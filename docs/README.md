@@ -1,6 +1,6 @@
 # Bot Marketplace — документация (MVP)
 
-Здесь собраны спецификации и заметки по MVP: интеграция Bybit (demo-first), формат Strategy DSL, рантайм бота и контракты backend API.
+Здесь собраны спецификации и заметки по MVP: интеграция Bybit (demo-first), формат Strategy DSL, рантайм бота, контракты backend API и эксплуатация.
 
 ## Навигация
 
@@ -16,6 +16,8 @@
 
 ### Backend API
 - [API contracts](12-api-contracts.md)
+- [OpenAPI (how-to)](openapi/README.md)
+- [OpenAPI spec](openapi/openapi.yaml)
 
 ### Безопасность и эксплуатация
 - [Security](13-security.md)
@@ -30,4 +32,3 @@
 - Все изменения фиксируем в markdown и коммитим.
 - Стратегия декларативная; код стратегии не исполняем.
 - Demo-first: торговые операции только в demo до отдельного решения о проде.
-
