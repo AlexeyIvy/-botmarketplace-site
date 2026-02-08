@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schema/strategy.schema.json",
+  "title": "Strategy DSL (MVP)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "name", "dslVersion", "enabled", "market", "entry", "risk", "execution", "guards"],
+  "properties": {
+    "id": { "type": "string", "minLength": 1 },
+    "name": { "type": "string", "minLength": 1 },
+    "dslVersion": { "type": "integer", "minimum": 1 },
+    "enabled": { "type": "boolean" },
+
+    "market": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["exchange", "env", "category", "symbol"],
+      "properties": {
+        "exchange": { "const": "bybit" },
+        "env": { "const": "demo" },
+        "category": { "const": "linear" },
+        "symbol": { "type": "string", "minLength": 1 }
+      }
+    },
+
+    "timeframes": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 0
+    },
+
+    "entry": {
+      "type": "object",
+      "additionalProperties": true
+    },
+
+    "risk": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["maxPositionSizeUsd", "riskPerTradePct", "cooldownSeconds"],
+      "properties": {
+        "maxPositionSizeUsd": { "type": "number", "exclusiveMinimum": 0 },
+        "riskPerTradePct": { "type": "number", "exclusiveMinimum": 0, "maximum": 100 },
+        "cooldownSeconds": { "type": "integer", "minimum": 0 },
+        "dailyLossLimitUsd": { "type": "number", "minimum": 0 }
+      }
+    },
+
+    "execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["orderType", "clientOrderIdPrefix"],
+      "properties": {
+        "orderType": { "enum": ["Market", "Limit"] },
+        "clientOrderIdPrefix": { "type": "string", "minLength": 1 },
+        "maxSlippageBps": { "type": "integer", "minimum": 0, "maximum": 500 }
+      }
+    },
+
+    "guards": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["maxOpenPositions", "maxOrdersPerMinute", "pauseOnError"],
+      "properties": {
+        "maxOpenPositions": { "type": "integer", "const": 1 },
+        "maxOrdersPerMinute": { "type": "integer", "minimum": 1, "maximum": 120 },
+        "pauseOnError": { "type": "boolean" }
+      }
+    }
+  }
+}
