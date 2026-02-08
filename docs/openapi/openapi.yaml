@@ -2,29 +2,58 @@ openapi: 3.1.0
 info:
   title: Bot Marketplace API (MVP)
   version: 0.1.0
+  license:
+    name: Proprietary
+    url: ../LICENSE.md
   description: >
     MVP API for strategies, bots, and signals (demo-first).
+
 servers:
   - url: /api
+
+security:
+  - bearerAuth: []
 
 paths:
   /healthz:
     get:
+      operationId: healthzGet
       summary: Liveness probe
+      security: []
       responses:
         "200":
           description: OK
+        "401":
+          $ref: "#/components/responses/Problem"
+        "503":
+          description: Service Unavailable
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
 
   /readyz:
     get:
+      operationId: readyzGet
       summary: Readiness probe
+      security: []
       responses:
         "200":
           description: OK
+        "401":
+          $ref: "#/components/responses/Problem"
+        "503":
+          description: Service Unavailable
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
 
   /auth/login:
     post:
+      operationId: authLogin
       summary: Login
+      security: []
       requestBody:
         required: true
         content:
@@ -43,16 +72,16 @@ paths:
 
   /strategies:
     get:
+      operationId: strategiesList
       summary: List strategies
-      security:
-        - bearerAuth: []
       responses:
         "200":
           description: OK
+        "401":
+          $ref: "#/components/responses/Problem"
     post:
+      operationId: strategiesCreate
       summary: Create strategy
-      security:
-        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -69,9 +98,8 @@ paths:
 
   /strategies/{strategyId}:validate:
     post:
+      operationId: strategiesValidate
       summary: Validate a strategy payload without saving
-      security:
-        - bearerAuth: []
       parameters:
         - name: strategyId
           in: path
@@ -94,16 +122,16 @@ paths:
 
   /bots:
     get:
+      operationId: botsList
       summary: List bots
-      security:
-        - bearerAuth: []
       responses:
         "200":
           description: OK
+        "401":
+          $ref: "#/components/responses/Problem"
     post:
+      operationId: botsCreate
       summary: Create bot
-      security:
-        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -120,9 +148,8 @@ paths:
 
   /bots/{botId}/events:
     get:
+      operationId: botEventsList
       summary: Bot transition/event log
-      security:
-        - bearerAuth: []
       parameters:
         - name: botId
           in: path
@@ -134,10 +161,14 @@ paths:
           description: OK
         "401":
           $ref: "#/components/responses/Problem"
+        "404":
+          $ref: "#/components/responses/Problem"
 
   /signals/webhook/{strategyId}:
     post:
+      operationId: signalWebhook
       summary: Webhook signal
+      security: []
       parameters:
         - name: strategyId
           in: path
@@ -176,12 +207,8 @@ components:
       additionalProperties: false
       required: [email, password]
       properties:
-        email:
-          type: string
-          format: email
-        password:
-          type: string
-          minLength: 1
+        email: { type: string, format: email }
+        password: { type: string, minLength: 1 }
 
     LoginResponse:
       type: object
@@ -202,8 +229,6 @@ components:
         detail: { type: string }
         instance: { type: string }
 
-    # Важное: Strategy подтягиваем из внешнего файла JSON Schema через $ref (относительный путь).
-    # Такой подход является стандартной практикой для $ref в OpenAPI/JSON References. [web:850]
     Strategy:
       $ref: "../schema/strategy.schema.json"
 
