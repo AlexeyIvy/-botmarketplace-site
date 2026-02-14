@@ -1,0 +1,19 @@
+{
+  "name": "botmarketplace",
+  "private": true,
+  "scripts": {
+    "dev:api": "pnpm --filter @botmarketplace/api dev",
+    "dev:web": "pnpm --filter @botmarketplace/web dev",
+    "build:api": "pnpm --filter @botmarketplace/api build",
+    "build:web": "pnpm --filter @botmarketplace/web build",
+    "db:migrate": "pnpm --filter @botmarketplace/api db:migrate",
+    "db:push": "pnpm --filter @botmarketplace/api db:push",
+    "db:generate": "pnpm --filter @botmarketplace/api db:generate",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down"
+  },
+  "packageManager": "pnpm@10.29.3",
+  "engines": {
+    "node": ">=20"
+  }
+}
