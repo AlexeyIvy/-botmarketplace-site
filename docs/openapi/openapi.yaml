@@ -23,8 +23,6 @@ paths:
       responses:
         "200":
           description: OK
-        "401":
-          $ref: "#/components/responses/Problem"
         "503":
           description: Service Unavailable
           content:
@@ -40,8 +38,6 @@ paths:
       responses:
         "200":
           description: OK
-        "401":
-          $ref: "#/components/responses/Problem"
         "503":
           description: Service Unavailable
           content:

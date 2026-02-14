@@ -35,7 +35,7 @@
 - [Схема БД, сущности, статусы, миграции](docs/07-data-model.md)
 
 ### 8) Контракты backend API
-- [Эндпоинты, payloads, ошибки, идемпотентность](docs/08-api-contracts.md)
+- [Эндпоинты, payloads, ошибки, идемпотентность](docs/12-api-contracts.md)
 
 ### 9) Интеграция Bybit
 - [Demo/Real, REST/WS, rate limits, trading-stop](docs/09-bybit-integration.md)
@@ -50,10 +50,10 @@
 - [Страницы, user flows, RU/EN i18n](docs/12-ui-ux.md)
 
 ### 13) Observability и Ops
-- [Логи, метрики, алерты, runbooks, бэкапы](docs/13-observability-ops.md)
+- [Логи, метрики, алерты, runbooks, бэкапы](docs/15-operations.md)
 
 ### 14) Roadmap / Спринты
-- [План работ спринтами + чеклисты](docs/14-roadmap-sprints.md)
+- [План работ спринтами + чеклисты](docs/16-roadmap.md)
 
 ### 15) Acceptance criteria
 - [Критерии приёмки MVP и по спринтам](docs/15-acceptance-criteria.md)

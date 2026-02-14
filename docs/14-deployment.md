@@ -43,7 +43,7 @@ MVP SHOULD:
 ## 5) Env vars (минимум)
 
 MVP MUST:
-- Секреты не в репозитории, только в env/secret manager (см. `docs/13-security.md`).
+- Секреты не в репозитории, только в env/secret manager (см. `docs/05-security.md`).
 
 Минимальные переменные:
 - `BYBIT_API_KEY`, `BYBIT_API_SECRET`
