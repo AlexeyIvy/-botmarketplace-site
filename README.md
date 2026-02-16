@@ -77,6 +77,20 @@ docs/       Project documentation
 
 ## Notes
 
+### Database migrations
+
+After pulling new changes that include Prisma schema updates, regenerate the
+client and apply migrations:
+
+```bash
+pnpm --filter @botmarketplace/api db:generate
+pnpm --filter @botmarketplace/api db:migrate
+```
+
+`db:migrate` runs `prisma migrate deploy`, which applies all pending migrations
+in order. If you need to create a **new** migration during development, use
+`npx prisma migrate dev --name <name>` inside `apps/api/`.
+
 ### pnpm `ignoredBuiltDependencies`
 
 `pnpm-workspace.yaml` lists `@prisma/client`, `@prisma/engines`, `esbuild`,
