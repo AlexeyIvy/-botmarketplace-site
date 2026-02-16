@@ -6,12 +6,14 @@ import { authRoutes } from "./routes/auth.js";
 import { strategyRoutes } from "./routes/strategies.js";
 import { botRoutes } from "./routes/bots.js";
 import { runRoutes } from "./routes/runs.js";
+import { workspacesRoutes } from "./routes/workspaces.js";
 
 /** Registers all domain routes. */
 async function registerRoutes(scope: import("fastify").FastifyInstance) {
   await scope.register(healthzRoutes);
   await scope.register(readyzRoutes);
   await scope.register(authRoutes);
+  await scope.register(workspacesRoutes);
   await scope.register(strategyRoutes);
   await scope.register(botRoutes);
   await scope.register(runRoutes);

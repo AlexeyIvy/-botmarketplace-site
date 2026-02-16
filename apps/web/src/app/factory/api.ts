@@ -17,17 +17,18 @@ export interface ProblemDetails {
   errors?: Array<{ field: string; message: string }>;
 }
 
-export async function apiFetch<T = unknown>(
+async function doFetch<T>(
   path: string,
-  options: RequestInit = {},
+  options: RequestInit,
+  injectWorkspace: boolean,
 ): Promise<{ ok: true; data: T } | { ok: false; problem: ProblemDetails }> {
-  const workspaceId = getWorkspaceId();
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
     ...(options.headers as Record<string, string>),
   };
-  if (workspaceId) {
-    headers["X-Workspace-Id"] = workspaceId;
+  if (injectWorkspace) {
+    const workspaceId = getWorkspaceId();
+    if (workspaceId) headers["X-Workspace-Id"] = workspaceId;
   }
 
   const res = await fetch(`${API_PREFIX}${path}`, { ...options, headers });
@@ -46,4 +47,14 @@ export async function apiFetch<T = unknown>(
 
   const data = (await res.json()) as T;
   return { ok: true, data };
+}
+
+/** Fetch with X-Workspace-Id header injected. */
+export function apiFetch<T = unknown>(path: string, options: RequestInit = {}) {
+  return doFetch<T>(path, options, true);
+}
+
+/** Fetch without X-Workspace-Id header (e.g. workspace creation). */
+export function apiFetchNoWorkspace<T = unknown>(path: string, options: RequestInit = {}) {
+  return doFetch<T>(path, options, false);
 }
