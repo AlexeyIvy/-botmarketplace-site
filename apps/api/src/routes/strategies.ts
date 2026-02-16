@@ -1,26 +1,9 @@
 import type { FastifyInstance } from "fastify";
 import { prisma } from "../lib/prisma.js";
 import { problem } from "../lib/problem.js";
+import { resolveWorkspace } from "../lib/workspace.js";
 
 const VALID_TIMEFRAMES = ["M1", "M5", "M15", "H1"] as const;
-
-// ---------------------------------------------------------------------------
-// Workspace resolution helper (temporary — will be replaced by real auth)
-// ---------------------------------------------------------------------------
-
-async function resolveWorkspace(request: import("fastify").FastifyRequest, reply: import("fastify").FastifyReply) {
-  const workspaceId = request.headers["x-workspace-id"] as string | undefined;
-  if (!workspaceId) {
-    problem(reply, 400, "Bad Request", "Missing required header: X-Workspace-Id");
-    return null;
-  }
-  const workspace = await prisma.workspace.findUnique({ where: { id: workspaceId } });
-  if (!workspace) {
-    problem(reply, 404, "Not Found", `Workspace ${workspaceId} not found`);
-    return null;
-  }
-  return workspace;
-}
 
 // ---------------------------------------------------------------------------
 // Minimal DSL validation
