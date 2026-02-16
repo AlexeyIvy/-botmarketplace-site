@@ -35,6 +35,7 @@ interface DemoSummary {
   strategyId: string;
   versionId: string;
   botId: string;
+  runId?: string;
 }
 
 export default function FactoryPage() {
@@ -80,7 +81,7 @@ export default function FactoryPage() {
     }
   }
 
-  async function createDemoSetup() {
+  async function createDemoSetup(autoStart: boolean) {
     setDemoRunning(true);
     setDemoSummary(null);
     setError(null);
@@ -153,12 +154,27 @@ export default function FactoryPage() {
       if (!botRes.ok) throw botRes.problem;
       const botId = botRes.data.id;
 
-      // E) Success
-      const summary: DemoSummary = { workspaceId, strategyId, versionId, botId };
+      // E) Optionally start a run
+      let runId: string | undefined;
+      if (autoStart) {
+        setDemoStatus("Starting run...");
+        const runRes = await apiFetch<{ id: string }>(`/bots/${botId}/runs`, {
+          method: "POST",
+        });
+        if (runRes.ok) {
+          runId = runRes.data.id;
+        } else if (runRes.problem.status !== 409) {
+          // 409 ActiveRunExists is fine — still redirect
+          throw runRes.problem;
+        }
+      }
+
+      // F) Success
+      const summary: DemoSummary = { workspaceId, strategyId, versionId, botId, runId };
       setDemoSummary(summary);
       setDemoStatus("Done! Redirecting...");
 
-      setTimeout(() => router.push(`/factory/bots/${botId}`), 800);
+      setTimeout(() => router.push(`/factory/bots/${botId}`), 600);
     } catch (err: unknown) {
       const prob = err as { title?: string; detail?: string };
       setError(`${prob.title ?? "Error"}: ${prob.detail ?? "Unknown error"}`);
@@ -209,9 +225,14 @@ export default function FactoryPage() {
         <p style={{ color: "var(--text-secondary)", fontSize: 13, marginBottom: 12 }}>
           Creates a full demo stack: Workspace, Strategy, Version, and Bot in one click.
         </p>
-        <button style={btnAccent} onClick={createDemoSetup} disabled={busy}>
-          {demoRunning ? "Creating demo setup..." : "Create Demo Setup"}
-        </button>
+        <div style={{ display: "flex", gap: 8 }}>
+          <button style={btnSecondary} onClick={() => createDemoSetup(false)} disabled={busy}>
+            Create Demo Setup
+          </button>
+          <button style={btnAccent} onClick={() => createDemoSetup(true)} disabled={busy}>
+            {demoRunning ? "Creating..." : "Create Demo + Start Run"}
+          </button>
+        </div>
         {demoStatus && (
           <p style={{ marginTop: 8, color: "var(--text-secondary)", fontSize: 13 }}>
             {demoStatus}
@@ -223,6 +244,7 @@ export default function FactoryPage() {
             <div>strategy: {demoSummary.strategyId}</div>
             <div>version: {demoSummary.versionId}</div>
             <div>bot: {demoSummary.botId}</div>
+            {demoSummary.runId && <div>run: {demoSummary.runId}</div>}
           </div>
         )}
       </div>
