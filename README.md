@@ -97,6 +97,14 @@ in order. If you need to create a **new** migration during development, use
 execution plan, create a new `StrategyVersion` with an incremented `version`
 integer. This keeps a full audit trail and allows rollback.
 
+### Bot runtime constraint
+
+Only **one active bot run** is allowed per (workspace, symbol) pair. This is
+enforced at the database level via a partial unique index on `BotRun` where
+`state IN ('CREATED','QUEUED','STARTING','SYNCING','RUNNING')`. Attempting to
+insert a second active run for the same workspace + symbol will raise a unique
+violation error.
+
 ### pnpm `ignoredBuiltDependencies`
 
 `pnpm-workspace.yaml` lists `@prisma/client`, `@prisma/engines`, `esbuild`,
