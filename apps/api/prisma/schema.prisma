@@ -31,6 +31,7 @@ model Workspace {
 
   members    WorkspaceMember[]
   strategies Strategy[]
+  botRuns    BotRun[]
 }
 
 model WorkspaceMember {
@@ -92,4 +93,55 @@ model StrategyVersion {
 
   @@unique([strategyId, version])
   @@index([strategyId])
+}
+
+// ── Bot runtime domain ───────────────────────────────────────────
+
+enum BotRunState {
+  CREATED
+  QUEUED
+  STARTING
+  SYNCING
+  RUNNING
+  STOPPING
+  STOPPED
+  FAILED
+  TIMED_OUT
+}
+
+model BotRun {
+  id          String       @id @default(uuid())
+  workspaceId String
+  symbol      String
+  state       BotRunState  @default(CREATED)
+  leaseOwner  String?
+  leaseUntil  DateTime?
+  startedAt   DateTime?
+  stoppedAt   DateTime?
+  errorCode   String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  events    BotEvent[]
+
+  // NOTE: partial unique index (one active run per workspace+symbol)
+  // is defined in the migration SQL because Prisma cannot express
+  // WHERE-filtered unique indexes.
+
+  @@index([workspaceId])
+  @@index([workspaceId, symbol])
+  @@index([state])
+}
+
+model BotEvent {
+  id          String   @id @default(uuid())
+  botRunId    String
+  ts          DateTime @default(now())
+  type        String
+  payloadJson Json
+
+  botRun BotRun @relation(fields: [botRunId], references: [id], onDelete: Cascade)
+
+  @@index([botRunId, ts(sort: Desc)])
 }
