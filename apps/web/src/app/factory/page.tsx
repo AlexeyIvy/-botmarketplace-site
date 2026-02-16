@@ -1,18 +1,50 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { getWorkspaceId, setWorkspaceId, apiFetchNoWorkspace } from "./api";
+import {
+  getWorkspaceId,
+  setWorkspaceId,
+  apiFetch,
+  apiFetchNoWorkspace,
+} from "./api";
 
 interface Workspace {
   id: string;
   name: string;
 }
 
+interface Strategy {
+  id: string;
+  name: string;
+}
+
+interface StrategyVersion {
+  id: string;
+  version: number;
+}
+
+interface Bot {
+  id: string;
+  name: string;
+}
+
+interface DemoSummary {
+  workspaceId: string;
+  strategyId: string;
+  versionId: string;
+  botId: string;
+}
+
 export default function FactoryPage() {
+  const router = useRouter();
   const [wsId, setWsId] = useState("");
   const [saved, setSaved] = useState<string | null>(null);
   const [creating, setCreating] = useState(false);
+  const [demoRunning, setDemoRunning] = useState(false);
+  const [demoStatus, setDemoStatus] = useState<string | null>(null);
+  const [demoSummary, setDemoSummary] = useState<DemoSummary | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -48,6 +80,96 @@ export default function FactoryPage() {
     }
   }
 
+  async function createDemoSetup() {
+    setDemoRunning(true);
+    setDemoSummary(null);
+    setError(null);
+
+    const suffix = Date.now() % 10000;
+
+    try {
+      // A) Create workspace
+      setDemoStatus("Creating workspace...");
+      const wsRes = await apiFetchNoWorkspace<Workspace>("/workspaces", {
+        method: "POST",
+        body: JSON.stringify({ name: `Demo Workspace ${suffix}` }),
+      });
+      if (!wsRes.ok) throw wsRes.problem;
+      const workspaceId = wsRes.data.id;
+      setWorkspaceId(workspaceId);
+      setWsId(workspaceId);
+      setSaved(workspaceId);
+
+      // B) Create strategy
+      setDemoStatus("Creating strategy...");
+      let strategyName = "Demo Strategy";
+      let stratRes = await apiFetch<Strategy>("/strategies", {
+        method: "POST",
+        body: JSON.stringify({ name: strategyName, symbol: "BTCUSDT", timeframe: "M5" }),
+      });
+      if (!stratRes.ok && stratRes.problem.status === 409) {
+        strategyName = `Demo Strategy ${suffix}`;
+        stratRes = await apiFetch<Strategy>("/strategies", {
+          method: "POST",
+          body: JSON.stringify({ name: strategyName, symbol: "BTCUSDT", timeframe: "M5" }),
+        });
+      }
+      if (!stratRes.ok) throw stratRes.problem;
+      const strategyId = stratRes.data.id;
+
+      // C) Create strategy version
+      setDemoStatus("Creating strategy version...");
+      const verRes = await apiFetch<StrategyVersion>(`/strategies/${strategyId}/versions`, {
+        method: "POST",
+        body: JSON.stringify({ dslJson: { kind: "demo", entry: { type: "market" } } }),
+      });
+      if (!verRes.ok) throw verRes.problem;
+      const versionId = verRes.data.id;
+
+      // D) Create bot
+      setDemoStatus("Creating bot...");
+      let botName = "Demo Bot";
+      let botRes = await apiFetch<Bot>("/bots", {
+        method: "POST",
+        body: JSON.stringify({
+          name: botName,
+          strategyVersionId: versionId,
+          symbol: "BTCUSDT",
+          timeframe: "M5",
+        }),
+      });
+      if (!botRes.ok && botRes.problem.status === 409) {
+        botName = `Demo Bot ${suffix}`;
+        botRes = await apiFetch<Bot>("/bots", {
+          method: "POST",
+          body: JSON.stringify({
+            name: botName,
+            strategyVersionId: versionId,
+            symbol: "BTCUSDT",
+            timeframe: "M5",
+          }),
+        });
+      }
+      if (!botRes.ok) throw botRes.problem;
+      const botId = botRes.data.id;
+
+      // E) Success
+      const summary: DemoSummary = { workspaceId, strategyId, versionId, botId };
+      setDemoSummary(summary);
+      setDemoStatus("Done! Redirecting...");
+
+      setTimeout(() => router.push(`/factory/bots/${botId}`), 800);
+    } catch (err: unknown) {
+      const prob = err as { title?: string; detail?: string };
+      setError(`${prob.title ?? "Error"}: ${prob.detail ?? "Unknown error"}`);
+      setDemoStatus(null);
+    } finally {
+      setDemoRunning(false);
+    }
+  }
+
+  const busy = creating || demoRunning;
+
   return (
     <div style={{ padding: "48px 24px", maxWidth: 600, margin: "0 auto" }}>
       <h1 style={{ fontSize: 28, marginBottom: 24 }}>Bot Factory</h1>
@@ -62,12 +184,12 @@ export default function FactoryPage() {
             onChange={(e) => setWsId(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && save()}
           />
-          <button style={btn} onClick={save}>
+          <button style={btn} onClick={save} disabled={busy}>
             Save
           </button>
         </div>
         <div style={{ marginTop: 8, display: "flex", alignItems: "center", gap: 12 }}>
-          <button style={btnSecondary} onClick={createWorkspace} disabled={creating}>
+          <button style={btnSecondary} onClick={createWorkspace} disabled={busy}>
             {creating ? "Creating..." : "Create Workspace"}
           </button>
           {saved && (
@@ -78,6 +200,30 @@ export default function FactoryPage() {
         </div>
         {error && (
           <p style={{ marginTop: 8, color: "#f85149", fontSize: 13 }}>{error}</p>
+        )}
+      </div>
+
+      {/* Demo bootstrap */}
+      <div style={{ ...card, marginTop: 16 }}>
+        <h2 style={{ fontSize: 18, marginBottom: 8 }}>Quick Start</h2>
+        <p style={{ color: "var(--text-secondary)", fontSize: 13, marginBottom: 12 }}>
+          Creates a full demo stack: Workspace, Strategy, Version, and Bot in one click.
+        </p>
+        <button style={btnAccent} onClick={createDemoSetup} disabled={busy}>
+          {demoRunning ? "Creating demo setup..." : "Create Demo Setup"}
+        </button>
+        {demoStatus && (
+          <p style={{ marginTop: 8, color: "var(--text-secondary)", fontSize: 13 }}>
+            {demoStatus}
+          </p>
+        )}
+        {demoSummary && (
+          <div style={{ marginTop: 12, padding: 12, background: "var(--bg-secondary)", borderRadius: 6, fontSize: 12, fontFamily: "monospace" }}>
+            <div>workspace: {demoSummary.workspaceId}</div>
+            <div>strategy: {demoSummary.strategyId}</div>
+            <div>version: {demoSummary.versionId}</div>
+            <div>bot: {demoSummary.botId}</div>
+          </div>
         )}
       </div>
 
@@ -134,6 +280,17 @@ const btnSecondary: React.CSSProperties = {
   borderRadius: 6,
   cursor: "pointer",
   fontSize: 14,
+};
+
+const btnAccent: React.CSSProperties = {
+  padding: "10px 20px",
+  background: "#238636",
+  color: "#fff",
+  border: "none",
+  borderRadius: 6,
+  cursor: "pointer",
+  fontSize: 14,
+  fontWeight: 600,
 };
 
 const linkCard: React.CSSProperties = {
