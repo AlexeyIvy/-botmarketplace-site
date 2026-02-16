@@ -31,6 +31,7 @@ model Workspace {
 
   members    WorkspaceMember[]
   strategies Strategy[]
+  bots       Bot[]
   botRuns    BotRun[]
 }
 
@@ -90,9 +91,39 @@ model StrategyVersion {
   createdAt         DateTime @default(now())
 
   strategy Strategy @relation(fields: [strategyId], references: [id], onDelete: Cascade)
+  bots     Bot[]
 
   @@unique([strategyId, version])
   @@index([strategyId])
+}
+
+// ── Bot aggregate ────────────────────────────────────────────────
+
+enum BotStatus {
+  DRAFT
+  ACTIVE
+  DISABLED
+}
+
+model Bot {
+  id                String          @id @default(uuid())
+  workspaceId       String
+  name              String
+  strategyVersionId String
+  symbol            String
+  timeframe         Timeframe
+  status            BotStatus       @default(DRAFT)
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+
+  workspace       Workspace       @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  strategyVersion StrategyVersion @relation(fields: [strategyVersionId], references: [id], onDelete: Restrict)
+  runs            BotRun[]
+
+  @@unique([workspaceId, name])
+  @@index([workspaceId])
+  @@index([strategyVersionId])
+  @@index([workspaceId, symbol])
 }
 
 // ── Bot runtime domain ───────────────────────────────────────────
@@ -111,6 +142,7 @@ enum BotRunState {
 
 model BotRun {
   id          String       @id @default(uuid())
+  botId       String
   workspaceId String
   symbol      String
   state       BotRunState  @default(CREATED)
@@ -122,6 +154,7 @@ model BotRun {
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
 
+  bot       Bot       @relation(fields: [botId], references: [id], onDelete: Cascade)
   workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   events    BotEvent[]
 
@@ -129,6 +162,7 @@ model BotRun {
   // is defined in the migration SQL because Prisma cannot express
   // WHERE-filtered unique indexes.
 
+  @@index([botId])
   @@index([workspaceId])
   @@index([workspaceId, symbol])
   @@index([state])
