@@ -97,6 +97,13 @@ in order. If you need to create a **new** migration during development, use
 execution plan, create a new `StrategyVersion` with an incremented `version`
 integer. This keeps a full audit trail and allows rollback.
 
+### Bot aggregate
+
+`Bot` is the executable unit that ties together a workspace, a specific
+`StrategyVersion`, a symbol (e.g. BTCUSDT), and a timeframe. Each `BotRun`
+belongs to a `Bot`. Deleting a `StrategyVersion` that is referenced by a bot is
+blocked (`onDelete: Restrict`), while deleting a bot cascades to its runs.
+
 ### Bot runtime constraint
 
 Only **one active bot run** is allowed per (workspace, symbol) pair. This is
