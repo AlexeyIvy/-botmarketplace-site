@@ -3,12 +3,14 @@ import cors from "@fastify/cors";
 import { healthzRoutes } from "./routes/healthz.js";
 import { readyzRoutes } from "./routes/readyz.js";
 import { authRoutes } from "./routes/auth.js";
+import { strategyRoutes } from "./routes/strategies.js";
 
 /** Registers all domain routes (healthz, readyz, auth). */
 async function registerRoutes(scope: import("fastify").FastifyInstance) {
   await scope.register(healthzRoutes);
   await scope.register(readyzRoutes);
   await scope.register(authRoutes);
+  await scope.register(strategyRoutes);
 }
 
 export async function buildApp() {
