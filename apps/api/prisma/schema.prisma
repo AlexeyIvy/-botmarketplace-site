@@ -29,7 +29,8 @@ model Workspace {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  members WorkspaceMember[]
+  members    WorkspaceMember[]
+  strategies Strategy[]
 }
 
 model WorkspaceMember {
@@ -45,4 +46,50 @@ model WorkspaceMember {
   @@unique([workspaceId, userId])
   @@index([workspaceId])
   @@index([userId])
+}
+
+// ── Strategy domain ──────────────────────────────────────────────
+
+enum StrategyStatus {
+  DRAFT
+  ACTIVE
+  ARCHIVED
+}
+
+enum Timeframe {
+  M1
+  M5
+  M15
+  H1
+}
+
+model Strategy {
+  id          String         @id @default(uuid())
+  workspaceId String
+  name        String
+  symbol      String
+  timeframe   Timeframe
+  status      StrategyStatus @default(DRAFT)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  workspace Workspace        @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  versions  StrategyVersion[]
+
+  @@unique([workspaceId, name])
+  @@index([workspaceId])
+}
+
+model StrategyVersion {
+  id                String   @id @default(uuid())
+  strategyId        String
+  version           Int
+  dslJson           Json
+  executionPlanJson Json
+  createdAt         DateTime @default(now())
+
+  strategy Strategy @relation(fields: [strategyId], references: [id], onDelete: Cascade)
+
+  @@unique([strategyId, version])
+  @@index([strategyId])
 }
