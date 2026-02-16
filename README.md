@@ -91,6 +91,12 @@ pnpm --filter @botmarketplace/api db:migrate
 in order. If you need to create a **new** migration during development, use
 `npx prisma migrate dev --name <name>` inside `apps/api/`.
 
+### Strategy versioning
+
+`StrategyVersion` rows are **immutable**. To update a strategy's DSL or
+execution plan, create a new `StrategyVersion` with an incremented `version`
+integer. This keeps a full audit trail and allows rollback.
+
 ### pnpm `ignoredBuiltDependencies`
 
 `pnpm-workspace.yaml` lists `@prisma/client`, `@prisma/engines`, `esbuild`,
