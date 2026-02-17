@@ -112,6 +112,38 @@ enforced at the database level via a partial unique index on `BotRun` where
 insert a second active run for the same workspace + symbol will raise a unique
 violation error.
 
+### API routing (dev vs prod)
+
+**Dev:** The Next.js frontend on `:3000` proxies `/api/*` requests to the
+Fastify API on `:4000` via `rewrites()` in `next.config.ts`. This avoids CORS
+issues and lets the frontend use relative paths (`/api/v1/...`).
+
+**Prod:** The rewrite is disabled (`NODE_ENV=production`). A reverse proxy
+(nginx, Caddy, or cloud ingress) must route `/api/*` to the API service.
+Example nginx config:
+
+```nginx
+server {
+    listen 80;
+
+    location /api/ {
+        proxy_pass http://api:4000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+
+    location / {
+        proxy_pass http://web:3000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
+```
+
+The frontend `api.ts` always uses relative paths (`/api/v1/...`), so no
+`NEXT_PUBLIC_API_URL` is needed in production — just ensure the reverse proxy
+routes correctly.
+
 ### pnpm `ignoredBuiltDependencies`
 
 `pnpm-workspace.yaml` lists `@prisma/client`, `@prisma/engines`, `esbuild`,
