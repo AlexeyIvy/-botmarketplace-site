@@ -157,6 +157,7 @@ model BotRun {
   bot       Bot       @relation(fields: [botId], references: [id], onDelete: Cascade)
   workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   events    BotEvent[]
+  intents   BotIntent[]
 
   // NOTE: partial unique index (one active run per workspace+symbol)
   // is defined in the migration SQL because Prisma cannot express
@@ -178,4 +179,54 @@ model BotEvent {
   botRun BotRun @relation(fields: [botRunId], references: [id], onDelete: Cascade)
 
   @@index([botRunId, ts(sort: Desc)])
+}
+
+// ── Idempotency / Order intents ───────────────────────────────────
+
+enum IntentType {
+  ENTRY
+  EXIT
+  SL
+  TP
+  CANCEL
+}
+
+enum IntentState {
+  PENDING
+  PLACED
+  FILLED
+  CANCELLED
+  FAILED
+}
+
+enum OrderSide {
+  BUY
+  SELL
+}
+
+model BotIntent {
+  id          String      @id @default(uuid())
+  botRunId    String
+  /// Client-provided idempotency key — unique per run
+  intentId    String
+  /// Exchange order link ID generated server-side (sent to exchange as clientOrderId)
+  orderLinkId String      @unique
+  type        IntentType
+  state       IntentState @default(PENDING)
+  side        OrderSide
+  qty         Decimal     @db.Decimal(18, 8)
+  price       Decimal?    @db.Decimal(18, 8)
+  /// Exchange-assigned order ID, set after placement confirmation
+  orderId     String?
+  /// Extra metadata (e.g., sl/tp prices, retry count, exchange response)
+  metaJson    Json?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  botRun BotRun @relation(fields: [botRunId], references: [id], onDelete: Cascade)
+
+  @@unique([botRunId, intentId])
+  @@index([botRunId])
+  @@index([orderLinkId])
+  @@index([botRunId, state])
 }
