@@ -7,7 +7,7 @@
 
 set -euo pipefail
 
-APP_DIR="/home/user/-botmarketplace-site"
+APP_DIR="/opt/-botmarketplace-site"
 DOMAIN="botmarketplace.store"
 
 cd "$APP_DIR"
@@ -35,12 +35,20 @@ echo "      botmarket-api and botmarket-web enabled"
 
 # 3. Install nginx config
 echo "[2/4] Installing nginx config..."
-cp "$APP_DIR/deploy/nginx.conf" "/etc/nginx/sites-available/$DOMAIN"
-if [[ ! -L "/etc/nginx/sites-enabled/$DOMAIN" ]]; then
+NGINX_ENABLED=0
+for f in "/etc/nginx/sites-enabled/$DOMAIN" "/etc/nginx/sites-enabled/$DOMAIN.conf" /etc/nginx/sites-enabled/botmarketplace.conf; do
+  if [[ -e "$f" ]]; then
+    echo "      Nginx config already active at $f — skipping install"
+    NGINX_ENABLED=1
+    break
+  fi
+done
+if [[ $NGINX_ENABLED -eq 0 ]]; then
+  cp "$APP_DIR/deploy/nginx.conf" "/etc/nginx/sites-available/$DOMAIN"
   ln -s "/etc/nginx/sites-available/$DOMAIN" "/etc/nginx/sites-enabled/$DOMAIN"
+  nginx -t
+  echo "      Nginx config installed and tested"
 fi
-nginx -t
-echo "      Nginx config installed and tested"
 
 # 4. Install pnpm dependencies and build
 echo "[3/4] Installing deps and building..."

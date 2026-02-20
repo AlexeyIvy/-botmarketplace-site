@@ -12,8 +12,8 @@ Wants=network-online.target
 [Service]
 Type=simple
 User=root
-WorkingDirectory=/home/user/-botmarketplace-site/apps/web
-EnvironmentFile=/home/user/-botmarketplace-site/.env
+WorkingDirectory=/opt/-botmarketplace-site/apps/web
+EnvironmentFile=/opt/-botmarketplace-site/.env
 ExecStart=/usr/bin/node node_modules/.bin/next start --port 3000
 Restart=on-failure
 RestartSec=5s
