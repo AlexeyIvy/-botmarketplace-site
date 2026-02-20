@@ -15,6 +15,9 @@ import { transition, isValidTransition } from "./stateMachine.js";
 const WORKER_ID = `worker-${process.pid}`;
 const POLL_INTERVAL_MS = 4_000;
 
+// Max time a run can stay in RUNNING state before auto-timeout (default: 4 hours)
+const MAX_RUN_DURATION_MS = parseInt(process.env.MAX_RUN_DURATION_MS ?? "", 10) || 4 * 60 * 60 * 1000;
+
 async function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -73,6 +76,31 @@ async function stopRun(runId: string) {
   }
 }
 
+/** Mark RUNNING runs that exceeded MAX_RUN_DURATION_MS as TIMED_OUT. */
+async function timeoutExpiredRuns() {
+  const cutoff = new Date(Date.now() - MAX_RUN_DURATION_MS);
+  const expired = await prisma.botRun.findMany({
+    where: {
+      state: "RUNNING",
+      startedAt: { lt: cutoff },
+    },
+    select: { id: true },
+    take: 10,
+  });
+  for (const { id } of expired) {
+    try {
+      await transition(id, "TIMED_OUT", {
+        eventType: "RUN_TIMED_OUT",
+        message: `Run exceeded max duration of ${MAX_RUN_DURATION_MS / 1000}s`,
+        errorCode: "MAX_DURATION_EXCEEDED",
+      });
+      console.log(`[botWorker] run ${id} timed out (exceeded ${MAX_RUN_DURATION_MS}ms)`);
+    } catch (err) {
+      console.error(`[botWorker] timeoutExpiredRuns ${id} error:`, err);
+    }
+  }
+}
+
 /** Renew lease on all RUNNING runs owned by this worker. */
 async function renewLeases() {
   const newLeaseUntil = new Date(Date.now() + 30_000);
@@ -105,6 +133,9 @@ async function poll() {
     for (const { id } of stopping) {
       await stopRun(id);
     }
+
+    // Timeout runs that exceeded max duration
+    await timeoutExpiredRuns();
 
     // Renew leases on our RUNNING runs
     await renewLeases();

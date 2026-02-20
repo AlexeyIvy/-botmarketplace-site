@@ -29,9 +29,13 @@ echo "[✓] .env found"
 echo "[1/4] Installing systemd services..."
 cp "$APP_DIR/deploy/botmarket-api.service" /etc/systemd/system/botmarket-api.service
 cp "$APP_DIR/deploy/botmarket-web.service" /etc/systemd/system/botmarket-web.service
+cp "$APP_DIR/deploy/botmarket-backup.service" /etc/systemd/system/botmarket-backup.service
+cp "$APP_DIR/deploy/botmarket-backup.timer"   /etc/systemd/system/botmarket-backup.timer
 systemctl daemon-reload
 systemctl enable botmarket-api botmarket-web
-echo "      botmarket-api and botmarket-web enabled"
+systemctl enable --now botmarket-backup.timer
+echo "      botmarket-api, botmarket-web enabled"
+echo "      botmarket-backup.timer enabled (daily 03:00)"
 
 # 3. Install nginx config
 echo "[2/4] Installing nginx config..."
@@ -68,6 +72,7 @@ echo ""
 echo "Status:"
 systemctl is-active botmarket-api && echo "  ✓ botmarket-api" || echo "  ✗ botmarket-api FAILED — check: journalctl -u botmarket-api -n 50"
 systemctl is-active botmarket-web  && echo "  ✓ botmarket-web"  || echo "  ✗ botmarket-web FAILED  — check: journalctl -u botmarket-web -n 50"
+systemctl is-active botmarket-backup.timer && echo "  ✓ botmarket-backup.timer" || echo "  ✗ botmarket-backup.timer NOT active"
 
 echo ""
 echo "Setup complete!"

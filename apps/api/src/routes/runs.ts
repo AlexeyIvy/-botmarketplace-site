@@ -17,7 +17,9 @@ import {
 
 export async function runRoutes(app: FastifyInstance) {
   // ── POST /bots/:botId/runs ── start a new run ────────────────────────────
-  app.post<{ Params: { botId: string } }>("/bots/:botId/runs", async (request, reply) => {
+  app.post<{ Params: { botId: string } }>("/bots/:botId/runs", {
+    config: { rateLimit: { max: 10, timeWindow: "1 minute" } },
+  }, async (request, reply) => {
     const workspace = await resolveWorkspace(request, reply);
     if (!workspace) return;
 
@@ -121,6 +123,44 @@ export async function runRoutes(app: FastifyInstance) {
       }
     },
   );
+
+  // ── POST /runs/stop-all ── emergency stop all active runs in workspace ─────
+  app.post("/runs/stop-all", async (request, reply) => {
+    const workspace = await resolveWorkspace(request, reply);
+    if (!workspace) return;
+
+    const activeRuns = await prisma.botRun.findMany({
+      where: {
+        workspaceId: workspace.id,
+        state: { notIn: ["STOPPED", "FAILED", "TIMED_OUT", "CREATED"] },
+      },
+      select: { id: true, state: true },
+    });
+
+    const stopped: string[] = [];
+    const errors: { id: string; error: string }[] = [];
+
+    for (const run of activeRuns) {
+      try {
+        if (isValidTransition(run.state, "STOPPING")) {
+          await transition(run.id, "STOPPING", {
+            eventType: "RUN_STOPPING",
+            message: "Stop All requested",
+          });
+        }
+        await transition(run.id, "STOPPED", {
+          eventType: "RUN_STOPPED",
+          message: "Stopped by Stop All",
+          stoppedAt: new Date(),
+        });
+        stopped.push(run.id);
+      } catch (err) {
+        errors.push({ id: run.id, error: String(err) });
+      }
+    }
+
+    return reply.send({ stopped, errors, total: activeRuns.length });
+  });
 
   // ── PATCH /runs/:runId/state ── worker-driven state advance ──────────────
   app.patch<{
