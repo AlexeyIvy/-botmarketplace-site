@@ -163,7 +163,7 @@ fi
 # ─── 7. Bot worker ───────────────────────────────────────────────────────────
 header "7. Bot Worker"
 
-if journalctl -u botmarket-api --no-pager 2>/dev/null | grep -q "botWorker.*started"; then
+if journalctl -u botmarket-api --no-pager --output=cat 2>/dev/null | grep -q "botWorker.*started"; then
   green "Bot worker started line found in API logs"
   ((++PASS))
 else
