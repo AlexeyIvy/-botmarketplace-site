@@ -33,6 +33,7 @@ model Workspace {
   strategies Strategy[]
   bots       Bot[]
   botRuns    BotRun[]
+  backtests  BacktestResult[]
 }
 
 model WorkspaceMember {
@@ -77,6 +78,7 @@ model Strategy {
 
   workspace Workspace        @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   versions  StrategyVersion[]
+  backtests BacktestResult[]
 
   @@unique([workspaceId, name])
   @@index([workspaceId])
@@ -229,4 +231,38 @@ model BotIntent {
   @@index([botRunId])
   @@index([orderLinkId])
   @@index([botRunId, state])
+}
+
+// ── Research Lab ─────────────────────────────────────────────────
+
+enum BacktestStatus {
+  PENDING
+  RUNNING
+  DONE
+  FAILED
+}
+
+model BacktestResult {
+  id           String         @id @default(uuid())
+  workspaceId  String
+  strategyId   String
+  /// Symbol passed at request time (may differ from strategy default)
+  symbol       String
+  /// Bybit kline interval: "1", "5", "15", "60"
+  interval     String
+  fromTs       DateTime
+  toTs         DateTime
+  status       BacktestStatus @default(PENDING)
+  /// Filled when status=DONE: { trades, wins, winrate, totalPnlPct, maxDrawdownPct, candles }
+  reportJson   Json?
+  errorMessage String?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  strategy  Strategy  @relation(fields: [strategyId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId])
+  @@index([strategyId])
+  @@index([workspaceId, createdAt(sort: Desc)])
 }
