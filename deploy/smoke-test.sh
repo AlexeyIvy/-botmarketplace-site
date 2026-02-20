@@ -76,8 +76,8 @@ REG=$(curl -s -X POST "$BASE_URL/api/v1/auth/register" \
   -H "Content-Type: application/json" \
   -d "{\"email\":\"$TEST_EMAIL\",\"password\":\"$TEST_PASS\"}")
 
-TOKEN=$(echo "$REG" | grep -o '"accessToken":"[^"]*"' | cut -d'"' -f4)
-WS_ID=$(echo "$REG" | grep -o '"workspaceId":"[^"]*"' | cut -d'"' -f4)
+TOKEN=$(echo "$REG" | grep -o '"accessToken":"[^"]*"' | cut -d'"' -f4) || true
+WS_ID=$(echo "$REG" | grep -o '"workspaceId":"[^"]*"' | cut -d'"' -f4) || true
 
 if [[ -n "$TOKEN" ]]; then
   green "POST /auth/register → accessToken received"
@@ -99,7 +99,7 @@ LOGIN=$(curl -s -X POST "$BASE_URL/api/v1/auth/login" \
   -H "Content-Type: application/json" \
   -d "{\"email\":\"$TEST_EMAIL\",\"password\":\"$TEST_PASS\"}")
 
-LOGIN_TOKEN=$(echo "$LOGIN" | grep -o '"accessToken":"[^"]*"' | cut -d'"' -f4)
+LOGIN_TOKEN=$(echo "$LOGIN" | grep -o '"accessToken":"[^"]*"' | cut -d'"' -f4) || true
 if [[ -n "$LOGIN_TOKEN" ]]; then
   green "POST /auth/login → accessToken received"
   ((++PASS))
@@ -163,7 +163,7 @@ fi
 # ─── 7. Bot worker ───────────────────────────────────────────────────────────
 header "7. Bot Worker"
 
-if journalctl -u botmarket-api -n 100 --no-pager 2>/dev/null | grep -q "botWorker.*started"; then
+if journalctl -u botmarket-api --no-pager 2>/dev/null | grep -q "botWorker.*started"; then
   green "Bot worker started line found in API logs"
   ((++PASS))
 else
