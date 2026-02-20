@@ -57,7 +57,7 @@ export default function LabPage() {
   const [wsId, setWsId] = useState("");
   const [strategyId, setStrategyId] = useState("");
   const [symbol, setSymbol] = useState("BTCUSDT");
-  const [interval, setInterval] = useState("15");
+  const [candleInterval, setCandleInterval] = useState("15");
   const [fromDate, setFromDate] = useState(() => {
     const d = new Date();
     d.setMonth(d.getMonth() - 1);
@@ -116,7 +116,7 @@ export default function LabPage() {
       body: JSON.stringify({
         strategyId: strategyId.trim(),
         symbol: symbol.trim() || undefined,
-        interval,
+        interval: candleInterval,
         fromTs: new Date(fromDate).toISOString(),
         toTs:   new Date(toDate).toISOString(),
       }),
@@ -177,8 +177,8 @@ export default function LabPage() {
             Interval
             <select
               style={inputStyle}
-              value={interval}
-              onChange={(e) => setInterval(e.target.value)}
+              value={candleInterval}
+              onChange={(e) => setCandleInterval(e.target.value)}
             >
               {INTERVALS.map((iv) => (
                 <option key={iv.value} value={iv.value}>{iv.label}</option>
