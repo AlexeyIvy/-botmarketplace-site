@@ -25,6 +25,12 @@ if [[ ! -f "$APP_DIR/.env" ]]; then
 fi
 echo "[✓] .env found"
 
+# 1. System dependencies
+echo "[0/4] Installing system dependencies..."
+apt-get update -qq
+apt-get install -y --no-install-recommends postgresql-client
+echo "      postgresql-client installed (required by backup.sh)"
+
 # 2. Install systemd services
 echo "[1/4] Installing systemd services..."
 cp "$APP_DIR/deploy/botmarket-api.service" /etc/systemd/system/botmarket-api.service
