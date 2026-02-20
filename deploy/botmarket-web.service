@@ -1,0 +1,28 @@
+# systemd service for BotMarketplace Web (Next.js)
+# Install: cp deploy/botmarket-web.service /etc/systemd/system/
+# Enable:  systemctl daemon-reload && systemctl enable botmarket-web
+# Start:   systemctl start botmarket-web
+# Logs:    journalctl -u botmarket-web -f
+
+[Unit]
+Description=BotMarketplace Web (Next.js)
+After=network-online.target botmarket-api.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/home/user/-botmarketplace-site/apps/web
+EnvironmentFile=/home/user/-botmarketplace-site/.env
+ExecStart=/usr/bin/node node_modules/.bin/next start --port 3000
+Restart=on-failure
+RestartSec=5s
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=botmarket-web
+
+Environment=NODE_ENV=production
+Environment=PORT=3000
+
+[Install]
+WantedBy=multi-user.target

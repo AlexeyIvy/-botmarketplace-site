@@ -9,6 +9,20 @@ export function setWorkspaceId(id: string) {
   localStorage.setItem("workspaceId", id);
 }
 
+export function getToken(): string | null {
+  if (typeof window === "undefined") return null;
+  return localStorage.getItem("accessToken");
+}
+
+export function setToken(token: string) {
+  localStorage.setItem("accessToken", token);
+}
+
+export function clearAuth() {
+  localStorage.removeItem("accessToken");
+  localStorage.removeItem("workspaceId");
+}
+
 export interface ProblemDetails {
   type: string;
   title: string;
@@ -22,8 +36,10 @@ async function doFetch<T>(
   options: RequestInit,
   injectWorkspace: boolean,
 ): Promise<{ ok: true; data: T } | { ok: false; problem: ProblemDetails }> {
+  const token = getToken();
   const headers: Record<string, string> = {
-    "Content-Type": "application/json",
+    ...(options.body != null ? { "Content-Type": "application/json" } : {}),
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
     ...(options.headers as Record<string, string>),
   };
   if (injectWorkspace) {

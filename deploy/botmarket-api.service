@@ -1,0 +1,28 @@
+# systemd service for BotMarketplace API (Fastify + Bot Worker)
+# Install: cp deploy/botmarket-api.service /etc/systemd/system/
+# Enable:  systemctl daemon-reload && systemctl enable botmarket-api
+# Start:   systemctl start botmarket-api
+# Logs:    journalctl -u botmarket-api -f
+
+[Unit]
+Description=BotMarketplace API
+After=network-online.target postgresql.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/home/user/-botmarketplace-site/apps/api
+EnvironmentFile=/home/user/-botmarketplace-site/.env
+ExecStart=/usr/bin/node dist/server.js
+Restart=on-failure
+RestartSec=5s
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=botmarket-api
+
+# Ensure node_modules/.bin is reachable (for prisma etc.)
+Environment=PATH=/usr/bin:/usr/local/bin:/root/.local/share/pnpm
+
+[Install]
+WantedBy=multi-user.target

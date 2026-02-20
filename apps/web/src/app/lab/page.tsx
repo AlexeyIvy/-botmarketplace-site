@@ -49,6 +49,13 @@ function fmtRate(n: number) {
   return (n * 100).toFixed(1) + "%";
 }
 
+function fmtInterval(interval: string) {
+  if (interval === "60") return "1h";
+  if (interval === "240") return "4h";
+  if (interval === "1440") return "1d";
+  return interval + "m";
+}
+
 // ---------------------------------------------------------------------------
 // Component
 // ---------------------------------------------------------------------------
@@ -258,7 +265,7 @@ export default function LabPage() {
           )}
 
           <div style={{ fontSize: 11, color: "var(--text-secondary)", marginTop: 12 }}>
-            {activeResult.symbol} · {activeResult.interval}m ·{" "}
+            {activeResult.symbol} · {fmtInterval(activeResult.interval)} ·{" "}
             {new Date(activeResult.fromTs).toLocaleDateString()} –{" "}
             {new Date(activeResult.toTs).toLocaleDateString()}
           </div>
@@ -315,7 +322,7 @@ export default function LabPage() {
                   onClick={() => { setActiveResult(bt); setActiveBtId(bt.id); }}
                 >
                   <td style={tdStyle}>{bt.symbol}</td>
-                  <td style={tdStyle}>{bt.interval}m</td>
+                  <td style={tdStyle}>{fmtInterval(bt.interval)}</td>
                   <td style={tdStyle}>
                     {new Date(bt.fromTs).toLocaleDateString()} –{" "}
                     {new Date(bt.toTs).toLocaleDateString()}

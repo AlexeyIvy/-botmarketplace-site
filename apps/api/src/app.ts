@@ -1,5 +1,6 @@
 import Fastify from "fastify";
 import cors from "@fastify/cors";
+import jwt from "@fastify/jwt";
 import { healthzRoutes } from "./routes/healthz.js";
 import { readyzRoutes } from "./routes/readyz.js";
 import { authRoutes } from "./routes/auth.js";
@@ -34,6 +35,24 @@ export async function buildApp() {
   });
 
   await app.register(cors, { origin: true });
+
+  // JWT plugin — secret from env or a fallback for dev
+  const jwtSecret = process.env.JWT_SECRET ?? "dev-secret-change-in-production-please";
+  await app.register(jwt, { secret: jwtSecret });
+
+  // Authenticate decorator used by protected routes
+  app.decorate("authenticate", async function (request: import("fastify").FastifyRequest, reply: import("fastify").FastifyReply) {
+    try {
+      await request.jwtVerify();
+    } catch {
+      return reply.status(401).send({
+        type: "about:blank",
+        title: "Unauthorized",
+        status: 401,
+        detail: "Valid Bearer token required",
+      });
+    }
+  });
 
   // Primary versioned routes: /api/v1/*
   await app.register(registerRoutes, { prefix: "/api/v1" });
