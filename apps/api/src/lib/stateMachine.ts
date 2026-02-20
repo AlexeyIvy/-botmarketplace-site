@@ -6,6 +6,7 @@
  */
 
 import type { BotRunState } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { prisma as defaultPrisma } from "./prisma.js";
 
 // ---------------------------------------------------------------------------
@@ -141,7 +142,7 @@ export async function transition(
       data: {
         botRunId: runId,
         type: eventType,
-        payloadJson: payload,
+        payloadJson: payload as Prisma.InputJsonValue,
       },
     });
 

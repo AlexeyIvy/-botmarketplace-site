@@ -11,6 +11,7 @@
 
 import { randomUUID } from "node:crypto";
 import type { FastifyInstance } from "fastify";
+import { Prisma } from "@prisma/client";
 import type { IntentState, IntentType, OrderSide } from "@prisma/client";
 import { prisma } from "../lib/prisma.js";
 import { problem } from "../lib/problem.js";
@@ -66,7 +67,7 @@ export async function intentRoutes(app: FastifyInstance) {
           side,
           qty:         qty,
           price:       price ?? null,
-          metaJson:    metaJson ?? null,
+          metaJson:    metaJson != null ? metaJson as Prisma.InputJsonValue : Prisma.JsonNull,
           state:       "PENDING",
         },
       });
@@ -143,8 +144,8 @@ export async function intentRoutes(app: FastifyInstance) {
         state:   newState,
         orderId: orderId ?? intent.orderId,
         metaJson: metaJson != null
-          ? { ...(intent.metaJson as Record<string, unknown> ?? {}), ...metaJson }
-          : intent.metaJson,
+          ? { ...(intent.metaJson as Record<string, unknown> ?? {}), ...metaJson } as Prisma.InputJsonValue
+          : intent.metaJson !== null ? intent.metaJson as Prisma.InputJsonValue : Prisma.JsonNull,
       },
     });
 
