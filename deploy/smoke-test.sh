@@ -21,10 +21,10 @@ check() {
   local label="$1" expected="$2" actual="$3"
   if [[ "$actual" == "$expected" ]]; then
     green "$label"
-    ((PASS++))
+    ((++PASS))
   else
     red "$label (expected: $expected, got: $actual)"
-    ((FAIL++))
+    ((++FAIL))
   fi
 }
 
@@ -32,10 +32,10 @@ check_contains() {
   local label="$1" needle="$2" haystack="$3"
   if echo "$haystack" | grep -q "$needle"; then
     green "$label"
-    ((PASS++))
+    ((++PASS))
   else
     red "$label (expected to contain: $needle)"
-    ((FAIL++))
+    ((++FAIL))
   fi
 }
 
@@ -81,18 +81,18 @@ WS_ID=$(echo "$REG" | grep -o '"workspaceId":"[^"]*"' | cut -d'"' -f4)
 
 if [[ -n "$TOKEN" ]]; then
   green "POST /auth/register → accessToken received"
-  ((PASS++))
+  ((++PASS))
 else
   red "POST /auth/register → no accessToken (response: $REG)"
-  ((FAIL++))
+  ((++FAIL))
 fi
 
 if [[ -n "$WS_ID" ]]; then
   green "POST /auth/register → workspaceId received"
-  ((PASS++))
+  ((++PASS))
 else
   red "POST /auth/register → no workspaceId"
-  ((FAIL++))
+  ((++FAIL))
 fi
 
 LOGIN=$(curl -s -X POST "$BASE_URL/api/v1/auth/login" \
@@ -102,10 +102,10 @@ LOGIN=$(curl -s -X POST "$BASE_URL/api/v1/auth/login" \
 LOGIN_TOKEN=$(echo "$LOGIN" | grep -o '"accessToken":"[^"]*"' | cut -d'"' -f4)
 if [[ -n "$LOGIN_TOKEN" ]]; then
   green "POST /auth/login → accessToken received"
-  ((PASS++))
+  ((++PASS))
 else
   red "POST /auth/login → failed (response: $LOGIN)"
-  ((FAIL++))
+  ((++FAIL))
 fi
 
 # Wrong password → 401
@@ -140,10 +140,10 @@ for i in $(seq 1 7); do
 done
 if [[ $RL_HIT -eq 1 ]]; then
   green "Rate limiting on /auth/register → 429 triggered"
-  ((PASS++))
+  ((++PASS))
 else
   red "Rate limiting on /auth/register → 429 NOT triggered after 7 requests"
-  ((FAIL++))
+  ((++FAIL))
 fi
 
 # ─── 6. Stop-all endpoint ─────────────────────────────────────────────────────
@@ -154,10 +154,10 @@ STOP_ALL=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/runs
 # 200 = success (0 active runs is fine), 4xx = problem
 if [[ "$STOP_ALL" == "200" ]]; then
   green "POST /runs/stop-all → 200"
-  ((PASS++))
+  ((++PASS))
 else
   red "POST /runs/stop-all → $STOP_ALL (expected 200)"
-  ((FAIL++))
+  ((++FAIL))
 fi
 
 # ─── 7. Bot worker ───────────────────────────────────────────────────────────
@@ -165,10 +165,10 @@ header "7. Bot Worker"
 
 if journalctl -u botmarket-api -n 100 --no-pager 2>/dev/null | grep -q "botWorker.*started"; then
   green "Bot worker started line found in API logs"
-  ((PASS++))
+  ((++PASS))
 else
   red "Bot worker start line NOT found in API logs"
-  ((FAIL++))
+  ((++FAIL))
 fi
 
 # ─── Summary ─────────────────────────────────────────────────────────────────
