@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { getToken, clearAuth } from "./factory/api";
 
 const NAV_ITEMS = [
   { href: "/terminal", label: "Terminal" },
@@ -11,6 +13,18 @@ const NAV_ITEMS = [
 
 export function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
+  const [isAuth, setIsAuth] = useState(false);
+
+  useEffect(() => {
+    setIsAuth(!!getToken());
+  }, [pathname]);
+
+  function handleLogout() {
+    clearAuth();
+    setIsAuth(false);
+    router.push("/login");
+  }
 
   return (
     <nav
@@ -39,6 +53,7 @@ export function Navbar() {
       >
         BotMarketplace
       </span>
+
       {NAV_ITEMS.map(({ href, label }) => {
         const isActive = pathname.startsWith(href);
         return (
@@ -59,6 +74,53 @@ export function Navbar() {
           </Link>
         );
       })}
+
+      <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: "8px" }}>
+        {isAuth ? (
+          <button
+            onClick={handleLogout}
+            style={{
+              background: "transparent",
+              border: "1px solid var(--border)",
+              borderRadius: "6px",
+              color: "var(--text-secondary)",
+              cursor: "pointer",
+              fontSize: "13px",
+              padding: "6px 14px",
+            }}
+          >
+            Sign out
+          </button>
+        ) : (
+          <>
+            <Link
+              href="/login"
+              style={{
+                padding: "6px 14px",
+                borderRadius: "6px",
+                fontSize: "13px",
+                color: "var(--text-secondary)",
+                border: "1px solid var(--border)",
+              }}
+            >
+              Sign in
+            </Link>
+            <Link
+              href="/register"
+              style={{
+                padding: "6px 14px",
+                borderRadius: "6px",
+                fontSize: "13px",
+                color: "#fff",
+                background: "var(--accent)",
+                fontWeight: 600,
+              }}
+            >
+              Register
+            </Link>
+          </>
+        )}
+      </div>
     </nav>
   );
 }
