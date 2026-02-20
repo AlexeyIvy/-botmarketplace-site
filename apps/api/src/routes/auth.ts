@@ -19,7 +19,9 @@ function authProblem(reply: FastifyReply, status: number, detail: string) {
 
 export async function authRoutes(app: FastifyInstance) {
   // ── POST /auth/register ────────────────────────────────────────────────────
-  app.post<{ Body: RegisterBody }>("/auth/register", async (request, reply) => {
+  app.post<{ Body: RegisterBody }>("/auth/register", {
+    config: { rateLimit: { max: 5, timeWindow: "15 minutes" } },
+  }, async (request, reply) => {
     const { email, password } = request.body ?? {};
 
     if (!email || !password) {

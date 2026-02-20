@@ -26,7 +26,9 @@ interface StartBacktestBody {
 
 export async function labRoutes(app: FastifyInstance) {
   // ── POST /lab/backtest ── trigger a new backtest ──────────────────────────
-  app.post<{ Body: StartBacktestBody }>("/lab/backtest", async (request, reply) => {
+  app.post<{ Body: StartBacktestBody }>("/lab/backtest", {
+    config: { rateLimit: { max: 5, timeWindow: "1 minute" } },
+  }, async (request, reply) => {
     const workspace = await resolveWorkspace(request, reply);
     if (!workspace) return;
 

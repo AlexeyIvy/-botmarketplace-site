@@ -1,0 +1,18 @@
+# systemd timer — triggers daily DB backup at 03:00
+# Install:
+#   cp deploy/botmarket-backup.timer /etc/systemd/system/
+#   cp deploy/botmarket-backup.service /etc/systemd/system/
+#   systemctl daemon-reload
+#   systemctl enable --now botmarket-backup.timer
+# Status: systemctl status botmarket-backup.timer
+# Last run: journalctl -u botmarket-backup -n 20
+
+[Unit]
+Description=BotMarketplace Daily DB Backup Timer
+
+[Timer]
+OnCalendar=03:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target

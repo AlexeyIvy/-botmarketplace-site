@@ -1,6 +1,7 @@
 import Fastify from "fastify";
 import cors from "@fastify/cors";
 import jwt from "@fastify/jwt";
+import rateLimit from "@fastify/rate-limit";
 import { healthzRoutes } from "./routes/healthz.js";
 import { readyzRoutes } from "./routes/readyz.js";
 import { authRoutes } from "./routes/auth.js";
@@ -35,6 +36,19 @@ export async function buildApp() {
   });
 
   await app.register(cors, { origin: true });
+
+  // Global rate limit — generous baseline; sensitive routes override below
+  await app.register(rateLimit, {
+    global: true,
+    max: 200,
+    timeWindow: "1 minute",
+    errorResponseBuilder: (_req, context) => ({
+      type: "about:blank",
+      title: "Too Many Requests",
+      status: 429,
+      detail: `Rate limit exceeded. Try again in ${Math.ceil(context.ttl / 1000)}s`,
+    }),
+  });
 
   // JWT plugin — secret from env or a fallback for dev
   const jwtSecret = process.env.JWT_SECRET ?? "dev-secret-change-in-production-please";
