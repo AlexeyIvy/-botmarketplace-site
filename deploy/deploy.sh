@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+# deploy.sh — Pull latest code, build, migrate, restart services
+# Usage: bash deploy/deploy.sh [--branch <branch>]
+#
+# Requirements:
+#   - pnpm installed globally
+#   - systemd services botmarket-api and botmarket-web installed
+#   - .env file present at project root
+
+set -euo pipefail
+
+APP_DIR="/home/user/-botmarketplace-site"
+BRANCH="${BRANCH:-main}"
+
+# Parse args
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    --branch) BRANCH="$2"; shift 2 ;;
+    *) echo "Unknown arg: $1"; exit 1 ;;
+  esac
+done
+
+cd "$APP_DIR"
+
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "  BotMarketplace deploy → $BRANCH"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+# 1. Pull latest code
+echo "[1/5] Git pull..."
+git fetch origin
+git checkout "$BRANCH"
+git pull origin "$BRANCH"
+
+# 2. Install dependencies
+echo "[2/5] Installing dependencies..."
+pnpm install --frozen-lockfile
+
+# 3. Run DB migrations
+echo "[3/5] Running DB migrations..."
+pnpm run db:migrate
+
+# 4. Build
+echo "[4/5] Building API and Web..."
+pnpm run build:api
+pnpm run build:web
+
+# 5. Restart services
+echo "[5/5] Restarting services..."
+systemctl restart botmarket-api
+systemctl restart botmarket-web
+
+# Wait a moment and show status
+sleep 3
+echo ""
+echo "Service status:"
+systemctl is-active botmarket-api && echo "  ✓ botmarket-api is running" || echo "  ✗ botmarket-api FAILED"
+systemctl is-active botmarket-web  && echo "  ✓ botmarket-web is running"  || echo "  ✗ botmarket-web FAILED"
+
+echo ""
+echo "Done. Check logs with:"
+echo "  journalctl -u botmarket-api -f"
+echo "  journalctl -u botmarket-web -f"
