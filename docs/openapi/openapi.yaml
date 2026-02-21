@@ -75,6 +75,8 @@ paths:
           description: OK
         "401":
           $ref: "#/components/responses/Problem"
+        "403":
+          $ref: "#/components/responses/Problem"
     post:
       operationId: strategiesCreate
       summary: Create strategy
@@ -90,6 +92,8 @@ paths:
         "400":
           $ref: "#/components/responses/Problem"
         "401":
+          $ref: "#/components/responses/Problem"
+        "403":
           $ref: "#/components/responses/Problem"
 
   /strategies/{strategyId}:validate:
@@ -125,6 +129,8 @@ paths:
           description: OK
         "401":
           $ref: "#/components/responses/Problem"
+        "403":
+          $ref: "#/components/responses/Problem"
     post:
       operationId: botsCreate
       summary: Create bot
@@ -140,6 +146,8 @@ paths:
         "400":
           $ref: "#/components/responses/Problem"
         "401":
+          $ref: "#/components/responses/Problem"
+        "403":
           $ref: "#/components/responses/Problem"
 
   /bots/{botId}/events:
