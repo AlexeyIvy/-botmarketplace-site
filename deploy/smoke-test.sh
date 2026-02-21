@@ -150,6 +150,7 @@ fi
 header "6. Stop-all endpoint"
 
 STOP_ALL=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/runs/stop-all" \
+  -H "Authorization: Bearer $TOKEN" \
   -H "X-Workspace-Id: $WS_ID")
 # 200 = success (0 active runs is fine), 4xx = problem
 if [[ "$STOP_ALL" == "200" ]]; then
