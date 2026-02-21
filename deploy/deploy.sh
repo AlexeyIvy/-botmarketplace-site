@@ -45,8 +45,19 @@ echo "[4/5] Building API and Web..."
 pnpm run build:api
 pnpm run build:web
 
-# 5. Restart services
-echo "[5/5] Restarting services..."
+# 5. Check critical env vars
+echo "[5/5] Checking env..."
+ENV_FILE="$APP_DIR/.env"
+if [[ -f "$ENV_FILE" ]]; then
+  if ! grep -q "^BOT_WORKER_SECRET=" "$ENV_FILE" || grep -q '^BOT_WORKER_SECRET="change-me-in-production"' "$ENV_FILE"; then
+    echo "  [!] WARNING: BOT_WORKER_SECRET is not set or still has placeholder value in .env"
+    echo "      Worker endpoints (PATCH /state, POST /heartbeat, POST /reconcile) will be UNPROTECTED."
+    echo "      Set a strong secret: echo 'BOT_WORKER_SECRET=\"$(openssl rand -hex 32)\"' >> $ENV_FILE"
+  fi
+fi
+
+# 6. Restart services
+echo "[6/6] Restarting services..."
 systemctl restart botmarket-api
 systemctl restart botmarket-web
 
@@ -61,3 +72,6 @@ echo ""
 echo "Done. Check logs with:"
 echo "  journalctl -u botmarket-api -f"
 echo "  journalctl -u botmarket-web -f"
+echo ""
+echo "Run smoke tests with:"
+echo "  bash deploy/smoke-test.sh"
