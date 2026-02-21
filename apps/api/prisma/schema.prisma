@@ -29,11 +29,12 @@ model Workspace {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  members    WorkspaceMember[]
-  strategies Strategy[]
-  bots       Bot[]
-  botRuns    BotRun[]
-  backtests  BacktestResult[]
+  members             WorkspaceMember[]
+  strategies          Strategy[]
+  bots                Bot[]
+  botRuns             BotRun[]
+  backtests           BacktestResult[]
+  exchangeConnections ExchangeConnection[]
 }
 
 model WorkspaceMember {
@@ -231,6 +232,31 @@ model BotIntent {
   @@index([botRunId])
   @@index([orderLinkId])
   @@index([botRunId, state])
+}
+
+// ── Exchange Connections ─────────────────────────────────────────
+
+enum ExchangeConnectionStatus {
+  UNKNOWN
+  CONNECTED
+  FAILED
+}
+
+model ExchangeConnection {
+  id               String                    @id @default(uuid())
+  workspaceId      String
+  exchange         String
+  name             String
+  apiKey           String
+  encryptedSecret  String
+  status           ExchangeConnectionStatus  @default(UNKNOWN)
+  createdAt        DateTime                  @default(now())
+  updatedAt        DateTime                  @updatedAt
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@unique([workspaceId, name])
+  @@index([workspaceId])
 }
 
 // ── Research Lab ─────────────────────────────────────────────────
