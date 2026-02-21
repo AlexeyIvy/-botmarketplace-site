@@ -168,6 +168,162 @@ paths:
         "404":
           $ref: "#/components/responses/Problem"
 
+  # ── Exchange Connections (Stage 8) ─────────────────────────────────────────
+
+  /exchanges:
+    get:
+      operationId: exchangesList
+      summary: List exchange connections (no secrets returned)
+      parameters:
+        - $ref: "#/components/parameters/XWorkspaceId"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ExchangeConnectionView"
+        "400":
+          $ref: "#/components/responses/Problem"
+        "401":
+          $ref: "#/components/responses/Problem"
+        "403":
+          $ref: "#/components/responses/Problem"
+    post:
+      operationId: exchangesCreate
+      summary: Create exchange connection
+      parameters:
+        - $ref: "#/components/parameters/XWorkspaceId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ExchangeConnectionCreateRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExchangeConnectionView"
+        "400":
+          $ref: "#/components/responses/Problem"
+        "401":
+          $ref: "#/components/responses/Problem"
+        "403":
+          $ref: "#/components/responses/Problem"
+        "409":
+          $ref: "#/components/responses/Problem"
+        "500":
+          $ref: "#/components/responses/Problem"
+
+  /exchanges/{connectionId}:
+    get:
+      operationId: exchangesGet
+      summary: Get exchange connection (no secrets returned)
+      parameters:
+        - $ref: "#/components/parameters/XWorkspaceId"
+        - name: connectionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExchangeConnectionView"
+        "401":
+          $ref: "#/components/responses/Problem"
+        "403":
+          $ref: "#/components/responses/Problem"
+        "404":
+          $ref: "#/components/responses/Problem"
+    patch:
+      operationId: exchangesPatch
+      summary: Update exchange connection (re-encrypts secret if provided)
+      parameters:
+        - $ref: "#/components/parameters/XWorkspaceId"
+        - name: connectionId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ExchangeConnectionPatchRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExchangeConnectionView"
+        "400":
+          $ref: "#/components/responses/Problem"
+        "401":
+          $ref: "#/components/responses/Problem"
+        "403":
+          $ref: "#/components/responses/Problem"
+        "404":
+          $ref: "#/components/responses/Problem"
+        "500":
+          $ref: "#/components/responses/Problem"
+    delete:
+      operationId: exchangesDelete
+      summary: Delete exchange connection
+      parameters:
+        - $ref: "#/components/parameters/XWorkspaceId"
+        - name: connectionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: No Content
+        "401":
+          $ref: "#/components/responses/Problem"
+        "403":
+          $ref: "#/components/responses/Problem"
+        "404":
+          $ref: "#/components/responses/Problem"
+
+  /exchanges/{connectionId}/test:
+    post:
+      operationId: exchangesTest
+      summary: Test exchange connection (demo-first)
+      parameters:
+        - $ref: "#/components/parameters/XWorkspaceId"
+        - name: connectionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Test result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExchangeConnectionTestResult"
+        "401":
+          $ref: "#/components/responses/Problem"
+        "403":
+          $ref: "#/components/responses/Problem"
+        "404":
+          $ref: "#/components/responses/Problem"
+        "500":
+          $ref: "#/components/responses/Problem"
+
   /signals/webhook/{strategyId}:
     post:
       operationId: signalWebhook
@@ -196,6 +352,15 @@ components:
     bearerAuth:
       type: http
       scheme: bearer
+
+  parameters:
+    XWorkspaceId:
+      name: X-Workspace-Id
+      in: header
+      required: true
+      schema:
+        type: string
+      description: Workspace ID (membership is enforced server-side)
 
   responses:
     Problem:
@@ -243,6 +408,52 @@ components:
       properties:
         strategyId: { type: string }
         note: { type: string }
+
+    ExchangeConnectionView:
+      type: object
+      description: >
+        Safe view of an exchange connection — never includes apiKey, secret, or encryptedSecret.
+      additionalProperties: false
+      required: [id, workspaceId, exchange, name, status, createdAt, updatedAt]
+      properties:
+        id: { type: string }
+        workspaceId: { type: string }
+        exchange: { type: string, example: "BYBIT" }
+        name: { type: string, example: "Main Bybit account" }
+        status:
+          type: string
+          enum: [UNKNOWN, CONNECTED, FAILED]
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+
+    ExchangeConnectionCreateRequest:
+      type: object
+      additionalProperties: false
+      required: [exchange, name, apiKey, secret]
+      properties:
+        exchange: { type: string, example: "BYBIT" }
+        name: { type: string, example: "Main Bybit account" }
+        apiKey: { type: string, minLength: 1 }
+        secret: { type: string, minLength: 1, description: "Raw secret — stored encrypted, never returned" }
+
+    ExchangeConnectionPatchRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        name: { type: string }
+        apiKey: { type: string, minLength: 1 }
+        secret: { type: string, minLength: 1, description: "Raw secret — re-encrypted on update, never returned" }
+
+    ExchangeConnectionTestResult:
+      type: object
+      additionalProperties: false
+      required: [id, status, detail]
+      properties:
+        id: { type: string }
+        status:
+          type: string
+          enum: [CONNECTED, FAILED]
+        detail: { type: string }
 
     SignalRequest:
       type: object
