@@ -9,7 +9,7 @@
 
 set -euo pipefail
 
-APP_DIR="/home/user/-botmarketplace-site"
+APP_DIR="/opt/-botmarketplace-site"
 BRANCH="${BRANCH:-main}"
 
 # Parse args
@@ -36,9 +36,11 @@ git pull origin "$BRANCH"
 echo "[2/5] Installing dependencies..."
 pnpm install --frozen-lockfile
 
-# 3. Run DB migrations
+# 3. Run DB migrations + regenerate Prisma client
 echo "[3/5] Running DB migrations..."
 pnpm run db:migrate
+echo "[3/5] Regenerating Prisma client..."
+pnpm --filter @botmarketplace/api exec prisma generate
 
 # 4. Build
 echo "[4/5] Building API and Web..."
