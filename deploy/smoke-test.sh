@@ -160,10 +160,72 @@ else
   ((++FAIL))
 fi
 
-# ─── 7. Bot worker ───────────────────────────────────────────────────────────
-header "7. Bot Worker"
+# ─── 7. Worker endpoint auth ─────────────────────────────────────────────────
+# These three endpoints are worker-to-API (machine-to-machine) and must NOT be
+# freely callable by anyone with just a workspace ID.
+# When BOT_WORKER_SECRET is set (production): expect 401 without the secret.
+# When BOT_WORKER_SECRET is unset (dev):       endpoint falls through to normal
+#   workspace/run validation, so we accept any non-500 response.
+header "7. Worker endpoint auth"
 
-if (set +o pipefail; journalctl -u botmarket-api --no-pager --output=cat 2>/dev/null | grep -q "botWorker.*started"); then
+WORKER_SECRET="${BOT_WORKER_SECRET:-}"
+
+# PATCH /runs/:runId/state — no auth header
+PATCH_STATE=$(curl -s -o /dev/null -w "%{http_code}" -X PATCH \
+  "$BASE_URL/api/v1/runs/smoke-fake-id/state" \
+  -H "Content-Type: application/json" \
+  -H "X-Workspace-Id: $WS_ID" \
+  -d '{"state":"RUNNING"}')
+if [[ -n "$WORKER_SECRET" ]]; then
+  check "PATCH /runs/:id/state without secret → 401" "401" "$PATCH_STATE"
+else
+  if [[ "$PATCH_STATE" != "5"* ]]; then
+    green "PATCH /runs/:id/state (dev, no secret) → $PATCH_STATE (no 5xx)"
+    ((++PASS))
+  else
+    red "PATCH /runs/:id/state → unexpected $PATCH_STATE"
+    ((++FAIL))
+  fi
+fi
+
+# POST /runs/:runId/heartbeat — no auth header
+HEARTBEAT=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
+  "$BASE_URL/api/v1/runs/smoke-fake-id/heartbeat" \
+  -H "Content-Type: application/json" \
+  -H "X-Workspace-Id: $WS_ID" \
+  -d '{"workerId":"smoke-test"}')
+if [[ -n "$WORKER_SECRET" ]]; then
+  check "POST /runs/:id/heartbeat without secret → 401" "401" "$HEARTBEAT"
+else
+  if [[ "$HEARTBEAT" != "5"* ]]; then
+    green "POST /runs/:id/heartbeat (dev, no secret) → $HEARTBEAT (no 5xx)"
+    ((++PASS))
+  else
+    red "POST /runs/:id/heartbeat → unexpected $HEARTBEAT"
+    ((++FAIL))
+  fi
+fi
+
+# POST /runs/reconcile — no auth header
+RECONCILE=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
+  "$BASE_URL/api/v1/runs/reconcile" \
+  -H "X-Workspace-Id: $WS_ID")
+if [[ -n "$WORKER_SECRET" ]]; then
+  check "POST /runs/reconcile without secret → 401" "401" "$RECONCILE"
+else
+  if [[ "$RECONCILE" != "5"* ]]; then
+    green "POST /runs/reconcile (dev, no secret) → $RECONCILE (no 5xx)"
+    ((++PASS))
+  else
+    red "POST /runs/reconcile → unexpected $RECONCILE"
+    ((++FAIL))
+  fi
+fi
+
+# ─── 8. Bot worker ───────────────────────────────────────────────────────────
+header "8. Bot Worker"
+
+if (set +o pipefail; journalctl -u botmarket-api --no-pager --output=cat 2>/dev/null | grep -q "botWorker.*started" 2>/dev/null); then
   green "Bot worker started line found in API logs"
   ((++PASS))
 else

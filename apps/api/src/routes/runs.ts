@@ -1,4 +1,4 @@
-import type { FastifyInstance } from "fastify";
+import type { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
 import type { BotRunState } from "@prisma/client";
 import { prisma } from "../lib/prisma.js";
 import { problem } from "../lib/problem.js";
@@ -10,6 +10,32 @@ import {
   InvalidTransitionError,
   RunNotFoundError,
 } from "../lib/stateMachine.js";
+
+// ---------------------------------------------------------------------------
+// Worker-secret guard
+// Applied to machine-to-machine endpoints that must NOT be callable by
+// arbitrary users. The in-process botWorker bypasses HTTP entirely (calls
+// Prisma directly), so this guard has zero runtime impact today; it protects
+// the HTTP surface for any future external worker.
+//
+// Auth scheme: Authorization: Bearer <BOT_WORKER_SECRET>
+// If BOT_WORKER_SECRET is not set (dev / CI), the check is skipped.
+// In production always set BOT_WORKER_SECRET in the environment.
+// ---------------------------------------------------------------------------
+async function verifyWorkerSecret(request: FastifyRequest, reply: FastifyReply) {
+  const secret = process.env.BOT_WORKER_SECRET;
+  if (!secret) return; // permissive in dev; production must set the var
+  const auth = request.headers.authorization;
+  const token = auth?.startsWith("Bearer ") ? auth.slice(7) : undefined;
+  if (!token || token !== secret) {
+    return reply.status(401).send({
+      type: "about:blank",
+      title: "Unauthorized",
+      status: 401,
+      detail: "Valid worker secret required (Authorization: Bearer <BOT_WORKER_SECRET>)",
+    });
+  }
+}
 
 // ---------------------------------------------------------------------------
 // Routes
@@ -166,7 +192,7 @@ export async function runRoutes(app: FastifyInstance) {
   app.patch<{
     Params: { runId: string };
     Body: { state: BotRunState; message?: string; errorCode?: string };
-  }>("/runs/:runId/state", async (request, reply) => {
+  }>("/runs/:runId/state", { preHandler: [verifyWorkerSecret] }, async (request, reply) => {
     const workspace = await resolveWorkspace(request, reply);
     if (!workspace) return;
 
@@ -201,6 +227,7 @@ export async function runRoutes(app: FastifyInstance) {
   // ── POST /runs/:runId/heartbeat ── lease renewal ──────────────────────────
   app.post<{ Params: { runId: string }; Body: { workerId: string } }>(
     "/runs/:runId/heartbeat",
+    { preHandler: [verifyWorkerSecret] },
     async (request, reply) => {
       const workspace = await resolveWorkspace(request, reply);
       if (!workspace) return;
@@ -257,7 +284,7 @@ export async function runRoutes(app: FastifyInstance) {
   );
 
   // ── POST /runs/reconcile ── recover stale runs ────────────────────────────
-  app.post("/runs/reconcile", async (request, reply) => {
+  app.post("/runs/reconcile", { preHandler: [verifyWorkerSecret] }, async (request, reply) => {
     const workspace = await resolveWorkspace(request, reply);
     if (!workspace) return;
 
