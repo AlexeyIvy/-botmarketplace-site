@@ -45,6 +45,7 @@ export async function runRoutes(app: FastifyInstance) {
   // ── POST /bots/:botId/runs ── start a new run ────────────────────────────
   app.post<{ Params: { botId: string } }>("/bots/:botId/runs", {
     config: { rateLimit: { max: 10, timeWindow: "1 minute" } },
+    onRequest: [app.authenticate],
   }, async (request, reply) => {
     const workspace = await resolveWorkspace(request, reply);
     if (!workspace) return;
@@ -104,6 +105,7 @@ export async function runRoutes(app: FastifyInstance) {
   // ── POST /bots/:botId/runs/:runId/stop ───────────────────────────────────
   app.post<{ Params: { botId: string; runId: string } }>(
     "/bots/:botId/runs/:runId/stop",
+    { onRequest: [app.authenticate] },
     async (request, reply) => {
       const workspace = await resolveWorkspace(request, reply);
       if (!workspace) return;
@@ -151,7 +153,7 @@ export async function runRoutes(app: FastifyInstance) {
   );
 
   // ── POST /runs/stop-all ── emergency stop all active runs in workspace ─────
-  app.post("/runs/stop-all", async (request, reply) => {
+  app.post("/runs/stop-all", { onRequest: [app.authenticate] }, async (request, reply) => {
     const workspace = await resolveWorkspace(request, reply);
     if (!workspace) return;
 
@@ -192,7 +194,7 @@ export async function runRoutes(app: FastifyInstance) {
   app.patch<{
     Params: { runId: string };
     Body: { state: BotRunState; message?: string; errorCode?: string };
-  }>("/runs/:runId/state", { preHandler: [verifyWorkerSecret] }, async (request, reply) => {
+  }>("/runs/:runId/state", { onRequest: [app.authenticate] }, async (request, reply) => {
     const workspace = await resolveWorkspace(request, reply);
     if (!workspace) return;
 
@@ -227,7 +229,7 @@ export async function runRoutes(app: FastifyInstance) {
   // ── POST /runs/:runId/heartbeat ── lease renewal ──────────────────────────
   app.post<{ Params: { runId: string }; Body: { workerId: string } }>(
     "/runs/:runId/heartbeat",
-    { preHandler: [verifyWorkerSecret] },
+    { onRequest: [app.authenticate] },
     async (request, reply) => {
       const workspace = await resolveWorkspace(request, reply);
       if (!workspace) return;
@@ -257,6 +259,7 @@ export async function runRoutes(app: FastifyInstance) {
   // ── GET /runs/:runId/events ── list events for a run ─────────────────────
   app.get<{ Params: { runId: string }; Querystring: { limit?: string; after?: string } }>(
     "/runs/:runId/events",
+    { onRequest: [app.authenticate] },
     async (request, reply) => {
       const workspace = await resolveWorkspace(request, reply);
       if (!workspace) return;
@@ -284,7 +287,7 @@ export async function runRoutes(app: FastifyInstance) {
   );
 
   // ── POST /runs/reconcile ── recover stale runs ────────────────────────────
-  app.post("/runs/reconcile", { preHandler: [verifyWorkerSecret] }, async (request, reply) => {
+  app.post("/runs/reconcile", { onRequest: [app.authenticate] }, async (request, reply) => {
     const workspace = await resolveWorkspace(request, reply);
     if (!workspace) return;
 
