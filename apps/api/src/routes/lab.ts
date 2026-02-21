@@ -28,6 +28,7 @@ export async function labRoutes(app: FastifyInstance) {
   // ── POST /lab/backtest ── trigger a new backtest ──────────────────────────
   app.post<{ Body: StartBacktestBody }>("/lab/backtest", {
     config: { rateLimit: { max: 5, timeWindow: "1 minute" } },
+    onRequest: [app.authenticate],
   }, async (request, reply) => {
     const workspace = await resolveWorkspace(request, reply);
     if (!workspace) return;
@@ -87,7 +88,7 @@ export async function labRoutes(app: FastifyInstance) {
   });
 
   // ── GET /lab/backtest/:id ── get result ────────────────────────────────────
-  app.get<{ Params: { id: string } }>("/lab/backtest/:id", async (request, reply) => {
+  app.get<{ Params: { id: string } }>("/lab/backtest/:id", { onRequest: [app.authenticate] }, async (request, reply) => {
     const workspace = await resolveWorkspace(request, reply);
     if (!workspace) return;
 
@@ -99,7 +100,7 @@ export async function labRoutes(app: FastifyInstance) {
   });
 
   // ── GET /lab/backtests ── list for workspace ───────────────────────────────
-  app.get("/lab/backtests", async (request, reply) => {
+  app.get("/lab/backtests", { onRequest: [app.authenticate] }, async (request, reply) => {
     const workspace = await resolveWorkspace(request, reply);
     if (!workspace) return;
 

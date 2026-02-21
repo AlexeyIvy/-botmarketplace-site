@@ -22,7 +22,7 @@ interface CreateBotBody {
 
 export async function botRoutes(app: FastifyInstance) {
   // GET /bots — list bots for workspace
-  app.get("/bots", async (request, reply) => {
+  app.get("/bots", { onRequest: [app.authenticate] }, async (request, reply) => {
     const workspace = await resolveWorkspace(request, reply);
     if (!workspace) return;
 
@@ -43,7 +43,7 @@ export async function botRoutes(app: FastifyInstance) {
   });
 
   // POST /bots — create a new bot (DRAFT)
-  app.post<{ Body: CreateBotBody }>("/bots", async (request, reply) => {
+  app.post<{ Body: CreateBotBody }>("/bots", { onRequest: [app.authenticate] }, async (request, reply) => {
     const workspace = await resolveWorkspace(request, reply);
     if (!workspace) return;
 
@@ -98,7 +98,7 @@ export async function botRoutes(app: FastifyInstance) {
   });
 
   // GET /bots/:id — get single bot (must belong to workspace)
-  app.get<{ Params: { id: string } }>("/bots/:id", async (request, reply) => {
+  app.get<{ Params: { id: string } }>("/bots/:id", { onRequest: [app.authenticate] }, async (request, reply) => {
     const workspace = await resolveWorkspace(request, reply);
     if (!workspace) return;
 

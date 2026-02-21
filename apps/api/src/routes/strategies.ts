@@ -35,7 +35,7 @@ interface ValidateBody {
 
 export async function strategyRoutes(app: FastifyInstance) {
   // GET /strategies — list strategies for workspace
-  app.get("/strategies", async (request, reply) => {
+  app.get("/strategies", { onRequest: [app.authenticate] }, async (request, reply) => {
     const workspace = await resolveWorkspace(request, reply);
     if (!workspace) return;
 
@@ -47,7 +47,7 @@ export async function strategyRoutes(app: FastifyInstance) {
   });
 
   // POST /strategies — create a new strategy (DRAFT)
-  app.post<{ Body: CreateStrategyBody }>("/strategies", async (request, reply) => {
+  app.post<{ Body: CreateStrategyBody }>("/strategies", { onRequest: [app.authenticate] }, async (request, reply) => {
     const workspace = await resolveWorkspace(request, reply);
     if (!workspace) return;
 
@@ -84,7 +84,7 @@ export async function strategyRoutes(app: FastifyInstance) {
   });
 
   // GET /strategies/:id — get single strategy (must belong to workspace)
-  app.get<{ Params: { id: string } }>("/strategies/:id", async (request, reply) => {
+  app.get<{ Params: { id: string } }>("/strategies/:id", { onRequest: [app.authenticate] }, async (request, reply) => {
     const workspace = await resolveWorkspace(request, reply);
     if (!workspace) return;
 
@@ -99,7 +99,7 @@ export async function strategyRoutes(app: FastifyInstance) {
   });
 
   // POST /strategies/:id/versions — create a new version
-  app.post<{ Params: { id: string }; Body: CreateVersionBody }>("/strategies/:id/versions", async (request, reply) => {
+  app.post<{ Params: { id: string }; Body: CreateVersionBody }>("/strategies/:id/versions", { onRequest: [app.authenticate] }, async (request, reply) => {
     const workspace = await resolveWorkspace(request, reply);
     if (!workspace) return;
 
@@ -133,7 +133,7 @@ export async function strategyRoutes(app: FastifyInstance) {
   });
 
   // POST /strategies/validate — validate DSL JSON
-  app.post<{ Body: ValidateBody }>("/strategies/validate", async (request, reply) => {
+  app.post<{ Body: ValidateBody }>("/strategies/validate", { onRequest: [app.authenticate] }, async (request, reply) => {
     const workspace = await resolveWorkspace(request, reply);
     if (!workspace) return;
 

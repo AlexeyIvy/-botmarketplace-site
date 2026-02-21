@@ -33,7 +33,7 @@ export async function intentRoutes(app: FastifyInstance) {
       price?: number;
       metaJson?: Record<string, unknown>;
     };
-  }>("/runs/:runId/intents", async (request, reply) => {
+  }>("/runs/:runId/intents", { onRequest: [app.authenticate] }, async (request, reply) => {
     const workspace = await resolveWorkspace(request, reply);
     if (!workspace) return;
 
@@ -90,7 +90,7 @@ export async function intentRoutes(app: FastifyInstance) {
   app.get<{
     Params: { runId: string };
     Querystring: { state?: IntentState };
-  }>("/runs/:runId/intents", async (request, reply) => {
+  }>("/runs/:runId/intents", { onRequest: [app.authenticate] }, async (request, reply) => {
     const workspace = await resolveWorkspace(request, reply);
     if (!workspace) return;
 
@@ -114,7 +114,7 @@ export async function intentRoutes(app: FastifyInstance) {
   app.patch<{
     Params: { runId: string; intentId: string };
     Body: { state: IntentState; orderId?: string; metaJson?: Record<string, unknown> };
-  }>("/runs/:runId/intents/:intentId/state", async (request, reply) => {
+  }>("/runs/:runId/intents/:intentId/state", { onRequest: [app.authenticate] }, async (request, reply) => {
     const workspace = await resolveWorkspace(request, reply);
     if (!workspace) return;
 
