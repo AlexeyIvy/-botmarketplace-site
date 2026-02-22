@@ -1,11 +1,85 @@
 /**
- * Fetch historical OHLCV candles from Bybit public API (market/kline).
- * Uses mainnet public endpoint — no auth required.
+ * Bybit public market-data helpers (read-only, no auth required).
+ * Used by: lab routes (candles for backtest), terminal routes (ticker + candles).
  */
 
 const BYBIT_PUBLIC = "https://api.bybit.com";
 /** Maximum candles per request (Bybit cap) */
 const PAGE_LIMIT = 1000;
+
+// ---------------------------------------------------------------------------
+// Ticker
+// ---------------------------------------------------------------------------
+
+export interface Ticker {
+  symbol: string;
+  lastPrice: number;
+  bidPrice: number;
+  askPrice: number;
+  prevPrice24h: number;
+  price24hPcnt: number;
+  highPrice24h: number;
+  lowPrice24h: number;
+  volume24h: number;
+  turnover24h: number;
+}
+
+interface BybitTickerResponse {
+  retCode: number;
+  retMsg: string;
+  result: {
+    list: Array<{
+      symbol: string;
+      lastPrice: string;
+      bid1Price: string;
+      ask1Price: string;
+      prevPrice24h: string;
+      price24hPcnt: string;
+      highPrice24h: string;
+      lowPrice24h: string;
+      volume24h: string;
+      turnover24h: string;
+    }>;
+  };
+}
+
+/**
+ * Fetch current ticker for a linear perpetual symbol (e.g. "BTCUSDT").
+ * Throws if the symbol is not found or Bybit returns an error.
+ */
+export async function fetchTicker(symbol: string): Promise<Ticker> {
+  const url =
+    `${BYBIT_PUBLIC}/v5/market/tickers` +
+    `?category=linear&symbol=${encodeURIComponent(symbol)}`;
+
+  const res = await fetch(url, { headers: { "User-Agent": "botmarketplace-terminal/1" } });
+  if (!res.ok) {
+    throw new Error(`Bybit ticker request failed: ${res.status} ${res.statusText}`);
+  }
+
+  const json = (await res.json()) as BybitTickerResponse;
+  if (json.retCode !== 0) {
+    throw new Error(`Bybit API error ${json.retCode}: ${json.retMsg}`);
+  }
+
+  const item = json.result?.list?.[0];
+  if (!item) {
+    throw new Error(`Symbol not found: ${symbol}`);
+  }
+
+  return {
+    symbol: item.symbol,
+    lastPrice: Number(item.lastPrice),
+    bidPrice: Number(item.bid1Price),
+    askPrice: Number(item.ask1Price),
+    prevPrice24h: Number(item.prevPrice24h),
+    price24hPcnt: Number(item.price24hPcnt),
+    highPrice24h: Number(item.highPrice24h),
+    lowPrice24h: Number(item.lowPrice24h),
+    volume24h: Number(item.volume24h),
+    turnover24h: Number(item.turnover24h),
+  };
+}
 
 export interface Candle {
   openTime: number; // ms
