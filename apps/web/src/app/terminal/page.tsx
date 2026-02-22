@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { apiFetchNoWorkspace } from "../factory/api";
+import { useState, useEffect } from "react";
+import { apiFetchNoWorkspace, apiFetch } from "../factory/api";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -28,7 +28,28 @@ interface Candle {
   volume: number;
 }
 
+interface ExchangeConnection {
+  id: string;
+  name: string;
+  exchange: string;
+  status: string;
+}
+
+interface TerminalOrder {
+  id: string;
+  symbol: string;
+  side: string;
+  type: string;
+  qty: string;
+  price: string | null;
+  status: string;
+  exchangeOrderId: string | null;
+  error: string | null;
+  createdAt: string;
+}
+
 type LoadState = "idle" | "loading" | "success" | "error";
+type OrderState = "idle" | "loading" | "success" | "error";
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -43,6 +64,7 @@ const DEFAULT_INTERVAL = "15";
 // ---------------------------------------------------------------------------
 
 export default function TerminalPage() {
+  // --- Market Data state ---
   const [symbol, setSymbol] = useState(DEFAULT_SYMBOL);
   const [interval, setInterval] = useState(DEFAULT_INTERVAL);
   const [limit, setLimit] = useState("50");
@@ -55,7 +77,28 @@ export default function TerminalPage() {
   const [candles, setCandles] = useState<Candle[]>([]);
   const [candlesError, setCandlesError] = useState<string | null>(null);
 
-  // --- Actions ---
+  // --- Order state ---
+  const [connections, setConnections] = useState<ExchangeConnection[]>([]);
+  const [selectedConnection, setSelectedConnection] = useState("");
+  const [orderSide, setOrderSide] = useState<"BUY" | "SELL">("BUY");
+  const [orderType, setOrderType] = useState<"MARKET" | "LIMIT">("MARKET");
+  const [orderQty, setOrderQty] = useState("");
+  const [orderPrice, setOrderPrice] = useState("");
+  const [orderState, setOrderState] = useState<OrderState>("idle");
+  const [lastOrder, setLastOrder] = useState<TerminalOrder | null>(null);
+  const [orderError, setOrderError] = useState<string | null>(null);
+
+  // Load exchange connections on mount
+  useEffect(() => {
+    apiFetch<ExchangeConnection[]>("/exchanges").then((res) => {
+      if (res.ok) {
+        setConnections(res.data);
+        if (res.data.length > 0) setSelectedConnection(res.data[0].id);
+      }
+    });
+  }, []);
+
+  // --- Market Data actions ---
 
   async function loadTicker() {
     const sym = symbol.trim().toUpperCase();
@@ -100,6 +143,63 @@ export default function TerminalPage() {
     await Promise.all([loadTicker(), loadCandles()]);
   }
 
+  // --- Order actions ---
+
+  async function submitOrder() {
+    if (!selectedConnection) {
+      setOrderError("Select an exchange connection first");
+      setOrderState("error");
+      return;
+    }
+    const sym = symbol.trim().toUpperCase() || DEFAULT_SYMBOL;
+    const qty = Number(orderQty);
+    if (!Number.isFinite(qty) || qty <= 0) {
+      setOrderError("Quantity must be a positive number");
+      setOrderState("error");
+      return;
+    }
+    if (orderType === "LIMIT") {
+      const pr = Number(orderPrice);
+      if (!Number.isFinite(pr) || pr <= 0) {
+        setOrderError("Price must be a positive number for LIMIT orders");
+        setOrderState("error");
+        return;
+      }
+    }
+
+    setOrderState("loading");
+    setOrderError(null);
+    setLastOrder(null);
+
+    const body: Record<string, unknown> = {
+      exchangeConnectionId: selectedConnection,
+      symbol: sym,
+      side: orderSide,
+      type: orderType,
+      qty,
+    };
+    if (orderType === "LIMIT") body.price = Number(orderPrice);
+
+    const res = await apiFetch<TerminalOrder>("/terminal/orders", {
+      method: "POST",
+      body: JSON.stringify(body),
+    });
+
+    if (res.ok) {
+      setLastOrder(res.data);
+      setOrderState("success");
+    } else {
+      setOrderError(`${res.problem.title}: ${res.problem.detail}`);
+      setOrderState("error");
+    }
+  }
+
+  async function refreshOrderStatus() {
+    if (!lastOrder) return;
+    const res = await apiFetch<TerminalOrder>(`/terminal/orders/${lastOrder.id}`);
+    if (res.ok) setLastOrder(res.data);
+  }
+
   // --- Helpers ---
 
   function pctColor(pct: number) {
@@ -119,7 +219,7 @@ export default function TerminalPage() {
   // ---------------------------------------------------------------------------
 
   return (
-    <div style={{ padding: "32px 24px", maxWidth: 900, margin: "0 auto" }}>
+    <div style={{ padding: "32px 24px", maxWidth: 960, margin: "0 auto" }}>
       <h1 style={{ fontSize: 26, marginBottom: 24 }}>Terminal — Market Data</h1>
 
       {/* ── Controls ── */}
@@ -184,6 +284,132 @@ export default function TerminalPage() {
             <TickerCell label="24h Volume" value={fmt(ticker.volume24h)} />
             <TickerCell label="Prev Close" value={fmt(ticker.prevPrice24h)} />
           </div>
+        )}
+      </div>
+
+      {/* ── Order Panel ── */}
+      <div style={{ ...card, marginBottom: 20 }}>
+        <h2 style={{ fontSize: 16, marginBottom: 14 }}>Place Order</h2>
+
+        {connections.length === 0 ? (
+          <p style={hint}>
+            No exchange connections found. Create one in Exchange Connections before placing orders.
+          </p>
+        ) : (
+          <>
+            <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "flex-end", marginBottom: 12 }}>
+              {/* Connection selector */}
+              <div>
+                <div style={fieldLabel}>Connection</div>
+                <select
+                  style={{ ...input, width: 200 }}
+                  value={selectedConnection}
+                  onChange={(e) => setSelectedConnection(e.target.value)}
+                >
+                  {connections.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.name} ({c.exchange})
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Side */}
+              <div>
+                <div style={fieldLabel}>Side</div>
+                <div style={{ display: "flex", gap: 4 }}>
+                  <button
+                    style={{
+                      ...sideBtn,
+                      background: orderSide === "BUY" ? "#3fb950" : "var(--bg-secondary)",
+                      color: orderSide === "BUY" ? "#fff" : "var(--text-primary)",
+                    }}
+                    onClick={() => setOrderSide("BUY")}
+                  >
+                    BUY
+                  </button>
+                  <button
+                    style={{
+                      ...sideBtn,
+                      background: orderSide === "SELL" ? "#f85149" : "var(--bg-secondary)",
+                      color: orderSide === "SELL" ? "#fff" : "var(--text-primary)",
+                    }}
+                    onClick={() => setOrderSide("SELL")}
+                  >
+                    SELL
+                  </button>
+                </div>
+              </div>
+
+              {/* Type */}
+              <div>
+                <div style={fieldLabel}>Type</div>
+                <select
+                  style={{ ...input, width: 110 }}
+                  value={orderType}
+                  onChange={(e) => setOrderType(e.target.value as "MARKET" | "LIMIT")}
+                >
+                  <option value="MARKET">Market</option>
+                  <option value="LIMIT">Limit</option>
+                </select>
+              </div>
+
+              {/* Qty */}
+              <div>
+                <div style={fieldLabel}>Qty</div>
+                <input
+                  style={{ ...input, width: 100 }}
+                  type="number"
+                  min={0}
+                  step="any"
+                  placeholder="e.g. 0.001"
+                  value={orderQty}
+                  onChange={(e) => setOrderQty(e.target.value)}
+                />
+              </div>
+
+              {/* Price (LIMIT only) */}
+              {orderType === "LIMIT" && (
+                <div>
+                  <div style={fieldLabel}>Price</div>
+                  <input
+                    style={{ ...input, width: 120 }}
+                    type="number"
+                    min={0}
+                    step="any"
+                    placeholder="e.g. 60000"
+                    value={orderPrice}
+                    onChange={(e) => setOrderPrice(e.target.value)}
+                  />
+                </div>
+              )}
+
+              {/* Submit */}
+              <button
+                style={{
+                  ...btn,
+                  background: orderSide === "BUY" ? "#3fb950" : "#f85149",
+                  alignSelf: "flex-end",
+                }}
+                onClick={submitOrder}
+                disabled={orderState === "loading"}
+              >
+                {orderState === "loading"
+                  ? "Placing..."
+                  : `${orderSide} ${orderType}`}
+              </button>
+            </div>
+
+            {/* Order result */}
+            {orderState === "error" && (
+              <p style={{ color: "#f85149", fontSize: 13, marginTop: 8 }}>{orderError}</p>
+            )}
+            {orderState === "success" && lastOrder && (
+              <div style={{ marginTop: 8 }}>
+                <OrderStatusRow order={lastOrder} onRefresh={refreshOrderStatus} />
+              </div>
+            )}
+          </>
         )}
       </div>
 
@@ -270,6 +496,61 @@ function TickerCell({
   );
 }
 
+function OrderStatusRow({
+  order,
+  onRefresh,
+}: {
+  order: TerminalOrder;
+  onRefresh: () => void;
+}) {
+  const statusColors: Record<string, string> = {
+    FILLED: "#3fb950",
+    FAILED: "#f85149",
+    REJECTED: "#f85149",
+    SUBMITTED: "#e3b341",
+    PARTIALLY_FILLED: "#e3b341",
+    CANCELLED: "var(--text-secondary)",
+    PENDING: "var(--text-secondary)",
+  };
+  const color = statusColors[order.status] ?? "var(--text-secondary)";
+
+  return (
+    <div
+      style={{
+        background: "var(--bg-secondary)",
+        borderRadius: 6,
+        padding: "10px 14px",
+        fontSize: 13,
+        display: "flex",
+        flexWrap: "wrap",
+        gap: 16,
+        alignItems: "center",
+      }}
+    >
+      <span style={{ fontWeight: 600, color }}>
+        {order.status}
+      </span>
+      <span style={{ fontFamily: "monospace" }}>
+        {order.side} {order.type} {order.qty} {order.symbol}
+        {order.price ? ` @ ${order.price}` : ""}
+      </span>
+      {order.exchangeOrderId && (
+        <span style={{ color: "var(--text-secondary)" }}>
+          #{order.exchangeOrderId.slice(0, 12)}...
+        </span>
+      )}
+      {order.error && (
+        <span style={{ color: "#f85149" }}>{order.error}</span>
+      )}
+      {(order.status === "SUBMITTED" || order.status === "PARTIALLY_FILLED") && (
+        <button style={{ ...btn, padding: "4px 10px", fontSize: 12 }} onClick={onRefresh}>
+          Refresh
+        </button>
+      )}
+    </div>
+  );
+}
+
 // ---------------------------------------------------------------------------
 // Styles
 // ---------------------------------------------------------------------------
@@ -301,9 +582,24 @@ const btn: React.CSSProperties = {
   fontWeight: 600,
 };
 
+const sideBtn: React.CSSProperties = {
+  padding: "8px 16px",
+  border: "1px solid var(--border)",
+  borderRadius: 6,
+  cursor: "pointer",
+  fontSize: 13,
+  fontWeight: 600,
+};
+
 const hint: React.CSSProperties = {
   color: "var(--text-secondary)",
   fontSize: 13,
+};
+
+const fieldLabel: React.CSSProperties = {
+  fontSize: 11,
+  color: "var(--text-secondary)",
+  marginBottom: 4,
 };
 
 const td: React.CSSProperties = {

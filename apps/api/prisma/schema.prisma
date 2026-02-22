@@ -35,6 +35,7 @@ model Workspace {
   botRuns             BotRun[]
   backtests           BacktestResult[]
   exchangeConnections ExchangeConnection[]
+  terminalOrders      TerminalOrder[]
 }
 
 model WorkspaceMember {
@@ -253,10 +254,58 @@ model ExchangeConnection {
   createdAt        DateTime                  @default(now())
   updatedAt        DateTime                  @updatedAt
 
-  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspace      Workspace       @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  terminalOrders TerminalOrder[]
 
   @@unique([workspaceId, name])
   @@index([workspaceId])
+}
+
+// ── Terminal Orders ──────────────────────────────────────────────
+
+enum TerminalOrderSide {
+  BUY
+  SELL
+}
+
+enum TerminalOrderType {
+  MARKET
+  LIMIT
+}
+
+enum TerminalOrderStatus {
+  PENDING
+  SUBMITTED
+  FILLED
+  PARTIALLY_FILLED
+  CANCELLED
+  REJECTED
+  FAILED
+}
+
+model TerminalOrder {
+  id                   String              @id @default(uuid())
+  workspaceId          String
+  exchangeConnectionId String
+  symbol               String
+  side                 TerminalOrderSide
+  type                 TerminalOrderType
+  qty                  Decimal             @db.Decimal(18, 8)
+  price                Decimal?            @db.Decimal(18, 8)
+  status               TerminalOrderStatus @default(PENDING)
+  /// Exchange-assigned order ID returned by Bybit after placement
+  exchangeOrderId      String?
+  /// Sanitized error message if status = FAILED | REJECTED
+  error                String?
+  createdAt            DateTime            @default(now())
+  updatedAt            DateTime            @updatedAt
+
+  workspace          Workspace          @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  exchangeConnection ExchangeConnection @relation(fields: [exchangeConnectionId], references: [id], onDelete: Restrict)
+
+  @@index([workspaceId])
+  @@index([exchangeConnectionId])
+  @@index([workspaceId, createdAt(sort: Desc)])
 }
 
 // ── Research Lab ─────────────────────────────────────────────────

@@ -234,6 +234,85 @@ else
   ((++FAIL))
 fi
 
+# ─── 9. Terminal Market Data (Stage 9a) ──────────────────────────────────────
+header "9. Terminal Market Data (Stage 9a)"
+
+# 9.1 ticker valid symbol → 200 + required fields
+TICKER_RESP=$(curl -s "$BASE_URL/api/v1/terminal/ticker?symbol=BTCUSDT" \
+  -H "Authorization: Bearer $TOKEN")
+TICKER_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$BASE_URL/api/v1/terminal/ticker?symbol=BTCUSDT" \
+  -H "Authorization: Bearer $TOKEN")
+check "GET /terminal/ticker?symbol=BTCUSDT → 200" "200" "$TICKER_CODE"
+check_contains "/terminal/ticker → lastPrice" '"lastPrice"' "$TICKER_RESP"
+check_contains "/terminal/ticker → symbol" '"symbol"' "$TICKER_RESP"
+
+# 9.2 candles valid params → 200 + OHLCV fields
+CANDLES_RESP=$(curl -s "$BASE_URL/api/v1/terminal/candles?symbol=BTCUSDT&interval=15&limit=10" \
+  -H "Authorization: Bearer $TOKEN")
+CANDLES_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
+  "$BASE_URL/api/v1/terminal/candles?symbol=BTCUSDT&interval=15&limit=10" \
+  -H "Authorization: Bearer $TOKEN")
+check "GET /terminal/candles 15m/10 → 200" "200" "$CANDLES_CODE"
+check_contains "/terminal/candles → openTime" '"openTime"' "$CANDLES_RESP"
+check_contains "/terminal/candles → close" '"close"' "$CANDLES_RESP"
+
+# 9.3 ticker ETHUSDT → 200
+ETH_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$BASE_URL/api/v1/terminal/ticker?symbol=ETHUSDT" \
+  -H "Authorization: Bearer $TOKEN")
+check "GET /terminal/ticker ETHUSDT → 200" "200" "$ETH_CODE"
+
+# 9.4 ticker missing symbol → 400
+NO_SYM=$(curl -s -o /dev/null -w "%{http_code}" "$BASE_URL/api/v1/terminal/ticker" \
+  -H "Authorization: Bearer $TOKEN")
+check "GET /terminal/ticker (no symbol) → 400" "400" "$NO_SYM"
+
+# 9.5 candles invalid interval → 400 + "Allowed values"
+BAD_INT_RESP=$(curl -s "$BASE_URL/api/v1/terminal/candles?symbol=BTCUSDT&interval=999" \
+  -H "Authorization: Bearer $TOKEN")
+BAD_INT_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
+  "$BASE_URL/api/v1/terminal/candles?symbol=BTCUSDT&interval=999" \
+  -H "Authorization: Bearer $TOKEN")
+check "GET /terminal/candles interval=999 → 400" "400" "$BAD_INT_CODE"
+check_contains "/terminal/candles bad interval → 'Allowed values'" "Allowed values" "$BAD_INT_RESP"
+
+# 9.6 candles limit > 1000 → 400
+BIG_LIMIT=$(curl -s -o /dev/null -w "%{http_code}" \
+  "$BASE_URL/api/v1/terminal/candles?symbol=BTCUSDT&limit=9999" \
+  -H "Authorization: Bearer $TOKEN")
+check "GET /terminal/candles limit=9999 → 400" "400" "$BIG_LIMIT"
+
+# 9.7 ticker unknown symbol → 422
+FAKE_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
+  "$BASE_URL/api/v1/terminal/ticker?symbol=FAKESYMBOLABC123" \
+  -H "Authorization: Bearer $TOKEN")
+check "GET /terminal/ticker FAKE → 422" "422" "$FAKE_CODE"
+
+# 9.8 ticker without auth → 401
+NO_AUTH_TICKER=$(curl -s -o /dev/null -w "%{http_code}" \
+  "$BASE_URL/api/v1/terminal/ticker?symbol=BTCUSDT")
+check "GET /terminal/ticker without auth → 401" "401" "$NO_AUTH_TICKER"
+
+# 9.9 candles without auth → 401
+NO_AUTH_CANDLES=$(curl -s -o /dev/null -w "%{http_code}" \
+  "$BASE_URL/api/v1/terminal/candles?symbol=BTCUSDT&interval=15&limit=10")
+check "GET /terminal/candles without auth → 401" "401" "$NO_AUTH_CANDLES"
+
+# 9.10 candles daily interval D → 200
+DAILY=$(curl -s -o /dev/null -w "%{http_code}" \
+  "$BASE_URL/api/v1/terminal/candles?symbol=BTCUSDT&interval=D&limit=5" \
+  -H "Authorization: Bearer $TOKEN")
+check "GET /terminal/candles interval=D → 200" "200" "$DAILY"
+
+# 9.11 no secrets leaked in ticker response
+SECRET_COUNT=$(echo "$TICKER_RESP" | grep -c "encryptedSecret\|\"secret\"\|\"apiKey\"" || echo "0")
+if [[ "$SECRET_COUNT" == "0" ]]; then
+  green "/terminal/ticker → no secret fields in response"
+  ((++PASS))
+else
+  red "/terminal/ticker → secret fields found in response!"
+  ((++FAIL))
+fi
+
 # ─── Summary ─────────────────────────────────────────────────────────────────
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"

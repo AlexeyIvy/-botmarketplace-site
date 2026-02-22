@@ -408,6 +408,85 @@ paths:
         "502":
           $ref: "#/components/responses/Problem"
 
+  /terminal/orders:
+    post:
+      operationId: terminalOrderCreate
+      summary: Create manual order (Market or Limit)
+      description: >
+        Places a Market or Limit order on Bybit via the specified ExchangeConnection.
+        Requires authentication and workspace membership.
+        API key and secret are never returned.
+      parameters:
+        - $ref: "#/components/parameters/XWorkspaceId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateOrderRequest"
+      responses:
+        "201":
+          description: Order submitted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TerminalOrderView"
+        "400":
+          $ref: "#/components/responses/Problem"
+        "401":
+          $ref: "#/components/responses/Problem"
+        "403":
+          $ref: "#/components/responses/Problem"
+        "404":
+          $ref: "#/components/responses/Problem"
+        "422":
+          $ref: "#/components/responses/Problem"
+        "502":
+          $ref: "#/components/responses/Problem"
+    get:
+      operationId: terminalOrdersList
+      summary: List recent terminal orders for workspace (latest 50)
+      parameters:
+        - $ref: "#/components/parameters/XWorkspaceId"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TerminalOrderView"
+        "401":
+          $ref: "#/components/responses/Problem"
+        "403":
+          $ref: "#/components/responses/Problem"
+
+  /terminal/orders/{id}:
+    get:
+      operationId: terminalOrderGet
+      summary: Get terminal order status (syncs with Bybit for open orders)
+      parameters:
+        - $ref: "#/components/parameters/XWorkspaceId"
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TerminalOrderView"
+        "401":
+          $ref: "#/components/responses/Problem"
+        "403":
+          $ref: "#/components/responses/Problem"
+        "404":
+          $ref: "#/components/responses/Problem"
+
   /signals/webhook/{strategyId}:
     post:
       operationId: signalWebhook
@@ -570,6 +649,72 @@ components:
         low: { type: number }
         close: { type: number }
         volume: { type: number, description: Volume in base currency }
+
+    CreateOrderRequest:
+      type: object
+      description: >
+        Payload for placing a manual terminal order.
+        For LIMIT orders, price is required.
+        For MARKET orders, price must not be set.
+        API key / secret are resolved server-side from the ExchangeConnection.
+      additionalProperties: false
+      required: [exchangeConnectionId, symbol, side, type, qty]
+      properties:
+        exchangeConnectionId:
+          type: string
+          description: ID of the ExchangeConnection to use for credentials
+        symbol:
+          type: string
+          example: BTCUSDT
+        side:
+          type: string
+          enum: [BUY, SELL]
+        type:
+          type: string
+          enum: [MARKET, LIMIT]
+        qty:
+          type: number
+          description: Order quantity (positive number)
+          exclusiveMinimum: 0
+        price:
+          type: number
+          description: Required for LIMIT orders; must not be set for MARKET orders
+          exclusiveMinimum: 0
+
+    TerminalOrderView:
+      type: object
+      description: >
+        Safe view of a terminal order. Never includes apiKey, secret, or encryptedSecret.
+      additionalProperties: false
+      required:
+        [id, workspaceId, exchangeConnectionId, symbol, side, type, qty,
+         status, createdAt, updatedAt]
+      properties:
+        id: { type: string }
+        workspaceId: { type: string }
+        exchangeConnectionId: { type: string }
+        symbol: { type: string, example: BTCUSDT }
+        side:
+          type: string
+          enum: [BUY, SELL]
+        type:
+          type: string
+          enum: [MARKET, LIMIT]
+        qty: { type: string, description: Quantity as decimal string }
+        price: { type: string, nullable: true, description: Price as decimal string (null for MARKET) }
+        status:
+          type: string
+          enum: [PENDING, SUBMITTED, FILLED, PARTIALLY_FILLED, CANCELLED, REJECTED, FAILED]
+        exchangeOrderId:
+          type: string
+          nullable: true
+          description: Exchange-assigned order ID after placement
+        error:
+          type: string
+          nullable: true
+          description: Sanitized error message if status is FAILED or REJECTED
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
 
     SignalRequest:
       type: object
