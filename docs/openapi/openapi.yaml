@@ -66,41 +66,89 @@ paths:
         "400":
           $ref: "#/components/responses/Problem"
 
+  # ── Strategies (Stage 10 — Strategy Authoring UX) ──────────────────────────
+
   /strategies:
     get:
       operationId: strategiesList
-      summary: List strategies
+      summary: List strategies in workspace
+      parameters:
+        - $ref: "#/components/parameters/XWorkspaceId"
       responses:
         "200":
           description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/StrategyView"
         "401":
           $ref: "#/components/responses/Problem"
         "403":
           $ref: "#/components/responses/Problem"
     post:
       operationId: strategiesCreate
-      summary: Create strategy
+      summary: Create strategy (metadata only — DSL added via versions)
+      parameters:
+        - $ref: "#/components/parameters/XWorkspaceId"
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Strategy"
+              $ref: "#/components/schemas/StrategyCreateRequest"
       responses:
         "201":
           description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StrategyView"
         "400":
           $ref: "#/components/responses/Problem"
         "401":
           $ref: "#/components/responses/Problem"
         "403":
           $ref: "#/components/responses/Problem"
+        "409":
+          $ref: "#/components/responses/Problem"
 
-  /strategies/{strategyId}:validate:
-    post:
-      operationId: strategiesValidate
-      summary: Validate a strategy payload without saving
+  /strategies/{strategyId}:
+    get:
+      operationId: strategiesGet
+      summary: Get strategy with all versions
       parameters:
+        - $ref: "#/components/parameters/XWorkspaceId"
+        - name: strategyId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StrategyDetailView"
+        "401":
+          $ref: "#/components/responses/Problem"
+        "403":
+          $ref: "#/components/responses/Problem"
+        "404":
+          $ref: "#/components/responses/Problem"
+
+  /strategies/{strategyId}/versions:
+    post:
+      operationId: strategyVersionCreate
+      summary: Create new strategy version (immutable DSL snapshot)
+      description: >
+        Creates a new immutable version of the strategy DSL. The DSL body is
+        validated against the Strategy DSL JSON Schema (2020-12) before saving.
+        Previous versions are never modified.
+      parameters:
+        - $ref: "#/components/parameters/XWorkspaceId"
         - name: strategyId
           in: path
           required: true
@@ -111,13 +159,59 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Strategy"
+              $ref: "#/components/schemas/StrategyVersionCreateRequest"
+      responses:
+        "201":
+          description: Version created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StrategyVersionView"
+        "400":
+          description: DSL schema validation error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ValidationProblem"
+        "401":
+          $ref: "#/components/responses/Problem"
+        "403":
+          $ref: "#/components/responses/Problem"
+        "404":
+          $ref: "#/components/responses/Problem"
+
+  /strategies/validate:
+    post:
+      operationId: strategiesValidate
+      summary: Validate DSL body without saving
+      description: >
+        Validates a strategy DSL body against the Strategy DSL JSON Schema (2020-12).
+        Returns { ok: true, message } on success, or 400 + field-level errors on failure.
+        Does not create any records.
+      parameters:
+        - $ref: "#/components/parameters/XWorkspaceId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StrategyVersionCreateRequest"
       responses:
         "200":
-          description: Valid
+          description: DSL is valid
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StrategyValidateResponse"
         "400":
-          $ref: "#/components/responses/Problem"
+          description: DSL schema validation error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ValidationProblem"
         "401":
+          $ref: "#/components/responses/Problem"
+        "403":
           $ref: "#/components/responses/Problem"
 
   /bots:
@@ -561,8 +655,150 @@ components:
         detail: { type: string }
         instance: { type: string }
 
+    # ── Strategy DSL contract (frozen, Stage 10) ──────────────────────────────
+
+    StrategyDslBody:
+      description: >
+        Strategy DSL v1 body. Frozen at Stage 10.
+        Full JSON Schema: docs/schema/strategy.schema.json.
+        Validated with Ajv (JSON Schema 2020-12) on every save.
+      type: object
+      additionalProperties: false
+      required: [id, name, dslVersion, enabled, market, entry, risk, execution, guards]
+      properties:
+        id: { type: string, minLength: 1 }
+        name: { type: string, minLength: 1 }
+        dslVersion: { type: integer, minimum: 1 }
+        enabled: { type: boolean }
+        market:
+          type: object
+          additionalProperties: false
+          required: [exchange, env, category, symbol]
+          properties:
+            exchange: { type: string, enum: [bybit] }
+            env: { type: string, enum: [demo] }
+            category: { type: string, enum: [linear] }
+            symbol: { type: string, minLength: 1 }
+        timeframes:
+          type: array
+          items: { type: string }
+        entry:
+          type: object
+          description: Entry signal rules (extensible in future DSL versions)
+          additionalProperties: true
+        risk:
+          type: object
+          additionalProperties: false
+          required: [maxPositionSizeUsd, riskPerTradePct, cooldownSeconds]
+          properties:
+            maxPositionSizeUsd: { type: number, exclusiveMinimum: 0 }
+            riskPerTradePct: { type: number, exclusiveMinimum: 0, maximum: 100 }
+            cooldownSeconds: { type: integer, minimum: 0 }
+            dailyLossLimitUsd: { type: number, minimum: 0 }
+        execution:
+          type: object
+          additionalProperties: false
+          required: [orderType, clientOrderIdPrefix]
+          properties:
+            orderType: { type: string, enum: [Market, Limit] }
+            clientOrderIdPrefix: { type: string, minLength: 1 }
+            maxSlippageBps: { type: integer, minimum: 0, maximum: 500 }
+        guards:
+          type: object
+          additionalProperties: false
+          required: [maxOpenPositions, maxOrdersPerMinute, pauseOnError]
+          properties:
+            maxOpenPositions: { type: integer, const: 1 }
+            maxOrdersPerMinute: { type: integer, minimum: 1, maximum: 120 }
+            pauseOnError: { type: boolean }
+
+    StrategyCreateRequest:
+      type: object
+      additionalProperties: false
+      required: [name, symbol, timeframe]
+      properties:
+        name: { type: string, minLength: 1, description: Display name (unique per workspace) }
+        symbol: { type: string, minLength: 1, example: BTCUSDT }
+        timeframe:
+          type: string
+          enum: [M1, M5, M15, H1]
+
+    StrategyView:
+      type: object
+      additionalProperties: false
+      required: [id, workspaceId, name, symbol, timeframe, status, createdAt, updatedAt]
+      properties:
+        id: { type: string }
+        workspaceId: { type: string }
+        name: { type: string }
+        symbol: { type: string }
+        timeframe: { type: string }
+        status: { type: string, enum: [DRAFT, ACTIVE, ARCHIVED] }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+
+    StrategyVersionView:
+      type: object
+      additionalProperties: false
+      required: [id, strategyId, version, dslJson, executionPlanJson, createdAt]
+      properties:
+        id: { type: string }
+        strategyId: { type: string }
+        version: { type: integer, description: Monotonically increasing version number }
+        dslJson:
+          $ref: "#/components/schemas/StrategyDslBody"
+        executionPlanJson:
+          type: object
+          description: Server-generated execution plan (stub in Stage 10, expanded in Stage 11)
+        createdAt: { type: string, format: date-time }
+
+    StrategyDetailView:
+      allOf:
+        - $ref: "#/components/schemas/StrategyView"
+        - type: object
+          properties:
+            versions:
+              type: array
+              items:
+                $ref: "#/components/schemas/StrategyVersionView"
+
+    StrategyVersionCreateRequest:
+      type: object
+      additionalProperties: false
+      required: [dslJson]
+      properties:
+        dslJson:
+          $ref: "#/components/schemas/StrategyDslBody"
+
+    StrategyValidateResponse:
+      type: object
+      additionalProperties: false
+      required: [ok, message]
+      properties:
+        ok: { type: boolean, enum: [true] }
+        message: { type: string, example: "DSL is valid" }
+
+    ValidationProblem:
+      description: >
+        Problem Details (RFC 9457) extended with field-level error array.
+        Each error has a field path (dot-notation pointer) and a message.
+      allOf:
+        - $ref: "#/components/schemas/Problem"
+        - type: object
+          properties:
+            errors:
+              type: array
+              items:
+                type: object
+                additionalProperties: false
+                required: [field, message]
+                properties:
+                  field: { type: string, description: "Dot-notation path e.g. 'risk.maxPositionSizeUsd'" }
+                  message: { type: string }
+
+    # ── Legacy ref (kept for backward compat in existing bot schemas) ─────────
     Strategy:
-      $ref: "../schema/strategy.schema.json"
+      $ref: "#/components/schemas/StrategyDslBody"
 
     BotCreateRequest:
       type: object
