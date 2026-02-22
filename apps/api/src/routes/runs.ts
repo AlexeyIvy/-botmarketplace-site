@@ -1,5 +1,7 @@
 import type { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
 import type { BotRunState } from "@prisma/client";
+import { randomUUID } from "node:crypto";
+import { Prisma } from "@prisma/client";
 import { prisma } from "../lib/prisma.js";
 import { problem } from "../lib/problem.js";
 import { resolveWorkspace } from "../lib/workspace.js";
@@ -43,7 +45,7 @@ async function verifyWorkerSecret(request: FastifyRequest, reply: FastifyReply) 
 
 export async function runRoutes(app: FastifyInstance) {
   // ── POST /bots/:botId/runs ── start a new run ────────────────────────────
-  app.post<{ Params: { botId: string } }>("/bots/:botId/runs", {
+  app.post<{ Params: { botId: string }; Body: { durationMinutes?: number } }>("/bots/:botId/runs", {
     config: { rateLimit: { max: 10, timeWindow: "1 minute" } },
     onRequest: [app.authenticate],
   }, async (request, reply) => {
@@ -53,6 +55,14 @@ export async function runRoutes(app: FastifyInstance) {
     const bot = await prisma.bot.findUnique({ where: { id: request.params.botId } });
     if (!bot || bot.workspaceId !== workspace.id) {
       return problem(reply, 404, "Not Found", "Bot not found");
+    }
+
+    // Validate durationMinutes if provided
+    const durationMinutes = request.body?.durationMinutes;
+    if (durationMinutes !== undefined) {
+      if (!Number.isInteger(durationMinutes) || durationMinutes < 1 || durationMinutes > 1440) {
+        return problem(reply, 400, "Validation Error", "durationMinutes must be an integer between 1 and 1440");
+      }
     }
 
     // Enforce single-active-run invariant
@@ -73,6 +83,7 @@ export async function runRoutes(app: FastifyInstance) {
           workspaceId: bot.workspaceId,
           symbol: bot.symbol,
           state: "CREATED",
+          durationMinutes: durationMinutes ?? null,
         },
       });
 
@@ -84,6 +95,7 @@ export async function runRoutes(app: FastifyInstance) {
             from: null,
             to: "CREATED",
             message: "Run created",
+            durationMinutes: durationMinutes ?? null,
             at: new Date().toISOString(),
           },
         },
@@ -101,6 +113,45 @@ export async function runRoutes(app: FastifyInstance) {
     const fresh = await prisma.botRun.findUnique({ where: { id: run.id } });
     return reply.status(201).send(fresh);
   });
+
+  // ── GET /bots/:botId/runs/:runId ── get a specific run ───────────────────
+  app.get<{ Params: { botId: string; runId: string } }>(
+    "/bots/:botId/runs/:runId",
+    { onRequest: [app.authenticate] },
+    async (request, reply) => {
+      const workspace = await resolveWorkspace(request, reply);
+      if (!workspace) return;
+
+      const bot = await prisma.bot.findUnique({ where: { id: request.params.botId } });
+      if (!bot || bot.workspaceId !== workspace.id) {
+        return problem(reply, 404, "Not Found", "Bot not found");
+      }
+
+      const run = await prisma.botRun.findUnique({ where: { id: request.params.runId } });
+      if (!run || run.botId !== bot.id) {
+        return problem(reply, 404, "Not Found", "Run not found");
+      }
+
+      return reply.send(run);
+    },
+  );
+
+  // ── GET /runs/:runId ── get any run by ID (within workspace) ─────────────
+  app.get<{ Params: { runId: string } }>(
+    "/runs/:runId",
+    { onRequest: [app.authenticate] },
+    async (request, reply) => {
+      const workspace = await resolveWorkspace(request, reply);
+      if (!workspace) return;
+
+      const run = await prisma.botRun.findUnique({ where: { id: request.params.runId } });
+      if (!run || run.workspaceId !== workspace.id) {
+        return problem(reply, 404, "Not Found", "Run not found");
+      }
+
+      return reply.send(run);
+    },
+  );
 
   // ── POST /bots/:botId/runs/:runId/stop ───────────────────────────────────
   app.post<{ Params: { botId: string; runId: string } }>(
@@ -283,6 +334,101 @@ export async function runRoutes(app: FastifyInstance) {
       });
 
       return reply.send(events);
+    },
+  );
+
+  // ── POST /runs/:runId/signal ── inject a trading signal into a running bot ─
+  //
+  // Signals are the mechanism by which a RUNNING bot is told to act.
+  // This endpoint:
+  //   1. Validates the run is RUNNING (only active bots accept signals)
+  //   2. Records a signal_generated BotEvent
+  //   3. Creates a BotIntent (ENTRY) with idempotency via intentId
+  //   4. Returns the created intent
+  //
+  // The actual order placement is done asynchronously by the bot worker.
+  // ---------------------------------------------------------------------------
+  app.post<{
+    Params: { runId: string };
+    Body: {
+      side: "BUY" | "SELL";
+      qty: number;
+      price?: number;
+      intentId?: string;
+    };
+  }>(
+    "/runs/:runId/signal",
+    { onRequest: [app.authenticate] },
+    async (request, reply) => {
+      const workspace = await resolveWorkspace(request, reply);
+      if (!workspace) return;
+
+      const run = await prisma.botRun.findUnique({ where: { id: request.params.runId } });
+      if (!run || run.workspaceId !== workspace.id) {
+        return problem(reply, 404, "Not Found", "Run not found");
+      }
+
+      // Only RUNNING bots can accept signals
+      if (run.state !== "RUNNING") {
+        return problem(reply, 409, "Conflict", `Run must be in RUNNING state to accept signals (current: ${run.state})`);
+      }
+
+      const { side, qty, price, intentId: clientIntentId } = request.body ?? {};
+
+      // Validate inputs
+      const errors: Array<{ field: string; message: string }> = [];
+      if (!side || !["BUY", "SELL"].includes(side)) {
+        errors.push({ field: "side", message: "side must be BUY or SELL" });
+      }
+      if (qty == null || !Number.isFinite(Number(qty)) || Number(qty) <= 0) {
+        errors.push({ field: "qty", message: "qty must be a positive number" });
+      }
+      if (errors.length > 0) {
+        return problem(reply, 400, "Validation Error", "Invalid signal payload", { errors });
+      }
+
+      const intentId = clientIntentId ?? randomUUID();
+
+      // Idempotency: if intent already exists for this run+intentId, return it
+      const existing = await prisma.botIntent.findUnique({
+        where: { botRunId_intentId: { botRunId: run.id, intentId } },
+      });
+      if (existing) {
+        return reply.status(200).send(existing);
+      }
+
+      // Record signal event + create intent atomically
+      const intent = await prisma.$transaction(async (tx) => {
+        await tx.botEvent.create({
+          data: {
+            botRunId: run.id,
+            type: "signal_generated",
+            payloadJson: {
+              intentId,
+              side,
+              qty: Number(qty),
+              price: price ?? null,
+              at: new Date().toISOString(),
+            } as Prisma.InputJsonValue,
+          },
+        });
+
+        return tx.botIntent.create({
+          data: {
+            botRunId: run.id,
+            intentId,
+            orderLinkId: randomUUID(),
+            type: "ENTRY",
+            side: side as "BUY" | "SELL",
+            qty: Number(qty),
+            price: price ?? null,
+            state: "PENDING",
+            metaJson: { source: "signal", at: new Date().toISOString() } as Prisma.InputJsonValue,
+          },
+        });
+      });
+
+      return reply.status(201).send(intent);
     },
   );
 

@@ -2,18 +2,9 @@ import type { FastifyInstance } from "fastify";
 import { prisma } from "../lib/prisma.js";
 import { problem } from "../lib/problem.js";
 import { resolveWorkspace } from "../lib/workspace.js";
+import { validateDsl } from "../lib/dslValidator.js";
 
 const VALID_TIMEFRAMES = ["M1", "M5", "M15", "H1"] as const;
-
-// ---------------------------------------------------------------------------
-// Minimal DSL validation
-// ---------------------------------------------------------------------------
-
-function validateDslJson(dslJson: unknown): string | null {
-  if (dslJson === null || dslJson === undefined) return "dslJson is required";
-  if (typeof dslJson !== "object" || Array.isArray(dslJson)) return "dslJson must be a JSON object";
-  return null;
-}
 
 // ---------------------------------------------------------------------------
 // Routes
@@ -98,7 +89,7 @@ export async function strategyRoutes(app: FastifyInstance) {
     return reply.send(strategy);
   });
 
-  // POST /strategies/:id/versions — create a new version
+  // POST /strategies/:id/versions — create a new version with DSL validation
   app.post<{ Params: { id: string }; Body: CreateVersionBody }>("/strategies/:id/versions", { onRequest: [app.authenticate] }, async (request, reply) => {
     const workspace = await resolveWorkspace(request, reply);
     if (!workspace) return;
@@ -109,9 +100,9 @@ export async function strategyRoutes(app: FastifyInstance) {
     }
 
     const { dslJson } = request.body ?? {};
-    const dslError = validateDslJson(dslJson);
-    if (dslError) {
-      return problem(reply, 400, "Validation Error", dslError);
+    const dslErrors = validateDsl(dslJson);
+    if (dslErrors) {
+      return problem(reply, 400, "Validation Error", "DSL validation failed", { errors: dslErrors });
     }
 
     // Determine next version number
@@ -132,16 +123,16 @@ export async function strategyRoutes(app: FastifyInstance) {
     return reply.status(201).send(version);
   });
 
-  // POST /strategies/validate — validate DSL JSON
+  // POST /strategies/validate — validate DSL JSON against full schema
   app.post<{ Body: ValidateBody }>("/strategies/validate", { onRequest: [app.authenticate] }, async (request, reply) => {
     const workspace = await resolveWorkspace(request, reply);
     if (!workspace) return;
 
     const { dslJson } = request.body ?? {};
-    const dslError = validateDslJson(dslJson);
-    if (dslError) {
-      return problem(reply, 400, "Validation Error", dslError);
+    const dslErrors = validateDsl(dslJson);
+    if (dslErrors) {
+      return problem(reply, 400, "Validation Error", "DSL validation failed", { errors: dslErrors });
     }
-    return reply.send({ ok: true });
+    return reply.send({ ok: true, message: "DSL is valid" });
   });
 }

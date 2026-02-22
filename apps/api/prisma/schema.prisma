@@ -110,24 +110,28 @@ enum BotStatus {
 }
 
 model Bot {
-  id                String          @id @default(uuid())
-  workspaceId       String
-  name              String
-  strategyVersionId String
-  symbol            String
-  timeframe         Timeframe
-  status            BotStatus       @default(DRAFT)
-  createdAt         DateTime        @default(now())
-  updatedAt         DateTime        @updatedAt
+  id                   String          @id @default(uuid())
+  workspaceId          String
+  name                 String
+  strategyVersionId    String
+  /// Optional link to exchange credentials used by the bot runtime
+  exchangeConnectionId String?
+  symbol               String
+  timeframe            Timeframe
+  status               BotStatus       @default(DRAFT)
+  createdAt            DateTime        @default(now())
+  updatedAt            DateTime        @updatedAt
 
-  workspace       Workspace       @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  strategyVersion StrategyVersion @relation(fields: [strategyVersionId], references: [id], onDelete: Restrict)
-  runs            BotRun[]
+  workspace          Workspace           @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  strategyVersion    StrategyVersion     @relation(fields: [strategyVersionId], references: [id], onDelete: Restrict)
+  exchangeConnection ExchangeConnection? @relation(fields: [exchangeConnectionId], references: [id], onDelete: SetNull)
+  runs               BotRun[]
 
   @@unique([workspaceId, name])
   @@index([workspaceId])
   @@index([strategyVersionId])
   @@index([workspaceId, symbol])
+  @@index([exchangeConnectionId])
 }
 
 // ── Bot runtime domain ───────────────────────────────────────────
@@ -145,18 +149,20 @@ enum BotRunState {
 }
 
 model BotRun {
-  id          String       @id @default(uuid())
-  botId       String
-  workspaceId String
-  symbol      String
-  state       BotRunState  @default(CREATED)
-  leaseOwner  String?
-  leaseUntil  DateTime?
-  startedAt   DateTime?
-  stoppedAt   DateTime?
-  errorCode   String?
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  id              String       @id @default(uuid())
+  botId           String
+  workspaceId     String
+  symbol          String
+  state           BotRunState  @default(CREATED)
+  leaseOwner      String?
+  leaseUntil      DateTime?
+  startedAt       DateTime?
+  stoppedAt       DateTime?
+  errorCode       String?
+  /// Configurable run duration in minutes; null = use server default MAX_RUN_DURATION_MS
+  durationMinutes Int?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
 
   bot       Bot       @relation(fields: [botId], references: [id], onDelete: Cascade)
   workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
@@ -256,6 +262,7 @@ model ExchangeConnection {
 
   workspace      Workspace       @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   terminalOrders TerminalOrder[]
+  bots           Bot[]
 
   @@unique([workspaceId, name])
   @@index([workspaceId])

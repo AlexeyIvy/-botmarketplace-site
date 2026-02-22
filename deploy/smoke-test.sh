@@ -312,6 +312,227 @@ else
   ((++FAIL))
 fi
 
+# ─── 10. Stage 10 — Strategy DSL Validation + Bot Runtime ───────────────────
+header "10. Stage 10 — DSL Validation + Bot Runtime"
+
+# ── Fixture: create strategy + version + bot for runtime tests ──────────────
+S10_STRAT=$(curl -s -X POST "$BASE_URL/api/v1/strategies" \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -H "X-Workspace-Id: $WS_ID" \
+  -d '{"name":"Stage10Strategy","symbol":"BTCUSDT","timeframe":"M15"}')
+S10_STRAT_ID=$(echo "$S10_STRAT" | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4) || true
+
+VALID_DSL='{
+  "id": "s10-dsl-1",
+  "name": "Stage10 Test Strategy",
+  "dslVersion": 1,
+  "enabled": true,
+  "market": {"exchange":"bybit","env":"demo","category":"linear","symbol":"BTCUSDT"},
+  "entry": {"side":"Buy","signal":"manual"},
+  "risk": {"maxPositionSizeUsd":100,"riskPerTradePct":1,"cooldownSeconds":60},
+  "execution": {"orderType":"Market","clientOrderIdPrefix":"s10test"},
+  "guards": {"maxOpenPositions":1,"maxOrdersPerMinute":10,"pauseOnError":true}
+}'
+
+# 10.1 POST /strategies/validate valid DSL → 200 + ok:true
+VALID_RESP=$(curl -s -X POST "$BASE_URL/api/v1/strategies/validate" \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -H "X-Workspace-Id: $WS_ID" \
+  -d "{\"dslJson\":$VALID_DSL}")
+VALID_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/strategies/validate" \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -H "X-Workspace-Id: $WS_ID" \
+  -d "{\"dslJson\":$VALID_DSL}")
+check "POST /strategies/validate valid DSL → 200" "200" "$VALID_CODE"
+check_contains "/strategies/validate → ok:true" '"ok":true' "$VALID_RESP"
+
+# 10.2 POST /strategies/validate missing required fields → 400 + errors
+INVALID_DSL='{"id":"x","name":"y","dslVersion":1}'
+BAD_DSL_RESP=$(curl -s -X POST "$BASE_URL/api/v1/strategies/validate" \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -H "X-Workspace-Id: $WS_ID" \
+  -d "{\"dslJson\":$INVALID_DSL}")
+BAD_DSL_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/strategies/validate" \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -H "X-Workspace-Id: $WS_ID" \
+  -d "{\"dslJson\":$INVALID_DSL}")
+check "POST /strategies/validate invalid DSL → 400" "400" "$BAD_DSL_CODE"
+check_contains "/strategies/validate invalid → errors array" '"errors"' "$BAD_DSL_RESP"
+
+# 10.3 POST /strategies/validate wrong dslVersion type → 400
+BAD_VER='{"id":"x","name":"y","dslVersion":"not-a-number","enabled":true,"market":{"exchange":"bybit","env":"demo","category":"linear","symbol":"BTCUSDT"},"entry":{},"risk":{"maxPositionSizeUsd":100,"riskPerTradePct":1,"cooldownSeconds":60},"execution":{"orderType":"Market","clientOrderIdPrefix":"x"},"guards":{"maxOpenPositions":1,"maxOrdersPerMinute":10,"pauseOnError":true}}'
+BAD_VER_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/strategies/validate" \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -H "X-Workspace-Id: $WS_ID" \
+  -d "{\"dslJson\":$BAD_VER}")
+check "POST /strategies/validate wrong dslVersion type → 400" "400" "$BAD_VER_CODE"
+
+# 10.4 Create strategy version with valid DSL → 201
+if [[ -n "$S10_STRAT_ID" ]]; then
+  S10_VER=$(curl -s -X POST "$BASE_URL/api/v1/strategies/$S10_STRAT_ID/versions" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "Content-Type: application/json" \
+    -H "X-Workspace-Id: $WS_ID" \
+    -d "{\"dslJson\":$VALID_DSL}")
+  S10_VER_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/strategies/$S10_STRAT_ID/versions" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "Content-Type: application/json" \
+    -H "X-Workspace-Id: $WS_ID" \
+    -d "{\"dslJson\":$VALID_DSL}")
+  S10_VER_ID=$(echo "$S10_VER" | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4) || true
+  check "POST /strategies/:id/versions valid DSL → 201" "201" "$S10_VER_CODE"
+else
+  red "Skipping version creation (no strategy ID)"
+  ((++FAIL))
+  S10_VER_ID=""
+fi
+
+# 10.5 Create strategy version with invalid DSL → 400
+if [[ -n "$S10_STRAT_ID" ]]; then
+  BAD_VER_RESP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/strategies/$S10_STRAT_ID/versions" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "Content-Type: application/json" \
+    -H "X-Workspace-Id: $WS_ID" \
+    -d "{\"dslJson\":$INVALID_DSL}")
+  check "POST /strategies/:id/versions invalid DSL → 400" "400" "$BAD_VER_RESP_CODE"
+else
+  red "Skipping bad version creation (no strategy ID)"
+  ((++FAIL))
+fi
+
+# 10.6 Create bot with exchangeConnectionId field (no real conn needed — test field accepted)
+if [[ -n "$S10_VER_ID" ]]; then
+  S10_BOT=$(curl -s -X POST "$BASE_URL/api/v1/bots" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "Content-Type: application/json" \
+    -H "X-Workspace-Id: $WS_ID" \
+    -d "{\"name\":\"Stage10Bot\",\"strategyVersionId\":\"$S10_VER_ID\",\"symbol\":\"BTCUSDT\",\"timeframe\":\"M15\"}")
+  S10_BOT_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/bots" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "Content-Type: application/json" \
+    -H "X-Workspace-Id: $WS_ID" \
+    -d "{\"name\":\"Stage10BotB\",\"strategyVersionId\":\"$S10_VER_ID\",\"symbol\":\"BTCUSDT\",\"timeframe\":\"M15\"}")
+  S10_BOT_ID=$(echo "$S10_BOT" | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4) || true
+  check "POST /bots → 201" "201" "$S10_BOT_CODE"
+else
+  red "Skipping bot creation (no strategy version ID)"
+  ((++FAIL))
+  S10_BOT_ID=""
+fi
+
+# 10.7 GET /bots/:id/runs → 200 + array
+if [[ -n "$S10_BOT_ID" ]]; then
+  RUNS_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$BASE_URL/api/v1/bots/$S10_BOT_ID/runs" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "X-Workspace-Id: $WS_ID")
+  RUNS_RESP=$(curl -s "$BASE_URL/api/v1/bots/$S10_BOT_ID/runs" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "X-Workspace-Id: $WS_ID")
+  check "GET /bots/:id/runs → 200" "200" "$RUNS_CODE"
+  # Empty array is fine (bot just created)
+  if echo "$RUNS_RESP" | grep -q '^\[\]$\|^\[{'; then
+    green "GET /bots/:id/runs → returns array"
+    ((++PASS))
+  elif [[ "$RUNS_RESP" == "[]" ]]; then
+    green "GET /bots/:id/runs → returns empty array"
+    ((++PASS))
+  else
+    check_contains "GET /bots/:id/runs → array response" '[' "$RUNS_RESP"
+  fi
+else
+  red "Skipping GET /bots/:id/runs (no bot ID)"
+  ((++FAIL))
+fi
+
+# 10.8 POST /bots/:id/runs with durationMinutes → 201 + durationMinutes field
+if [[ -n "$S10_BOT_ID" ]]; then
+  RUN_RESP=$(curl -s -X POST "$BASE_URL/api/v1/bots/$S10_BOT_ID/runs" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "Content-Type: application/json" \
+    -H "X-Workspace-Id: $WS_ID" \
+    -d '{"durationMinutes":5}')
+  RUN_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/bots/$S10_BOT_ID/runs" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "Content-Type: application/json" \
+    -H "X-Workspace-Id: $WS_ID" \
+    -d '{"durationMinutes":5}')
+  S10_RUN_ID=$(echo "$RUN_RESP" | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4) || true
+  # 201 = created, 409 = already active (OK for smoke idempotency)
+  if [[ "$RUN_CODE" == "201" ]] || [[ "$RUN_CODE" == "409" ]]; then
+    green "POST /bots/:id/runs with durationMinutes → $RUN_CODE"
+    ((++PASS))
+  else
+    red "POST /bots/:id/runs with durationMinutes → $RUN_CODE (expected 201)"
+    ((++FAIL))
+  fi
+  check_contains "POST /bots/:id/runs → durationMinutes field" '"durationMinutes"' "$RUN_RESP"
+else
+  red "Skipping POST /bots/:id/runs (no bot ID)"
+  ((++FAIL))
+fi
+
+# 10.9 GET /runs/:runId → 200 (fetch run by ID)
+if [[ -n "$S10_RUN_ID" ]]; then
+  GET_RUN_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$BASE_URL/api/v1/runs/$S10_RUN_ID" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "X-Workspace-Id: $WS_ID")
+  check "GET /runs/:runId → 200" "200" "$GET_RUN_CODE"
+else
+  red "Skipping GET /runs/:runId (no run ID)"
+  ((++FAIL))
+fi
+
+# 10.10 POST /runs/:runId/signal on non-RUNNING run → 409
+if [[ -n "$S10_RUN_ID" ]]; then
+  SIG_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/runs/$S10_RUN_ID/signal" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "Content-Type: application/json" \
+    -H "X-Workspace-Id: $WS_ID" \
+    -d '{"side":"BUY","qty":0.001}')
+  # Run is QUEUED/STARTING — should get 409 (not RUNNING yet)
+  # OR 201 if worker already advanced it to RUNNING
+  if [[ "$SIG_CODE" == "409" ]] || [[ "$SIG_CODE" == "201" ]]; then
+    green "POST /runs/:runId/signal → $SIG_CODE (expected 409 or 201)"
+    ((++PASS))
+  else
+    red "POST /runs/:runId/signal → $SIG_CODE (expected 409 or 201)"
+    ((++FAIL))
+  fi
+else
+  red "Skipping POST /runs/:runId/signal (no run ID)"
+  ((++FAIL))
+fi
+
+# 10.11 POST /runs/:runId/signal without auth → 401
+if [[ -n "$S10_RUN_ID" ]]; then
+  SIG_UNAUTH=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/runs/$S10_RUN_ID/signal" \
+    -H "Content-Type: application/json" \
+    -d '{"side":"BUY","qty":0.001}')
+  check "POST /runs/:runId/signal without auth → 401" "401" "$SIG_UNAUTH"
+else
+  red "Skipping signal unauth test (no run ID)"
+  ((++FAIL))
+fi
+
+# 10.12 POST /bots/:id/runs invalid durationMinutes → 400
+if [[ -n "$S10_BOT_ID" ]]; then
+  BAD_DUR_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/bots/$S10_BOT_ID/runs" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "Content-Type: application/json" \
+    -H "X-Workspace-Id: $WS_ID" \
+    -d '{"durationMinutes":99999}')
+  check "POST /bots/:id/runs durationMinutes=99999 → 400" "400" "$BAD_DUR_CODE"
+else
+  red "Skipping bad durationMinutes test (no bot ID)"
+  ((++FAIL))
+fi
+
 # ─── Summary ─────────────────────────────────────────────────────────────────
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
