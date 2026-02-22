@@ -304,8 +304,7 @@ DAILY=$(curl -s -o /dev/null -w "%{http_code}" \
 check "GET /terminal/candles interval=D → 200" "200" "$DAILY"
 
 # 9.11 no secrets leaked in ticker response
-SECRET_COUNT=$(echo "$TICKER_RESP" | grep -c "encryptedSecret\|\"secret\"\|\"apiKey\"" || echo "0")
-if [[ "$SECRET_COUNT" == "0" ]]; then
+if ! echo "$TICKER_RESP" | grep -q "encryptedSecret\|\"secret\"\|\"apiKey\""; then
   green "/terminal/ticker → no secret fields in response"
   ((++PASS))
 else
