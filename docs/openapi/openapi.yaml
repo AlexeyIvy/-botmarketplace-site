@@ -324,6 +324,90 @@ paths:
         "500":
           $ref: "#/components/responses/Problem"
 
+  # ── Terminal — Market Data (Stage 9a, read-only) ────────────────────────────
+
+  /terminal/ticker:
+    get:
+      operationId: terminalTicker
+      summary: Get current ticker for a symbol
+      description: >
+        Returns live ticker data (last price, bid/ask, 24h stats) for a Bybit linear
+        perpetual symbol. Requires authentication. Market data is public (Bybit); no
+        workspace is required.
+      parameters:
+        - name: symbol
+          in: query
+          required: true
+          schema:
+            type: string
+            example: BTCUSDT
+          description: Linear perpetual symbol (e.g. BTCUSDT)
+      responses:
+        "200":
+          description: Ticker data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ticker"
+        "400":
+          $ref: "#/components/responses/Problem"
+        "401":
+          $ref: "#/components/responses/Problem"
+        "422":
+          $ref: "#/components/responses/Problem"
+        "502":
+          $ref: "#/components/responses/Problem"
+
+  /terminal/candles:
+    get:
+      operationId: terminalCandles
+      summary: Get recent OHLCV candles for a symbol
+      description: >
+        Returns a list of OHLCV candles from Bybit for a linear perpetual symbol.
+        Requires authentication. Market data is public (Bybit); no workspace is required.
+      parameters:
+        - name: symbol
+          in: query
+          required: true
+          schema:
+            type: string
+            example: BTCUSDT
+          description: Linear perpetual symbol (e.g. BTCUSDT)
+        - name: interval
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: ["1", "5", "15", "30", "60", "240", "D"]
+            default: "15"
+          description: Kline interval
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 1000
+            default: 200
+          description: Number of candles to return (max 1000)
+      responses:
+        "200":
+          description: Candles array (ascending by openTime)
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Candle"
+        "400":
+          $ref: "#/components/responses/Problem"
+        "401":
+          $ref: "#/components/responses/Problem"
+        "422":
+          $ref: "#/components/responses/Problem"
+        "502":
+          $ref: "#/components/responses/Problem"
+
   /signals/webhook/{strategyId}:
     post:
       operationId: signalWebhook
@@ -454,6 +538,38 @@ components:
           type: string
           enum: [CONNECTED, FAILED]
         detail: { type: string }
+
+    Ticker:
+      type: object
+      description: Current market ticker for a linear perpetual symbol.
+      additionalProperties: false
+      required:
+        [symbol, lastPrice, bidPrice, askPrice, prevPrice24h, price24hPcnt,
+         highPrice24h, lowPrice24h, volume24h, turnover24h]
+      properties:
+        symbol: { type: string, example: BTCUSDT }
+        lastPrice: { type: number, description: Last traded price }
+        bidPrice: { type: number, description: Best bid price }
+        askPrice: { type: number, description: Best ask price }
+        prevPrice24h: { type: number, description: Price 24h ago }
+        price24hPcnt: { type: number, description: 24h price change fraction (e.g. 0.02 = +2%) }
+        highPrice24h: { type: number, description: 24h high }
+        lowPrice24h: { type: number, description: 24h low }
+        volume24h: { type: number, description: 24h volume in base currency }
+        turnover24h: { type: number, description: 24h turnover in quote currency }
+
+    Candle:
+      type: object
+      description: OHLCV candle (ascending openTime order).
+      additionalProperties: false
+      required: [openTime, open, high, low, close, volume]
+      properties:
+        openTime: { type: integer, description: Candle open timestamp in milliseconds }
+        open: { type: number }
+        high: { type: number }
+        low: { type: number }
+        close: { type: number }
+        volume: { type: number, description: Volume in base currency }
 
     SignalRequest:
       type: object
