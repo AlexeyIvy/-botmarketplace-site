@@ -18,6 +18,7 @@ apps/api/prisma/migrations/**/migration_lock.toml
 
 # Build
 *.tsbuildinfo
+next-env.d.ts
 
 # Claude Code secrets (never commit tokens)
 .claude/secrets

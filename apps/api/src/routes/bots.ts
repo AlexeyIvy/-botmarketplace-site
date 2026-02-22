@@ -14,6 +14,7 @@ interface CreateBotBody {
   strategyVersionId: string;
   symbol: string;
   timeframe: string;
+  exchangeConnectionId?: string;
 }
 
 // ---------------------------------------------------------------------------
@@ -36,6 +37,7 @@ export async function botRoutes(app: FastifyInstance) {
         timeframe: true,
         status: true,
         strategyVersionId: true,
+        exchangeConnectionId: true,
         updatedAt: true,
       },
     });
@@ -47,7 +49,7 @@ export async function botRoutes(app: FastifyInstance) {
     const workspace = await resolveWorkspace(request, reply);
     if (!workspace) return;
 
-    const { name, strategyVersionId, symbol, timeframe } = request.body ?? {};
+    const { name, strategyVersionId, symbol, timeframe, exchangeConnectionId } = request.body ?? {};
 
     // --- field validation ---
     const errors: Array<{ field: string; message: string }> = [];
@@ -76,6 +78,14 @@ export async function botRoutes(app: FastifyInstance) {
       return problem(reply, 400, "Bad Request", "strategyVersionId not found in this workspace");
     }
 
+    // --- verify exchangeConnectionId if provided ---
+    if (exchangeConnectionId !== undefined && exchangeConnectionId !== null) {
+      const conn = await prisma.exchangeConnection.findUnique({ where: { id: exchangeConnectionId } });
+      if (!conn || conn.workspaceId !== workspace.id) {
+        return problem(reply, 400, "Bad Request", "exchangeConnectionId not found in this workspace");
+      }
+    }
+
     // --- unique name check ---
     const existing = await prisma.bot.findUnique({
       where: { workspaceId_name: { workspaceId: workspace.id, name } },
@@ -89,6 +99,7 @@ export async function botRoutes(app: FastifyInstance) {
         workspaceId: workspace.id,
         name,
         strategyVersionId,
+        exchangeConnectionId: exchangeConnectionId ?? null,
         symbol,
         timeframe: timeframe as typeof VALID_TIMEFRAMES[number],
         status: "DRAFT",
@@ -117,6 +128,7 @@ export async function botRoutes(app: FastifyInstance) {
             startedAt: true,
             stoppedAt: true,
             errorCode: true,
+            durationMinutes: true,
             createdAt: true,
           },
         },
@@ -128,5 +140,45 @@ export async function botRoutes(app: FastifyInstance) {
 
     const { runs, ...rest } = bot;
     return reply.send({ ...rest, lastRun: runs[0] ?? null });
+  });
+
+  // GET /bots/:id/runs — list runs for a bot
+  app.get<{
+    Params: { id: string };
+    Querystring: { limit?: string; state?: string };
+  }>("/bots/:id/runs", { onRequest: [app.authenticate] }, async (request, reply) => {
+    const workspace = await resolveWorkspace(request, reply);
+    if (!workspace) return;
+
+    const bot = await prisma.bot.findUnique({ where: { id: request.params.id } });
+    if (!bot || bot.workspaceId !== workspace.id) {
+      return problem(reply, 404, "Not Found", "Bot not found");
+    }
+
+    const limit = Math.min(Number(request.query?.limit ?? 20), 100);
+    const stateFilter = request.query?.state;
+
+    const runs = await prisma.botRun.findMany({
+      where: {
+        botId: bot.id,
+        ...(stateFilter ? { state: stateFilter as import("@prisma/client").BotRunState } : {}),
+      },
+      orderBy: { createdAt: "desc" },
+      take: limit,
+      select: {
+        id: true,
+        state: true,
+        symbol: true,
+        startedAt: true,
+        stoppedAt: true,
+        errorCode: true,
+        durationMinutes: true,
+        leaseOwner: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+
+    return reply.send(runs);
   });
 }

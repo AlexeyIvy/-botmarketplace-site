@@ -76,27 +76,43 @@ async function stopRun(runId: string) {
   }
 }
 
-/** Mark RUNNING runs that exceeded MAX_RUN_DURATION_MS as TIMED_OUT. */
+/**
+ * Mark RUNNING runs that exceeded their duration as TIMED_OUT.
+ *
+ * Respects per-run durationMinutes if set; falls back to MAX_RUN_DURATION_MS.
+ */
 async function timeoutExpiredRuns() {
-  const cutoff = new Date(Date.now() - MAX_RUN_DURATION_MS);
-  const expired = await prisma.botRun.findMany({
+  const now = Date.now();
+
+  const candidates = await prisma.botRun.findMany({
     where: {
       state: "RUNNING",
-      startedAt: { lt: cutoff },
+      startedAt: { not: null },
     },
-    select: { id: true },
-    take: 10,
+    select: { id: true, startedAt: true, durationMinutes: true },
+    take: 20,
   });
-  for (const { id } of expired) {
+
+  for (const run of candidates) {
+    if (!run.startedAt) continue;
+
+    // Per-run timeout: durationMinutes takes priority over global default
+    const maxDurationMs = run.durationMinutes !== null && run.durationMinutes !== undefined
+      ? run.durationMinutes * 60 * 1000
+      : MAX_RUN_DURATION_MS;
+
+    const elapsed = now - run.startedAt.getTime();
+    if (elapsed < maxDurationMs) continue;
+
     try {
-      await transition(id, "TIMED_OUT", {
+      await transition(run.id, "TIMED_OUT", {
         eventType: "RUN_TIMED_OUT",
-        message: `Run exceeded max duration of ${MAX_RUN_DURATION_MS / 1000}s`,
+        message: `Run exceeded max duration of ${maxDurationMs / 1000}s`,
         errorCode: "MAX_DURATION_EXCEEDED",
       });
-      console.log(`[botWorker] run ${id} timed out (exceeded ${MAX_RUN_DURATION_MS}ms)`);
+      console.log(`[botWorker] run ${run.id} timed out (elapsed=${elapsed}ms, max=${maxDurationMs}ms)`);
     } catch (err) {
-      console.error(`[botWorker] timeoutExpiredRuns ${id} error:`, err);
+      console.error(`[botWorker] timeoutExpiredRuns ${run.id} error:`, err);
     }
   }
 }
