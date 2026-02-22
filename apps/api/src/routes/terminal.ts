@@ -33,8 +33,12 @@ function bybitErrorToProblem(
 ) {
   const msg = err instanceof Error ? err.message : String(err);
 
-  // "Symbol not found" → 422
-  if (msg.toLowerCase().includes("symbol not found") || msg.includes("not found")) {
+  // "Symbol not found" or "symbol invalid" → 422
+  if (
+    msg.toLowerCase().includes("symbol not found") ||
+    msg.includes("not found") ||
+    msg.toLowerCase().includes("symbol invalid")
+  ) {
     return problem(reply, 422, "Unprocessable Content", `Unknown symbol. ${msg}`);
   }
 
