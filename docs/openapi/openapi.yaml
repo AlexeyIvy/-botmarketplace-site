@@ -68,6 +68,7 @@ paths:
 
   # ── Strategies (Stage 10 — Strategy Authoring UX) ──────────────────────────
 
+
   /strategies:
     get:
       operationId: strategiesList
@@ -214,20 +215,36 @@ paths:
         "403":
           $ref: "#/components/responses/Problem"
 
+  # ── Bots (Stage 11 — Bot Factory Launch Flow) ──────────────────────────────
+
   /bots:
     get:
       operationId: botsList
-      summary: List bots
+      summary: List bots in workspace
+      parameters:
+        - $ref: "#/components/parameters/XWorkspaceId"
       responses:
         "200":
           description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BotView"
         "401":
           $ref: "#/components/responses/Problem"
         "403":
           $ref: "#/components/responses/Problem"
     post:
       operationId: botsCreate
-      summary: Create bot
+      summary: Create bot from strategy version
+      description: >
+        Creates a bot in DRAFT status linked to an immutable StrategyVersion snapshot.
+        Optionally links an ExchangeConnection for runtime credentials.
+        Both strategyVersionId and exchangeConnectionId (if provided) must belong to the same workspace.
+      parameters:
+        - $ref: "#/components/parameters/XWorkspaceId"
       requestBody:
         required: true
         content:
@@ -237,18 +254,25 @@ paths:
       responses:
         "201":
           description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BotView"
         "400":
           $ref: "#/components/responses/Problem"
         "401":
           $ref: "#/components/responses/Problem"
         "403":
           $ref: "#/components/responses/Problem"
+        "409":
+          $ref: "#/components/responses/Problem"
 
-  /bots/{botId}/events:
+  /bots/{botId}:
     get:
-      operationId: botEventsList
-      summary: Bot transition/event log
+      operationId: botsGet
+      summary: Get bot detail (includes strategyVersion + lastRun)
       parameters:
+        - $ref: "#/components/parameters/XWorkspaceId"
         - name: botId
           in: path
           required: true
@@ -257,10 +281,304 @@ paths:
       responses:
         "200":
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BotDetailView"
         "401":
+          $ref: "#/components/responses/Problem"
+        "403":
           $ref: "#/components/responses/Problem"
         "404":
           $ref: "#/components/responses/Problem"
+
+  /bots/{botId}/runs:
+    get:
+      operationId: botRunsList
+      summary: List runs for a bot (latest first, max 100)
+      parameters:
+        - $ref: "#/components/parameters/XWorkspaceId"
+        - name: botId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - name: state
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [CREATED, QUEUED, STARTING, SYNCING, RUNNING, STOPPING, STOPPED, FAILED, TIMED_OUT]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BotRunView"
+        "401":
+          $ref: "#/components/responses/Problem"
+        "403":
+          $ref: "#/components/responses/Problem"
+        "404":
+          $ref: "#/components/responses/Problem"
+    post:
+      operationId: botRunCreate
+      summary: Start a new bot run
+      description: >
+        Creates a BotRun and queues it for processing by the bot worker.
+        The worker transitions the run through QUEUED → STARTING → SYNCING → RUNNING.
+        Enforces single-active-run invariant per bot (409 if already active).
+      parameters:
+        - $ref: "#/components/parameters/XWorkspaceId"
+        - name: botId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BotRunCreateRequest"
+      responses:
+        "201":
+          description: Run created and queued
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BotRunView"
+        "400":
+          $ref: "#/components/responses/Problem"
+        "401":
+          $ref: "#/components/responses/Problem"
+        "403":
+          $ref: "#/components/responses/Problem"
+        "404":
+          $ref: "#/components/responses/Problem"
+        "409":
+          description: Active run already exists for this bot
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+
+  /bots/{botId}/runs/{runId}:
+    get:
+      operationId: botRunGet
+      summary: Get specific run for a bot
+      parameters:
+        - $ref: "#/components/parameters/XWorkspaceId"
+        - name: botId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: runId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BotRunView"
+        "401":
+          $ref: "#/components/responses/Problem"
+        "403":
+          $ref: "#/components/responses/Problem"
+        "404":
+          $ref: "#/components/responses/Problem"
+
+  /bots/{botId}/runs/{runId}/stop:
+    post:
+      operationId: botRunStop
+      summary: Stop an active bot run
+      description: >
+        Requests the bot run to stop. If the run is in a stoppable state,
+        transitions through STOPPING → STOPPED. Returns 409 if already terminal.
+      parameters:
+        - $ref: "#/components/parameters/XWorkspaceId"
+        - name: botId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: runId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Run stopped (or stop requested)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BotRunView"
+        "401":
+          $ref: "#/components/responses/Problem"
+        "403":
+          $ref: "#/components/responses/Problem"
+        "404":
+          $ref: "#/components/responses/Problem"
+        "409":
+          description: Run already in terminal state
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+
+  /runs/{runId}:
+    get:
+      operationId: runGet
+      summary: Get any run by ID (workspace-scoped)
+      parameters:
+        - $ref: "#/components/parameters/XWorkspaceId"
+        - name: runId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BotRunView"
+        "401":
+          $ref: "#/components/responses/Problem"
+        "403":
+          $ref: "#/components/responses/Problem"
+        "404":
+          $ref: "#/components/responses/Problem"
+
+  /runs/{runId}/events:
+    get:
+      operationId: runEventsList
+      summary: Get event log for a run (ascending chronological order)
+      parameters:
+        - $ref: "#/components/parameters/XWorkspaceId"
+        - name: runId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 500
+            default: 100
+        - name: after
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+          description: Return only events after this timestamp (for pagination)
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BotEventView"
+        "401":
+          $ref: "#/components/responses/Problem"
+        "403":
+          $ref: "#/components/responses/Problem"
+        "404":
+          $ref: "#/components/responses/Problem"
+
+  /runs/stop-all:
+    post:
+      operationId: runsStopAll
+      summary: Emergency stop all active runs in workspace
+      parameters:
+        - $ref: "#/components/parameters/XWorkspaceId"
+      responses:
+        "200":
+          description: Result of stop-all operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  stopped:
+                    type: array
+                    items:
+                      type: string
+                    description: IDs of successfully stopped runs
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                  total:
+                    type: integer
+        "401":
+          $ref: "#/components/responses/Problem"
+        "403":
+          $ref: "#/components/responses/Problem"
+
+  /runs/{runId}/signal:
+    post:
+      operationId: runSignal
+      summary: Inject a trading signal into a RUNNING bot
+      description: >
+        Records a signal event and creates a PENDING BotIntent.
+        Idempotent via intentId. Only works when run state is RUNNING.
+      parameters:
+        - $ref: "#/components/parameters/XWorkspaceId"
+        - name: runId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RunSignalRequest"
+      responses:
+        "201":
+          description: Intent created
+        "200":
+          description: Duplicate — existing intent returned (idempotent)
+        "400":
+          $ref: "#/components/responses/Problem"
+        "401":
+          $ref: "#/components/responses/Problem"
+        "403":
+          $ref: "#/components/responses/Problem"
+        "404":
+          $ref: "#/components/responses/Problem"
+        "409":
+          description: Run is not in RUNNING state
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
 
   # ── Exchange Connections (Stage 8) ─────────────────────────────────────────
 
@@ -800,13 +1118,143 @@ components:
     Strategy:
       $ref: "#/components/schemas/StrategyDslBody"
 
+    # ── Bots (Stage 11) ───────────────────────────────────────────────────────
+
     BotCreateRequest:
       type: object
       additionalProperties: false
-      required: [strategyId]
+      required: [name, strategyVersionId, symbol, timeframe]
       properties:
-        strategyId: { type: string }
-        note: { type: string }
+        name:
+          type: string
+          minLength: 1
+          description: Display name (unique per workspace)
+        strategyVersionId:
+          type: string
+          description: ID of the StrategyVersion (frozen DSL snapshot) to link to this bot
+        symbol:
+          type: string
+          example: BTCUSDT
+        timeframe:
+          type: string
+          enum: [M1, M5, M15, H1]
+        exchangeConnectionId:
+          type: string
+          nullable: true
+          description: Optional ID of ExchangeConnection (must belong to same workspace)
+
+    BotView:
+      type: object
+      description: Bot list item — no secrets, no nested strategy detail.
+      additionalProperties: false
+      required: [id, workspaceId, name, symbol, timeframe, status, strategyVersionId, createdAt, updatedAt]
+      properties:
+        id: { type: string }
+        workspaceId: { type: string }
+        name: { type: string }
+        symbol: { type: string }
+        timeframe: { type: string, enum: [M1, M5, M15, H1] }
+        status: { type: string, enum: [DRAFT, ACTIVE, DISABLED] }
+        strategyVersionId: { type: string }
+        exchangeConnectionId: { type: string, nullable: true }
+        updatedAt: { type: string, format: date-time }
+        createdAt: { type: string, format: date-time }
+
+    BotDetailView:
+      allOf:
+        - $ref: "#/components/schemas/BotView"
+        - type: object
+          properties:
+            strategyVersion:
+              type: object
+              properties:
+                id: { type: string }
+                version: { type: integer }
+                strategy:
+                  type: object
+                  properties:
+                    id: { type: string }
+                    name: { type: string }
+            lastRun:
+              $ref: "#/components/schemas/BotRunView"
+              nullable: true
+
+    BotRunCreateRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        durationMinutes:
+          type: integer
+          minimum: 1
+          maximum: 1440
+          nullable: true
+          description: >
+            Optional per-run time limit in minutes (1–1440).
+            If omitted, server default (MAX_RUN_DURATION_MS, default 4 h) applies.
+
+    BotRunView:
+      type: object
+      description: >
+        Bot run snapshot. Never includes exchange credentials.
+        States: CREATED → QUEUED → STARTING → SYNCING → RUNNING → STOPPING → STOPPED | FAILED | TIMED_OUT.
+      additionalProperties: false
+      required: [id, botId, workspaceId, symbol, state, createdAt, updatedAt]
+      properties:
+        id: { type: string }
+        botId: { type: string }
+        workspaceId: { type: string }
+        symbol: { type: string }
+        state:
+          type: string
+          enum: [CREATED, QUEUED, STARTING, SYNCING, RUNNING, STOPPING, STOPPED, FAILED, TIMED_OUT]
+        leaseOwner: { type: string, nullable: true }
+        leaseUntil: { type: string, format: date-time, nullable: true }
+        startedAt: { type: string, format: date-time, nullable: true }
+        stoppedAt: { type: string, format: date-time, nullable: true }
+        errorCode: { type: string, nullable: true }
+        durationMinutes: { type: integer, nullable: true, minimum: 1, maximum: 1440 }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+
+    BotEventView:
+      type: object
+      description: Immutable event emitted on each state transition or signal.
+      additionalProperties: false
+      required: [id, ts, type, payloadJson]
+      properties:
+        id: { type: string }
+        ts: { type: string, format: date-time }
+        type:
+          type: string
+          description: >
+            Event type label, e.g. RUN_CREATED, RUN_QUEUED, RUN_STARTING,
+            RUN_SYNCING, RUN_RUNNING, RUN_STOPPING, RUN_STOPPED,
+            RUN_FAILED, RUN_TIMED_OUT, signal_generated.
+        payloadJson:
+          type: object
+          additionalProperties: true
+          description: Transition metadata (from, to, message, at) or signal payload.
+
+    RunSignalRequest:
+      type: object
+      additionalProperties: false
+      required: [side, qty]
+      properties:
+        side:
+          type: string
+          enum: [BUY, SELL]
+        qty:
+          type: number
+          exclusiveMinimum: 0
+          description: Order quantity
+        price:
+          type: number
+          exclusiveMinimum: 0
+          nullable: true
+          description: Limit price (omit for market)
+        intentId:
+          type: string
+          description: Client-provided idempotency key; server generates UUID if omitted
 
     ExchangeConnectionView:
       type: object

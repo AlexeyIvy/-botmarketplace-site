@@ -118,11 +118,22 @@ export default function FactoryPage() {
       if (!stratRes.ok) throw stratRes.problem;
       const strategyId = stratRes.data.id;
 
-      // C) Create strategy version
+      // C) Create strategy version (valid Stage-10 DSL v1)
       setDemoStatus("Creating strategy version...");
+      const demoDsl = {
+        id: `${strategyId}-v1`,
+        name: strategyName,
+        dslVersion: 1,
+        enabled: true,
+        market: { exchange: "bybit", env: "demo", category: "linear", symbol: "BTCUSDT" },
+        entry: { side: "Buy", signal: "manual" },
+        risk: { maxPositionSizeUsd: 100, riskPerTradePct: 1, cooldownSeconds: 60 },
+        execution: { orderType: "Market", clientOrderIdPrefix: "demobot" },
+        guards: { maxOpenPositions: 1, maxOrdersPerMinute: 10, pauseOnError: true },
+      };
       const verRes = await apiFetch<StrategyVersion>(`/strategies/${strategyId}/versions`, {
         method: "POST",
-        body: JSON.stringify({ dslJson: { kind: "demo", entry: { type: "market" } } }),
+        body: JSON.stringify({ dslJson: demoDsl }),
       });
       if (!verRes.ok) throw verRes.problem;
       const versionId = verRes.data.id;
