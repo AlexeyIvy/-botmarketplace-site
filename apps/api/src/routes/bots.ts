@@ -108,6 +108,62 @@ export async function botRoutes(app: FastifyInstance) {
     return reply.status(201).send(bot);
   });
 
+  // PATCH /bots/:id — update name or exchangeConnectionId
+  app.patch<{ Params: { id: string }; Body: { name?: string; exchangeConnectionId?: string | null } }>(
+    "/bots/:id",
+    { onRequest: [app.authenticate] },
+    async (request, reply) => {
+      const workspace = await resolveWorkspace(request, reply);
+      if (!workspace) return;
+
+      const bot = await prisma.bot.findUnique({ where: { id: request.params.id } });
+      if (!bot || bot.workspaceId !== workspace.id) {
+        return problem(reply, 404, "Not Found", "Bot not found");
+      }
+
+      const { name, exchangeConnectionId } = request.body ?? {};
+
+      const updateData: Record<string, unknown> = {};
+
+      if (name !== undefined) {
+        if (typeof name !== "string" || name.trim() === "") {
+          return problem(reply, 400, "Validation Error", "name must be a non-empty string");
+        }
+        // Check uniqueness if name is changing
+        if (name !== bot.name) {
+          const existing = await prisma.bot.findUnique({
+            where: { workspaceId_name: { workspaceId: workspace.id, name } },
+          });
+          if (existing) {
+            return problem(reply, 409, "Conflict", `Bot "${name}" already exists in this workspace`);
+          }
+        }
+        updateData.name = name;
+      }
+
+      if (exchangeConnectionId !== undefined) {
+        if (exchangeConnectionId !== null) {
+          const conn = await prisma.exchangeConnection.findUnique({ where: { id: exchangeConnectionId } });
+          if (!conn || conn.workspaceId !== workspace.id) {
+            return problem(reply, 400, "Bad Request", "exchangeConnectionId not found in this workspace");
+          }
+        }
+        updateData.exchangeConnectionId = exchangeConnectionId;
+      }
+
+      if (Object.keys(updateData).length === 0) {
+        return problem(reply, 400, "Validation Error", "No updatable fields provided (name, exchangeConnectionId)");
+      }
+
+      const updated = await prisma.bot.update({
+        where: { id: bot.id },
+        data: updateData,
+      });
+
+      return reply.send(updated);
+    },
+  );
+
   // GET /bots/:id — get single bot (must belong to workspace)
   app.get<{ Params: { id: string } }>("/bots/:id", { onRequest: [app.authenticate] }, async (request, reply) => {
     const workspace = await resolveWorkspace(request, reply);

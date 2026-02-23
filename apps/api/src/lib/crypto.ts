@@ -38,6 +38,16 @@ export function encrypt(plaintext: string, key: Buffer): string {
 }
 
 /**
+ * Get the encryption key directly (no Fastify reply required).
+ * Returns null if the key is missing or invalid — caller decides what to do.
+ */
+export function getEncryptionKeyRaw(): Buffer | null {
+  const raw = process.env.SECRET_ENCRYPTION_KEY;
+  if (!raw || raw.length !== 64) return null;
+  return Buffer.from(raw, "hex");
+}
+
+/**
  * Decrypt a payload produced by encrypt().
  * Throws on any tampering / wrong key.
  */
