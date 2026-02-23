@@ -76,33 +76,42 @@ export async function runRoutes(app: FastifyInstance) {
       return problem(reply, 409, "ActiveRunExists", "An active run already exists for this bot");
     }
 
-    const run = await prisma.$transaction(async (tx) => {
-      const created = await tx.botRun.create({
-        data: {
-          botId: bot.id,
-          workspaceId: bot.workspaceId,
-          symbol: bot.symbol,
-          state: "CREATED",
-          durationMinutes: durationMinutes ?? null,
-        },
-      });
-
-      await tx.botEvent.create({
-        data: {
-          botRunId: created.id,
-          type: "RUN_CREATED",
-          payloadJson: {
-            from: null,
-            to: "CREATED",
-            message: "Run created",
+    let run;
+    try {
+      run = await prisma.$transaction(async (tx) => {
+        const created = await tx.botRun.create({
+          data: {
+            botId: bot.id,
+            workspaceId: bot.workspaceId,
+            symbol: bot.symbol,
+            state: "CREATED",
             durationMinutes: durationMinutes ?? null,
-            at: new Date().toISOString(),
           },
-        },
-      });
+        });
 
-      return created;
-    });
+        await tx.botEvent.create({
+          data: {
+            botRunId: created.id,
+            type: "RUN_CREATED",
+            payloadJson: {
+              from: null,
+              to: "CREATED",
+              message: "Run created",
+              durationMinutes: durationMinutes ?? null,
+              at: new Date().toISOString(),
+            },
+          },
+        });
+
+        return created;
+      });
+    } catch (err) {
+      // P2002 = unique constraint — partial index blocks duplicate active run for workspace+symbol
+      if ((err as { code?: string })?.code === "P2002") {
+        return problem(reply, 409, "ActiveRunExists", `An active run for symbol ${bot.symbol} already exists in this workspace`);
+      }
+      throw err;
+    }
 
     // Immediately transition to QUEUED via state machine
     await transition(run.id, "QUEUED", {
