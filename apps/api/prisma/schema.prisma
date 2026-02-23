@@ -94,8 +94,9 @@ model StrategyVersion {
   executionPlanJson Json
   createdAt         DateTime @default(now())
 
-  strategy Strategy @relation(fields: [strategyId], references: [id], onDelete: Cascade)
-  bots     Bot[]
+  strategy  Strategy         @relation(fields: [strategyId], references: [id], onDelete: Cascade)
+  bots      Bot[]
+  backtests BacktestResult[]
 
   @@unique([strategyId, version])
   @@index([strategyId])
@@ -325,26 +326,32 @@ enum BacktestStatus {
 }
 
 model BacktestResult {
-  id           String         @id @default(uuid())
-  workspaceId  String
-  strategyId   String
+  id                String         @id @default(uuid())
+  workspaceId       String
+  strategyId        String
+  /// Pinned version for reproducibility — set when strategyVersionId is supplied at run time
+  strategyVersionId String?
   /// Symbol passed at request time (may differ from strategy default)
-  symbol       String
+  symbol            String
   /// Bybit kline interval: "1", "5", "15", "60"
-  interval     String
-  fromTs       DateTime
-  toTs         DateTime
-  status       BacktestStatus @default(PENDING)
-  /// Filled when status=DONE: { trades, wins, winrate, totalPnlPct, maxDrawdownPct, candles }
-  reportJson   Json?
-  errorMessage String?
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
+  interval          String
+  fromTs            DateTime
+  toTs              DateTime
+  status            BacktestStatus @default(PENDING)
+  /// Engine version tag for reproducibility (incremented when algorithm changes)
+  engineVersion     String         @default("1")
+  /// Filled when status=DONE: { trades, wins, winrate, totalPnlPct, maxDrawdownPct, candles, engineVersion }
+  reportJson        Json?
+  errorMessage      String?
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
 
-  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  strategy  Strategy  @relation(fields: [strategyId], references: [id], onDelete: Cascade)
+  workspace       Workspace        @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  strategy        Strategy         @relation(fields: [strategyId], references: [id], onDelete: Cascade)
+  strategyVersion StrategyVersion? @relation(fields: [strategyVersionId], references: [id], onDelete: SetNull)
 
   @@index([workspaceId])
   @@index([strategyId])
+  @@index([strategyVersionId])
   @@index([workspaceId, createdAt(sort: Desc)])
 }

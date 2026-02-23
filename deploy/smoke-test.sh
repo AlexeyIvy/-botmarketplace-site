@@ -743,6 +743,242 @@ else
   ((++FAIL))
 fi
 
+# ─── 12. Research Lab Results & Reproducibility (Stage 12) ──────────────────
+header "12. Research Lab — Reproducibility"
+
+# 12.1 POST /lab/backtest without auth → 401
+LAB_UNAUTH=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/lab/backtest" \
+  -H "Content-Type: application/json" \
+  -d '{"strategyVersionId":"test","fromTs":"2026-01-01T00:00:00Z","toTs":"2026-01-31T00:00:00Z"}')
+check "POST /lab/backtest without auth → 401" "401" "$LAB_UNAUTH"
+
+# 12.2 POST /lab/backtest without strategy ref → 400
+LAB_NO_STRAT=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/lab/backtest" \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "X-Workspace-Id: $WS_ID" \
+  -H "Content-Type: application/json" \
+  -d '{"fromTs":"2026-01-01T00:00:00Z","toTs":"2026-01-31T00:00:00Z"}')
+check "POST /lab/backtest without strategyRef → 400" "400" "$LAB_NO_STRAT"
+
+# 12.3 POST /lab/backtest with invalid interval → 400
+LAB_BAD_IV=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/lab/backtest" \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "X-Workspace-Id: $WS_ID" \
+  -H "Content-Type: application/json" \
+  -d '{"strategyId":"dummy","interval":"999","fromTs":"2026-01-01T00:00:00Z","toTs":"2026-01-31T00:00:00Z"}')
+check "POST /lab/backtest invalid interval → 400" "400" "$LAB_BAD_IV"
+
+# 12.4 POST /lab/backtest cross-workspace strategyVersionId → 403
+if [[ -n "$S10_VER_ID" ]]; then
+  # Register second user for cross-workspace check
+  LAB_EMAIL2="smoke_lab2_$(date +%s)@test.com"
+  LAB_REG2=$(curl -s -X POST "$BASE_URL/api/v1/auth/register" \
+    -H "Content-Type: application/json" \
+    -d "{\"email\":\"$LAB_EMAIL2\",\"password\":\"$TEST_PASS\"}")
+  LAB_TOKEN2=$(echo "$LAB_REG2" | grep -o '"accessToken":"[^"]*"' | cut -d'"' -f4) || true
+  LAB_WS2=$(echo "$LAB_REG2" | grep -o '"workspaceId":"[^"]*"' | cut -d'"' -f4) || true
+
+  if [[ -n "$LAB_TOKEN2" && -n "$LAB_WS2" ]]; then
+    XWS_LAB=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/lab/backtest" \
+      -H "Authorization: Bearer $LAB_TOKEN2" \
+      -H "X-Workspace-Id: $LAB_WS2" \
+      -H "Content-Type: application/json" \
+      -d "{\"strategyVersionId\":\"$S10_VER_ID\",\"fromTs\":\"2026-01-01T00:00:00Z\",\"toTs\":\"2026-01-31T00:00:00Z\"}")
+    check "POST /lab/backtest cross-workspace strategyVersionId → 403" "403" "$XWS_LAB"
+  else
+    red "Skipping cross-workspace lab test (failed to register second user)"
+    ((++FAIL))
+  fi
+else
+  red "Skipping cross-workspace lab test (no S10_VER_ID)"
+  ((++FAIL))
+fi
+
+# 12.5 POST /lab/backtest with strategyVersionId → 202 (start)
+S12_BT_ID=""
+if [[ -n "$S10_VER_ID" ]]; then
+  S12_BT=$(curl -s -X POST "$BASE_URL/api/v1/lab/backtest" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "X-Workspace-Id: $WS_ID" \
+    -H "Content-Type: application/json" \
+    -d "{\"strategyVersionId\":\"$S10_VER_ID\",\"symbol\":\"BTCUSDT\",\"interval\":\"15\",
+         \"fromTs\":\"2026-01-01T00:00:00Z\",\"toTs\":\"2026-02-01T00:00:00Z\"}")
+  S12_BT_ID=$(echo "$S12_BT" | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4) || true
+  if [[ -n "$S12_BT_ID" ]]; then
+    green "POST /lab/backtest → 202, id=$S12_BT_ID"
+    ((++PASS))
+  else
+    red "POST /lab/backtest → failed (response: $S12_BT)"
+    ((++FAIL))
+  fi
+
+  # 12.6 Check engineVersion stored in record
+  BT_EV=$(echo "$S12_BT" | grep -o '"engineVersion":"[^"]*"' | cut -d'"' -f4) || true
+  if [[ -n "$BT_EV" ]]; then
+    green "POST /lab/backtest → engineVersion present: $BT_EV"
+    ((++PASS))
+  else
+    red "POST /lab/backtest → engineVersion missing from response"
+    ((++FAIL))
+  fi
+
+  # 12.7 strategyVersionId stored in record
+  BT_VID=$(echo "$S12_BT" | grep -o '"strategyVersionId":"[^"]*"' | cut -d'"' -f4) || true
+  if [[ "$BT_VID" == "$S10_VER_ID" ]]; then
+    green "POST /lab/backtest → strategyVersionId stored correctly"
+    ((++PASS))
+  else
+    red "POST /lab/backtest → strategyVersionId mismatch (got: $BT_VID, expected: $S10_VER_ID)"
+    ((++FAIL))
+  fi
+else
+  red "Skipping backtest start tests (no S10_VER_ID)"
+  ((++FAIL)); ((++FAIL)); ((++FAIL))
+fi
+
+# 12.8 GET /lab/backtest/:id → 200
+if [[ -n "$S12_BT_ID" ]]; then
+  BT_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+    "$BASE_URL/api/v1/lab/backtest/$S12_BT_ID" \
+    -H "Authorization: Bearer $TOKEN" -H "X-Workspace-Id: $WS_ID")
+  check "GET /lab/backtest/:id → 200" "200" "$BT_STATUS"
+else
+  red "Skipping GET /lab/backtest/:id (no backtest ID)"
+  ((++FAIL))
+fi
+
+# 12.9 GET /lab/backtests → list present
+BLIST=$(curl -s "$BASE_URL/api/v1/lab/backtests" \
+  -H "Authorization: Bearer $TOKEN" -H "X-Workspace-Id: $WS_ID")
+BLIST_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$BASE_URL/api/v1/lab/backtests" \
+  -H "Authorization: Bearer $TOKEN" -H "X-Workspace-Id: $WS_ID")
+check "GET /lab/backtests → 200" "200" "$BLIST_CODE"
+
+# 12.10 GET /lab/backtest/:id/result — wait for completion (up to 60s) then check
+S12_RESULT_OK=false
+if [[ -n "$S12_BT_ID" ]]; then
+  for _i in $(seq 1 12); do
+    sleep 5
+    BT_FULL=$(curl -s "$BASE_URL/api/v1/lab/backtest/$S12_BT_ID" \
+      -H "Authorization: Bearer $TOKEN" -H "X-Workspace-Id: $WS_ID")
+    BT_ST=$(echo "$BT_FULL" | grep -o '"status":"[^"]*"' | cut -d'"' -f4) || true
+    if [[ "$BT_ST" == "DONE" || "$BT_ST" == "FAILED" ]]; then
+      break
+    fi
+  done
+
+  RESULT_RESP=$(curl -s "$BASE_URL/api/v1/lab/backtest/$S12_BT_ID/result" \
+    -H "Authorization: Bearer $TOKEN" -H "X-Workspace-Id: $WS_ID")
+  RESULT_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
+    "$BASE_URL/api/v1/lab/backtest/$S12_BT_ID/result" \
+    -H "Authorization: Bearer $TOKEN" -H "X-Workspace-Id: $WS_ID")
+
+  if [[ "$RESULT_CODE" == "200" ]]; then
+    green "GET /lab/backtest/:id/result → 200 (completed)"
+    ((++PASS))
+    S12_RESULT_OK=true
+
+    # Verify metrics fields present
+    for field in trades wins winrate totalPnlPct maxDrawdownPct candles; do
+      if echo "$RESULT_RESP" | grep -q "\"$field\""; then
+        green "GET /lab/backtest/:id/result → $field present"
+        ((++PASS))
+      else
+        red "GET /lab/backtest/:id/result → $field missing"
+        ((++FAIL))
+      fi
+    done
+
+    # engineVersion in result
+    if echo "$RESULT_RESP" | grep -q '"engineVersion"'; then
+      green "GET /lab/backtest/:id/result → engineVersion present"
+      ((++PASS))
+    else
+      red "GET /lab/backtest/:id/result → engineVersion missing"
+      ((++FAIL))
+    fi
+  else
+    red "GET /lab/backtest/:id/result → $RESULT_CODE (expected 200, backtest may still be running)"
+    ((++FAIL))
+    # Still mark sub-tests as skip
+    for _f in trades wins winrate totalPnlPct maxDrawdownPct candles engineVersion; do
+      red "Skipping field check (backtest not done)"
+      ((++FAIL))
+    done
+  fi
+else
+  red "Skipping result endpoint test (no backtest ID)"
+  ((++FAIL))
+  for _f in trades wins winrate totalPnlPct maxDrawdownPct candles engineVersion; do
+    red "Skipping field check (no backtest ID)"
+    ((++FAIL))
+  done
+fi
+
+# 12.11 Reproducibility: second run same input → same key metrics
+if $S12_RESULT_OK && [[ -n "$S10_VER_ID" ]]; then
+  S12_BT2=$(curl -s -X POST "$BASE_URL/api/v1/lab/backtest" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "X-Workspace-Id: $WS_ID" \
+    -H "Content-Type: application/json" \
+    -d "{\"strategyVersionId\":\"$S10_VER_ID\",\"symbol\":\"BTCUSDT\",\"interval\":\"15\",
+         \"fromTs\":\"2026-01-01T00:00:00Z\",\"toTs\":\"2026-02-01T00:00:00Z\"}")
+  S12_BT2_ID=$(echo "$S12_BT2" | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4) || true
+
+  if [[ -n "$S12_BT2_ID" ]]; then
+    for _i in $(seq 1 12); do
+      sleep 5
+      BT2_FULL=$(curl -s "$BASE_URL/api/v1/lab/backtest/$S12_BT2_ID" \
+        -H "Authorization: Bearer $TOKEN" -H "X-Workspace-Id: $WS_ID")
+      BT2_ST=$(echo "$BT2_FULL" | grep -o '"status":"[^"]*"' | cut -d'"' -f4) || true
+      if [[ "$BT2_ST" == "DONE" || "$BT2_ST" == "FAILED" ]]; then break; fi
+    done
+
+    R1=$(curl -s "$BASE_URL/api/v1/lab/backtest/$S12_BT_ID/result" \
+      -H "Authorization: Bearer $TOKEN" -H "X-Workspace-Id: $WS_ID")
+    R2=$(curl -s "$BASE_URL/api/v1/lab/backtest/$S12_BT2_ID/result" \
+      -H "Authorization: Bearer $TOKEN" -H "X-Workspace-Id: $WS_ID")
+
+    R1_TRADES=$(echo "$R1" | grep -o '"trades":[0-9]*' | cut -d: -f2) || true
+    R2_TRADES=$(echo "$R2" | grep -o '"trades":[0-9]*' | cut -d: -f2) || true
+    R1_WINRATE=$(echo "$R1" | grep -o '"winrate":[0-9.]*' | head -1 | cut -d: -f2) || true
+    R2_WINRATE=$(echo "$R2" | grep -o '"winrate":[0-9.]*' | head -1 | cut -d: -f2) || true
+
+    if [[ "$R1_TRADES" == "$R2_TRADES" && -n "$R1_TRADES" ]]; then
+      green "Reproducibility: trades match ($R1_TRADES == $R2_TRADES)"
+      ((++PASS))
+    else
+      red "Reproducibility: trades differ ($R1_TRADES vs $R2_TRADES)"
+      ((++FAIL))
+    fi
+
+    if [[ "$R1_WINRATE" == "$R2_WINRATE" && -n "$R1_WINRATE" ]]; then
+      green "Reproducibility: winrate match ($R1_WINRATE == $R2_WINRATE)"
+      ((++PASS))
+    else
+      red "Reproducibility: winrate differ ($R1_WINRATE vs $R2_WINRATE)"
+      ((++FAIL))
+    fi
+  else
+    red "Reproducibility: failed to start second run"
+    ((++FAIL)); ((++FAIL))
+  fi
+else
+  red "Skipping reproducibility check (first result not ready or no version ID)"
+  ((++FAIL)); ((++FAIL))
+fi
+
+# 12.12 No secrets in backtest list response
+BLIST_SECRETS=$(curl -s "$BASE_URL/api/v1/lab/backtests" \
+  -H "Authorization: Bearer $TOKEN" -H "X-Workspace-Id: $WS_ID")
+if ! echo "$BLIST_SECRETS" | grep -q '"encryptedSecret"\|"apiKey"\|"passwordHash"'; then
+  green "GET /lab/backtests → no secret fields in response"
+  ((++PASS))
+else
+  red "GET /lab/backtests → secret fields found!"
+  ((++FAIL))
+fi
+
 # ─── Summary ─────────────────────────────────────────────────────────────────
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"

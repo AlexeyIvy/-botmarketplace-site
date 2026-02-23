@@ -899,6 +899,120 @@ paths:
         "404":
           $ref: "#/components/responses/Problem"
 
+  # ── Research Lab (Stage 12 — Reproducibility) ───────────────────────────────
+
+  /lab/backtest:
+    post:
+      operationId: labBacktestCreate
+      summary: Start a backtest run
+      description: >
+        Triggers an async backtest. Accepts either `strategyVersionId` (preferred,
+        pins the exact DSL for reproducibility) or `strategyId` (fallback, resolves
+        to the latest version). Same inputs → same metrics (deterministic engine v1).
+      parameters:
+        - $ref: "#/components/parameters/XWorkspaceId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BacktestRequest"
+      responses:
+        "202":
+          description: Accepted — backtest queued
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BacktestResult"
+        "400":
+          $ref: "#/components/responses/Problem"
+        "401":
+          $ref: "#/components/responses/Problem"
+        "403":
+          $ref: "#/components/responses/Problem"
+
+  /lab/backtests:
+    get:
+      operationId: labBacktestList
+      summary: List recent backtest runs for the workspace (last 50)
+      parameters:
+        - $ref: "#/components/parameters/XWorkspaceId"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BacktestResult"
+        "401":
+          $ref: "#/components/responses/Problem"
+        "403":
+          $ref: "#/components/responses/Problem"
+
+  /lab/backtest/{id}:
+    get:
+      operationId: labBacktestGet
+      summary: Get full backtest record (status + reportJson)
+      parameters:
+        - $ref: "#/components/parameters/XWorkspaceId"
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BacktestResult"
+        "202":
+          description: Still running — status is PENDING or RUNNING
+        "401":
+          $ref: "#/components/responses/Problem"
+        "403":
+          $ref: "#/components/responses/Problem"
+        "404":
+          $ref: "#/components/responses/Problem"
+
+  /lab/backtest/{id}/result:
+    get:
+      operationId: labBacktestResult
+      summary: Get clean result summary with metrics (or status if still running)
+      parameters:
+        - $ref: "#/components/parameters/XWorkspaceId"
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Backtest completed — metrics available
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BacktestResultSummary"
+        "202":
+          description: Still running or pending
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:     { type: string }
+                  status: { type: string, enum: [PENDING, RUNNING] }
+                  errorMessage: { type: string, nullable: true }
+        "401":
+          $ref: "#/components/responses/Problem"
+        "403":
+          $ref: "#/components/responses/Problem"
+        "404":
+          $ref: "#/components/responses/Problem"
+
   /signals/webhook/{strategyId}:
     post:
       operationId: signalWebhook
@@ -1399,6 +1513,106 @@ components:
           description: Sanitized error message if status is FAILED or REJECTED
         createdAt: { type: string, format: date-time }
         updatedAt: { type: string, format: date-time }
+
+    # ── Research Lab schemas (Stage 12) ─────────────────────────────────────
+
+    BacktestRequest:
+      type: object
+      additionalProperties: false
+      description: >
+        Request body for POST /lab/backtest.
+        Provide `strategyVersionId` for full reproducibility (preferred) or
+        `strategyId` as a fallback (resolves to latest version at run time).
+      required: [fromTs, toTs]
+      properties:
+        strategyVersionId:
+          type: string
+          description: Pinned strategy version UUID — ensures reproducibility
+        strategyId:
+          type: string
+          description: Strategy UUID — resolves to latest version (fallback)
+        symbol:
+          type: string
+          example: BTCUSDT
+          description: Override symbol (default from strategy)
+        interval:
+          type: string
+          enum: ["1", "5", "15", "60"]
+          description: Bybit kline interval
+        fromTs:
+          type: string
+          format: date-time
+          description: Backtest start (inclusive)
+        toTs:
+          type: string
+          format: date-time
+          description: Backtest end (inclusive)
+
+    BacktestMetrics:
+      type: object
+      description: >
+        Deterministic metrics produced by engine v1 (price-breakout, lookback 20, 2:1 R/R).
+        Rounding: winrate to 4dp, PnL/drawdown to 2dp.
+      required: [trades, wins, winrate, totalPnlPct, maxDrawdownPct, candles]
+      properties:
+        trades:          { type: integer, description: Total completed trades }
+        wins:            { type: integer, description: Winning trades }
+        winrate:         { type: number, description: Win rate 0–1 (4 decimal places) }
+        totalPnlPct:     { type: number, description: Sum of per-trade PnL % (2dp) }
+        maxDrawdownPct:  { type: number, description: Peak-to-trough drawdown % (2dp) }
+        candles:         { type: integer, description: Candles processed }
+        engineVersion:   { type: string, description: Engine version tag }
+
+    BacktestResult:
+      type: object
+      description: Full backtest record (status + optional metrics when DONE)
+      required: [id, workspaceId, strategyId, symbol, interval, fromTs, toTs, status, engineVersion, createdAt, updatedAt]
+      properties:
+        id:                { type: string }
+        workspaceId:       { type: string }
+        strategyId:        { type: string }
+        strategyVersionId:
+          type: string
+          nullable: true
+          description: Pinned version ID — null if strategyId fallback was used
+        symbol:            { type: string }
+        interval:          { type: string }
+        fromTs:            { type: string, format: date-time }
+        toTs:              { type: string, format: date-time }
+        status:
+          type: string
+          enum: [PENDING, RUNNING, DONE, FAILED]
+        engineVersion:
+          type: string
+          description: Algorithm version tag for reproducibility (e.g. "1")
+        reportJson:
+          nullable: true
+          allOf:
+            - $ref: "#/components/schemas/BacktestMetrics"
+        errorMessage:
+          type: string
+          nullable: true
+        createdAt:  { type: string, format: date-time }
+        updatedAt:  { type: string, format: date-time }
+
+    BacktestResultSummary:
+      type: object
+      description: >
+        Clean result summary returned by GET /lab/backtest/:id/result when status=DONE.
+        Suitable for display — omits internal fields.
+      required: [id, strategyId, symbol, interval, fromTs, toTs, engineVersion, metrics, createdAt]
+      properties:
+        id:                { type: string }
+        strategyId:        { type: string }
+        strategyVersionId: { type: string, nullable: true }
+        symbol:            { type: string }
+        interval:          { type: string }
+        fromTs:            { type: string, format: date-time }
+        toTs:              { type: string, format: date-time }
+        engineVersion:     { type: string }
+        metrics:
+          $ref: "#/components/schemas/BacktestMetrics"
+        createdAt:         { type: string, format: date-time }
 
     SignalRequest:
       type: object

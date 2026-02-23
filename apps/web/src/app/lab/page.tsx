@@ -15,16 +15,19 @@ interface BacktestReport {
   totalPnlPct: number;
   maxDrawdownPct: number;
   candles: number;
+  engineVersion?: string;
 }
 
 interface BacktestItem {
   id: string;
   strategyId: string;
+  strategyVersionId: string | null;
   symbol: string;
   interval: string;
   fromTs: string;
   toTs: string;
   status: "PENDING" | "RUNNING" | "DONE" | "FAILED";
+  engineVersion: string;
   reportJson: BacktestReport | null;
   errorMessage: string | null;
   createdAt: string;
@@ -62,6 +65,8 @@ function fmtInterval(interval: string) {
 
 export default function LabPage() {
   const [wsId, setWsId] = useState("");
+  // Reproducibility: prefer strategyVersionId; strategyId as fallback
+  const [strategyVersionId, setStrategyVersionId] = useState("");
   const [strategyId, setStrategyId] = useState("");
   const [symbol, setSymbol] = useState("BTCUSDT");
   const [candleInterval, setCandleInterval] = useState("15");
@@ -113,20 +118,29 @@ export default function LabPage() {
   async function startBacktest() {
     setError(null);
     if (!wsId.trim()) { setError("Set Workspace ID in Factory first"); return; }
-    if (!strategyId.trim()) { setError("Strategy ID is required"); return; }
+    if (!strategyVersionId.trim() && !strategyId.trim()) {
+      setError("Strategy Version ID (or Strategy ID) is required");
+      return;
+    }
     setRunning(true);
     setActiveResult(null);
     setActiveBtId(null);
 
+    const body: Record<string, string> = {
+      fromTs: new Date(fromDate).toISOString(),
+      toTs:   new Date(toDate).toISOString(),
+      interval: candleInterval,
+    };
+    if (symbol.trim()) body["symbol"] = symbol.trim();
+    if (strategyVersionId.trim()) {
+      body["strategyVersionId"] = strategyVersionId.trim();
+    } else {
+      body["strategyId"] = strategyId.trim();
+    }
+
     const res = await apiFetch<BacktestItem>("/lab/backtest", {
       method: "POST",
-      body: JSON.stringify({
-        strategyId: strategyId.trim(),
-        symbol: symbol.trim() || undefined,
-        interval: candleInterval,
-        fromTs: new Date(fromDate).toISOString(),
-        toTs:   new Date(toDate).toISOString(),
-      }),
+      body: JSON.stringify(body),
     });
 
     if (!res.ok) {
@@ -142,10 +156,10 @@ export default function LabPage() {
   const report = activeResult?.reportJson ?? null;
 
   return (
-    <div style={{ padding: "32px 24px", maxWidth: 760, margin: "0 auto" }}>
+    <div style={{ padding: "32px 24px", maxWidth: 800, margin: "0 auto" }}>
       <h1 style={{ fontSize: 26, marginBottom: 4 }}>Research Lab</h1>
       <p style={{ color: "var(--text-secondary)", marginBottom: 28, fontSize: 14 }}>
-        Historical backtest · price-breakout strategy (lookback 20) · 2:1 R/R
+        Historical backtest · price-breakout strategy (lookback 20) · 2:1 R/R · deterministic
       </p>
 
       {/* ── Form ── */}
@@ -163,12 +177,28 @@ export default function LabPage() {
             />
           </label>
           <label style={labelStyle}>
-            Strategy ID
+            Strategy Version ID
+            <span style={{ fontSize: 11, color: "var(--text-secondary)", marginTop: -2 }}>
+              Recommended — pins version for reproducibility
+            </span>
             <input
               style={inputStyle}
+              value={strategyVersionId}
+              onChange={(e) => setStrategyVersionId(e.target.value)}
+              placeholder="uuid (preferred)"
+            />
+          </label>
+          <label style={labelStyle}>
+            Strategy ID
+            <span style={{ fontSize: 11, color: "var(--text-secondary)", marginTop: -2 }}>
+              Fallback — uses latest version
+            </span>
+            <input
+              style={{ ...inputStyle, opacity: strategyVersionId.trim() ? 0.4 : 1 }}
               value={strategyId}
               onChange={(e) => setStrategyId(e.target.value)}
-              placeholder="uuid"
+              placeholder="uuid (fallback)"
+              disabled={!!strategyVersionId.trim()}
             />
           </label>
           <label style={labelStyle}>
@@ -246,22 +276,42 @@ export default function LabPage() {
           )}
 
           {activeResult.status === "DONE" && report && (
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
-              <MetricCard label="Trades" value={String(report.trades)} />
-              <MetricCard label="Wins" value={String(report.wins)} />
-              <MetricCard label="Winrate" value={fmtRate(report.winrate)} />
-              <MetricCard
-                label="Total PnL"
-                value={pct(report.totalPnlPct)}
-                positive={report.totalPnlPct >= 0}
-              />
-              <MetricCard
-                label="Max Drawdown"
-                value={`-${report.maxDrawdownPct.toFixed(2)}%`}
-                positive={false}
-              />
-              <MetricCard label="Candles" value={String(report.candles)} />
-            </div>
+            <>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
+                <MetricCard label="Trades" value={String(report.trades)} />
+                <MetricCard label="Wins" value={String(report.wins)} />
+                <MetricCard label="Winrate" value={fmtRate(report.winrate)} />
+                <MetricCard
+                  label="Total PnL"
+                  value={pct(report.totalPnlPct)}
+                  positive={report.totalPnlPct >= 0}
+                />
+                <MetricCard
+                  label="Max Drawdown"
+                  value={`-${report.maxDrawdownPct.toFixed(2)}%`}
+                  positive={false}
+                />
+                <MetricCard label="Candles" value={String(report.candles)} />
+              </div>
+              <div style={{
+                marginTop: 14,
+                padding: "8px 12px",
+                borderRadius: 6,
+                background: "rgba(96,165,250,0.08)",
+                border: "1px solid rgba(96,165,250,0.2)",
+                fontSize: 12,
+                color: "var(--text-secondary)",
+                display: "flex",
+                gap: 16,
+                flexWrap: "wrap",
+              }}>
+                <span>Engine v{activeResult.engineVersion}</span>
+                {activeResult.strategyVersionId && (
+                  <span>Version: <code style={{ fontSize: 11 }}>{activeResult.strategyVersionId.slice(0, 8)}…</code></span>
+                )}
+                <span style={{ color: "#4ade80" }}>Reproducible — same inputs → same metrics</span>
+              </div>
+            </>
           )}
 
           <div style={{ fontSize: 11, color: "var(--text-secondary)", marginTop: 12 }}>
@@ -308,6 +358,7 @@ export default function LabPage() {
                 <th style={thStyle}>Symbol</th>
                 <th style={thStyle}>Int</th>
                 <th style={thStyle}>Period</th>
+                <th style={thStyle}>Ver</th>
                 <th style={thStyle}>Status</th>
                 <th style={thStyle}>Trades</th>
                 <th style={thStyle}>Winrate</th>
@@ -326,6 +377,12 @@ export default function LabPage() {
                   <td style={tdStyle}>
                     {new Date(bt.fromTs).toLocaleDateString()} –{" "}
                     {new Date(bt.toTs).toLocaleDateString()}
+                  </td>
+                  <td style={tdStyle}>
+                    {bt.strategyVersionId
+                      ? <span style={{ color: "#4ade80", fontSize: 11 }} title={bt.strategyVersionId}>pinned</span>
+                      : <span style={{ color: "#fbbf24", fontSize: 11 }}>latest</span>
+                    }
                   </td>
                   <td style={tdStyle}><StatusBadge status={bt.status} /></td>
                   <td style={tdStyle}>{bt.reportJson?.trades ?? "—"}</td>
