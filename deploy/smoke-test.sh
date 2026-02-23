@@ -533,6 +533,216 @@ else
   ((++FAIL))
 fi
 
+# ─── 11. Stage 11 — Bot Factory Launch Flow ─────────────────────────────────
+header "11. Stage 11 — Bot Factory Launch Flow"
+
+# Reuse fixtures from Section 10 ($S10_VER_ID, $S10_BOT_ID, $S10_RUN_ID)
+
+# 11.1 GET /bots/:id → 200 + strategyVersion nested
+if [[ -n "$S10_BOT_ID" ]]; then
+  BOT_DETAIL=$(curl -s "$BASE_URL/api/v1/bots/$S10_BOT_ID" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "X-Workspace-Id: $WS_ID")
+  BOT_DETAIL_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$BASE_URL/api/v1/bots/$S10_BOT_ID" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "X-Workspace-Id: $WS_ID")
+  check "GET /bots/:id → 200" "200" "$BOT_DETAIL_CODE"
+  check_contains "GET /bots/:id → strategyVersion present" '"strategyVersion"' "$BOT_DETAIL"
+  check_contains "GET /bots/:id → lastRun field present" '"lastRun"' "$BOT_DETAIL"
+else
+  red "Skipping GET /bots/:id (no bot ID from Section 10)"
+  ((++FAIL)); ((++FAIL)); ((++FAIL))
+fi
+
+# 11.2 GET /runs/:runId/events → 200 + events array
+if [[ -n "$S10_RUN_ID" ]]; then
+  EVT_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$BASE_URL/api/v1/runs/$S10_RUN_ID/events" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "X-Workspace-Id: $WS_ID")
+  EVT_RESP=$(curl -s "$BASE_URL/api/v1/runs/$S10_RUN_ID/events" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "X-Workspace-Id: $WS_ID")
+  check "GET /runs/:runId/events → 200" "200" "$EVT_CODE"
+  # Should have at least RUN_CREATED event
+  if echo "$EVT_RESP" | grep -q '"type"'; then
+    green "GET /runs/:runId/events → events returned"
+    ((++PASS))
+  else
+    check_contains "GET /runs/:runId/events → array" '[' "$EVT_RESP"
+  fi
+  # No secrets in event log
+  if ! echo "$EVT_RESP" | grep -q '"encryptedSecret"\|"apiKey"\|"secret"'; then
+    green "GET /runs/:runId/events → no secrets in payload"
+    ((++PASS))
+  else
+    red "GET /runs/:runId/events → secret field found in events!"
+    ((++FAIL))
+  fi
+else
+  red "Skipping GET /runs/:runId/events (no run ID)"
+  ((++FAIL)); ((++FAIL)); ((++FAIL))
+fi
+
+# 11.3 GET /runs/:runId/events without auth → 401
+if [[ -n "$S10_RUN_ID" ]]; then
+  EVT_UNAUTH=$(curl -s -o /dev/null -w "%{http_code}" "$BASE_URL/api/v1/runs/$S10_RUN_ID/events")
+  check "GET /runs/:runId/events without auth → 401" "401" "$EVT_UNAUTH"
+else
+  red "Skipping events unauth test (no run ID)"
+  ((++FAIL))
+fi
+
+# 11.4 POST /bots/:id/runs/:runId/stop
+# Create a second bot for stop test so we don't collide with active run from Section 10
+if [[ -n "$S10_VER_ID" ]]; then
+  STOP_BOT=$(curl -s -X POST "$BASE_URL/api/v1/bots" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "Content-Type: application/json" \
+    -H "X-Workspace-Id: $WS_ID" \
+    -d "{\"name\":\"Stage11StopBot\",\"strategyVersionId\":\"$S10_VER_ID\",\"symbol\":\"BTCUSDT\",\"timeframe\":\"M15\"}")
+  STOP_BOT_ID=$(echo "$STOP_BOT" | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4) || true
+
+  if [[ -n "$STOP_BOT_ID" ]]; then
+    # Start a run
+    STOP_RUN=$(curl -s -X POST "$BASE_URL/api/v1/bots/$STOP_BOT_ID/runs" \
+      -H "Authorization: Bearer $TOKEN" \
+      -H "Content-Type: application/json" \
+      -H "X-Workspace-Id: $WS_ID" \
+      -d '{"durationMinutes":60}')
+    STOP_RUN_ID=$(echo "$STOP_RUN" | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4) || true
+
+    if [[ -n "$STOP_RUN_ID" ]]; then
+      # Stop it
+      STOP_RESP=$(curl -s -X POST "$BASE_URL/api/v1/bots/$STOP_BOT_ID/runs/$STOP_RUN_ID/stop" \
+        -H "Authorization: Bearer $TOKEN" \
+        -H "Content-Type: application/json" \
+        -H "X-Workspace-Id: $WS_ID")
+      STOP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
+        "$BASE_URL/api/v1/bots/$STOP_BOT_ID/runs/$STOP_RUN_ID/stop" \
+        -H "Authorization: Bearer $TOKEN" \
+        -H "Content-Type: application/json" \
+        -H "X-Workspace-Id: $WS_ID")
+      # 200 = stopped, 409 = already terminal (if worker already terminated it)
+      if [[ "$STOP_CODE" == "200" ]] || [[ "$STOP_CODE" == "409" ]]; then
+        green "POST /bots/:id/runs/:runId/stop → $STOP_CODE (expected 200 or 409)"
+        ((++PASS))
+      else
+        red "POST /bots/:id/runs/:runId/stop → $STOP_CODE (expected 200 or 409)"
+        ((++FAIL))
+      fi
+      # Verify response has state field
+      check_contains "POST .../stop → state field" '"state"' "$STOP_RESP"
+    else
+      red "Skipping stop test (failed to start run for stop bot)"
+      ((++FAIL)); ((++FAIL))
+    fi
+  else
+    red "Skipping stop test (failed to create stop bot)"
+    ((++FAIL)); ((++FAIL))
+  fi
+else
+  red "Skipping stop test (no strategy version ID)"
+  ((++FAIL)); ((++FAIL))
+fi
+
+# 11.5 Cross-workspace: bot from other workspace → 403
+if [[ -n "$S10_BOT_ID" ]]; then
+  REG2=$(curl -s -X POST "$BASE_URL/api/v1/auth/register" \
+    -H "Content-Type: application/json" \
+    -d '{"email":"s11_xws_'"$(date +%s)"'@test.com","password":"Test1234!"}')
+  TOKEN2=$(echo "$REG2" | grep -o '"accessToken":"[^"]*"' | cut -d'"' -f4) || true
+  WS_ID2=$(echo "$REG2" | grep -o '"workspaceId":"[^"]*"' | cut -d'"' -f4) || true
+
+  if [[ -n "$TOKEN2" && -n "$WS_ID2" ]]; then
+    # Try to access bot from workspace 1 using workspace 2's token+wsId
+    XWS_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$BASE_URL/api/v1/bots/$S10_BOT_ID" \
+      -H "Authorization: Bearer $TOKEN2" \
+      -H "X-Workspace-Id: $WS_ID2")
+    # Accept 404 (workspace isolation hides the resource) or 403
+    if [[ "$XWS_CODE" == "404" ]] || [[ "$XWS_CODE" == "403" ]]; then
+      green "GET /bots/:id cross-workspace → $XWS_CODE (workspace isolated)"
+      ((++PASS))
+    else
+      red "GET /bots/:id cross-workspace → $XWS_CODE (expected 403 or 404)"
+      ((++FAIL))
+    fi
+
+    # Try to start run on bot from workspace 1 using workspace 2
+    XWS_RUN_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
+      "$BASE_URL/api/v1/bots/$S10_BOT_ID/runs" \
+      -H "Authorization: Bearer $TOKEN2" \
+      -H "Content-Type: application/json" \
+      -H "X-Workspace-Id: $WS_ID2")
+    if [[ "$XWS_RUN_CODE" == "403" ]] || [[ "$XWS_RUN_CODE" == "404" ]]; then
+      green "POST /bots/:id/runs cross-workspace → $XWS_RUN_CODE (workspace isolated)"
+      ((++PASS))
+    else
+      red "POST /bots/:id/runs cross-workspace → $XWS_RUN_CODE (expected 403 or 404)"
+      ((++FAIL))
+    fi
+  else
+    red "Skipping cross-workspace test (failed to register second user)"
+    ((++FAIL)); ((++FAIL))
+  fi
+else
+  red "Skipping cross-workspace test (no bot ID)"
+  ((++FAIL)); ((++FAIL))
+fi
+
+# 11.6 POST /bots without strategyVersionId → 400
+MISSING_SVER=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/bots" \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -H "X-Workspace-Id: $WS_ID" \
+  -d '{"name":"NoStratBot","symbol":"BTCUSDT","timeframe":"M15"}')
+check "POST /bots without strategyVersionId → 400" "400" "$MISSING_SVER"
+
+# 11.7 POST /bots with non-existent strategyVersionId → 400
+BAD_SVER=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/bots" \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -H "X-Workspace-Id: $WS_ID" \
+  -d '{"name":"BadStratBot","strategyVersionId":"00000000-0000-0000-0000-000000000000","symbol":"BTCUSDT","timeframe":"M15"}')
+check "POST /bots with invalid strategyVersionId → 400" "400" "$BAD_SVER"
+
+# 11.8 GET /bots without auth → 401
+BOTS_UNAUTH=$(curl -s -o /dev/null -w "%{http_code}" "$BASE_URL/api/v1/bots")
+check "GET /bots without auth → 401" "401" "$BOTS_UNAUTH"
+
+# 11.9 No secrets in bot/run responses
+if [[ -n "$S10_BOT_ID" ]]; then
+  BOT_RESP=$(curl -s "$BASE_URL/api/v1/bots/$S10_BOT_ID" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "X-Workspace-Id: $WS_ID")
+  if ! echo "$BOT_RESP" | grep -q '"encryptedSecret"\|"apiKey"\|"passwordHash"'; then
+    green "GET /bots/:id → no secret fields in response"
+    ((++PASS))
+  else
+    red "GET /bots/:id → secret fields found in bot response!"
+    ((++FAIL))
+  fi
+else
+  red "Skipping secret-check test (no bot ID)"
+  ((++FAIL))
+fi
+
+# 11.10 GET /bots/:id/runs after section 10 run → array with at least 1 run
+if [[ -n "$S10_BOT_ID" ]]; then
+  RUNS_AFTER=$(curl -s "$BASE_URL/api/v1/bots/$S10_BOT_ID/runs" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "X-Workspace-Id: $WS_ID")
+  if echo "$RUNS_AFTER" | grep -q '"state"'; then
+    green "GET /bots/:id/runs → at least one run returned with state"
+    ((++PASS))
+  else
+    red "GET /bots/:id/runs → no runs found (expected at least 1 from Section 10)"
+    ((++FAIL))
+  fi
+else
+  red "Skipping runs-after test (no bot ID)"
+  ((++FAIL))
+fi
+
 # ─── Summary ─────────────────────────────────────────────────────────────────
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
