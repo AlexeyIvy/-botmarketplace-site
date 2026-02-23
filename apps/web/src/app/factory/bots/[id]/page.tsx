@@ -35,10 +35,31 @@ interface BotEvent {
   payloadJson: Record<string, unknown>;
 }
 
+interface BotIntent {
+  id: string;
+  intentId: string;
+  type: string;
+  side: string;
+  qty: string;
+  price: string | null;
+  state: string;
+  orderId: string | null;
+  createdAt: string;
+}
+
+const INTENT_STATE_COLOR: Record<string, string> = {
+  PENDING:   "#e3b341",
+  PLACED:    "#388bfd",
+  FILLED:    "#3fb950",
+  CANCELLED: "#8b949e",
+  FAILED:    "#f85149",
+};
+
 export default function BotDetailPage() {
   const { id: botId } = useParams<{ id: string }>();
   const [bot, setBot] = useState<BotDetail | null>(null);
   const [events, setEvents] = useState<BotEvent[]>([]);
+  const [intents, setIntents] = useState<BotIntent[]>([]);
   const [error, setError] = useState<ProblemDetails | null>(null);
   const [polling, setPolling] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -61,20 +82,30 @@ export default function BotDetailPage() {
     if (res.ok) setEvents(res.data);
   }, []);
 
+  const loadIntents = useCallback(async (runId: string) => {
+    const res = await apiFetch<BotIntent[]>(`/runs/${runId}/intents`);
+    if (res.ok) setIntents(res.data);
+  }, []);
+
   // Initial load
   useEffect(() => {
     loadBot().then((b) => {
-      if (b?.lastRun) loadEvents(b.lastRun.id);
+      if (b?.lastRun) {
+        loadEvents(b.lastRun.id);
+        loadIntents(b.lastRun.id);
+      }
     });
-  }, [loadBot, loadEvents]);
+  }, [loadBot, loadEvents, loadIntents]);
 
   // Polling
   useEffect(() => {
     if (polling && bot?.lastRun) {
-      const runId = bot.lastRun.id;
       intervalRef.current = setInterval(async () => {
         const b = await loadBot();
-        if (b?.lastRun) await loadEvents(b.lastRun.id);
+        if (b?.lastRun) {
+          await loadEvents(b.lastRun.id);
+          await loadIntents(b.lastRun.id);
+        }
         // Auto-stop polling if run is terminal
         if (b?.lastRun && ["STOPPED", "FAILED", "TIMED_OUT"].includes(b.lastRun.state)) {
           setPolling(false);
@@ -84,14 +115,17 @@ export default function BotDetailPage() {
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  }, [polling, bot?.lastRun?.id, loadBot, loadEvents]);
+  }, [polling, bot?.lastRun?.id, loadBot, loadEvents, loadIntents]);
 
   async function startRun() {
     setError(null);
     const res = await apiFetch<BotRun>(`/bots/${botId}/runs`, { method: "POST" });
     if (res.ok) {
       await loadBot().then((b) => {
-        if (b?.lastRun) loadEvents(b.lastRun.id);
+        if (b?.lastRun) {
+          loadEvents(b.lastRun.id);
+          loadIntents(b.lastRun.id);
+        }
       });
       setPolling(true);
     } else {
@@ -106,7 +140,10 @@ export default function BotDetailPage() {
     if (res.ok) {
       setPolling(false);
       await loadBot().then((b) => {
-        if (b?.lastRun) loadEvents(b.lastRun.id);
+        if (b?.lastRun) {
+          loadEvents(b.lastRun.id);
+          loadIntents(b.lastRun.id);
+        }
       });
     } else {
       setError((res as { ok: false; problem: ProblemDetails }).problem);
@@ -136,7 +173,10 @@ export default function BotDetailPage() {
         <>
           <h1 style={{ fontSize: 24, marginBottom: 8 }}>{bot.name}</h1>
           <p style={{ color: "var(--text-secondary)", marginBottom: 4 }}>
-            {bot.symbol} · {bot.timeframe} · {bot.status}
+            {bot.symbol} · {bot.timeframe} ·{" "}
+            <span style={{ color: bot.status === "ACTIVE" ? "#3fb950" : "var(--text-secondary)" }}>
+              {bot.status}
+            </span>
           </p>
           <p style={{ color: "var(--text-secondary)", marginBottom: 24, fontSize: 13 }}>
             Strategy: <strong>{bot.strategyVersion.strategy.name}</strong> v{bot.strategyVersion.version}
@@ -157,7 +197,10 @@ export default function BotDetailPage() {
               style={btnSecondary}
               onClick={() => {
                 loadBot().then((b) => {
-                  if (b?.lastRun) loadEvents(b.lastRun.id);
+                  if (b?.lastRun) {
+                    loadEvents(b.lastRun.id);
+                    loadIntents(b.lastRun.id);
+                  }
                 });
               }}
             >
@@ -172,8 +215,44 @@ export default function BotDetailPage() {
             {polling && <span style={{ fontSize: 12, color: "#3fb950" }}>● polling</span>}
           </div>
 
+          {/* Intents */}
+          <h3 style={{ marginTop: 24, marginBottom: 12 }}>Intents</h3>
+          {intents.length > 0 ? (
+            <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: 8 }}>
+              <thead>
+                <tr>
+                  {["Time", "Type", "Side", "Qty", "State", "OrderId"].map((h) => (
+                    <th key={h} style={th}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {intents.map((intent) => (
+                  <tr key={intent.id}>
+                    <td style={{ ...td, fontSize: 12, whiteSpace: "nowrap" }}>
+                      {new Date(intent.createdAt).toLocaleTimeString()}
+                    </td>
+                    <td style={td}>{intent.type}</td>
+                    <td style={td}>{intent.side}</td>
+                    <td style={td}>{intent.qty}</td>
+                    <td style={{ ...td, fontWeight: 600, color: INTENT_STATE_COLOR[intent.state] ?? "inherit" }}>
+                      {intent.state}
+                    </td>
+                    <td style={{ ...td, fontFamily: "monospace", fontSize: 11 }}>
+                      {intent.orderId ? intent.orderId.slice(0, 12) + "…" : "—"}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <p style={{ color: "var(--text-secondary)", marginBottom: 16 }}>
+              {lastRun ? "No intents yet — inject a signal to create one" : "No runs yet"}
+            </p>
+          )}
+
           {/* Events log */}
-          <h3 style={{ marginTop: 24, marginBottom: 12 }}>Events</h3>
+          <h3 style={{ marginTop: 16, marginBottom: 12 }}>Events</h3>
           {events.length > 0 ? (
             <table style={{ width: "100%", borderCollapse: "collapse" }}>
               <thead>

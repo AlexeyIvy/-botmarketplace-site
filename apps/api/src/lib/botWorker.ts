@@ -1,16 +1,26 @@
 /**
- * Bot Worker — background loop that advances bot run states.
+ * Bot Worker — background loop that advances bot run states and executes intents.
  *
  * Lifecycle:
  *   QUEUED → STARTING → SYNCING → RUNNING  (worker drives this)
  *   STOPPING → STOPPED                      (worker completes stop)
  *
- * The worker runs independently in the same process. For production,
- * this should be extracted into a dedicated worker process.
+ * Intent execution (Stage 11):
+ *   PENDING → PLACED (on Bybit call or demo-sim) → FAILED (on error)
+ *
+ * Bot.status sync (Stage 11):
+ *   Bot.status = ACTIVE when any run is not in terminal state
+ *   Bot.status = DRAFT  when all runs are terminal
+ *
+ * The worker runs in the same process. For production, extract into a
+ * dedicated worker process.
  */
 
+import { Prisma } from "@prisma/client";
 import { prisma } from "./prisma.js";
 import { transition, isValidTransition } from "./stateMachine.js";
+import { bybitPlaceOrder } from "./bybitOrder.js";
+import { decrypt, getEncryptionKeyRaw } from "./crypto.js";
 
 const WORKER_ID = `worker-${process.pid}`;
 const POLL_INTERVAL_MS = 4_000;
@@ -21,6 +31,35 @@ const MAX_RUN_DURATION_MS = parseInt(process.env.MAX_RUN_DURATION_MS ?? "", 10) 
 async function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+// ---------------------------------------------------------------------------
+// Bot.status sync
+// ---------------------------------------------------------------------------
+
+/**
+ * Sync Bot.status based on whether any active runs exist.
+ * ACTIVE = at least one non-terminal run; DRAFT = all runs terminated.
+ */
+async function syncBotStatus(botId: string): Promise<void> {
+  try {
+    const activeCount = await prisma.botRun.count({
+      where: {
+        botId,
+        state: { notIn: ["STOPPED", "FAILED", "TIMED_OUT"] },
+      },
+    });
+    await prisma.bot.update({
+      where: { id: botId },
+      data: { status: activeCount > 0 ? "ACTIVE" : "DRAFT" },
+    });
+  } catch (err) {
+    console.error(`[botWorker] syncBotStatus ${botId} error:`, err);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Run lifecycle
+// ---------------------------------------------------------------------------
 
 /** Advance a single QUEUED run through STARTING → SYNCING → RUNNING. */
 async function activateRun(runId: string) {
@@ -55,13 +94,17 @@ async function activateRun(runId: string) {
       where: { id: runId },
       data: { leaseOwner: WORKER_ID, leaseUntil: new Date(Date.now() + 30_000) },
     });
+
+    // Sync Bot.status → ACTIVE
+    const run = await prisma.botRun.findUnique({ where: { id: runId }, select: { botId: true } });
+    if (run) await syncBotStatus(run.botId);
   } catch (err) {
     // If another worker won or run was stopped, ignore
     console.error(`[botWorker] activateRun ${runId} error:`, err);
   }
 }
 
-/** Advance a STOPPING run to STOPPED. */
+/** Advance a STOPPING run to STOPPED and sync Bot.status. */
 async function stopRun(runId: string) {
   try {
     const run = await prisma.botRun.findUnique({ where: { id: runId } });
@@ -71,6 +114,7 @@ async function stopRun(runId: string) {
       message: "Worker completed stop",
       stoppedAt: new Date(),
     });
+    await syncBotStatus(run.botId);
   } catch (err) {
     console.error(`[botWorker] stopRun ${runId} error:`, err);
   }
@@ -78,7 +122,6 @@ async function stopRun(runId: string) {
 
 /**
  * Mark RUNNING runs that exceeded their duration as TIMED_OUT.
- *
  * Respects per-run durationMinutes if set; falls back to MAX_RUN_DURATION_MS.
  */
 async function timeoutExpiredRuns() {
@@ -89,17 +132,17 @@ async function timeoutExpiredRuns() {
       state: "RUNNING",
       startedAt: { not: null },
     },
-    select: { id: true, startedAt: true, durationMinutes: true },
+    select: { id: true, botId: true, startedAt: true, durationMinutes: true },
     take: 20,
   });
 
   for (const run of candidates) {
     if (!run.startedAt) continue;
 
-    // Per-run timeout: durationMinutes takes priority over global default
-    const maxDurationMs = run.durationMinutes !== null && run.durationMinutes !== undefined
-      ? run.durationMinutes * 60 * 1000
-      : MAX_RUN_DURATION_MS;
+    const maxDurationMs =
+      run.durationMinutes !== null && run.durationMinutes !== undefined
+        ? run.durationMinutes * 60 * 1000
+        : MAX_RUN_DURATION_MS;
 
     const elapsed = now - run.startedAt.getTime();
     if (elapsed < maxDurationMs) continue;
@@ -111,6 +154,7 @@ async function timeoutExpiredRuns() {
         errorCode: "MAX_DURATION_EXCEEDED",
       });
       console.log(`[botWorker] run ${run.id} timed out (elapsed=${elapsed}ms, max=${maxDurationMs}ms)`);
+      await syncBotStatus(run.botId);
     } catch (err) {
       console.error(`[botWorker] timeoutExpiredRuns ${run.id} error:`, err);
     }
@@ -125,6 +169,197 @@ async function renewLeases() {
     data: { leaseUntil: newLeaseUntil },
   });
 }
+
+// ---------------------------------------------------------------------------
+// Intent execution (Stage 11)
+// ---------------------------------------------------------------------------
+
+/**
+ * Process a single BotIntent:
+ * - Demo mode (no exchangeConnection): simulate immediately → FILLED
+ * - Live mode (has exchangeConnection): call Bybit → PLACED (or FAILED on error)
+ *
+ * Uses optimistic locking: atomically claims PENDING → PLACED before acting.
+ * If another worker already claimed it (count=0), skips silently.
+ */
+async function executeIntent(intent: {
+  id: string;
+  intentId: string;
+  orderLinkId: string;
+  side: string;
+  qty: { toString: () => string };
+  price: { toString: () => string } | null;
+  metaJson: Prisma.JsonValue;
+  botRun: {
+    id: string;
+    bot: {
+      id: string;
+      symbol: string;
+      exchangeConnectionId: string | null;
+      exchangeConnection: { apiKey: string; encryptedSecret: string } | null;
+      strategyVersion: { dslJson: Prisma.JsonValue } | null;
+    };
+  };
+}) {
+  const { botRun } = intent;
+  const { bot } = botRun;
+
+  // Atomically claim the intent (optimistic lock)
+  const claimed = await prisma.botIntent.updateMany({
+    where: { id: intent.id, state: "PENDING" },
+    data: { state: "PLACED" },
+  });
+  if (claimed.count === 0) return; // another worker grabbed it or it changed
+
+  try {
+    if (!bot.exchangeConnection) {
+      // ── Demo mode: simulate order placement ──────────────────────────────
+      const meta = {
+        ...(intent.metaJson && typeof intent.metaJson === "object" ? intent.metaJson as Record<string, unknown> : {}),
+        simulated: true,
+        filledAt: new Date().toISOString(),
+      };
+      await prisma.botIntent.update({
+        where: { id: intent.id },
+        data: { state: "FILLED", metaJson: meta as Prisma.InputJsonValue },
+      });
+      await prisma.botEvent.create({
+        data: {
+          botRunId: botRun.id,
+          type: "intent_simulated",
+          payloadJson: {
+            intentId: intent.intentId,
+            orderLinkId: intent.orderLinkId,
+            side: intent.side,
+            qty: intent.qty.toString(),
+            simulated: true,
+            at: new Date().toISOString(),
+          } as Prisma.InputJsonValue,
+        },
+      });
+      console.log(`[botWorker] intent ${intent.intentId} simulated (no exchange connection)`);
+    } else {
+      // ── Live mode: place order on Bybit ──────────────────────────────────
+      const encKey = getEncryptionKeyRaw();
+      if (!encKey) {
+        throw new Error("SECRET_ENCRYPTION_KEY not configured");
+      }
+      const plainSecret = decrypt(bot.exchangeConnection.encryptedSecret, encKey);
+
+      // Determine orderType from strategy DSL or default to Market
+      const dsl = bot.strategyVersion?.dslJson as { execution?: { orderType?: string } } | null;
+      const orderType =
+        (dsl?.execution?.orderType === "Limit" ? "Limit" : "Market") as "Market" | "Limit";
+
+      const side = intent.side === "BUY" ? "Buy" : "Sell";
+
+      const result = await bybitPlaceOrder(
+        bot.exchangeConnection.apiKey,
+        plainSecret,
+        {
+          symbol: bot.symbol,
+          side,
+          orderType,
+          qty: intent.qty.toString(),
+          ...(intent.price && orderType === "Limit" ? { price: intent.price.toString() } : {}),
+        },
+      );
+
+      const meta = {
+        ...(intent.metaJson && typeof intent.metaJson === "object" ? intent.metaJson as Record<string, unknown> : {}),
+        exchangeOrderId: result.orderId,
+        placedAt: new Date().toISOString(),
+      };
+      await prisma.botIntent.update({
+        where: { id: intent.id },
+        data: { orderId: result.orderId, metaJson: meta as Prisma.InputJsonValue },
+      });
+      await prisma.botEvent.create({
+        data: {
+          botRunId: botRun.id,
+          type: "intent_placed",
+          payloadJson: {
+            intentId: intent.intentId,
+            orderId: result.orderId,
+            orderLinkId: result.orderLinkId,
+            at: new Date().toISOString(),
+          } as Prisma.InputJsonValue,
+        },
+      });
+      console.log(`[botWorker] intent ${intent.intentId} placed → orderId=${result.orderId}`);
+    }
+  } catch (err) {
+    // Placement failed — mark intent as FAILED
+    const meta = {
+      ...(intent.metaJson && typeof intent.metaJson === "object" ? intent.metaJson as Record<string, unknown> : {}),
+      error: String(err),
+      failedAt: new Date().toISOString(),
+    };
+    await prisma.botIntent.update({
+      where: { id: intent.id },
+      data: { state: "FAILED", metaJson: meta as Prisma.InputJsonValue },
+    });
+    await prisma.botEvent.create({
+      data: {
+        botRunId: botRun.id,
+        type: "intent_failed",
+        payloadJson: {
+          intentId: intent.intentId,
+          error: String(err),
+          at: new Date().toISOString(),
+        } as Prisma.InputJsonValue,
+      },
+    });
+    console.error(`[botWorker] intent ${intent.intentId} failed:`, err);
+  }
+}
+
+/**
+ * Process all PENDING intents on RUNNING runs.
+ * Picks up to 20 at a time ordered by creation time.
+ */
+async function processIntents() {
+  try {
+    const pendingIntents = await prisma.botIntent.findMany({
+      where: {
+        state: "PENDING",
+        botRun: { state: "RUNNING" },
+      },
+      include: {
+        botRun: {
+          include: {
+            bot: {
+              select: {
+                id: true,
+                symbol: true,
+                exchangeConnectionId: true,
+                exchangeConnection: {
+                  select: { apiKey: true, encryptedSecret: true },
+                },
+                strategyVersion: {
+                  select: { dslJson: true },
+                },
+              },
+            },
+          },
+        },
+      },
+      orderBy: { createdAt: "asc" },
+      take: 20,
+    });
+
+    for (const intent of pendingIntents) {
+      // Type narrowing: botRun.bot is always included here
+      await executeIntent(intent as Parameters<typeof executeIntent>[0]);
+    }
+  } catch (err) {
+    console.error("[botWorker] processIntents error:", err);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Main polling loop
+// ---------------------------------------------------------------------------
 
 /** Main polling loop. */
 async function poll() {
@@ -155,6 +390,9 @@ async function poll() {
 
     // Renew leases on our RUNNING runs
     await renewLeases();
+
+    // Process PENDING intents on RUNNING runs (Stage 11)
+    await processIntents();
   } catch (err) {
     console.error("[botWorker] poll error:", err);
   }
