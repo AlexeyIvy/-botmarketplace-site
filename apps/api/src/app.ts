@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import Fastify from "fastify";
 import cors from "@fastify/cors";
 import jwt from "@fastify/jwt";
@@ -37,6 +38,8 @@ export async function buildApp() {
           ? { target: "pino-pretty" }
           : undefined,
     },
+    genReqId: (req) =>
+      (req.headers["x-request-id"] as string) || randomUUID(),
   });
 
   await app.register(cors, { origin: true });
@@ -70,6 +73,31 @@ export async function buildApp() {
         detail: "Valid Bearer token required",
       });
     }
+  });
+
+  // Echo X-Request-Id back to caller
+  app.addHook("onSend", async (request, reply) => {
+    reply.header("X-Request-Id", request.id);
+  });
+
+  // Global catch-all for unhandled errors
+  app.setErrorHandler((error: Error & { statusCode?: number; status?: number }, request, reply) => {
+    const statusCode = error.statusCode ?? error.status ?? 500;
+    if (statusCode < 500) {
+      // Non-server errors (validation, rate-limit, etc.) — pass through as-is
+      void reply.status(statusCode).send(error);
+      return;
+    }
+    request.log.error({ err: error, reqId: request.id }, "Unhandled error");
+    void reply.status(500).send({
+      type: "about:blank",
+      title: "Internal Server Error",
+      status: 500,
+      detail:
+        process.env.NODE_ENV === "production"
+          ? "An unexpected error occurred"
+          : error.message,
+    });
   });
 
   // Primary versioned routes: /api/v1/*
