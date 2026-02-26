@@ -8,6 +8,24 @@ import { getWorkspaceId, apiFetch } from "../factory/api";
 // Types
 // ---------------------------------------------------------------------------
 
+interface Strategy {
+  id: string;
+  name: string;
+  symbol: string;
+  timeframe: string;
+}
+
+interface TradeRecord {
+  entryTime: number;
+  exitTime: number;
+  entryPrice: number;
+  exitPrice: number;
+  slPrice: number;
+  tpPrice: number;
+  outcome: "WIN" | "LOSS" | "NEUTRAL";
+  pnlPct: number;
+}
+
 interface BacktestReport {
   trades: number;
   wins: number;
@@ -15,6 +33,7 @@ interface BacktestReport {
   totalPnlPct: number;
   maxDrawdownPct: number;
   candles: number;
+  tradeLog?: TradeRecord[];
 }
 
 interface BacktestItem {
@@ -56,12 +75,16 @@ function fmtInterval(interval: string) {
   return interval + "m";
 }
 
+function fmtTs(ts: number) {
+  return new Date(ts).toLocaleDateString(undefined, { month: "short", day: "numeric" });
+}
+
 // ---------------------------------------------------------------------------
 // Component
 // ---------------------------------------------------------------------------
 
 export default function LabPage() {
-  const [wsId, setWsId] = useState("");
+  const [strategies, setStrategies] = useState<Strategy[]>([]);
   const [strategyId, setStrategyId] = useState("");
   const [symbol, setSymbol] = useState("BTCUSDT");
   const [candleInterval, setCandleInterval] = useState("15");
@@ -76,13 +99,24 @@ export default function LabPage() {
   const [error, setError] = useState<string | null>(null);
   const [activeBtId, setActiveBtId] = useState<string | null>(null);
   const [activeResult, setActiveResult] = useState<BacktestItem | null>(null);
+  const [showTradeLog, setShowTradeLog] = useState(false);
   const [history, setHistory] = useState<BacktestItem[]>([]);
   const [historyLoading, setHistoryLoading] = useState(false);
 
+  // Load strategies for dropdown
   useEffect(() => {
-    const stored = getWorkspaceId();
-    if (stored) setWsId(stored);
+    if (!getWorkspaceId()) return;
+    apiFetch<Strategy[]>("/strategies").then((res) => {
+      if (res.ok) setStrategies(res.data);
+    });
   }, []);
+
+  // When strategy selection changes, auto-fill symbol from strategy
+  const handleStrategyChange = (id: string) => {
+    setStrategyId(id);
+    const strat = strategies.find((s) => s.id === id);
+    if (strat) setSymbol(strat.symbol);
+  };
 
   const loadHistory = useCallback(async () => {
     if (!getWorkspaceId()) return;
@@ -94,6 +128,7 @@ export default function LabPage() {
 
   useEffect(() => { loadHistory(); }, [loadHistory]);
 
+  // Poll active backtest until terminal
   useEffect(() => {
     if (!activeBtId) return;
     if (activeResult?.status === "DONE" || activeResult?.status === "FAILED") return;
@@ -112,11 +147,12 @@ export default function LabPage() {
 
   async function startBacktest() {
     setError(null);
-    if (!wsId.trim()) { setError("Set Workspace ID in Factory first"); return; }
-    if (!strategyId.trim()) { setError("Strategy ID is required"); return; }
+    if (!getWorkspaceId()) { setError("Set Workspace ID in Factory first"); return; }
+    if (!strategyId.trim()) { setError("Select a strategy"); return; }
     setRunning(true);
     setActiveResult(null);
     setActiveBtId(null);
+    setShowTradeLog(false);
 
     const res = await apiFetch<BacktestItem>("/lab/backtest", {
       method: "POST",
@@ -140,9 +176,10 @@ export default function LabPage() {
   }
 
   const report = activeResult?.reportJson ?? null;
+  const tradeLog = report?.tradeLog ?? [];
 
   return (
-    <div style={{ padding: "32px 24px", maxWidth: 760, margin: "0 auto" }}>
+    <div style={{ padding: "32px 24px", maxWidth: 860, margin: "0 auto" }}>
       <h1 style={{ fontSize: 26, marginBottom: 4 }}>Research Lab</h1>
       <p style={{ color: "var(--text-secondary)", marginBottom: 28, fontSize: 14 }}>
         Historical backtest · price-breakout strategy (lookback 20) · 2:1 R/R
@@ -153,24 +190,31 @@ export default function LabPage() {
         <h2 style={{ fontSize: 16, marginBottom: 16 }}>Run Backtest</h2>
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-          <label style={labelStyle}>
-            Workspace ID
-            <input
-              style={inputStyle}
-              value={wsId}
-              onChange={(e) => setWsId(e.target.value)}
-              placeholder="from Factory"
-            />
+          <label style={{ ...labelStyle, gridColumn: "1 / -1" }}>
+            Strategy
+            {strategies.length > 0 ? (
+              <select
+                style={inputStyle}
+                value={strategyId}
+                onChange={(e) => handleStrategyChange(e.target.value)}
+              >
+                <option value="">— select a strategy —</option>
+                {strategies.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.name} ({s.symbol} · {s.timeframe})
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <input
+                style={inputStyle}
+                value={strategyId}
+                onChange={(e) => setStrategyId(e.target.value)}
+                placeholder="strategy UUID (no strategies loaded)"
+              />
+            )}
           </label>
-          <label style={labelStyle}>
-            Strategy ID
-            <input
-              style={inputStyle}
-              value={strategyId}
-              onChange={(e) => setStrategyId(e.target.value)}
-              placeholder="uuid"
-            />
-          </label>
+
           <label style={labelStyle}>
             Symbol
             <input
@@ -246,22 +290,75 @@ export default function LabPage() {
           )}
 
           {activeResult.status === "DONE" && report && (
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
-              <MetricCard label="Trades" value={String(report.trades)} />
-              <MetricCard label="Wins" value={String(report.wins)} />
-              <MetricCard label="Winrate" value={fmtRate(report.winrate)} />
-              <MetricCard
-                label="Total PnL"
-                value={pct(report.totalPnlPct)}
-                positive={report.totalPnlPct >= 0}
-              />
-              <MetricCard
-                label="Max Drawdown"
-                value={`-${report.maxDrawdownPct.toFixed(2)}%`}
-                positive={false}
-              />
-              <MetricCard label="Candles" value={String(report.candles)} />
-            </div>
+            <>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
+                <MetricCard label="Trades" value={String(report.trades)} />
+                <MetricCard label="Wins" value={String(report.wins)} />
+                <MetricCard label="Winrate" value={fmtRate(report.winrate)} />
+                <MetricCard
+                  label="Total PnL"
+                  value={pct(report.totalPnlPct)}
+                  positive={report.totalPnlPct >= 0}
+                />
+                <MetricCard
+                  label="Max Drawdown"
+                  value={`-${report.maxDrawdownPct.toFixed(2)}%`}
+                  positive={false}
+                />
+                <MetricCard label="Candles" value={String(report.candles)} />
+              </div>
+
+              {/* Trade Log toggle */}
+              {tradeLog.length > 0 && (
+                <div style={{ marginTop: 16 }}>
+                  <button
+                    style={{ ...btnStyle, fontSize: 12, padding: "5px 14px", background: "rgba(255,255,255,0.08)", color: "inherit" }}
+                    onClick={() => setShowTradeLog((v) => !v)}
+                  >
+                    {showTradeLog ? "Hide" : "Show"} Trade Log ({tradeLog.length} trades)
+                  </button>
+
+                  {showTradeLog && (
+                    <div style={{ marginTop: 12, overflowX: "auto" }}>
+                      <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
+                        <thead>
+                          <tr style={{ color: "var(--text-secondary)", textAlign: "left" }}>
+                            <th style={thStyle}>Entry</th>
+                            <th style={thStyle}>Exit</th>
+                            <th style={thStyle}>Entry $</th>
+                            <th style={thStyle}>Exit $</th>
+                            <th style={thStyle}>SL $</th>
+                            <th style={thStyle}>TP $</th>
+                            <th style={thStyle}>Outcome</th>
+                            <th style={thStyle}>PnL %</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {tradeLog.map((t, i) => (
+                            <tr key={i} style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+                              <td style={tdStyle}>{fmtTs(t.entryTime)}</td>
+                              <td style={tdStyle}>{fmtTs(t.exitTime)}</td>
+                              <td style={tdStyle}>{t.entryPrice.toFixed(2)}</td>
+                              <td style={tdStyle}>{t.exitPrice.toFixed(2)}</td>
+                              <td style={tdStyle}>{t.slPrice.toFixed(2)}</td>
+                              <td style={tdStyle}>{t.tpPrice.toFixed(2)}</td>
+                              <td style={tdStyle}><OutcomeBadge outcome={t.outcome} /></td>
+                              <td style={{
+                                ...tdStyle,
+                                color: t.pnlPct >= 0 ? "#4ade80" : "#f87171",
+                                fontWeight: 600,
+                              }}>
+                                {pct(t.pnlPct)}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </div>
+              )}
+            </>
           )}
 
           <div style={{ fontSize: 11, color: "var(--text-secondary)", marginTop: 12 }}>
@@ -319,7 +416,7 @@ export default function LabPage() {
                 <tr
                   key={bt.id}
                   style={{ cursor: "pointer", borderTop: "1px solid rgba(255,255,255,0.06)" }}
-                  onClick={() => { setActiveResult(bt); setActiveBtId(bt.id); }}
+                  onClick={() => { setActiveResult(bt); setActiveBtId(bt.id); setShowTradeLog(false); }}
                 >
                   <td style={tdStyle}>{bt.symbol}</td>
                   <td style={tdStyle}>{fmtInterval(bt.interval)}</td>
@@ -371,6 +468,16 @@ function StatusBadge({ status }: { status: string }) {
   );
 }
 
+function OutcomeBadge({ outcome }: { outcome: "WIN" | "LOSS" | "NEUTRAL" }) {
+  const map = {
+    WIN:     { color: "#4ade80", label: "WIN" },
+    LOSS:    { color: "#f87171", label: "LOSS" },
+    NEUTRAL: { color: "#94a3b8", label: "NEUT" },
+  };
+  const { color, label } = map[outcome];
+  return <span style={{ fontSize: 11, fontWeight: 600, color }}>{label}</span>;
+}
+
 function MetricCard({ label, value, positive }: { label: string; value: string; positive?: boolean }) {
   const color = positive === undefined ? undefined : positive ? "#4ade80" : "#f87171";
   return (
@@ -385,19 +492,19 @@ function MetricCard({ label, value, positive }: { label: string; value: string; 
 // Styles
 // ---------------------------------------------------------------------------
 
-const sectionStyle: { [key: string]: string | number | undefined } = {
+const sectionStyle: React.CSSProperties = {
   background: "var(--surface, #1a1a2e)",
   borderRadius: 8,
   padding: 20,
   marginBottom: 20,
 };
 
-const labelStyle: { [key: string]: string | number | undefined } = {
+const labelStyle: React.CSSProperties = {
   display: "flex", flexDirection: "column", gap: 6,
   fontSize: 13, color: "var(--text-secondary)",
 };
 
-const inputStyle: { [key: string]: string | number | undefined } = {
+const inputStyle: React.CSSProperties = {
   background: "rgba(255,255,255,0.07)",
   border: "1px solid rgba(255,255,255,0.12)",
   borderRadius: 6, padding: "8px 10px",
@@ -405,11 +512,11 @@ const inputStyle: { [key: string]: string | number | undefined } = {
   outline: "none", width: "100%", boxSizing: "border-box",
 };
 
-const btnStyle: { [key: string]: string | number | undefined } = {
+const btnStyle: React.CSSProperties = {
   background: "#3b82f6", color: "#fff", border: "none",
   borderRadius: 6, padding: "10px 20px",
   fontSize: 14, fontWeight: 600, cursor: "pointer",
 };
 
-const thStyle: { [key: string]: string | number | undefined } = { padding: "6px 8px", fontWeight: 500, fontSize: 12 };
-const tdStyle: { [key: string]: string | number | undefined } = { padding: "8px 8px" };
+const thStyle: React.CSSProperties = { padding: "6px 8px", fontWeight: 500, fontSize: 12 };
+const tdStyle: React.CSSProperties = { padding: "8px 8px" };
