@@ -743,6 +743,225 @@ else
   ((++FAIL))
 fi
 
+# ─── 12. Stage 12 — DSL enforcement + Lab backtest API ──────────────────────
+header "12. Stage 12 — DSL enforcement + Lab backtest API"
+
+# Shared setup: create strategy + version for Stage 12 tests
+S12_STRAT=$(curl -s -X POST "$BASE_URL/api/v1/strategies" \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -H "X-Workspace-Id: $WS_ID" \
+  -d '{"name":"S12 Test Strategy","symbol":"BTCUSDT","timeframe":"M15"}')
+S12_STRAT_ID=$(echo "$S12_STRAT" | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4) || true
+
+S12_VER_ENABLED=$(curl -s -X POST "$BASE_URL/api/v1/strategies/$S12_STRAT_ID/versions" \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -H "X-Workspace-Id: $WS_ID" \
+  -d '{
+    "dslJson": {
+      "id":"s12-enabled","name":"S12 Enabled","dslVersion":1,"enabled":true,
+      "market":{"exchange":"bybit","env":"demo","category":"linear","symbol":"BTCUSDT"},
+      "entry":{"side":"Buy","signal":"manual"},
+      "risk":{"maxPositionSizeUsd":100,"riskPerTradePct":1,"cooldownSeconds":60,"dailyLossLimitUsd":50},
+      "execution":{"orderType":"Market","clientOrderIdPrefix":"s12bot"},
+      "guards":{"maxOpenPositions":1,"maxOrdersPerMinute":10,"pauseOnError":true}
+    }
+  }')
+S12_VER_ENABLED_ID=$(echo "$S12_VER_ENABLED" | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4) || true
+
+S12_VER_DISABLED=$(curl -s -X POST "$BASE_URL/api/v1/strategies/$S12_STRAT_ID/versions" \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -H "X-Workspace-Id: $WS_ID" \
+  -d '{
+    "dslJson": {
+      "id":"s12-disabled","name":"S12 Disabled","dslVersion":1,"enabled":false,
+      "market":{"exchange":"bybit","env":"demo","category":"linear","symbol":"BTCUSDT"},
+      "entry":{"side":"Buy","signal":"manual"},
+      "risk":{"maxPositionSizeUsd":100,"riskPerTradePct":1,"cooldownSeconds":60},
+      "execution":{"orderType":"Market","clientOrderIdPrefix":"s12bot"},
+      "guards":{"maxOpenPositions":1,"maxOrdersPerMinute":10,"pauseOnError":true}
+    }
+  }')
+S12_VER_DISABLED_ID=$(echo "$S12_VER_DISABLED" | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4) || true
+
+# 12.1 POST /lab/backtest → 202 PENDING
+if [[ -n "$S12_STRAT_ID" ]]; then
+  S12_BT_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/lab/backtest" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "Content-Type: application/json" \
+    -H "X-Workspace-Id: $WS_ID" \
+    -d "{\"strategyId\":\"$S12_STRAT_ID\",\"symbol\":\"BTCUSDT\",\"interval\":\"15\",\"fromTs\":\"2024-01-01T00:00:00Z\",\"toTs\":\"2024-01-31T00:00:00Z\"}")
+  check "POST /lab/backtest → 202" "202" "$S12_BT_CODE"
+
+  S12_BT=$(curl -s -X POST "$BASE_URL/api/v1/lab/backtest" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "Content-Type: application/json" \
+    -H "X-Workspace-Id: $WS_ID" \
+    -d "{\"strategyId\":\"$S12_STRAT_ID\",\"symbol\":\"BTCUSDT\",\"interval\":\"15\",\"fromTs\":\"2024-01-01T00:00:00Z\",\"toTs\":\"2024-01-31T00:00:00Z\"}")
+  S12_BT_ID=$(echo "$S12_BT" | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4) || true
+  S12_BT_STATUS=$(echo "$S12_BT" | grep -o '"status":"[^"]*"' | head -1 | cut -d'"' -f4) || true
+  if [[ "$S12_BT_STATUS" == "PENDING" ]] || [[ "$S12_BT_STATUS" == "RUNNING" ]]; then
+    green "POST /lab/backtest → status PENDING/RUNNING"
+    ((++PASS))
+  else
+    red "POST /lab/backtest → unexpected status: $S12_BT_STATUS"
+    ((++FAIL))
+  fi
+else
+  red "Skipping backtest tests (no strategy created)"
+  ((++FAIL)); ((++FAIL))
+fi
+
+# 12.2 GET /lab/backtests → 200 + array
+S12_LIST_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$BASE_URL/api/v1/lab/backtests" \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "X-Workspace-Id: $WS_ID")
+check "GET /lab/backtests → 200" "200" "$S12_LIST_CODE"
+
+# 12.3 GET /lab/backtest/:id → 200
+if [[ -n "$S12_BT_ID" ]]; then
+  S12_GET_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$BASE_URL/api/v1/lab/backtest/$S12_BT_ID" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "X-Workspace-Id: $WS_ID")
+  check "GET /lab/backtest/:id → 200" "200" "$S12_GET_CODE"
+else
+  red "Skipping GET /lab/backtest/:id (no backtest ID)"
+  ((++FAIL))
+fi
+
+# 12.4 POST /lab/backtest without auth → 401
+S12_UNAUTH=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/lab/backtest" \
+  -H "Content-Type: application/json" \
+  -d '{"strategyId":"fake","fromTs":"2024-01-01T00:00:00Z","toTs":"2024-01-31T00:00:00Z"}')
+check "POST /lab/backtest without auth → 401" "401" "$S12_UNAUTH"
+
+# 12.5 POST /lab/backtest without strategyId → 400
+S12_NO_STRAT=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/lab/backtest" \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -H "X-Workspace-Id: $WS_ID" \
+  -d '{"fromTs":"2024-01-01T00:00:00Z","toTs":"2024-01-31T00:00:00Z"}')
+check "POST /lab/backtest without strategyId → 400" "400" "$S12_NO_STRAT"
+
+# 12.6 POST /lab/backtest with fromTs >= toTs → 400
+if [[ -n "$S12_STRAT_ID" ]]; then
+  S12_BAD_RANGE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/lab/backtest" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "Content-Type: application/json" \
+    -H "X-Workspace-Id: $WS_ID" \
+    -d "{\"strategyId\":\"$S12_STRAT_ID\",\"fromTs\":\"2024-02-01T00:00:00Z\",\"toTs\":\"2024-01-01T00:00:00Z\"}")
+  check "POST /lab/backtest fromTs >= toTs → 400" "400" "$S12_BAD_RANGE"
+else
+  red "Skipping date-range validation test (no strategy)"
+  ((++FAIL))
+fi
+
+# 12.7 Bot with enabled DSL → bot creation succeeds
+if [[ -n "$S12_VER_ENABLED_ID" ]]; then
+  S12_BOT=$(curl -s -X POST "$BASE_URL/api/v1/bots" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "Content-Type: application/json" \
+    -H "X-Workspace-Id: $WS_ID" \
+    -d "{\"name\":\"S12 Enabled Bot\",\"strategyVersionId\":\"$S12_VER_ENABLED_ID\",\"symbol\":\"BTCUSDT\",\"timeframe\":\"M15\"}")
+  S12_BOT_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/bots" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "Content-Type: application/json" \
+    -H "X-Workspace-Id: $WS_ID" \
+    -d "{\"name\":\"S12 Enabled Bot2\",\"strategyVersionId\":\"$S12_VER_ENABLED_ID\",\"symbol\":\"BTCUSDT\",\"timeframe\":\"M15\"}")
+  check "POST /bots with enabled DSL → 201" "201" "$S12_BOT_CODE"
+  S12_BOT_ID=$(echo "$S12_BOT" | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4) || true
+else
+  red "Skipping enabled-bot test (no strategy version)"
+  ((++FAIL))
+fi
+
+# 12.8 Bot with disabled DSL → bot creation succeeds (enforcement is in worker, not create)
+if [[ -n "$S12_VER_DISABLED_ID" ]]; then
+  S12_DIS_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/bots" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "Content-Type: application/json" \
+    -H "X-Workspace-Id: $WS_ID" \
+    -d "{\"name\":\"S12 Disabled Bot\",\"strategyVersionId\":\"$S12_VER_DISABLED_ID\",\"symbol\":\"BTCUSDT\",\"timeframe\":\"M15\"}")
+  check "POST /bots with disabled DSL → 201 (worker cancels intents)" "201" "$S12_DIS_CODE"
+else
+  red "Skipping disabled-bot test (no strategy version)"
+  ((++FAIL))
+fi
+
+# 12.9 Run + intent on enabled bot → intent created 201
+if [[ -n "$S12_BOT_ID" ]]; then
+  S12_RUN=$(curl -s -X POST "$BASE_URL/api/v1/bots/$S12_BOT_ID/runs" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "Content-Type: application/json" \
+    -H "X-Workspace-Id: $WS_ID" \
+    -d '{"durationMinutes":5}')
+  S12_RUN_ID=$(echo "$S12_RUN" | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4) || true
+  sleep 6  # wait for worker to advance to RUNNING
+  if [[ -n "$S12_RUN_ID" ]]; then
+    S12_INTENT=$(curl -s -X POST "$BASE_URL/api/v1/runs/$S12_RUN_ID/intents" \
+      -H "Authorization: Bearer $TOKEN" \
+      -H "Content-Type: application/json" \
+      -H "X-Workspace-Id: $WS_ID" \
+      -d "{\"intentId\":\"s12-intent-1\",\"type\":\"ENTRY\",\"side\":\"BUY\",\"qty\":0.001}")
+    S12_INTENT_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/runs/$S12_RUN_ID/intents" \
+      -H "Authorization: Bearer $TOKEN" \
+      -H "Content-Type: application/json" \
+      -H "X-Workspace-Id: $WS_ID" \
+      -d "{\"intentId\":\"s12-intent-2\",\"type\":\"ENTRY\",\"side\":\"BUY\",\"qty\":0.001}")
+    check "POST /runs/:runId/intents → 201" "201" "$S12_INTENT_CODE"
+    S12_INTENT_ID=$(echo "$S12_INTENT" | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4) || true
+  else
+    red "Skipping intent test (no run ID)"
+    ((++FAIL))
+  fi
+else
+  red "Skipping intent test (no bot ID)"
+  ((++FAIL))
+fi
+
+# 12.10 GET /runs/:runId/intents → 200 + array
+if [[ -n "$S12_RUN_ID" ]]; then
+  S12_INTENTS_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$BASE_URL/api/v1/runs/$S12_RUN_ID/intents" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "X-Workspace-Id: $WS_ID")
+  check "GET /runs/:runId/intents → 200" "200" "$S12_INTENTS_CODE"
+else
+  red "Skipping GET intents (no run ID)"
+  ((++FAIL))
+fi
+
+# 12.11 POST /runs/:runId/intents without auth → 401
+if [[ -n "$S12_RUN_ID" ]]; then
+  S12_INTENT_UNAUTH=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/runs/$S12_RUN_ID/intents" \
+    -H "Content-Type: application/json" \
+    -d '{"intentId":"x","type":"ENTRY","side":"BUY","qty":0.001}')
+  check "POST /runs/:runId/intents without auth → 401" "401" "$S12_INTENT_UNAUTH"
+else
+  red "Skipping intents-unauth test (no run ID)"
+  ((++FAIL))
+fi
+
+# 12.12 Intent idempotency: same intentId → existing record returned (200 or 201)
+if [[ -n "$S12_RUN_ID" && -n "$S12_INTENT_ID" ]]; then
+  S12_IDEM_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/runs/$S12_RUN_ID/intents" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "Content-Type: application/json" \
+    -H "X-Workspace-Id: $WS_ID" \
+    -d "{\"intentId\":\"s12-intent-1\",\"type\":\"ENTRY\",\"side\":\"BUY\",\"qty\":0.001}")
+  if [[ "$S12_IDEM_CODE" == "200" ]] || [[ "$S12_IDEM_CODE" == "201" ]]; then
+    green "POST /runs/:runId/intents idempotency → $S12_IDEM_CODE (existing intent returned)"
+    ((++PASS))
+  else
+    red "POST /runs/:runId/intents idempotency → $S12_IDEM_CODE (expected 200 or 201)"
+    ((++FAIL))
+  fi
+else
+  red "Skipping idempotency test (no run/intent ID)"
+  ((++FAIL))
+fi
+
 # ─── Summary ─────────────────────────────────────────────────────────────────
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
