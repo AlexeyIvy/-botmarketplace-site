@@ -21,11 +21,20 @@
  * dedicated worker process.
  */
 
+import pino from "pino";
 import { Prisma } from "@prisma/client";
 import { prisma } from "./prisma.js";
 import { transition, isValidTransition } from "./stateMachine.js";
 import { bybitPlaceOrder } from "./bybitOrder.js";
 import { decrypt, getEncryptionKeyRaw } from "./crypto.js";
+
+const workerLog = pino({
+  name: "botWorker",
+  transport:
+    process.env.NODE_ENV !== "production"
+      ? { target: "pino-pretty" }
+      : undefined,
+});
 
 const WORKER_ID = `worker-${process.pid}`;
 const POLL_INTERVAL_MS = 4_000;
@@ -58,7 +67,7 @@ async function syncBotStatus(botId: string): Promise<void> {
       data: { status: activeCount > 0 ? "ACTIVE" : "DRAFT" },
     });
   } catch (err) {
-    console.error(`[botWorker] syncBotStatus ${botId} error:`, err);
+    workerLog.error({ err, botId }, "syncBotStatus error");
   }
 }
 
@@ -105,7 +114,7 @@ async function activateRun(runId: string) {
     if (run) await syncBotStatus(run.botId);
   } catch (err) {
     // If another worker won or run was stopped, ignore
-    console.error(`[botWorker] activateRun ${runId} error:`, err);
+    workerLog.error({ err, runId }, "activateRun error");
   }
 }
 
@@ -121,7 +130,7 @@ async function stopRun(runId: string) {
     });
     await syncBotStatus(run.botId);
   } catch (err) {
-    console.error(`[botWorker] stopRun ${runId} error:`, err);
+    workerLog.error({ err, runId }, "stopRun error");
   }
 }
 
@@ -158,10 +167,10 @@ async function timeoutExpiredRuns() {
         message: `Run exceeded max duration of ${maxDurationMs / 1000}s`,
         errorCode: "MAX_DURATION_EXCEEDED",
       });
-      console.log(`[botWorker] run ${run.id} timed out (elapsed=${elapsed}ms, max=${maxDurationMs}ms)`);
+      workerLog.info({ runId: run.id, elapsed, maxDurationMs }, "run timed out");
       await syncBotStatus(run.botId);
     } catch (err) {
-      console.error(`[botWorker] timeoutExpiredRuns ${run.id} error:`, err);
+      workerLog.error({ err, runId: run.id }, "timeoutExpiredRuns error");
     }
   }
 }
@@ -242,7 +251,7 @@ async function executeIntent(intent: {
           } as Prisma.InputJsonValue,
         },
       });
-      console.log(`[botWorker] intent ${intent.intentId} simulated (no exchange connection)`);
+      workerLog.info({ intentId: intent.intentId }, "intent simulated (demo mode)");
     } else {
       // ── Live mode: place order on Bybit ──────────────────────────────────
       const encKey = getEncryptionKeyRaw();
@@ -291,7 +300,7 @@ async function executeIntent(intent: {
           } as Prisma.InputJsonValue,
         },
       });
-      console.log(`[botWorker] intent ${intent.intentId} placed → orderId=${result.orderId}`);
+      workerLog.info({ intentId: intent.intentId, orderId: result.orderId }, "intent placed");
     }
   } catch (err) {
     // Placement failed — mark intent as FAILED
@@ -315,7 +324,7 @@ async function executeIntent(intent: {
         } as Prisma.InputJsonValue,
       },
     });
-    console.error(`[botWorker] intent ${intent.intentId} failed:`, err);
+    workerLog.error({ err, intentId: intent.intentId }, "executeIntent error");
   }
 }
 
@@ -376,16 +385,13 @@ async function enforceDailyLossLimit(): Promise<void> {
           eventType: "RUN_STOPPING",
           message: `Daily loss limit $${dailyLossLimitUsd} exceeded (estimated loss: $${estimatedDailyLoss.toFixed(2)} from ${failedToday} failed intent(s))`,
         });
-        console.log(
-          `[botWorker] run ${run.id} stopping — daily loss limit $${dailyLossLimitUsd} exceeded ` +
-          `(estimated: $${estimatedDailyLoss.toFixed(2)}, ${failedToday} failed intents today)`,
-        );
+        workerLog.info({ runId: run.id, estimatedDailyLoss, dailyLossLimitUsd }, "daily loss limit exceeded, stopping run");
       } catch (err) {
-        console.error(`[botWorker] enforceDailyLossLimit ${run.id} error:`, err);
+        workerLog.error({ err, runId: run.id }, "enforceDailyLossLimit error");
       }
     }
   } catch (err) {
-    console.error("[botWorker] enforceDailyLossLimit error:", err);
+    workerLog.error({ err }, "enforceDailyLossLimit error");
   }
 }
 
@@ -445,7 +451,7 @@ async function processIntents() {
             } as Prisma.InputJsonValue,
           },
         });
-        console.log(`[botWorker] intent ${intent.intentId} cancelled — strategy disabled`);
+        workerLog.info({ intentId: intent.intentId }, "intent cancelled — strategy disabled");
         continue;
       }
 
@@ -453,7 +459,7 @@ async function processIntents() {
       await executeIntent(intent as Parameters<typeof executeIntent>[0]);
     }
   } catch (err) {
-    console.error("[botWorker] processIntents error:", err);
+    workerLog.error({ err }, "processIntents error");
   }
 }
 
@@ -494,13 +500,13 @@ async function poll() {
     // Process PENDING intents on RUNNING runs (Stage 11)
     await processIntents();
   } catch (err) {
-    console.error("[botWorker] poll error:", err);
+    workerLog.error({ err }, "poll error");
   }
 }
 
 /** Start the background worker. Returns a cleanup function. */
 export function startBotWorker(): () => void {
-  console.log(`[botWorker] started (id=${WORKER_ID}, interval=${POLL_INTERVAL_MS}ms)`);
+  workerLog.info({ workerId: WORKER_ID, interval: POLL_INTERVAL_MS }, "botWorker started");
   const timer = setInterval(poll, POLL_INTERVAL_MS);
   // Run once immediately
   poll();

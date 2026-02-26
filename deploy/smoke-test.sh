@@ -8,6 +8,7 @@ set -euo pipefail
 BASE_URL="${BASE_URL:-https://botmarketplace.store}"
 TEST_EMAIL="smoke_$(date +%s)@test.com"
 TEST_PASS="Smoke1234!"
+TEST_EMAIL2="smoke2_$(date +%s)@test.com"
 PASS=0
 FAIL=0
 
@@ -123,6 +124,13 @@ check "GET /auth/me with token → 200" "200" "$ME_AUTH"
 
 ME_UNAUTH=$(curl -s -o /dev/null -w "%{http_code}" "$BASE_URL/api/v1/auth/me")
 check "GET /auth/me without token → 401" "401" "$ME_UNAUTH"
+
+# Pre-register second user before rate-limiter fires (used in Section 11 cross-workspace test)
+REG2_PRE=$(curl -s -X POST "$BASE_URL/api/v1/auth/register" \
+  -H "Content-Type: application/json" \
+  -d "{\"email\":\"$TEST_EMAIL2\",\"password\":\"$TEST_PASS\"}")
+TOKEN2=$(echo "$REG2_PRE" | grep -o '"accessToken":"[^"]*"' | cut -d'"' -f4) || true
+WS_ID2=$(echo "$REG2_PRE" | grep -o '"workspaceId":"[^"]*"' | cut -d'"' -f4) || true
 
 # ─── 5. Rate limiting ─────────────────────────────────────────────────────────
 header "5. Rate limiting"
@@ -475,6 +483,7 @@ if [[ -n "$S10_BOT_ID" ]]; then
 else
   red "Skipping POST /bots/:id/runs (no bot ID)"
   ((++FAIL))
+  S10_RUN_ID=""
 fi
 
 # 10.9 GET /runs/:runId → 200 (fetch run by ID)
@@ -599,7 +608,7 @@ if [[ -n "$S10_VER_ID" ]]; then
     -H "Authorization: Bearer $TOKEN" \
     -H "Content-Type: application/json" \
     -H "X-Workspace-Id: $WS_ID" \
-    -d "{\"name\":\"Stage11StopBot\",\"strategyVersionId\":\"$S10_VER_ID\",\"symbol\":\"BTCUSDT\",\"timeframe\":\"M15\"}")
+    -d "{\"name\":\"Stage11StopBot\",\"strategyVersionId\":\"$S10_VER_ID\",\"symbol\":\"ETHUSDT\",\"timeframe\":\"M15\"}")
   STOP_BOT_ID=$(echo "$STOP_BOT" | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4) || true
 
   if [[ -n "$STOP_BOT_ID" ]]; then
@@ -612,16 +621,19 @@ if [[ -n "$S10_VER_ID" ]]; then
     STOP_RUN_ID=$(echo "$STOP_RUN" | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4) || true
 
     if [[ -n "$STOP_RUN_ID" ]]; then
+      sleep 6  # wait for worker to advance run from QUEUED → RUNNING before stop
       # Stop it
       STOP_RESP=$(curl -s -X POST "$BASE_URL/api/v1/bots/$STOP_BOT_ID/runs/$STOP_RUN_ID/stop" \
         -H "Authorization: Bearer $TOKEN" \
         -H "Content-Type: application/json" \
-        -H "X-Workspace-Id: $WS_ID")
+        -H "X-Workspace-Id: $WS_ID" \
+        -d '{}')
       STOP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
         "$BASE_URL/api/v1/bots/$STOP_BOT_ID/runs/$STOP_RUN_ID/stop" \
         -H "Authorization: Bearer $TOKEN" \
         -H "Content-Type: application/json" \
-        -H "X-Workspace-Id: $WS_ID")
+        -H "X-Workspace-Id: $WS_ID" \
+        -d '{}')
       # 200 = stopped, 409 = already terminal (if worker already terminated it)
       if [[ "$STOP_CODE" == "200" ]] || [[ "$STOP_CODE" == "409" ]]; then
         green "POST /bots/:id/runs/:runId/stop → $STOP_CODE (expected 200 or 409)"
@@ -647,12 +659,7 @@ fi
 
 # 11.5 Cross-workspace: bot from other workspace → 403
 if [[ -n "$S10_BOT_ID" ]]; then
-  REG2=$(curl -s -X POST "$BASE_URL/api/v1/auth/register" \
-    -H "Content-Type: application/json" \
-    -d '{"email":"s11_xws_'"$(date +%s)"'@test.com","password":"Test1234!"}')
-  TOKEN2=$(echo "$REG2" | grep -o '"accessToken":"[^"]*"' | cut -d'"' -f4) || true
-  WS_ID2=$(echo "$REG2" | grep -o '"workspaceId":"[^"]*"' | cut -d'"' -f4) || true
-
+  # TOKEN2/WS_ID2 pre-registered before rate-limiter section (see above)
   if [[ -n "$TOKEN2" && -n "$WS_ID2" ]]; then
     # Try to access bot from workspace 1 using workspace 2's token+wsId
     XWS_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$BASE_URL/api/v1/bots/$S10_BOT_ID" \
@@ -672,7 +679,8 @@ if [[ -n "$S10_BOT_ID" ]]; then
       "$BASE_URL/api/v1/bots/$S10_BOT_ID/runs" \
       -H "Authorization: Bearer $TOKEN2" \
       -H "Content-Type: application/json" \
-      -H "X-Workspace-Id: $WS_ID2")
+      -H "X-Workspace-Id: $WS_ID2" \
+      -d '{}')
     if [[ "$XWS_RUN_CODE" == "403" ]] || [[ "$XWS_RUN_CODE" == "404" ]]; then
       green "POST /bots/:id/runs cross-workspace → $XWS_RUN_CODE (workspace isolated)"
       ((++PASS))
@@ -864,17 +872,18 @@ if [[ -n "$S12_VER_ENABLED_ID" ]]; then
     -H "Authorization: Bearer $TOKEN" \
     -H "Content-Type: application/json" \
     -H "X-Workspace-Id: $WS_ID" \
-    -d "{\"name\":\"S12 Enabled Bot\",\"strategyVersionId\":\"$S12_VER_ENABLED_ID\",\"symbol\":\"BTCUSDT\",\"timeframe\":\"M15\"}")
+    -d "{\"name\":\"S12 Enabled Bot\",\"strategyVersionId\":\"$S12_VER_ENABLED_ID\",\"symbol\":\"SOLUSDT\",\"timeframe\":\"M15\"}")
   S12_BOT_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/bots" \
     -H "Authorization: Bearer $TOKEN" \
     -H "Content-Type: application/json" \
     -H "X-Workspace-Id: $WS_ID" \
-    -d "{\"name\":\"S12 Enabled Bot2\",\"strategyVersionId\":\"$S12_VER_ENABLED_ID\",\"symbol\":\"BTCUSDT\",\"timeframe\":\"M15\"}")
+    -d "{\"name\":\"S12 Enabled Bot2\",\"strategyVersionId\":\"$S12_VER_ENABLED_ID\",\"symbol\":\"SOLUSDT\",\"timeframe\":\"M15\"}")
   check "POST /bots with enabled DSL → 201" "201" "$S12_BOT_CODE"
   S12_BOT_ID=$(echo "$S12_BOT" | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4) || true
 else
   red "Skipping enabled-bot test (no strategy version)"
   ((++FAIL))
+  S12_BOT_ID=""
 fi
 
 # 12.8 Bot with disabled DSL → bot creation succeeds (enforcement is in worker, not create)
@@ -883,7 +892,7 @@ if [[ -n "$S12_VER_DISABLED_ID" ]]; then
     -H "Authorization: Bearer $TOKEN" \
     -H "Content-Type: application/json" \
     -H "X-Workspace-Id: $WS_ID" \
-    -d "{\"name\":\"S12 Disabled Bot\",\"strategyVersionId\":\"$S12_VER_DISABLED_ID\",\"symbol\":\"BTCUSDT\",\"timeframe\":\"M15\"}")
+    -d "{\"name\":\"S12 Disabled Bot\",\"strategyVersionId\":\"$S12_VER_DISABLED_ID\",\"symbol\":\"SOLUSDT\",\"timeframe\":\"M15\"}")
   check "POST /bots with disabled DSL → 201 (worker cancels intents)" "201" "$S12_DIS_CODE"
 else
   red "Skipping disabled-bot test (no strategy version)"
@@ -915,10 +924,13 @@ if [[ -n "$S12_BOT_ID" ]]; then
   else
     red "Skipping intent test (no run ID)"
     ((++FAIL))
+    S12_INTENT_ID=""
   fi
 else
   red "Skipping intent test (no bot ID)"
   ((++FAIL))
+  S12_RUN_ID=""
+  S12_INTENT_ID=""
 fi
 
 # 12.10 GET /runs/:runId/intents → 200 + array
@@ -959,6 +971,36 @@ if [[ -n "$S12_RUN_ID" && -n "$S12_INTENT_ID" ]]; then
   fi
 else
   red "Skipping idempotency test (no run/intent ID)"
+  ((++FAIL))
+fi
+
+# ─── 13. Observability ───────────────────────────────────────────────────────
+header "13. Observability"
+
+# 13.1 /healthz has uptime field
+S13_HEALTH=$(curl -s "$BASE_URL/api/v1/healthz")
+check_contains "GET /healthz → has uptime" '"uptime"' "$S13_HEALTH"
+
+# 13.2 /healthz has timestamp field
+check_contains "GET /healthz → has timestamp" '"timestamp"' "$S13_HEALTH"
+
+# 13.3 Response includes X-Request-Id header
+S13_HEADERS=$(curl -sD- -o /dev/null "$BASE_URL/api/v1/healthz")
+if echo "$S13_HEADERS" | grep -qi "x-request-id:"; then
+  green "GET /healthz → X-Request-Id header present"
+  ((++PASS))
+else
+  red "GET /healthz → X-Request-Id header missing"
+  ((++FAIL))
+fi
+
+# 13.4 Client-provided X-Request-Id is echoed back
+S13_ECHO_HEADERS=$(curl -sD- -o /dev/null "$BASE_URL/api/v1/healthz" -H "X-Request-Id: test-req-123")
+if echo "$S13_ECHO_HEADERS" | grep -qi "x-request-id: test-req-123"; then
+  green "GET /healthz with X-Request-Id → echoed back"
+  ((++PASS))
+else
+  red "GET /healthz with X-Request-Id → not echoed (headers: $(echo "$S13_ECHO_HEADERS" | grep -i x-request-id || echo 'none'))"
   ((++FAIL))
 fi
 
