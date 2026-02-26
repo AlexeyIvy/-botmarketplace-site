@@ -12,6 +12,11 @@
  *   Bot.status = ACTIVE when any run is not in terminal state
  *   Bot.status = DRAFT  when all runs are terminal
  *
+ * DSL enforcement (Stage 12):
+ *   enabled: false         → PENDING intents are CANCELLED immediately
+ *   risk.dailyLossLimitUsd → RUNNING run transitions to STOPPING when estimated
+ *                            daily loss (FAILED intents × loss-per-trade) exceeds limit
+ *
  * The worker runs in the same process. For production, extract into a
  * dedicated worker process.
  */
@@ -314,6 +319,76 @@ async function executeIntent(intent: {
   }
 }
 
+// ---------------------------------------------------------------------------
+// Stage 12: DSL enforcement helpers
+// ---------------------------------------------------------------------------
+
+/**
+ * Enforce risk.dailyLossLimitUsd for all RUNNING bot runs.
+ *
+ * Heuristic: failed_intents_today × estimated_loss_per_intent ≥ dailyLossLimitUsd
+ * where estimated_loss_per_intent = (riskPerTradePct / 100) × maxPositionSizeUsd.
+ *
+ * When the limit is exceeded the run is transitioned to STOPPING.
+ */
+async function enforceDailyLossLimit(): Promise<void> {
+  try {
+    const runningRuns = await prisma.botRun.findMany({
+      where: { state: "RUNNING" },
+      select: {
+        id: true,
+        bot: {
+          select: {
+            strategyVersion: { select: { dslJson: true } },
+          },
+        },
+      },
+      take: 50,
+    });
+
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+
+    for (const run of runningRuns) {
+      const dsl = run.bot?.strategyVersion?.dslJson as Record<string, unknown> | null;
+      const risk = dsl?.["risk"] as Record<string, unknown> | undefined;
+      const dailyLossLimitUsd = typeof risk?.["dailyLossLimitUsd"] === "number"
+        ? risk["dailyLossLimitUsd"] as number : null;
+      if (!dailyLossLimitUsd || dailyLossLimitUsd <= 0) continue;
+
+      const riskPerTradePct   = typeof risk?.["riskPerTradePct"]   === "number" ? risk["riskPerTradePct"]   as number : 1;
+      const maxPositionSizeUsd = typeof risk?.["maxPositionSizeUsd"] === "number" ? risk["maxPositionSizeUsd"] as number : 100;
+      const estimatedLossPerTrade = (riskPerTradePct / 100) * maxPositionSizeUsd;
+
+      const failedToday = await prisma.botIntent.count({
+        where: {
+          botRunId: run.id,
+          state: "FAILED",
+          createdAt: { gte: todayStart },
+        },
+      });
+
+      const estimatedDailyLoss = failedToday * estimatedLossPerTrade;
+      if (estimatedDailyLoss < dailyLossLimitUsd) continue;
+
+      try {
+        await transition(run.id, "STOPPING", {
+          eventType: "RUN_STOPPING",
+          message: `Daily loss limit $${dailyLossLimitUsd} exceeded (estimated loss: $${estimatedDailyLoss.toFixed(2)} from ${failedToday} failed intent(s))`,
+        });
+        console.log(
+          `[botWorker] run ${run.id} stopping — daily loss limit $${dailyLossLimitUsd} exceeded ` +
+          `(estimated: $${estimatedDailyLoss.toFixed(2)}, ${failedToday} failed intents today)`,
+        );
+      } catch (err) {
+        console.error(`[botWorker] enforceDailyLossLimit ${run.id} error:`, err);
+      }
+    }
+  } catch (err) {
+    console.error("[botWorker] enforceDailyLossLimit error:", err);
+  }
+}
+
 /**
  * Process all PENDING intents on RUNNING runs.
  * Picks up to 20 at a time ordered by creation time.
@@ -349,6 +424,31 @@ async function processIntents() {
     });
 
     for (const intent of pendingIntents) {
+      // Stage 12: respect enabled: false — cancel intents for disabled strategies
+      const dsl = intent.botRun.bot.strategyVersion?.dslJson as Record<string, unknown> | null;
+      if (dsl && dsl["enabled"] === false) {
+        await prisma.botIntent.updateMany({
+          where: { id: intent.id, state: "PENDING" },
+          data: {
+            state: "CANCELLED",
+            metaJson: { reason: "strategy_disabled", at: new Date().toISOString() } as Prisma.InputJsonValue,
+          },
+        });
+        await prisma.botEvent.create({
+          data: {
+            botRunId: intent.botRun.id,
+            type: "intent_cancelled",
+            payloadJson: {
+              intentId: intent.intentId,
+              reason: "strategy disabled (enabled: false)",
+              at: new Date().toISOString(),
+            } as Prisma.InputJsonValue,
+          },
+        });
+        console.log(`[botWorker] intent ${intent.intentId} cancelled — strategy disabled`);
+        continue;
+      }
+
       // Type narrowing: botRun.bot is always included here
       await executeIntent(intent as Parameters<typeof executeIntent>[0]);
     }
