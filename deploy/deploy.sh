@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 # deploy.sh — Pull latest code, build, migrate, restart services
-# Usage: bash deploy/deploy.sh [--branch <branch>]
+# Usage: bash deploy/deploy.sh [--branch <branch>] [--ref <tag-or-sha>]
+#
+# Examples:
+#   bash deploy/deploy.sh                     # deploy latest main
+#   bash deploy/deploy.sh --branch my-branch  # deploy a branch
+#   bash deploy/deploy.sh --ref v0.1.0-rc1    # deploy a specific tag
+#   bash deploy/deploy.sh --ref abc1234def    # deploy a specific commit SHA
 #
 # Requirements:
 #   - pnpm installed globally
@@ -11,26 +17,39 @@ set -euo pipefail
 
 APP_DIR="/opt/-botmarketplace-site"
 BRANCH="${BRANCH:-main}"
+REF=""  # tag or SHA; if set, overrides BRANCH for checkout
 
 # Parse args
 while [[ $# -gt 0 ]]; do
   case $1 in
     --branch) BRANCH="$2"; shift 2 ;;
+    --ref)    REF="$2"; shift 2 ;;
     *) echo "Unknown arg: $1"; exit 1 ;;
   esac
 done
 
 cd "$APP_DIR"
 
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "  BotMarketplace deploy → $BRANCH"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+if [[ -n "$REF" ]]; then
+  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  echo "  BotMarketplace deploy → ref: $REF"
+  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+else
+  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  echo "  BotMarketplace deploy → $BRANCH"
+  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+fi
 
 # 1. Pull latest code
-echo "[1/5] Git pull..."
-git fetch origin
-git checkout "$BRANCH"
-git pull origin "$BRANCH"
+echo "[1/5] Git fetch + checkout..."
+git fetch origin --tags
+if [[ -n "$REF" ]]; then
+  # Detached HEAD at tag/SHA — reproducible, pinned deploy
+  git checkout "$REF"
+else
+  git checkout "$BRANCH"
+  git pull origin "$BRANCH"
+fi
 
 # 2. Install dependencies
 echo "[2/5] Installing dependencies..."
@@ -70,6 +89,9 @@ echo "Service status:"
 systemctl is-active botmarket-api && echo "  ✓ botmarket-api is running" || echo "  ✗ botmarket-api FAILED"
 systemctl is-active botmarket-web  && echo "  ✓ botmarket-web is running"  || echo "  ✗ botmarket-web FAILED"
 
+echo ""
+DEPLOYED_REF=$(git describe --tags --always 2>/dev/null || git rev-parse --short HEAD)
+echo "Deployed ref: $DEPLOYED_REF"
 echo ""
 echo "Done. Check logs with:"
 echo "  journalctl -u botmarket-api -f"

@@ -1004,6 +1004,96 @@ else
   ((++FAIL))
 fi
 
+# ─── 14. Stage 14 — RC Validation (Exchange Connections + Secret Leak Guard) ──
+header "14. Stage 14 — RC Validation"
+
+# 14.1 POST /exchanges → 201 (demo connection, no real keys needed)
+EC_RESP=$(curl -s -X POST "$BASE_URL/api/v1/exchanges" \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -H "X-Workspace-Id: $WS_ID" \
+  -d '{"exchange":"bybit","name":"smoke-demo-conn","apiKey":"smoke-api-key","secret":"smoke-secret"}')
+EC_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/exchanges" \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -H "X-Workspace-Id: $WS_ID" \
+  -d '{"exchange":"bybit","name":"smoke-demo-conn-b","apiKey":"smoke-api-key-b","secret":"smoke-secret-b"}')
+EC_ID=$(echo "$EC_RESP" | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4) || true
+check "POST /exchanges (demo connection) → 201" "201" "$EC_CODE"
+
+# 14.2 No secrets in exchange connection response
+if [[ -n "$EC_RESP" ]]; then
+  if ! echo "$EC_RESP" | grep -q '"encryptedSecret"\|"apiKey"\|"secret"'; then
+    green "POST /exchanges → no secret fields in response"
+    ((++PASS))
+  else
+    red "POST /exchanges → secret field found in exchange connection response!"
+    ((++FAIL))
+  fi
+else
+  red "Skipping exchange secret-check (no response)"
+  ((++FAIL))
+fi
+
+# 14.3 GET /exchanges → 200 + array
+EC_LIST_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$BASE_URL/api/v1/exchanges" \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "X-Workspace-Id: $WS_ID")
+check "GET /exchanges → 200" "200" "$EC_LIST_CODE"
+
+# 14.4 GET /exchanges/:id → 200 + no secrets
+if [[ -n "$EC_ID" ]]; then
+  EC_GET=$(curl -s "$BASE_URL/api/v1/exchanges/$EC_ID" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "X-Workspace-Id: $WS_ID")
+  EC_GET_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$BASE_URL/api/v1/exchanges/$EC_ID" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "X-Workspace-Id: $WS_ID")
+  check "GET /exchanges/:id → 200" "200" "$EC_GET_CODE"
+  if ! echo "$EC_GET" | grep -q '"encryptedSecret"\|"apiKey"\|"secret"'; then
+    green "GET /exchanges/:id → no secret fields in response"
+    ((++PASS))
+  else
+    red "GET /exchanges/:id → secret field found!"
+    ((++FAIL))
+  fi
+else
+  red "Skipping GET /exchanges/:id (no connection ID)"
+  ((++FAIL)); ((++FAIL))
+fi
+
+# 14.5 GET /exchanges without auth → 401
+EC_UNAUTH=$(curl -s -o /dev/null -w "%{http_code}" "$BASE_URL/api/v1/exchanges")
+check "GET /exchanges without auth → 401" "401" "$EC_UNAUTH"
+
+# 14.6 DELETE /exchanges/:id → 204
+if [[ -n "$EC_ID" ]]; then
+  EC_DEL_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X DELETE "$BASE_URL/api/v1/exchanges/$EC_ID" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "X-Workspace-Id: $WS_ID")
+  check "DELETE /exchanges/:id → 204" "204" "$EC_DEL_CODE"
+else
+  red "Skipping DELETE /exchanges/:id (no connection ID)"
+  ((++FAIL))
+fi
+
+# 14.7 Global secret leak guard — scan strategy + run + lab responses
+S14_SAFE=1
+for endpoint_name in "terminal/ticker" "strategies" "bots" "lab/backtests"; do
+  RESP=$(curl -s "$BASE_URL/api/v1/$endpoint_name" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "X-Workspace-Id: $WS_ID" 2>/dev/null || true)
+  if echo "$RESP" | grep -qE '"encryptedSecret"|"passwordHash"'; then
+    red "Secret leak detected in GET /$endpoint_name response!"
+    S14_SAFE=0
+    ((++FAIL))
+  fi
+done
+if [[ $S14_SAFE -eq 1 ]]; then
+  green "Global secret leak guard → no encryptedSecret/passwordHash in list endpoints"
+  ((++PASS))
+fi
+
 # ─── Summary ─────────────────────────────────────────────────────────────────
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -1013,6 +1103,21 @@ if [[ $FAIL -eq 0 ]]; then
   printf "  \033[32mALL TESTS PASSED ✓\033[0m\n"
 else
   printf "  \033[31m$FAIL TEST(S) FAILED ✗\033[0m\n"
+  echo ""
+  echo "  Troubleshooting hints:"
+  echo "  ─────────────────────"
+  echo "  • Rate limit failures: wait ~15 min between full runs (window resets)"
+  echo "  • Worker state failures: wait 6-10 s for QUEUED→RUNNING transition"
+  echo "  • Auth failures: check JWT_SECRET in .env on VPS"
+  echo "  • Secret leak: check safeView() projection in exchanges.ts / botWorker.ts"
+  echo "  • 5xx errors: journalctl -u botmarket-api --since '5 min ago' | grep Unhandled"
+  echo "  • Correlation: add -H 'X-Request-Id: debug-1' and grep logs for 'debug-1'"
+  echo ""
+  echo "  Re-run a single section manually:"
+  echo "    BASE_URL=$BASE_URL bash deploy/smoke-test.sh"
+  echo ""
+  echo "  Full logs:"
+  echo "    journalctl -u botmarket-api -f"
 fi
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
