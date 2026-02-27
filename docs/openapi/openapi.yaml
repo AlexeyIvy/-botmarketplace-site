@@ -45,6 +45,39 @@ paths:
               schema:
                 $ref: "#/components/schemas/Problem"
 
+  /auth/register:
+    post:
+      operationId: authRegister
+      summary: Register new user (creates user + default workspace)
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+      responses:
+        "201":
+          description: User created; returns tokens + workspaceId
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
+        "400":
+          $ref: "#/components/responses/Problem"
+        "409":
+          description: Email already registered
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "429":
+          description: Rate limit exceeded (5 req / 15 min)
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+
   /auth/login:
     post:
       operationId: authLogin
@@ -64,6 +97,34 @@ paths:
               schema:
                 $ref: "#/components/schemas/LoginResponse"
         "400":
+          $ref: "#/components/responses/Problem"
+        "401":
+          description: Invalid credentials
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+
+  /auth/me:
+    get:
+      operationId: authMe
+      summary: Get current user info
+      responses:
+        "200":
+          description: Current user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  email:
+                    type: string
+                  workspaceId:
+                    type: string
+                required: [id, email, workspaceId]
+        "401":
           $ref: "#/components/responses/Problem"
 
   # ── Strategies (Stage 10 — Strategy Authoring UX) ──────────────────────────
@@ -899,6 +960,164 @@ paths:
         "404":
           $ref: "#/components/responses/Problem"
 
+  # ── Bot Intents (Stage 12) ──────────────────────────────────────────────────
+
+  /runs/{runId}/intents:
+    get:
+      operationId: runIntentsList
+      summary: List intents for a run
+      parameters:
+        - $ref: "#/components/parameters/XWorkspaceId"
+        - name: runId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BotIntentView"
+        "401":
+          $ref: "#/components/responses/Problem"
+        "403":
+          $ref: "#/components/responses/Problem"
+        "404":
+          $ref: "#/components/responses/Problem"
+    post:
+      operationId: runIntentsCreate
+      summary: Create a trading intent for a RUNNING bot run
+      description: >
+        Creates a PENDING BotIntent for the given run.
+        Idempotent via intentId. Only works when run state is RUNNING.
+        Worker processes PENDING intents on the next poll cycle (~4 s).
+      parameters:
+        - $ref: "#/components/parameters/XWorkspaceId"
+        - name: runId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BotIntentCreateRequest"
+      responses:
+        "201":
+          description: Intent created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BotIntentView"
+        "200":
+          description: Duplicate — existing intent returned (idempotent)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BotIntentView"
+        "400":
+          $ref: "#/components/responses/Problem"
+        "401":
+          $ref: "#/components/responses/Problem"
+        "403":
+          $ref: "#/components/responses/Problem"
+        "404":
+          $ref: "#/components/responses/Problem"
+        "409":
+          description: Run is not in RUNNING state
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+
+  # ── Research Lab (Stage 12) ─────────────────────────────────────────────────
+
+  /lab/backtest:
+    post:
+      operationId: labBacktestCreate
+      summary: Start a backtest run (async)
+      description: >
+        Enqueues a backtest for the given strategy + date range.
+        Returns 202 with status PENDING. Poll GET /lab/backtest/:id for results.
+      parameters:
+        - $ref: "#/components/parameters/XWorkspaceId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BacktestCreateRequest"
+      responses:
+        "202":
+          description: Backtest accepted (status PENDING)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BacktestView"
+        "400":
+          $ref: "#/components/responses/Problem"
+        "401":
+          $ref: "#/components/responses/Problem"
+        "403":
+          $ref: "#/components/responses/Problem"
+        "404":
+          description: Strategy not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+
+  /lab/backtests:
+    get:
+      operationId: labBacktestsList
+      summary: List backtests for workspace (latest first)
+      parameters:
+        - $ref: "#/components/parameters/XWorkspaceId"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BacktestView"
+        "401":
+          $ref: "#/components/responses/Problem"
+        "403":
+          $ref: "#/components/responses/Problem"
+
+  /lab/backtest/{backtestId}:
+    get:
+      operationId: labBacktestGet
+      summary: Get backtest by ID (includes reportJson when DONE)
+      parameters:
+        - $ref: "#/components/parameters/XWorkspaceId"
+        - name: backtestId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BacktestView"
+        "401":
+          $ref: "#/components/responses/Problem"
+        "403":
+          $ref: "#/components/responses/Problem"
+        "404":
+          $ref: "#/components/responses/Problem"
+
   /signals/webhook/{strategyId}:
     post:
       operationId: signalWebhook
@@ -1415,3 +1634,102 @@ components:
         ts:
           type: string
           format: date-time
+
+    # ── Bot Intents (Stage 12) ─────────────────────────────────────────────────
+
+    BotIntentCreateRequest:
+      type: object
+      additionalProperties: false
+      required: [intentId, type, side, qty]
+      properties:
+        intentId:
+          type: string
+          minLength: 1
+          description: Client-provided idempotency key (unique per run)
+        type:
+          type: string
+          enum: [ENTRY, EXIT]
+        side:
+          type: string
+          enum: [BUY, SELL]
+        qty:
+          type: number
+          exclusiveMinimum: 0
+          description: Order quantity
+
+    BotIntentView:
+      type: object
+      additionalProperties: false
+      required: [id, runId, intentId, type, side, qty, state, createdAt, updatedAt]
+      properties:
+        id: { type: string }
+        runId: { type: string }
+        intentId: { type: string, description: Client-provided idempotency key }
+        type: { type: string, enum: [ENTRY, EXIT] }
+        side: { type: string, enum: [BUY, SELL] }
+        qty: { type: number }
+        state:
+          type: string
+          enum: [PENDING, PLACED, FILLED, CANCELLED, FAILED]
+          description: >
+            PENDING = waiting for worker; PLACED = submitted to exchange;
+            FILLED = confirmed; CANCELLED = cancelled by worker (e.g. strategy disabled);
+            FAILED = exchange or internal error.
+        orderId: { type: string, nullable: true, description: Exchange order ID if placed }
+        error: { type: string, nullable: true }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+
+    # ── Research Lab (Stage 12) ───────────────────────────────────────────────
+
+    BacktestCreateRequest:
+      type: object
+      additionalProperties: false
+      required: [strategyId, fromTs, toTs]
+      properties:
+        strategyId:
+          type: string
+          description: ID of the strategy to backtest (uses latest version)
+        symbol:
+          type: string
+          example: BTCUSDT
+          description: Override symbol (default taken from strategy)
+        interval:
+          type: string
+          enum: ["1", "5", "15", "30", "60", "240", "D"]
+          default: "15"
+          description: Candle interval for backtest data
+        fromTs:
+          type: string
+          format: date-time
+          description: Start of backtest window (inclusive)
+        toTs:
+          type: string
+          format: date-time
+          description: End of backtest window (exclusive); must be after fromTs
+
+    BacktestView:
+      type: object
+      additionalProperties: false
+      required: [id, workspaceId, strategyId, status, createdAt, updatedAt]
+      properties:
+        id: { type: string }
+        workspaceId: { type: string }
+        strategyId: { type: string }
+        status:
+          type: string
+          enum: [PENDING, RUNNING, DONE, FAILED]
+        symbol: { type: string, nullable: true }
+        interval: { type: string, nullable: true }
+        fromTs: { type: string, format: date-time, nullable: true }
+        toTs: { type: string, format: date-time, nullable: true }
+        reportJson:
+          type: object
+          nullable: true
+          description: >
+            Populated when status = DONE. Contains: trades (int), winrate (float),
+            pnl (float), maxDrawdown (float), tradeLog (array of TradeRecord).
+          additionalProperties: true
+        errorMessage: { type: string, nullable: true }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
