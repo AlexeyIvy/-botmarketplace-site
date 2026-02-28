@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { apiFetchNoWorkspace, apiFetch } from "../factory/api";
+import { useRouter } from "next/navigation";
+import { apiFetchNoWorkspace, apiFetch, getToken } from "../factory/api";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -64,6 +65,15 @@ const DEFAULT_INTERVAL = "15";
 // ---------------------------------------------------------------------------
 
 export default function TerminalPage() {
+  const router = useRouter();
+
+  // --- Auth state ---
+  const [hasToken, setHasToken] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    setHasToken(!!getToken());
+  }, []);
+
   // --- Market Data state ---
   const [symbol, setSymbol] = useState(DEFAULT_SYMBOL);
   const [interval, setInterval] = useState(DEFAULT_INTERVAL);
@@ -140,6 +150,10 @@ export default function TerminalPage() {
   }
 
   async function loadAll() {
+    if (!getToken()) {
+      router.push("/login");
+      return;
+    }
     await Promise.all([loadTicker(), loadCandles()]);
   }
 
@@ -217,6 +231,31 @@ export default function TerminalPage() {
   // ---------------------------------------------------------------------------
   // Render
   // ---------------------------------------------------------------------------
+
+  // Auth gate: show Login CTA while token status is loading or if no token
+  if (hasToken === null) {
+    return (
+      <div style={{ padding: "32px 24px", maxWidth: 960, margin: "0 auto" }}>
+        <p style={hint}>Loading...</p>
+      </div>
+    );
+  }
+
+  if (hasToken === false) {
+    return (
+      <div style={loginCtaWrap}>
+        <div style={loginCtaBox}>
+          <h1 style={{ fontSize: 26, marginBottom: 12 }}>Terminal</h1>
+          <p style={{ color: "var(--text-secondary)", marginBottom: 24, fontSize: 15 }}>
+            Sign in to load market data, view charts, and place orders.
+          </p>
+          <button style={loginCtaBtn} onClick={() => router.push("/login")}>
+            Login to load market data
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div style={{ padding: "32px 24px", maxWidth: 960, margin: "0 auto" }}>
@@ -607,4 +646,28 @@ const td: React.CSSProperties = {
   textAlign: "right",
   borderBottom: "1px solid var(--border)",
   fontFamily: "monospace",
+};
+
+const loginCtaWrap: React.CSSProperties = {
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  minHeight: "60vh",
+  padding: "32px 24px",
+};
+
+const loginCtaBox: React.CSSProperties = {
+  textAlign: "center",
+  maxWidth: 400,
+};
+
+const loginCtaBtn: React.CSSProperties = {
+  padding: "12px 32px",
+  background: "var(--accent)",
+  color: "#fff",
+  border: "none",
+  borderRadius: 8,
+  cursor: "pointer",
+  fontSize: 16,
+  fontWeight: 600,
 };
