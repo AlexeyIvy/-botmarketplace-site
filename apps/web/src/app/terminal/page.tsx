@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { apiFetchNoWorkspace, apiFetch, getToken } from "../factory/api";
+import TerminalChart from "../../components/terminal/TerminalChart";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -295,6 +296,17 @@ export default function TerminalPage() {
             {loading ? "Loading..." : "Load"}
           </button>
         </div>
+      </div>
+
+      {/* ── Chart ── */}
+      <div style={{ ...card, marginBottom: 20 }}>
+        <h2 style={{ fontSize: 16, marginBottom: 12 }}>
+          Chart — {symbol || DEFAULT_SYMBOL}
+        </h2>
+        <TerminalChart
+          symbol={symbol || DEFAULT_SYMBOL}
+          limit={Math.min(Math.max(1, Number(limit) || 200), 1000)}
+        />
       </div>
 
       {/* ── Ticker ── */}
