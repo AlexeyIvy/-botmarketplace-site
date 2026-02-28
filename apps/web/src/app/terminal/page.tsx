@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { apiFetchNoWorkspace, apiFetch, getToken } from "../factory/api";
-import TerminalChart from "../../components/terminal/TerminalChart";
+import TerminalChart, { type ChartMarker } from "../../components/terminal/TerminalChart";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -52,12 +52,13 @@ interface TerminalOrder {
 
 type LoadState = "idle" | "loading" | "success" | "error";
 type OrderState = "idle" | "loading" | "success" | "error";
+type BottomTab = "ticker" | "orders" | "candles";
 
 // ---------------------------------------------------------------------------
 // Constants
 // ---------------------------------------------------------------------------
 
-const INTERVALS = ["1", "5", "15", "30", "60", "240", "D"] as const;
+const WATCHLIST_SYMBOLS = ["BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT"] as const;
 const DEFAULT_SYMBOL = "BTCUSDT";
 const DEFAULT_INTERVAL = "15";
 
@@ -99,6 +100,23 @@ export default function TerminalPage() {
   const [lastOrder, setLastOrder] = useState<TerminalOrder | null>(null);
   const [orderError, setOrderError] = useState<string | null>(null);
 
+  // --- Orders history (for markers + tab) ---
+  const [allOrders, setAllOrders] = useState<TerminalOrder[]>([]);
+  const [markers, setMarkers] = useState<ChartMarker[]>([]);
+
+  // --- Layout state ---
+  const [showWatchlist, setShowWatchlist] = useState(true);
+  const [showOrderPanel, setShowOrderPanel] = useState(true);
+  const [bottomTab, setBottomTab] = useState<BottomTab>("ticker");
+
+  // Mobile: collapse panels by default on small screens
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.innerWidth < 768) {
+      setShowWatchlist(false);
+      setShowOrderPanel(false);
+    }
+  }, []);
+
   // Load exchange connections on mount
   useEffect(() => {
     apiFetch<ExchangeConnection[]>("/exchanges").then((res) => {
@@ -108,6 +126,27 @@ export default function TerminalPage() {
       }
     });
   }, []);
+
+  // Load orders for markers (workspace-scoped via apiFetch)
+  useEffect(() => {
+    if (!hasToken) return;
+    apiFetch<TerminalOrder[]>("/terminal/orders").then((res) => {
+      if (!res.ok) return;
+      setAllOrders(res.data);
+    });
+  }, [hasToken]);
+
+  // Rebuild markers whenever orders or symbol changes
+  useEffect(() => {
+    const sym = symbol.trim().toUpperCase();
+    const m: ChartMarker[] = allOrders
+      .filter((o) => o.symbol === sym && (o.side === "BUY" || o.side === "SELL"))
+      .map((o) => ({
+        time: Math.floor(new Date(o.createdAt).getTime() / 1000),
+        side: o.side as "BUY" | "SELL",
+      }));
+    setMarkers(m);
+  }, [allOrders, symbol]);
 
   // --- Market Data actions ---
 
@@ -203,6 +242,10 @@ export default function TerminalPage() {
     if (res.ok) {
       setLastOrder(res.data);
       setOrderState("success");
+      // Refresh markers after placing an order
+      apiFetch<TerminalOrder[]>("/terminal/orders").then((r) => {
+        if (r.ok) setAllOrders(r.data);
+      });
     } else {
       setOrderError(`${res.problem.title}: ${res.problem.detail}`);
       setOrderState("error");
@@ -230,13 +273,12 @@ export default function TerminalPage() {
   const loading = tickerState === "loading" || candlesState === "loading";
 
   // ---------------------------------------------------------------------------
-  // Render
+  // Auth gate
   // ---------------------------------------------------------------------------
 
-  // Auth gate: show Login CTA while token status is loading or if no token
   if (hasToken === null) {
     return (
-      <div style={{ padding: "32px 24px", maxWidth: 960, margin: "0 auto" }}>
+      <div style={{ padding: "32px 24px" }}>
         <p style={hint}>Loading...</p>
       </div>
     );
@@ -258,267 +300,358 @@ export default function TerminalPage() {
     );
   }
 
+  // ---------------------------------------------------------------------------
+  // Render — MT4-like layout
+  // ---------------------------------------------------------------------------
+
   return (
-    <div style={{ padding: "32px 24px", maxWidth: 960, margin: "0 auto" }}>
-      <h1 style={{ fontSize: 26, marginBottom: 24 }}>Terminal — Market Data</h1>
+    <div style={outerWrap}>
 
-      {/* ── Controls ── */}
-      <div style={{ ...card, marginBottom: 20 }}>
-        <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
-          <input
-            style={{ ...input, width: 140 }}
-            placeholder="Symbol (e.g. BTCUSDT)"
-            value={symbol}
-            onChange={(e) => setSymbol(e.target.value.toUpperCase())}
-            onKeyDown={(e) => e.key === "Enter" && loadAll()}
-          />
-          <select
-            style={{ ...input, width: 100 }}
-            value={interval}
-            onChange={(e) => setInterval(e.target.value)}
-          >
-            {INTERVALS.map((iv) => (
-              <option key={iv} value={iv}>
-                {iv === "D" ? "1D" : `${iv}m`}
-              </option>
-            ))}
-          </select>
-          <input
-            style={{ ...input, width: 80 }}
-            type="number"
-            min={1}
-            max={1000}
-            placeholder="Limit"
-            value={limit}
-            onChange={(e) => setLimit(e.target.value)}
-          />
-          <button style={btn} onClick={loadAll} disabled={loading}>
-            {loading ? "Loading..." : "Load"}
-          </button>
-        </div>
-      </div>
+      {/* ── Top bar: controls + panel toggles ── */}
+      <div style={topBar}>
+        <button
+          style={togglePanelBtn}
+          onClick={() => setShowWatchlist((v) => !v)}
+          title="Toggle Watchlist"
+        >
+          {showWatchlist ? "◀ Watch" : "Watch ▶"}
+        </button>
 
-      {/* ── Chart ── */}
-      <div style={{ ...card, marginBottom: 20 }}>
-        <h2 style={{ fontSize: 16, marginBottom: 12 }}>
-          Chart — {symbol || DEFAULT_SYMBOL}
-        </h2>
-        <TerminalChart
-          symbol={symbol || DEFAULT_SYMBOL}
-          limit={Math.min(Math.max(1, Number(limit) || 200), 1000)}
+        <input
+          style={{ ...input, width: 120 }}
+          placeholder="Symbol"
+          value={symbol}
+          onChange={(e) => setSymbol(e.target.value.toUpperCase())}
+          onKeyDown={(e) => e.key === "Enter" && loadAll()}
         />
+
+        <select
+          style={{ ...input, width: 80 }}
+          value={interval}
+          onChange={(e) => setInterval(e.target.value)}
+        >
+          {(["1", "5", "15", "30", "60", "240", "D"] as const).map((iv) => (
+            <option key={iv} value={iv}>
+              {iv === "D" ? "1D" : `${iv}m`}
+            </option>
+          ))}
+        </select>
+
+        <input
+          style={{ ...input, width: 70 }}
+          type="number"
+          min={1}
+          max={1000}
+          placeholder="Limit"
+          value={limit}
+          onChange={(e) => setLimit(e.target.value)}
+        />
+
+        <button style={btn} onClick={loadAll} disabled={loading}>
+          {loading ? "Loading..." : "Load"}
+        </button>
+
+        <button
+          style={togglePanelBtn}
+          onClick={() => setShowOrderPanel((v) => !v)}
+          title="Toggle Order Panel"
+        >
+          {showOrderPanel ? "Orders ▶" : "◀ Orders"}
+        </button>
       </div>
 
-      {/* ── Ticker ── */}
-      <div style={{ ...card, marginBottom: 20 }}>
-        <h2 style={{ fontSize: 16, marginBottom: 12 }}>Ticker</h2>
+      {/* ── Main row: Watchlist | Chart | Order Panel ── */}
+      <div style={mainRow}>
 
-        {tickerState === "idle" && (
-          <p style={hint}>Select a symbol and click Load.</p>
-        )}
-        {tickerState === "loading" && <p style={hint}>Loading ticker...</p>}
-        {tickerState === "error" && (
-          <p style={{ color: "#f85149", fontSize: 13 }}>{tickerError}</p>
-        )}
-        {tickerState === "success" && ticker && (
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: 12 }}>
-            <TickerCell label="Last Price" value={fmt(ticker.lastPrice)} />
-            <TickerCell label="Bid" value={fmt(ticker.bidPrice)} />
-            <TickerCell label="Ask" value={fmt(ticker.askPrice)} />
-            <TickerCell
-              label="24h Change"
-              value={`${(ticker.price24hPcnt * 100).toFixed(2)}%`}
-              color={pctColor(ticker.price24hPcnt)}
-            />
-            <TickerCell label="24h High" value={fmt(ticker.highPrice24h)} />
-            <TickerCell label="24h Low" value={fmt(ticker.lowPrice24h)} />
-            <TickerCell label="24h Volume" value={fmt(ticker.volume24h)} />
-            <TickerCell label="Prev Close" value={fmt(ticker.prevPrice24h)} />
+        {/* ── Left: Watchlist ── */}
+        {showWatchlist && (
+          <div style={watchlistPanel}>
+            <div style={panelTitle}>Watchlist</div>
+            {WATCHLIST_SYMBOLS.map((sym) => (
+              <button
+                key={sym}
+                style={{
+                  ...watchlistItem,
+                  background: sym === symbol ? "var(--accent, #0969da)" : "transparent",
+                  color: sym === symbol ? "#fff" : "var(--text-primary)",
+                  fontWeight: sym === symbol ? 700 : 400,
+                }}
+                onClick={() => setSymbol(sym)}
+              >
+                {sym}
+              </button>
+            ))}
           </div>
         )}
-      </div>
 
-      {/* ── Order Panel ── */}
-      <div style={{ ...card, marginBottom: 20 }}>
-        <h2 style={{ fontSize: 16, marginBottom: 14 }}>Place Order</h2>
+        {/* ── Center: Chart ── */}
+        <div style={chartCenter}>
+          <TerminalChart
+            symbol={symbol || DEFAULT_SYMBOL}
+            limit={Math.min(Math.max(1, Number(limit) || 200), 1000)}
+            markers={markers}
+          />
+        </div>
 
-        {connections.length === 0 ? (
-          <p style={hint}>
-            No exchange connections found. Create one in Exchange Connections before placing orders.
-          </p>
-        ) : (
-          <>
-            <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "flex-end", marginBottom: 12 }}>
-              {/* Connection selector */}
-              <div>
-                <div style={fieldLabel}>Connection</div>
-                <select
-                  style={{ ...input, width: 200 }}
-                  value={selectedConnection}
-                  onChange={(e) => setSelectedConnection(e.target.value)}
-                >
-                  {connections.map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.name} ({c.exchange})
-                    </option>
-                  ))}
-                </select>
-              </div>
+        {/* ── Right: Order Panel ── */}
+        {showOrderPanel && (
+          <div style={orderPanelCol}>
+            <div style={panelTitle}>Place Order</div>
 
-              {/* Side */}
-              <div>
-                <div style={fieldLabel}>Side</div>
-                <div style={{ display: "flex", gap: 4 }}>
-                  <button
-                    style={{
-                      ...sideBtn,
-                      background: orderSide === "BUY" ? "#3fb950" : "var(--bg-secondary)",
-                      color: orderSide === "BUY" ? "#fff" : "var(--text-primary)",
-                    }}
-                    onClick={() => setOrderSide("BUY")}
-                  >
-                    BUY
-                  </button>
-                  <button
-                    style={{
-                      ...sideBtn,
-                      background: orderSide === "SELL" ? "#f85149" : "var(--bg-secondary)",
-                      color: orderSide === "SELL" ? "#fff" : "var(--text-primary)",
-                    }}
-                    onClick={() => setOrderSide("SELL")}
-                  >
-                    SELL
-                  </button>
-                </div>
-              </div>
-
-              {/* Type */}
-              <div>
-                <div style={fieldLabel}>Type</div>
-                <select
-                  style={{ ...input, width: 110 }}
-                  value={orderType}
-                  onChange={(e) => setOrderType(e.target.value as "MARKET" | "LIMIT")}
-                >
-                  <option value="MARKET">Market</option>
-                  <option value="LIMIT">Limit</option>
-                </select>
-              </div>
-
-              {/* Qty */}
-              <div>
-                <div style={fieldLabel}>Qty</div>
-                <input
-                  style={{ ...input, width: 100 }}
-                  type="number"
-                  min={0}
-                  step="any"
-                  placeholder="e.g. 0.001"
-                  value={orderQty}
-                  onChange={(e) => setOrderQty(e.target.value)}
-                />
-              </div>
-
-              {/* Price (LIMIT only) */}
-              {orderType === "LIMIT" && (
+            {connections.length === 0 ? (
+              <p style={{ ...hint, padding: "10px 12px" }}>
+                No exchange connections. Create one first.
+              </p>
+            ) : (
+              <div style={{ display: "flex", flexDirection: "column", gap: 10, padding: "10px 12px" }}>
+                {/* Connection */}
                 <div>
-                  <div style={fieldLabel}>Price</div>
+                  <div style={fieldLabel}>Connection</div>
+                  <select
+                    style={{ ...input, width: "100%" }}
+                    value={selectedConnection}
+                    onChange={(e) => setSelectedConnection(e.target.value)}
+                  >
+                    {connections.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.name} ({c.exchange})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Side */}
+                <div>
+                  <div style={fieldLabel}>Side</div>
+                  <div style={{ display: "flex", gap: 4 }}>
+                    <button
+                      style={{
+                        ...sideBtn,
+                        flex: 1,
+                        background: orderSide === "BUY" ? "#3fb950" : "var(--bg-secondary)",
+                        color: orderSide === "BUY" ? "#fff" : "var(--text-primary)",
+                      }}
+                      onClick={() => setOrderSide("BUY")}
+                    >
+                      BUY
+                    </button>
+                    <button
+                      style={{
+                        ...sideBtn,
+                        flex: 1,
+                        background: orderSide === "SELL" ? "#f85149" : "var(--bg-secondary)",
+                        color: orderSide === "SELL" ? "#fff" : "var(--text-primary)",
+                      }}
+                      onClick={() => setOrderSide("SELL")}
+                    >
+                      SELL
+                    </button>
+                  </div>
+                </div>
+
+                {/* Type */}
+                <div>
+                  <div style={fieldLabel}>Type</div>
+                  <select
+                    style={{ ...input, width: "100%" }}
+                    value={orderType}
+                    onChange={(e) => setOrderType(e.target.value as "MARKET" | "LIMIT")}
+                  >
+                    <option value="MARKET">Market</option>
+                    <option value="LIMIT">Limit</option>
+                  </select>
+                </div>
+
+                {/* Qty */}
+                <div>
+                  <div style={fieldLabel}>Qty</div>
                   <input
-                    style={{ ...input, width: 120 }}
+                    style={{ ...input, width: "100%" }}
                     type="number"
                     min={0}
                     step="any"
-                    placeholder="e.g. 60000"
-                    value={orderPrice}
-                    onChange={(e) => setOrderPrice(e.target.value)}
+                    placeholder="e.g. 0.001"
+                    value={orderQty}
+                    onChange={(e) => setOrderQty(e.target.value)}
                   />
                 </div>
-              )}
 
-              {/* Submit */}
-              <button
-                style={{
-                  ...btn,
-                  background: orderSide === "BUY" ? "#3fb950" : "#f85149",
-                  alignSelf: "flex-end",
-                }}
-                onClick={submitOrder}
-                disabled={orderState === "loading"}
-              >
-                {orderState === "loading"
-                  ? "Placing..."
-                  : `${orderSide} ${orderType}`}
-              </button>
-            </div>
+                {/* Price (LIMIT only) */}
+                {orderType === "LIMIT" && (
+                  <div>
+                    <div style={fieldLabel}>Price</div>
+                    <input
+                      style={{ ...input, width: "100%" }}
+                      type="number"
+                      min={0}
+                      step="any"
+                      placeholder="e.g. 60000"
+                      value={orderPrice}
+                      onChange={(e) => setOrderPrice(e.target.value)}
+                    />
+                  </div>
+                )}
 
-            {/* Order result */}
-            {orderState === "error" && (
-              <p style={{ color: "#f85149", fontSize: 13, marginTop: 8 }}>{orderError}</p>
-            )}
-            {orderState === "success" && lastOrder && (
-              <div style={{ marginTop: 8 }}>
-                <OrderStatusRow order={lastOrder} onRefresh={refreshOrderStatus} />
+                {/* Submit */}
+                <button
+                  style={{
+                    ...btn,
+                    width: "100%",
+                    background: orderSide === "BUY" ? "#3fb950" : "#f85149",
+                  }}
+                  onClick={submitOrder}
+                  disabled={orderState === "loading"}
+                >
+                  {orderState === "loading"
+                    ? "Placing..."
+                    : `${orderSide} ${orderType}`}
+                </button>
+
+                {/* Result */}
+                {orderState === "error" && (
+                  <p style={{ color: "#f85149", fontSize: 12, margin: 0 }}>{orderError}</p>
+                )}
+                {orderState === "success" && lastOrder && (
+                  <OrderStatusRow order={lastOrder} onRefresh={refreshOrderStatus} />
+                )}
               </div>
             )}
-          </>
+          </div>
         )}
       </div>
 
-      {/* ── Candles ── */}
-      <div style={card}>
-        <h2 style={{ fontSize: 16, marginBottom: 12 }}>
-          Candles{candlesState === "success" ? ` (${candles.length})` : ""}
-        </h2>
+      {/* ── Bottom tabs: Ticker | Orders | Candles ── */}
+      <div style={bottomSection}>
+        <div style={tabBar}>
+          {(["ticker", "orders", "candles"] as BottomTab[]).map((tab) => (
+            <button
+              key={tab}
+              style={{
+                ...tabBtn,
+                borderBottom: bottomTab === tab ? "2px solid var(--accent, #0969da)" : "2px solid transparent",
+                color: bottomTab === tab ? "var(--text-primary)" : "var(--text-secondary)",
+                fontWeight: bottomTab === tab ? 600 : 400,
+              }}
+              onClick={() => setBottomTab(tab)}
+            >
+              {tab.charAt(0).toUpperCase() + tab.slice(1)}
+              {tab === "orders" && allOrders.length > 0 ? ` (${allOrders.length})` : ""}
+              {tab === "candles" && candlesState === "success" ? ` (${candles.length})` : ""}
+            </button>
+          ))}
+        </div>
 
-        {candlesState === "idle" && <p style={hint}>Click Load to fetch candles.</p>}
-        {candlesState === "loading" && <p style={hint}>Loading candles...</p>}
-        {candlesState === "error" && (
-          <p style={{ color: "#f85149", fontSize: 13 }}>{candlesError}</p>
-        )}
-        {candlesState === "success" && candles.length === 0 && (
-          <p style={hint}>No candles returned.</p>
-        )}
-        {candlesState === "success" && candles.length > 0 && (
-          <div style={{ overflowX: "auto" }}>
-            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
-              <thead>
-                <tr>
-                  {["Time", "Open", "High", "Low", "Close", "Volume"].map((h) => (
-                    <th
-                      key={h}
-                      style={{
-                        textAlign: "right",
-                        padding: "4px 8px",
-                        borderBottom: "1px solid var(--border)",
-                        color: "var(--text-secondary)",
-                        fontWeight: 600,
-                      }}
-                    >
-                      {h}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {[...candles].reverse().map((c) => {
-                  const bullish = c.close >= c.open;
-                  return (
-                    <tr key={c.openTime}>
-                      <td style={td}>{new Date(c.openTime).toLocaleString()}</td>
-                      <td style={td}>{fmt(c.open)}</td>
-                      <td style={td}>{fmt(c.high)}</td>
-                      <td style={td}>{fmt(c.low)}</td>
-                      <td style={{ ...td, color: bullish ? "#3fb950" : "#f85149" }}>
-                        {fmt(c.close)}
-                      </td>
-                      <td style={td}>{fmt(c.volume)}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        )}
+        <div style={tabContent}>
+          {/* Ticker tab */}
+          {bottomTab === "ticker" && (
+            <>
+              {tickerState === "idle" && (
+                <p style={hint}>Select a symbol and click Load.</p>
+              )}
+              {tickerState === "loading" && <p style={hint}>Loading ticker...</p>}
+              {tickerState === "error" && (
+                <p style={{ color: "#f85149", fontSize: 13 }}>{tickerError}</p>
+              )}
+              {tickerState === "success" && ticker && (
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: 10 }}>
+                  <TickerCell label="Last Price" value={fmt(ticker.lastPrice)} />
+                  <TickerCell label="Bid" value={fmt(ticker.bidPrice)} />
+                  <TickerCell label="Ask" value={fmt(ticker.askPrice)} />
+                  <TickerCell
+                    label="24h Change"
+                    value={`${(ticker.price24hPcnt * 100).toFixed(2)}%`}
+                    color={pctColor(ticker.price24hPcnt)}
+                  />
+                  <TickerCell label="24h High" value={fmt(ticker.highPrice24h)} />
+                  <TickerCell label="24h Low" value={fmt(ticker.lowPrice24h)} />
+                  <TickerCell label="24h Volume" value={fmt(ticker.volume24h)} />
+                  <TickerCell label="Prev Close" value={fmt(ticker.prevPrice24h)} />
+                </div>
+              )}
+            </>
+          )}
+
+          {/* Orders tab */}
+          {bottomTab === "orders" && (
+            <>
+              {allOrders.length === 0 ? (
+                <p style={hint}>No orders yet.</p>
+              ) : (
+                <div style={{ overflowX: "auto" }}>
+                  <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
+                    <thead>
+                      <tr>
+                        {["Time", "Symbol", "Side", "Type", "Qty", "Price", "Status"].map((h) => (
+                          <th key={h} style={thStyle}>{h}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {[...allOrders].reverse().map((o) => {
+                        const sideColor = o.side === "BUY" ? "#3fb950" : "#f85149";
+                        return (
+                          <tr key={o.id}>
+                            <td style={td}>{new Date(o.createdAt).toLocaleString()}</td>
+                            <td style={td}>{o.symbol}</td>
+                            <td style={{ ...td, color: sideColor, fontWeight: 700 }}>{o.side}</td>
+                            <td style={td}>{o.type}</td>
+                            <td style={td}>{o.qty}</td>
+                            <td style={td}>{o.price ?? "—"}</td>
+                            <td style={td}>{o.status}</td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </>
+          )}
+
+          {/* Candles tab */}
+          {bottomTab === "candles" && (
+            <>
+              {candlesState === "idle" && <p style={hint}>Click Load to fetch candles.</p>}
+              {candlesState === "loading" && <p style={hint}>Loading candles...</p>}
+              {candlesState === "error" && (
+                <p style={{ color: "#f85149", fontSize: 13 }}>{candlesError}</p>
+              )}
+              {candlesState === "success" && candles.length === 0 && (
+                <p style={hint}>No candles returned.</p>
+              )}
+              {candlesState === "success" && candles.length > 0 && (
+                <div style={{ overflowX: "auto" }}>
+                  <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
+                    <thead>
+                      <tr>
+                        {["Time", "Open", "High", "Low", "Close", "Volume"].map((h) => (
+                          <th key={h} style={thStyle}>{h}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {[...candles].reverse().map((c) => {
+                        const bullish = c.close >= c.open;
+                        return (
+                          <tr key={c.openTime}>
+                            <td style={td}>{new Date(c.openTime).toLocaleString()}</td>
+                            <td style={td}>{fmt(c.open)}</td>
+                            <td style={td}>{fmt(c.high)}</td>
+                            <td style={td}>{fmt(c.low)}</td>
+                            <td style={{ ...td, color: bullish ? "#3fb950" : "#f85149" }}>
+                              {fmt(c.close)}
+                            </td>
+                            <td style={td}>{fmt(c.volume)}</td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -540,7 +673,7 @@ function TickerCell({
   return (
     <div style={{ padding: "10px 12px", background: "var(--bg-secondary)", borderRadius: 6 }}>
       <div style={{ fontSize: 11, color: "var(--text-secondary)", marginBottom: 4 }}>{label}</div>
-      <div style={{ fontSize: 16, fontWeight: 600, color: color ?? "var(--text-primary)" }}>
+      <div style={{ fontSize: 15, fontWeight: 600, color: color ?? "var(--text-primary)" }}>
         {value}
       </div>
     </div>
@@ -570,31 +703,24 @@ function OrderStatusRow({
       style={{
         background: "var(--bg-secondary)",
         borderRadius: 6,
-        padding: "10px 14px",
-        fontSize: 13,
+        padding: "8px 10px",
+        fontSize: 12,
         display: "flex",
         flexWrap: "wrap",
-        gap: 16,
+        gap: 8,
         alignItems: "center",
       }}
     >
-      <span style={{ fontWeight: 600, color }}>
-        {order.status}
-      </span>
+      <span style={{ fontWeight: 700, color }}>{order.status}</span>
       <span style={{ fontFamily: "monospace" }}>
         {order.side} {order.type} {order.qty} {order.symbol}
         {order.price ? ` @ ${order.price}` : ""}
       </span>
-      {order.exchangeOrderId && (
-        <span style={{ color: "var(--text-secondary)" }}>
-          #{order.exchangeOrderId.slice(0, 12)}...
-        </span>
-      )}
       {order.error && (
         <span style={{ color: "#f85149" }}>{order.error}</span>
       )}
       {(order.status === "SUBMITTED" || order.status === "PARTIALLY_FILLED") && (
-        <button style={{ ...btn, padding: "4px 10px", fontSize: 12 }} onClick={onRefresh}>
+        <button style={{ ...btn, padding: "3px 8px", fontSize: 11 }} onClick={onRefresh}>
           Refresh
         </button>
       )}
@@ -606,37 +732,150 @@ function OrderStatusRow({
 // Styles
 // ---------------------------------------------------------------------------
 
-const card: React.CSSProperties = {
+const outerWrap: React.CSSProperties = {
+  display: "flex",
+  flexDirection: "column",
+  height: "100%",
+  minHeight: "100vh",
+  padding: "0",
+  boxSizing: "border-box",
+};
+
+const topBar: React.CSSProperties = {
+  display: "flex",
+  alignItems: "center",
+  gap: 8,
+  padding: "8px 12px",
+  borderBottom: "1px solid var(--border)",
+  flexWrap: "wrap",
   background: "var(--bg-card)",
+};
+
+const togglePanelBtn: React.CSSProperties = {
+  padding: "6px 10px",
+  fontSize: 12,
+  background: "var(--bg-secondary)",
   border: "1px solid var(--border)",
-  borderRadius: 8,
-  padding: 16,
+  borderRadius: 5,
+  cursor: "pointer",
+  color: "var(--text-secondary)",
+  whiteSpace: "nowrap",
+};
+
+const mainRow: React.CSSProperties = {
+  display: "flex",
+  flex: 1,
+  gap: 0,
+  minHeight: 0,
+  overflow: "hidden",
+};
+
+const watchlistPanel: React.CSSProperties = {
+  width: 160,
+  minWidth: 140,
+  borderRight: "1px solid var(--border)",
+  background: "var(--bg-card)",
+  display: "flex",
+  flexDirection: "column",
+  flexShrink: 0,
+};
+
+const panelTitle: React.CSSProperties = {
+  fontSize: 11,
+  fontWeight: 700,
+  color: "var(--text-secondary)",
+  textTransform: "uppercase",
+  letterSpacing: "0.06em",
+  padding: "10px 12px 6px",
+  borderBottom: "1px solid var(--border)",
+};
+
+const watchlistItem: React.CSSProperties = {
+  display: "block",
+  width: "100%",
+  textAlign: "left",
+  padding: "9px 12px",
+  fontSize: 13,
+  border: "none",
+  borderBottom: "1px solid var(--border)",
+  cursor: "pointer",
+  fontFamily: "monospace",
+  borderRadius: 0,
+};
+
+const chartCenter: React.CSSProperties = {
+  flex: 1,
+  minWidth: 0,
+  padding: "12px",
+  background: "var(--bg-primary, var(--bg-card))",
+  overflow: "hidden",
+};
+
+const orderPanelCol: React.CSSProperties = {
+  width: 240,
+  minWidth: 200,
+  borderLeft: "1px solid var(--border)",
+  background: "var(--bg-card)",
+  padding: "0 0 12px 0",
+  flexShrink: 0,
+  overflowY: "auto",
+};
+
+const bottomSection: React.CSSProperties = {
+  borderTop: "1px solid var(--border)",
+  background: "var(--bg-card)",
+  maxHeight: 280,
+  display: "flex",
+  flexDirection: "column",
+};
+
+const tabBar: React.CSSProperties = {
+  display: "flex",
+  borderBottom: "1px solid var(--border)",
+  padding: "0 8px",
+};
+
+const tabBtn: React.CSSProperties = {
+  padding: "8px 14px",
+  fontSize: 12,
+  background: "none",
+  border: "none",
+  borderBottom: "2px solid transparent",
+  cursor: "pointer",
+  fontWeight: 400,
+  whiteSpace: "nowrap",
+};
+
+const tabContent: React.CSSProperties = {
+  padding: "12px",
+  overflowY: "auto",
+  flex: 1,
 };
 
 const input: React.CSSProperties = {
-  padding: "8px 12px",
+  padding: "6px 10px",
   background: "var(--bg-secondary)",
   border: "1px solid var(--border)",
-  borderRadius: 6,
+  borderRadius: 5,
   color: "var(--text-primary)",
-  fontSize: 14,
+  fontSize: 13,
 };
 
 const btn: React.CSSProperties = {
-  padding: "8px 20px",
+  padding: "7px 16px",
   background: "var(--accent)",
   color: "#fff",
   border: "none",
-  borderRadius: 6,
+  borderRadius: 5,
   cursor: "pointer",
-  fontSize: 14,
+  fontSize: 13,
   fontWeight: 600,
 };
 
 const sideBtn: React.CSSProperties = {
-  padding: "8px 16px",
+  padding: "8px 0",
   border: "1px solid var(--border)",
-  borderRadius: 6,
+  borderRadius: 5,
   cursor: "pointer",
   fontSize: 13,
   fontWeight: 600,
@@ -645,12 +884,23 @@ const sideBtn: React.CSSProperties = {
 const hint: React.CSSProperties = {
   color: "var(--text-secondary)",
   fontSize: 13,
+  margin: 0,
 };
 
 const fieldLabel: React.CSSProperties = {
   fontSize: 11,
   color: "var(--text-secondary)",
   marginBottom: 4,
+};
+
+const thStyle: React.CSSProperties = {
+  textAlign: "right",
+  padding: "4px 8px",
+  borderBottom: "1px solid var(--border)",
+  color: "var(--text-secondary)",
+  fontWeight: 600,
+  fontSize: 11,
+  whiteSpace: "nowrap",
 };
 
 const td: React.CSSProperties = {
