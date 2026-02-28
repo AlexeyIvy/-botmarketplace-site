@@ -3,14 +3,17 @@
 import { useEffect, useRef, useState } from 'react';
 import {
   createChart,
+  createSeriesMarkers,
   CandlestickSeries,
   HistogramSeries,
   LineSeries,
   type IChartApi,
   type ISeriesApi,
+  type ISeriesMarkersPluginApi,
   type CandlestickData,
   type HistogramData,
   type LineData,
+  type SeriesMarker,
   type Time,
   CrosshairMode,
 } from 'lightweight-charts';
@@ -30,11 +33,19 @@ interface Candle {
   volume: number;
 }
 
+export interface ChartMarker {
+  /** Unix seconds */
+  time: number;
+  side: 'BUY' | 'SELL';
+}
+
 export interface TerminalChartProps {
   /** Symbol to display, e.g. "BTCUSDT". Re-fetches when changed. */
   symbol: string;
   /** Number of candles to fetch (1–1000). Default: 200. */
   limit?: number;
+  /** Trade markers to overlay on the chart. */
+  markers?: ChartMarker[];
 }
 
 // ---------------------------------------------------------------------------
@@ -59,7 +70,7 @@ const RSI_PERIOD = 14;
 // Component
 // ---------------------------------------------------------------------------
 
-export default function TerminalChart({ symbol, limit = 200 }: TerminalChartProps) {
+export default function TerminalChart({ symbol, limit = 200, markers }: TerminalChartProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<IChartApi | null>(null);
   const candleSeriesRef = useRef<ISeriesApi<'Candlestick'> | null>(null);
@@ -67,6 +78,7 @@ export default function TerminalChart({ symbol, limit = 200 }: TerminalChartProp
   const ma20Ref = useRef<ISeriesApi<'Line'> | null>(null);
   const ema50Ref = useRef<ISeriesApi<'Line'> | null>(null);
   const rsi14Ref = useRef<ISeriesApi<'Line'> | null>(null);
+  const markersPluginRef = useRef<ISeriesMarkersPluginApi<Time> | null>(null);
 
   const [interval, setIntervalValue] = useState<Interval>('15');
   const [loading, setLoading] = useState(false);
@@ -166,12 +178,16 @@ export default function TerminalChart({ symbol, limit = 200 }: TerminalChartProp
       panes[1].setHeight(RSI_PANE_HEIGHT);
     }
 
+    // ── Trade markers plugin ──────────────────────────────────────────────
+    const markersPlugin = createSeriesMarkers(candleSeries);
+
     chartRef.current = chart;
     candleSeriesRef.current = candleSeries;
     volumeSeriesRef.current = volumeSeries;
     ma20Ref.current = ma20;
     ema50Ref.current = ema50;
     rsi14Ref.current = rsi14;
+    markersPluginRef.current = markersPlugin;
 
     // ── ResizeObserver ────────────────────────────────────────────────────
     const observer = new ResizeObserver(() => {
@@ -183,6 +199,7 @@ export default function TerminalChart({ symbol, limit = 200 }: TerminalChartProp
 
     return () => {
       observer.disconnect();
+      markersPlugin.detach();
       chart.remove();
       chartRef.current = null;
       candleSeriesRef.current = null;
@@ -190,6 +207,7 @@ export default function TerminalChart({ symbol, limit = 200 }: TerminalChartProp
       ma20Ref.current = null;
       ema50Ref.current = null;
       rsi14Ref.current = null;
+      markersPluginRef.current = null;
     };
   }, []); // run once
 
@@ -209,6 +227,19 @@ export default function TerminalChart({ symbol, limit = 200 }: TerminalChartProp
   useEffect(() => {
     rsi14Ref.current?.applyOptions({ visible: showRSI });
   }, [showRSI]);
+
+  // ── Markers effect ───────────────────────────────────────────────────────
+  useEffect(() => {
+    if (!markersPluginRef.current) return;
+    const seriesMarkers: SeriesMarker<Time>[] = (markers ?? []).map((m) => ({
+      time: m.time as Time,
+      position: m.side === 'BUY' ? 'belowBar' : 'aboveBar',
+      shape: m.side === 'BUY' ? 'arrowUp' : 'arrowDown',
+      color: m.side === 'BUY' ? '#3fb950' : '#f85149',
+      size: 1,
+    }));
+    markersPluginRef.current.setMarkers(seriesMarkers);
+  }, [markers]);
 
   // ── Load data when symbol or interval changes ───────────────────────────
   useEffect(() => {
