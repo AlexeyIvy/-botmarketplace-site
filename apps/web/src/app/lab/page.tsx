@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { getWorkspaceId, apiFetch } from "../factory/api";
+import { getWorkspaceId, apiFetch } from "../../lib/api";
 
 // ---------------------------------------------------------------------------
 // Types

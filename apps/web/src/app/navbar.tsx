@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getToken, clearAuth } from "./factory/api";
+import { getToken, clearAuth } from "../lib/api";
 
 const NAV_ITEMS = [
   { href: "/terminal", label: "Terminal" },
@@ -77,20 +77,34 @@ export function Navbar() {
 
       <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: "8px" }}>
         {isAuth ? (
-          <button
-            onClick={handleLogout}
-            style={{
-              background: "transparent",
-              border: "1px solid var(--border)",
-              borderRadius: "6px",
-              color: "var(--text-secondary)",
-              cursor: "pointer",
-              fontSize: "13px",
-              padding: "6px 14px",
-            }}
-          >
-            Sign out
-          </button>
+          <>
+            <Link
+              href="/settings"
+              style={{
+                padding: "6px 14px",
+                borderRadius: "6px",
+                fontSize: "13px",
+                color: pathname.startsWith("/settings") ? "var(--accent)" : "var(--text-secondary)",
+                background: pathname.startsWith("/settings") ? "var(--bg-card)" : "transparent",
+              }}
+            >
+              ⚙ Settings
+            </Link>
+            <button
+              onClick={handleLogout}
+              style={{
+                background: "transparent",
+                border: "1px solid var(--border)",
+                borderRadius: "6px",
+                color: "var(--text-secondary)",
+                cursor: "pointer",
+                fontSize: "13px",
+                padding: "6px 14px",
+              }}
+            >
+              Sign out
+            </button>
+          </>
         ) : (
           <>
             <Link
