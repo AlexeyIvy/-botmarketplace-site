@@ -9,17 +9,24 @@ interface Me {
   email: string;
 }
 
+type Theme = "system" | "dark" | "light";
+
 export default function SettingsPage() {
   const router = useRouter();
   const [me, setMe] = useState<Me | null>(null);
   const [loading, setLoading] = useState(true);
   const [sessionExpired, setSessionExpired] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [theme, setTheme] = useState<Theme>("system");
 
   useEffect(() => {
     if (!getToken()) {
       router.push("/login");
       return;
+    }
+    const stored = localStorage.getItem("theme") as Theme | null;
+    if (stored === "system" || stored === "dark" || stored === "light") {
+      setTheme(stored);
     }
     apiFetchNoWorkspace<Me>("/auth/me").then((res) => {
       setLoading(false);
@@ -36,6 +43,24 @@ export default function SettingsPage() {
   function handleLogout() {
     clearAuth();
     router.push("/login");
+  }
+
+  function applyTheme(t: Theme) {
+    localStorage.setItem("theme", t);
+    setTheme(t);
+    if (t === "light") {
+      document.documentElement.classList.add("theme-light");
+    } else if (t === "dark") {
+      document.documentElement.classList.remove("theme-light");
+    } else {
+      // system: read matchMedia once, no subscription
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      if (prefersDark) {
+        document.documentElement.classList.remove("theme-light");
+      } else {
+        document.documentElement.classList.add("theme-light");
+      }
+    }
   }
 
   if (loading && !sessionExpired) {
@@ -72,6 +97,23 @@ export default function SettingsPage() {
           <button onClick={handleLogout} style={logoutBtn}>
             Log out
           </button>
+        </div>
+      </section>
+
+      {/* Appearance block */}
+      <section style={card}>
+        <h2 style={sectionTitle}>Appearance</h2>
+        <div style={field}>
+          <span style={fieldLabel}>Theme</span>
+          <select
+            value={theme}
+            onChange={(e) => applyTheme(e.target.value as Theme)}
+            style={themeSelect}
+          >
+            <option value="system">System</option>
+            <option value="dark">Dark</option>
+            <option value="light">Light</option>
+          </select>
         </div>
       </section>
     </div>
@@ -128,6 +170,16 @@ const logoutBtn: React.CSSProperties = {
   color: "var(--text-secondary)",
   cursor: "pointer",
   fontSize: 13,
+};
+
+const themeSelect: React.CSSProperties = {
+  background: "var(--bg-secondary)",
+  border: "1px solid var(--border)",
+  borderRadius: 6,
+  color: "var(--text-primary)",
+  fontSize: 13,
+  padding: "6px 10px",
+  cursor: "pointer",
 };
 
 const hint: React.CSSProperties = {
