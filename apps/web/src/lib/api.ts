@@ -74,7 +74,8 @@ async function doFetch<T>(
     };
   }
 
-  const data = (await res.json()) as T;
+  const text = await res.text();
+  const data = text.length > 0 ? (JSON.parse(text) as T) : (undefined as T);
   return { ok: true, data };
 }
 
