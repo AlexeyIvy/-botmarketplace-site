@@ -10,6 +10,17 @@
   --nav-height: 56px;
 }
 
+html.theme-light {
+  --bg-primary:     #ffffff;
+  --bg-secondary:   #f6f8fa;
+  --bg-card:        #ffffff;
+  --border:         #d0d7de;
+  --text-primary:   #1f2328;
+  --text-secondary: #656d76;
+  --accent:         #0969da;
+  --accent-hover:   #0550ae;
+}
+
 * {
   margin: 0;
   padding: 0;
