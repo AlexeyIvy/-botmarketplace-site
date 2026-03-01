@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { apiFetchNoWorkspace, apiFetch, getToken } from "../factory/api";
+import { apiFetchNoWorkspace, apiFetch, getToken } from "../../lib/api";
 import TerminalChart, { type ChartMarker } from "../../components/terminal/TerminalChart";
 
 // ---------------------------------------------------------------------------
@@ -71,6 +71,7 @@ export default function TerminalPage() {
 
   // --- Auth state ---
   const [hasToken, setHasToken] = useState<boolean | null>(null);
+  const [sessionExpired, setSessionExpired] = useState(false);
 
   useEffect(() => {
     setHasToken(!!getToken());
@@ -123,6 +124,8 @@ export default function TerminalPage() {
       if (res.ok) {
         setConnections(res.data);
         if (res.data.length > 0) setSelectedConnection(res.data[0].id);
+      } else if (res.problem.status === 401) {
+        setSessionExpired(true);
       }
     });
   }, []);
@@ -164,6 +167,7 @@ export default function TerminalPage() {
       setTicker(res.data);
       setTickerState("success");
     } else {
+      if (res.problem.status === 401) setSessionExpired(true);
       setTickerError(`${res.problem.title}: ${res.problem.detail}`);
       setTickerState("error");
     }
@@ -184,6 +188,7 @@ export default function TerminalPage() {
       setCandles(res.data);
       setCandlesState("success");
     } else {
+      if (res.problem.status === 401) setSessionExpired(true);
       setCandlesError(`${res.problem.title}: ${res.problem.detail}`);
       setCandlesState("error");
     }
@@ -247,6 +252,7 @@ export default function TerminalPage() {
         if (r.ok) setAllOrders(r.data);
       });
     } else {
+      if (res.problem.status === 401) setSessionExpired(true);
       setOrderError(`${res.problem.title}: ${res.problem.detail}`);
       setOrderState("error");
     }
@@ -306,6 +312,19 @@ export default function TerminalPage() {
 
   return (
     <div style={outerWrap}>
+
+      {/* ── Session expired banner ── */}
+      {sessionExpired && (
+        <div style={{ background: "#f85149", color: "#fff", padding: "10px 16px", fontSize: 13, display: "flex", alignItems: "center", gap: 12 }}>
+          <span>Session expired. Please log in again.</span>
+          <button
+            onClick={() => router.push("/login")}
+            style={{ background: "rgba(255,255,255,0.2)", border: "1px solid rgba(255,255,255,0.4)", borderRadius: 4, color: "#fff", cursor: "pointer", fontSize: 12, padding: "3px 10px" }}
+          >
+            Log in
+          </button>
+        </div>
+      )}
 
       {/* ── Top bar: controls + panel toggles ── */}
       <div style={topBar}>

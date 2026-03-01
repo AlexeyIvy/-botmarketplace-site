@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { setToken, setWorkspaceId } from "../factory/api";
+import { setToken, setWorkspaceId } from "../../lib/api";
 
 const cardStyle: React.CSSProperties = {
   background: "var(--bg-secondary)",

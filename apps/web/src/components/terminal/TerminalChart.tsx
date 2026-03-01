@@ -17,7 +17,7 @@ import {
   type Time,
   CrosshairMode,
 } from 'lightweight-charts';
-import { apiFetchNoWorkspace } from '../../app/factory/api';
+import { apiFetchNoWorkspace } from '../../lib/api';
 import { calcMA, calcEMA, calcRSI } from './indicators';
 
 // ---------------------------------------------------------------------------
