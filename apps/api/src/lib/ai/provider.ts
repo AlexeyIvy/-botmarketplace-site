@@ -3,11 +3,18 @@ export interface ChatMessage {
   content: string;
 }
 
+export interface AIChatOptions {
+  maxTokens?: number;
+  /** Request JSON-only output (for plan mode). OpenAI: response_format json_object.
+   *  Anthropic: handled via system prompt instruction. */
+  jsonMode?: boolean;
+}
+
 export interface AIProvider {
   chat(
     messages: ChatMessage[],
     system: string,
-    options?: { maxTokens?: number },
+    options?: AIChatOptions,
   ): Promise<string>;
 }
 
@@ -27,14 +34,17 @@ class OpenAIProvider implements AIProvider {
   async chat(
     messages: ChatMessage[],
     system: string,
-    options?: { maxTokens?: number },
+    options?: AIChatOptions,
   ): Promise<string> {
-    const body = {
+    const body: Record<string, unknown> = {
       model: this.model,
       messages: [{ role: "system", content: system }, ...messages],
       max_tokens: options?.maxTokens ?? 1024,
       stream: false,
     };
+    if (options?.jsonMode) {
+      body.response_format = { type: "json_object" };
+    }
 
     const res = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -75,8 +85,9 @@ class AnthropicProvider implements AIProvider {
   async chat(
     messages: ChatMessage[],
     system: string,
-    options?: { maxTokens?: number },
+    options?: AIChatOptions,
   ): Promise<string> {
+    // Anthropic has no JSON mode API param — the system prompt handles it.
     const body = {
       model: this.model,
       system,

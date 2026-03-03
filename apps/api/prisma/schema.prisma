@@ -36,6 +36,8 @@ model Workspace {
   backtests           BacktestResult[]
   exchangeConnections ExchangeConnection[]
   terminalOrders      TerminalOrder[]
+  aiPlans             AiPlan[]
+  aiActionAudits      AiActionAudit[]
 }
 
 model WorkspaceMember {
@@ -312,6 +314,54 @@ model TerminalOrder {
 
   @@index([workspaceId])
   @@index([exchangeConnectionId])
+  @@index([workspaceId, createdAt(sort: Desc)])
+}
+
+// ── AI Actions ───────────────────────────────────────────────────
+
+enum AiActionStatus {
+  PROPOSED
+  EXECUTED
+  FAILED
+  CANCELLED
+}
+
+/// Stores a generated action plan (TTL 30 min). Used by /ai/execute to load
+/// the original plan inputs so clients cannot tamper with them.
+model AiPlan {
+  id          String   @id @default(uuid())
+  workspaceId String
+  userId      String
+  expiresAt   DateTime
+  planJson    Json
+  requestId   String?
+  createdAt   DateTime @default(now())
+
+  workspace    Workspace       @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  actionAudits AiActionAudit[]
+
+  @@index([workspaceId, createdAt(sort: Desc)])
+}
+
+/// One row per action execution attempt. Status tracks lifecycle.
+model AiActionAudit {
+  id         String         @id @default(uuid())
+  planId     String
+  workspaceId String
+  userId     String
+  actionId   String
+  actionType String
+  status     AiActionStatus @default(PROPOSED)
+  inputJson  Json
+  resultJson Json?
+  requestId  String?
+  createdAt  DateTime       @default(now())
+  executedAt DateTime?
+
+  plan      AiPlan    @relation(fields: [planId], references: [id], onDelete: Cascade)
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@index([planId])
   @@index([workspaceId, createdAt(sort: Desc)])
 }
 

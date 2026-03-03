@@ -3,6 +3,8 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { apiFetch, apiFetchNoWorkspace, getToken } from "@/lib/api";
+import { ActionPlanCard } from "./ActionPlanCard";
+import type { ActionPlan } from "./ActionPlanCard";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -12,6 +14,13 @@ interface ChatMessage {
   role: "user" | "assistant";
   content: string;
 }
+
+// A chat entry is either a regular text message or a plan response
+type ChatEntry =
+  | { kind: "chat"; role: "user" | "assistant"; content: string }
+  | { kind: "plan"; plan: ActionPlan };
+
+type ChatMode = "explain" | "plan";
 
 interface AIStatus {
   available: boolean;
@@ -48,8 +57,8 @@ const drawerStyle: React.CSSProperties = {
   position: "fixed",
   bottom: "80px",
   right: "24px",
-  width: "360px",
-  maxHeight: "520px",
+  width: "380px",
+  maxHeight: "560px",
   zIndex: Z_CHAT,
   background: "var(--bg-card)",
   border: "1px solid var(--border)",
@@ -61,16 +70,30 @@ const drawerStyle: React.CSSProperties = {
 };
 
 const drawerHeaderStyle: React.CSSProperties = {
-  padding: "12px 16px",
+  padding: "10px 16px",
   borderBottom: "1px solid var(--border)",
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between",
   background: "var(--bg-secondary)",
-  fontSize: "14px",
-  fontWeight: 600,
-  color: "var(--text-primary)",
+  flexShrink: 0,
 };
+
+const modeTabsStyle: React.CSSProperties = {
+  display: "flex",
+  gap: "4px",
+};
+
+const modeTabStyle = (active: boolean): React.CSSProperties => ({
+  background: active ? "var(--accent)" : "transparent",
+  color: active ? "#fff" : "var(--text-secondary)",
+  border: active ? "none" : "1px solid var(--border)",
+  borderRadius: "6px",
+  padding: "4px 10px",
+  fontSize: "12px",
+  fontWeight: 600,
+  cursor: "pointer",
+});
 
 const messagesStyle: React.CSSProperties = {
   flex: 1,
@@ -84,7 +107,7 @@ const messagesStyle: React.CSSProperties = {
 
 function messageBubbleStyle(role: "user" | "assistant"): React.CSSProperties {
   return {
-    maxWidth: "85%",
+    maxWidth: "88%",
     padding: "8px 12px",
     borderRadius: "12px",
     fontSize: "13px",
@@ -104,6 +127,7 @@ const inputAreaStyle: React.CSSProperties = {
   display: "flex",
   gap: "8px",
   alignItems: "flex-end",
+  flexShrink: 0,
 };
 
 const textareaStyle: React.CSSProperties = {
@@ -145,6 +169,7 @@ const errorBannerStyle: React.CSSProperties = {
   alignItems: "center",
   justifyContent: "space-between",
   gap: "8px",
+  flexShrink: 0,
 };
 
 const sessionBannerStyle: React.CSSProperties = {
@@ -164,69 +189,78 @@ const sessionBannerStyle: React.CSSProperties = {
 
 export function ChatWidget() {
   const router = useRouter();
-  const [aiAvailable, setAiAvailable] = useState<boolean | null>(null); // null = checking
+  const [aiAvailable, setAiAvailable] = useState<boolean | null>(null);
   const [open, setOpen] = useState(false);
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [mode, setMode] = useState<ChatMode>("explain");
+  const [entries, setEntries] = useState<ChatEntry[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [sessionExpired, setSessionExpired] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Check AI availability on mount (no auth needed)
+  // Check AI availability on mount
   useEffect(() => {
     const token = getToken();
-    if (!token) {
-      setAiAvailable(false);
-      return;
-    }
+    if (!token) { setAiAvailable(false); return; }
     apiFetchNoWorkspace<AIStatus>("/ai/status").then((res) => {
-      if (res.ok) {
-        setAiAvailable(res.data.available);
-      } else {
-        setAiAvailable(false);
-      }
+      setAiAvailable(res.ok ? res.data.available : false);
     });
   }, []);
 
-  // Scroll to bottom on new messages
+  // Scroll to bottom on new entries
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, loading]);
+  }, [entries, loading]);
+
+  // Build plain ChatMessage[] for /ai/chat context (exclude plan entries)
+  function chatHistory(): ChatMessage[] {
+    return entries
+      .filter((e): e is Extract<ChatEntry, { kind: "chat" }> => e.kind === "chat")
+      .map((e) => ({ role: e.role, content: e.content }));
+  }
+
+  function handleError(status: number, detail?: string) {
+    if (status === 401) { setSessionExpired(true); return; }
+    if (status === 429) setError("Rate limit reached. Please wait before sending another message.");
+    else if (status === 503) setError("AI is temporarily unavailable.");
+    else if (status === 504) setError("AI request timed out. Please try again.");
+    else setError(detail || "Something went wrong. Please try again.");
+  }
 
   async function sendMessage() {
     const text = input.trim();
     if (!text || loading) return;
 
-    const userMsg: ChatMessage = { role: "user", content: text };
-    const updated = [...messages, userMsg];
-    setMessages(updated);
+    setEntries((prev) => [...prev, { kind: "chat", role: "user", content: text }]);
     setInput("");
     setError(null);
     setLoading(true);
 
-    const res = await apiFetch<{ reply: string }>("/ai/chat", {
-      method: "POST",
-      body: JSON.stringify({ messages: updated }),
-    });
-
-    setLoading(false);
-
-    if (res.ok) {
-      setMessages((prev) => [...prev, { role: "assistant", content: res.data.reply }]);
-    } else {
-      if (res.problem.status === 401) {
-        setSessionExpired(true);
-        return;
-      }
-      if (res.problem.status === 429) {
-        setError("Rate limit reached. Please wait a moment before sending another message.");
-      } else if (res.problem.status === 503) {
-        setError("AI is temporarily unavailable.");
-      } else if (res.problem.status === 504) {
-        setError("AI request timed out. Please try again.");
+    if (mode === "explain") {
+      // Explain mode: /ai/chat — pass full chat history for context
+      const history: ChatMessage[] = [...chatHistory(), { role: "user", content: text }];
+      const res = await apiFetch<{ reply: string }>("/ai/chat", {
+        method: "POST",
+        body: JSON.stringify({ messages: history }),
+      });
+      setLoading(false);
+      if (res.ok) {
+        setEntries((prev) => [...prev, { kind: "chat", role: "assistant", content: res.data.reply }]);
       } else {
-        setError(res.problem.detail || "Something went wrong. Please try again.");
+        handleError(res.problem.status, res.problem.detail);
+      }
+    } else {
+      // Plan mode: /ai/plan — single message, returns ActionPlan
+      const res = await apiFetch<ActionPlan>("/ai/plan", {
+        method: "POST",
+        body: JSON.stringify({ message: text }),
+      });
+      setLoading(false);
+      if (res.ok) {
+        setEntries((prev) => [...prev, { kind: "plan", plan: res.data }]);
+      } else {
+        handleError(res.problem.status, res.problem.detail);
       }
     }
   }
@@ -238,8 +272,11 @@ export function ChatWidget() {
     }
   }
 
-  // Don't render if AI is unavailable or not yet checked
   if (!aiAvailable) return null;
+
+  const placeholder = mode === "explain"
+    ? "Ask about your runs, strategies, errors… (Enter)"
+    : "Describe what you want to do… e.g. \"Create bot and start run\" (Enter)";
 
   return (
     <>
@@ -249,16 +286,31 @@ export function ChatWidget() {
         onClick={() => setOpen((o) => !o)}
         aria-label={open ? "Close AI chat" : "Open AI chat"}
       >
-        <span>💬</span>
-        <span>Chat</span>
+        <span>⚡</span>
+        <span>AI</span>
       </button>
 
       {/* Drawer */}
       {open && (
         <div style={drawerStyle} role="dialog" aria-label="AI Assistant">
-          {/* Header */}
+          {/* Header with mode tabs */}
           <div style={drawerHeaderStyle}>
-            <span>AI Assistant</span>
+            <div style={modeTabsStyle}>
+              <button
+                style={modeTabStyle(mode === "explain")}
+                onClick={() => setMode("explain")}
+                title="Ask questions, get explanations"
+              >
+                Explain
+              </button>
+              <button
+                style={modeTabStyle(mode === "plan")}
+                onClick={() => setMode("plan")}
+                title="Propose and confirm actions"
+              >
+                ⚡ Do
+              </button>
+            </div>
             <button
               onClick={() => setOpen(false)}
               style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-secondary)", fontSize: "18px", lineHeight: 1 }}
@@ -268,7 +320,7 @@ export function ChatWidget() {
             </button>
           </div>
 
-          {/* Session expired state */}
+          {/* Body */}
           {sessionExpired ? (
             <div style={sessionBannerStyle}>
               <span>Session expired. Please log in again.</span>
@@ -281,27 +333,39 @@ export function ChatWidget() {
             </div>
           ) : (
             <>
-              {/* Messages */}
+              {/* Messages / Plan cards */}
               <div style={messagesStyle}>
-                {messages.length === 0 && (
+                {entries.length === 0 && (
                   <p style={{ fontSize: "13px", color: "var(--text-secondary)", textAlign: "center", marginTop: "24px" }}>
-                    Ask me about your runs, strategies, backtests, or errors.
+                    {mode === "explain"
+                      ? "Ask me about your runs, strategies, backtests, or errors."
+                      : "Tell me what you\u2019d like to do and I\u2019ll propose an action plan."}
                   </p>
                 )}
-                {messages.map((msg, i) => (
-                  <div key={i} style={messageBubbleStyle(msg.role)}>
-                    {msg.content}
-                  </div>
-                ))}
+                {entries.map((entry, i) => {
+                  if (entry.kind === "chat") {
+                    return (
+                      <div key={i} style={messageBubbleStyle(entry.role)}>
+                        {entry.content}
+                      </div>
+                    );
+                  }
+                  // Plan entry — rendered as ActionPlanCard
+                  return (
+                    <div key={i} style={{ alignSelf: "stretch" }}>
+                      <ActionPlanCard plan={entry.plan} />
+                    </div>
+                  );
+                })}
                 {loading && (
                   <div style={{ ...messageBubbleStyle("assistant"), color: "var(--text-secondary)" }}>
-                    Thinking…
+                    {mode === "plan" ? "Planning\u2026" : "Thinking\u2026"}
                   </div>
                 )}
                 <div ref={messagesEndRef} />
               </div>
 
-              {/* Error */}
+              {/* Error banner */}
               {error && (
                 <div style={errorBannerStyle}>
                   <span>{error}</span>
@@ -321,9 +385,9 @@ export function ChatWidget() {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  placeholder="Ask a question… (Enter to send)"
+                  placeholder={placeholder}
                   rows={1}
-                  maxLength={4096}
+                  maxLength={2000}
                   disabled={loading}
                 />
                 <button
@@ -331,7 +395,7 @@ export function ChatWidget() {
                   onClick={() => void sendMessage()}
                   disabled={loading || !input.trim()}
                 >
-                  Send
+                  {mode === "plan" ? "Plan" : "Send"}
                 </button>
               </div>
             </>
