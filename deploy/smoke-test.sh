@@ -1094,6 +1094,194 @@ if [[ $S14_SAFE -eq 1 ]]; then
   ((++PASS))
 fi
 
+# ─── 18. Stage 18b — AI Actions Execute ──────────────────────────────────────
+header "18. Stage 18b — AI Actions Execute"
+
+# 18.0 GET /ai/status — public endpoint, no auth needed
+S18_STATUS=$(curl -s "$BASE_URL/api/v1/ai/status")
+S18_AVAIL=$(echo "$S18_STATUS" | grep -o '"available":[^,}]*' | cut -d: -f2 | tr -d ' "')
+S18_PROVIDER=$(echo "$S18_STATUS" | grep -o '"provider":"[^"]*"' | cut -d'"' -f4)
+if [[ "$S18_AVAIL" == "true" && -n "$S18_PROVIDER" ]]; then
+  green "GET /ai/status → available=true provider=$S18_PROVIDER"
+  ((++PASS))
+else
+  red "GET /ai/status → unexpected (response: $S18_STATUS)"
+  ((++FAIL))
+fi
+
+# 18.1 POST /ai/plan — no auth → 401
+S18_PLAN_NOAUTH=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/ai/plan" \
+  -H "Content-Type: application/json" \
+  -d '{"message":"test"}')
+check "POST /ai/plan without auth → 401" "401" "$S18_PLAN_NOAUTH"
+
+# 18.2 POST /ai/execute — no auth → 401
+S18_EXEC_NOAUTH=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/ai/execute" \
+  -H "Content-Type: application/json" \
+  -d '{"planId":"fake","actionId":"fake"}')
+check "POST /ai/execute without auth → 401" "401" "$S18_EXEC_NOAUTH"
+
+# 18.3 POST /ai/execute — missing planId → 400
+S18_EXEC_NOID=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/ai/execute" \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"actionId":"x"}')
+check "POST /ai/execute missing planId → 400" "400" "$S18_EXEC_NOID"
+
+# 18.4 POST /ai/execute — missing actionId → 400
+S18_EXEC_NOACTION=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/ai/execute" \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"planId":"x"}')
+check "POST /ai/execute missing actionId → 400" "400" "$S18_EXEC_NOACTION"
+
+# 18.5 POST /ai/execute — non-existent planId → 404
+S18_EXEC_404=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/ai/execute" \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"planId":"00000000-0000-0000-0000-000000000000","actionId":"x"}')
+check "POST /ai/execute non-existent planId → 404" "404" "$S18_EXEC_404"
+
+# 18.6 POST /ai/plan — create a plan with VALIDATE_DSL action
+S18_PLAN_MSG='Validate this strategy DSL and tell me if it is correct: {"indicators":[{"id":"rsi14","type":"RSI","period":14}],"rules":{"entry":{"condition":"rsi14.value < 30"},"exit":{"condition":"rsi14.value > 70"}}}'
+
+if [[ "$S18_AVAIL" != "true" ]]; then
+  red "POST /ai/plan skipped — AI provider not available"
+  ((++FAIL))
+else
+  S18_PLAN_RESP=$(curl -s -X POST "$BASE_URL/api/v1/ai/plan" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "Content-Type: application/json" \
+    -d "{\"message\":$(echo "$S18_PLAN_MSG" | python3 -c 'import sys,json; print(json.dumps(sys.stdin.read().strip()))')}")
+
+  S18_PLAN_ID=$(echo "$S18_PLAN_RESP" | grep -o '"planId":"[^"]*"' | head -1 | cut -d'"' -f4)
+  S18_PLAN_HTTP=$(echo "$S18_PLAN_RESP" | grep -o '"actions":\[' | head -1)
+
+  if [[ -n "$S18_PLAN_ID" && -n "$S18_PLAN_HTTP" ]]; then
+    green "POST /ai/plan → planId=$S18_PLAN_ID actions[] present"
+    ((++PASS))
+  else
+    red "POST /ai/plan → unexpected (response: ${S18_PLAN_RESP:0:300})"
+    ((++FAIL))
+    S18_PLAN_ID=""
+  fi
+
+  # 18.7 Extract first actionId and type
+  S18_ACTION_ID=$(echo "$S18_PLAN_RESP" | python3 -c "
+import sys,json,re
+try:
+    d=json.loads(sys.stdin.read())
+    acts=d.get('actions',[])
+    if acts: print(acts[0]['actionId'])
+except: pass
+" 2>/dev/null || true)
+  S18_ACTION_TYPE=$(echo "$S18_PLAN_RESP" | python3 -c "
+import sys,json
+try:
+    d=json.loads(sys.stdin.read())
+    acts=d.get('actions',[])
+    if acts: print(acts[0]['type'])
+except: pass
+" 2>/dev/null || true)
+
+  if [[ -n "$S18_ACTION_ID" ]]; then
+    green "POST /ai/plan → first action: type=$S18_ACTION_TYPE id=${S18_ACTION_ID:0:8}…"
+    ((++PASS))
+  else
+    red "POST /ai/plan → could not extract actionId from response"
+    ((++FAIL))
+  fi
+
+  # 18.8 POST /ai/execute — execute first action
+  if [[ -n "$S18_PLAN_ID" && -n "$S18_ACTION_ID" ]]; then
+    S18_EXEC_RESP=$(curl -s -X POST "$BASE_URL/api/v1/ai/execute" \
+      -H "Authorization: Bearer $TOKEN" \
+      -H "Content-Type: application/json" \
+      -d "{\"planId\":\"$S18_PLAN_ID\",\"actionId\":\"$S18_ACTION_ID\"}")
+    S18_EXEC_STATUS=$(echo "$S18_EXEC_RESP" | grep -o '"status":"[^"]*"' | head -1 | cut -d'"' -f4)
+    S18_EXEC_AT=$(echo "$S18_EXEC_RESP" | grep -o '"executedAt":"[^"]*"' | head -1 | cut -d'"' -f4)
+
+    if [[ "$S18_EXEC_STATUS" == "EXECUTED" && -n "$S18_EXEC_AT" ]]; then
+      green "POST /ai/execute → status=EXECUTED type=$S18_ACTION_TYPE"
+      ((++PASS))
+    else
+      red "POST /ai/execute → unexpected (response: ${S18_EXEC_RESP:0:400})"
+      ((++FAIL))
+    fi
+
+    # 18.9 Double-execute same action → 409
+    S18_EXEC_DUP=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/ai/execute" \
+      -H "Authorization: Bearer $TOKEN" \
+      -H "Content-Type: application/json" \
+      -d "{\"planId\":\"$S18_PLAN_ID\",\"actionId\":\"$S18_ACTION_ID\"}")
+    check "POST /ai/execute duplicate action → 409" "409" "$S18_EXEC_DUP"
+  fi
+
+  # 18.10 Wrong actionId inside valid plan → 404
+  if [[ -n "$S18_PLAN_ID" ]]; then
+    S18_EXEC_BADACT=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/ai/execute" \
+      -H "Authorization: Bearer $TOKEN" \
+      -H "Content-Type: application/json" \
+      -d "{\"planId\":\"$S18_PLAN_ID\",\"actionId\":\"nonexistent-action-id\"}")
+    check "POST /ai/execute bad actionId in valid plan → 404" "404" "$S18_EXEC_BADACT"
+  fi
+
+  # 18.11 Chain test: CREATE_STRATEGY + CREATE_STRATEGY_VERSION with dependsOn
+  S18_CHAIN_MSG='Create a new strategy named SmokeChain with RSI14 indicator, then create version 1 for it'
+  S18_CHAIN_RESP=$(curl -s -X POST "$BASE_URL/api/v1/ai/plan" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "Content-Type: application/json" \
+    -d "{\"message\":$(echo "$S18_CHAIN_MSG" | python3 -c 'import sys,json; print(json.dumps(sys.stdin.read().strip()))')}")
+
+  S18_CHAIN_PLAN_ID=$(echo "$S18_CHAIN_RESP" | grep -o '"planId":"[^"]*"' | head -1 | cut -d'"' -f4)
+  S18_CHAIN_COUNT=$(echo "$S18_CHAIN_RESP" | python3 -c "
+import sys,json
+try:
+    d=json.loads(sys.stdin.read()); print(len(d.get('actions',[])))
+except: print(0)
+" 2>/dev/null || echo 0)
+
+  if [[ -n "$S18_CHAIN_PLAN_ID" && "$S18_CHAIN_COUNT" -ge 2 ]]; then
+    green "POST /ai/plan (chain) → planId present, actions=$S18_CHAIN_COUNT"
+    ((++PASS))
+
+    # Extract second action (should have dependsOn the first)
+    S18_DEP_ACTION_ID=$(echo "$S18_CHAIN_RESP" | python3 -c "
+import sys,json
+try:
+    d=json.loads(sys.stdin.read())
+    acts=d.get('actions',[])
+    dep=[a for a in acts if a.get('dependsOn')]
+    if dep: print(dep[0]['actionId'])
+except: pass
+" 2>/dev/null || true)
+
+    if [[ -n "$S18_DEP_ACTION_ID" ]]; then
+      # Try to execute dependent action before its dependency → must get 409
+      S18_DEPBLOCK=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/ai/execute" \
+        -H "Authorization: Bearer $TOKEN" \
+        -H "Content-Type: application/json" \
+        -d "{\"planId\":\"$S18_CHAIN_PLAN_ID\",\"actionId\":\"$S18_DEP_ACTION_ID\"}")
+      check "POST /ai/execute dependent step before parent → 409" "409" "$S18_DEPBLOCK"
+    else
+      green "POST /ai/plan (chain) → AI did not produce dependsOn (single-action plan), skipping chain block test"
+      ((++PASS))
+    fi
+  else
+    red "POST /ai/plan (chain) → unexpected (response: ${S18_CHAIN_RESP:0:300})"
+    ((++FAIL))
+  fi
+
+  # 18.12 Cross-workspace isolation — execute plan from ws1 using token of ws2
+  if [[ -n "$S18_PLAN_ID" && -n "$TOKEN2" ]]; then
+    S18_XWSEXEC=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/ai/execute" \
+      -H "Authorization: Bearer $TOKEN2" \
+      -H "Content-Type: application/json" \
+      -d "{\"planId\":\"$S18_PLAN_ID\",\"actionId\":\"$S18_ACTION_ID\"}")
+    check "POST /ai/execute cross-workspace plan → 403" "403" "$S18_XWSEXEC"
+  fi
+fi
+
 # ─── Summary ─────────────────────────────────────────────────────────────────
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
