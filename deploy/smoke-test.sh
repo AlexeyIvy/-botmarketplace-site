@@ -1155,9 +1155,9 @@ else
     -d "{\"message\":$(echo "$S18_PLAN_MSG" | python3 -c 'import sys,json; print(json.dumps(sys.stdin.read().strip()))')}")
 
   S18_PLAN_ID=$(echo "$S18_PLAN_RESP" | grep -o '"planId":"[^"]*"' | head -1 | cut -d'"' -f4)
-  S18_PLAN_HTTP=$(echo "$S18_PLAN_RESP" | grep -o '"actions":\[' | head -1)
+  S18_PLAN_HAS_ACTIONS=$(echo "$S18_PLAN_RESP" | grep -o '"actionId"' | head -1)
 
-  if [[ -n "$S18_PLAN_ID" && -n "$S18_PLAN_HTTP" ]]; then
+  if [[ -n "$S18_PLAN_ID" && -n "$S18_PLAN_HAS_ACTIONS" ]]; then
     green "POST /ai/plan → planId=$S18_PLAN_ID actions[] present"
     ((++PASS))
   else
