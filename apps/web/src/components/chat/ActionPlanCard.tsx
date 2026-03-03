@@ -289,6 +289,13 @@ function ActionItemRow({ item, planId, state, depsExecuted, onExecuting, onExecu
         )}
       </div>
 
+      {/* HIGH danger warning */}
+      {item.dangerLevel === "HIGH" && state.status === "pending" && (
+        <div style={{ fontSize: "11px", color: "#f85149", background: "rgba(248,81,73,0.08)", borderRadius: "4px", padding: "4px 8px" }}>
+          ⚠ High-risk action — this will stop an active run. Confirm carefully.
+        </div>
+      )}
+
       {/* Action buttons */}
       <div style={btnRow}>
         <button

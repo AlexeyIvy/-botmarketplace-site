@@ -17,6 +17,8 @@ import {
   ActionNotFoundError,
 } from "../lib/actions/strategies.js";
 import { runBacktestAction } from "../lib/actions/lab.js";
+import { createBot } from "../lib/actions/bots.js";
+import { startRun, stopRun } from "../lib/actions/runs.js";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -367,8 +369,11 @@ export async function aiRoutes(app: FastifyInstance) {
       }
 
       // 5. Check only allowlisted types (belt-and-suspenders)
-      const STAGE_18B_TYPES = new Set(["CREATE_STRATEGY", "VALIDATE_DSL", "CREATE_STRATEGY_VERSION", "RUN_BACKTEST"]);
-      if (!STAGE_18B_TYPES.has(action.type)) {
+      const ALLOWED_ACTION_TYPES = new Set([
+        "CREATE_STRATEGY", "VALIDATE_DSL", "CREATE_STRATEGY_VERSION", "RUN_BACKTEST",
+        "CREATE_BOT", "START_RUN", "STOP_RUN",
+      ]);
+      if (!ALLOWED_ACTION_TYPES.has(action.type)) {
         return problem(reply, 400, "Bad Request", `Action type "${action.type}" is not supported in this version`);
       }
 
@@ -399,6 +404,16 @@ export async function aiRoutes(app: FastifyInstance) {
 
       // 8. Resolve __FROM:{actionId}:{field}__ placeholders in stored input
       const resolvedInput = await resolvePlaceholders(action.input, planId);
+
+      // 8b. Secret-key scanner — belt-and-suspenders against prompt injection
+      const leakedKey = findSecretKey(resolvedInput);
+      if (leakedKey) {
+        request.log.warn(
+          { planId, actionId, actionType: action.type, workspaceId: workspace.id, leakedKey },
+          "ai.execute.secret_key_detected",
+        );
+        return problem(reply, 400, "Bad Request", `Action input contains disallowed key: "${leakedKey}"`);
+      }
 
       // 9. Create PROPOSED audit record (or reuse existing PROPOSED one)
       const auditRecord = existingAudit ?? await prisma.aiActionAudit.create({
@@ -469,6 +484,15 @@ export async function aiRoutes(app: FastifyInstance) {
 
 const PLACEHOLDER_RE = /^__FROM:([0-9a-f-]+):([a-zA-Z_]+)__$/;
 
+/** Return the first key that looks like a secret, or null if clean. */
+const SECRET_KEY_RE = /api.?key|secret|password|token|encrypted/i;
+function findSecretKey(input: Record<string, unknown>): string | null {
+  for (const key of Object.keys(input)) {
+    if (SECRET_KEY_RE.test(key)) return key;
+  }
+  return null;
+}
+
 /**
  * Replace __FROM:{actionId}:{field}__ placeholders in the action input
  * by looking up the result of the dependency's AiActionAudit record.
@@ -510,6 +534,12 @@ async function dispatchAction(
       return createStrategyVersion(workspaceId, input) as unknown as Record<string, unknown>;
     case "RUN_BACKTEST":
       return runBacktestAction(workspaceId, input) as unknown as Record<string, unknown>;
+    case "CREATE_BOT":
+      return createBot(workspaceId, input) as unknown as Record<string, unknown>;
+    case "START_RUN":
+      return startRun(workspaceId, input) as unknown as Record<string, unknown>;
+    case "STOP_RUN":
+      return stopRun(workspaceId, input) as unknown as Record<string, unknown>;
     default:
       throw new ActionValidationError(`Unsupported action type: ${type}`);
   }
