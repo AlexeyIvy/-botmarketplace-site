@@ -121,6 +121,57 @@ class AnthropicProvider implements AIProvider {
 }
 
 // ---------------------------------------------------------------------------
+// Groq provider (OpenAI-compatible API)
+// ---------------------------------------------------------------------------
+
+class GroqProvider implements AIProvider {
+  private readonly apiKey: string;
+  private readonly model: string;
+
+  constructor(apiKey: string, model: string) {
+    this.apiKey = apiKey;
+    this.model = model;
+  }
+
+  async chat(
+    messages: ChatMessage[],
+    system: string,
+    options?: AIChatOptions,
+  ): Promise<string> {
+    const body: Record<string, unknown> = {
+      model: this.model,
+      messages: [{ role: "system", content: system }, ...messages],
+      max_tokens: options?.maxTokens ?? 1024,
+      stream: false,
+    };
+    if (options?.jsonMode) {
+      body.response_format = { type: "json_object" };
+    }
+
+    const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${this.apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+      signal: AbortSignal.timeout(30_000),
+    });
+
+    if (!res.ok) {
+      throw new ProviderError(res.status, `Groq error: ${res.status} ${res.statusText}`);
+    }
+
+    const json = (await res.json()) as {
+      choices?: Array<{ message?: { content?: string } }>;
+    };
+    const text = json.choices?.[0]?.message?.content;
+    if (!text) throw new ProviderError(502, "Groq returned empty response");
+    return text;
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Error type
 // ---------------------------------------------------------------------------
 
@@ -141,6 +192,7 @@ export class ProviderError extends Error {
 const DEFAULT_MODELS: Record<string, string> = {
   openai: "gpt-4o-mini",
   anthropic: "claude-haiku-4-5-20251001",
+  groq: "llama-3.3-70b-versatile",
 };
 
 export function createProvider(): AIProvider {
@@ -150,6 +202,9 @@ export function createProvider(): AIProvider {
 
   if (providerName === "anthropic") {
     return new AnthropicProvider(apiKey, model);
+  }
+  if (providerName === "groq") {
+    return new GroqProvider(apiKey, model);
   }
   return new OpenAIProvider(apiKey, model);
 }
