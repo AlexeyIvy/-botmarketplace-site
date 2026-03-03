@@ -19,7 +19,7 @@
 - `docs/18-foundation-v1-plan.md`
 - `docs/19-cloudcode-control-loop.md`
 
-## Stage 1 — Platform bootstrap (in progress)
+## Stage 1 — Platform bootstrap (done)
 
 Цель:
 - поднять минимальный технический каркас проекта:
