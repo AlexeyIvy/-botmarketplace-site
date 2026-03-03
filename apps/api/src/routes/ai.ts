@@ -1,8 +1,12 @@
 import type { FastifyInstance } from "fastify";
+import { prisma } from "../lib/prisma.js";
 import { problem } from "../lib/problem.js";
 import { resolveWorkspace } from "../lib/workspace.js";
 import { buildContext, serializeContext } from "../lib/ai/context.js";
 import { buildSystemPrompt } from "../lib/ai/prompt.js";
+import { buildPlanContext, serializePlanContext } from "../lib/ai/planContext.js";
+import { buildPlanSystemPrompt } from "../lib/ai/planPrompt.js";
+import { parsePlanResponse, buildActionPlan } from "../lib/ai/planParser.js";
 import { createProvider, getConfiguredModel, ProviderError } from "../lib/ai/provider.js";
 
 // ---------------------------------------------------------------------------
@@ -16,6 +20,11 @@ interface ChatMessage {
 
 interface ChatBody {
   messages: ChatMessage[];
+  contextMode?: "auto" | "none";
+}
+
+interface PlanBody {
+  message: string;
   contextMode?: "auto" | "none";
 }
 
@@ -183,6 +192,119 @@ export async function aiRoutes(app: FastifyInstance) {
       );
 
       return reply.send({ reply: reply_text, requestId: request.id });
+    },
+  );
+
+  // ── POST /ai/plan ─────────────────────────────────────────────────────────
+  // Stage 18a: generate a structured action plan from a user message.
+  // Returns ActionPlan JSON. Execution is handled by /ai/execute (Stage 18b).
+  app.post<{ Body: PlanBody }>(
+    "/ai/plan",
+    {
+      config: { rateLimit: { max: 20, timeWindow: "1 minute" } },
+      onRequest: [app.authenticate],
+    },
+    async (request, reply) => {
+      const startTime = Date.now();
+
+      if (!process.env.AI_API_KEY) {
+        return problem(reply, 503, "Service Unavailable", "AI not configured");
+      }
+
+      const workspace = await resolveWorkspace(request, reply);
+      if (!workspace) return;
+
+      const { message, contextMode = "auto" } = request.body ?? {};
+
+      if (typeof message !== "string" || message.trim().length === 0) {
+        return problem(reply, 400, "Bad Request", "message is required and must not be empty");
+      }
+      if (message.length > 2000) {
+        return problem(reply, 400, "Bad Request", "message exceeds 2000 character limit");
+      }
+
+      const userId = (request.user as { sub?: string })?.sub ?? "unknown";
+
+      // Build plan-mode context (includes resource IDs)
+      const ctx = contextMode === "auto" ? await buildPlanContext(workspace.id) : null;
+      const contextBlock = serializePlanContext(ctx);
+      const systemPrompt = buildPlanSystemPrompt(contextBlock);
+
+      // Call provider in JSON mode
+      const provider = createProvider();
+      let rawPlan: string;
+
+      try {
+        rawPlan = await provider.chat(
+          [{ role: "user", content: message }],
+          systemPrompt,
+          { maxTokens: 2048, jsonMode: true },
+        );
+      } catch (err) {
+        const latencyMs = Date.now() - startTime;
+
+        if (err instanceof ProviderError) {
+          request.log.warn(
+            { reqId: request.id, workspaceId: workspace.id, userId, latencyMs, providerStatus: err.providerStatus },
+            "ai.plan.provider_error",
+          );
+          const mapped = providerStatusToHttp(err.providerStatus);
+          return problem(reply, mapped.status, mapped.title, mapped.detail);
+        }
+
+        const isTimeout =
+          err instanceof Error &&
+          (err.name === "TimeoutError" || err.name === "AbortError" || err.message.includes("timed out"));
+
+        if (isTimeout) {
+          return problem(reply, 504, "Gateway Timeout", "AI request timed out");
+        }
+
+        request.log.error({ err, reqId: request.id, workspaceId: workspace.id, userId, latencyMs }, "ai.plan.unexpected_error");
+        return problem(reply, 502, "Bad Gateway", "AI provider error");
+      }
+
+      // Parse and validate the plan
+      const parseResult = parsePlanResponse(rawPlan);
+      if (!parseResult.ok) {
+        request.log.warn(
+          { reqId: request.id, workspaceId: workspace.id, userId, reason: parseResult.reason },
+          "ai.plan.parse_error",
+        );
+        return problem(reply, 502, "Bad Gateway", `AI returned invalid plan: ${parseResult.reason}`);
+      }
+
+      // Persist to DB — planId comes from the DB record
+      const expiresAt = new Date(Date.now() + 30 * 60 * 1000);
+      const planRecord = await prisma.aiPlan.create({
+        data: {
+          workspaceId: workspace.id,
+          userId,
+          expiresAt,
+          planJson: {
+            actions: parseResult.actions,
+            note: parseResult.note ?? null,
+          } as object,
+          requestId: request.id,
+        },
+      });
+
+      const plan = buildActionPlan(planRecord.id, parseResult.actions, parseResult.note);
+
+      const latencyMs = Date.now() - startTime;
+      request.log.info(
+        {
+          reqId: request.id,
+          workspaceId: workspace.id,
+          userId,
+          planId: planRecord.id,
+          actionCount: parseResult.actions.length,
+          latencyMs,
+        },
+        "ai.plan.complete",
+      );
+
+      return reply.send(plan);
     },
   );
 }
