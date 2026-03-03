@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { apiFetch } from "@/lib/api";
 
 // ---------------------------------------------------------------------------
 // Types (mirrored from backend planParser.ts — no shared package in this repo)
@@ -26,6 +27,14 @@ export interface ActionPlan {
   expiresAt: string;
   actions: ActionItem[];
   note?: string;
+}
+
+interface ExecuteResponse {
+  actionId: string;
+  type: string;
+  status: string;
+  result: Record<string, unknown>;
+  executedAt: string;
 }
 
 // ---------------------------------------------------------------------------
@@ -104,6 +113,12 @@ const confirmBtnStyle: React.CSSProperties = {
   cursor: "pointer",
 };
 
+const confirmBtnDisabledStyle: React.CSSProperties = {
+  ...confirmBtnStyle,
+  opacity: 0.4,
+  cursor: "not-allowed",
+};
+
 const cancelBtnStyle: React.CSSProperties = {
   background: "transparent",
   color: "var(--text-secondary)",
@@ -138,39 +153,53 @@ const jsonPreStyle: React.CSSProperties = {
   overflowY: "auto",
 };
 
-const toastStyle: React.CSSProperties = {
-  fontSize: "12px",
-  color: "#e3b341",
-  padding: "4px 0 0 0",
-};
+// ---------------------------------------------------------------------------
+// Per-action execution state (managed at card level for cross-action dep checks)
+// ---------------------------------------------------------------------------
+
+type ActionStatus = "pending" | "executing" | "executed" | "failed" | "cancelled";
+
+interface ActionState {
+  status: ActionStatus;
+  result?: Record<string, unknown>;
+  error?: string;
+}
 
 // ---------------------------------------------------------------------------
 // Single action row
 // ---------------------------------------------------------------------------
 
-type ActionStatus = "pending" | "cancelled" | "confirmed_stub";
-
 interface ActionItemRowProps {
   item: ActionItem;
+  planId: string;
+  state: ActionState;
+  depsExecuted: boolean;
+  onExecuting: (actionId: string) => void;
+  onExecuted: (actionId: string, result: Record<string, unknown>) => void;
+  onFailed: (actionId: string, error: string) => void;
+  onCancelled: (actionId: string) => void;
 }
 
-function ActionItemRow({ item }: ActionItemRowProps) {
-  const [status, setStatus] = useState<ActionStatus>("pending");
+function ActionItemRow({ item, planId, state, depsExecuted, onExecuting, onExecuted, onFailed, onCancelled }: ActionItemRowProps) {
   const [showJson, setShowJson] = useState(false);
-  const [toast, setToast] = useState<string | null>(null);
 
-  function handleConfirm() {
-    // Stage 18a: execution not yet implemented — show stub message
-    setToast("✓ Noted — execution coming in Stage 18b");
-    setStatus("confirmed_stub");
-    setTimeout(() => setToast(null), 4000);
+  async function handleConfirm() {
+    if (state.status !== "pending") return;
+    onExecuting(item.actionId);
+
+    const res = await apiFetch<ExecuteResponse>("/ai/execute", {
+      method: "POST",
+      body: JSON.stringify({ planId, actionId: item.actionId }),
+    });
+
+    if (res.ok) {
+      onExecuted(item.actionId, res.data.result);
+    } else {
+      onFailed(item.actionId, res.problem.detail ?? "Execution failed");
+    }
   }
 
-  function handleCancel() {
-    setStatus("cancelled");
-  }
-
-  if (status === "cancelled") {
+  if (state.status === "cancelled") {
     return (
       <div style={{ ...actionRowStyle, opacity: 0.45 }}>
         <div style={{ display: "flex", gap: "6px", alignItems: "center" }}>
@@ -181,6 +210,42 @@ function ActionItemRow({ item }: ActionItemRowProps) {
       </div>
     );
   }
+
+  if (state.status === "executed") {
+    return (
+      <div style={actionRowStyle}>
+        <div style={{ display: "flex", gap: "6px", alignItems: "center", flexWrap: "wrap" }}>
+          <span style={typeBadgeStyle}>{item.type}</span>
+          <span style={{ color: "var(--text-primary)", fontWeight: 500 }}>{item.title}</span>
+          <span style={{ fontSize: "11px", color: "#3fb950", fontWeight: 600 }}>✓ Done</span>
+        </div>
+        {state.result && Object.keys(state.result).length > 0 && (
+          <pre style={{ ...jsonPreStyle, borderLeft: "2px solid #3fb950" }}>
+            {JSON.stringify(state.result, null, 2)}
+          </pre>
+        )}
+      </div>
+    );
+  }
+
+  if (state.status === "failed") {
+    return (
+      <div style={{ ...actionRowStyle, borderLeft: "2px solid #f85149" }}>
+        <div style={{ display: "flex", gap: "6px", alignItems: "center", flexWrap: "wrap" }}>
+          <span style={typeBadgeStyle}>{item.type}</span>
+          <span style={{ color: "var(--text-primary)", fontWeight: 500 }}>{item.title}</span>
+          <span style={{ fontSize: "11px", color: "#f85149", fontWeight: 600 }}>✗ Failed</span>
+        </div>
+        {state.error && (
+          <div style={{ fontSize: "12px", color: "#f85149" }}>{state.error}</div>
+        )}
+      </div>
+    );
+  }
+
+  const isExecuting = state.status === "executing";
+  const canConfirm = depsExecuted && !isExecuting;
+  const blockReason = !depsExecuted ? "Complete previous steps first" : null;
 
   return (
     <div style={actionRowStyle}>
@@ -205,6 +270,13 @@ function ActionItemRow({ item }: ActionItemRowProps) {
         </div>
       )}
 
+      {/* Dependency block hint */}
+      {blockReason && (
+        <div style={{ fontSize: "11px", color: "var(--text-secondary)", fontStyle: "italic" }}>
+          🔒 {blockReason}
+        </div>
+      )}
+
       {/* JSON toggle */}
       <div>
         <button style={jsonToggleStyle} onClick={() => setShowJson((v) => !v)}>
@@ -218,22 +290,20 @@ function ActionItemRow({ item }: ActionItemRowProps) {
       </div>
 
       {/* Action buttons */}
-      {status === "confirmed_stub" ? (
-        <div style={toastStyle}>✓ Noted — execution coming in Stage 18b</div>
-      ) : (
-        <div style={btnRow}>
-          <button style={confirmBtnStyle} onClick={handleConfirm}>
-            Confirm
-          </button>
-          <button style={cancelBtnStyle} onClick={handleCancel}>
+      <div style={btnRow}>
+        <button
+          style={canConfirm ? confirmBtnStyle : confirmBtnDisabledStyle}
+          onClick={canConfirm ? handleConfirm : undefined}
+          disabled={!canConfirm}
+        >
+          {isExecuting ? "Running…" : "Confirm"}
+        </button>
+        {!isExecuting && (
+          <button style={cancelBtnStyle} onClick={() => onCancelled(item.actionId)}>
             Cancel
           </button>
-        </div>
-      )}
-
-      {toast && status !== "confirmed_stub" && (
-        <div style={toastStyle}>{toast}</div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
@@ -247,6 +317,27 @@ interface ActionPlanCardProps {
 }
 
 export function ActionPlanCard({ plan }: ActionPlanCardProps) {
+  // Track per-action state at card level to enforce dependency ordering
+  const [actionStates, setActionStates] = useState<Record<string, ActionState>>(() => {
+    const init: Record<string, ActionState> = {};
+    for (const a of plan.actions) init[a.actionId] = { status: "pending" };
+    return init;
+  });
+
+  function setActionState(actionId: string, update: Partial<ActionState>) {
+    setActionStates((prev) => ({
+      ...prev,
+      [actionId]: { ...prev[actionId], ...update },
+    }));
+  }
+
+  function areDepsExecuted(item: ActionItem): boolean {
+    if (!item.dependsOn || item.dependsOn.length === 0) return true;
+    return item.dependsOn.every(
+      (depId) => actionStates[depId]?.status === "executed",
+    );
+  }
+
   return (
     <div style={cardStyle}>
       <div style={cardHeaderStyle}>
@@ -273,7 +364,17 @@ export function ActionPlanCard({ plan }: ActionPlanCardProps) {
       )}
 
       {plan.actions.map((item) => (
-        <ActionItemRow key={item.actionId} item={item} />
+        <ActionItemRow
+          key={item.actionId}
+          item={item}
+          planId={plan.planId}
+          state={actionStates[item.actionId] ?? { status: "pending" }}
+          depsExecuted={areDepsExecuted(item)}
+          onExecuting={(id) => setActionState(id, { status: "executing" })}
+          onExecuted={(id, result) => setActionState(id, { status: "executed", result })}
+          onFailed={(id, error) => setActionState(id, { status: "failed", error })}
+          onCancelled={(id) => setActionState(id, { status: "cancelled" })}
+        />
       ))}
 
       <div style={{ padding: "6px 12px", fontSize: "11px", color: "var(--text-secondary)", borderTop: plan.actions.length > 0 ? "1px solid var(--border)" : "none" }}>

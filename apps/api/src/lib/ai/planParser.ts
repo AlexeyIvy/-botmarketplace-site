@@ -111,7 +111,12 @@ export function parsePlanResponse(raw: string): ParseResult | ParseError {
     return { ok: false, reason: 'Missing "actions" array in plan response' };
   }
 
-  const validated: ActionItem[] = [];
+  // ---------------------------------------------------------------------------
+  // Pass 1 — assign server UUIDs and build AI id → server UUID map
+  // ---------------------------------------------------------------------------
+  const aiToServer = new Map<string, string>();
+  const serverToType = new Map<string, string>();
+  const rawItems: Array<{ item: Record<string, unknown>; serverUuid: string }> = [];
 
   for (let i = 0; i < obj.actions.length; i++) {
     const raw = obj.actions[i];
@@ -119,6 +124,20 @@ export function parsePlanResponse(raw: string): ParseResult | ParseError {
       return { ok: false, reason: `actions[${i}] is not an object` };
     }
     const item = raw as Record<string, unknown>;
+    const serverUuid = randomUUID();
+    const aiId = typeof item.actionId === "string" ? item.actionId : `__pos_${i}__`;
+    aiToServer.set(aiId, serverUuid);
+    if (typeof item.type === "string") serverToType.set(serverUuid, item.type);
+    rawItems.push({ item, serverUuid });
+  }
+
+  // ---------------------------------------------------------------------------
+  // Pass 2 — validate and build ActionItems
+  // ---------------------------------------------------------------------------
+  const validated: ActionItem[] = [];
+
+  for (let i = 0; i < rawItems.length; i++) {
+    const { item, serverUuid } = rawItems[i];
 
     // Validate type
     if (typeof item.type !== "string" || !ALLOWED_TYPES.has(item.type)) {
@@ -131,22 +150,46 @@ export function parsePlanResponse(raw: string): ParseResult | ParseError {
       return { ok: false, reason: `actions[${i}].dangerLevel "${dangerLevel}" is invalid` };
     }
 
-    // Validate input
-    const input = (item.input && typeof item.input === "object") ? item.input as Record<string, unknown> : {};
+    // Resolve dependsOn: map AI-provided IDs to server UUIDs
+    const rawDeps = Array.isArray(item.dependsOn) ? item.dependsOn : [];
+    const dependsOn: string[] = rawDeps
+      .filter((d): d is string => typeof d === "string")
+      .map((d) => aiToServer.get(d) ?? d)
+      .filter((d) => serverToType.has(d)); // only keep IDs that actually exist in this plan
+
+    // Build input; inject dependency placeholder for CREATE_STRATEGY_VERSION → CREATE_STRATEGY
+    let input: Record<string, unknown> =
+      item.input && typeof item.input === "object" ? { ...(item.input as Record<string, unknown>) } : {};
+
+    if (item.type === "CREATE_STRATEGY_VERSION" && dependsOn.length > 0) {
+      // If strategyId is missing, empty, or looks like an AI-invented id (not a UUID from context),
+      // and we depend on a CREATE_STRATEGY action — inject a FROM placeholder so the execute handler
+      // can resolve it dynamically from the dependency's result.
+      const createStrategyDepId = dependsOn.find(
+        (d) => serverToType.get(d) === "CREATE_STRATEGY",
+      );
+      if (createStrategyDepId) {
+        const strategyId = input.strategyId;
+        const looksLikeContextUuid =
+          typeof strategyId === "string" &&
+          /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(strategyId);
+        if (!looksLikeContextUuid) {
+          input = { ...input, strategyId: `__FROM:${createStrategyDepId}:strategyId__` };
+        }
+      }
+    }
+
     if (containsSecretKeys(input)) {
       return { ok: false, reason: `actions[${i}] input contains secret-like keys — rejected` };
     }
 
-    // Assign server-side actionId (ignore any AI-provided one for security)
-    const actionId = randomUUID();
-
     validated.push({
-      actionId,
+      actionId: serverUuid,
       type: item.type as ActionType,
       title: typeof item.title === "string" ? item.title.slice(0, 80) : item.type,
       dangerLevel: dangerLevel as DangerLevel,
       requiresConfirmation: true,
-      dependsOn: [],   // dependsOn is resolved in Stage 18c; empty for 18a
+      dependsOn,
       input,
       preconditions: Array.isArray(item.preconditions)
         ? (item.preconditions as unknown[]).filter((p): p is string => typeof p === "string")
