@@ -803,8 +803,10 @@ if [[ -n "$S12_STRAT_ID" ]]; then
     -H "Content-Type: application/json" \
     -H "X-Workspace-Id: $WS_ID" \
     -d '{"exchange":"bybit","symbol":"BTCUSDT","interval":"M15","fromTsMs":1704067200000,"toTsMs":1706745600000}')
-  S12_DATASET_ID=$(echo "$S12_DATASET" | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4) || true
+  S12_DATASET_ID=$(echo "$S12_DATASET" | grep -o '"datasetId":"[^"]*"' | head -1 | cut -d'"' -f4) || true
 fi
+
+S12_BT_ID=""
 
 # 12.1 POST /lab/backtest (dataset-first) → 202 PENDING
 if [[ -n "$S12_STRAT_ID" && -n "$S12_DATASET_ID" ]]; then
@@ -1529,7 +1531,7 @@ S20_DS_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/l
   -d '{"exchange":"bybit","symbol":"BTCUSDT","interval":"M15","fromTsMs":1704067200000,"toTsMs":1706745600000}')
 check "20.1 POST /lab/datasets → 201" "201" "$S20_DS_CODE"
 
-S20_DS_ID=$(echo "$S20_DS" | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4) || true
+S20_DS_ID=$(echo "$S20_DS" | grep -o '"datasetId":"[^"]*"' | head -1 | cut -d'"' -f4) || true
 S20_DS_HASH=$(echo "$S20_DS" | grep -o '"datasetHash":"[^"]*"' | head -1 | cut -d'"' -f4) || true
 if [[ -n "$S20_DS_ID" && -n "$S20_DS_HASH" ]]; then
   green "20.1 datasetId and datasetHash present in response"
@@ -1546,7 +1548,7 @@ if [[ -n "$S20_DS_ID" ]]; then
     -H "Content-Type: application/json" \
     -H "X-Workspace-Id: $WS_ID" \
     -d '{"exchange":"bybit","symbol":"BTCUSDT","interval":"M15","fromTsMs":1704067200000,"toTsMs":1706745600000}')
-  S20_DS2_ID=$(echo "$S20_DS2" | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4) || true
+  S20_DS2_ID=$(echo "$S20_DS2" | grep -o '"datasetId":"[^"]*"' | head -1 | cut -d'"' -f4) || true
   S20_DS2_HASH=$(echo "$S20_DS2" | grep -o '"datasetHash":"[^"]*"' | head -1 | cut -d'"' -f4) || true
   if [[ "$S20_DS2_ID" == "$S20_DS_ID" && "$S20_DS2_HASH" == "$S20_DS_HASH" ]]; then
     green "20.2 Repeat POST → upsert: same datasetId and hash"
@@ -1571,7 +1573,7 @@ if [[ -n "$S20_DS_ID" ]]; then
   check "20.3 GET /lab/datasets/:id → 200" "200" "$S20_GET_CODE"
   # Check all 7 qualityJson fields
   S20_QUAL_OK=true
-  for field in gapsCount maxGapMs dupeAttempts sanityIssuesCount firstOpenTimeMs lastOpenTimeMs expectedCandles; do
+  for field in intervalMs candleCount dupeAttempts gapsCount maxGapMs sanityIssuesCount sanityDetails; do
     if ! echo "$S20_GET" | grep -q "\"$field\""; then
       S20_QUAL_OK=false
       red "20.3 qualityJson missing field: $field"
@@ -1645,6 +1647,124 @@ if [[ -n "$S20_BT_ID" ]]; then
   fi
 else
   red "20.7 Skipping BacktestResult fields test (no backtest from 20.6)"
+  ((++FAIL))
+fi
+
+# ─── 21. Stage 19c — Fees/Slippage + Retention ───────────────────────────────
+header "21. Stage 19c — Fees/Slippage + Retention"
+
+# 21.1 Fees effect: pnl with fees <= pnl without fees (deterministic)
+S21_BT_NO_FEE_ID=""
+S21_BT_WITH_FEE_ID=""
+if [[ -n "$S12_STRAT_ID" && -n "$S20_DS_ID" ]]; then
+  # Backtest A: no fees
+  S21_BT_A=$(curl -s -X POST "$BASE_URL/api/v1/lab/backtest" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "Content-Type: application/json" \
+    -H "X-Workspace-Id: $WS_ID" \
+    -d "{\"strategyId\":\"$S12_STRAT_ID\",\"datasetId\":\"$S20_DS_ID\",\"feeBps\":0,\"slippageBps\":0,\"fillAt\":\"CLOSE\"}")
+  S21_CODE_A=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/lab/backtest" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "Content-Type: application/json" \
+    -H "X-Workspace-Id: $WS_ID" \
+    -d "{\"strategyId\":\"$S12_STRAT_ID\",\"datasetId\":\"$S20_DS_ID\",\"feeBps\":0,\"slippageBps\":0,\"fillAt\":\"CLOSE\"}")
+  check "21.1 POST /lab/backtest feeBps=0 → 202" "202" "$S21_CODE_A"
+  S21_BT_NO_FEE_ID=$(echo "$S21_BT_A" | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4) || true
+
+  # Backtest B: with fees + slippage
+  S21_BT_B=$(curl -s -X POST "$BASE_URL/api/v1/lab/backtest" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "Content-Type: application/json" \
+    -H "X-Workspace-Id: $WS_ID" \
+    -d "{\"strategyId\":\"$S12_STRAT_ID\",\"datasetId\":\"$S20_DS_ID\",\"feeBps\":100,\"slippageBps\":50,\"fillAt\":\"CLOSE\"}")
+  S21_CODE_B=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/lab/backtest" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "Content-Type: application/json" \
+    -H "X-Workspace-Id: $WS_ID" \
+    -d "{\"strategyId\":\"$S12_STRAT_ID\",\"datasetId\":\"$S20_DS_ID\",\"feeBps\":100,\"slippageBps\":50,\"fillAt\":\"CLOSE\"}")
+  check "21.1 POST /lab/backtest feeBps=100 → 202" "202" "$S21_CODE_B"
+  S21_BT_WITH_FEE_ID=$(echo "$S21_BT_B" | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4) || true
+else
+  red "21.1 Skipping fee-effect test (no strategyId or datasetId)"
+  ((++FAIL)); ((++FAIL))
+fi
+
+# Poll both backtests to DONE (up to 60s)
+S21_PNL_NO_FEE=""
+S21_PNL_WITH_FEE=""
+if [[ -n "$S21_BT_NO_FEE_ID" ]]; then
+  for _i in $(seq 1 30); do
+    S21_GET_A=$(curl -s "$BASE_URL/api/v1/lab/backtest/$S21_BT_NO_FEE_ID" \
+      -H "Authorization: Bearer $TOKEN" -H "X-Workspace-Id: $WS_ID")
+    S21_STATUS_A=$(echo "$S21_GET_A" | grep -o '"status":"[^"]*"' | head -1 | cut -d'"' -f4) || true
+    if [[ "$S21_STATUS_A" == "DONE" ]]; then
+      S21_PNL_NO_FEE=$(echo "$S21_GET_A" | grep -o '"totalPnlPct":[^,}]*' | head -1 | cut -d: -f2) || true
+      break
+    elif [[ "$S21_STATUS_A" == "FAILED" ]]; then
+      break
+    fi
+    sleep 2
+  done
+  if [[ -z "$S21_PNL_NO_FEE" ]]; then
+    red "21.1 Backtest A (feeBps=0) did not reach DONE in 60s (status=$S21_STATUS_A)"
+    ((++FAIL))
+  else
+    green "21.1 Backtest A (feeBps=0) DONE — totalPnlPct=$S21_PNL_NO_FEE"
+    ((++PASS))
+  fi
+else
+  red "21.1 Skipping backtest A poll (no id)"
+  ((++FAIL))
+fi
+
+if [[ -n "$S21_BT_WITH_FEE_ID" ]]; then
+  for _i in $(seq 1 30); do
+    S21_GET_B=$(curl -s "$BASE_URL/api/v1/lab/backtest/$S21_BT_WITH_FEE_ID" \
+      -H "Authorization: Bearer $TOKEN" -H "X-Workspace-Id: $WS_ID")
+    S21_STATUS_B=$(echo "$S21_GET_B" | grep -o '"status":"[^"]*"' | head -1 | cut -d'"' -f4) || true
+    if [[ "$S21_STATUS_B" == "DONE" ]]; then
+      S21_PNL_WITH_FEE=$(echo "$S21_GET_B" | grep -o '"totalPnlPct":[^,}]*' | head -1 | cut -d: -f2) || true
+      break
+    elif [[ "$S21_STATUS_B" == "FAILED" ]]; then
+      break
+    fi
+    sleep 2
+  done
+  if [[ -z "$S21_PNL_WITH_FEE" ]]; then
+    red "21.1 Backtest B (feeBps=100) did not reach DONE in 60s (status=$S21_STATUS_B)"
+    ((++FAIL))
+  else
+    green "21.1 Backtest B (feeBps=100) DONE — totalPnlPct=$S21_PNL_WITH_FEE"
+    ((++PASS))
+  fi
+else
+  red "21.1 Skipping backtest B poll (no id)"
+  ((++FAIL))
+fi
+
+# Compare: pnl with fees must be <= pnl without fees
+if [[ -n "$S21_PNL_NO_FEE" && -n "$S21_PNL_WITH_FEE" ]]; then
+  # Use awk for floating point comparison
+  FEE_IMPACT_OK=$(awk -v a="$S21_PNL_WITH_FEE" -v b="$S21_PNL_NO_FEE" 'BEGIN { print (a <= b) ? "yes" : "no" }')
+  if [[ "$FEE_IMPACT_OK" == "yes" ]]; then
+    green "21.1 Fees effect: pnl_with_fees ($S21_PNL_WITH_FEE) <= pnl_no_fees ($S21_PNL_NO_FEE) ✓"
+    ((++PASS))
+  else
+    red "21.1 Fee impact wrong: pnl_with_fees ($S21_PNL_WITH_FEE) > pnl_no_fees ($S21_PNL_NO_FEE)"
+    ((++FAIL))
+  fi
+else
+  red "21.1 Cannot compare pnl (missing one or both results)"
+  ((++FAIL))
+fi
+
+# 21.2 Retention log line present in journalctl
+S21_RETENTION_LOG=$(journalctl -u botmarket-api --since "30 min ago" --no-pager -q 2>/dev/null || true)
+if echo "$S21_RETENTION_LOG" | grep -q "marketCandle retention complete"; then
+  green "21.2 marketCandle retention complete log found ✓"
+  ((++PASS))
+else
+  red "21.2 marketCandle retention log NOT found (journalctl -u botmarket-api | grep 'marketCandle retention complete')"
   ((++FAIL))
 fi
 

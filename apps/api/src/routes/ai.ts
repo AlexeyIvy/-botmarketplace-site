@@ -362,7 +362,7 @@ export async function aiRoutes(app: FastifyInstance) {
       }
 
       // 4. Find action in stored plan
-      const planJson = planRecord.planJson as { actions: ActionItem[]; note?: string };
+      const planJson = planRecord.planJson as unknown as { actions: ActionItem[]; note?: string };
       const action = planJson.actions?.find((a: ActionItem) => a.actionId === actionId);
       if (!action) {
         return problem(reply, 404, "Not Found", "Action not found in plan");

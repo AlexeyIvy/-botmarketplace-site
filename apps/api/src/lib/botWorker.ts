@@ -42,6 +42,11 @@ const POLL_INTERVAL_MS = 4_000;
 // Max time a run can stay in RUNNING state before auto-timeout (default: 4 hours)
 const MAX_RUN_DURATION_MS = parseInt(process.env.MAX_RUN_DURATION_MS ?? "", 10) || 4 * 60 * 60 * 1000;
 
+// Stage 19c: MarketCandle retention
+const RETENTION_DAYS = parseInt(process.env.MARKET_CANDLE_RETENTION_DAYS ?? "", 10) || 90;
+const RETENTION_INTERVAL_MS = 60 * 60 * 1000; // minimum gap between retention runs (1 hour)
+let lastRetentionRunMs = 0;
+
 async function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -464,6 +469,32 @@ async function processIntents() {
 }
 
 // ---------------------------------------------------------------------------
+// Stage 19c: MarketCandle retention job
+// ---------------------------------------------------------------------------
+
+/**
+ * Delete MarketCandle rows older than RETENTION_DAYS.
+ * Deletion is by candle open time (openTimeMs), not row creation time.
+ * MarketCandle is workspace-shared — no workspace filter needed.
+ * Errors are caught and logged; they must not crash the worker.
+ */
+async function runMarketCandleRetention(): Promise<void> {
+  lastRetentionRunMs = Date.now();
+  try {
+    const cutoffMs = Date.now() - RETENTION_DAYS * 24 * 60 * 60 * 1000;
+    const result = await prisma.marketCandle.deleteMany({
+      where: { openTimeMs: { lt: BigInt(cutoffMs) } },
+    });
+    workerLog.info(
+      { deleted: result.count, retentionDays: RETENTION_DAYS },
+      "marketCandle retention complete",
+    );
+  } catch (err) {
+    workerLog.error({ err }, "marketCandle retention error");
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Main polling loop
 // ---------------------------------------------------------------------------
 
@@ -499,6 +530,11 @@ async function poll() {
 
     // Process PENDING intents on RUNNING runs (Stage 11)
     await processIntents();
+
+    // Stage 19c: run retention at most once per hour
+    if (Date.now() - lastRetentionRunMs >= RETENTION_INTERVAL_MS) {
+      await runMarketCandleRetention();
+    }
   } catch (err) {
     workerLog.error({ err }, "poll error");
   }
@@ -508,7 +544,9 @@ async function poll() {
 export function startBotWorker(): () => void {
   workerLog.info({ workerId: WORKER_ID, interval: POLL_INTERVAL_MS }, "botWorker started");
   const timer = setInterval(poll, POLL_INTERVAL_MS);
-  // Run once immediately
+  // Run poll once immediately
   poll();
+  // Run retention once immediately so the log line appears without waiting an hour
+  runMarketCandleRetention();
   return () => clearInterval(timer);
 }

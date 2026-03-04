@@ -221,7 +221,7 @@ async function runBacktestAsync(
 
     // Map to backtest engine format
     const candles = dbCandles.map((c) => ({
-      time:   Number(c.openTimeMs),
+      openTime: Number(c.openTimeMs),
       open:   Number(c.open),
       high:   Number(c.high),
       low:    Number(c.low),
@@ -229,7 +229,12 @@ async function runBacktestAsync(
       volume: Number(c.volume),
     }));
 
-    const report = runBacktest(candles, riskPct);
+    // Stage 19c: pass fee/slippage params stored on the BacktestResult
+    const report = runBacktest(candles, riskPct, {
+      feeBps:      bt?.feeBps      ?? 0,
+      slippageBps: bt?.slippageBps ?? 0,
+      fillAt:      "CLOSE",
+    });
 
     await prisma.backtestResult.update({
       where: { id: btId },
