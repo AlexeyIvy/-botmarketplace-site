@@ -221,7 +221,7 @@ async function runBacktestAsync(
 
     // Map to backtest engine format
     const candles = dbCandles.map((c) => ({
-      time:   Number(c.openTimeMs),
+      openTime: Number(c.openTimeMs),
       open:   Number(c.open),
       high:   Number(c.high),
       low:    Number(c.low),

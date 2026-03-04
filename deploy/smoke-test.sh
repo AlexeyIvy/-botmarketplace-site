@@ -803,8 +803,10 @@ if [[ -n "$S12_STRAT_ID" ]]; then
     -H "Content-Type: application/json" \
     -H "X-Workspace-Id: $WS_ID" \
     -d '{"exchange":"bybit","symbol":"BTCUSDT","interval":"M15","fromTsMs":1704067200000,"toTsMs":1706745600000}')
-  S12_DATASET_ID=$(echo "$S12_DATASET" | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4) || true
+  S12_DATASET_ID=$(echo "$S12_DATASET" | grep -o '"datasetId":"[^"]*"' | head -1 | cut -d'"' -f4) || true
 fi
+
+S12_BT_ID=""
 
 # 12.1 POST /lab/backtest (dataset-first) → 202 PENDING
 if [[ -n "$S12_STRAT_ID" && -n "$S12_DATASET_ID" ]]; then
@@ -1529,7 +1531,7 @@ S20_DS_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/l
   -d '{"exchange":"bybit","symbol":"BTCUSDT","interval":"M15","fromTsMs":1704067200000,"toTsMs":1706745600000}')
 check "20.1 POST /lab/datasets → 201" "201" "$S20_DS_CODE"
 
-S20_DS_ID=$(echo "$S20_DS" | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4) || true
+S20_DS_ID=$(echo "$S20_DS" | grep -o '"datasetId":"[^"]*"' | head -1 | cut -d'"' -f4) || true
 S20_DS_HASH=$(echo "$S20_DS" | grep -o '"datasetHash":"[^"]*"' | head -1 | cut -d'"' -f4) || true
 if [[ -n "$S20_DS_ID" && -n "$S20_DS_HASH" ]]; then
   green "20.1 datasetId and datasetHash present in response"
@@ -1546,7 +1548,7 @@ if [[ -n "$S20_DS_ID" ]]; then
     -H "Content-Type: application/json" \
     -H "X-Workspace-Id: $WS_ID" \
     -d '{"exchange":"bybit","symbol":"BTCUSDT","interval":"M15","fromTsMs":1704067200000,"toTsMs":1706745600000}')
-  S20_DS2_ID=$(echo "$S20_DS2" | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4) || true
+  S20_DS2_ID=$(echo "$S20_DS2" | grep -o '"datasetId":"[^"]*"' | head -1 | cut -d'"' -f4) || true
   S20_DS2_HASH=$(echo "$S20_DS2" | grep -o '"datasetHash":"[^"]*"' | head -1 | cut -d'"' -f4) || true
   if [[ "$S20_DS2_ID" == "$S20_DS_ID" && "$S20_DS2_HASH" == "$S20_DS_HASH" ]]; then
     green "20.2 Repeat POST → upsert: same datasetId and hash"
@@ -1571,7 +1573,7 @@ if [[ -n "$S20_DS_ID" ]]; then
   check "20.3 GET /lab/datasets/:id → 200" "200" "$S20_GET_CODE"
   # Check all 7 qualityJson fields
   S20_QUAL_OK=true
-  for field in gapsCount maxGapMs dupeAttempts sanityIssuesCount firstOpenTimeMs lastOpenTimeMs expectedCandles; do
+  for field in intervalMs candleCount dupeAttempts gapsCount maxGapMs sanityIssuesCount sanityDetails; do
     if ! echo "$S20_GET" | grep -q "\"$field\""; then
       S20_QUAL_OK=false
       red "20.3 qualityJson missing field: $field"
