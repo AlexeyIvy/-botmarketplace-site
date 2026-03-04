@@ -1737,7 +1737,11 @@ components:
           nullable: true
           description: >
             Populated when status = DONE. Contains: trades (int), winrate (float),
-            pnl (float), maxDrawdown (float), tradeLog (array of TradeRecord).
+            totalPnlPct (float), maxDrawdownPct (float), candles (int),
+            tradeLog (array of TradeRecord).
+            Stage 19c: entry/exit prices in TradeRecord are *effective* (after
+            feeBps + slippageBps applied at entry, feeBps applied at exit).
+            totalPnlPct reflects real-cost economics when feeBps/slippageBps > 0.
           additionalProperties: true
         errorMessage: { type: string, nullable: true }
         createdAt: { type: string, format: date-time }
