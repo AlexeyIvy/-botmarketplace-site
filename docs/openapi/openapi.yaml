@@ -1685,28 +1685,37 @@ components:
     BacktestCreateRequest:
       type: object
       additionalProperties: false
-      required: [strategyId, fromTs, toTs]
+      required: [strategyId, datasetId]
+      description: >
+        Stage 19 dataset-first contract. datasetId is required; symbol/interval/range
+        are derived from the dataset. Legacy range-based fields (fromTs/toTs/symbol/interval)
+        are no longer accepted (spec §10.1).
       properties:
         strategyId:
           type: string
-          description: ID of the strategy to backtest (uses latest version)
-        symbol:
+          description: ID of the strategy to backtest (uses latest DSL version)
+        datasetId:
           type: string
-          example: BTCUSDT
-          description: Override symbol (default taken from strategy)
-        interval:
+          description: >
+            ID of a MarketDataset (POST /lab/datasets). Provides symbol, interval,
+            date range, and pre-fetched candles. Required.
+        feeBps:
+          type: integer
+          minimum: 0
+          maximum: 1000
+          default: 0
+          description: Fee in basis points (1 bps = 0.01%). Applied in Stage 19c.
+        slippageBps:
+          type: integer
+          minimum: 0
+          maximum: 1000
+          default: 0
+          description: Slippage in basis points. Applied in Stage 19c.
+        fillAt:
           type: string
-          enum: ["1", "5", "15", "30", "60", "240", "D"]
-          default: "15"
-          description: Candle interval for backtest data
-        fromTs:
-          type: string
-          format: date-time
-          description: Start of backtest window (inclusive)
-        toTs:
-          type: string
-          format: date-time
-          description: End of backtest window (exclusive); must be after fromTs
+          enum: ["CLOSE"]
+          default: "CLOSE"
+          description: Fill price reference. Stage 19 v2.2 fixes to CLOSE.
 
     BacktestView:
       type: object
@@ -1733,3 +1742,28 @@ components:
         errorMessage: { type: string, nullable: true }
         createdAt: { type: string, format: date-time }
         updatedAt: { type: string, format: date-time }
+        # Stage 19b reproducibility snapshot
+        datasetId:
+          type: string
+          nullable: true
+          description: MarketDataset ID used for this run. Null for legacy backtests.
+        datasetHash:
+          type: string
+          nullable: true
+          description: Deterministic SHA256 hash of the dataset candles at fetch time.
+        feeBps:
+          type: integer
+          default: 0
+          description: Fee in basis points recorded at submission time.
+        slippageBps:
+          type: integer
+          default: 0
+          description: Slippage in basis points recorded at submission time.
+        fillAt:
+          type: string
+          default: "CLOSE"
+          description: Fill price reference recorded at submission time.
+        engineVersion:
+          type: string
+          default: "unknown"
+          description: COMMIT_SHA of the API server at the time the backtest ran.

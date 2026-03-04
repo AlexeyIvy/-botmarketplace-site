@@ -15,6 +15,30 @@ interface Strategy {
   timeframe: string;
 }
 
+interface DatasetItem {
+  id: string;
+  exchange: string;
+  symbol: string;
+  interval: string;
+  fromTsMs: number;
+  toTsMs: number;
+  fetchedAt: string;
+  datasetHash: string;
+  candleCount: number;
+  qualityJson: QualityJson;
+  status: string;
+}
+
+interface QualityJson {
+  gapsCount: number;
+  maxGapMs: number;
+  dupeAttempts: number;
+  sanityIssuesCount: number;
+  firstOpenTimeMs: number;
+  lastOpenTimeMs: number;
+  expectedCandles: number;
+}
+
 interface TradeRecord {
   entryTime: number;
   exitTime: number;
@@ -47,14 +71,14 @@ interface BacktestItem {
   reportJson: BacktestReport | null;
   errorMessage: string | null;
   createdAt: string;
+  // Stage 19b reproducibility fields
+  datasetId: string | null;
+  datasetHash: string | null;
+  feeBps: number;
+  slippageBps: number;
+  fillAt: string;
+  engineVersion: string;
 }
-
-const INTERVALS = [
-  { value: "1",  label: "1m" },
-  { value: "5",  label: "5m" },
-  { value: "15", label: "15m" },
-  { value: "60", label: "1h" },
-];
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -79,21 +103,19 @@ function fmtTs(ts: number) {
   return new Date(ts).toLocaleDateString(undefined, { month: "short", day: "numeric" });
 }
 
+function shortHash(hash: string | null | undefined) {
+  return hash ? hash.slice(0, 10) : null;
+}
+
 // ---------------------------------------------------------------------------
 // Component
 // ---------------------------------------------------------------------------
 
 export default function LabPage() {
   const [strategies, setStrategies] = useState<Strategy[]>([]);
+  const [datasets, setDatasets] = useState<DatasetItem[]>([]);
   const [strategyId, setStrategyId] = useState("");
-  const [symbol, setSymbol] = useState("BTCUSDT");
-  const [candleInterval, setCandleInterval] = useState("15");
-  const [fromDate, setFromDate] = useState(() => {
-    const d = new Date();
-    d.setMonth(d.getMonth() - 1);
-    return d.toISOString().slice(0, 10);
-  });
-  const [toDate, setToDate] = useState(() => new Date().toISOString().slice(0, 10));
+  const [datasetId, setDatasetId] = useState("");
 
   const [running, setRunning] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -103,19 +125,19 @@ export default function LabPage() {
   const [history, setHistory] = useState<BacktestItem[]>([]);
   const [historyLoading, setHistoryLoading] = useState(false);
 
-  // Load strategies for dropdown
+  // Load strategies and datasets
   useEffect(() => {
     if (!getWorkspaceId()) return;
     apiFetch<Strategy[]>("/strategies").then((res) => {
       if (res.ok) setStrategies(res.data);
     });
+    apiFetch<DatasetItem[]>("/lab/datasets").then((res) => {
+      if (res.ok) setDatasets(res.data);
+    });
   }, []);
 
-  // When strategy selection changes, auto-fill symbol from strategy
   const handleStrategyChange = (id: string) => {
     setStrategyId(id);
-    const strat = strategies.find((s) => s.id === id);
-    if (strat) setSymbol(strat.symbol);
   };
 
   const loadHistory = useCallback(async () => {
@@ -149,6 +171,7 @@ export default function LabPage() {
     setError(null);
     if (!getWorkspaceId()) { setError("Set Workspace ID in Factory first"); return; }
     if (!strategyId.trim()) { setError("Select a strategy"); return; }
+    if (!datasetId.trim()) { setError("Select a dataset"); return; }
     setRunning(true);
     setActiveResult(null);
     setActiveBtId(null);
@@ -158,10 +181,10 @@ export default function LabPage() {
       method: "POST",
       body: JSON.stringify({
         strategyId: strategyId.trim(),
-        symbol: symbol.trim() || undefined,
-        interval: candleInterval,
-        fromTs: new Date(fromDate).toISOString(),
-        toTs:   new Date(toDate).toISOString(),
+        datasetId: datasetId.trim(),
+        feeBps: 0,
+        slippageBps: 0,
+        fillAt: "CLOSE",
       }),
     });
 
@@ -178,11 +201,14 @@ export default function LabPage() {
   const report = activeResult?.reportJson ?? null;
   const tradeLog = report?.tradeLog ?? [];
 
+  // Selected dataset info for preview
+  const selectedDataset = datasets.find((d) => d.id === datasetId) ?? null;
+
   return (
     <div style={{ padding: "32px 24px", maxWidth: 860, margin: "0 auto" }}>
       <h1 style={{ fontSize: 26, marginBottom: 4 }}>Research Lab</h1>
       <p style={{ color: "var(--text-secondary)", marginBottom: 28, fontSize: 14 }}>
-        Historical backtest · price-breakout strategy (lookback 20) · 2:1 R/R
+        Historical backtest · dataset-first (Stage 19) · price-breakout strategy (lookback 20) · 2:1 R/R
       </p>
 
       {/* ── Form ── */}
@@ -215,45 +241,37 @@ export default function LabPage() {
             )}
           </label>
 
-          <label style={labelStyle}>
-            Symbol
-            <input
-              style={inputStyle}
-              value={symbol}
-              onChange={(e) => setSymbol(e.target.value)}
-              placeholder="BTCUSDT"
-            />
+          <label style={{ ...labelStyle, gridColumn: "1 / -1" }}>
+            Dataset
+            {datasets.length > 0 ? (
+              <select
+                style={inputStyle}
+                value={datasetId}
+                onChange={(e) => setDatasetId(e.target.value)}
+              >
+                <option value="">— select a dataset —</option>
+                {datasets.map((d) => (
+                  <option key={d.id} value={d.id}>
+                    {d.symbol} · {d.interval} · {new Date(d.fromTsMs).toLocaleDateString()} – {new Date(d.toTsMs).toLocaleDateString()} · {d.candleCount} candles · {d.status}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <input
+                style={inputStyle}
+                value={datasetId}
+                onChange={(e) => setDatasetId(e.target.value)}
+                placeholder="dataset UUID (no datasets loaded — POST /lab/datasets first)"
+              />
+            )}
           </label>
-          <label style={labelStyle}>
-            Interval
-            <select
-              style={inputStyle}
-              value={candleInterval}
-              onChange={(e) => setCandleInterval(e.target.value)}
-            >
-              {INTERVALS.map((iv) => (
-                <option key={iv.value} value={iv.value}>{iv.label}</option>
-              ))}
-            </select>
-          </label>
-          <label style={labelStyle}>
-            From
-            <input
-              style={inputStyle}
-              type="date"
-              value={fromDate}
-              onChange={(e) => setFromDate(e.target.value)}
-            />
-          </label>
-          <label style={labelStyle}>
-            To
-            <input
-              style={inputStyle}
-              type="date"
-              value={toDate}
-              onChange={(e) => setToDate(e.target.value)}
-            />
-          </label>
+
+          {selectedDataset && (
+            <div style={{ gridColumn: "1 / -1", fontSize: 12, color: "var(--text-secondary)", background: "rgba(255,255,255,0.03)", borderRadius: 6, padding: "8px 12px" }}>
+              <strong>Dataset:</strong> {selectedDataset.exchange} · {selectedDataset.symbol} · {selectedDataset.interval} ·{" "}
+              {selectedDataset.candleCount} candles · hash: <code>{shortHash(selectedDataset.datasetHash)}</code> · {selectedDataset.status}
+            </div>
+          )}
         </div>
 
         {error && (
@@ -285,7 +303,7 @@ export default function LabPage() {
 
           {(activeResult.status === "PENDING" || activeResult.status === "RUNNING") && (
             <div style={{ color: "var(--text-secondary)", fontSize: 13 }}>
-              Fetching candles and simulating… polling every 2 s
+              Loading candles from dataset and simulating… polling every 2 s
             </div>
           )}
 
@@ -361,6 +379,9 @@ export default function LabPage() {
             </>
           )}
 
+          {/* ── Data snapshot (Stage 19b) ── */}
+          <DataSnapshot bt={activeResult} />
+
           <div style={{ fontSize: 11, color: "var(--text-secondary)", marginTop: 12 }}>
             {activeResult.symbol} · {fmtInterval(activeResult.interval)} ·{" "}
             {new Date(activeResult.fromTs).toLocaleDateString()} –{" "}
@@ -405,6 +426,8 @@ export default function LabPage() {
                 <th style={thStyle}>Symbol</th>
                 <th style={thStyle}>Int</th>
                 <th style={thStyle}>Period</th>
+                <th style={thStyle}>Dataset</th>
+                <th style={thStyle}>Fee/Slip</th>
                 <th style={thStyle}>Status</th>
                 <th style={thStyle}>Trades</th>
                 <th style={thStyle}>Winrate</th>
@@ -424,6 +447,14 @@ export default function LabPage() {
                     {new Date(bt.fromTs).toLocaleDateString()} –{" "}
                     {new Date(bt.toTs).toLocaleDateString()}
                   </td>
+                  <td style={tdStyle}>
+                    {bt.datasetHash
+                      ? <code style={{ fontSize: 11 }}>{shortHash(bt.datasetHash)}</code>
+                      : <span style={{ color: "var(--text-secondary)", fontSize: 11 }}>legacy</span>}
+                  </td>
+                  <td style={tdStyle}>
+                    {bt.datasetId ? `${bt.feeBps}/${bt.slippageBps}` : "—"}
+                  </td>
                   <td style={tdStyle}><StatusBadge status={bt.status} /></td>
                   <td style={tdStyle}>{bt.reportJson?.trades ?? "—"}</td>
                   <td style={tdStyle}>
@@ -442,6 +473,45 @@ export default function LabPage() {
           </table>
         )}
       </section>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Data Snapshot sub-component (Stage 19b spec §11)
+// ---------------------------------------------------------------------------
+
+function DataSnapshot({ bt }: { bt: BacktestItem }) {
+  if (!bt.datasetId) {
+    return (
+      <div style={{ marginTop: 16, padding: "10px 14px", background: "rgba(255,255,255,0.03)", borderRadius: 6, fontSize: 12, color: "var(--text-secondary)" }}>
+        Legacy backtest (no dataset binding)
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ marginTop: 16 }}>
+      <div style={{ fontSize: 12, fontWeight: 600, color: "var(--text-secondary)", marginBottom: 8, textTransform: "uppercase", letterSpacing: "0.05em" }}>
+        Data Snapshot
+      </div>
+      <div style={{ background: "rgba(255,255,255,0.03)", borderRadius: 6, padding: "12px 14px", fontSize: 12, display: "grid", gridTemplateColumns: "1fr 1fr", gap: "6px 24px" }}>
+        <SnapshotRow label="Dataset ID" value={bt.datasetId.slice(0, 18) + "…"} mono />
+        <SnapshotRow label="Hash" value={bt.datasetHash ? shortHash(bt.datasetHash)! : "—"} mono />
+        <SnapshotRow label="Fee" value={`${bt.feeBps} bps`} />
+        <SnapshotRow label="Slippage" value={`${bt.slippageBps} bps`} />
+        <SnapshotRow label="Fill at" value={bt.fillAt} />
+        <SnapshotRow label="Engine" value={bt.engineVersion} mono />
+      </div>
+    </div>
+  );
+}
+
+function SnapshotRow({ label, value, mono }: { label: string; value: string; mono?: boolean }) {
+  return (
+    <div style={{ display: "flex", gap: 8, alignItems: "baseline" }}>
+      <span style={{ color: "var(--text-secondary)", minWidth: 80, flexShrink: 0 }}>{label}:</span>
+      <span style={mono ? { fontFamily: "monospace", fontSize: 11 } : {}}>{value}</span>
     </div>
   );
 }
