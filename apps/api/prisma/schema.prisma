@@ -38,6 +38,7 @@ model Workspace {
   terminalOrders      TerminalOrder[]
   aiPlans             AiPlan[]
   aiActionAudits      AiActionAudit[]
+  datasets            MarketDataset[]
 }
 
 model WorkspaceMember {
@@ -362,6 +363,65 @@ model AiActionAudit {
   workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
 
   @@index([planId])
+  @@index([workspaceId, createdAt(sort: Desc)])
+}
+
+// ── Market Data (Stage 19a) ──────────────────────────────────────
+
+enum CandleInterval {
+  M1
+  M5
+  M15
+  M30
+  H1
+  H4
+  D1
+}
+
+enum DatasetStatus {
+  READY
+  PARTIAL
+  FAILED
+}
+
+/// Shared (non-workspace-scoped) candle storage. Deduped by unique key.
+model MarketCandle {
+  id         String         @id @default(uuid())
+  exchange   String
+  symbol     String
+  interval   CandleInterval
+  openTimeMs BigInt
+  open       Decimal        @db.Decimal(18, 8)
+  high       Decimal        @db.Decimal(18, 8)
+  low        Decimal        @db.Decimal(18, 8)
+  close      Decimal        @db.Decimal(18, 8)
+  volume     Decimal        @db.Decimal(18, 8)
+  createdAt  DateTime       @default(now())
+
+  @@unique([exchange, symbol, interval, openTimeMs])
+  @@index([exchange, symbol, interval, openTimeMs(sort: Desc)])
+}
+
+/// Workspace-scoped snapshot of a market data range. Immutable hash for reproducibility.
+model MarketDataset {
+  id            String         @id @default(uuid())
+  workspaceId   String
+  exchange      String
+  symbol        String
+  interval      CandleInterval
+  fromTsMs      BigInt
+  toTsMs        BigInt
+  fetchedAt     DateTime       @default(now())
+  datasetHash   String
+  candleCount   Int
+  qualityJson   Json
+  engineVersion String
+  status        DatasetStatus
+  createdAt     DateTime       @default(now())
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@unique([workspaceId, exchange, symbol, interval, fromTsMs, toTsMs])
   @@index([workspaceId, createdAt(sort: Desc)])
 }
 
