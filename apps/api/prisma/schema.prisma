@@ -419,7 +419,8 @@ model MarketDataset {
   status        DatasetStatus
   createdAt     DateTime       @default(now())
 
-  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspace Workspace       @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  backtests BacktestResult[]
 
   @@unique([workspaceId, exchange, symbol, interval, fromTsMs, toTsMs])
   @@index([workspaceId, createdAt(sort: Desc)])
@@ -438,9 +439,9 @@ model BacktestResult {
   id           String         @id @default(uuid())
   workspaceId  String
   strategyId   String
-  /// Symbol passed at request time (may differ from strategy default)
+  /// Symbol — for display/compat; source of truth for new runs is the dataset
   symbol       String
-  /// Bybit kline interval: "1", "5", "15", "60"
+  /// Bybit kline interval string — for display/compat; source of truth is dataset.interval
   interval     String
   fromTs       DateTime
   toTs         DateTime
@@ -451,10 +452,23 @@ model BacktestResult {
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
 
-  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  strategy  Strategy  @relation(fields: [strategyId], references: [id], onDelete: Cascade)
+  /// Stage 19b — reproducibility binding (nullable for legacy backtests)
+  datasetId     String?
+  datasetHash   String?
+  feeBps        Int            @default(0)
+  slippageBps   Int            @default(0)
+  /// Fill price reference; Stage 19 v2.2 fixes to "CLOSE"
+  fillAt        String         @default("CLOSE")
+  engineVersion String         @default("unknown")
+
+  workspace Workspace      @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  strategy  Strategy       @relation(fields: [strategyId], references: [id], onDelete: Cascade)
+  /// SetNull chosen: dataset records are historical snapshots; deleting a dataset should not
+  /// cascade-delete backtest history. Reproducibility is preserved via datasetHash.
+  dataset   MarketDataset? @relation(fields: [datasetId], references: [id], onDelete: SetNull)
 
   @@index([workspaceId])
   @@index([strategyId])
   @@index([workspaceId, createdAt(sort: Desc)])
+  @@index([datasetId])
 }

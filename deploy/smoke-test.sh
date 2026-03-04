@@ -794,20 +794,32 @@ S12_VER_DISABLED=$(curl -s -X POST "$BASE_URL/api/v1/strategies/$S12_STRAT_ID/ve
   }')
 S12_VER_DISABLED_ID=$(echo "$S12_VER_DISABLED" | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4) || true
 
-# 12.1 POST /lab/backtest → 202 PENDING
+# Stage 19b: backtest is dataset-first. Create a dataset first, then use it in 12.1.
+S12_DATASET=""
+S12_DATASET_ID=""
 if [[ -n "$S12_STRAT_ID" ]]; then
+  S12_DATASET=$(curl -s -X POST "$BASE_URL/api/v1/lab/datasets" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "Content-Type: application/json" \
+    -H "X-Workspace-Id: $WS_ID" \
+    -d '{"exchange":"bybit","symbol":"BTCUSDT","interval":"M15","fromTsMs":1704067200000,"toTsMs":1706745600000}')
+  S12_DATASET_ID=$(echo "$S12_DATASET" | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4) || true
+fi
+
+# 12.1 POST /lab/backtest (dataset-first) → 202 PENDING
+if [[ -n "$S12_STRAT_ID" && -n "$S12_DATASET_ID" ]]; then
   S12_BT_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/lab/backtest" \
     -H "Authorization: Bearer $TOKEN" \
     -H "Content-Type: application/json" \
     -H "X-Workspace-Id: $WS_ID" \
-    -d "{\"strategyId\":\"$S12_STRAT_ID\",\"symbol\":\"BTCUSDT\",\"interval\":\"15\",\"fromTs\":\"2024-01-01T00:00:00Z\",\"toTs\":\"2024-01-31T00:00:00Z\"}")
-  check "POST /lab/backtest → 202" "202" "$S12_BT_CODE"
+    -d "{\"strategyId\":\"$S12_STRAT_ID\",\"datasetId\":\"$S12_DATASET_ID\"}")
+  check "POST /lab/backtest (dataset-first) → 202" "202" "$S12_BT_CODE"
 
   S12_BT=$(curl -s -X POST "$BASE_URL/api/v1/lab/backtest" \
     -H "Authorization: Bearer $TOKEN" \
     -H "Content-Type: application/json" \
     -H "X-Workspace-Id: $WS_ID" \
-    -d "{\"strategyId\":\"$S12_STRAT_ID\",\"symbol\":\"BTCUSDT\",\"interval\":\"15\",\"fromTs\":\"2024-01-01T00:00:00Z\",\"toTs\":\"2024-01-31T00:00:00Z\"}")
+    -d "{\"strategyId\":\"$S12_STRAT_ID\",\"datasetId\":\"$S12_DATASET_ID\"}")
   S12_BT_ID=$(echo "$S12_BT" | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4) || true
   S12_BT_STATUS=$(echo "$S12_BT" | grep -o '"status":"[^"]*"' | head -1 | cut -d'"' -f4) || true
   if [[ "$S12_BT_STATUS" == "PENDING" ]] || [[ "$S12_BT_STATUS" == "RUNNING" ]]; then
@@ -818,7 +830,7 @@ if [[ -n "$S12_STRAT_ID" ]]; then
     ((++FAIL))
   fi
 else
-  red "Skipping backtest tests (no strategy created)"
+  red "Skipping backtest tests (no strategy or dataset created)"
   ((++FAIL)); ((++FAIL))
 fi
 
@@ -842,7 +854,7 @@ fi
 # 12.4 POST /lab/backtest without auth → 401
 S12_UNAUTH=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/lab/backtest" \
   -H "Content-Type: application/json" \
-  -d '{"strategyId":"fake","fromTs":"2024-01-01T00:00:00Z","toTs":"2024-01-31T00:00:00Z"}')
+  -d '{"strategyId":"fake","datasetId":"fake"}')
 check "POST /lab/backtest without auth → 401" "401" "$S12_UNAUTH"
 
 # 12.5 POST /lab/backtest without strategyId → 400
@@ -850,19 +862,19 @@ S12_NO_STRAT=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/
   -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
   -H "X-Workspace-Id: $WS_ID" \
-  -d '{"fromTs":"2024-01-01T00:00:00Z","toTs":"2024-01-31T00:00:00Z"}')
+  -d '{"datasetId":"some-dataset-id"}')
 check "POST /lab/backtest without strategyId → 400" "400" "$S12_NO_STRAT"
 
-# 12.6 POST /lab/backtest with fromTs >= toTs → 400
+# 12.6 POST /lab/backtest without datasetId → 400 (Stage 19 dataset-first)
 if [[ -n "$S12_STRAT_ID" ]]; then
-  S12_BAD_RANGE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/lab/backtest" \
+  S12_NO_DATASET=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/lab/backtest" \
     -H "Authorization: Bearer $TOKEN" \
     -H "Content-Type: application/json" \
     -H "X-Workspace-Id: $WS_ID" \
-    -d "{\"strategyId\":\"$S12_STRAT_ID\",\"fromTs\":\"2024-02-01T00:00:00Z\",\"toTs\":\"2024-01-01T00:00:00Z\"}")
-  check "POST /lab/backtest fromTs >= toTs → 400" "400" "$S12_BAD_RANGE"
+    -d "{\"strategyId\":\"$S12_STRAT_ID\"}")
+  check "POST /lab/backtest without datasetId → 400" "400" "$S12_NO_DATASET"
 else
-  red "Skipping date-range validation test (no strategy)"
+  red "Skipping datasetId validation test (no strategy)"
   ((++FAIL))
 fi
 
@@ -1499,6 +1511,141 @@ except: pass
     green "POST /ai/execute START_RUN bad-ID test skipped — AI did not return START_RUN action"
     ((++PASS))
   fi
+fi
+
+# ─── 20. Stage 19 — Datasets & Reproducibility ──────────────────────────────
+header "20. Stage 19 — Datasets & Reproducibility"
+
+# 20.1 POST /lab/datasets → 201 + datasetId/hash present
+S20_DS=$(curl -s -X POST "$BASE_URL/api/v1/lab/datasets" \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -H "X-Workspace-Id: $WS_ID" \
+  -d '{"exchange":"bybit","symbol":"BTCUSDT","interval":"M15","fromTsMs":1704067200000,"toTsMs":1706745600000}')
+S20_DS_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/lab/datasets" \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -H "X-Workspace-Id: $WS_ID" \
+  -d '{"exchange":"bybit","symbol":"BTCUSDT","interval":"M15","fromTsMs":1704067200000,"toTsMs":1706745600000}')
+check "20.1 POST /lab/datasets → 201" "201" "$S20_DS_CODE"
+
+S20_DS_ID=$(echo "$S20_DS" | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4) || true
+S20_DS_HASH=$(echo "$S20_DS" | grep -o '"datasetHash":"[^"]*"' | head -1 | cut -d'"' -f4) || true
+if [[ -n "$S20_DS_ID" && -n "$S20_DS_HASH" ]]; then
+  green "20.1 datasetId and datasetHash present in response"
+  ((++PASS))
+else
+  red "20.1 datasetId or datasetHash missing (id=$S20_DS_ID hash=$S20_DS_HASH)"
+  ((++FAIL))
+fi
+
+# 20.2 Repeat POST same params → upsert (same datasetId, stable hash)
+if [[ -n "$S20_DS_ID" ]]; then
+  S20_DS2=$(curl -s -X POST "$BASE_URL/api/v1/lab/datasets" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "Content-Type: application/json" \
+    -H "X-Workspace-Id: $WS_ID" \
+    -d '{"exchange":"bybit","symbol":"BTCUSDT","interval":"M15","fromTsMs":1704067200000,"toTsMs":1706745600000}')
+  S20_DS2_ID=$(echo "$S20_DS2" | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4) || true
+  S20_DS2_HASH=$(echo "$S20_DS2" | grep -o '"datasetHash":"[^"]*"' | head -1 | cut -d'"' -f4) || true
+  if [[ "$S20_DS2_ID" == "$S20_DS_ID" && "$S20_DS2_HASH" == "$S20_DS_HASH" ]]; then
+    green "20.2 Repeat POST → upsert: same datasetId and hash"
+    ((++PASS))
+  else
+    red "20.2 Repeat POST → upsert mismatch (id1=$S20_DS_ID id2=$S20_DS2_ID hash1=$S20_DS_HASH hash2=$S20_DS2_HASH)"
+    ((++FAIL))
+  fi
+else
+  red "20.2 Skipping upsert test (no dataset from 20.1)"
+  ((++FAIL))
+fi
+
+# 20.3 GET /lab/datasets/:id → 200 + qualityJson with all 7 fields
+if [[ -n "$S20_DS_ID" ]]; then
+  S20_GET=$(curl -s "$BASE_URL/api/v1/lab/datasets/$S20_DS_ID" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "X-Workspace-Id: $WS_ID")
+  S20_GET_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$BASE_URL/api/v1/lab/datasets/$S20_DS_ID" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "X-Workspace-Id: $WS_ID")
+  check "20.3 GET /lab/datasets/:id → 200" "200" "$S20_GET_CODE"
+  # Check all 7 qualityJson fields
+  S20_QUAL_OK=true
+  for field in gapsCount maxGapMs dupeAttempts sanityIssuesCount firstOpenTimeMs lastOpenTimeMs expectedCandles; do
+    if ! echo "$S20_GET" | grep -q "\"$field\""; then
+      S20_QUAL_OK=false
+      red "20.3 qualityJson missing field: $field"
+    fi
+  done
+  if [[ "$S20_QUAL_OK" == "true" ]]; then
+    green "20.3 qualityJson has all 7 required fields"
+    ((++PASS))
+  else
+    ((++FAIL))
+  fi
+else
+  red "20.3 Skipping GET dataset test (no dataset from 20.1)"
+  ((++FAIL)); ((++FAIL))
+fi
+
+# 20.4 POST /lab/datasets range >365d → 400
+S20_RANGE_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/lab/datasets" \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -H "X-Workspace-Id: $WS_ID" \
+  -d '{"exchange":"bybit","symbol":"BTCUSDT","interval":"M15","fromTsMs":1609459200000,"toTsMs":1704067200000}')
+check "20.4 POST /lab/datasets range >365d → 400" "400" "$S20_RANGE_CODE"
+
+# 20.5 POST /lab/datasets request >100k candles → 400
+# M1 over 90 days = ~129600 candles (>100k)
+S20_LIMIT_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/lab/datasets" \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -H "X-Workspace-Id: $WS_ID" \
+  -d '{"exchange":"bybit","symbol":"BTCUSDT","interval":"M1","fromTsMs":1704067200000,"toTsMs":1711843200000}')
+check "20.5 POST /lab/datasets >100k candles → 400" "400" "$S20_LIMIT_CODE"
+
+# 20.6 POST /lab/backtest with datasetId → 202
+S20_BT_ID=""
+if [[ -n "$S12_STRAT_ID" && -n "$S20_DS_ID" ]]; then
+  S20_BT=$(curl -s -X POST "$BASE_URL/api/v1/lab/backtest" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "Content-Type: application/json" \
+    -H "X-Workspace-Id: $WS_ID" \
+    -d "{\"strategyId\":\"$S12_STRAT_ID\",\"datasetId\":\"$S20_DS_ID\",\"feeBps\":0,\"slippageBps\":0,\"fillAt\":\"CLOSE\"}")
+  S20_BT_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/lab/backtest" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "Content-Type: application/json" \
+    -H "X-Workspace-Id: $WS_ID" \
+    -d "{\"strategyId\":\"$S12_STRAT_ID\",\"datasetId\":\"$S20_DS_ID\",\"feeBps\":0,\"slippageBps\":0,\"fillAt\":\"CLOSE\"}")
+  check "20.6 POST /lab/backtest with datasetId → 202" "202" "$S20_BT_CODE"
+  S20_BT_ID=$(echo "$S20_BT" | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4) || true
+else
+  red "20.6 Skipping backtest test (need S12_STRAT_ID + S20_DS_ID)"
+  ((++FAIL))
+fi
+
+# 20.7 GET /lab/backtest/:id → dataset fields present
+if [[ -n "$S20_BT_ID" ]]; then
+  S20_GET_BT=$(curl -s "$BASE_URL/api/v1/lab/backtest/$S20_BT_ID" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "X-Workspace-Id: $WS_ID")
+  S20_BT_FIELDS_OK=true
+  for field in datasetId datasetHash feeBps slippageBps fillAt engineVersion; do
+    if ! echo "$S20_GET_BT" | grep -q "\"$field\""; then
+      S20_BT_FIELDS_OK=false
+      red "20.7 BacktestResult missing field: $field"
+    fi
+  done
+  if [[ "$S20_BT_FIELDS_OK" == "true" ]]; then
+    green "20.7 GET /lab/backtest/:id has all Stage 19b fields"
+    ((++PASS))
+  else
+    ((++FAIL))
+  fi
+else
+  red "20.7 Skipping BacktestResult fields test (no backtest from 20.6)"
+  ((++FAIL))
 fi
 
 # ─── Summary ─────────────────────────────────────────────────────────────────
