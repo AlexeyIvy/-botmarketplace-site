@@ -1821,6 +1821,46 @@ GUEST_ORDER=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
   "$BASE_URL/api/v1/terminal/orders")
 check "20a.3 POST /terminal/orders (no auth) → 401" "401" "$GUEST_ORDER"
 
+# ─── 20b. Navbar profile — avatarUrl + PATCH /users/me ───────────────────────
+header "20b. Navbar profile — avatarUrl + PATCH /users/me"
+
+# 20b.1 GET /auth/me (authed) → 200 and contains "email"
+S20B_ME=$(curl -s -H "Authorization: Bearer $TOKEN" \
+  "$BASE_URL/api/v1/auth/me")
+S20B_ME_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
+  -H "Authorization: Bearer $TOKEN" \
+  "$BASE_URL/api/v1/auth/me")
+if [[ "$S20B_ME_CODE" == "200" ]] && echo "$S20B_ME" | grep -q '"email"'; then
+  ((++PASS)); printf "  \033[32m✓\033[0m 20b.1 GET /auth/me (authed) → 200 with email\n"
+else
+  ((++FAIL)); printf "  \033[31m✗\033[0m 20b.1 GET /auth/me (authed) → 200 with email (got $S20B_ME_CODE)\n"
+fi
+
+# 20b.2 PATCH /users/me set avatarUrl → 200
+S20B_PATCH=$(curl -s -o /dev/null -w "%{http_code}" -X PATCH \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"avatarUrl":"https://example.com/avatar-stage20b.gif"}' \
+  "$BASE_URL/api/v1/users/me")
+check "20b.2 PATCH /users/me set avatarUrl → 200" "200" "$S20B_PATCH"
+
+# 20b.3 GET /auth/me now contains avatarUrl (DB lookup)
+S20B_ME2=$(curl -s -H "Authorization: Bearer $TOKEN" \
+  "$BASE_URL/api/v1/auth/me")
+if echo "$S20B_ME2" | grep -q '"avatarUrl"'; then
+  ((++PASS)); printf "  \033[32m✓\033[0m 20b.3 GET /auth/me contains avatarUrl after PATCH\n"
+else
+  ((++FAIL)); printf "  \033[31m✗\033[0m 20b.3 GET /auth/me contains avatarUrl after PATCH\n"
+fi
+
+# 20b.4 PATCH /users/me clear avatarUrl → 200
+S20B_CLEAR=$(curl -s -o /dev/null -w "%{http_code}" -X PATCH \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"avatarUrl":null}' \
+  "$BASE_URL/api/v1/users/me")
+check "20b.4 PATCH /users/me clear avatarUrl → 200" "200" "$S20B_CLEAR"
+
 # ─── Summary ─────────────────────────────────────────────────────────────────
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
