@@ -1768,6 +1768,39 @@ else
   ((++FAIL))
 fi
 
+# ─── 20c. User Preferences Sync ──────────────────────────────────────────────
+header "20c. User Preferences Sync"
+
+# 20c.1 GET without auth → 401
+S20C_NO_AUTH=$(curl -s -o /dev/null -w "%{http_code}" "$BASE_URL/api/v1/user/preferences")
+check "20c.1 GET /user/preferences without auth → 401" "401" "$S20C_NO_AUTH"
+
+# 20c.2 GET with auth → 200
+S20C_GET=$(curl -s -w "\n%{http_code}" "$BASE_URL/api/v1/user/preferences" \
+  -H "Authorization: Bearer $TOKEN")
+S20C_GET_CODE=$(echo "$S20C_GET" | tail -1)
+S20C_GET_BODY=$(echo "$S20C_GET" | head -1)
+check "20c.2 GET /user/preferences with auth → 200" "200" "$S20C_GET_CODE"
+check_contains "20c.2 GET response contains terminalJson" "terminalJson" "$S20C_GET_BODY"
+
+# 20c.3 PUT valid payload → 200
+S20C_VALID_PAYLOAD='{"terminalJson":{"version":1,"terminal":{"bybit:linear":{"watchlist":["BTCUSDT","ETHUSDT"],"activeSymbol":"BTCUSDT","interval":"15","indicators":[],"layout":{"showWatchlist":true,"showOrderPanel":true}}}}}'
+S20C_PUT=$(curl -s -w "\n%{http_code}" -X PUT "$BASE_URL/api/v1/user/preferences" \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d "$S20C_VALID_PAYLOAD")
+S20C_PUT_CODE=$(echo "$S20C_PUT" | tail -1)
+S20C_PUT_BODY=$(echo "$S20C_PUT" | head -1)
+check "20c.3 PUT /user/preferences valid payload → 200" "200" "$S20C_PUT_CODE"
+check_contains "20c.3 PUT response contains terminalJson" "terminalJson" "$S20C_PUT_BODY"
+
+# 20c.4 PUT invalid version → 400
+S20C_BAD_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X PUT "$BASE_URL/api/v1/user/preferences" \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"terminalJson":{"version":999,"terminal":{}}}')
+check "20c.4 PUT /user/preferences invalid version → 400" "400" "$S20C_BAD_CODE"
+
 # ─── Summary ─────────────────────────────────────────────────────────────────
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"

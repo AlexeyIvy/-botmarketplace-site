@@ -14,7 +14,8 @@ model User {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  memberships WorkspaceMember[]
+  memberships  WorkspaceMember[]
+  preferences  UserPreference?
 }
 
 enum WorkspaceRole {
@@ -424,6 +425,19 @@ model MarketDataset {
 
   @@unique([workspaceId, exchange, symbol, interval, fromTsMs, toTsMs])
   @@index([workspaceId, createdAt(sort: Desc)])
+}
+
+// ── User Preferences (Stage 20c) ─────────────────────────────────
+
+/// Per-user preferences store. One row per user; not workspace-scoped.
+model UserPreference {
+  id           String   @id @default(uuid())
+  userId       String   @unique
+  terminalJson Json
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 // ── Research Lab ─────────────────────────────────────────────────
