@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Navbar } from "./navbar";
 import { ChatWidgetWrapper } from "@/components/chat/ChatWidgetWrapper";
+import { OnboardingModal } from "@/components/OnboardingModal";
 
 export const metadata: Metadata = {
   title: "BotMarketplace",
@@ -26,6 +27,7 @@ export default function RootLayout({
       </head>
       <body>
         <Navbar />
+        <OnboardingModal />
         <main style={{ paddingTop: "var(--nav-height)" }}>{children}</main>
         <ChatWidgetWrapper />
       </body>

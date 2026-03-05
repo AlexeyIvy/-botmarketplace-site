@@ -295,15 +295,15 @@ FAKE_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
   -H "Authorization: Bearer $TOKEN")
 check "GET /terminal/ticker FAKE → 422" "422" "$FAKE_CODE"
 
-# 9.8 ticker without auth → 401
+# 9.8 ticker without auth → 200 (public since stage 20a)
 NO_AUTH_TICKER=$(curl -s -o /dev/null -w "%{http_code}" \
   "$BASE_URL/api/v1/terminal/ticker?symbol=BTCUSDT")
-check "GET /terminal/ticker without auth → 401" "401" "$NO_AUTH_TICKER"
+check "GET /terminal/ticker without auth → 200" "200" "$NO_AUTH_TICKER"
 
-# 9.9 candles without auth → 401
+# 9.9 candles without auth → 200 (public since stage 20a)
 NO_AUTH_CANDLES=$(curl -s -o /dev/null -w "%{http_code}" \
   "$BASE_URL/api/v1/terminal/candles?symbol=BTCUSDT&interval=15&limit=10")
-check "GET /terminal/candles without auth → 401" "401" "$NO_AUTH_CANDLES"
+check "GET /terminal/candles without auth → 200" "200" "$NO_AUTH_CANDLES"
 
 # 9.10 candles daily interval D → 200
 DAILY=$(curl -s -o /dev/null -w "%{http_code}" \
@@ -1800,6 +1800,26 @@ S20C_BAD_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X PUT "$BASE_URL/api/v1/
   -H "Content-Type: application/json" \
   -d '{"terminalJson":{"version":999,"terminal":{}}}')
 check "20c.4 PUT /user/preferences invalid version → 400" "400" "$S20C_BAD_CODE"
+
+# ─── 20a. Guest mode — market data without auth ──────────────────────────────
+header "20a. Guest mode — market data without auth"
+
+# 20a.1 GET /terminal/ticker without auth → 200
+GUEST_TICKER=$(curl -s -o /dev/null -w "%{http_code}" \
+  "$BASE_URL/api/v1/terminal/ticker?symbol=BTCUSDT")
+check "20a.1 GET /terminal/ticker (no auth) → 200" "200" "$GUEST_TICKER"
+
+# 20a.2 GET /terminal/candles without auth → 200
+GUEST_CANDLES=$(curl -s -o /dev/null -w "%{http_code}" \
+  "$BASE_URL/api/v1/terminal/candles?symbol=BTCUSDT&interval=15&limit=50")
+check "20a.2 GET /terminal/candles (no auth) → 200" "200" "$GUEST_CANDLES"
+
+# 20a.3 POST /terminal/orders without auth → 401 (still protected)
+GUEST_ORDER=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"symbol":"BTCUSDT","side":"BUY","type":"MARKET","qty":0.001}' \
+  "$BASE_URL/api/v1/terminal/orders")
+check "20a.3 POST /terminal/orders (no auth) → 401" "401" "$GUEST_ORDER"
 
 # ─── Summary ─────────────────────────────────────────────────────────────────
 echo ""

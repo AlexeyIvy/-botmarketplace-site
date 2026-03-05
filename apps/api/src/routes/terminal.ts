@@ -77,11 +77,11 @@ export async function terminalRoutes(app: FastifyInstance) {
    * GET /terminal/ticker?symbol=BTCUSDT
    *
    * Returns current ticker data for a linear perpetual symbol.
-   * Requires authentication (JWT). No workspace required — Bybit data is public.
+   * Public — no authentication required. Bybit data is public.
    */
   app.get<{ Querystring: { symbol?: string } }>(
     "/terminal/ticker",
-    { onRequest: [app.authenticate] },
+    {},
     async (request, reply) => {
       const { symbol } = request.query;
 
@@ -105,7 +105,7 @@ export async function terminalRoutes(app: FastifyInstance) {
    * GET /terminal/candles?symbol=BTCUSDT&interval=15&limit=200
    *
    * Returns recent OHLCV candles for a linear perpetual symbol.
-   * Requires authentication (JWT). No workspace required — Bybit data is public.
+   * Public — no authentication required. Bybit data is public.
    *
    * Parameters:
    *   symbol   — required; e.g. "BTCUSDT"
@@ -114,7 +114,7 @@ export async function terminalRoutes(app: FastifyInstance) {
    */
   app.get<{ Querystring: { symbol?: string; interval?: string; limit?: string } }>(
     "/terminal/candles",
-    { onRequest: [app.authenticate] },
+    {},
     async (request, reply) => {
       const { symbol, interval: intervalParam, limit: limitParam } = request.query;
 
