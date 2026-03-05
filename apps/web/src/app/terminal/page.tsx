@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { apiFetchNoWorkspace, apiFetch, getToken } from "../../lib/api";
 import TerminalChart, { type ChartMarker } from "../../components/terminal/TerminalChart";
@@ -63,6 +63,69 @@ const DEFAULT_SYMBOL = "BTCUSDT";
 const DEFAULT_INTERVAL = "15";
 
 // ---------------------------------------------------------------------------
+// Preferences helpers (Stage 20c)
+// ---------------------------------------------------------------------------
+
+const PREFS_LS_KEY = "terminalPrefsV1";
+const PREFS_IMPORTED_KEY = "terminalPrefsImported";
+
+interface MarketPrefs {
+  watchlist: string[];
+  activeSymbol?: string;
+  interval?: string;
+  indicators?: unknown[];
+  layout?: { showWatchlist?: boolean; showOrderPanel?: boolean };
+}
+
+interface TerminalJson {
+  version: 1;
+  terminal: Record<string, MarketPrefs>;
+}
+
+/** Exchange+market key for bybit linear (default) */
+const MARKET_KEY = "bybit:linear";
+
+const DEFAULT_PREFS: TerminalJson = {
+  version: 1,
+  terminal: {
+    [MARKET_KEY]: {
+      watchlist: [...WATCHLIST_SYMBOLS],
+      activeSymbol: DEFAULT_SYMBOL,
+      interval: DEFAULT_INTERVAL,
+      indicators: [],
+      layout: { showWatchlist: true, showOrderPanel: true },
+    },
+  },
+};
+
+function loadGuestPrefs(): TerminalJson | null {
+  try {
+    const raw = localStorage.getItem(PREFS_LS_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as TerminalJson;
+    if (parsed?.version === 1 && parsed?.terminal) return parsed;
+  } catch {
+    // ignore
+  }
+  return null;
+}
+
+function saveGuestPrefs(prefs: TerminalJson) {
+  try {
+    localStorage.setItem(PREFS_LS_KEY, JSON.stringify(prefs));
+  } catch {
+    // ignore
+  }
+}
+
+function isDefaultOrEmpty(terminalJson: unknown): boolean {
+  if (!terminalJson || typeof terminalJson !== "object") return true;
+  const tj = terminalJson as TerminalJson;
+  if (!tj.terminal) return true;
+  return Object.keys(tj.terminal).length === 0;
+}
+
+// ---------------------------------------------------------------------------
 // Component
 // ---------------------------------------------------------------------------
 
@@ -117,6 +180,95 @@ export default function TerminalPage() {
       setShowOrderPanel(false);
     }
   }, []);
+
+  // --- Preferences sync (Stage 20c) ---
+  const prefsSaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const prefsLoaded = useRef(false);
+
+  /** Build current prefs snapshot from local state */
+  const buildPrefs = useCallback((): TerminalJson => ({
+    version: 1,
+    terminal: {
+      [MARKET_KEY]: {
+        watchlist: [...WATCHLIST_SYMBOLS],
+        activeSymbol: symbol,
+        interval,
+        indicators: [],
+        layout: { showWatchlist, showOrderPanel },
+      },
+    },
+  }), [symbol, interval, showWatchlist, showOrderPanel]);
+
+  /** Apply a loaded TerminalJson to local state */
+  function applyPrefs(tj: TerminalJson) {
+    const mkt = tj.terminal?.[MARKET_KEY];
+    if (!mkt) return;
+    if (mkt.activeSymbol) setSymbol(mkt.activeSymbol);
+    if (mkt.interval) setInterval(mkt.interval);
+    if (mkt.layout) {
+      if (typeof mkt.layout.showWatchlist === "boolean") setShowWatchlist(mkt.layout.showWatchlist);
+      if (typeof mkt.layout.showOrderPanel === "boolean") setShowOrderPanel(mkt.layout.showOrderPanel);
+    }
+  }
+
+  /** Debounced save — guest or authed */
+  const schedulePrefsWrite = useCallback((prefs: TerminalJson) => {
+    if (prefsSaveTimer.current) clearTimeout(prefsSaveTimer.current);
+    prefsSaveTimer.current = setTimeout(() => {
+      if (getToken()) {
+        apiFetchNoWorkspace("/user/preferences", {
+          method: "PUT",
+          body: JSON.stringify({ terminalJson: prefs }),
+        }).catch(() => undefined);
+      } else {
+        saveGuestPrefs(prefs);
+      }
+    }, 1500);
+  }, []);
+
+  // Load preferences on mount
+  useEffect(() => {
+    if (prefsLoaded.current) return;
+    prefsLoaded.current = true;
+
+    if (getToken()) {
+      // Auth mode: fetch from server
+      apiFetchNoWorkspace<{ terminalJson: TerminalJson }>("/user/preferences").then((res) => {
+        if (!res.ok) return;
+        const serverEmpty = isDefaultOrEmpty(res.data.terminalJson);
+
+        if (serverEmpty) {
+          // Try to auto-import guest prefs once
+          const guestImported = localStorage.getItem(PREFS_IMPORTED_KEY);
+          const guest = guestImported ? null : loadGuestPrefs();
+          if (guest && !guestImported) {
+            apiFetchNoWorkspace("/user/preferences", {
+              method: "PUT",
+              body: JSON.stringify({ terminalJson: guest }),
+            }).then(() => {
+              localStorage.setItem(PREFS_IMPORTED_KEY, "1");
+              applyPrefs(guest);
+            }).catch(() => undefined);
+          } else {
+            applyPrefs(DEFAULT_PREFS);
+          }
+        } else {
+          applyPrefs(res.data.terminalJson);
+        }
+      }).catch(() => undefined);
+    } else {
+      // Guest mode: load from localStorage
+      const guest = loadGuestPrefs();
+      if (guest) applyPrefs(guest);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Save preferences whenever key state changes (after initial load)
+  useEffect(() => {
+    if (!prefsLoaded.current) return;
+    schedulePrefsWrite(buildPrefs());
+  }, [symbol, interval, showWatchlist, showOrderPanel, buildPrefs, schedulePrefsWrite]);
 
   // Load exchange connections on mount
   useEffect(() => {

@@ -16,6 +16,7 @@ import { datasetRoutes } from "./routes/datasets.js";
 import { exchangeRoutes } from "./routes/exchanges.js";
 import { terminalRoutes } from "./routes/terminal.js";
 import { aiRoutes } from "./routes/ai.js";
+import { preferencesRoutes } from "./routes/preferences.js";
 
 /** Registers all domain routes. */
 async function registerRoutes(scope: import("fastify").FastifyInstance) {
@@ -32,6 +33,7 @@ async function registerRoutes(scope: import("fastify").FastifyInstance) {
   await scope.register(exchangeRoutes);
   await scope.register(terminalRoutes);
   await scope.register(aiRoutes);
+  await scope.register(preferencesRoutes);
 }
 
 export async function buildApp() {
