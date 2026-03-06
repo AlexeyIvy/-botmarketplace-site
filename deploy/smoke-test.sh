@@ -1801,6 +1801,39 @@ S20C_BAD_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X PUT "$BASE_URL/api/v1/
   -d '{"terminalJson":{"version":999,"terminal":{}}}')
 check "20c.4 PUT /user/preferences invalid version → 400" "400" "$S20C_BAD_CODE"
 
+# ─── 20d. Stage 20d — Symbols directory + Batch tickers (public) ─────────────
+header "20d. Terminal Symbols Directory + Tickers (Stage 20d)"
+
+# 20d.1 GET /terminal/symbols?exchange=bybit&market=linear → 200 + non-empty symbols
+S20D_SYM=$(curl -s -w "\n%{http_code}" \
+  "$BASE_URL/api/v1/terminal/symbols?exchange=bybit&market=linear")
+S20D_SYM_CODE=$(echo "$S20D_SYM" | tail -1)
+S20D_SYM_BODY=$(echo "$S20D_SYM" | head -1)
+check "20d.1 GET /terminal/symbols linear → 200" "200" "$S20D_SYM_CODE"
+check_contains "20d.1 symbols response has symbols array" '"symbols"' "$S20D_SYM_BODY"
+check_contains "20d.1 symbols array non-empty (has BTCUSDT)" "BTCUSDT" "$S20D_SYM_BODY"
+
+# 20d.2 GET /terminal/tickers?exchange=bybit&market=linear&symbols=BTCUSDT,ETHUSDT → 200 + lastPrice
+S20D_TICK=$(curl -s -w "\n%{http_code}" \
+  "$BASE_URL/api/v1/terminal/tickers?exchange=bybit&market=linear&symbols=BTCUSDT,ETHUSDT")
+S20D_TICK_CODE=$(echo "$S20D_TICK" | tail -1)
+S20D_TICK_BODY=$(echo "$S20D_TICK" | head -1)
+check "20d.2 GET /terminal/tickers 2 symbols → 200" "200" "$S20D_TICK_CODE"
+check_contains "20d.2 tickers response has tickers array" '"tickers"' "$S20D_TICK_BODY"
+check_contains "20d.2 tickers response has lastPrice" '"lastPrice"' "$S20D_TICK_BODY"
+
+# 20d.3 GET /terminal/tickers with too many symbols (31) → 400
+TOO_MANY_SYMS=$(python3 -c "print(','.join(['SYM'+str(i) for i in range(31)]))" 2>/dev/null || \
+  echo "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,AA,BB,CC,DD,EE")
+S20D_TOO_MANY=$(curl -s -o /dev/null -w "%{http_code}" \
+  "$BASE_URL/api/v1/terminal/tickers?exchange=bybit&market=linear&symbols=${TOO_MANY_SYMS}")
+check "20d.3 GET /terminal/tickers 31 symbols → 400" "400" "$S20D_TOO_MANY"
+
+# 20d.4 GET /terminal/symbols invalid market → 400
+S20D_BAD_MKT=$(curl -s -o /dev/null -w "%{http_code}" \
+  "$BASE_URL/api/v1/terminal/symbols?exchange=bybit&market=invalid_market")
+check "20d.4 GET /terminal/symbols invalid market → 400" "400" "$S20D_BAD_MKT"
+
 # ─── Summary ─────────────────────────────────────────────────────────────────
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
