@@ -1892,6 +1892,30 @@ S20D_BAD_MKT=$(curl -s -o /dev/null -w "%{http_code}" \
   "$BASE_URL/api/v1/terminal/symbols?exchange=bybit&market=invalid")
 check "20d.4 GET /terminal/symbols invalid market → 400" "400" "$S20D_BAD_MKT"
 
+# ─── 20e. Indicators v2 + Guest Lab Demo ─────────────────────────────────────
+header "20e. Demo Backtest endpoint (Stage 20e)"
+
+# 20e.1 POST /demo/backtest with valid presetId → 200
+S20E_DEMO=$(curl -s -w "\n%{http_code}" \
+  -X POST "$BASE_URL/api/v1/demo/backtest" \
+  -H "Content-Type: application/json" \
+  -d '{"presetId":"btc-breakout-demo"}')
+S20E_DEMO_CODE=$(echo "$S20E_DEMO" | tail -1)
+S20E_DEMO_BODY=$(echo "$S20E_DEMO" | head -1)
+check "20e.1 POST /demo/backtest valid preset → 200" "200" "$S20E_DEMO_CODE"
+
+# 20e.2 Response contains summary and trades fields
+check_contains "20e.2 response has summary field" '"summary"' "$S20E_DEMO_BODY"
+check_contains "20e.2 response has trades field" '"trades"' "$S20E_DEMO_BODY"
+check_contains "20e.2 response has winrate field" '"winrate"' "$S20E_DEMO_BODY"
+
+# 20e.3 POST /demo/backtest with invalid presetId → 400
+S20E_BAD=$(curl -s -o /dev/null -w "%{http_code}" \
+  -X POST "$BASE_URL/api/v1/demo/backtest" \
+  -H "Content-Type: application/json" \
+  -d '{"presetId":"does-not-exist"}')
+check "20e.3 POST /demo/backtest invalid presetId → 400" "400" "$S20E_BAD"
+
 # ─── Summary ─────────────────────────────────────────────────────────────────
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { getWorkspaceId, apiFetch } from "../../lib/api";
+import { getWorkspaceId, apiFetch, apiFetchNoWorkspace } from "../../lib/api";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -108,10 +108,309 @@ function shortHash(hash: string | null | undefined) {
 }
 
 // ---------------------------------------------------------------------------
+// Guest Demo types (Stage 20e)
+// ---------------------------------------------------------------------------
+
+interface DemoSummary {
+  trades: number;
+  wins: number;
+  winrate: number;
+  totalPnlPct: number;
+  maxDrawdownPct: number;
+  candles: number;
+}
+
+interface DemoResult {
+  presetId: string;
+  description: string;
+  symbol: string;
+  interval: string;
+  summary: DemoSummary;
+  trades: TradeRecord[];
+}
+
+const DEMO_PRESETS = [
+  {
+    id: "btc-breakout-demo",
+    label: "BTC Breakout",
+    subtitle: "BTCUSDT · 1h · 90 days",
+    description: "Price-breakout strategy on BTC/USDT 1-hour candles over the last 90 days.",
+  },
+  {
+    id: "eth-mean-reversion-demo",
+    label: "ETH Momentum",
+    subtitle: "ETHUSDT · 15m · 45 days",
+    description: "Breakout momentum strategy on ETH/USDT 15-minute candles over the last 45 days.",
+  },
+];
+
+type DemoStep = "idle" | "select" | "load" | "simulate" | "report";
+
+// ---------------------------------------------------------------------------
+// Guest Lab Demo component
+// ---------------------------------------------------------------------------
+
+function GuestLabDemo() {
+  const [selectedPreset, setSelectedPreset] = useState<string | null>(null);
+  const [step, setStep] = useState<DemoStep>("idle");
+  const [result, setResult] = useState<DemoResult | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [showTrades, setShowTrades] = useState(false);
+
+  async function runDemo(presetId: string) {
+    setSelectedPreset(presetId);
+    setResult(null);
+    setError(null);
+    setShowTrades(false);
+
+    // Step 1: select
+    setStep("select");
+    await delay(600);
+
+    // Step 2: load dataset
+    setStep("load");
+    await delay(800);
+
+    // Step 3: simulate (fetch real data from server)
+    setStep("simulate");
+
+    const res = await apiFetchNoWorkspace<DemoResult>("/demo/backtest", {
+      method: "POST",
+      body: JSON.stringify({ presetId }),
+    });
+
+    if (!res.ok) {
+      setError(`${res.problem.title}: ${res.problem.detail}`);
+      setStep("idle");
+      return;
+    }
+
+    await delay(400);
+
+    // Step 4: show report
+    setStep("report");
+    setResult(res.data);
+  }
+
+  const preset = DEMO_PRESETS.find((p) => p.id === selectedPreset) ?? null;
+
+  return (
+    <div>
+      <h1 style={{ fontSize: 26, marginBottom: 4 }}>Research Lab — Demo</h1>
+      <p style={{ color: "var(--text-secondary)", marginBottom: 28, fontSize: 14 }}>
+        Explore our backtest engine with public market data — no account needed.
+        <Link href="/login" style={{ color: "var(--accent, #0969da)", marginLeft: 8 }}>
+          Sign in for full access →
+        </Link>
+      </p>
+
+      {/* Preset cards */}
+      <div style={{ display: "flex", gap: 16, flexWrap: "wrap", marginBottom: 28 }}>
+        {DEMO_PRESETS.map((p) => (
+          <div
+            key={p.id}
+            style={{
+              ...demoCard,
+              border: selectedPreset === p.id
+                ? "2px solid var(--accent, #0969da)"
+                : "2px solid var(--border)",
+            }}
+          >
+            <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 4 }}>{p.label}</div>
+            <div style={{ fontSize: 12, color: "var(--text-secondary)", marginBottom: 10 }}>
+              {p.subtitle}
+            </div>
+            <div style={{ fontSize: 13, color: "var(--text-secondary)", marginBottom: 16, lineHeight: 1.5 }}>
+              {p.description}
+            </div>
+            <button
+              style={{
+                ...demoBtnStyle,
+                opacity: step !== "idle" && step !== "report" ? 0.5 : 1,
+                cursor: step !== "idle" && step !== "report" ? "not-allowed" : "pointer",
+              }}
+              onClick={() => {
+                if (step !== "idle" && step !== "report") return;
+                void runDemo(p.id);
+              }}
+            >
+              {selectedPreset === p.id && step !== "idle" && step !== "report"
+                ? "Running..."
+                : "Run demo backtest"}
+            </button>
+          </div>
+        ))}
+      </div>
+
+      {/* Step progress */}
+      {step !== "idle" && (
+        <div style={{ ...sectionStyle, marginBottom: 24 }}>
+          <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 16 }}>
+            {preset?.label ?? "Demo"} · Progress
+          </div>
+          <DemoProgress step={step} />
+        </div>
+      )}
+
+      {/* Error */}
+      {error && (
+        <div style={{ color: "#f85149", padding: "12px 16px", background: "rgba(248,81,73,0.1)", borderRadius: 6, marginBottom: 16 }}>
+          {error}
+        </div>
+      )}
+
+      {/* Report */}
+      {step === "report" && result && (
+        <div style={sectionStyle}>
+          <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 4 }}>{result.description}</div>
+          <div style={{ fontSize: 12, color: "var(--text-secondary)", marginBottom: 20 }}>
+            {result.summary.candles.toLocaleString()} candles processed
+          </div>
+
+          {/* Summary grid */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))", gap: 10, marginBottom: 20 }}>
+            <DemoStat label="Trades" value={String(result.summary.trades)} />
+            <DemoStat label="Win Rate" value={fmtRate(result.summary.winrate)} color={result.summary.winrate >= 0.5 ? "#3fb950" : "#f85149"} />
+            <DemoStat label="Total PnL" value={pct(result.summary.totalPnlPct)} color={result.summary.totalPnlPct >= 0 ? "#3fb950" : "#f85149"} />
+            <DemoStat label="Max Drawdown" value={`-${result.summary.maxDrawdownPct.toFixed(2)}%`} color="#e3b341" />
+          </div>
+
+          {/* Trade log toggle */}
+          {result.trades.length > 0 && (
+            <>
+              <button
+                style={{ ...demoBtnStyle, background: "var(--bg-secondary)", color: "var(--text-primary)", border: "1px solid var(--border)", marginBottom: 12 }}
+                onClick={() => setShowTrades((v) => !v)}
+              >
+                {showTrades ? "Hide" : "Show"} trade log ({result.trades.length})
+              </button>
+              {showTrades && (
+                <div style={{ overflowX: "auto" }}>
+                  <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
+                    <thead>
+                      <tr>
+                        {["Entry", "Exit", "Entry Price", "Exit Price", "Outcome", "PnL %"].map((h) => (
+                          <th key={h} style={thStyleDemo}>{h}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {result.trades.map((t, i) => (
+                        <tr key={i}>
+                          <td style={tdDemo}>{new Date(t.entryTime).toLocaleDateString()}</td>
+                          <td style={tdDemo}>{new Date(t.exitTime).toLocaleDateString()}</td>
+                          <td style={tdDemo}>{t.entryPrice.toFixed(2)}</td>
+                          <td style={tdDemo}>{t.exitPrice.toFixed(2)}</td>
+                          <td style={{ ...tdDemo, color: t.outcome === "WIN" ? "#3fb950" : t.outcome === "LOSS" ? "#f85149" : "var(--text-secondary)", fontWeight: 700 }}>
+                            {t.outcome}
+                          </td>
+                          <td style={{ ...tdDemo, color: t.pnlPct >= 0 ? "#3fb950" : "#f85149" }}>
+                            {pct(t.pnlPct)}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Demo step progress sub-component
+// ---------------------------------------------------------------------------
+
+const DEMO_STEPS: { key: DemoStep; label: string }[] = [
+  { key: "select", label: "Select preset" },
+  { key: "load", label: "Load dataset" },
+  { key: "simulate", label: "Run simulation" },
+  { key: "report", label: "Render report" },
+];
+
+function DemoProgress({ step }: { step: DemoStep }) {
+  const order: DemoStep[] = ["select", "load", "simulate", "report"];
+  const current = order.indexOf(step);
+  return (
+    <div style={{ display: "flex", gap: 0 }}>
+      {DEMO_STEPS.map((s, i) => {
+        const done = i < current;
+        const active = i === current;
+        return (
+          <div key={s.key} style={{ display: "flex", alignItems: "center", flex: 1 }}>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", flex: 1 }}>
+              <div style={{
+                width: 28, height: 28,
+                borderRadius: "50%",
+                background: done ? "#3fb950" : active ? "var(--accent, #0969da)" : "var(--bg-secondary)",
+                border: `2px solid ${done ? "#3fb950" : active ? "var(--accent, #0969da)" : "var(--border)"}`,
+                display: "flex", alignItems: "center", justifyContent: "center",
+                fontSize: 13, fontWeight: 700,
+                color: done || active ? "#fff" : "var(--text-secondary)",
+                marginBottom: 6,
+                transition: "background 0.3s",
+              }}>
+                {done ? "✓" : i + 1}
+              </div>
+              <div style={{ fontSize: 11, color: active ? "var(--text-primary)" : "var(--text-secondary)", textAlign: "center" }}>
+                {s.label}
+                {active && step !== "report" && (
+                  <span style={{ display: "inline-block", marginLeft: 4 }}>...</span>
+                )}
+              </div>
+            </div>
+            {i < DEMO_STEPS.length - 1 && (
+              <div style={{
+                height: 2, flex: "0 0 24px",
+                background: done ? "#3fb950" : "var(--border)",
+                marginBottom: 22,
+                transition: "background 0.3s",
+              }} />
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function DemoStat({ label, value, color }: { label: string; value: string; color?: string }) {
+  return (
+    <div style={{ padding: "12px 14px", background: "var(--bg-secondary)", borderRadius: 6 }}>
+      <div style={{ fontSize: 11, color: "var(--text-secondary)", marginBottom: 4 }}>{label}</div>
+      <div style={{ fontSize: 16, fontWeight: 700, color: color ?? "var(--text-primary)" }}>{value}</div>
+    </div>
+  );
+}
+
+function delay(ms: number) {
+  return new Promise<void>((resolve) => setTimeout(resolve, ms));
+}
+
+// ---------------------------------------------------------------------------
 // Component
 // ---------------------------------------------------------------------------
 
 export default function LabPage() {
+  const hasWorkspace = !!getWorkspaceId();
+
+  // Guest mode — no workspace
+  if (!hasWorkspace) {
+    return (
+      <div style={{ padding: "32px 24px", maxWidth: 860, margin: "0 auto" }}>
+        <GuestLabDemo />
+      </div>
+    );
+  }
+
+  return <AuthLabPage />;
+}
+
+function AuthLabPage() {
   const [strategies, setStrategies] = useState<Strategy[]>([]);
   const [datasets, setDatasets] = useState<DatasetItem[]>([]);
   const [strategyId, setStrategyId] = useState("");
@@ -590,3 +889,42 @@ const btnStyle: React.CSSProperties = {
 
 const thStyle: React.CSSProperties = { padding: "6px 8px", fontWeight: 500, fontSize: 12 };
 const tdStyle: React.CSSProperties = { padding: "8px 8px" };
+
+// ── Guest demo styles (Stage 20e) ─────────────────────────────────────────
+
+const demoCard: React.CSSProperties = {
+  flex: "1 1 260px",
+  maxWidth: 360,
+  background: "var(--surface, #1a1a2e)",
+  borderRadius: 10,
+  padding: 20,
+  boxSizing: "border-box",
+};
+
+const demoBtnStyle: React.CSSProperties = {
+  background: "#3b82f6",
+  color: "#fff",
+  border: "none",
+  borderRadius: 6,
+  padding: "10px 20px",
+  fontSize: 14,
+  fontWeight: 600,
+  cursor: "pointer",
+  width: "100%",
+};
+
+const thStyleDemo: React.CSSProperties = {
+  padding: "6px 8px",
+  fontWeight: 600,
+  fontSize: 11,
+  color: "var(--text-secondary)",
+  textAlign: "left",
+  borderBottom: "1px solid var(--border)",
+};
+
+const tdDemo: React.CSSProperties = {
+  padding: "7px 8px",
+  fontSize: 12,
+  borderBottom: "1px solid var(--border)",
+  fontFamily: "monospace",
+};

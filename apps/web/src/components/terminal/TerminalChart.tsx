@@ -18,7 +18,14 @@ import {
   CrosshairMode,
 } from 'lightweight-charts';
 import { apiFetchNoWorkspace } from '../../lib/api';
-import { calcMA, calcEMA, calcRSI } from './indicators';
+import {
+  calcMA,
+  calcEMA,
+  calcRSI,
+  calcBB,
+  calcMACD,
+  type ActiveIndicator,
+} from './indicators';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -46,6 +53,11 @@ export interface TerminalChartProps {
   limit?: number;
   /** Trade markers to overlay on the chart. */
   markers?: ChartMarker[];
+  /**
+   * Active indicators driven by the framework.
+   * Each item has: { id, params } where id is one of "ma"|"ema"|"bb"|"rsi"|"macd".
+   */
+  activeIndicators?: ActiveIndicator[];
 }
 
 // ---------------------------------------------------------------------------
@@ -62,33 +74,51 @@ function fmtInterval(iv: string) {
 const CHART_HEIGHT = 400;
 const RSI_PANE_HEIGHT = 120;
 
-const MA_PERIOD = 20;
-const EMA_PERIOD = 50;
-const RSI_PERIOD = 14;
+// ---------------------------------------------------------------------------
+// Cached data ref shape
+// ---------------------------------------------------------------------------
+
+interface CachedCandles {
+  times: Time[];
+  closes: number[];
+  raw: Candle[];
+}
 
 // ---------------------------------------------------------------------------
 // Component
 // ---------------------------------------------------------------------------
 
-export default function TerminalChart({ symbol, limit = 200, markers }: TerminalChartProps) {
+export default function TerminalChart({
+  symbol,
+  limit = 200,
+  markers,
+  activeIndicators = [],
+}: TerminalChartProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<IChartApi | null>(null);
   const candleSeriesRef = useRef<ISeriesApi<'Candlestick'> | null>(null);
   const volumeSeriesRef = useRef<ISeriesApi<'Histogram'> | null>(null);
-  const ma20Ref = useRef<ISeriesApi<'Line'> | null>(null);
-  const ema50Ref = useRef<ISeriesApi<'Line'> | null>(null);
-  const rsi14Ref = useRef<ISeriesApi<'Line'> | null>(null);
+  // Overlay series (pane 0)
+  const maRef = useRef<ISeriesApi<'Line'> | null>(null);
+  const emaRef = useRef<ISeriesApi<'Line'> | null>(null);
+  const bbUpperRef = useRef<ISeriesApi<'Line'> | null>(null);
+  const bbMidRef = useRef<ISeriesApi<'Line'> | null>(null);
+  const bbLowerRef = useRef<ISeriesApi<'Line'> | null>(null);
+  // Oscillator series (pane 1)
+  const rsiRef = useRef<ISeriesApi<'Line'> | null>(null);
+  const macdLineRef = useRef<ISeriesApi<'Line'> | null>(null);
+  const macdSignalRef = useRef<ISeriesApi<'Line'> | null>(null);
+  const macdHistRef = useRef<ISeriesApi<'Histogram'> | null>(null);
+
   const markersPluginRef = useRef<ISeriesMarkersPluginApi<Time> | null>(null);
+  const lastCandlesRef = useRef<CachedCandles | null>(null);
 
   const [interval, setIntervalValue] = useState<Interval>('15');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Toggle state — volume on by default, indicators off
+  // Volume stays as a standalone toggle (not part of indicator framework)
   const [showVolume, setShowVolume] = useState(true);
-  const [showMA, setShowMA] = useState(false);
-  const [showEMA, setShowEMA] = useState(false);
-  const [showRSI, setShowRSI] = useState(false);
 
   // ── Create chart once on mount ──────────────────────────────────────────
   useEffect(() => {
@@ -106,21 +136,16 @@ export default function TerminalChart({ symbol, limit = 200, markers }: Terminal
         vertLines: { color: 'rgba(255,255,255,0.06)' },
         horzLines: { color: 'rgba(255,255,255,0.06)' },
       },
-      crosshair: {
-        mode: CrosshairMode.Magnet,
-      },
+      crosshair: { mode: CrosshairMode.Magnet },
       timeScale: {
         borderColor: 'rgba(255,255,255,0.1)',
         timeVisible: true,
         secondsVisible: false,
       },
-      rightPriceScale: {
-        borderColor: 'rgba(255,255,255,0.1)',
-      },
+      rightPriceScale: { borderColor: 'rgba(255,255,255,0.1)' },
     });
 
-    // ── Pane 0: Candlestick + Volume + MA + EMA ──────────────────────────
-
+    // ── Pane 0: Candlestick ───────────────────────────────────────────────
     const candleSeries = chart.addSeries(CandlestickSeries, {
       upColor: '#3fb950',
       downColor: '#f85149',
@@ -136,12 +161,10 @@ export default function TerminalChart({ symbol, limit = 200, markers }: Terminal
       priceFormat: { type: 'volume' },
       priceScaleId: 'volume',
     });
-    chart.priceScale('volume').applyOptions({
-      scaleMargins: { top: 0.85, bottom: 0 },
-    });
+    chart.priceScale('volume').applyOptions({ scaleMargins: { top: 0.85, bottom: 0 } });
 
-    // MA(20) — golden line on pane 0
-    const ma20 = chart.addSeries(LineSeries, {
+    // MA — golden (pane 0, hidden initially)
+    const maSeries = chart.addSeries(LineSeries, {
       color: '#f0c040',
       lineWidth: 1,
       priceLineVisible: false,
@@ -149,8 +172,8 @@ export default function TerminalChart({ symbol, limit = 200, markers }: Terminal
       visible: false,
     }, 0);
 
-    // EMA(50) — sky-blue line on pane 0
-    const ema50 = chart.addSeries(LineSeries, {
+    // EMA — sky blue (pane 0, hidden initially)
+    const emaSeries = chart.addSeries(LineSeries, {
       color: '#4fc3f7',
       lineWidth: 1,
       priceLineVisible: false,
@@ -158,25 +181,76 @@ export default function TerminalChart({ symbol, limit = 200, markers }: Terminal
       visible: false,
     }, 0);
 
-    // ── Pane 1: RSI ───────────────────────────────────────────────────────
-    const rsi14 = chart.addSeries(LineSeries, {
+    // BB upper — magenta dashed (pane 0, hidden)
+    const bbUpperSeries = chart.addSeries(LineSeries, {
+      color: 'rgba(206,147,216,0.7)',
+      lineWidth: 1,
+      lineStyle: 1, // dashed
+      priceLineVisible: false,
+      lastValueVisible: false,
+      visible: false,
+    }, 0);
+
+    // BB mid — magenta solid (pane 0, hidden)
+    const bbMidSeries = chart.addSeries(LineSeries, {
+      color: '#ce93d8',
+      lineWidth: 1,
+      priceLineVisible: false,
+      lastValueVisible: false,
+      visible: false,
+    }, 0);
+
+    // BB lower — magenta dashed (pane 0, hidden)
+    const bbLowerSeries = chart.addSeries(LineSeries, {
+      color: 'rgba(206,147,216,0.7)',
+      lineWidth: 1,
+      lineStyle: 1,
+      priceLineVisible: false,
+      lastValueVisible: false,
+      visible: false,
+    }, 0);
+
+    // ── Pane 1: Oscillators (RSI + MACD) ─────────────────────────────────
+    const rsiSeries = chart.addSeries(LineSeries, {
       color: '#ce93d8',
       lineWidth: 1,
       priceLineVisible: false,
       lastValueVisible: true,
-      title: 'RSI(14)',
+      title: 'RSI',
+      visible: false,
+    }, 1);
+    rsiSeries.createPriceLine({ price: 70, color: 'rgba(248,81,73,0.5)', lineWidth: 1, lineStyle: 2, title: '' });
+    rsiSeries.createPriceLine({ price: 30, color: 'rgba(63,185,80,0.5)', lineWidth: 1, lineStyle: 2, title: '' });
+
+    const macdLineSeries = chart.addSeries(LineSeries, {
+      color: '#60a5fa',
+      lineWidth: 1,
+      priceLineVisible: false,
+      lastValueVisible: false,
+      title: 'MACD',
       visible: false,
     }, 1);
 
-    // Overbought / oversold reference lines (dashed)
-    rsi14.createPriceLine({ price: 70, color: 'rgba(248,81,73,0.5)', lineWidth: 1, lineStyle: 2, title: '' });
-    rsi14.createPriceLine({ price: 30, color: 'rgba(63,185,80,0.5)', lineWidth: 1, lineStyle: 2, title: '' });
+    const macdSignalSeries = chart.addSeries(LineSeries, {
+      color: '#f0c040',
+      lineWidth: 1,
+      priceLineVisible: false,
+      lastValueVisible: false,
+      title: 'Signal',
+      visible: false,
+    }, 1);
 
-    // Shrink RSI pane
+    const macdHistSeries = chart.addSeries(HistogramSeries, {
+      color: '#3fb950',
+      priceLineVisible: false,
+      lastValueVisible: false,
+      title: 'Hist',
+      visible: false,
+    }, 1);
+
+    // Shrink oscillator pane
     const panes = chart.panes();
-    if (panes.length > 1) {
-      panes[1].setHeight(RSI_PANE_HEIGHT);
-    }
+    if (panes.length > 1) panes[1].setHeight(RSI_PANE_HEIGHT);
 
     // ── Trade markers plugin ──────────────────────────────────────────────
     const markersPlugin = createSeriesMarkers(candleSeries);
@@ -184,9 +258,15 @@ export default function TerminalChart({ symbol, limit = 200, markers }: Terminal
     chartRef.current = chart;
     candleSeriesRef.current = candleSeries;
     volumeSeriesRef.current = volumeSeries;
-    ma20Ref.current = ma20;
-    ema50Ref.current = ema50;
-    rsi14Ref.current = rsi14;
+    maRef.current = maSeries;
+    emaRef.current = emaSeries;
+    bbUpperRef.current = bbUpperSeries;
+    bbMidRef.current = bbMidSeries;
+    bbLowerRef.current = bbLowerSeries;
+    rsiRef.current = rsiSeries;
+    macdLineRef.current = macdLineSeries;
+    macdSignalRef.current = macdSignalSeries;
+    macdHistRef.current = macdHistSeries;
     markersPluginRef.current = markersPlugin;
 
     // ── ResizeObserver ────────────────────────────────────────────────────
@@ -204,29 +284,31 @@ export default function TerminalChart({ symbol, limit = 200, markers }: Terminal
       chartRef.current = null;
       candleSeriesRef.current = null;
       volumeSeriesRef.current = null;
-      ma20Ref.current = null;
-      ema50Ref.current = null;
-      rsi14Ref.current = null;
+      maRef.current = null;
+      emaRef.current = null;
+      bbUpperRef.current = null;
+      bbMidRef.current = null;
+      bbLowerRef.current = null;
+      rsiRef.current = null;
+      macdLineRef.current = null;
+      macdSignalRef.current = null;
+      macdHistRef.current = null;
       markersPluginRef.current = null;
     };
   }, []); // run once
 
-  // ── Toggle effects ───────────────────────────────────────────────────────
+  // ── Volume toggle ────────────────────────────────────────────────────────
   useEffect(() => {
     volumeSeriesRef.current?.applyOptions({ visible: showVolume });
   }, [showVolume]);
 
+  // ── Apply indicators to cached data (when activeIndicators prop changes) ─
   useEffect(() => {
-    ma20Ref.current?.applyOptions({ visible: showMA });
-  }, [showMA]);
-
-  useEffect(() => {
-    ema50Ref.current?.applyOptions({ visible: showEMA });
-  }, [showEMA]);
-
-  useEffect(() => {
-    rsi14Ref.current?.applyOptions({ visible: showRSI });
-  }, [showRSI]);
+    if (lastCandlesRef.current) {
+      applyIndicators(lastCandlesRef.current, activeIndicators);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeIndicators]);
 
   // ── Markers effect ───────────────────────────────────────────────────────
   useEffect(() => {
@@ -240,6 +322,106 @@ export default function TerminalChart({ symbol, limit = 200, markers }: Terminal
     }));
     markersPluginRef.current.setMarkers(seriesMarkers);
   }, [markers]);
+
+  // ── Compute and apply all indicator series from cached candle data ───────
+  function applyIndicators(cached: CachedCandles, indicators: ActiveIndicator[]) {
+    const { times, closes } = cached;
+
+    const active = new Set(indicators.map((i) => i.id));
+    const paramsFor = (id: string): ActiveIndicator['params'] =>
+      indicators.find((i) => i.id === id)?.params ?? {};
+
+    // ── MA ──
+    const maActive = active.has('ma');
+    if (maActive) {
+      const p = paramsFor('ma');
+      const period = Math.max(2, p.period ?? 20);
+      const vals = calcMA(closes, period);
+      const data: LineData<Time>[] = vals
+        .map((v, i) => (v !== null ? { time: times[i], value: v } : null))
+        .filter((x): x is LineData<Time> => x !== null);
+      maRef.current?.setData(data);
+      maRef.current?.applyOptions({ title: `MA(${period})` });
+    }
+    maRef.current?.applyOptions({ visible: maActive });
+
+    // ── EMA ──
+    const emaActive = active.has('ema');
+    if (emaActive) {
+      const p = paramsFor('ema');
+      const period = Math.max(2, p.period ?? 50);
+      const vals = calcEMA(closes, period);
+      const data: LineData<Time>[] = vals
+        .map((v, i) => (v !== null ? { time: times[i], value: v } : null))
+        .filter((x): x is LineData<Time> => x !== null);
+      emaRef.current?.setData(data);
+      emaRef.current?.applyOptions({ title: `EMA(${period})` });
+    }
+    emaRef.current?.applyOptions({ visible: emaActive });
+
+    // ── Bollinger Bands ──
+    const bbActive = active.has('bb');
+    if (bbActive) {
+      const p = paramsFor('bb');
+      const period = Math.max(2, p.period ?? 20);
+      const std = Math.max(0.1, p.stdDev ?? 2);
+      const bb = calcBB(closes, period, std);
+      const toLineData = (arr: (number | null)[]): LineData<Time>[] =>
+        arr
+          .map((v, i) => (v !== null ? { time: times[i], value: v } : null))
+          .filter((x): x is LineData<Time> => x !== null);
+      bbUpperRef.current?.setData(toLineData(bb.upper));
+      bbMidRef.current?.setData(toLineData(bb.mid));
+      bbLowerRef.current?.setData(toLineData(bb.lower));
+      bbMidRef.current?.applyOptions({ title: `BB(${period},${std})` });
+    }
+    bbUpperRef.current?.applyOptions({ visible: bbActive });
+    bbMidRef.current?.applyOptions({ visible: bbActive });
+    bbLowerRef.current?.applyOptions({ visible: bbActive });
+
+    // ── RSI ──
+    const rsiActive = active.has('rsi');
+    if (rsiActive) {
+      const p = paramsFor('rsi');
+      const period = Math.max(2, p.period ?? 14);
+      const vals = calcRSI(closes, period);
+      const data: LineData<Time>[] = vals
+        .map((v, i) => (v !== null ? { time: times[i], value: v } : null))
+        .filter((x): x is LineData<Time> => x !== null);
+      rsiRef.current?.setData(data);
+      rsiRef.current?.applyOptions({ title: `RSI(${period})` });
+    }
+    rsiRef.current?.applyOptions({ visible: rsiActive });
+
+    // ── MACD ──
+    const macdActive = active.has('macd');
+    if (macdActive) {
+      const p = paramsFor('macd');
+      const fast = Math.max(2, p.fastPeriod ?? 12);
+      const slow = Math.max(fast + 1, p.slowPeriod ?? 26);
+      const sig = Math.max(2, p.signalPeriod ?? 9);
+      const macd = calcMACD(closes, fast, slow, sig);
+      const toLineData = (arr: (number | null)[]): LineData<Time>[] =>
+        arr
+          .map((v, i) => (v !== null ? { time: times[i], value: v } : null))
+          .filter((x): x is LineData<Time> => x !== null);
+      macdLineRef.current?.setData(toLineData(macd.macd));
+      macdSignalRef.current?.setData(toLineData(macd.signal));
+      // Histogram with red/green coloring
+      const histData: HistogramData<Time>[] = macd.hist
+        .map((v, i) =>
+          v !== null
+            ? ({ time: times[i], value: v, color: v >= 0 ? '#3fb950' : '#f85149' } as HistogramData<Time>)
+            : null,
+        )
+        .filter((x): x is HistogramData<Time> => x !== null);
+      macdHistRef.current?.setData(histData);
+      macdLineRef.current?.applyOptions({ title: `MACD(${fast},${slow},${sig})` });
+    }
+    macdLineRef.current?.applyOptions({ visible: macdActive });
+    macdSignalRef.current?.applyOptions({ visible: macdActive });
+    macdHistRef.current?.applyOptions({ visible: macdActive });
+  }
 
   // ── Load data when symbol or interval changes ───────────────────────────
   useEffect(() => {
@@ -266,11 +448,10 @@ export default function TerminalChart({ symbol, limit = 200, markers }: Terminal
       const raw = res.data;
       if (!raw.length) return;
 
-      // CRITICAL: API openTime is milliseconds → lightweight-charts needs seconds
       const times = raw.map((c) => Math.floor(c.openTime / 1000) as Time);
       const closes = raw.map((c) => c.close);
 
-      // ── Candlestick data ──
+      // Candlestick
       const candleData: CandlestickData<Time>[] = raw.map((c, i) => ({
         time: times[i],
         open: c.open,
@@ -279,44 +460,26 @@ export default function TerminalChart({ symbol, limit = 200, markers }: Terminal
         close: c.close,
       }));
 
-      // ── Volume data ──
+      // Volume
       const volumeData: HistogramData<Time>[] = raw.map((c, i) => ({
         time: times[i],
         value: c.volume,
-        color: c.close >= c.open
-          ? 'rgba(63, 185, 80, 0.35)'
-          : 'rgba(248, 81, 73, 0.35)',
+        color: c.close >= c.open ? 'rgba(63,185,80,0.35)' : 'rgba(248,81,73,0.35)',
       }));
-
-      // ── MA(20) data ──
-      const maValues = calcMA(closes, MA_PERIOD);
-      const maData: LineData<Time>[] = maValues
-        .map((v, i) => (v !== null ? { time: times[i], value: v } : null))
-        .filter((x): x is LineData<Time> => x !== null);
-
-      // ── EMA(50) data ──
-      const emaValues = calcEMA(closes, EMA_PERIOD);
-      const emaData: LineData<Time>[] = emaValues
-        .map((v, i) => (v !== null ? { time: times[i], value: v } : null))
-        .filter((x): x is LineData<Time> => x !== null);
-
-      // ── RSI(14) data ──
-      const rsiValues = calcRSI(closes, RSI_PERIOD);
-      const rsiData: LineData<Time>[] = rsiValues
-        .map((v, i) => (v !== null ? { time: times[i], value: v } : null))
-        .filter((x): x is LineData<Time> => x !== null);
 
       candleSeriesRef.current?.setData(candleData);
       volumeSeriesRef.current?.setData(volumeData);
-      ma20Ref.current?.setData(maData);
-      ema50Ref.current?.setData(emaData);
-      rsi14Ref.current?.setData(rsiData);
+
+      // Cache and apply indicators
+      const cached: CachedCandles = { times, closes, raw };
+      lastCandlesRef.current = cached;
+      applyIndicators(cached, activeIndicators);
+
       chartRef.current?.timeScale().fitContent();
     });
 
-    return () => {
-      cancelled = true;
-    };
+    return () => { cancelled = true; };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [symbol, interval, limit]);
 
   // ── Render ───────────────────────────────────────────────────────────────
@@ -339,15 +502,22 @@ export default function TerminalChart({ symbol, limit = 200, markers }: Terminal
             {fmtInterval(iv)}
           </button>
         ))}
-        {loading && <span style={styles.loadingHint}>Loading...</span>}
-      </div>
 
-      {/* ── Indicator toggles ── */}
-      <div style={styles.toggleRow}>
-        <ToggleBtn label="Vol" active={showVolume} color="#26a69a" onClick={() => setShowVolume((v) => !v)} />
-        <ToggleBtn label={`MA(${MA_PERIOD})`} active={showMA} color="#f0c040" onClick={() => setShowMA((v) => !v)} />
-        <ToggleBtn label={`EMA(${EMA_PERIOD})`} active={showEMA} color="#4fc3f7" onClick={() => setShowEMA((v) => !v)} />
-        <ToggleBtn label={`RSI(${RSI_PERIOD})`} active={showRSI} color="#ce93d8" onClick={() => setShowRSI((v) => !v)} />
+        {/* Volume toggle */}
+        <button
+          onClick={() => setShowVolume((v) => !v)}
+          style={{
+            ...styles.toggleBtn,
+            background: showVolume ? '#26a69a' : 'var(--bg-secondary)',
+            color: showVolume ? '#fff' : 'var(--text-secondary)',
+            borderColor: showVolume ? '#26a69a' : 'var(--border)',
+            marginLeft: 8,
+          }}
+        >
+          Vol
+        </button>
+
+        {loading && <span style={styles.loadingHint}>Loading...</span>}
       </div>
 
       {/* ── Error ── */}
@@ -360,36 +530,6 @@ export default function TerminalChart({ symbol, limit = 200, markers }: Terminal
 }
 
 // ---------------------------------------------------------------------------
-// ToggleBtn sub-component
-// ---------------------------------------------------------------------------
-
-function ToggleBtn({
-  label,
-  active,
-  color,
-  onClick,
-}: {
-  label: string;
-  active: boolean;
-  color: string;
-  onClick: () => void;
-}) {
-  return (
-    <button
-      onClick={onClick}
-      style={{
-        ...styles.toggleBtn,
-        background: active ? color : 'var(--bg-secondary)',
-        color: active ? '#fff' : 'var(--text-secondary)',
-        borderColor: active ? color : 'var(--border)',
-      }}
-    >
-      {label}
-    </button>
-  );
-}
-
-// ---------------------------------------------------------------------------
 // Styles
 // ---------------------------------------------------------------------------
 
@@ -397,7 +537,7 @@ const styles = {
   tfRow: {
     display: 'flex',
     gap: 4,
-    marginBottom: 6,
+    marginBottom: 8,
     flexWrap: 'wrap',
     alignItems: 'center',
   } as React.CSSProperties,
@@ -411,20 +551,6 @@ const styles = {
     transition: 'background 0.15s, color 0.15s',
   } as React.CSSProperties,
 
-  loadingHint: {
-    fontSize: 12,
-    color: 'var(--text-secondary)',
-    marginLeft: 8,
-  } as React.CSSProperties,
-
-  toggleRow: {
-    display: 'flex',
-    gap: 6,
-    marginBottom: 8,
-    flexWrap: 'wrap',
-    alignItems: 'center',
-  } as React.CSSProperties,
-
   toggleBtn: {
     padding: '3px 10px',
     fontSize: 11,
@@ -433,6 +559,12 @@ const styles = {
     cursor: 'pointer',
     fontWeight: 600,
     transition: 'background 0.15s, color 0.15s, border-color 0.15s',
+  } as React.CSSProperties,
+
+  loadingHint: {
+    fontSize: 12,
+    color: 'var(--text-secondary)',
+    marginLeft: 8,
   } as React.CSSProperties,
 
   errorMsg: {

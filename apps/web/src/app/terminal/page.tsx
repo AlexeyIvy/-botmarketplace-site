@@ -4,6 +4,10 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { apiFetchNoWorkspace, apiFetch, getToken } from "../../lib/api";
 import TerminalChart, { type ChartMarker } from "../../components/terminal/TerminalChart";
+import {
+  INDICATOR_REGISTRY,
+  type ActiveIndicator,
+} from "../../components/terminal/indicators";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -97,7 +101,7 @@ interface MarketPrefs {
   watchlist: string[];
   activeSymbol?: string;
   interval?: string;
-  indicators?: unknown[];
+  indicators?: ActiveIndicator[];
   layout?: { showWatchlist?: boolean; showOrderPanel?: boolean };
 }
 
@@ -212,6 +216,11 @@ export default function TerminalPage() {
   const [watchlistQuotes, setWatchlistQuotes] = useState<Record<string, WatchlistQuote>>({});
   const pollTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // --- Indicator state (Stage 20e) ---
+  const [activeIndicators, setActiveIndicators] = useState<ActiveIndicator[]>([]);
+  const [indicatorModal, setIndicatorModal] = useState<ActiveIndicator | null>(null);
+  const [showIndicatorAdd, setShowIndicatorAdd] = useState(false);
+
   // --- Layout state ---
   const [showWatchlist, setShowWatchlist] = useState(true);
   const [showOrderPanel, setShowOrderPanel] = useState(true);
@@ -241,11 +250,11 @@ export default function TerminalPage() {
         watchlist: [...watchlist],
         activeSymbol: symbol,
         interval,
-        indicators: [],
+        indicators: activeIndicators,
         layout: { showWatchlist, showOrderPanel },
       },
     },
-  }), [selectedExchange, selectedMarket, currentMktKey, watchlist, symbol, interval, showWatchlist, showOrderPanel]);
+  }), [selectedExchange, selectedMarket, currentMktKey, watchlist, symbol, interval, activeIndicators, showWatchlist, showOrderPanel]);
 
   /** Apply a loaded TerminalJson to local state */
   function applyPrefs(tj: TerminalJson) {
@@ -270,6 +279,14 @@ export default function TerminalPage() {
     if (mkt.layout) {
       if (typeof mkt.layout.showWatchlist === "boolean") setShowWatchlist(mkt.layout.showWatchlist);
       if (typeof mkt.layout.showOrderPanel === "boolean") setShowOrderPanel(mkt.layout.showOrderPanel);
+    }
+    // Restore saved indicators — validate against registry
+    if (Array.isArray(mkt.indicators)) {
+      const validIds = new Set(INDICATOR_REGISTRY.map((d) => d.id));
+      const restored = (mkt.indicators as ActiveIndicator[]).filter(
+        (ind) => ind && typeof ind.id === "string" && validIds.has(ind.id),
+      );
+      if (restored.length > 0) setActiveIndicators(restored);
     }
   }
 
@@ -330,7 +347,7 @@ export default function TerminalPage() {
   useEffect(() => {
     if (!prefsLoaded.current) return;
     schedulePrefsWrite(buildPrefs());
-  }, [symbol, interval, showWatchlist, showOrderPanel, watchlist, selectedExchange, selectedMarket, buildPrefs, schedulePrefsWrite]);
+  }, [symbol, interval, showWatchlist, showOrderPanel, watchlist, activeIndicators, selectedExchange, selectedMarket, buildPrefs, schedulePrefsWrite]);
 
   // --- Load symbols directory when exchange/market changes ---
   useEffect(() => {
@@ -750,12 +767,137 @@ export default function TerminalPage() {
 
         {/* ── Center: Chart ── */}
         <div style={chartCenter}>
+          {/* ── Indicator toolbar ── */}
+          <div style={indicatorBar}>
+            {/* Active indicator chips */}
+            {activeIndicators.map((ind) => {
+              const def = INDICATOR_REGISTRY.find((d) => d.id === ind.id);
+              return (
+                <button
+                  key={ind.id}
+                  style={indicatorChip}
+                  onClick={() => setIndicatorModal({ ...ind })}
+                  title="Click to edit"
+                >
+                  {def?.label ?? ind.id}
+                  <span
+                    style={indicatorChipX}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setActiveIndicators((prev) => prev.filter((i) => i.id !== ind.id));
+                    }}
+                  >
+                    ×
+                  </span>
+                </button>
+              );
+            })}
+
+            {/* Add indicator dropdown */}
+            <div style={{ position: "relative" }}>
+              <button
+                style={addIndicatorBtn}
+                onClick={() => setShowIndicatorAdd((v) => !v)}
+              >
+                + Indicator
+              </button>
+              {showIndicatorAdd && (
+                <div style={indicatorDropdown}>
+                  {INDICATOR_REGISTRY.filter(
+                    (def) => !activeIndicators.some((a) => a.id === def.id),
+                  ).map((def) => (
+                    <button
+                      key={def.id}
+                      style={indicatorDropdownItem}
+                      onClick={() => {
+                        setActiveIndicators((prev) => [
+                          ...prev,
+                          { id: def.id, params: { ...def.defaultParams } },
+                        ]);
+                        setShowIndicatorAdd(false);
+                      }}
+                    >
+                      {def.label}
+                    </button>
+                  ))}
+                  {INDICATOR_REGISTRY.every((d) => activeIndicators.some((a) => a.id === d.id)) && (
+                    <div style={{ padding: "8px 12px", fontSize: 12, color: "var(--text-secondary)" }}>
+                      All indicators active
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+
           <TerminalChart
             symbol={symbol || DEFAULT_SYMBOL}
             limit={Math.min(Math.max(1, Number(limit) || 200), 1000)}
             markers={markers}
+            activeIndicators={activeIndicators}
           />
         </div>
+
+        {/* ── Indicator settings modal ── */}
+        {indicatorModal && (() => {
+          const def = INDICATOR_REGISTRY.find((d) => d.id === indicatorModal.id);
+          if (!def) return null;
+          return (
+            <div style={modalOverlay} onClick={() => setIndicatorModal(null)}>
+              <div style={modalBox} onClick={(e) => e.stopPropagation()}>
+                <div style={modalTitle}>{def.label} Settings</div>
+                {def.paramDefs.map((pd) => (
+                  <label key={pd.key} style={modalField}>
+                    <span style={{ fontSize: 12, color: "var(--text-secondary)" }}>{pd.label}</span>
+                    <input
+                      type="number"
+                      min={pd.min}
+                      max={pd.max}
+                      step={pd.step ?? 1}
+                      value={indicatorModal.params[pd.key] ?? ""}
+                      onChange={(e) => {
+                        const v = parseFloat(e.target.value);
+                        if (!Number.isFinite(v)) return;
+                        setIndicatorModal((prev) =>
+                          prev ? { ...prev, params: { ...prev.params, [pd.key]: v } } : prev,
+                        );
+                      }}
+                      style={{ ...input, width: "100%", marginTop: 4 }}
+                    />
+                  </label>
+                ))}
+                <div style={{ display: "flex", gap: 8, marginTop: 16 }}>
+                  <button
+                    style={btn}
+                    onClick={() => {
+                      setActiveIndicators((prev) =>
+                        prev.map((i) => (i.id === indicatorModal.id ? { ...indicatorModal } : i)),
+                      );
+                      setIndicatorModal(null);
+                    }}
+                  >
+                    Apply
+                  </button>
+                  <button
+                    style={{ ...btn, background: "#f85149" }}
+                    onClick={() => {
+                      setActiveIndicators((prev) => prev.filter((i) => i.id !== indicatorModal.id));
+                      setIndicatorModal(null);
+                    }}
+                  >
+                    Remove
+                  </button>
+                  <button
+                    style={{ ...btn, background: "var(--bg-secondary)", color: "var(--text-secondary)" }}
+                    onClick={() => setIndicatorModal(null)}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          );
+        })()}
 
         {/* ── Right: Order Panel ── */}
         {showOrderPanel && (
@@ -1315,4 +1457,106 @@ const pickerRow: React.CSSProperties = {
   gap: 8,
   padding: "5px 4px",
   borderBottom: "1px solid var(--border)",
+};
+
+// ── Indicator styles (Stage 20e) ──────────────────────────────────────────
+
+const indicatorBar: React.CSSProperties = {
+  display: "flex",
+  flexWrap: "wrap",
+  gap: 6,
+  marginBottom: 8,
+  alignItems: "center",
+};
+
+const indicatorChip: React.CSSProperties = {
+  display: "inline-flex",
+  alignItems: "center",
+  gap: 4,
+  padding: "3px 10px",
+  fontSize: 12,
+  background: "rgba(96,165,250,0.15)",
+  border: "1px solid rgba(96,165,250,0.4)",
+  borderRadius: 4,
+  cursor: "pointer",
+  color: "#60a5fa",
+  fontWeight: 600,
+};
+
+const indicatorChipX: React.CSSProperties = {
+  marginLeft: 2,
+  fontSize: 14,
+  lineHeight: 1,
+  opacity: 0.7,
+  cursor: "pointer",
+};
+
+const addIndicatorBtn: React.CSSProperties = {
+  padding: "3px 10px",
+  fontSize: 12,
+  background: "var(--bg-secondary)",
+  border: "1px solid var(--border)",
+  borderRadius: 4,
+  cursor: "pointer",
+  color: "var(--text-secondary)",
+};
+
+const indicatorDropdown: React.CSSProperties = {
+  position: "absolute",
+  top: "calc(100% + 4px)",
+  left: 0,
+  background: "var(--bg-card)",
+  border: "1px solid var(--border)",
+  borderRadius: 6,
+  boxShadow: "0 4px 16px rgba(0,0,0,0.4)",
+  zIndex: 50,
+  minWidth: 160,
+  overflow: "hidden",
+};
+
+const indicatorDropdownItem: React.CSSProperties = {
+  display: "block",
+  width: "100%",
+  textAlign: "left",
+  padding: "9px 14px",
+  fontSize: 13,
+  background: "none",
+  border: "none",
+  borderBottom: "1px solid var(--border)",
+  cursor: "pointer",
+  color: "var(--text-primary)",
+};
+
+const modalOverlay: React.CSSProperties = {
+  position: "fixed",
+  inset: 0,
+  background: "rgba(0,0,0,0.55)",
+  zIndex: 200,
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+};
+
+const modalBox: React.CSSProperties = {
+  background: "var(--bg-card)",
+  border: "1px solid var(--border)",
+  borderRadius: 10,
+  padding: "24px",
+  minWidth: 280,
+  maxWidth: 360,
+  width: "90%",
+  boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
+};
+
+const modalTitle: React.CSSProperties = {
+  fontSize: 16,
+  fontWeight: 700,
+  marginBottom: 16,
+};
+
+const modalField: React.CSSProperties = {
+  display: "flex",
+  flexDirection: "column",
+  gap: 2,
+  marginBottom: 12,
 };
