@@ -94,12 +94,16 @@ export async function authRoutes(app: FastifyInstance) {
   // ── GET /auth/me ───────────────────────────────────────────────────────────
   app.get("/auth/me", { onRequest: [app.authenticate] }, async (request, reply) => {
     const payload = request.user as { sub: string; email: string };
+    const user = await prisma.user.findUnique({ where: { id: payload.sub } });
+    if (!user) {
+      return reply.status(401).send({ type: "about:blank", title: "Unauthorized", status: 401, detail: "User not found" });
+    }
     const membership = await prisma.workspaceMember.findFirst({
       where: { userId: payload.sub },
       orderBy: { createdAt: "asc" },
     });
     return reply.send({
-      user: { id: payload.sub, email: payload.email },
+      user: { id: user.id, email: user.email, avatarUrl: user.avatarUrl ?? null },
       workspaceId: membership?.workspaceId ?? null,
     });
   });

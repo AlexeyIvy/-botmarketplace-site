@@ -11,6 +11,12 @@ import { apiFetch, apiFetchNoWorkspace, clearAuth, getToken } from "../../lib/ap
 interface Me {
   id: string;
   email: string;
+  avatarUrl?: string | null;
+}
+
+interface MeResponse {
+  user: Me;
+  workspaceId: string | null;
 }
 
 interface ExchangeConn {
@@ -45,6 +51,11 @@ export default function SettingsPage() {
   const [sessionExpired, setSessionExpired] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // avatar
+  const [avatarInput, setAvatarInput] = useState("");
+  const [avatarSaving, setAvatarSaving] = useState(false);
+  const [avatarError, setAvatarError] = useState<string | null>(null);
+
   // appearance
   const [theme, setTheme] = useState<Theme>("system");
 
@@ -69,14 +80,15 @@ export default function SettingsPage() {
     }
     setConnLoading(true);
     Promise.all([
-      apiFetchNoWorkspace<Me>("/auth/me"),
+      apiFetchNoWorkspace<MeResponse>("/auth/me"),
       apiFetch<ExchangeConn[]>("/exchanges"),
     ]).then(([meRes, connsRes]) => {
       setLoading(false);
       setConnLoading(false);
 
       if (meRes.ok) {
-        setMe(meRes.data);
+        setMe(meRes.data.user);
+        setAvatarInput(meRes.data.user.avatarUrl ?? "");
       } else if (meRes.problem.status === 401) {
         setSessionExpired(true);
         return;
@@ -97,6 +109,21 @@ export default function SettingsPage() {
   function handleLogout() {
     clearAuth();
     router.push("/login");
+  }
+
+  async function handleAvatarSave() {
+    setAvatarError(null);
+    setAvatarSaving(true);
+    const res = await apiFetchNoWorkspace<{ user: Me }>("/users/me", {
+      method: "PATCH",
+      body: JSON.stringify({ avatarUrl: avatarInput.trim() || null }),
+    });
+    setAvatarSaving(false);
+    if (res.ok) {
+      setMe((prev) => prev ? { ...prev, avatarUrl: res.data.user.avatarUrl } : prev);
+    } else {
+      setAvatarError(res.problem.detail ?? "Failed to save avatar");
+    }
   }
 
   function applyTheme(t: Theme) {
@@ -218,6 +245,34 @@ export default function SettingsPage() {
         </div>
         <div style={{ marginTop: 20 }}>
           <button onClick={handleLogout} style={logoutBtn}>Log out</button>
+        </div>
+      </section>
+
+      {/* Avatar block */}
+      <section style={card}>
+        <h2 style={sectionTitle}>Avatar</h2>
+        {avatarError && <p style={{ color: "#f85149", fontSize: 13, marginBottom: 12 }}>{avatarError}</p>}
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          {me?.avatarUrl && (
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={me.avatarUrl}
+                alt="avatar preview"
+                style={{ width: 56, height: 56, borderRadius: "50%", objectFit: "cover", border: "1px solid var(--border)" }}
+              />
+              <span style={{ color: "var(--text-secondary)", fontSize: 12 }}>Current avatar</span>
+            </div>
+          )}
+          <input
+            placeholder="Avatar URL (http:// or https://)"
+            value={avatarInput}
+            onChange={(e) => setAvatarInput(e.target.value)}
+            style={inputStyle}
+          />
+          <button onClick={handleAvatarSave} disabled={avatarSaving} style={{ ...primaryBtn, alignSelf: "flex-start" }}>
+            {avatarSaving ? "Saving…" : "Save Avatar"}
+          </button>
         </div>
       </section>
 
