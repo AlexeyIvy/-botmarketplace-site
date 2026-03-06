@@ -54,16 +54,40 @@ type LoadState = "idle" | "loading" | "success" | "error";
 type OrderState = "idle" | "loading" | "success" | "error";
 type BottomTab = "ticker" | "orders" | "candles";
 
+interface SymbolInfo {
+  symbol: string;
+  base: string;
+  quote: string;
+  status: string;
+}
+
+interface WatchlistQuote {
+  symbol: string;
+  lastPrice: string;
+  price24hPcnt: string;
+  prevLastPrice?: string; // for up/down hint
+}
+
 // ---------------------------------------------------------------------------
 // Constants
 // ---------------------------------------------------------------------------
 
-const WATCHLIST_SYMBOLS = ["BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT"] as const;
+const SUPPORTED_EXCHANGES = ["bybit"] as const;
+const SUPPORTED_MARKETS = ["linear", "spot"] as const;
+type SupportedExchange = (typeof SUPPORTED_EXCHANGES)[number];
+type SupportedMarket = (typeof SUPPORTED_MARKETS)[number];
+
+const DEFAULT_EXCHANGE: SupportedExchange = "bybit";
+const DEFAULT_MARKET: SupportedMarket = "linear";
 const DEFAULT_SYMBOL = "BTCUSDT";
 const DEFAULT_INTERVAL = "15";
 
+const DEFAULT_WATCHLIST = ["BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT"];
+const MAX_WATCHLIST = 30;
+const POLL_INTERVAL_MS = 2000;
+
 // ---------------------------------------------------------------------------
-// Preferences helpers (Stage 20c)
+// Preferences helpers (Stage 20c extended for 20d)
 // ---------------------------------------------------------------------------
 
 const PREFS_LS_KEY = "terminalPrefsV1";
@@ -79,17 +103,22 @@ interface MarketPrefs {
 
 interface TerminalJson {
   version: 1;
+  selectedExchange?: string;
+  selectedMarket?: string;
   terminal: Record<string, MarketPrefs>;
 }
 
-/** Exchange+market key for bybit linear (default) */
-const MARKET_KEY = "bybit:linear";
+function marketKey(exchange: string, market: string) {
+  return `${exchange}:${market}`;
+}
 
 const DEFAULT_PREFS: TerminalJson = {
   version: 1,
+  selectedExchange: DEFAULT_EXCHANGE,
+  selectedMarket: DEFAULT_MARKET,
   terminal: {
-    [MARKET_KEY]: {
-      watchlist: [...WATCHLIST_SYMBOLS],
+    [marketKey(DEFAULT_EXCHANGE, DEFAULT_MARKET)]: {
+      watchlist: [...DEFAULT_WATCHLIST],
       activeSymbol: DEFAULT_SYMBOL,
       interval: DEFAULT_INTERVAL,
       indicators: [],
@@ -140,6 +169,16 @@ export default function TerminalPage() {
     setHasToken(!!getToken());
   }, []);
 
+  // --- Exchange + Market selection ---
+  const [selectedExchange, setSelectedExchange] = useState<SupportedExchange>(DEFAULT_EXCHANGE);
+  const [selectedMarket, setSelectedMarket] = useState<SupportedMarket>(DEFAULT_MARKET);
+
+  // --- Symbols directory ---
+  const [allSymbols, setAllSymbols] = useState<SymbolInfo[]>([]);
+  const [symbolsLoading, setSymbolsLoading] = useState(false);
+  const [symbolSearch, setSymbolSearch] = useState("");
+  const [showPicker, setShowPicker] = useState(false);
+
   // --- Market Data state ---
   const [symbol, setSymbol] = useState(DEFAULT_SYMBOL);
   const [interval, setInterval] = useState(DEFAULT_INTERVAL);
@@ -168,6 +207,11 @@ export default function TerminalPage() {
   const [allOrders, setAllOrders] = useState<TerminalOrder[]>([]);
   const [markers, setMarkers] = useState<ChartMarker[]>([]);
 
+  // --- Watchlist + polling ---
+  const [watchlist, setWatchlist] = useState<string[]>([...DEFAULT_WATCHLIST]);
+  const [watchlistQuotes, setWatchlistQuotes] = useState<Record<string, WatchlistQuote>>({});
+  const pollTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   // --- Layout state ---
   const [showWatchlist, setShowWatchlist] = useState(true);
   const [showOrderPanel, setShowOrderPanel] = useState(true);
@@ -181,30 +225,48 @@ export default function TerminalPage() {
     }
   }, []);
 
-  // --- Preferences sync (Stage 20c) ---
+  // --- Preferences sync (Stage 20c extended) ---
   const prefsSaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const prefsLoaded = useRef(false);
 
-  /** Build current prefs snapshot from local state */
+  const currentMktKey = marketKey(selectedExchange, selectedMarket);
+
+  /** Build current prefs snapshot */
   const buildPrefs = useCallback((): TerminalJson => ({
     version: 1,
+    selectedExchange,
+    selectedMarket,
     terminal: {
-      [MARKET_KEY]: {
-        watchlist: [...WATCHLIST_SYMBOLS],
+      [currentMktKey]: {
+        watchlist: [...watchlist],
         activeSymbol: symbol,
         interval,
         indicators: [],
         layout: { showWatchlist, showOrderPanel },
       },
     },
-  }), [symbol, interval, showWatchlist, showOrderPanel]);
+  }), [selectedExchange, selectedMarket, currentMktKey, watchlist, symbol, interval, showWatchlist, showOrderPanel]);
 
   /** Apply a loaded TerminalJson to local state */
   function applyPrefs(tj: TerminalJson) {
-    const mkt = tj.terminal?.[MARKET_KEY];
+    if (tj.selectedExchange && SUPPORTED_EXCHANGES.includes(tj.selectedExchange as SupportedExchange)) {
+      setSelectedExchange(tj.selectedExchange as SupportedExchange);
+    }
+    if (tj.selectedMarket && SUPPORTED_MARKETS.includes(tj.selectedMarket as SupportedMarket)) {
+      setSelectedMarket(tj.selectedMarket as SupportedMarket);
+    }
+    // Load prefs for the saved market key
+    const mktKey = marketKey(
+      tj.selectedExchange ?? DEFAULT_EXCHANGE,
+      tj.selectedMarket ?? DEFAULT_MARKET,
+    );
+    const mkt = tj.terminal?.[mktKey] ?? tj.terminal?.[marketKey(DEFAULT_EXCHANGE, DEFAULT_MARKET)];
     if (!mkt) return;
     if (mkt.activeSymbol) setSymbol(mkt.activeSymbol);
     if (mkt.interval) setInterval(mkt.interval);
+    if (Array.isArray(mkt.watchlist) && mkt.watchlist.length > 0) {
+      setWatchlist(mkt.watchlist.slice(0, MAX_WATCHLIST));
+    }
     if (mkt.layout) {
       if (typeof mkt.layout.showWatchlist === "boolean") setShowWatchlist(mkt.layout.showWatchlist);
       if (typeof mkt.layout.showOrderPanel === "boolean") setShowOrderPanel(mkt.layout.showOrderPanel);
@@ -264,15 +326,66 @@ export default function TerminalPage() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Save preferences whenever key state changes (after initial load)
+  // Save preferences when key state changes
   useEffect(() => {
     if (!prefsLoaded.current) return;
     schedulePrefsWrite(buildPrefs());
-  }, [symbol, interval, showWatchlist, showOrderPanel, buildPrefs, schedulePrefsWrite]);
+  }, [symbol, interval, showWatchlist, showOrderPanel, watchlist, selectedExchange, selectedMarket, buildPrefs, schedulePrefsWrite]);
 
-  // Load exchange connections on mount (auth only — guests must not call this)
+  // --- Load symbols directory when exchange/market changes ---
   useEffect(() => {
-    if (!hasToken) return;
+    setAllSymbols([]);
+    setSymbolsLoading(true);
+    apiFetchNoWorkspace<{ symbols: SymbolInfo[] }>(
+      `/terminal/symbols?exchange=${selectedExchange}&market=${selectedMarket}`,
+    ).then((res) => {
+      if (res.ok) setAllSymbols(res.data.symbols ?? []);
+    }).catch(() => undefined).finally(() => setSymbolsLoading(false));
+  }, [selectedExchange, selectedMarket]);
+
+  // --- Watchlist polling ---
+  const pollWatchlistQuotes = useCallback(async () => {
+    if (watchlist.length === 0) return;
+    const syms = watchlist.slice(0, MAX_WATCHLIST).join(",");
+    const res = await apiFetchNoWorkspace<{ tickers: Array<{ symbol: string; lastPrice: string; price24hPcnt: string }> }>(
+      `/terminal/tickers?exchange=${selectedExchange}&market=${selectedMarket}&symbols=${encodeURIComponent(syms)}`,
+    );
+    if (!res.ok) return;
+    setWatchlistQuotes((prev) => {
+      const next: Record<string, WatchlistQuote> = { ...prev };
+      for (const t of res.data.tickers ?? []) {
+        next[t.symbol] = {
+          symbol: t.symbol,
+          lastPrice: t.lastPrice,
+          price24hPcnt: t.price24hPcnt,
+          prevLastPrice: prev[t.symbol]?.lastPrice,
+        };
+      }
+      return next;
+    });
+  }, [watchlist, selectedExchange, selectedMarket]);
+
+  // Start/restart polling when watchlist or exchange/market changes
+  useEffect(() => {
+    if (pollTimerRef.current) clearTimeout(pollTimerRef.current);
+    let active = true;
+    function schedulePoll() {
+      void pollWatchlistQuotes().finally(() => {
+        if (active) {
+          pollTimerRef.current = setTimeout(schedulePoll, POLL_INTERVAL_MS);
+        }
+      });
+    }
+    schedulePoll();
+    return () => {
+      active = false;
+      if (pollTimerRef.current) clearTimeout(pollTimerRef.current);
+    };
+  }, [pollWatchlistQuotes]);
+
+  // Load exchange connections on mount (auth only)
+  useEffect(() => {
+    if (!getToken()) return;
     apiFetch<ExchangeConnection[]>("/exchanges").then((res) => {
       if (res.ok) {
         setConnections(res.data);
@@ -281,7 +394,7 @@ export default function TerminalPage() {
         setSessionExpired(true);
       }
     });
-  }, [hasToken]);
+  }, []);
 
   // Load orders for markers (workspace-scoped via apiFetch)
   useEffect(() => {
@@ -469,6 +582,28 @@ export default function TerminalPage() {
           {showWatchlist ? "◀ Watch" : "Watch ▶"}
         </button>
 
+        {/* Exchange selector */}
+        <select
+          style={{ ...input, width: 80 }}
+          value={selectedExchange}
+          onChange={(e) => setSelectedExchange(e.target.value as SupportedExchange)}
+        >
+          {SUPPORTED_EXCHANGES.map((ex) => (
+            <option key={ex} value={ex}>{ex}</option>
+          ))}
+        </select>
+
+        {/* Market selector */}
+        <select
+          style={{ ...input, width: 80 }}
+          value={selectedMarket}
+          onChange={(e) => setSelectedMarket(e.target.value as SupportedMarket)}
+        >
+          {SUPPORTED_MARKETS.map((m) => (
+            <option key={m} value={m}>{m}</option>
+          ))}
+        </select>
+
         <input
           style={{ ...input, width: 120 }}
           placeholder="Symbol"
@@ -476,6 +611,15 @@ export default function TerminalPage() {
           onChange={(e) => setSymbol(e.target.value.toUpperCase())}
           onKeyDown={(e) => e.key === "Enter" && loadAll()}
         />
+
+        {/* Symbols picker toggle */}
+        <button
+          style={togglePanelBtn}
+          onClick={() => setShowPicker((v) => !v)}
+          title="Browse symbols"
+        >
+          {symbolsLoading ? "..." : `+ Symbols`}
+        </button>
 
         <select
           style={{ ...input, width: 80 }}
@@ -512,6 +656,54 @@ export default function TerminalPage() {
         </button>
       </div>
 
+      {/* ── Symbols picker dropdown ── */}
+      {showPicker && (
+        <div style={pickerDropdown}>
+          <div style={{ display: "flex", gap: 6, marginBottom: 8 }}>
+            <input
+              style={{ ...input, flex: 1 }}
+              placeholder="Search symbols..."
+              value={symbolSearch}
+              onChange={(e) => setSymbolSearch(e.target.value.toUpperCase())}
+              autoFocus
+            />
+            <button style={togglePanelBtn} onClick={() => setShowPicker(false)}>✕</button>
+          </div>
+          <div style={{ maxHeight: 240, overflowY: "auto" }}>
+            {allSymbols
+              .filter((s) => !symbolSearch || s.symbol.includes(symbolSearch))
+              .slice(0, 100)
+              .map((s) => {
+                const inList = watchlist.includes(s.symbol);
+                return (
+                  <div key={s.symbol} style={pickerRow}>
+                    <span style={{ fontFamily: "monospace", fontSize: 13 }}>{s.symbol}</span>
+                    <span style={{ color: "var(--text-secondary)", fontSize: 11 }}>{s.base}/{s.quote}</span>
+                    <button
+                      style={{
+                        ...togglePanelBtn,
+                        padding: "2px 8px",
+                        fontSize: 11,
+                        marginLeft: "auto",
+                        color: inList ? "#f85149" : "#3fb950",
+                      }}
+                      onClick={() => {
+                        if (inList) {
+                          setWatchlist((prev) => prev.filter((x) => x !== s.symbol));
+                        } else if (watchlist.length < MAX_WATCHLIST) {
+                          setWatchlist((prev) => [...prev, s.symbol]);
+                        }
+                      }}
+                    >
+                      {inList ? "Remove" : "Add"}
+                    </button>
+                  </div>
+                );
+              })}
+          </div>
+        </div>
+      )}
+
       {/* ── Main row: Watchlist | Chart | Order Panel ── */}
       <div style={mainRow}>
 
@@ -519,20 +711,40 @@ export default function TerminalPage() {
         {showWatchlist && (
           <div style={watchlistPanel}>
             <div style={panelTitle}>Watchlist</div>
-            {WATCHLIST_SYMBOLS.map((sym) => (
-              <button
-                key={sym}
-                style={{
-                  ...watchlistItem,
-                  background: sym === symbol ? "var(--accent, #0969da)" : "transparent",
-                  color: sym === symbol ? "#fff" : "var(--text-primary)",
-                  fontWeight: sym === symbol ? 700 : 400,
-                }}
-                onClick={() => setSymbol(sym)}
-              >
-                {sym}
-              </button>
-            ))}
+            {watchlist.map((sym) => {
+              const q = watchlistQuotes[sym];
+              const pct = q ? parseFloat(q.price24hPcnt) : 0;
+              const priceUp = q && q.prevLastPrice ? parseFloat(q.lastPrice) > parseFloat(q.prevLastPrice) : null;
+              return (
+                <button
+                  key={sym}
+                  style={{
+                    ...watchlistItem,
+                    background: sym === symbol ? "var(--accent, #0969da)" : "transparent",
+                    color: sym === symbol ? "#fff" : "var(--text-primary)",
+                    fontWeight: sym === symbol ? 700 : 400,
+                  }}
+                  onClick={() => setSymbol(sym)}
+                >
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <span>{sym}</span>
+                    {q && (
+                      <span style={{
+                        fontSize: 11,
+                        color: priceUp === true ? "#3fb950" : priceUp === false ? "#f85149" : "inherit",
+                      }}>
+                        {priceUp === true ? "▲" : priceUp === false ? "▼" : ""}{q.lastPrice}
+                      </span>
+                    )}
+                  </div>
+                  {q && (
+                    <div style={{ fontSize: 10, color: pct > 0 ? "#3fb950" : pct < 0 ? "#f85149" : "var(--text-secondary)", textAlign: "right" }}>
+                      {pct > 0 ? "+" : ""}{(pct * 100).toFixed(2)}%
+                    </div>
+                  )}
+                </button>
+              );
+            })}
           </div>
         )}
 
@@ -1087,4 +1299,20 @@ const loginCtaBtn: React.CSSProperties = {
   cursor: "pointer",
   fontSize: 16,
   fontWeight: 600,
+};
+
+const pickerDropdown: React.CSSProperties = {
+  position: "relative",
+  background: "var(--bg-card)",
+  borderBottom: "1px solid var(--border)",
+  padding: "10px 12px",
+  zIndex: 10,
+};
+
+const pickerRow: React.CSSProperties = {
+  display: "flex",
+  alignItems: "center",
+  gap: 8,
+  padding: "5px 4px",
+  borderBottom: "1px solid var(--border)",
 };

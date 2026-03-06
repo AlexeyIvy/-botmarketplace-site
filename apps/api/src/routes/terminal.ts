@@ -66,12 +66,190 @@ function bybitErrorToProblem(
 }
 
 // ---------------------------------------------------------------------------
+// Stage 20d — Symbols directory + batch tickers
+// ---------------------------------------------------------------------------
+
+const SUPPORTED_EXCHANGES = ["bybit"] as const;
+const SUPPORTED_MARKETS = ["linear", "spot"] as const;
+type SupportedMarket = (typeof SUPPORTED_MARKETS)[number];
+
+const BYBIT_PUBLIC_BASE = "https://api.bybit.com";
+const MAX_TICKER_SYMBOLS = 30;
+
+/** Map our "market" param to Bybit category */
+function marketToCategory(market: SupportedMarket): string {
+  if (market === "spot") return "spot";
+  return "linear"; // linear perpetuals
+}
+
+interface BybitInstrumentsResponse {
+  retCode: number;
+  retMsg: string;
+  result: {
+    list: Array<{
+      symbol: string;
+      baseCoin: string;
+      quoteCoin: string;
+      status: string;
+    }>;
+  };
+}
+
+interface BybitBatchTickerResponse {
+  retCode: number;
+  retMsg: string;
+  result: {
+    list: Array<{
+      symbol: string;
+      lastPrice: string;
+      price24hPcnt: string;
+    }>;
+  };
+}
+
+// ---------------------------------------------------------------------------
 // Routes
 // ---------------------------------------------------------------------------
 
 export async function terminalRoutes(app: FastifyInstance) {
   // Register order routes (Stage 9b)
   registerOrderRoutes(app);
+
+  /**
+   * GET /terminal/symbols?exchange=bybit&market=linear
+   *
+   * Public endpoint — no auth required.
+   * Returns tradeable instruments for the given exchange+market.
+   */
+  app.get<{ Querystring: { exchange?: string; market?: string } }>(
+    "/terminal/symbols",
+    async (request, reply) => {
+      const { exchange, market } = request.query;
+
+      if (!exchange || !SUPPORTED_EXCHANGES.includes(exchange as "bybit")) {
+        return problem(
+          reply,
+          400,
+          "Bad Request",
+          `Query parameter 'exchange' is required. Supported: ${SUPPORTED_EXCHANGES.join(", ")}`,
+        );
+      }
+      if (!market || !SUPPORTED_MARKETS.includes(market as SupportedMarket)) {
+        return problem(
+          reply,
+          400,
+          "Bad Request",
+          `Query parameter 'market' is required. Supported: ${SUPPORTED_MARKETS.join(", ")}`,
+        );
+      }
+
+      const category = marketToCategory(market as SupportedMarket);
+      const url =
+        `${BYBIT_PUBLIC_BASE}/v5/market/instruments-info?category=${category}&status=Trading&limit=1000`;
+
+      try {
+        const res = await fetch(url, { headers: { "User-Agent": "botmarketplace-terminal/1" } });
+        if (!res.ok) {
+          throw new Error(`Bybit instruments request failed: ${res.status} ${res.statusText}`);
+        }
+        const json = (await res.json()) as BybitInstrumentsResponse;
+        if (json.retCode !== 0) {
+          throw new Error(`Bybit API error ${json.retCode}: ${json.retMsg}`);
+        }
+
+        const symbols = (json.result?.list ?? []).map((item) => ({
+          symbol: item.symbol,
+          base: item.baseCoin,
+          quote: item.quoteCoin,
+          status: item.status,
+        }));
+
+        return reply.send({ exchange, market, symbols });
+      } catch (err) {
+        request.log.warn({ exchange, market, err }, "terminal symbols fetch failed");
+        return bybitErrorToProblem(reply, err, "symbols");
+      }
+    },
+  );
+
+  /**
+   * GET /terminal/tickers?exchange=bybit&market=linear&symbols=BTCUSDT,ETHUSDT
+   *
+   * Public endpoint — no auth required.
+   * Returns lastPrice + price24hPcnt for a batch of symbols (max 30).
+   */
+  app.get<{ Querystring: { exchange?: string; market?: string; symbols?: string } }>(
+    "/terminal/tickers",
+    async (request, reply) => {
+      const { exchange, market, symbols: symbolsParam } = request.query;
+
+      if (!exchange || !SUPPORTED_EXCHANGES.includes(exchange as "bybit")) {
+        return problem(
+          reply,
+          400,
+          "Bad Request",
+          `Query parameter 'exchange' is required. Supported: ${SUPPORTED_EXCHANGES.join(", ")}`,
+        );
+      }
+      if (!market || !SUPPORTED_MARKETS.includes(market as SupportedMarket)) {
+        return problem(
+          reply,
+          400,
+          "Bad Request",
+          `Query parameter 'market' is required. Supported: ${SUPPORTED_MARKETS.join(", ")}`,
+        );
+      }
+      if (!symbolsParam || !symbolsParam.trim()) {
+        return problem(reply, 400, "Bad Request", "Query parameter 'symbols' is required (comma-separated)");
+      }
+
+      const symbolList = symbolsParam
+        .split(",")
+        .map((s) => s.trim().toUpperCase())
+        .filter(Boolean);
+
+      if (symbolList.length === 0) {
+        return problem(reply, 400, "Bad Request", "'symbols' must contain at least one symbol");
+      }
+      if (symbolList.length > MAX_TICKER_SYMBOLS) {
+        return problem(
+          reply,
+          400,
+          "Bad Request",
+          `Too many symbols. Maximum allowed: ${MAX_TICKER_SYMBOLS}`,
+        );
+      }
+
+      const category = marketToCategory(market as SupportedMarket);
+
+      // Fan out — Bybit tickers endpoint accepts a single symbol per call.
+      try {
+        const results = await Promise.all(
+          symbolList.map(async (sym) => {
+            const url =
+              `${BYBIT_PUBLIC_BASE}/v5/market/tickers?category=${category}&symbol=${encodeURIComponent(sym)}`;
+            const res = await fetch(url, { headers: { "User-Agent": "botmarketplace-terminal/1" } });
+            if (!res.ok) return null;
+            const json = (await res.json()) as BybitBatchTickerResponse;
+            if (json.retCode !== 0) return null;
+            const item = json.result?.list?.[0];
+            if (!item) return null;
+            return {
+              symbol: item.symbol,
+              lastPrice: item.lastPrice,
+              price24hPcnt: item.price24hPcnt,
+            };
+          }),
+        );
+
+        const tickers = results.filter(Boolean);
+        return reply.send({ exchange, market, tickers });
+      } catch (err) {
+        request.log.warn({ exchange, market, err }, "terminal tickers fetch failed");
+        return bybitErrorToProblem(reply, err, "tickers");
+      }
+    },
+  );
 
   /**
    * GET /terminal/ticker?symbol=BTCUSDT
