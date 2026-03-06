@@ -270,8 +270,9 @@ export default function TerminalPage() {
     schedulePrefsWrite(buildPrefs());
   }, [symbol, interval, showWatchlist, showOrderPanel, buildPrefs, schedulePrefsWrite]);
 
-  // Load exchange connections on mount
+  // Load exchange connections on mount (auth only — guests must not call this)
   useEffect(() => {
+    if (!hasToken) return;
     apiFetch<ExchangeConnection[]>("/exchanges").then((res) => {
       if (res.ok) {
         setConnections(res.data);
@@ -280,7 +281,7 @@ export default function TerminalPage() {
         setSessionExpired(true);
       }
     });
-  }, []);
+  }, [hasToken]);
 
   // Load orders for markers (workspace-scoped via apiFetch)
   useEffect(() => {
@@ -347,10 +348,6 @@ export default function TerminalPage() {
   }
 
   async function loadAll() {
-    if (!getToken()) {
-      router.push("/login");
-      return;
-    }
     await Promise.all([loadTicker(), loadCandles()]);
   }
 
@@ -438,22 +435,6 @@ export default function TerminalPage() {
     return (
       <div style={{ padding: "32px 24px" }}>
         <p style={hint}>Loading...</p>
-      </div>
-    );
-  }
-
-  if (hasToken === false) {
-    return (
-      <div style={loginCtaWrap}>
-        <div style={loginCtaBox}>
-          <h1 style={{ fontSize: 26, marginBottom: 12 }}>Terminal</h1>
-          <p style={{ color: "var(--text-secondary)", marginBottom: 24, fontSize: 15 }}>
-            Sign in to load market data, view charts, and place orders.
-          </p>
-          <button style={loginCtaBtn} onClick={() => router.push("/login")}>
-            Login to load market data
-          </button>
-        </div>
       </div>
     );
   }
@@ -569,7 +550,16 @@ export default function TerminalPage() {
           <div style={orderPanelCol}>
             <div style={panelTitle}>Place Order</div>
 
-            {connections.length === 0 ? (
+            {!hasToken ? (
+              <div style={{ padding: "16px 12px", display: "flex", flexDirection: "column", gap: 10 }}>
+                <p style={{ ...hint, fontSize: 13, lineHeight: 1.5 }}>
+                  Login to trade / connect exchange
+                </p>
+                <button style={loginCtaBtn} onClick={() => router.push("/login")}>
+                  Sign in
+                </button>
+              </div>
+            ) : connections.length === 0 ? (
               <p style={{ ...hint, padding: "10px 12px" }}>
                 No exchange connections. Create one first.
               </p>
@@ -745,7 +735,14 @@ export default function TerminalPage() {
           {/* Orders tab */}
           {bottomTab === "orders" && (
             <>
-              {allOrders.length === 0 ? (
+              {!hasToken ? (
+                <div style={{ display: "flex", flexDirection: "column", gap: 10, alignItems: "flex-start" }}>
+                  <p style={hint}>Login to view order history.</p>
+                  <button style={{ ...loginCtaBtn, fontSize: 13, padding: "8px 20px" }} onClick={() => router.push("/login")}>
+                    Sign in to trade
+                  </button>
+                </div>
+              ) : allOrders.length === 0 ? (
                 <p style={hint}>No orders yet.</p>
               ) : (
                 <div style={{ overflowX: "auto" }}>
@@ -1079,19 +1076,6 @@ const td: React.CSSProperties = {
   textAlign: "right",
   borderBottom: "1px solid var(--border)",
   fontFamily: "monospace",
-};
-
-const loginCtaWrap: React.CSSProperties = {
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  minHeight: "60vh",
-  padding: "32px 24px",
-};
-
-const loginCtaBox: React.CSSProperties = {
-  textAlign: "center",
-  maxWidth: 400,
 };
 
 const loginCtaBtn: React.CSSProperties = {
