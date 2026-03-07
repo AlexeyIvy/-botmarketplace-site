@@ -106,9 +106,9 @@ MVP MUST:
 
 ## 6) Масштабирование (post-MVP)
 
-- Multi-user:
-  - добавляем Workspace и лимиты,
-  - изоляция ключей/данных.
+- Multi-user (расширение):
+  - `workspaceId`-изоляция введена в Stage 7 (lab/dataset layer); расширяем на все сущности,
+  - RBAC роли и лимиты (post-MVP).
 - Multi-bot:
   - очередь BotRuns,
   - ограничение concurrency,
@@ -117,3 +117,122 @@ MVP MUST:
   - feature flag,
   - дополнительные подтверждения,
   - расширенный аудит и risk-лимиты.
+
+---
+
+## 7) Research Lab v2 — архитектурная интеграция
+
+> **Canonical spec:** `docs/23-lab-v2-ide-spec.md`. Данный раздел описывает место Lab в общей архитектуре системы — только то, что влияет на смежные компоненты.
+
+### 7.1 Место Lab в общей архитектуре
+
+Lab v2 (`/lab`) — это frontend IDE-шелл поверх существующих backend-сервисов.
+Он не является отдельным сервисом. Он не создаёт параллельного data layer.
+
+```
+┌────────────────────────────────────────────────────────────────────┐
+│  Browser — /lab (Lab Shell, Phase 1+)                              │
+│                                                                     │
+│  ┌─────────┐  ┌─────────────────┐  ┌────────────────────────────┐ │
+│  │  Data   │  │  Build           │  │  Test / Classic             │ │
+│  │  mode   │  │  mode            │  │  mode                       │ │
+│  │(Stage19 │  │(React Flow       │  │(BacktestRunner /            │ │
+│  │ dataset │  │ canvas,          │  │ DslEditor + AiChat)         │ │
+│  │ UI)     │  │ Phase 3)         │  │                             │ │
+│  └────┬────┘  └────────┬─────────┘  └───────────────────────────┘ │
+│       │                 │                                           │
+│    useLabGraphStore (Zustand) — session state, localStorage Phase 1 │
+└───────┼─────────────────┼────────────────────────────────────────── ┘
+        │                 │
+        ▼                 ▼
+┌──────────────────────────────────────────────────────────────────┐
+│  Backend API (/api/v1/)                                           │
+│                                                                   │
+│  Stage 19 dataset endpoints   │  Phase 3+ graph persistence      │
+│  POST /lab/datasets           │  POST /lab/graphs                │
+│  GET  /lab/datasets           │  GET  /lab/graphs                │
+│  GET  /lab/datasets/:id       │  GET  /lab/graphs/:id            │
+│  GET  /lab/datasets/:id/preview│ (quality in :id response body)  │
+│                               │  Phase 4: graph compiler         │
+│  Existing: BotRun, BotEvent,  │  POST /lab/graphs/:id/compile    │
+│  StrategyVersion, BacktestResult│ → returns StrategyVersion       │
+└──────────────────────────────────────────────────────────────────┘
+        │
+        ▼
+┌──────────────────────────────────────────────────────────────────┐
+│  Bot Runtime (Worker)                                             │
+│  Reads: StrategyVersion.body (compiled DSL JSON)                 │
+│  Does NOT know: StrategyGraph, LabWorkspace, React Flow          │
+└──────────────────────────────────────────────────────────────────┘
+```
+
+### 7.2 Инварианты архитектуры Lab
+
+**Frontend не ходит на биржу напрямую:**
+Это правило не меняется для Lab. Frontend Lab shell запрашивает только собственный backend.
+Все данные из Bybit приходят через Backend API (proxy / cached).
+
+**Stage 19 dataset layer переиспользуется, не переписывается:**
+Lab v2 Phase 2 строит UI поверх уже существующих Stage 19 API endpoints.
+Не создаётся дублирующих таблиц `Dataset`, `DatasetDefinition` и т.п.
+Единственное допустимое изменение схемы в Phase 2: `MarketDataset.name` (nullable).
+
+**Phase 1 = нет backend-изменений:**
+Phase 1 — только frontend shell, компонентная структура, context bar.
+Никаких новых API эндпоинтов, никаких схем, никаких DB миграций.
+
+**Graph = authoring layer, не runtime:**
+StrategyGraph и LabWorkspace — объекты уровня редактора.
+Bot Runtime получает только `StrategyVersion.body` (декларативный DSL).
+Runtime не знает о React Flow, нодах, портах, LabWorkspace.
+
+### 7.3 LabWorkspace vs Workspace
+
+| | `LabWorkspace` | `Workspace` (Stage 7; RBAC — post-MVP) |
+|---|---|---|
+| Что это | Рабочая область лаборатории для Lab v2 | Мультиарендный контейнер для всего приложения |
+| Когда появляется | Phase 3 (DB table) / Phase 1 (client state) | Stage 7 (entity + workspaceId-изоляция); RBAC/квоты — post-MVP |
+| Ownership | `workspaceId` FK → Workspace; один LabWorkspace на Workspace в Phase 3 | Содержит пользователей и роли |
+| Что хранит | activeExchangeConnectionId, activeDatasetId, uiState | userId набор, роли, квоты |
+| Путается ли с Workspace | **НЕТ** — отдельная таблица, отдельный концепт | — |
+
+> Правило: `LabWorkspace` принадлежит `Workspace` через `workspaceId` FK — но это разные сущности. `LabWorkspace` — инструментальная область редактора; `Workspace` — мультиарендный контейнер приложения. Не использовать взаимозаменяемо.
+
+### 7.4 Цепочка компиляции (Phase 4)
+
+```
+StrategyGraph (Phase 3 DB entity)
+     │
+     │  POST /api/v1/lab/graphs/:id/compile
+     ▼
+Graph Compiler (Phase 4 backend service / function)
+     │  Reads: StrategyGraph.nodesJson + edgesJson
+     │  Reads: blockLibraryVersion → block-to-DSL mapping table
+     ▼
+StrategyVersion.body (declarative DSL JSON)
+     │  + creates StrategyGraphVersion (immutable snapshot)
+     ▼
+BotRun → Bot Runtime Worker
+     │  Reads StrategyVersion.body only
+     ▼
+Bybit API (via Backend)
+```
+
+- Компилятор живёт в backend (не в браузере).
+- Mapping table (block type → DSL rule) документируется в `docs/10-strategy-dsl.md §8` до начала кодирования Phase 4.
+- Фронтенд только вызывает эндпоинт компиляции и отображает результат.
+
+### 7.5 Хронология новых компонентов по фазам
+
+| Компонент | Тип | Фаза | Влияние на смежные системы |
+|---|---|---|---|
+| `LabShell`, `ContextBar`, mode tabs | Frontend only | Phase 1 | Нет (0 backend changes) |
+| `react-resizable-panels` | Frontend dep | Phase 1 | Нет |
+| Dataset UI (DatasetPanel) | Frontend only | Phase 2 | Читает Stage 19 API — не меняет его |
+| `MarketDataset.name` column | DB migration | Phase 2 | Nullable add; non-breaking |
+| `LabWorkspace` table | DB migration | Phase 3 | Новая таблица; нет FK на существующие critical entities |
+| `StrategyGraph` table | DB migration | Phase 3 | Новая таблица; FK на LabWorkspace |
+| React Flow canvas | Frontend dep | Phase 3 | Нет backend влияния |
+| Graph compiler endpoint | Backend | Phase 4 | Создаёт StrategyVersion + StrategyGraphVersion |
+| `StrategyGraphVersion` table | DB migration | Phase 4 | FK на StrategyGraph + StrategyVersion |
+| BacktestRunner UI | Frontend | Phase 5 | Вызывает существующий Stage 19 backtest API |

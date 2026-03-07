@@ -22,6 +22,35 @@
 - **Idempotency** — свойство операций “повторный запрос не создаёт дубликат” (важно для place/cancel).
 - **Reconciliation** — восстановление и сверка состояния (ордера/позиции) после реконнекта/сбоев.
 
+- **MarketDataset** — определение набора рыночных данных (symbol, timeframe, диапазон дат, хэш качества). Введено в Stage 19. Уже существует в кодовой базе. Переиспользуется в Lab v2 Phase 2+.
+- **BacktestResult** — результат бэктеста, привязанный к конкретной паре `(datasetId + datasetHash + engineVersion)`. Введено в Stage 19. Уже существует в кодовой базе.
+
+---
+
+## Lab v2 термины (Phase 3+, будущие сущности)
+
+- **LabWorkspace** — рабочая область лаборатории для построения стратегий в визуальном редакторе. **Не путать с `Workspace`** (см. ниже). Один на Workspace в Phase 3 (ownership через `workspaceId` FK). Хранит ссылку на активный `StrategyGraph` и активный `MarketDataset`. Введена в Phase 3 Lab v2.
+
+- **Workspace** — мультиарендный управленческий контейнер для всего приложения. Введён в Stage 7 (`workspaceId`-изоляция для lab/dataset layer). Полный RBAC, роли, квоты — post-MVP. **Не является** `LabWorkspace`.
+
+  > **Правило разграничения:** `LabWorkspace` = инструментальная рабочая область для Lab v2. `Workspace` = мультиарендный контейнер приложения (Stage 7; RBAC post-MVP). Не использовать термины взаимозаменяемо.
+
+- **StrategyGraph** — граф стратегии: набор `LabGraphNode` (узлов) и `LabGraphEdge` (рёбер), представляющих логику торговой стратегии визуально. Является **authoring-представлением** — компилируется в `StrategyVersion` / DSL. Хранится в `StrategyGraph.nodesJson` + `StrategyGraph.edgesJson`. Введена в Phase 3.
+
+- **StrategyGraphVersion** — иммутабельный снепшот `StrategyGraph`, создаваемый **только при компиляции** графа в DSL (Phase 4). Содержит полный снепшот графа + `blockLibraryVersion` + обязательную ссылку на `StrategyVersion` (скомпилированный DSL). Не создаётся при обычном сохранении графа. Введена в Phase 4.
+
+- **ValidationIssue** — запись об ошибке или предупреждении при валидации `StrategyGraph` на клиенте. Не является отдельной DB-сущностью в Phase 3 — хранится как часть UI-состояния в `useLabGraphStore`. Типы: `required-port-missing`, `type-mismatch`, `cycle-detected`, `missing-risk-block`, `block-library-version-mismatch`.
+
+- **BlockLibraryVersion** — semver-версия библиотеки блоков (`MAJOR.MINOR.PATCH`), зафиксированная в каждом `StrategyGraph` и `StrategyGraphVersion`. При расхождении MAJOR-версии требуется функция миграции. Используется для предотвращения несовместимости при загрузке старых графов.
+
+- **CandleInterval** — строковый тип, описывающий таймфрейм рыночных данных. Допустимые значения: `”1”`, `”3”`, `”5”`, `”15”`, `”30”`, `”60”`, `”120”`, `”240”`, `”360”`, `”720”`, `”D”`, `”W”`, `”M”` (формат Bybit). Используется в `MarketDataset` и при валидации совместимости портов (`Series<OHLCV>` при мисматче таймфреймов).
+
+- **PortDataType** — тип данных порта узла графа. Возможные значения: `Series<OHLCV>`, `Series<number>`, `Series<boolean>`, `Signal`, `RiskParams`, `OrderModel`. Типизация портов — строгая, без неявных преобразований. Подробнее: `docs/23-lab-v2-ide-spec.md §9.1`.
+
+- **Classic mode** — режим лаборатории MVP v1: DSL-редактор + AI-чат + результаты бэктеста. Обязателен до приёмки Phase 4 Lab v2. Представлен вкладкой `[Classic]` в Lab v2 шелле.
+
+---
+
 ## Соглашения
 
 - В документации “обязательное” = MUST (без этого задача не считается выполненной).

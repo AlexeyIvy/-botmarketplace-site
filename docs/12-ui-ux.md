@@ -1,6 +1,9 @@
-# UI/UX (MVP v1)
+# UI/UX (MVP v1 → Lab v2 evolution)
 
-Документ описывает структуру интерфейса, основные страницы, user flows и компонентную модель MVP.
+Документ описывает структуру интерфейса, основные страницы, user flows и компонентную модель.
+Разделён на две части: MVP v1 (текущая реализация) и Lab v2 (спланированная поэтапная эволюция).
+
+> **Canonical Lab v2 spec:** `docs/23-lab-v2-ide-spec.md`. Данный раздел — краткое отражение для согласованности, не дублирует детали.
 
 ## 1) Общие принципы
 
@@ -45,30 +48,109 @@
 
 ## 4) Research Lab
 
-### Layout
-- **Левая панель**: список стратегий (CRUD).
-- **Центр**: редактор Strategy DSL (JSON) + валидация в реальном времени.
-- **Правая панель**: AI-чат (генерация/правка стратегии).
-- **Нижняя панель**: результаты backtest (если запущен).
+> **Status:** This section covers two overlapping generations of the Lab UI.
+> Lab v2 is implemented incrementally via phases (see `docs/23-lab-v2-ide-spec.md`).
+> Classic mode (MVP v1) remains mandatory until Phase 4 of Lab v2 is accepted.
 
-### User flow: создание стратегии через AI
-1. Открыть Lab, нажать «New Strategy».
-2. Описать идею в AI-чате (текстом).
-3. AI генерирует Strategy Spec (JSON) + объяснение.
-4. Пользователь видит JSON в редакторе, может отредактировать.
-5. Нажать «Validate» — проверка по schema.
-6. Нажать «Save» — стратегия сохраняется.
+---
 
-### User flow: backtest (MVP minimum)
-1. Выбрать сохранённую стратегию.
-2. Нажать «Run Backtest» (исторический replay по свечам).
-3. Увидеть отчёт: trades, winrate, PnL, max drawdown.
+### 4A) Classic mode (MVP v1 — current implementation, must be preserved)
 
-### Компоненты
-- `StrategyList` — список стратегий
-- `DslEditor` — JSON-редактор с подсветкой и валидацией
-- `AiChat` — чат-панель (input + history + strategy output)
-- `BacktestReport` — отчёт бэктеста (таблица + метрики)
+**Layout:**
+- **Left panel**: strategy list (CRUD).
+- **Center**: Strategy DSL editor (JSON) + real-time schema validation.
+- **Right panel**: AI chat (strategy generation and editing).
+- **Bottom panel**: backtest results (when triggered).
+
+**User flow: creating a strategy via AI:**
+1. Open Lab, click "New Strategy".
+2. Describe the idea in AI chat (plain text).
+3. AI generates a Strategy Spec (JSON) + explanation.
+4. User sees JSON in editor, can hand-edit.
+5. Click "Validate" — schema check runs.
+6. Click "Save" — strategy is persisted.
+
+**User flow: backtest (MVP minimum):**
+1. Select a saved strategy.
+2. Click "Run Backtest" (historical replay over candles).
+3. See report: trades, winrate, PnL, max drawdown.
+
+**Classic mode components:**
+- `StrategyList` — strategy list with CRUD actions
+- `DslEditor` — JSON editor with syntax highlighting and live validation
+- `AiChat` — chat panel (input + history + strategy output)
+- `BacktestReport` — backtest results (table + metrics)
+
+> **Non-negotiable:** `DslEditor`, `AiChat`, and `BacktestReport` MUST NOT be removed
+> until Lab v2 Phase 4 is formally accepted. Both modes coexist as tabs.
+
+---
+
+### 4B) Lab v2 shell (phased evolution — details in `docs/23-lab-v2-ide-spec.md`)
+
+Lab v2 transforms `/lab` into a multi-mode IDE shell. The layout evolves across phases.
+
+**Target shell layout (Phase 1):**
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  Context bar: [ExchangeConnection ▾] [Dataset ▾]  [Build ▾]    │
+├────────────┬────────────────────────────────────┬───────────────┤
+│  Left      │  Center (mode-dependent view)       │  Right        │
+│  panel     │                                      │  Inspector    │
+│  (Data /   │  [Data] dataset list + preview       │  panel        │
+│   palette  │  [Build] React Flow strategy canvas  │               │
+│   or       │  [Test]  backtest run + results      │               │
+│   dataset  │  [Classic] DSL editor + AI chat      │               │
+│   list)    │                                      │               │
+├────────────┴────────────────────────────────────┴───────────────┤
+│  Bottom drawer: node output preview / validation issues / logs   │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+**Top context bar (Phase 1):**
+- Exchange connection selector (read from user's saved connections).
+- Dataset selector (binds active `MarketDataset` to the workspace).
+- Mode tabs: `[Data]` / `[Build]` / `[Test]` / `[Classic]`.
+- `Classic` tab is always visible until Phase 4 acceptance.
+
+**Data mode (Phase 2):**
+- Left: list of `MarketDataset` definitions for the workspace.
+- Center: dataset definition form (symbol, timeframe, date range) + data quality indicator.
+- Right: Inspector with dataset metadata (row count, last fetched, hash).
+- Bottom: row count / data preview (virtualized table or OHLCV chart).
+
+**Build mode (Phase 3):**
+- Left: searchable/categorized block palette.
+- Center: React Flow strategy canvas (see §6.3.1 of Lab v2 spec for connection UX).
+- Right: Inspector for selected node (parameters, port info, validation errors).
+- Bottom: diagnostics drawer (validation issues, stale nodes, execution log).
+
+**Test mode (Phase 5):**
+- Center: backtest run trigger + reproducible result viewer.
+- Right: run metadata (dataset hash, strategy version, engine version).
+- Bottom: equity curve, trade list, performance metrics.
+
+**Inspector panel (mandatory from Phase 3):**
+- Shows context for the selected graph object (node or edge).
+- For nodes: type, parameters, port status (connected / unconnected / error), validation errors.
+- For edges: source port, target port, data type, stale/invalid state.
+- For no selection: workspace summary (node count, validation status).
+
+**Diagnostics drawer (Phase 3):**
+- Persistent bottom panel listing graph-level issues.
+- Issue types: required-port-missing, type-mismatch (if edge was saved), stale-node, risk-block-absent.
+- Each issue is actionable (click → focus affected node/edge on canvas).
+
+**Lab v2 components (new, phased):**
+- `LabShell` — top-level route layout with context bar + mode tabs
+- `ContextBar` — connection + dataset selector + mode switcher
+- `DatasetPanel` — dataset list and definition form (Phase 2)
+- `StrategyCanvas` — React Flow canvas wrapper (Phase 3)
+- `BlockPalette` — categorized, searchable block list (Phase 3)
+- `LabInspector` — context-sensitive right panel (Phase 3)
+- `DiagnosticsDrawer` — validation issues + logs (Phase 3)
+- `BacktestRunner` — reproducible run trigger + result viewer (Phase 5)
 
 ## 5) Bot Factory
 
