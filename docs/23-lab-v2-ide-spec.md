@@ -383,6 +383,311 @@ This model ensures:
 
 ---
 
+### 6.3.1 Block connection UX (visual interaction model)
+
+> **Phase:** Phase 3 (graph editor implementation).
+> This section defines how users visually understand, create, modify, and remove connections between blocks. It is a required design spec for the React Flow custom node/edge implementation.
+
+The connection experience must feel like a **professional strategy IDE**, not a low-code toy. Users building trading strategies need to immediately understand what data flows where, see incompatibility before committing, and maintain clarity as graph density increases.
+
+---
+
+#### Connection layout (port placement)
+
+Every block node renders two distinct sides:
+
+- **Input ports — left side of the node:** aligned vertically in the left column of the node body. Each port shows its label to the right of the handle, inside the node.
+- **Output ports — right side of the node:** aligned vertically in the right column of the node body. Each port shows its label to the left of the handle, inside the node.
+
+Port labels:
+- Short, lowercase, descriptive: `price`, `signal`, `length`, `risk`, `candles out`.
+- Font: same as node body text, 10px, muted foreground color.
+- Always visible (not hover-only) so the graph is readable without interaction.
+
+Hit area:
+- Visible handle circle: **10px diameter**.
+- Invisible click/drag hit area: **24px × 24px** centered on the handle. This prevents misses when clicking quickly on edge-mounted handles.
+
+> **React Flow implementation note:** Use React Flow's `<Handle>` component with custom `className` and explicit `style` overrides. The `<Handle>` renders an invisible hit area by default — do not suppress it.
+
+---
+
+#### Port appearance
+
+Each handle is a **solid circle** whose fill and outline color is determined by its `PortDataType` (see §9.1 for full color table).
+
+Port state rendering rules:
+
+| State | Visual |
+|---|---|
+| Unconnected, required | Outline ring (2px) in type color; center hollow; subtle pulse animation (2s cycle, scale 1.0→1.1→1.0) to draw attention |
+| Unconnected, optional | Outline ring (1px) in type color at 50% opacity; no animation |
+| Connected | Solid fill in type color; no animation; small inner dot to reinforce "occupied" |
+| Hovered (during drag-to-connect) | Ring scale increases (CSS `transform: scale(1.4)`); glow shadow matches type color |
+| Incompatible target (during drag) | Ring turns red (`#D44C4C`); scale decreases (0.85); type color suppressed |
+
+Required port missing connection (validation error state):
+- Outline ring color switches to error red `#D44C4C`.
+- Warning icon (`⚠`) appears beside the port label.
+- This state persists until connection is made or graph is saved as draft.
+
+---
+
+#### Edge appearance
+
+Edges are **cubic bezier curves** drawn by React Flow's default connection renderer (or `SmoothStepEdge` if bezier causes excessive overlap in dense graphs — configurable per graph).
+
+Visual specification:
+
+| Property | Default | Hover | Selected | Stale | Invalid |
+|---|---|---|---|---|---|
+| Stroke width | 2px | 3px | 3px | 2px | 2px |
+| Stroke color | Type color (see §9.1) at 80% opacity | Type color at 100% | Type color at 100% | Type color at 35% opacity | `#D44C4C` |
+| Stroke style | Solid | Solid | Solid | Dashed (6px dash, 3px gap) | Dashed (4px dash, 2px gap) |
+| Box shadow / glow | None | None | Soft glow (4px blur, type color at 40%) | None | None |
+| Label (optional) | Hidden | Shows type abbreviation (e.g., `ℝ`, `𝔹`, `OHLCV`) | Shows full type name | Shows `stale` badge | Shows `type mismatch` |
+
+> **Design principle:** Avoid thick, neon, or busy wires by default. The canvas must remain readable at medium-to-high density. Emphasis should come only from hover, selection, or error state — not from the default resting appearance.
+
+> **React Flow implementation note:** Use `edgeTypes` prop with a custom edge renderer component. The custom edge reads `data.dataType` from the edge object and `data.isStale`, `data.isInvalid` flags to apply the correct style class.
+
+---
+
+#### Connection interaction (drag-to-connect)
+
+**Standard flow:**
+1. User hovers over an **output** handle (right side of node) → handle scales up to signal draggability.
+2. User drags from output handle → a **provisional connection line** appears (see below).
+3. Cursor moves over the canvas → compatible input handles highlight; incompatible handles dim.
+4. User drops onto a compatible **input** handle → edge is created, stored in graph state.
+5. Undo records the edge addition as a single history entry.
+
+**Provisional connection line (in-flight state):**
+- Bezier curve from source handle to cursor.
+- Stroke: 2px, neutral gray (`#8090A0`), 60% opacity, dashed (4px dash / 4px gap).
+- No type color until connection is completed — type color is applied only when a valid target handle is hovered (instant color switch to matching type color).
+- The cursor shows a `crosshair` pointer while dragging.
+
+**Reversed drag (input-to-output):**
+- React Flow supports connection initiation from either side (`connectionMode: ConnectionMode.Loose`).
+- Dragging from an input handle initiates a connection in the same way; the direction is resolved on drop.
+- The connection is still stored with canonical source = output, target = input direction.
+
+> **React Flow implementation note:** Implement using `onConnectStart`, `onConnect`, `onConnectEnd` callbacks. Use `isValidConnection` prop on the `<ReactFlow>` component to enforce type compatibility and cycle detection on every potential drop target.
+
+---
+
+#### Compatible target highlighting during drag
+
+When a connection drag is in progress, all handles on the canvas are re-evaluated as potential targets:
+
+**Compatible input handle** (type matches, no cycle would be created):
+- Pulse ring animation activates (scale 1.0→1.2→1.0, 0.8s cycle).
+- Ring color matches source output type color at 100%.
+- Surrounding node body gets a subtle left-border highlight (3px, type color at 60%).
+
+**Incompatible input handle** (type mismatch or would create a cycle):
+- Handle opacity → 25%.
+- Handle ring → red (`#D44C4C`).
+- Surrounding node opacity → 60%.
+- If user hovers the incompatible handle, a small tooltip appears near cursor (see §6.3.1 Validation feedback).
+
+**Unrelated handles (not input or already-connected inputs):**
+- No change in appearance; reduces visual noise.
+
+**Canvas nodes with no compatible input at all:**
+- Node opacity → 60% to recede into background.
+
+> **Implementation:** Use a React context value (e.g., `dragSourcePortType`) that is set on `onConnectStart` and cleared on `onConnectEnd`. Each handle reads this value to compute its current visual state class. This avoids prop-drilling and re-renders being triggered by a single cursor position.
+
+---
+
+#### Validation feedback at connection time
+
+Feedback must be **immediate and visible**. Silent failure (edge simply not created, no explanation) is prohibited.
+
+| Rejection reason | Feedback |
+|---|---|
+| Type mismatch | Inline tooltip near cursor: `"Type mismatch: Series⟨number⟩ → Signal not compatible"`. Handle ring turns red. No edge is created. |
+| Would create a cycle | Toast notification (top-right, 3s, dismissable): `"Cannot connect: this would create a cycle in the graph"`. |
+| Connecting output-to-output | Tooltip: `"Connect an output to an input port"`. No edge created. |
+| Connecting input-to-input | Tooltip: `"Connect from an output port"`. No edge created. |
+
+Tooltip style:
+- Small rounded chip (not full modal).
+- Background: dark overlay (`rgba(20,24,30,0.92)`), white text, 12px font.
+- Appears within 150ms of hover on incompatible target.
+- Disappears when cursor moves away.
+
+> `isValidConnection` must return `false` for all rejection cases. The tooltip is rendered by `onConnectEnd` if `isValidConnection` returned false for the last hovered target.
+
+---
+
+#### Port cardinality rules
+
+| Port type | Cardinality | Enforcement |
+|---|---|---|
+| Input port | Accepts **exactly one** incoming edge | If a second edge is dropped onto an occupied input, the existing edge is removed and the new edge takes its place |
+| Output port | May fan out to **any number of targets** | No limit; multiple edges from one output are valid |
+
+**Replace-on-drop behavior for occupied inputs:**
+1. User drags a new edge and drops onto an input port that already has an incoming edge.
+2. The old edge animates out (fade + shrink, 150ms).
+3. The new edge animates in (grow + fade in, 150ms).
+4. Both operations are recorded as a single undo history entry (remove old + add new = 1 undo step).
+5. No confirmation dialog is shown — the replacement is immediate and undoable.
+
+> Rationale: Confirmation dialogs interrupt flow and are not expected in professional graph editors. Undo (`Cmd+Z`) is the correct recovery path. This matches the UX convention in tools like Figma, Blender node editor, and TouchDesigner.
+
+---
+
+#### Hover and selection behavior
+
+**Hovering an edge:**
+- Edge stroke width increases to 3px; opacity to 100%.
+- Both connected handles (source and target) scale up and glow.
+- A floating label appears near the midpoint of the edge showing: source node name → target node name + port name + type abbreviation (e.g., `EMA → Compare [price | ℝ]`).
+- Connected source and target node cards receive a subtle highlight border (1px, type color at 40%).
+
+**Selecting an edge (click):**
+- Edge receives selection highlight (glow shadow).
+- Inspector panel shows: source port, target port, data type, edge id, stale/invalid flag.
+- `Delete` / `Backspace` removes the selected edge (single undo entry).
+
+**Hovering a node:**
+- All edges connected to the node highlight (same as edge hover state).
+- Unconnected handles pulse briefly to remind user of available connections.
+
+**Selecting a node:**
+- Connected edges highlight.
+- Inspector opens immediately (no click delay needed).
+- If multiple nodes selected: Inspector shows summary (count, types, validation status).
+
+---
+
+#### Disconnect behavior
+
+| Action | Result |
+|---|---|
+| Select edge → `Delete` / `Backspace` | Edge removed; both port handles return to unconnected state |
+| Right-click edge → "Remove connection" | Same as above (context menu alternative) |
+| Select node → `Delete` | Node removed; all connected edges removed automatically; affected downstream nodes marked `stale` |
+| Drag edge endpoint off handle (React Flow "detach") | Edge removed (if `edgesReconnectable` is enabled in Phase 3B) |
+
+On any edge removal:
+- Downstream nodes that depended on the disconnected port are immediately marked `validationState: 'stale'`.
+- Required input ports left unconnected switch to their error visual state.
+- The diagnostics drawer updates its issue list within one render cycle.
+
+---
+
+#### Stale and invalid downstream propagation
+
+When a node's output changes — or a node is removed — downstream state must be visually invalidated immediately (before any recomputation):
+
+**Stale propagation rules (client-side, Phase 3):**
+1. When an edge is removed, all nodes reachable downstream via remaining edges from that source are marked `validationState: 'stale'`.
+2. When a node's parameter changes, that node and all downstream nodes are marked `stale`.
+3. When a block library version mismatch is detected on load, affected nodes are marked `stale` with tooltip: `"Block updated — parameters may have changed"`.
+
+**Visual representation of stale state:**
+- Node card: muted header color + `stale` chip badge (amber, uppercase, 10px).
+- Connected edges to/from stale node: dashed stroke (see edge table above).
+- Inspector shows stale badge and suggests "Re-validate graph" action.
+
+**Required input port disconnected after node removal:**
+- Port renders in its required-but-unconnected error state immediately.
+- The node with the disconnected required input shows `validationState: 'error'`.
+- Diagnostics drawer shows: `"[NodeName] input '[portName]' is required but has no source"`.
+
+---
+
+#### Usability enhancements
+
+These are implementation details that separate a professional experience from a functional one:
+
+| Enhancement | Specification |
+|---|---|
+| **Connection preview tooltip** | When user hovers an output handle (before starting drag), show a small chip near the handle with the output type (e.g., `→ Series⟨number⟩`). Disappears on drag start. Appears after 400ms hover delay. |
+| **Auto-pan at viewport edge** | During drag-to-connect, if cursor approaches within 60px of viewport edge, canvas pans in that direction. Pan speed scales with proximity to edge (min: 2px/frame, max: 12px/frame). React Flow has partial built-in support via `autoPanOnConnect`. |
+| **Success micro-animation** | On successful connection: the new edge briefly animates in (300ms ease-out stroke-dashoffset travel from source to target). Subtle, professional — avoids gamification. |
+| **Reason hint on incompatible hover** | When cursor hovers on a dimmed incompatible handle for >150ms, tooltip shows the concrete mismatch reason (not just "incompatible"). Implementation: computed in `isValidConnection` and stored in a ref for the tooltip renderer. |
+| **Snap-to-grid** | Optional grid snapping for node positions (toggle, default off). Dragging nodes snaps to 8px grid when enabled. Does not affect edge routing. |
+| **Minimap edge color** | Minimap (React Flow built-in) should show edge lines in a neutral mid-gray; do not render per-type colors in minimap (too dense at small scale). |
+
+---
+
+#### Visual design recommendations (dark theme)
+
+The canvas uses the project's dark theme (trading convention, per `docs/12-ui-ux.md`).
+
+Design principles for the connection system:
+- Wire colors must be **distinguishable** but **not dominant**. They are guides, not decorations.
+- Default state is quiet; activity and error states use intensity and saturation.
+- Avoid glowing neon wires at rest. Save glow effects for hover and selection only.
+- The canvas background should be a near-black (`#0F1217`) with a subtle dot-grid or fine line-grid (`#1E2530` at 40% opacity). Grid helps spatial orientation without adding noise.
+- Node card headers use **category color** (muted, desaturated) as a left border accent, not as full background fill. This keeps nodes readable at all zoom levels.
+
+Port type color palette (dark theme):
+
+| Type | Color | Hex | Use |
+|---|---|---|---|
+| `Series<OHLCV>` | Steel blue | `#5B9BD5` | Raw market data; data source blocks |
+| `Series<number>` | Amber | `#D4A44C` | Numeric indicator output; most common |
+| `Series<boolean>` | Violet | `#9580C8` | Boolean condition series |
+| `Signal` | Emerald | `#52A97C` | Entry/exit trigger (most important output type) |
+| `RiskParams` | Coral | `#D46060` | Risk configuration; draws attention by design |
+| `OrderModel` | Slate | `#6A849E` | Order execution config; structural, de-emphasized |
+
+> These colors are chosen to be distinguishable on dark backgrounds without relying solely on hue (variance in luminance + hue reduces colorblind impact). A future accessibility pass should verify WCAG AA contrast against the canvas background for all six colors.
+
+---
+
+#### Accessibility and future keyboard support
+
+Phase 3 MVP:
+- All `<Handle>` components must have `aria-label` set to the full port description:
+  `aria-label="EMA output: Series<number>"` / `aria-label="Compare input 'price': Series<number>, required"`.
+- All edges in the React Flow graph receive `aria-label`:
+  `aria-label="Edge from EMA output to Compare price input, type Series<number>"`.
+- These labels enable screen reader traversal of the graph structure.
+
+Future (Phase 6, not required in Phase 3):
+- Tab navigation through nodes, then handles within a node.
+- `Enter` on a source handle begins keyboard-driven connection mode.
+- Arrow keys select next compatible handle.
+- `Enter` again confirms connection.
+- `Escape` cancels connection.
+
+> **Non-blocking requirement:** The Phase 3 implementation must not make keyboard connection support impossible to add later. Do not use event capture patterns that would prevent Tab focus on handles.
+
+---
+
+#### Acceptance additions for Phase 3 (connection UX)
+
+These criteria must pass before Phase 3 is considered complete:
+
+- [ ] Dragging from an output handle produces a visible provisional line
+- [ ] Compatible input handles highlight (ring pulse) during drag
+- [ ] Incompatible input handles dim (opacity 25%) + turn red during drag
+- [ ] Dropping on incompatible target: shows tooltip with mismatch reason, no edge created
+- [ ] Creating a cycle: toast notification shown, no edge created
+- [ ] Dropping on occupied input: old edge removed (animated), new edge connected, both recorded as one undo step
+- [ ] `Cmd+Z` correctly undoes the last connection action
+- [ ] Selecting an edge: glow + Inspector updates with edge details
+- [ ] `Delete` on selected edge: edge removed, downstream nodes go stale
+- [ ] Deleting a node: all connected edges removed, downstream ports show required-missing error state
+- [ ] Required unconnected ports render in error state (red ring + ⚠ label)
+- [ ] Stale nodes show amber `stale` badge in node card header
+- [ ] Edge labels appear on hover (source → target + type)
+- [ ] Edges render in correct type color (verify all 6 types)
+- [ ] Success animation plays on new connection (300ms, not jarring)
+- [ ] Auto-pan activates when dragging near viewport edge
+- [ ] `aria-label` present on all handles and edges (verify with browser accessibility inspector)
+- [ ] Performance: 200 nodes, 300 edges → 60fps during pan/zoom (Chrome DevTools Performance tab)
+
+---
+
 ## 6.4 Inspector panel (mandatory)
 
 When a node is selected, Inspector shows:
@@ -526,6 +831,28 @@ type PortDataType =
   | 'RiskParams'
   | 'OrderModel';
 ```
+
+### 9.1 Port data type semantics and color system
+
+The six `PortDataType` values correspond to specific semantic roles in the strategy execution model.
+Each type has an assigned color used across all visual surfaces (handles, edges, Inspector type badges).
+
+| Type | Semantic role | Color name | Hex | Compatible with |
+|---|---|---|---|---|
+| `Series<OHLCV>` | Raw market candle stream | Steel blue | `#5B9BD5` | Input: resample, transform, indicator blocks |
+| `Series<number>` | Numeric indicator output | Amber | `#D4A44C` | Input: compare, threshold, arithmetic, signal blocks |
+| `Series<boolean>` | Boolean condition series | Violet | `#9580C8` | Input: AND/OR/NOT, confirm, cross, if/else blocks |
+| `Signal` | Entry/exit trigger event | Emerald | `#52A97C` | Input: execution blocks (enter_long, enter_short, close) |
+| `RiskParams` | Risk configuration object | Coral | `#D46060` | Input: Risk block required port only |
+| `OrderModel` | Order execution parameters | Slate | `#6A849E` | Input: Execution block configuration port |
+
+**Type compatibility rules:**
+- Types are **strict** — `Series<number>` cannot connect to a `Series<boolean>` port.
+- There are no implicit coercions at the graph level.
+- Future: a `cast` block (numeric → boolean threshold) may be introduced as an explicit transform node, not as an implicit edge coercion.
+- `Series<OHLCV>` is the only source type for indicator blocks; indicator blocks emit `Series<number>`.
+
+---
 
 ### Edge model
 ```typescript
@@ -1082,30 +1409,38 @@ Introduce usable visual strategy composition using React Flow.
 - Auto-save draft to backend (`PATCH /api/v1/lab/graphs/:id`) with 2s debounce.
 - Auto-layout button (Dagre integration).
 
-**3B — Node palette + Inspector:**
+**3B — Node palette + Inspector + connection UX:**
 - Searchable block palette (left panel) with all block categories (§6.3).
 - Phase 3 MVP blocks: `candles`, `SMA`, `EMA`, `RSI`, `compare`, `cross`, `enter_long`, `enter_short`, `stop_loss`, `take_profit`.
-- Custom React Flow node renderer for each block type (color by category, port indicators).
-- Inspector panel: parameter form, port info, validation errors for selected node.
-- Port type compatibility enforced at connect time (client-side).
+- Custom React Flow node renderer for each block type (color by category; handles styled per §6.3.1 and §9.1).
+- Full block connection UX as specified in §6.3.1: handle styling, edge colors, drag-to-connect, compatible-target highlighting, incompatible-target feedback, cardinality enforcement, stale state propagation.
+- Inspector panel: parameter form, port info (with type color badges), validation errors for selected node.
+- Port type compatibility enforced at connect time (client-side, per `isValidConnection` callback).
+- Type mismatch and cycle tooltips/toasts per §6.3.1 validation feedback table.
 
 **3C — Graph validation rules:**
 - Client-side graph validation (cycle detection, type mismatch, missing required blocks).
 - Debounced re-validation (500ms after last edit).
 - Validation issues shown in Inspector + Validation tab in drawer.
 - "Missing risk block" rule enforced (graph is invalid without at least one risk block).
+- Required unconnected input ports render in error state automatically after validation.
 
 ### Acceptance checks
 - [ ] Canvas loads with empty graph
 - [ ] Drag blocks from palette to canvas
-- [ ] Connect two compatible ports — edge appears
-- [ ] Connect incompatible ports — edge rejected with error
-- [ ] Delete node removes connected edges
-- [ ] Cmd+Z undoes last action
+- [ ] Connect two compatible ports — edge appears in correct type color
+- [ ] Connect incompatible ports — edge rejected; tooltip shows mismatch reason
+- [ ] Connect to produce a cycle — toast shown, no edge created
+- [ ] Drop on occupied input — old edge replaced (animated), single undo step
+- [ ] Delete node removes connected edges; downstream nodes marked stale
+- [ ] Cmd+Z undoes last connection/deletion action
 - [ ] Graph with: candles → EMA → cross → enter_long + stop_loss + take_profit passes validation
-- [ ] Graph without risk block shows validation error
-- [ ] Inspector shows correct params and port info for selected node
+- [ ] Graph without risk block shows validation error; required port renders red ring + ⚠
+- [ ] Inspector shows correct params and port info (including type color) for selected node
+- [ ] Selecting an edge highlights source/target nodes and shows edge label
 - [ ] Auto-save triggers after 2s of inactivity
+- [ ] All port handles and edges have `aria-label` (verify with DevTools accessibility panel)
+- [ ] 200 nodes + 300 edges renders at ≥ 60fps during pan/zoom
 
 ---
 
