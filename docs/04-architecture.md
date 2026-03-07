@@ -151,8 +151,8 @@ Lab v2 (`/lab`) — это frontend IDE-шелл поверх существую
 │  Stage 19 dataset endpoints   │  Phase 3+ graph persistence      │
 │  POST /lab/datasets           │  POST /lab/workspaces            │
 │  GET  /lab/datasets           │  POST /lab/graphs                │
-│  GET  /lab/datasets/:id/preview│  GET  /lab/graphs/:id            │
-│  GET  /lab/datasets/:id/quality│                                  │
+│  GET  /lab/datasets/:id       │  GET  /lab/graphs/:id            │
+│  GET  /lab/datasets/:id/preview│ (quality in :id response body)  │
 │                               │  Phase 4: graph compiler         │
 │  Existing: BotRun, BotEvent,  │  POST /lab/graphs/:id/compile    │
 │  StrategyVersion, BacktestResult│ → returns StrategyVersion       │
@@ -190,13 +190,13 @@ Runtime не знает о React Flow, нодах, портах, LabWorkspace.
 
 | | `LabWorkspace` | `Workspace` (post-MVP) |
 |---|---|---|
-| Что это | Личная рабочая область для Lab v2 | Мультиарендный контейнер для всего приложения |
+| Что это | Рабочая область лаборатории для Lab v2 | Мультиарендный контейнер для всего приложения |
 | Когда появляется | Phase 3 (DB table) / Phase 1 (client state) | Post-MVP |
-| На пользователя | Один (в Phase 3) | N:M |
-| Что хранит | activeDatasetId, activeGraphId, uiState | userId набор, роли, квоты |
+| Ownership | `workspaceId` FK → Workspace; один LabWorkspace на Workspace в Phase 3 | Содержит пользователей и роли |
+| Что хранит | activeExchangeConnectionId, activeDatasetId, uiState | userId набор, роли, квоты |
 | Путается ли с Workspace | **НЕТ** — отдельная таблица, отдельный концепт | — |
 
-> Правило: никогда не использовать `workspaceId` из `LabWorkspace` как замену будущему `Workspace.id`. Это разные сущности с разными жизненными циклами.
+> Правило: `LabWorkspace` принадлежит `Workspace` через `workspaceId` FK — но это разные сущности. `LabWorkspace` — инструментальная область редактора; `Workspace` — мультиарендный контейнер приложения. Не использовать взаимозаменяемо.
 
 ### 7.4 Цепочка компиляции (Phase 4)
 

@@ -1645,7 +1645,7 @@ This sequence minimizes rework, keeps the system compatible with the current arc
 These decisions are **closed**. They must not be re-opened in implementation PRs without a separate architecture review and doc update.
 
 **Backend / data layer:**
-- Stage 19 dataset backend is reused — not reimplemented. Phase 2 uses existing Stage 19 API endpoints (`POST /api/v1/lab/datasets`, `GET /api/v1/lab/datasets`, `/preview`, `/quality`). No new Dataset tables.
+- Stage 19 dataset backend is reused — not reimplemented. Phase 2 uses existing Stage 19 API endpoints (`POST /api/v1/lab/datasets`, `GET /api/v1/lab/datasets`, `GET /api/v1/lab/datasets/:id` (includes quality metadata), `GET /api/v1/lab/datasets/:id/preview`). No separate `/quality` sub-endpoint. No new Dataset tables.
 - All API paths follow `/api/v1/` prefix. No exceptions.
 - Phase 1 introduces zero backend changes and zero schema migrations.
 - Phase 2 introduces at most one migration: `MarketDataset.name` nullable string column (only if not already present).

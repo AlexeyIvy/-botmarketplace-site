@@ -174,17 +174,18 @@ MUST:
 
 Поля (планируемые):
 - `id` (ulid, PK)
-- `userId` (FK → User.id, index)
+- `workspaceId` (FK → Workspace.id, index)
 - `name` (string, nullable)
+- `activeExchangeConnectionId` (FK → ExchangeConnection.id, nullable)
 - `activeDatasetId` (FK → MarketDataset.id, nullable)
-- `activeGraphId` (FK → StrategyGraph.id, nullable)
 - `uiState` (jsonb) — состояние UI (активная вкладка, позиция canvas и пр.)
 - `createdAt`, `updatedAt`
 
 Индексы (планируемые):
-- `(userId)` unique (один LabWorkspace на пользователя в Phase 3; может стать N:1 позже)
+- `(workspaceId)` unique (один LabWorkspace на Workspace в Phase 3)
 
-> Не путать: `LabWorkspace` — личная рабочая область; `Workspace` (§5) — будущий мультиарендный контейнер.
+> Не путать: `LabWorkspace` — рабочая область лаборатории, принадлежит Workspace; `Workspace` (§5) — будущий мультиарендный контейнер. Это отдельные таблицы с разными жизненными циклами.
+> Ref: `docs/23-lab-v2-ide-spec.md §17`
 
 ### 6.2 StrategyGraph (Phase 3)
 
