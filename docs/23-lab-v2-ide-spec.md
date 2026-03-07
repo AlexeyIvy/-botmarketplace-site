@@ -1584,15 +1584,17 @@ Do not split for other reasons (e.g., "cleanliness") — extra PRs add review ov
 
 ## 22. Required updates to existing docs
 
-| Doc | What to update |
-|---|---|
-| `docs/12-ui-ux.md` | Replace Lab layout section with Lab v2 four-panel model |
-| `docs/02-requirements-functional.md` | Add: dataset builder, graph builder, reproducible backtests (Phase 5) |
-| `docs/04-architecture.md` | Add: LabWorkspace, StrategyGraph, graph compiler service |
-| `docs/07-data-model.md` | Add planned entities as **future (Phase 3+)**: `LabWorkspace`, `StrategyGraph`, `StrategyGraphVersion`; reference existing Stage 19 entities (`MarketDataset`, `BacktestResult`) |
-| `docs/10-strategy-dsl.md` | Add: visual graph compiles into declarative DSL; block-to-DSL mapping table |
-| `docs/17-tech-stack.md` | Add: React Flow v11+ (canvas), `react-resizable-panels`, `@tanstack/react-virtual`, `zundo` |
-| `docs/00-glossary.md` | Add: LabWorkspace, StrategyGraph, ValidationIssue, BlockLibraryVersion, CandleInterval |
+> **Phase 0 doc freeze status** — updated as work is completed.
+
+| Doc | What to update | Status |
+|---|---|---|
+| `docs/12-ui-ux.md` | Replace Lab layout section with Lab v2 four-panel model; preserve Classic mode description | ✅ Done (Phase 0) |
+| `docs/07-data-model.md` | Add planned entities as **future (Phase 3+)**: `LabWorkspace`, `StrategyGraph`, `StrategyGraphVersion`; reference existing Stage 19 entities; distinguish existing vs future | ✅ Done (Phase 0) |
+| `docs/10-strategy-dsl.md` | Add: visual graph as authoring layer statement; compiler chain; block-to-DSL mapping table (Phase 4 only) | ✅ Authoring layer done (Phase 0); mapping table deferred to Phase 4 |
+| `docs/17-tech-stack.md` | Add: React Flow v11+ (canvas), `react-resizable-panels`, `@tanstack/react-virtual`, `zundo` | ✅ Done (Phase 0) |
+| `docs/00-glossary.md` | Add: LabWorkspace, StrategyGraph, StrategyGraphVersion, ValidationIssue, BlockLibraryVersion, CandleInterval, PortDataType, Classic mode; disambiguate LabWorkspace vs Workspace | ✅ Done (Phase 0) |
+| `docs/02-requirements-functional.md` | Add: dataset builder, graph builder, reproducible backtests (Phase 5) | ⏳ Pending (recommended before Phase 1) |
+| `docs/04-architecture.md` | Add: LabWorkspace, StrategyGraph, graph compiler service | ⏳ Pending (recommended before Phase 3) |
 
 ---
 
@@ -1635,3 +1637,146 @@ Priority order MUST be:
 - **Classic mode (DslEditor + AiChat + BacktestReport) MUST NOT be removed** until Phase 4 is accepted.
 
 This sequence minimizes rework, keeps the system compatible with the current architecture, and creates the strongest foundation for future AI-assisted strategy research inside botmarketplace.store.
+
+---
+
+## 25. Frozen decisions for implementation
+
+These decisions are **closed**. They must not be re-opened in implementation PRs without a separate architecture review and doc update.
+
+**Backend / data layer:**
+- Stage 19 dataset backend is reused — not reimplemented. Phase 2 uses existing Stage 19 API endpoints (`POST /api/v1/lab/datasets`, `GET /api/v1/lab/datasets`, `/preview`, `/quality`). No new Dataset tables.
+- All API paths follow `/api/v1/` prefix. No exceptions.
+- Phase 1 introduces zero backend changes and zero schema migrations.
+- Phase 2 introduces at most one migration: `MarketDataset.name` nullable string column (only if not already present).
+- Phase 3 introduces the first mandatory DB migrations: `LabWorkspace` + `StrategyGraph` + `StrategyGraphVersion` tables.
+
+**Canvas / graph model:**
+- Canvas library is **React Flow v11+ (XYFlow)**. Fixed. Not negotiable. Alternatives were considered and rejected. Do not introduce rete.js, Cytoscape, D3 force graph, or custom WebGL canvas.
+- Input port cardinality: maximum **one** incoming edge per input port.
+- Output port cardinality: unlimited fan-out to multiple target inputs.
+- Replace-on-drop is the default UX for occupied input ports (no confirmation dialog; undoable via Cmd+Z).
+- Typed ports: `Series<OHLCV>`, `Series<number>`, `Series<boolean>`, `Signal`, `RiskParams`, `OrderModel`. Types are strict; no implicit coercion at the graph layer. A `cast` block is the correct future mechanism for explicit type bridging.
+- Cycle detection runs on every edge addition (client-side, before persisting).
+
+**Strategy execution model:**
+- The visual graph is an **authoring layer only**. It is not a runtime engine.
+- The graph compiles into a `StrategyVersion.body` (declarative DSL JSON). The bot runtime uses the DSL, not the graph.
+- No arbitrary scripting inside the graph editor. No `eval`, no `Function()`, no user-supplied JS/Python. All logic is expressed through predefined block types.
+
+**Migration / compatibility:**
+- Classic mode (`DslEditor` + `AiChat` + `BacktestReport`) is **mandatory** until Phase 4 is formally accepted. It must not be removed earlier.
+- `blockLibraryVersion` is stored in every `StrategyGraph` and `StrategyGraphVersion`. MAJOR version bump requires a migration function in `packages/shared/src/blockMigrations/`.
+
+**State management:**
+- Canvas state lives in a dedicated Zustand store (`useLabGraphStore`), separate from global app state.
+- Undo/redo uses `zundo` (Zustand temporal middleware). Do not reimplement history manually.
+
+---
+
+## 26. Phase 3 explicit exclusions
+
+The following features are **explicitly out of scope for Phase 3 MVP**. Implementing any of these during Phase 3 constitutes scope creep and the PR should be rejected.
+
+| Feature | Reason for exclusion |
+|---|---|
+| Real-time collaboration (multi-user canvas) | Requires CRDT/OT infrastructure; out of scope for single-user MVP |
+| Subgraphs / nested graphs | Significantly increases graph model complexity; deferred to Phase 6+ |
+| Keyboard-driven connection mode (Tab + Enter) | Phase 6 enhancement; aria-labels must be added in Phase 3 to not block it |
+| Portfolio optimizer integration | Separate product feature; no design spec yet |
+| Arbitrary custom code blocks (user JS/Python) | Violates security model; no eval in strategy execution layer |
+| Advanced graph grouping / collapsible subgraph regions | Phase 5+ feature if needed |
+| Graph version branching / merge | Post-MVP; StrategyGraphVersion is linear in Phase 3 |
+| Live strategy execution directly from graph | Graph compiles to DSL; execution via Bot runtime only |
+| Multi-dataset binding per graph | One active dataset per LabWorkspace in Phase 3 |
+| Team-level graph sharing | Requires Workspace entity; post-MVP |
+| Mobile / touch canvas interaction | Desktop-first; Phase 3 targets 1280px+ |
+
+If any of the above features appear desirable during Phase 3 implementation, the correct response is:
+1. Create a documentation issue / spike note.
+2. Do not add it to the Phase 3 PR.
+3. Design it properly in a future spec section.
+
+---
+
+## 27. PR hygiene and review discipline for Lab phases
+
+These rules apply to all implementation PRs in the Lab v2 sequence (Phase 1 through Phase 6).
+
+**Scope rules:**
+- One PR = one sub-phase maximum (e.g., Phase 3A is one PR, Phase 3B is a separate PR).
+- A PR that implements Phase 3A must not contain Phase 3B work, even if it seems "almost done".
+- No unrelated refactors bundled with Lab phase PRs. If cleanup is needed, open a separate PR.
+- No "while I'm here" improvements to non-Lab files unless they are consistency fixes directly caused by the Lab change.
+
+**Documentation discipline:**
+- If a PR changes a public contract (API endpoint signature, DB schema, component prop interface, PortDataType enum), the corresponding doc must be updated **in the same PR**.
+- No undocumented API changes. No undocumented schema migrations.
+- If the PR implements acceptance criteria listed in this spec, mark them `[x]` in the spec in the same PR.
+
+**Evidence requirements (UI phases):**
+- Phase 1+: PRs must include at minimum one screenshot of the rendered shell or component in the PR description.
+- Phase 3+: PRs that change canvas behavior must include a screen recording (gif or video, max 30s) demonstrating the core interaction in the PR description.
+- Phase 3+: Manual verification steps must be written in the PR description (e.g., "1. Open /lab, 2. Drag EMA block to canvas, 3. Confirm handle appears on left side...").
+
+**Migration discipline:**
+- Any PR for phases explicitly marked "no migrations" (Phase 1, Phase 2 except `MarketDataset.name`) must have a checklist item in the PR: `- [ ] No schema migrations in this PR`.
+- If a migration file accidentally ends up in a no-migration phase PR, the PR must be rejected.
+
+**Performance discipline:**
+- Phase 3 PRs that touch the canvas or node rendering must include a performance check result (Chrome DevTools Performance tab screenshot or Lighthouse trace excerpt) showing ≥ 60fps with 200 nodes and 300 edges.
+- If performance budget is missed, the PR must not be merged until optimized.
+
+**Review sign-off:**
+- Lab phase PRs require at minimum one approving review from a reviewer who has read the relevant phase spec section.
+- "Looks good to me" without reading the spec is not sufficient sign-off.
+
+---
+
+## 28. Error presentation hierarchy
+
+This defines the preferred UX layering for surfacing errors and warnings throughout the Lab v2 IDE. Consistent error presentation prevents users from missing important feedback or being overwhelmed by redundant messages.
+
+```
+Level 1 — Inline field error (lowest, most local)
+  └─ Where: form inputs in the Inspector panel (node parameters)
+  └─ What: field-level validation messages directly below the input
+  └─ Example: "Period must be between 1 and 500"
+  └─ Trigger: on blur or on change; cleared immediately when valid
+
+Level 2 — Port / edge tooltip (connection context)
+  └─ Where: small floating chip near cursor or target handle, on canvas
+  └─ What: connection-time rejection with concrete reason
+  └─ Example: "Type mismatch: Series⟨number⟩ → Signal not compatible"
+  └─ Trigger: during drag-to-connect on incompatible target hover (≥ 150ms)
+  └─ Duration: visible while hovering; disappears on cursor move
+
+Level 3 — Inspector-level issue detail (selected object context)
+  └─ Where: Inspector panel, when a node or edge is selected
+  └─ What: full validation issue list for the selected object
+  └─ Example: "[price] input required but not connected", "Block library v2 → v3: migration needed"
+  └─ Trigger: always shown for selected object if issues exist
+  └─ Duration: persistent while object is selected
+
+Level 4 — Toast (transient action rejection)
+  └─ Where: top-right corner, overlaid on canvas
+  └─ What: single-action rejection that cannot be shown inline
+  └─ Example: "Cannot connect: this would create a cycle in the graph"
+  └─ Trigger: on failed connect action
+  └─ Duration: 3–4 seconds, manually dismissable; auto-dismissed after timeout
+  └─ Do NOT use toast for persistent problems (wrong level)
+
+Level 5 — Diagnostics drawer (persistent / system-level)
+  └─ Where: bottom drawer, always accessible
+  └─ What: all graph-level validation issues (required ports missing, missing risk block, stale nodes, engine errors)
+  └─ Example: "[RSI_1] input 'candles' is required but has no source"
+  └─ Trigger: recalculated after every graph mutation (debounced 500ms)
+  └─ Duration: persistent; updated in real-time; each issue is clickable to focus affected node/edge
+```
+
+**Rules:**
+- Do not show the same error at more than one level simultaneously. Choose the most specific level.
+- Toast is for **action rejection only**, not for persistent state problems. A disconnected required port is a Level 3/5 issue, not a toast.
+- Inline field errors (Level 1) are always visible without opening the drawer.
+- The diagnostics drawer issue count is always visible in the drawer tab header (e.g., `Diagnostics (3)`), even when closed.
+- Silent failure (action silently does nothing) is prohibited at all levels.

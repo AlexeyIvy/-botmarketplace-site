@@ -3,6 +3,12 @@
 Документ описывает сущности, поля, связи, статусы и индексы.
 Цель: MVP для 1 пользователя, но без миграционной боли при переходе к multi-user.
 
+> **Два слоя сущностей:**
+> - **§2 (ниже)** — уже реализованные MVP-сущности (существуют в кодовой базе).
+> - **§6 (ниже)** — будущие сущности Lab v2, запланированные в Phase 3+ (НЕ существуют пока; добавляются при реализации соответствующей фазы). Не перепутайте статусы.
+> - Stage 19 ввёл `MarketDataset` и `BacktestResult` как отдельные сущности — они уже существуют.
+>   Ссылки: `docs/steps/19-stage-19-research-data-pipeline.md`, `docs/23-lab-v2-ide-spec.md`.
+
 ## 1) Общие требования к данным
 
 MUST:
@@ -144,3 +150,81 @@ MUST:
 
 Важно:
 - Механика object-level authorization должна работать уже сейчас на `userId`, чтобы позже заменить/расширить на `workspaceId`.
+
+---
+
+## 6) Сущности Lab v2 — БУДУЩИЕ (Phase 3+, ещё НЕ существуют)
+
+> **ВАЖНО:** Все сущности ниже — **планируемые**, не реализованные.
+> Не создавайте миграции для них раньше, чем соответствующая фаза начата.
+> Phase 1 и Phase 2 Lab v2 не добавляют ни одной из этих таблиц (только Phase 2 добавляет `MarketDataset.name` — если ещё нет).
+
+### 6.1 LabWorkspace (Phase 3)
+
+Назначение: контейнер состояния лаборатории для одного пользователя.
+Важно: это **не** `Workspace` (будущий multi-tenant контейнер).
+Это инструментальная рабочая область для построения стратегий.
+
+Поля (планируемые):
+- `id` (ulid, PK)
+- `userId` (FK → User.id, index)
+- `name` (string, nullable)
+- `activeDatasetId` (FK → MarketDataset.id, nullable)
+- `activeGraphId` (FK → StrategyGraph.id, nullable)
+- `uiState` (jsonb) — состояние UI (активная вкладка, позиция canvas и пр.)
+- `createdAt`, `updatedAt`
+
+Индексы (планируемые):
+- `(userId)` unique (один LabWorkspace на пользователя в Phase 3; может стать N:1 позже)
+
+> Не путать: `LabWorkspace` — личная рабочая область; `Workspace` (§5) — будущий мультиарендный контейнер.
+
+### 6.2 StrategyGraph (Phase 3)
+
+Назначение: визуальный граф стратегии (набор узлов и рёбер).
+Является **authoring-представлением** стратегии; компилируется в `StrategyVersion` / DSL.
+
+Поля (планируемые):
+- `id` (ulid, PK)
+- `labWorkspaceId` (FK → LabWorkspace.id, index)
+- `name` (string)
+- `dslVersionTarget` (int) — целевая версия DSL для компилятора
+- `blockLibraryVersion` (string, semver)
+- `nodesJson` (jsonb) — массив `LabGraphNode`
+- `edgesJson` (jsonb) — массив `LabGraphEdge`
+- `validationStatus` (enum: `ok`, `warning`, `error`)
+- `validationIssueCount` (int)
+- `createdAt`, `updatedAt`
+
+Индексы:
+- `(labWorkspaceId, updatedAt desc)`
+
+Ограничение размера: максимум 500 узлов / 1000 рёбер на граф (guard на уровне API).
+
+### 6.3 StrategyGraphVersion (Phase 3)
+
+Назначение: иммутабельный снепшот версии графа (для истории и компиляции).
+
+Поля (планируемые):
+- `id` (ulid, PK)
+- `graphId` (FK → StrategyGraph.id, index)
+- `version` (int, 1..N)
+- `snapshotJson` (jsonb) — полный граф на момент снепшота
+- `blockLibraryVersion` (string)
+- `compiledDslJson` (jsonb, nullable) — результат компиляции в DSL (заполняется в Phase 4)
+- `createdAt`
+
+Индексы:
+- `(graphId, version)` unique
+
+### 6.4 Уже существующие Stage 19 сущности (справочно)
+
+Следующие сущности были введены в Stage 19 и **уже существуют** в кодовой базе:
+- `MarketDataset` — определение набора рыночных данных (symbol, timeframe, dateRange, datasetHash и др.)
+- `BacktestResult` — результат бэктеста (привязан к `datasetId` + `datasetHash` + `engineVersion`)
+
+Lab v2 **переиспользует** эти сущности. Не создавайте дублирующие таблицы.
+
+Единственное допустимое изменение Phase 2: добавить `MarketDataset.name` (nullable string), если поля ещё нет.
+
+---
