@@ -1,19 +1,12 @@
 "use client";
 
 import { getWorkspaceId } from "../../lib/api";
-import { LabShell } from "./LabShell";
 import { AuthLabClassicMode, GuestLabClassicMode } from "./ClassicMode";
 
+// Classic mode — default tab for /lab.
+// The LabShell wrapper (tabs, context bar, inspector, diagnostics) is
+// provided by layout.tsx; this page only returns the tab content.
 export default function LabPage() {
   const hasWorkspace = !!getWorkspaceId();
-
-  if (!hasWorkspace) {
-    // Guest mode: simple centred layout (no shell needed)
-    return <GuestLabClassicMode />;
-  }
-
-  // Authenticated: full Lab v2 shell with Classic mode as default tab
-  return (
-    <LabShell classicContent={<AuthLabClassicMode />} />
-  );
+  return hasWorkspace ? <AuthLabClassicMode /> : <GuestLabClassicMode />;
 }

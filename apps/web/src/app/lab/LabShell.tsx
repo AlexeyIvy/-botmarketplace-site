@@ -1,49 +1,81 @@
 "use client";
 
-import { useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Group, Panel, Separator } from "react-resizable-panels";
+import { useLabGraphStore } from "./useLabGraphStore";
 
 // ---------------------------------------------------------------------------
-// Types
+// Tab definitions — order matches spec
 // ---------------------------------------------------------------------------
 
-type LabTab = "classic" | "data" | "build" | "test";
+const TABS = [
+  { id: "classic", label: "Classic mode", href: "/lab" },
+  { id: "data",    label: "Data",         href: "/lab/data" },
+  { id: "build",   label: "Build",        href: "/lab/build" },
+  { id: "test",    label: "Test",         href: "/lab/test" },
+] as const;
 
-const TABS: { id: LabTab; label: string }[] = [
-  { id: "classic", label: "Classic mode" },
-  { id: "data", label: "Data" },
-  { id: "build", label: "Build" },
-  { id: "test", label: "Test" },
-];
+type TabId = (typeof TABS)[number]["id"];
+
+function getActiveTab(pathname: string): TabId {
+  if (pathname === "/lab" || pathname === "/lab/") return "classic";
+  if (pathname.startsWith("/lab/data"))  return "data";
+  if (pathname.startsWith("/lab/build")) return "build";
+  if (pathname.startsWith("/lab/test"))  return "test";
+  return "classic";
+}
 
 // ---------------------------------------------------------------------------
-// Context Bar — static placeholder (Phase 1A)
-// Phase 1B will wire this to useLabGraphStore
+// Context Bar — Phase 1B: reads from useLabGraphStore
 // ---------------------------------------------------------------------------
 
 function LabContextBar() {
+  const activeConnectionId = useLabGraphStore((s) => s.activeConnectionId);
+  const activeDatasetId    = useLabGraphStore((s) => s.activeDatasetId);
+  const validationState    = useLabGraphStore((s) => s.validationState);
+  const runState           = useLabGraphStore((s) => s.runState);
+
   return (
     <div style={contextBarStyle}>
       <span style={ctxTitleStyle}>Research Lab</span>
       <div style={ctxItemsStyle}>
-        <CtxBadge label="Connection" value="— not selected" />
-        <CtxBadge label="Dataset" value="— not selected" />
-        <CtxBadge label="Validation" value="idle" dimmed />
-        <CtxBadge label="Run" value="idle" dimmed />
+        <CtxBadge
+          label="Connection"
+          value={activeConnectionId ?? "— not selected"}
+          dimmed={activeConnectionId === null}
+        />
+        <CtxBadge
+          label="Dataset"
+          value={activeDatasetId ?? "— not selected"}
+          dimmed={activeDatasetId === null}
+        />
+        <CtxBadge label="Validation" value={validationState} dimmed />
+        <CtxBadge label="Run"        value={runState}        dimmed />
       </div>
     </div>
   );
 }
 
-function CtxBadge({ label, value, dimmed }: { label: string; value: string; dimmed?: boolean }) {
+function CtxBadge({
+  label,
+  value,
+  dimmed,
+}: {
+  label: string;
+  value: string;
+  dimmed?: boolean;
+}) {
   return (
     <div style={ctxBadgeStyle}>
       <span style={{ color: "var(--text-secondary)", fontSize: 11 }}>{label}:</span>
-      <span style={{
-        fontSize: 12,
-        marginLeft: 4,
-        color: dimmed ? "var(--text-secondary)" : "var(--text-primary)",
-      }}>
+      <span
+        style={{
+          fontSize: 12,
+          marginLeft: 4,
+          color: dimmed ? "var(--text-secondary)" : "var(--text-primary)",
+        }}
+      >
         {value}
       </span>
     </div>
@@ -87,32 +119,20 @@ function DiagnosticsPlaceholder() {
 }
 
 // ---------------------------------------------------------------------------
-// Placeholder tab content
-// ---------------------------------------------------------------------------
-
-function PlaceholderTab({ title, text }: { title: string; text: string }) {
-  return (
-    <div style={{ padding: "48px 40px" }}>
-      <h2 style={{ fontSize: 18, marginBottom: 12, color: "var(--text-primary)" }}>{title}</h2>
-      <p style={{ color: "var(--text-secondary)", fontSize: 14, lineHeight: 1.6 }}>{text}</p>
-    </div>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// Lab Shell — Phase 1A multi-panel layout
+// Lab Shell — Phase 1B: route-aware tabs + store-wired Context Bar
 // ---------------------------------------------------------------------------
 
 interface LabShellProps {
-  classicContent: React.ReactNode;
+  children: React.ReactNode;
 }
 
-export function LabShell({ classicContent }: LabShellProps) {
-  const [activeTab, setActiveTab] = useState<LabTab>("classic");
+export function LabShell({ children }: LabShellProps) {
+  const pathname  = usePathname();
+  const activeTab = getActiveTab(pathname);
 
   return (
     <div style={shellStyle}>
-      {/* Top Context Bar — static placeholder */}
+      {/* Top Context Bar — reads from useLabGraphStore */}
       <LabContextBar />
 
       {/* Main resizable layout */}
@@ -122,52 +142,34 @@ export function LabShell({ classicContent }: LabShellProps) {
         <Panel minSize={20}>
           <Group orientation="horizontal">
 
-            {/* Left/Main: tab bar + tab content */}
+            {/* Left/Main: tab bar + tab content (children from active route) */}
             <Panel minSize={30}>
               <div style={tabAreaStyle}>
 
-                {/* Tab bar */}
-                <div style={tabBarStyle} role="tablist" aria-label="Lab sections">
+                {/* Tab bar — Links for route-aware navigation */}
+                <nav style={tabBarStyle} aria-label="Lab sections">
                   {TABS.map((tab) => {
                     const isActive = activeTab === tab.id;
                     return (
-                      <button
+                      <Link
                         key={tab.id}
+                        href={tab.href}
                         role="tab"
                         aria-selected={isActive}
                         style={{
                           ...tabBtnStyle,
                           ...(isActive ? tabBtnActiveStyle : {}),
                         }}
-                        onClick={() => setActiveTab(tab.id)}
                       >
                         {tab.label}
-                      </button>
+                      </Link>
                     );
                   })}
-                </div>
+                </nav>
 
-                {/* Tab content */}
+                {/* Tab content — provided by the active route */}
                 <div style={tabContentStyle} role="tabpanel">
-                  {activeTab === "classic" && classicContent}
-                  {activeTab === "data" && (
-                    <PlaceholderTab
-                      title="Data"
-                      text="Dataset builder coming in Phase 2. You will be able to connect an exchange, select instruments, define timeframes and date ranges, and build reusable market datasets."
-                    />
-                  )}
-                  {activeTab === "build" && (
-                    <PlaceholderTab
-                      title="Build"
-                      text="Strategy canvas coming in Phase 3. You will be able to visually compose strategies from typed building blocks using a node-based editor."
-                    />
-                  )}
-                  {activeTab === "test" && (
-                    <PlaceholderTab
-                      title="Test"
-                      text="Test runner coming in Phase 5. You will be able to run reproducible backtests against explicit datasets with full diagnostics and equity curve."
-                    />
-                  )}
+                  {children}
                 </div>
 
               </div>
@@ -270,12 +272,13 @@ const tabBtnStyle: React.CSSProperties = {
   borderBottom: "2px solid transparent",
   color: "var(--text-secondary)",
   cursor: "pointer",
-  transition: "color 0.15s, border-color 0.15s",
+  textDecoration: "none",
+  display: "inline-block",
 };
 
 const tabBtnActiveStyle: React.CSSProperties = {
   color: "var(--text-primary)",
-  borderBottomColor: "var(--accent)",
+  borderBottom: "2px solid var(--accent)",
   background: "rgba(255,255,255,0.02)",
 };
 
@@ -322,7 +325,6 @@ const resizeHandleH: React.CSSProperties = {
   background: "var(--border)",
   cursor: "col-resize",
   flexShrink: 0,
-  transition: "background 0.15s",
 };
 
 const resizeHandleV: React.CSSProperties = {
@@ -330,5 +332,4 @@ const resizeHandleV: React.CSSProperties = {
   background: "var(--border)",
   cursor: "row-resize",
   flexShrink: 0,
-  transition: "background 0.15s",
 };
