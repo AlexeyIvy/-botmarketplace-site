@@ -37,7 +37,7 @@
 
 - **StrategyGraph** — граф стратегии: набор `LabGraphNode` (узлов) и `LabGraphEdge` (рёбер), представляющих логику торговой стратегии визуально. Является **authoring-представлением** — компилируется в `StrategyVersion` / DSL. Хранится в `StrategyGraph.nodesJson` + `StrategyGraph.edgesJson`. Введена в Phase 3.
 
-- **StrategyGraphVersion** — иммутабельный снепшот версии `StrategyGraph`. Создаётся при сохранении или компиляции. Содержит полный граф + `blockLibraryVersion` + опционально скомпилированный DSL. Введена в Phase 3.
+- **StrategyGraphVersion** — иммутабельный снепшот `StrategyGraph`, создаваемый **только при компиляции** графа в DSL (Phase 4). Содержит полный снепшот графа + `blockLibraryVersion` + обязательную ссылку на `StrategyVersion` (скомпилированный DSL). Не создаётся при обычном сохранении графа. Введена в Phase 4.
 
 - **ValidationIssue** — запись об ошибке или предупреждении при валидации `StrategyGraph` на клиенте. Не является отдельной DB-сущностью в Phase 3 — хранится как часть UI-состояния в `useLabGraphStore`. Типы: `required-port-missing`, `type-mismatch`, `cycle-detected`, `missing-risk-block`, `block-library-version-mismatch`.
 

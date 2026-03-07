@@ -1589,7 +1589,7 @@ Do not split for other reasons (e.g., "cleanliness") — extra PRs add review ov
 | Doc | What to update | Status |
 |---|---|---|
 | `docs/12-ui-ux.md` | Replace Lab layout section with Lab v2 four-panel model; preserve Classic mode description | ✅ Done (Phase 0) |
-| `docs/07-data-model.md` | Add planned entities as **future (Phase 3+)**: `LabWorkspace`, `StrategyGraph`, `StrategyGraphVersion`; reference existing Stage 19 entities; distinguish existing vs future | ✅ Done (Phase 0) |
+| `docs/07-data-model.md` | Add planned entities as **future**: `LabWorkspace` + `StrategyGraph` (Phase 3), `StrategyGraphVersion` (Phase 4); reference existing Stage 19 entities; distinguish existing vs future | ✅ Done (Phase 0) |
 | `docs/10-strategy-dsl.md` | Add: visual graph as authoring layer statement; compiler chain; block-to-DSL mapping table (Phase 4 only) | ✅ Authoring layer done (Phase 0); mapping table deferred to Phase 4 |
 | `docs/17-tech-stack.md` | Add: React Flow v11+ (canvas), `react-resizable-panels`, `@tanstack/react-virtual`, `zundo` | ✅ Done (Phase 0) |
 | `docs/00-glossary.md` | Add: LabWorkspace, StrategyGraph, StrategyGraphVersion, ValidationIssue, BlockLibraryVersion, CandleInterval, PortDataType, Classic mode; disambiguate LabWorkspace vs Workspace | ✅ Done (Phase 0) |
@@ -1649,7 +1649,8 @@ These decisions are **closed**. They must not be re-opened in implementation PRs
 - All API paths follow `/api/v1/` prefix. No exceptions.
 - Phase 1 introduces zero backend changes and zero schema migrations.
 - Phase 2 introduces at most one migration: `MarketDataset.name` nullable string column (only if not already present).
-- Phase 3 introduces the first mandatory DB migrations: `LabWorkspace` + `StrategyGraph` + `StrategyGraphVersion` tables.
+- Phase 3 introduces the first mandatory DB migrations: `LabWorkspace` + `StrategyGraph` tables.
+- Phase 4 introduces `StrategyGraphVersion` table (created on first graph compile; see §17 for schema).
 
 **Canvas / graph model:**
 - Canvas library is **React Flow v11+ (XYFlow)**. Fixed. Not negotiable. Alternatives were considered and rejected. Do not introduce rete.js, Cytoscape, D3 force graph, or custom WebGL canvas.
@@ -1686,7 +1687,7 @@ The following features are **explicitly out of scope for Phase 3 MVP**. Implemen
 | Portfolio optimizer integration | Separate product feature; no design spec yet |
 | Arbitrary custom code blocks (user JS/Python) | Violates security model; no eval in strategy execution layer |
 | Advanced graph grouping / collapsible subgraph regions | Phase 5+ feature if needed |
-| Graph version branching / merge | Post-MVP; StrategyGraphVersion is linear in Phase 3 |
+| Graph version branching / merge | Post-MVP; StrategyGraphVersion (Phase 4) is linear — one sequential version per compile, no branching |
 | Live strategy execution directly from graph | Graph compiles to DSL; execution via Bot runtime only |
 | Multi-dataset binding per graph | One active dataset per LabWorkspace in Phase 3 |
 | Team-level graph sharing | Requires Workspace entity; post-MVP |

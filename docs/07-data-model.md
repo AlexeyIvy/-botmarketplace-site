@@ -153,11 +153,18 @@ MUST:
 
 ---
 
-## 6) Сущности Lab v2 — БУДУЩИЕ (Phase 3+, ещё НЕ существуют)
+## 6) Сущности Lab v2 — БУДУЩИЕ (ещё НЕ существуют)
 
 > **ВАЖНО:** Все сущности ниже — **планируемые**, не реализованные.
 > Не создавайте миграции для них раньше, чем соответствующая фаза начата.
-> Phase 1 и Phase 2 Lab v2 не добавляют ни одной из этих таблиц (только Phase 2 добавляет `MarketDataset.name` — если ещё нет).
+>
+> Хронология появления:
+> - Phase 1: **нет новых таблиц**.
+> - Phase 2: только `MarketDataset.name` (nullable column, если ещё нет) — не новая таблица.
+> - Phase 3: `LabWorkspace` + `StrategyGraph` (первые новые таблицы).
+> - Phase 4: `StrategyGraphVersion` (создаётся при компиляции графа в DSL).
+>
+> Ref: `docs/23-lab-v2-ide-spec.md §17 persistence timeline`
 
 ### 6.1 LabWorkspace (Phase 3)
 
@@ -201,21 +208,25 @@ MUST:
 
 Ограничение размера: максимум 500 узлов / 1000 рёбер на граф (guard на уровне API).
 
-### 6.3 StrategyGraphVersion (Phase 3)
+### 6.3 StrategyGraphVersion (Phase 4)
 
-Назначение: иммутабельный снепшот версии графа (для истории и компиляции).
+Назначение: иммутабельный снепшот графа, создаваемый при компиляции в DSL.
+Не создаётся при обычном сохранении — только при явной компиляции (фиксирует пару граф + скомпилированный DSL).
 
 Поля (планируемые):
 - `id` (ulid, PK)
-- `graphId` (FK → StrategyGraph.id, index)
+- `graphId` (FK → StrategyGraph.id, index) — именуется `strategyGraphId` в §17 spec
 - `version` (int, 1..N)
-- `snapshotJson` (jsonb) — полный граф на момент снепшота
-- `blockLibraryVersion` (string)
-- `compiledDslJson` (jsonb, nullable) — результат компиляции в DSL (заполняется в Phase 4)
+- `blockLibraryVersion` (string) — фиксируется на момент компиляции
+- `graphSnapshotJson` (jsonb) — полный снепшот графа на момент компиляции
+- `strategyVersionId` (FK → StrategyVersion) — результат компиляции (обязателен)
 - `createdAt`
 
 Индексы:
 - `(graphId, version)` unique
+
+> Таблица вводится в Phase 4. В Phase 3 история изменений графа не версионируется на DB-уровне.
+> Ref: `docs/23-lab-v2-ide-spec.md §17 (persistence timeline)`
 
 ### 6.4 Уже существующие Stage 19 сущности (справочно)
 
