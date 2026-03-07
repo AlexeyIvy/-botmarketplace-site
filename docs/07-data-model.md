@@ -14,7 +14,7 @@
 MUST:
 - Во всех таблицах есть `createdAt`, `updatedAt`.
 - Все “публичные” идентификаторы ресурсов (botId/runId/connectionId) — UUID/ULID (не автоинкремент).
-- Любой объект принадлежит `userId` (а в будущем `workspaceId`) — это основа object-level authorization.
+- Объекты авторизуются через `userId` (MVP-сущности: ExchangeConnection, Bot, BotRun) или `workspaceId` (Stage 7+: MarketDataset, LabWorkspace). Полная миграция всех сущностей на `workspaceId` — post-MVP. Это основа object-level authorization.
 
 SHOULD:
 - Soft delete (deletedAt) для сущностей с историей (Bots, Connections).
@@ -141,15 +141,17 @@ MUST:
   - либо миграция старых spec,
   - либо поддержка нескольких версий в валидаторе.
 
-## 5) Multi-user задел (post-MVP)
+## 5) Multi-user задел
 
-План:
-- Добавить `Workspace` и `workspaceId` во все сущности.
+> Stage 7 ввёл `workspaceId`-изоляцию для lab/dataset layer (`MarketDataset`, `LabWorkspace`). Существующие MVP-сущности (`ExchangeConnection`, `Bot`, `BotRun`) пока используют `userId`-изоляцию.
+
+Оставшаяся post-MVP эволюция:
+- Расширить `workspaceId` на все оставшиеся MVP-сущности.
 - RBAC роли на workspace.
 - Квоты per workspace (боты, requests, AI generation).
 
 Важно:
-- Механика object-level authorization должна работать уже сейчас на `userId`, чтобы позже заменить/расширить на `workspaceId`.
+- `workspaceId` как поле изоляции уже существует (Stage 7). Полная RBAC-структура и управление пространствами — post-MVP.
 
 ---
 
@@ -169,7 +171,7 @@ MUST:
 ### 6.1 LabWorkspace (Phase 3)
 
 Назначение: контейнер состояния лаборатории для одного пользователя.
-Важно: это **не** `Workspace` (будущий multi-tenant контейнер).
+Важно: это **не** `Workspace` (мультиарендный управленческий контейнер, Stage 7; RBAC/квоты — post-MVP).
 Это инструментальная рабочая область для построения стратегий.
 
 Поля (планируемые):
@@ -184,7 +186,7 @@ MUST:
 Индексы (планируемые):
 - `(workspaceId)` unique (один LabWorkspace на Workspace в Phase 3)
 
-> Не путать: `LabWorkspace` — рабочая область лаборатории, принадлежит Workspace; `Workspace` (§5) — будущий мультиарендный контейнер. Это отдельные таблицы с разными жизненными циклами.
+> Не путать: `LabWorkspace` — рабочая область лаборатории, принадлежит Workspace через `workspaceId` FK; `Workspace` (§5) — мультиарендный контейнер (Stage 7; full RBAC/квоты — post-MVP). Это отдельные таблицы с разными жизненными циклами.
 > Ref: `docs/23-lab-v2-ide-spec.md §17`
 
 ### 6.2 StrategyGraph (Phase 3)
@@ -216,7 +218,7 @@ MUST:
 
 Поля (планируемые):
 - `id` (ulid, PK)
-- `graphId` (FK → StrategyGraph.id, index) — именуется `strategyGraphId` в §17 spec
+- `strategyGraphId` (FK → StrategyGraph.id, index)
 - `version` (int, 1..N)
 - `blockLibraryVersion` (string) — фиксируется на момент компиляции
 - `graphSnapshotJson` (jsonb) — полный снепшот графа на момент компиляции
@@ -224,7 +226,7 @@ MUST:
 - `createdAt`
 
 Индексы:
-- `(graphId, version)` unique
+- `(strategyGraphId, version)` unique
 
 > Таблица вводится в Phase 4. В Phase 3 история изменений графа не версионируется на DB-уровне.
 > Ref: `docs/23-lab-v2-ide-spec.md §17 (persistence timeline)`

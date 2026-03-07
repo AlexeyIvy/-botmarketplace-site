@@ -106,9 +106,9 @@ MVP MUST:
 
 ## 6) Масштабирование (post-MVP)
 
-- Multi-user:
-  - добавляем Workspace и лимиты,
-  - изоляция ключей/данных.
+- Multi-user (расширение):
+  - `workspaceId`-изоляция введена в Stage 7 (lab/dataset layer); расширяем на все сущности,
+  - RBAC роли и лимиты (post-MVP).
 - Multi-bot:
   - очередь BotRuns,
   - ограничение concurrency,
@@ -149,8 +149,8 @@ Lab v2 (`/lab`) — это frontend IDE-шелл поверх существую
 │  Backend API (/api/v1/)                                           │
 │                                                                   │
 │  Stage 19 dataset endpoints   │  Phase 3+ graph persistence      │
-│  POST /lab/datasets           │  POST /lab/workspaces            │
-│  GET  /lab/datasets           │  POST /lab/graphs                │
+│  POST /lab/datasets           │  POST /lab/graphs                │
+│  GET  /lab/datasets           │  GET  /lab/graphs                │
 │  GET  /lab/datasets/:id       │  GET  /lab/graphs/:id            │
 │  GET  /lab/datasets/:id/preview│ (quality in :id response body)  │
 │                               │  Phase 4: graph compiler         │
@@ -188,10 +188,10 @@ Runtime не знает о React Flow, нодах, портах, LabWorkspace.
 
 ### 7.3 LabWorkspace vs Workspace
 
-| | `LabWorkspace` | `Workspace` (post-MVP) |
+| | `LabWorkspace` | `Workspace` (Stage 7; RBAC — post-MVP) |
 |---|---|---|
 | Что это | Рабочая область лаборатории для Lab v2 | Мультиарендный контейнер для всего приложения |
-| Когда появляется | Phase 3 (DB table) / Phase 1 (client state) | Post-MVP |
+| Когда появляется | Phase 3 (DB table) / Phase 1 (client state) | Stage 7 (entity + workspaceId-изоляция); RBAC/квоты — post-MVP |
 | Ownership | `workspaceId` FK → Workspace; один LabWorkspace на Workspace в Phase 3 | Содержит пользователей и роли |
 | Что хранит | activeExchangeConnectionId, activeDatasetId, uiState | userId набор, роли, квоты |
 | Путается ли с Workspace | **НЕТ** — отдельная таблица, отдельный концепт | — |

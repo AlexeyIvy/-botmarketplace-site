@@ -1593,8 +1593,8 @@ Do not split for other reasons (e.g., "cleanliness") — extra PRs add review ov
 | `docs/10-strategy-dsl.md` | Add: visual graph as authoring layer statement; compiler chain; block-to-DSL mapping table (Phase 4 only) | ✅ Authoring layer done (Phase 0); mapping table deferred to Phase 4 |
 | `docs/17-tech-stack.md` | Add: React Flow v11+ (canvas), `react-resizable-panels`, `@tanstack/react-virtual`, `zundo` | ✅ Done (Phase 0) |
 | `docs/00-glossary.md` | Add: LabWorkspace, StrategyGraph, StrategyGraphVersion, ValidationIssue, BlockLibraryVersion, CandleInterval, PortDataType, Classic mode; disambiguate LabWorkspace vs Workspace | ✅ Done (Phase 0) |
-| `docs/02-requirements-functional.md` | Add: dataset builder, graph builder, reproducible backtests (Phase 5) | ⏳ Pending (recommended before Phase 1) |
-| `docs/04-architecture.md` | Add: LabWorkspace, StrategyGraph, graph compiler service | ⏳ Pending (recommended before Phase 3) |
+| `docs/02-requirements-functional.md` | Add: dataset builder, graph builder, reproducible backtests (Phase 5) | ✅ Done (Phase 0) |
+| `docs/04-architecture.md` | Add: LabWorkspace, StrategyGraph, graph compiler service | ✅ Done (Phase 0) |
 
 ---
 
