@@ -1,7 +1,7 @@
 # LAB CHANGE SPEC — Research Lab v2 IDE
 **Project:** BotMarketplace
 **Repository:** `AlexeyIvy/-botmarketplace-site`
-**Status:** Reviewed & revised (expert pass)
+**Status:** Finalized — implementation-ready (Revision 2, March 2026)
 **Author role:** Senior Software Engineer / Product Architect
 **Reviewed by:** Expert engineering pass (March 2026)
 **Scope:** Upgrade `/lab` from MVP JSON/AI editor into scalable research workspace for data acquisition, dataset management, visual strategy composition, validation, and backtest execution.
@@ -9,24 +9,24 @@
 
 ---
 
-## REVIEW NOTES (expert pass)
+## CHANGE LOG
 
-> Этот блок фиксирует исправления и дополнения, внесённые при экспертной ревизии.
-> После финализации документа блок можно убрать.
+> Этот блок фиксирует историю ревизий документа.
 
-**Критические исправления:**
-- Добавлены явные ссылки на Stage 19 (dataset layer уже реализован — нельзя игнорировать).
-- Исправлены конфликты имён: `ConnectionProfile` → `ExchangeConnection`, `StrategyWorkspace` → `LabWorkspace` (во избежание коллизии с multi-tenant `Workspace`), `BacktestRun` → `BacktestResult` (уже существует в schema).
+**Revision 2 — March 2026 (implementation-readiness pass):**
+- `LabWorkspace` явно разделён на два состояния: logical (Phase 1, localStorage/Zustand) и persisted DB entity (Phase 3+). Нет риска преждевременной схемы.
+- Classic mode усилен: теперь явно mandatory until Phase 4 acceptance, с запретом удаления в Phase 1–3.
+- Phase 0 обозначен как обязательный отдельный PR. Добавлена рекомендованная PR-последовательность.
+- Phase 2B получил опциональный сплит на 2B1 (endpoint + table) и 2B2 (chart), если объём задачи слишком большой.
+- Performance budgets скоупированы на Phase 3+ — больше не блокируют Phase 0/1.
+- Уточнена language logical vs persisted объектов по всему документу.
+- Статус документа: **FINALIZED — готов к реализации**.
+
+**Revision 1 — March 2026 (initial expert pass):**
+- Добавлены явные ссылки на Stage 19 (dataset layer уже реализован).
+- Исправлены конфликты имён: `ConnectionProfile` → `ExchangeConnection`, `StrategyWorkspace` → `LabWorkspace`, `BacktestRun` → `BacktestResult`.
 - Все API-пути приведены к проектному стандарту `/api/v1/`.
-- Добавлена спецификация библиотеки canvas (React Flow v11+).
-- Добавлена семантика выполнения графа (модель time-series нод).
-- Добавлены acceptance criteria к каждой фазе (соответствие принятому в проекте формату).
-- Добавлена стратегия фонового выполнения запросов (BullMQ, как в BotRun).
-- Добавлены бюджеты производительности.
-- Добавлена стратегия keyboard shortcuts.
-- Добавлена versioning для библиотеки блоков.
-- Усилена интеграция AI-функциональности.
-- Добавлены явные зависимости между фазами и существующими Stage'ами.
+- Добавлена спецификация canvas library (React Flow v11+), graph evaluation semantics, keyboard shortcuts, block library versioning, AI integration, phase dependencies.
 
 ---
 
@@ -127,17 +127,32 @@ The user MUST be able to inspect:
 Data acquisition, dataset definition, strategy graph, and backtest run MUST exist as separate logical objects.
 
 ### 4.4 Backward compatibility
-The existing JSON/DSL editor MUST continue to work during migration.
-The visual builder is additive first, not a replacement in Phase 1.
 
-> Concretely: `DslEditor`, `AiChat`, `BacktestReport`, and `StrategyList` components must be preserved as subviews in the new shell until Phase 4 is accepted.
+**Classic mode is MANDATORY until Phase 4 acceptance.**
+
+The existing JSON/DSL editor MUST continue to work during migration.
+The visual builder is additive first, not a replacement.
+
+Classic mode rules:
+- `DslEditor`, `AiChat`, `BacktestReport`, and `StrategyList` MUST be preserved as a "Classic mode" tab in the new shell.
+- Classic mode MUST NOT be removed or disabled during Phases 1, 2, or 3.
+- Classic mode MAY be deprecated only after Phase 4 acceptance criteria are fully met — specifically: graph compiles to valid `StrategyVersion` and the compiled DSL has been proven stable in at least one real backtest run.
+- Until Phase 4 acceptance, the DSL-based workflow is the **operational fallback** for all users.
+- Any implementer that removes Classic mode before Phase 4 acceptance has violated this spec.
+
+> Rationale: Users who already have saved DSL strategies must not lose access to their strategies mid-migration. The graph editor is being added, not substituted.
 
 ### 4.5 Safety
 No arbitrary user code execution in Lab.
 All strategy logic remains schema-validated and compiled into safe declarative forms.
 
 ### 4.6 Performance budget
-The Lab must remain usable with:
+
+> **Scope:** These budgets are acceptance criteria for **Phase 3 (graph editor) and later** phases only.
+> They are NOT blockers for Phase 0 (docs) or Phase 1 (shell layout).
+> Phase 1 shell has no canvas and no dataset preview — performance criteria do not apply.
+
+Target budgets (Phase 3+):
 - up to 200 nodes on the canvas at 60 fps during pan/zoom,
 - Inspector update latency < 100ms on node select,
 - Dataset preview render < 500ms for up to 10,000 rows (virtualized table),
@@ -170,12 +185,14 @@ The screen needs explicit modes or panels for:
 ### 5.4 Missing API/quality constraints
 Real exchange integration requires:
 - rate limit awareness (Stage 19: 10 req/min POST `/lab/datasets`),
-- request status (async job via BullMQ),
+- request status visibility (Stage 19 POST is synchronous with a 30s transaction timeout; the UI must show a loading state during the POST and handle slow responses gracefully),
 - pagination handling,
 - partial failure reporting,
 - retry/backoff,
 - cache visibility,
 - gap detection (Stage 19: `gapsCount`, `maxGapMs` in `qualityJson`).
+
+> **Note on Stage 19 execution model:** `POST /api/v1/lab/datasets` is synchronous — it fetches, hashes, and saves in a single Prisma transaction (max ~30s). It is NOT a BullMQ-queued async job. The "fetching" status is a UI-side loading state only, not a DB status value. DB statuses are `READY | PARTIAL | FAILED` (Stage 19 spec §7.2).
 
 ### 5.5 Missing typed graph model
 A block canvas without a typed node/edge model will become brittle and hard to validate, diff, export, or compile.
@@ -188,13 +205,15 @@ A block canvas without a typed node/edge model will become brittle and hard to v
 Persistent bar at top of `/lab`.
 
 Contains:
-- workspace/research session name (`LabWorkspace.name`),
-- active exchange connection (`ExchangeConnection.label + status`),
+- session name (Phase 1: hardcoded "Research Lab" or editable string in `useLabGraphStore`; Phase 3+: `LabWorkspace.name` from DB),
+- active exchange connection (`ExchangeConnection.label + status`, or "— not selected"),
 - environment (`demo`, future `real` behind feature flag),
-- current dataset badge (`MarketDataset.id` short + `status`),
-- current strategy badge,
-- validation state (icon: ok / warning / error),
-- run state (idle / running / done).
+- current dataset badge (`MarketDataset.id` short + `status`, or "— not selected"),
+- current strategy badge (Phase 3+),
+- validation state (icon: ok / warning / error; idle in Phase 1),
+- run state (idle / running / done; idle in Phase 1).
+
+All values read from `useLabGraphStore`. Context Bar is fully implemented in Phase 1B.
 
 Purpose:
 - always show the current context,
@@ -231,7 +250,7 @@ Primary upper work area.
 - Detected gaps (from `qualityJson.gapsCount`, `qualityJson.maxGapMs`)
 - Duplicate attempts (from `qualityJson.dupeAttempts`)
 - Last sync time (`MarketDataset.fetchedAt`)
-- Fetch job progress (polling `GET /api/v1/lab/datasets/:id` every 2s while `status = fetching`)
+- Request progress (spinner shown while POST is in-flight; Stage 19 POST is synchronous, no DB "fetching" status exists)
 - Warning banner (shown when `MarketDataset.status = PARTIAL`)
 - Rate limit indicator (show when approaching 10 req/min POST limit)
 
@@ -407,18 +426,30 @@ Dataset snapshot block (pinned at top of Results drawer, after Stage 19):
 
 The frontend/backend contract evolves around these logical entities.
 
+### Object status legend
+- **Exists** — already in codebase, use as-is, no new schema work needed.
+- **Logical only** — concept used in UI, no DB entity yet; lifecycle is client-side state (localStorage / Zustand store).
+- **New (Phase N)** — DB entity required; persistence begins at the stated phase.
+- **In-memory** — lives only in frontend memory during session; never persisted to DB.
+
 | Object | Status | Notes |
 |---|---|---|
-| `ExchangeConnection` | Exists (Stage 8) | Use as-is; replaces "ConnectionProfile" |
-| `MarketDataset` | Exists (Stage 19) | Use as-is; replaces "Dataset" + "DatasetVersion" |
-| `BacktestResult` | Exists (Stage 19) | Use as-is; replaces "BacktestRun" |
-| `StrategyVersion` | Exists (Stage 10) | Source of truth for compiled strategy |
-| `LabWorkspace` | New | Editable container for Lab session (see §17) |
-| `StrategyGraph` | New | Versioned typed graph representation |
-| `StrategyGraphVersion` | New | Immutable graph snapshot (complements `StrategyVersion`) |
-| `ValidationIssue` | New (in-memory initially) | Per-node/per-edge validation result |
+| `ExchangeConnection` | **Exists** (Stage 8) | Use as-is; replaces "ConnectionProfile" |
+| `MarketDataset` | **Exists** (Stage 19) | Use as-is; replaces "Dataset" + "DatasetVersion" |
+| `BacktestResult` | **Exists** (Stage 19) | Use as-is; replaces "BacktestRun" |
+| `StrategyVersion` | **Exists** (Stage 10) | Source of truth for compiled strategy |
+| `LabWorkspace` | **Logical only → New (Phase 3)** | Phase 1–2: client-side session state only (localStorage + Zustand). Phase 3: becomes persisted DB entity when graph storage is needed. See §17 for schema. |
+| `StrategyGraph` | **New (Phase 3)** | Requires DB when graph persistence begins in Phase 3 |
+| `StrategyGraphVersion` | **New (Phase 4)** | Immutable snapshot created on compile |
+| `ValidationIssue` | **In-memory** | Per-node/edge validation result; never persisted; reconstructed on each graph edit |
 
-> **Naming convention note:** The name `StrategyWorkspace` from earlier drafts is replaced by `LabWorkspace` to avoid collision with the multi-tenant `Workspace` concept used throughout the project (auth, workspace isolation, `workspaceId` checks).
+> **CRITICAL — LabWorkspace persistence timing:**
+> In Phase 1, `LabWorkspace` does NOT require any DB schema change.
+> Phase 1 only needs: `useLabGraphStore` (Zustand) with `activeConnectionId`, `activeDatasetId`, `activeGraphId` — stored in component state and optionally persisted to localStorage.
+> The `LabWorkspace` DB table is introduced in Phase 3 when graph drafts must survive page reload.
+> Implementers MUST NOT create a `LabWorkspace` DB migration as part of Phase 0 or Phase 1.
+
+> **Naming convention note:** `LabWorkspace` is distinct from the multi-tenant `Workspace` entity (Stage 7 auth, `workspaceId` isolation). They are separate concepts and separate DB tables.
 
 ---
 
@@ -431,19 +462,33 @@ The `MarketDataset` entity (Stage 19) already covers:
 - `fetchedAt`, `datasetHash`, `candleCount`, `qualityJson`, `status`
 - `engineVersion`
 
-Statuses from Stage 19: `READY`, `PARTIAL`, `FAILED`
-Add UI-side derived state: `fetching` (polling in progress), `draft` (not yet submitted)
+Statuses from Stage 19: `READY`, `PARTIAL`, `FAILED` (these are the only DB status values).
+
+UI-side derived states (not persisted, live only in `useLabGraphStore`):
+- `draft` — form filled but not yet submitted
+- `submitting` — POST in flight (show spinner/progress)
+- `loading_preview` — fetching preview rows after READY
 
 ### One missing field (propose addition)
-- `name` (string, optional): user-friendly label for saved datasets
-  Current schema has no display name → add to `MarketDataset` as nullable string in the next schema migration.
+- `name` (string, optional): user-friendly label for saved datasets.
+  Current `MarketDataset` schema has no display name → add as nullable string in Phase 2 migration.
 
 ### Dataset creation flow in UI
-1. User fills Dataset Builder form → UI validates locally (symbol exists, range ≤ 365d, candles ≤ 100k estimate)
-2. UI calls `POST /api/v1/lab/datasets` (existing endpoint)
-3. Backend returns `datasetId` + initial status
-4. UI polls `GET /api/v1/lab/datasets/:id` every 2s while `status !== READY | PARTIAL | FAILED`
-5. On completion, Dataset Builder shows preview and quality summary
+
+> **Stage 19 POST is synchronous** — it runs the full fetch + hash + quality inside a single Prisma transaction (up to ~30s).
+> There is no async BullMQ queue for dataset creation. The POST returns the final `READY | PARTIAL | FAILED` status.
+
+UI flow:
+1. User fills Dataset Builder form → UI validates locally (symbol exists in `InstrumentCache`, range ≤ 365d, estimated candles ≤ 100k)
+2. UI sets local state → `submitting`, shows progress indicator
+3. UI calls `POST /api/v1/lab/datasets` — blocks until complete (max ~30s)
+4. Backend returns `{ datasetId, datasetHash, status, qualityJson, candleCount }` — final status
+5. UI updates `useLabGraphStore.activeDatasetId` and Context Bar badge
+6. On `READY`: Dataset Builder shows preview and quality summary
+7. On `PARTIAL`: show persistent warning banner + still show preview
+8. On `FAILED`: show error with `qualityJson.sanityDetails`
+
+Optional enhancement (not required for Phase 2A): if user navigates away during a long POST, re-enter Dataset Builder, and the dataset is found via `GET /api/v1/lab/datasets` with a matching params — UI may display the already-computed result without re-fetching.
 
 ---
 
@@ -771,8 +816,46 @@ All endpoints use `/api/v1/` prefix (project standard).
 
 Existing entities used as-is: `ExchangeConnection`, `MarketDataset`, `MarketCandle`, `BacktestResult`, `StrategyVersion`.
 
-### New: `LabWorkspace`
-Editable research session container.
+### Persistence timeline — when each new entity is introduced
+
+| Entity | First introduced as DB schema | Phase | Migration required? |
+|---|---|---|---|
+| `LabWorkspace` | **Phase 3** | When graph drafts need persistence across page reload | Yes — new table |
+| `StrategyGraph` | **Phase 3** | Same time as LabWorkspace | Yes — new table |
+| `StrategyGraphVersion` | **Phase 4** | On first graph compile | Yes — new table |
+| `MarketDataset.name` | **Phase 2** | Minimal nullable column | Yes — nullable column add |
+
+> **Phase 0 and Phase 1: ZERO schema migrations required.**
+> Phase 2 requires exactly one minimal schema change: adding `name` (nullable string) to `MarketDataset`.
+> All new tables are introduced in Phase 3 at the earliest.
+
+---
+
+### LabWorkspace — Phase 1 lifecycle (client-side only)
+
+In Phase 1, `LabWorkspace` exists only as **Zustand store state**, optionally backed by `localStorage`.
+
+Phase 1 `useLabGraphStore` state shape (NO DB):
+```typescript
+// Client-side session state — no backend persistence in Phase 1
+interface LabSessionState {
+  activeConnectionId: string | null;   // ExchangeConnection id
+  activeDatasetId: string | null;      // MarketDataset id
+  activeGraphId: string | null;        // StrategyGraph id (null until Phase 3)
+  validationState: 'ok' | 'warning' | 'error' | 'stale' | 'idle';
+  runState: 'idle' | 'running' | 'done' | 'failed';
+  nodes: [];                           // empty until Phase 3
+  edges: [];                           // empty until Phase 3
+}
+```
+
+This state is sufficient for Phase 1 Context Bar rendering and Phase 2 Dataset Builder wiring.
+
+---
+
+### New: `LabWorkspace` (Phase 3 DB entity)
+
+Introduced when graph persistence is needed.
 - `id` (ulid, PK)
 - `workspaceId` (FK → Workspace)
 - `name` (string)
@@ -780,7 +863,7 @@ Editable research session container.
 - `activeDatasetId` (FK → MarketDataset, nullable)
 - `createdAt`, `updatedAt`
 
-### New: `StrategyGraph`
+### New: `StrategyGraph` (Phase 3)
 Visual graph draft (editable).
 - `id` (ulid, PK)
 - `labWorkspaceId` (FK → LabWorkspace)
@@ -805,7 +888,7 @@ Immutable snapshot of graph at compile time.
 ### Migration principle
 All additions are additive (new tables, nullable FK columns).
 No breaking changes to existing `Bot`, `BotRun`, `BotSpecVersion`, `BacktestResult` schemas.
-New nullable fields on `MarketDataset`: `name` (string, nullable).
+New nullable field on `MarketDataset`: `name` (string, nullable) — Phase 2.
 
 ---
 
@@ -837,22 +920,49 @@ Each phase is independently completable, reviewable, and has explicit acceptance
 ### Goal
 Align docs and freeze the architectural direction before implementation.
 
+> **This phase MUST be completed as a standalone, separate PR before any UI work starts.**
+> Rationale: freezing the vocabulary, naming, and API contracts before code is written prevents the most expensive class of bugs — architectural misunderstandings baked into implementation.
+> Phase 0 contains no code changes. It is documentation-only.
+
+### Recommended PR sequence
+
+```
+PR 1 — Phase 0:   docs-only, no code
+PR 2 — Phase 1A:  panel layout (no backend)
+PR 3 — Phase 1B:  Lab store wiring (no backend)
+PR 4 — Phase 2A:  dataset form UI
+PR 5 — Phase 2B:  preview table/chart + /preview endpoint
+PR 6 — Phase 2C:  quality summary UI
+...
+```
+
+> Each PR must be independently reviewable and deployable.
+> Do NOT combine Phase 0 with Phase 1A or any UI work.
+> Do NOT start Phase 1A until Phase 0 is merged and reviewed.
+
 ### Tasks
-- Update `docs/12-ui-ux.md` Lab section with Lab v2 workspace model.
-- Add this spec as `docs/23-lab-v2-ide-spec.md`.
+- Update `docs/12-ui-ux.md` Lab section with Lab v2 workspace model (4-panel layout, Classic mode note).
+- Add this spec as `docs/23-lab-v2-ide-spec.md` (already done — verify content is final).
 - Update `docs/00-glossary.md`:
-  - add: `LabWorkspace`, `StrategyGraph`, `StrategyGraphVersion`, `ValidationIssue`, `BlockLibraryVersion`
+  - add: `LabWorkspace`, `StrategyGraph`, `StrategyGraphVersion`, `ValidationIssue`, `BlockLibraryVersion`, `CandleInterval`
   - clarify: `Dataset` → points to `MarketDataset` (Stage 19)
   - clarify: `BacktestRun` → is `BacktestResult` in codebase
-- Update `docs/07-data-model.md` with `LabWorkspace`, `StrategyGraph`, `StrategyGraphVersion`.
-- Confirm non-breaking relation to existing DSL and Stage 19.
+  - add note: `LabWorkspace` ≠ `Workspace` (different concepts, different DB tables)
+- Update `docs/07-data-model.md`:
+  - reference `LabWorkspace`, `StrategyGraph`, `StrategyGraphVersion` as **future entities** (Phase 3+)
+  - reference Stage 19 `MarketDataset` and `BacktestResult` as existing entities
+- Confirm non-breaking relation to existing DSL (Stage 10) and Stage 19.
 - Add React Flow v11+ as approved canvas library to `docs/17-tech-stack.md`.
+- Add `react-resizable-panels`, `@tanstack/react-virtual`, `zundo` to `docs/17-tech-stack.md`.
 
 ### Acceptance checks
 - [ ] No glossary term ambiguity between Lab v2 and existing docs
-- [ ] `LabWorkspace` does not conflict with `Workspace` usage anywhere
-- [ ] React Flow added to tech stack doc
-- [ ] Stage 19 referenced in Phase 2 and Phase 5 with explicit "build on top of, not reimplement" note
+- [ ] `LabWorkspace` does not conflict with `Workspace` usage anywhere in docs
+- [ ] `docs/12-ui-ux.md` Lab section reflects 4-panel model and Classic mode mandatory status
+- [ ] React Flow v11+ added to tech stack doc
+- [ ] Stage 19 explicitly referenced in Phase 2 and Phase 5 with "build on top of, not reimplement" note
+- [ ] `docs/07-data-model.md` lists new entities as future (Phase 3+), not current
+- [ ] No code changes in this PR
 
 ---
 
@@ -861,34 +971,62 @@ Align docs and freeze the architectural direction before implementation.
 ### Goal
 Create the new `/lab` screen structure without breaking existing functionality.
 
+> **No backend changes. No schema migrations. No new API endpoints.**
+> Phase 1 is purely frontend layout and client-side state.
+
+### LabWorkspace in Phase 1 — client-side only
+
+`LabWorkspace` in this phase is **not a DB entity**. It is the `useLabGraphStore` Zustand store.
+The store holds session state (`activeConnectionId`, `activeDatasetId`) in component memory,
+optionally persisted to `localStorage` for page-reload survival.
+
+**No `LabWorkspace` table migration is needed in Phase 1.**
+DB entity `LabWorkspace` is introduced in Phase 3.
+
+### Classic mode — MANDATORY in Phase 1
+
+`StrategyList`, `DslEditor`, `AiChat`, and `BacktestReport` MUST be preserved in their current form as a "Classic mode" tab.
+Phase 1 does not modify these components — it only wraps them in the new shell layout.
+An implementer who removes or degrades Classic mode components in this phase has violated the spec.
+
 ### Tasks
+
 **1A — Panel layout:**
-- Replace current single-center layout with multi-panel shell:
-  - top context bar (static, no data),
-  - dataset panel (placeholder with loading state),
-  - strategy workspace (placeholder canvas area),
-  - inspector panel (placeholder),
-  - diagnostics drawer (collapsed placeholder).
-- Use CSS Grid / Flexbox with resize handles (use `react-resizable-panels` library).
-- Preserve existing `StrategyList`, `DslEditor`, `AiChat`, `BacktestReport` as a "Classic mode" tab.
+- Replace current single-center layout with multi-panel shell using `react-resizable-panels`:
+  - top context bar (static, no data — all fields show "— not selected"),
+  - left/main area with tabs: `[Classic mode]` (default) | `[Data]` | `[Build]` | `[Test]` (last 3 placeholders),
+  - right inspector placeholder (collapsible),
+  - bottom diagnostics drawer (collapsed placeholder).
+- Classic mode tab contains existing `StrategyList` + `DslEditor` + `AiChat` + `BacktestReport` unchanged.
+- Default tab on page load: **Classic mode** (not Data or Build — those are placeholders).
+- No canvas library installed yet. Canvas area in [Build] tab is a plain `<div>` placeholder with text "Strategy canvas coming in Phase 3".
 
 **1B — Lab state / store wiring:**
 - Create `useLabGraphStore` (Zustand) with:
-  - `activeConnectionId`, `activeDatasetId`, `activeGraphId`
-  - `validationState`, `runState`
-  - `nodes[]`, `edges[]` (empty, ready for Phase 3)
-  - undo/redo history (zundo temporal middleware)
-- Wire Context Bar to `useLabGraphStore`.
-- Add routing for Lab modes: `/lab` (default), `/lab/data`, `/lab/build`, `/lab/test`.
+  - `activeConnectionId: string | null`
+  - `activeDatasetId: string | null`
+  - `activeGraphId: string | null` (unused until Phase 3)
+  - `validationState: 'idle' | 'ok' | 'warning' | 'error' | 'stale'`
+  - `runState: 'idle' | 'running' | 'done' | 'failed'`
+  - `nodes: []` (empty array, ready for Phase 3)
+  - `edges: []` (empty array, ready for Phase 3)
+  - undo/redo history (zundo temporal middleware — installed now, wired to empty state)
+- Wire Context Bar to `useLabGraphStore` (shows "— not selected" when null).
+- Add routing for Lab tabs: `/lab` (default → Classic mode), `/lab/data`, `/lab/build`, `/lab/test`.
+- Optional: persist `activeConnectionId` and `activeDatasetId` to `localStorage` (low priority).
 
 ### Acceptance checks
 - [ ] `/lab` loads without error
-- [ ] All 4 panels render with placeholders
-- [ ] Classic mode tab shows existing DslEditor + AiChat + BacktestReport
-- [ ] Context Bar renders (connection: "none selected", dataset: "none selected")
-- [ ] Resize handles work (drag dataset panel height)
-- [ ] `useLabGraphStore` exists and is connected to Context Bar
-- [ ] No backend changes required
+- [ ] All panel regions render: Context Bar, tabbed main area, inspector placeholder, diagnostics drawer
+- [ ] Default tab is Classic mode — `DslEditor` + `AiChat` + `BacktestReport` render and function unchanged
+- [ ] `[Data]` tab shows placeholder text (no dataset form yet)
+- [ ] `[Build]` tab shows placeholder text (no canvas yet)
+- [ ] `[Test]` tab shows placeholder text
+- [ ] Context Bar renders with "— not selected" for connection and dataset
+- [ ] Resize handles work (drag panel widths/heights)
+- [ ] `useLabGraphStore` initializes correctly (no errors)
+- [ ] `useLabGraphStore` is connected to Context Bar
+- [ ] No backend changes, no new API endpoints, no DB migrations
 
 ---
 
@@ -901,8 +1039,9 @@ Introduce dataset definition and preview workflow using the existing Stage 19 ba
 **2A — Dataset form UI:**
 - Dataset Builder panel with all mandatory controls (§6.2).
 - Client-side pre-validation (symbol from `InstrumentCache`, range ≤ 365d, estimated candles ≤ 100k).
-- On submit: `POST /api/v1/lab/datasets` → receive `datasetId`.
-- Poll `GET /api/v1/lab/datasets/:id` every 2s while `status = fetching` (reuse SWR polling pattern from BotRun status).
+- On submit: show `submitting` spinner → call `POST /api/v1/lab/datasets` (synchronous, blocks up to ~30s).
+- POST returns final status (`READY | PARTIAL | FAILED`) and full metadata — no polling required.
+- Optional: if user navigates away, use `GET /api/v1/lab/datasets` list to find an existing dataset matching the request params.
 
 **2B — Preview table/chart:**
 - Table view: paginated virtualized table (use `@tanstack/react-virtual`).
@@ -1058,21 +1197,37 @@ Expand Lab toward richer research workflows.
 Claude Code MUST receive work in chunks no larger than one lettered sub-phase.
 Do not combine 3A + 3B + 3C into one task.
 
+> **Phase 0 is always a separate task/PR from any implementation phase.**
+> Never combine Phase 0 docs work with Phase 1 shell work.
+
 ### Recommended execution slices
-- Phase 0: docs + glossary update (1 task)
-- Phase 1A: panel layout only (1 task)
-- Phase 1B: Lab state/store wiring (1 task)
-- Phase 2A: dataset form UI (1 task)
-- Phase 2B: preview table/chart + `/preview` endpoint (1 task)
-- Phase 2C: quality summary UI (1 task)
-- Phase 3A: graph canvas base + keyboard shortcuts (1 task)
-- Phase 3B: node palette + Inspector (1 task)
-- Phase 3C: client-side validation rules (1 task)
-- Phase 4A: compiler backend + graph schema (1 task)
-- Phase 4B: compiler UI + DSL preview (1 task)
-- Phase 5A: run creation + report shell (1 task)
-- Phase 5B: metrics/trades/equity/log tabs (1 task)
-- Phase 6: private data + stale-state + compare (2 tasks)
+
+| Slice | Content | PR |
+|---|---|---|
+| Phase 0 | docs + glossary update | PR 1 |
+| Phase 1A | panel layout (no backend) | PR 2 |
+| Phase 1B | Lab state/store wiring | PR 3 |
+| Phase 2A | dataset form UI | PR 4 |
+| Phase 2B | preview table/chart + `/preview` endpoint | PR 5 |
+| Phase 2C | quality summary UI | PR 6 |
+| Phase 3A | graph canvas base + keyboard shortcuts | PR 7 |
+| Phase 3B | node palette + Inspector | PR 8 |
+| Phase 3C | client-side validation rules | PR 9 |
+| Phase 4A | compiler backend + graph schema | PR 10 |
+| Phase 4B | compiler UI + DSL preview | PR 11 |
+| Phase 5A | run creation + report shell | PR 12 |
+| Phase 5B | metrics/trades/equity/log tabs | PR 13 |
+| Phase 6 | private data + stale-state + compare | PR 14–15 |
+
+### Phase 2B optional split
+
+If Phase 2B proves too large in a single PR, it MAY be split:
+- **Phase 2B1**: `/preview` endpoint (backend) + virtualized table view (frontend)
+- **Phase 2B2**: chart view (OHLCV candlestick via `lightweight-charts`)
+
+This split is optional. Default is 2B as one unit. Only split if implementation size warrants it.
+
+Do not split for other reasons (e.g., "cleanliness") — extra PRs add review overhead.
 
 ---
 
@@ -1099,7 +1254,7 @@ Do not combine 3A + 3B + 3C into one task.
 | `docs/12-ui-ux.md` | Replace Lab layout section with Lab v2 four-panel model |
 | `docs/02-requirements-functional.md` | Add: dataset builder, graph builder, reproducible backtests (Phase 5) |
 | `docs/04-architecture.md` | Add: LabWorkspace, StrategyGraph, graph compiler service |
-| `docs/07-data-model.md` | Add: LabWorkspace, StrategyGraph, StrategyGraphVersion; reference Stage 19 entities |
+| `docs/07-data-model.md` | Add planned entities as **future (Phase 3+)**: `LabWorkspace`, `StrategyGraph`, `StrategyGraphVersion`; reference existing Stage 19 entities (`MarketDataset`, `BacktestResult`) |
 | `docs/10-strategy-dsl.md` | Add: visual graph compiles into declarative DSL; block-to-DSL mapping table |
 | `docs/17-tech-stack.md` | Add: React Flow v11+ (canvas), `react-resizable-panels`, `@tanstack/react-virtual`, `zundo` |
 | `docs/00-glossary.md` | Add: LabWorkspace, StrategyGraph, ValidationIssue, BlockLibraryVersion, CandleInterval |
@@ -1129,16 +1284,19 @@ Do NOT rebuild Lab as one giant feature.
 Implement it as an additive phased IDE migration.
 
 Priority order MUST be:
-1. shell structure (Phase 1),
+0. **docs freeze (Phase 0)** — ALWAYS FIRST, standalone PR,
+1. shell structure (Phase 1A + 1B),
 2. dataset definition UI on existing backend (Phase 2),
 3. graph model + canvas (Phase 3),
 4. compiler (Phase 4),
 5. reproducible runs (Phase 5).
 
 **Critical implementation guidance:**
-- Phase 2 is purely UI — no backend entities needed. Stage 19 already built the data layer.
-- Phase 3 requires a canvas library decision (React Flow v11+) before any code is written.
-- Phase 4 requires a formal block-to-DSL mapping table defined in `docs/10-strategy-dsl.md` before the compiler is coded.
-- Phase 5 extends `BacktestResult` (which already has `datasetId`/`datasetHash`/`engineVersion` from Stage 19) — binding is mostly UI work.
+- **Phase 0 must be a separate PR from Phase 1** — no mixing docs with code.
+- **Phase 2 is purely UI** — no new backend entities. Stage 19 already built the data layer. Phase 2 requires one minimal schema change: `MarketDataset.name` (nullable string).
+- **Phase 3 requires a canvas library decision** (React Flow v11+) confirmed before any code is written. Also introduces the first DB migrations: `LabWorkspace` + `StrategyGraph` tables.
+- **Phase 4 requires a formal block-to-DSL mapping table** defined in `docs/10-strategy-dsl.md` before the compiler is coded.
+- **Phase 5 extends `BacktestResult`** (which already has `datasetId`/`datasetHash`/`engineVersion` from Stage 19) — binding is mostly UI work.
+- **Classic mode (DslEditor + AiChat + BacktestReport) MUST NOT be removed** until Phase 4 is accepted.
 
 This sequence minimizes rework, keeps the system compatible with the current architecture, and creates the strongest foundation for future AI-assisted strategy research inside botmarketplace.store.
