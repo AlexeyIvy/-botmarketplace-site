@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@tanstack/react-virtual": "^3.13.21",
     "lightweight-charts": "^5.1.0",
     "next": "^15.3.0",
     "react": "^19.1.0",

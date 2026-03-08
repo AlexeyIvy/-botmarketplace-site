@@ -1,9 +1,10 @@
 /**
- * Dataset routes — Stage 19a + Phase 2A
+ * Dataset routes — Stage 19a + Phase 2A + Phase 2B
  *
- * POST /lab/datasets      — create (or retrieve existing) frozen market dataset
- * GET  /lab/datasets      — list workspace datasets (Phase 2A)
- * GET  /lab/datasets/:id  — retrieve dataset metadata + qualityJson
+ * POST /lab/datasets             — create (or retrieve existing) frozen market dataset
+ * GET  /lab/datasets             — list workspace datasets (Phase 2A)
+ * GET  /lab/datasets/:id         — retrieve dataset metadata + qualityJson
+ * GET  /lab/datasets/:id/preview — paginated OHLCV rows for table/chart preview (Phase 2B)
  *
  * Rate limits:
  *   POST  10 req/min
@@ -312,6 +313,75 @@ export async function datasetRoutes(app: FastifyInstance) {
       status:        ds.status,
       name:          ds.name,
       createdAt:     ds.createdAt,
+    });
+  });
+
+  // ── GET /lab/datasets/:id/preview ──────────────────────────────────────────
+  // Phase 2B: paginated OHLCV rows for table/chart preview.
+  // Uses MarketCandle rows in the dataset's [fromTsMs, toTsMs] range.
+  // totalCount is taken from ds.candleCount (computed at fetch time) — no extra COUNT query.
+  app.get<{
+    Params: { id: string };
+    Querystring: { page?: string; pageSize?: string };
+  }>("/lab/datasets/:id/preview", {
+    config: { rateLimit: { max: 60, timeWindow: "1 minute" } },
+    onRequest: [app.authenticate],
+  }, async (request, reply) => {
+    const workspace = await resolveWorkspace(request, reply);
+    if (!workspace) return;
+
+    const ds = await prisma.marketDataset.findUnique({ where: { id: request.params.id } });
+    if (!ds) {
+      return problem(reply, 404, "Not Found", "Dataset not found");
+    }
+    if (ds.workspaceId !== workspace.id) {
+      return problem(reply, 403, "Forbidden", "Dataset belongs to another workspace");
+    }
+
+    const rawPage = parseInt(request.query.page ?? "1", 10);
+    const rawSize = parseInt(request.query.pageSize ?? "200", 10);
+    const page     = Math.max(1, Number.isFinite(rawPage) ? rawPage : 1);
+    const pageSize = Math.min(500, Math.max(1, Number.isFinite(rawSize) ? rawSize : 200));
+
+    const totalCount = ds.candleCount;
+    const totalPages = totalCount > 0 ? Math.ceil(totalCount / pageSize) : 0;
+    const skip       = (page - 1) * pageSize;
+
+    const candles = await prisma.marketCandle.findMany({
+      where: {
+        exchange:   ds.exchange,
+        symbol:     ds.symbol,
+        interval:   ds.interval,
+        openTimeMs: { gte: ds.fromTsMs, lte: ds.toTsMs },
+      },
+      orderBy: { openTimeMs: "asc" },
+      skip,
+      take: pageSize,
+      select: {
+        openTimeMs: true,
+        open:       true,
+        high:       true,
+        low:        true,
+        close:      true,
+        volume:     true,
+      },
+    });
+
+    return reply.send({
+      datasetId:  ds.id,
+      page,
+      pageSize,
+      totalCount,
+      totalPages,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      rows: (candles as any[]).map((c) => ({
+        t: c.openTimeMs.toString(),
+        o: c.open.toString(),
+        h: c.high.toString(),
+        l: c.low.toString(),
+        c: c.close.toString(),
+        v: c.volume.toString(),
+      })),
     });
   });
 }
