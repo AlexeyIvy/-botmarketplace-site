@@ -1,5 +1,7 @@
 import { create } from "zustand";
 import { temporal } from "zundo";
+import type { Node, Edge, NodeChange, EdgeChange } from "@xyflow/react";
+import { applyNodeChanges, applyEdgeChanges } from "@xyflow/react";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -8,16 +10,14 @@ import { temporal } from "zundo";
 export type ValidationState = "idle" | "ok" | "warning" | "error" | "stale";
 export type RunState = "idle" | "running" | "done" | "failed";
 
-// Node / Edge are typed as unknown here — Phase 3 will narrow these with
-// React Flow types when the canvas is introduced.
 export interface LabGraphState {
   activeConnectionId: string | null;
   activeDatasetId: string | null;
   activeGraphId: string | null;
   validationState: ValidationState;
   runState: RunState;
-  nodes: unknown[];
-  edges: unknown[];
+  nodes: Node[];
+  edges: Edge[];
 }
 
 interface LabGraphActions {
@@ -26,6 +26,12 @@ interface LabGraphActions {
   setActiveGraphId: (id: string | null) => void;
   setValidationState: (state: ValidationState) => void;
   setRunState: (state: RunState) => void;
+  // Phase 3A: React Flow change handlers
+  onNodesChange: (changes: NodeChange[]) => void;
+  onEdgesChange: (changes: EdgeChange[]) => void;
+  // Phase 3A: direct setters for undo/redo
+  setNodes: (nodes: Node[]) => void;
+  setEdges: (edges: Edge[]) => void;
 }
 
 // ---------------------------------------------------------------------------
@@ -43,9 +49,8 @@ const initialState: LabGraphState = {
 };
 
 // ---------------------------------------------------------------------------
-// Store — Phase 1B
-// zundo provides undo/redo history wiring.
-// Graph functionality (nodes / edges mutations) is deferred to Phase 3.
+// Store — Phase 3A
+// zundo provides undo/redo history. React Flow types now replace unknown[].
 // ---------------------------------------------------------------------------
 
 export const useLabGraphStore = create<LabGraphState & LabGraphActions>()(
@@ -57,10 +62,15 @@ export const useLabGraphStore = create<LabGraphState & LabGraphActions>()(
       setActiveGraphId: (id) => set({ activeGraphId: id }),
       setValidationState: (state) => set({ validationState: state }),
       setRunState: (state) => set({ runState: state }),
+      onNodesChange: (changes) =>
+        set((state) => ({ nodes: applyNodeChanges(changes, state.nodes) })),
+      onEdgesChange: (changes) =>
+        set((state) => ({ edges: applyEdgeChanges(changes, state.edges) })),
+      setNodes: (nodes) => set({ nodes }),
+      setEdges: (edges) => set({ edges }),
     }),
-    // zundo options: only track the fields relevant to undo/redo graph history.
-    // Connection / dataset selection is intentionally excluded (they are
-    // navigation choices, not graph mutations).
+    // zundo options: only track graph state for undo/redo history.
+    // Connection / dataset selection is excluded (navigation, not mutations).
     {
       partialize: (state) => ({
         activeGraphId: state.activeGraphId,
