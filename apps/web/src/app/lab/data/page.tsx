@@ -15,6 +15,7 @@
 import { useEffect, useState } from "react";
 import { apiFetch, getWorkspaceId } from "../../../lib/api";
 import { useLabGraphStore } from "../useLabGraphStore";
+import { DatasetPreview } from "../DatasetPreview";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -608,9 +609,7 @@ function DatasetResult({
         </>
       )}
 
-      <div style={{ marginTop: 16, fontSize: 12, color: "var(--text-secondary)" }}>
-        Table and chart preview available in Phase 2B.
-      </div>
+      <DatasetPreview datasetId={result.datasetId} status={result.status} />
 
       <button onClick={onNewDataset} style={{ ...secondaryBtnStyle, marginTop: 20 }}>
         New Dataset
@@ -671,9 +670,7 @@ function ActiveDatasetInfo({
         <MetaRow label="Hash"       value={ds.datasetHash.slice(0, 16) + "…"} mono />
       </div>
 
-      <div style={{ marginTop: 12, fontSize: 12, color: "var(--text-secondary)" }}>
-        Table and chart preview available in Phase 2B.
-      </div>
+      <DatasetPreview datasetId={ds.datasetId} status={ds.status} />
 
       <button onClick={onNewDataset} style={{ ...secondaryBtnStyle, marginTop: 20 }}>
         New Dataset
