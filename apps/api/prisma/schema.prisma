@@ -419,6 +419,7 @@ model MarketDataset {
   qualityJson   Json
   engineVersion String
   status        DatasetStatus
+  name          String?
   createdAt     DateTime       @default(now())
 
   workspace Workspace       @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
