@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@tanstack/react-virtual": "^3.13.21",
+    "@xyflow/react": "^12.10.1",
     "lightweight-charts": "^5.1.0",
     "next": "^15.3.0",
     "react": "^19.1.0",
