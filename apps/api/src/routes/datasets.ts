@@ -1,8 +1,9 @@
 /**
- * Dataset routes — Stage 19a
+ * Dataset routes — Stage 19a + Phase 2A
  *
- * POST /lab/datasets  — create (or retrieve existing) frozen market dataset
- * GET  /lab/datasets/:id — retrieve dataset metadata + qualityJson
+ * POST /lab/datasets      — create (or retrieve existing) frozen market dataset
+ * GET  /lab/datasets      — list workspace datasets (Phase 2A)
+ * GET  /lab/datasets/:id  — retrieve dataset metadata + qualityJson
  *
  * Rate limits:
  *   POST  10 req/min
@@ -47,6 +48,8 @@ interface CreateDatasetBody {
   exchange: string;
   symbol: string;
   interval: string;
+  /** Optional display name for this dataset */
+  name?: string;
   /** ISO date string (alternative to fromTsMs) */
   fromTs?: string;
   /** ISO date string (alternative to toTsMs) */
@@ -72,6 +75,7 @@ export async function datasetRoutes(app: FastifyInstance) {
       exchange,
       symbol,
       interval,
+      name,
       fromTs,
       toTs,
       fromTsMs: bodyFromMs,
@@ -202,6 +206,7 @@ export async function datasetRoutes(app: FastifyInstance) {
           qualityJson:   qualityJson as unknown as object,
           engineVersion,
           status,
+          name:          name?.trim() || null,
         },
         update: {
           fetchedAt:     new Date(),
@@ -210,12 +215,15 @@ export async function datasetRoutes(app: FastifyInstance) {
           qualityJson:   qualityJson as unknown as object,
           engineVersion,
           status,
+          // preserve existing name on re-fetch unless a new one is provided
+          ...(name?.trim() ? { name: name.trim() } : {}),
         },
       });
     }, { timeout: 30_000 });
 
     return reply.status(201).send({
       datasetId:     dataset.id,
+      name:          dataset.name,
       datasetHash:   dataset.datasetHash,
       status:        dataset.status,
       qualityJson:   dataset.qualityJson,
@@ -223,6 +231,53 @@ export async function datasetRoutes(app: FastifyInstance) {
       fetchedAt:     dataset.fetchedAt,
       engineVersion: dataset.engineVersion,
     });
+  });
+
+  // ── GET /lab/datasets ──────────────────────────────────────────────────────
+  app.get("/lab/datasets", {
+    config: { rateLimit: { max: 60, timeWindow: "1 minute" } },
+    onRequest: [app.authenticate],
+  }, async (request, reply) => {
+    const workspace = await resolveWorkspace(request, reply);
+    if (!workspace) return;
+
+    const datasets = await prisma.marketDataset.findMany({
+      where: { workspaceId: workspace.id },
+      orderBy: { createdAt: "desc" },
+      take: 100,
+      select: {
+        id: true,
+        exchange: true,
+        symbol: true,
+        interval: true,
+        fromTsMs: true,
+        toTsMs: true,
+        candleCount: true,
+        status: true,
+        name: true,
+        datasetHash: true,
+        fetchedAt: true,
+        createdAt: true,
+      },
+    });
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return reply.send(
+      (datasets as any[]).map((ds) => ({
+        datasetId:   ds.id,
+        exchange:    ds.exchange,
+        symbol:      ds.symbol,
+        interval:    ds.interval,
+        fromTsMs:    ds.fromTsMs.toString(),
+        toTsMs:      ds.toTsMs.toString(),
+        candleCount: ds.candleCount,
+        status:      ds.status,
+        name:        ds.name,
+        datasetHash: ds.datasetHash,
+        fetchedAt:   ds.fetchedAt,
+        createdAt:   ds.createdAt,
+      }))
+    );
   });
 
   // ── GET /lab/datasets/:id ──────────────────────────────────────────────────
@@ -255,6 +310,7 @@ export async function datasetRoutes(app: FastifyInstance) {
       qualityJson:   ds.qualityJson,
       engineVersion: ds.engineVersion,
       status:        ds.status,
+      name:          ds.name,
       createdAt:     ds.createdAt,
     });
   });

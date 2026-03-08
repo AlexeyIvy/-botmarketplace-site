@@ -1,0 +1,335 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Group, Panel, Separator } from "react-resizable-panels";
+import { useLabGraphStore } from "./useLabGraphStore";
+
+// ---------------------------------------------------------------------------
+// Tab definitions — order matches spec
+// ---------------------------------------------------------------------------
+
+const TABS = [
+  { id: "classic", label: "Classic mode", href: "/lab" },
+  { id: "data",    label: "Data",         href: "/lab/data" },
+  { id: "build",   label: "Build",        href: "/lab/build" },
+  { id: "test",    label: "Test",         href: "/lab/test" },
+] as const;
+
+type TabId = (typeof TABS)[number]["id"];
+
+function getActiveTab(pathname: string): TabId {
+  if (pathname === "/lab" || pathname === "/lab/") return "classic";
+  if (pathname.startsWith("/lab/data"))  return "data";
+  if (pathname.startsWith("/lab/build")) return "build";
+  if (pathname.startsWith("/lab/test"))  return "test";
+  return "classic";
+}
+
+// ---------------------------------------------------------------------------
+// Context Bar — Phase 1B: reads from useLabGraphStore
+// ---------------------------------------------------------------------------
+
+function LabContextBar() {
+  const activeConnectionId = useLabGraphStore((s) => s.activeConnectionId);
+  const activeDatasetId    = useLabGraphStore((s) => s.activeDatasetId);
+  const validationState    = useLabGraphStore((s) => s.validationState);
+  const runState           = useLabGraphStore((s) => s.runState);
+
+  return (
+    <div style={contextBarStyle}>
+      <span style={ctxTitleStyle}>Research Lab</span>
+      <div style={ctxItemsStyle}>
+        <CtxBadge
+          label="Connection"
+          value={activeConnectionId ?? "— not selected"}
+          dimmed={activeConnectionId === null}
+        />
+        <CtxBadge
+          label="Dataset"
+          value={activeDatasetId ?? "— not selected"}
+          dimmed={activeDatasetId === null}
+        />
+        <CtxBadge label="Validation" value={validationState} dimmed />
+        <CtxBadge label="Run"        value={runState}        dimmed />
+      </div>
+    </div>
+  );
+}
+
+function CtxBadge({
+  label,
+  value,
+  dimmed,
+}: {
+  label: string;
+  value: string;
+  dimmed?: boolean;
+}) {
+  return (
+    <div style={ctxBadgeStyle}>
+      <span style={{ color: "var(--text-secondary)", fontSize: 11 }}>{label}:</span>
+      <span
+        style={{
+          fontSize: 12,
+          marginLeft: 4,
+          color: dimmed ? "var(--text-secondary)" : "var(--text-primary)",
+        }}
+      >
+        {value}
+      </span>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Inspector placeholder panel (right side)
+// ---------------------------------------------------------------------------
+
+function InspectorPlaceholder() {
+  return (
+    <div style={inspectorStyle}>
+      <div style={panelLabelStyle}>Inspector</div>
+      <p style={placeholderTextStyle}>
+        Select a node or block to inspect its properties.
+      </p>
+      <p style={{ ...placeholderTextStyle, marginTop: 8, fontSize: 11 }}>
+        (Available in Phase 3)
+      </p>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Diagnostics drawer placeholder (bottom)
+// ---------------------------------------------------------------------------
+
+function DiagnosticsPlaceholder() {
+  return (
+    <div style={diagnosticsStyle}>
+      <span style={panelLabelStyle}>Diagnostics</span>
+      <span style={{ ...placeholderTextStyle, marginLeft: 12 }}>
+        No issues detected.
+      </span>
+      <span style={{ ...placeholderTextStyle, fontSize: 11, marginLeft: 4 }}>
+        (Available in Phase 3)
+      </span>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Lab Shell — Phase 1B: route-aware tabs + store-wired Context Bar
+// ---------------------------------------------------------------------------
+
+interface LabShellProps {
+  children: React.ReactNode;
+}
+
+export function LabShell({ children }: LabShellProps) {
+  const pathname  = usePathname();
+  const activeTab = getActiveTab(pathname);
+
+  return (
+    <div style={shellStyle}>
+      {/* Top Context Bar — reads from useLabGraphStore */}
+      <LabContextBar />
+
+      {/* Main resizable layout */}
+      <Group orientation="vertical" style={{ flex: 1, minHeight: 0 }}>
+
+        {/* Row: tabbed main area + right inspector */}
+        <Panel minSize={20}>
+          <Group orientation="horizontal">
+
+            {/* Left/Main: tab bar + tab content (children from active route) */}
+            <Panel minSize={30}>
+              <div style={tabAreaStyle}>
+
+                {/* Tab bar — Links for route-aware navigation */}
+                <nav style={tabBarStyle} aria-label="Lab sections">
+                  {TABS.map((tab) => {
+                    const isActive = activeTab === tab.id;
+                    return (
+                      <Link
+                        key={tab.id}
+                        href={tab.href}
+                        role="tab"
+                        aria-selected={isActive}
+                        style={{
+                          ...tabBtnStyle,
+                          ...(isActive ? tabBtnActiveStyle : {}),
+                        }}
+                      >
+                        {tab.label}
+                      </Link>
+                    );
+                  })}
+                </nav>
+
+                {/* Tab content — provided by the active route */}
+                <div style={tabContentStyle} role="tabpanel">
+                  {children}
+                </div>
+
+              </div>
+            </Panel>
+
+            {/* Resize handle (horizontal) */}
+            <Separator style={resizeHandleH} />
+
+            {/* Right: Inspector placeholder */}
+            <Panel defaultSize={22} minSize={8} collapsible>
+              <InspectorPlaceholder />
+            </Panel>
+
+          </Group>
+        </Panel>
+
+        {/* Resize handle (vertical) */}
+        <Separator style={resizeHandleV} />
+
+        {/* Bottom: Diagnostics drawer placeholder */}
+        <Panel defaultSize={8} minSize={4} collapsible>
+          <DiagnosticsPlaceholder />
+        </Panel>
+
+      </Group>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Styles
+// ---------------------------------------------------------------------------
+
+const shellStyle: React.CSSProperties = {
+  display: "flex",
+  flexDirection: "column",
+  height: "calc(100vh - var(--nav-height))",
+  background: "var(--bg-primary)",
+  overflow: "hidden",
+};
+
+const contextBarStyle: React.CSSProperties = {
+  display: "flex",
+  alignItems: "center",
+  gap: 20,
+  padding: "0 20px",
+  borderBottom: "1px solid var(--border)",
+  background: "var(--bg-secondary)",
+  flexShrink: 0,
+  height: 44,
+};
+
+const ctxTitleStyle: React.CSSProperties = {
+  fontSize: 13,
+  fontWeight: 600,
+  color: "var(--text-primary)",
+  flexShrink: 0,
+  paddingRight: 8,
+  borderRight: "1px solid var(--border)",
+};
+
+const ctxItemsStyle: React.CSSProperties = {
+  display: "flex",
+  gap: 8,
+  flex: 1,
+  flexWrap: "wrap",
+  alignItems: "center",
+};
+
+const ctxBadgeStyle: React.CSSProperties = {
+  display: "flex",
+  alignItems: "center",
+  padding: "2px 8px",
+  background: "rgba(255,255,255,0.03)",
+  borderRadius: 4,
+  border: "1px solid var(--border)",
+  whiteSpace: "nowrap",
+};
+
+const tabAreaStyle: React.CSSProperties = {
+  display: "flex",
+  flexDirection: "column",
+  height: "100%",
+  overflow: "hidden",
+};
+
+const tabBarStyle: React.CSSProperties = {
+  display: "flex",
+  borderBottom: "1px solid var(--border)",
+  background: "var(--bg-secondary)",
+  flexShrink: 0,
+};
+
+const tabBtnStyle: React.CSSProperties = {
+  padding: "10px 18px",
+  fontSize: 13,
+  fontWeight: 500,
+  background: "none",
+  border: "none",
+  borderBottom: "2px solid transparent",
+  color: "var(--text-secondary)",
+  cursor: "pointer",
+  textDecoration: "none",
+  display: "inline-block",
+};
+
+const tabBtnActiveStyle: React.CSSProperties = {
+  color: "var(--text-primary)",
+  borderBottom: "2px solid var(--accent)",
+  background: "rgba(255,255,255,0.02)",
+};
+
+const tabContentStyle: React.CSSProperties = {
+  flex: 1,
+  overflow: "auto",
+  minHeight: 0,
+};
+
+const inspectorStyle: React.CSSProperties = {
+  height: "100%",
+  borderLeft: "1px solid var(--border)",
+  background: "var(--bg-secondary)",
+  padding: "16px",
+  overflow: "auto",
+};
+
+const diagnosticsStyle: React.CSSProperties = {
+  height: "100%",
+  borderTop: "1px solid var(--border)",
+  background: "var(--bg-secondary)",
+  padding: "0 16px",
+  display: "flex",
+  alignItems: "center",
+};
+
+const panelLabelStyle: React.CSSProperties = {
+  fontSize: 11,
+  fontWeight: 600,
+  textTransform: "uppercase",
+  letterSpacing: "0.06em",
+  color: "var(--text-secondary)",
+  flexShrink: 0,
+};
+
+const placeholderTextStyle: React.CSSProperties = {
+  fontSize: 13,
+  color: "var(--text-secondary)",
+  lineHeight: 1.6,
+};
+
+const resizeHandleH: React.CSSProperties = {
+  width: 4,
+  background: "var(--border)",
+  cursor: "col-resize",
+  flexShrink: 0,
+};
+
+const resizeHandleV: React.CSSProperties = {
+  height: 4,
+  background: "var(--border)",
+  cursor: "row-resize",
+  flexShrink: 0,
+};
