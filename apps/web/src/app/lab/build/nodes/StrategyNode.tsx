@@ -2,7 +2,8 @@
 
 // ---------------------------------------------------------------------------
 // Phase 3B — Custom node renderer for Strategy Graph blocks
-// Per §6.3.1 and §9.1
+// Phase 3C — Error badge on header + red port ring for unconnected required ports
+// Per §6.3.1 and §9.1, §28 Level 3/5
 // ---------------------------------------------------------------------------
 
 import { memo, useCallback } from "react";
@@ -17,6 +18,7 @@ import {
   type LabNodeData,
 } from "../blockDefs";
 import { useConnectionContext } from "../ConnectionContext";
+import { useLabGraphStore } from "../../useLabGraphStore";
 
 // ---------------------------------------------------------------------------
 // Port handle component (per §6.3.1 port appearance)
@@ -34,6 +36,8 @@ interface PortHandleProps {
   incompatibleTarget: boolean;
   /** Whether this port already has an incoming connection (inputs only) */
   connected: boolean;
+  /** Phase 3C: whether this port has a validation error (unconnected required) */
+  hasValidationError: boolean;
 }
 
 function PortHandle({
@@ -45,6 +49,7 @@ function PortHandle({
   compatibleTarget,
   incompatibleTarget,
   connected,
+  hasValidationError,
 }: PortHandleProps) {
   const color = PORT_TYPE_COLOR[dataType];
   const position = side === "input" ? Position.Left : Position.Right;
@@ -75,6 +80,11 @@ function PortHandle({
     // Connected: solid fill + inner dot
     handleStyle.background = color;
     handleStyle.boxShadow = `0 0 0 1.5px ${color}`;
+  } else if (hasValidationError) {
+    // Phase 3C: unconnected required port with validation error → red ring
+    handleStyle.background = "transparent";
+    handleStyle.boxShadow = `0 0 0 2px #D44C4C, 0 0 5px #D44C4C66`;
+    handleStyle.animation = "portErrorPulse 1.5s ease-in-out infinite";
   } else if (required) {
     // Unconnected required: outline ring with pulse (animation via className)
     handleStyle.background = "transparent";
@@ -89,7 +99,7 @@ function PortHandle({
   const ariaLabel =
     side === "output"
       ? `${label} output: ${dataType}`
-      : `${label} input: ${dataType}${required ? ", required" : ""}`;
+      : `${label} input: ${dataType}${required ? ", required" : ""}${hasValidationError ? ", error: unconnected" : ""}`;
 
   return (
     <div
@@ -120,13 +130,18 @@ function PortHandle({
       <span
         style={{
           fontSize: 10,
-          color: "rgba(255,255,255,0.45)",
+          color: hasValidationError
+            ? "rgba(212,76,76,0.9)"
+            : "rgba(255,255,255,0.45)",
           userSelect: "none",
           fontFamily: "inherit",
           lineHeight: 1,
         }}
       >
         {label}
+        {hasValidationError && (
+          <span style={{ marginLeft: 3, fontSize: 9 }}>⚠</span>
+        )}
       </span>
     </div>
   );
@@ -149,6 +164,19 @@ function StrategyNode({ id, data, selected }: NodeProps) {
   const edges = useRFStore((s) => s.edges);
   const connectedInputIds = new Set(
     edges.filter((e) => e.target === id).map((e) => e.targetHandle)
+  );
+
+  // Phase 3C: get validation issues for this node from Zustand store
+  const validationIssues = useLabGraphStore((s) => s.validationIssues);
+  const nodeIssues = validationIssues.filter((issue) => issue.nodeId === id);
+  const hasNodeError = nodeIssues.some((i) => i.severity === "error");
+  const hasNodeWarning = nodeIssues.some((i) => i.severity === "warning");
+
+  // Build set of port IDs that have validation errors
+  const errorPortIds = new Set(
+    nodeIssues
+      .filter((i) => i.portId !== undefined)
+      .map((i) => i.portId as string)
   );
 
   const categoryColor = CATEGORY_COLOR[blockDef.category];
@@ -178,13 +206,21 @@ function StrategyNode({ id, data, selected }: NodeProps) {
   const nodeOpacity =
     isDragging && blockDef.inputs.length > 0 && !nodeHasCompatibleInput ? 0.6 : 1;
 
+  // Error badge color: red for errors, amber for warnings only
+  const errorBadgeColor = hasNodeError ? "#D44C4C" : "#FBBF24";
+  const showErrorBadge = hasNodeError || hasNodeWarning;
+
   return (
     <>
-      {/* Keyframe for port pulse animation */}
+      {/* Keyframe for port pulse animations */}
       <style>{`
         @keyframes portPulse {
           0%, 100% { transform: scale(1); }
           50% { transform: scale(1.1); }
+        }
+        @keyframes portErrorPulse {
+          0%, 100% { transform: scale(1); box-shadow: 0 0 0 2px #D44C4C, 0 0 5px #D44C4C66; }
+          50% { transform: scale(1.15); box-shadow: 0 0 0 2px #D44C4C, 0 0 8px #D44C4CAA; }
         }
       `}</style>
 
@@ -196,6 +232,8 @@ function StrategyNode({ id, data, selected }: NodeProps) {
             : "rgba(255,255,255,0.04)",
           border: selected
             ? `1px solid ${categoryColor}80`
+            : hasNodeError
+            ? "1px solid rgba(212,76,76,0.4)"
             : "1px solid rgba(255,255,255,0.1)",
           borderLeft: `3px solid ${categoryColor}`,
           borderRadius: 6,
@@ -205,6 +243,8 @@ function StrategyNode({ id, data, selected }: NodeProps) {
           color: "rgba(255,255,255,0.85)",
           boxShadow: isStale
             ? "0 0 0 1px rgba(251,191,36,0.4)"
+            : hasNodeError
+            ? "0 0 0 1px rgba(212,76,76,0.25)"
             : selected
             ? `0 0 8px ${categoryColor}40`
             : "none",
@@ -231,6 +271,7 @@ function StrategyNode({ id, data, selected }: NodeProps) {
               color: categoryColor,
               letterSpacing: "0.03em",
               textTransform: "uppercase",
+              flex: 1,
             }}
           >
             {blockDef.label}
@@ -249,6 +290,25 @@ function StrategyNode({ id, data, selected }: NodeProps) {
               }}
             >
               stale
+            </span>
+          )}
+          {/* Phase 3C: Error/warning badge on node header (§28 Level 3) */}
+          {showErrorBadge && (
+            <span
+              style={{
+                fontSize: 11,
+                color: errorBadgeColor,
+                lineHeight: 1,
+                flexShrink: 0,
+              }}
+              title={
+                hasNodeError
+                  ? `${nodeIssues.filter((i) => i.severity === "error").length} validation error(s)`
+                  : `${nodeIssues.filter((i) => i.severity === "warning").length} validation warning(s)`
+              }
+              aria-label={hasNodeError ? "Node has validation errors" : "Node has validation warnings"}
+            >
+              ⚠
             </span>
           )}
         </div>
@@ -279,6 +339,8 @@ function StrategyNode({ id, data, selected }: NodeProps) {
                 "input"
               );
               const connected = connectedInputIds.has(port.id);
+              // Phase 3C: port has error if it's in the errorPortIds set
+              const hasValidationError = errorPortIds.has(port.id);
               return (
                 <PortHandle
                   key={port.id}
@@ -290,6 +352,7 @@ function StrategyNode({ id, data, selected }: NodeProps) {
                   compatibleTarget={compatibleTarget}
                   incompatibleTarget={incompatibleTarget}
                   connected={connected}
+                  hasValidationError={hasValidationError}
                 />
               );
             })}
@@ -322,6 +385,7 @@ function StrategyNode({ id, data, selected }: NodeProps) {
                 compatibleTarget={false}
                 incompatibleTarget={false}
                 connected={false}
+                hasValidationError={false}
               />
             ))}
           </div>
