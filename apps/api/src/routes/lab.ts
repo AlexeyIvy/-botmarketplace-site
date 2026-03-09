@@ -22,24 +22,25 @@ const MAX_BPS = 1000; // 10%
 // ---------------------------------------------------------------------------
 
 /**
- * Stage 19 dataset-first backtest request.
+ * Phase 5 dataset-first backtest request.
+ * strategyVersionId is required — explicit version binding for reproducibility.
  * datasetId is required — the dataset provides symbol/interval/range + candles.
- * Legacy range-based fields (fromTs/toTs/symbol/interval) are not accepted;
- * the dataset is the single source of truth (spec §10.1).
+ * Per docs/23-lab-v2-ide-spec.md §16 Phase 5.
  */
 interface StartBacktestBody {
-  strategyId: string;
+  strategyVersionId: string;
   datasetId: string;
   feeBps?: number;
   slippageBps?: number;
   fillAt?: FillAt;
 }
 
-/** Fields returned in list/detail views (includes Stage 19b additions) */
+/** Fields returned in list/detail views (includes Stage 19b + Phase 5 additions) */
 const BACKTEST_SELECT = {
   id: true,
   workspaceId: true,
   strategyId: true,
+  strategyVersionId: true,
   symbol: true,
   interval: true,
   fromTs: true,
@@ -270,7 +271,31 @@ export async function labRoutes(app: FastifyInstance) {
     });
   });
 
-  // ── POST /lab/backtest ── trigger a new backtest (dataset-first) ──────────
+  // ── GET /lab/strategy-versions ── list compiled StrategyVersions for workspace ──
+  // Phase 5: needed for backtest form to select a specific compiled version.
+  app.get("/lab/strategy-versions", { onRequest: [app.authenticate] }, async (request, reply) => {
+    const workspace = await resolveWorkspace(request, reply);
+    if (!workspace) return;
+
+    const versions = await prisma.strategyVersion.findMany({
+      where: { strategy: { workspaceId: workspace.id } },
+      orderBy: { createdAt: "desc" },
+      take: 100,
+      select: {
+        id: true,
+        version: true,
+        createdAt: true,
+        strategy: {
+          select: { id: true, name: true, symbol: true },
+        },
+      },
+    });
+
+    return reply.send(versions);
+  });
+
+  // ── POST /lab/backtest ── trigger a new backtest (Phase 5, strategyVersionId-first) ──
+  // Per docs/23-lab-v2-ide-spec.md §16 Phase 5
   app.post<{ Body: StartBacktestBody }>("/lab/backtest", {
     config: { rateLimit: { max: 5, timeWindow: "1 minute" } },
     onRequest: [app.authenticate],
@@ -279,7 +304,7 @@ export async function labRoutes(app: FastifyInstance) {
     if (!workspace) return;
 
     const {
-      strategyId,
+      strategyVersionId,
       datasetId,
       feeBps = 0,
       slippageBps = 0,
@@ -289,8 +314,8 @@ export async function labRoutes(app: FastifyInstance) {
     // ── Validation ──────────────────────────────────────────────────────────
     const errors: Array<{ field: string; message: string }> = [];
 
-    if (!strategyId) errors.push({ field: "strategyId", message: "strategyId is required" });
-    if (!datasetId)  errors.push({ field: "datasetId",  message: "datasetId is required (Stage 19 dataset-first contract)" });
+    if (!strategyVersionId) errors.push({ field: "strategyVersionId", message: "strategyVersionId is required (Phase 5 explicit version binding)" });
+    if (!datasetId)         errors.push({ field: "datasetId",         message: "datasetId is required (dataset-first contract)" });
 
     if (!Number.isInteger(feeBps) || feeBps < 0 || feeBps > MAX_BPS) {
       errors.push({ field: "feeBps", message: `feeBps must be integer 0–${MAX_BPS}` });
@@ -306,16 +331,18 @@ export async function labRoutes(app: FastifyInstance) {
       return problem(reply, 400, "Validation Error", "Invalid backtest request", { errors });
     }
 
-    // ── Resolve strategy (workspace isolation) ───────────────────────────────
-    const strategy = await prisma.strategy.findUnique({ where: { id: strategyId } });
-    if (!strategy || strategy.workspaceId !== workspace.id) {
-      return problem(reply, 404, "Not Found", "Strategy not found");
+    // ── Resolve StrategyVersion (workspace isolation via strategy) ────────────
+    const strategyVersion = await prisma.strategyVersion.findUnique({
+      where: { id: strategyVersionId },
+      include: { strategy: true },
+    });
+    if (!strategyVersion || strategyVersion.strategy.workspaceId !== workspace.id) {
+      return problem(reply, 404, "Not Found", "StrategyVersion not found");
     }
 
     // ── Resolve dataset (workspace isolation) ────────────────────────────────
     const dataset = await prisma.marketDataset.findUnique({ where: { id: datasetId } });
     if (!dataset || dataset.workspaceId !== workspace.id) {
-      // 404 rather than 403 to avoid leaking existence of other workspace datasets
       return problem(reply, 404, "Not Found", "Dataset not found");
     }
 
@@ -330,16 +357,17 @@ export async function labRoutes(app: FastifyInstance) {
     // ── Create PENDING record ────────────────────────────────────────────────
     const bt = await prisma.backtestResult.create({
       data: {
-        workspaceId:  workspace.id,
-        strategyId:   strategy.id,
+        workspaceId:       workspace.id,
+        strategyId:        strategyVersion.strategyId,
+        strategyVersionId: strategyVersion.id,
         symbol,
         interval,
         fromTs,
         toTs,
-        status:       "PENDING",
-        // Stage 19b reproducibility snapshot
-        datasetId:    dataset.id,
-        datasetHash:  dataset.datasetHash,
+        status:            "PENDING",
+        // Reproducibility snapshot
+        datasetId:         dataset.id,
+        datasetHash:       dataset.datasetHash,
         feeBps,
         slippageBps,
         fillAt,
@@ -349,7 +377,7 @@ export async function labRoutes(app: FastifyInstance) {
     });
 
     // Run async (fire-and-forget)
-    runBacktestAsync(bt.id, dataset.id, dataset.exchange, symbol, dataset.interval).catch(() => {
+    runBacktestAsync(bt.id, dataset.id, dataset.exchange, symbol, dataset.interval, strategyVersion.id).catch(() => {
       // errors handled inside runBacktestAsync
     });
 
@@ -388,6 +416,7 @@ export async function labRoutes(app: FastifyInstance) {
 
 // ---------------------------------------------------------------------------
 // Async backtest runner — loads candles from DB (dataset-first)
+// Phase 5: uses explicit strategyVersionId for DSL lookup (reproducible runs)
 // ---------------------------------------------------------------------------
 
 async function runBacktestAsync(
@@ -396,6 +425,7 @@ async function runBacktestAsync(
   exchange: string,
   symbol: string,
   interval: import("@prisma/client").CandleInterval,
+  strategyVersionId?: string,
 ): Promise<void> {
   try {
     await prisma.backtestResult.update({
@@ -403,18 +433,25 @@ async function runBacktestAsync(
       data: { status: "RUNNING" },
     });
 
-    // Fetch strategy + latest version for riskPct
-    const bt = await prisma.backtestResult.findUnique({ where: { id: btId } });
-    const strategy = bt
-      ? await prisma.strategy.findUnique({
+    // Phase 5: use explicit strategyVersionId if provided; fall back to latest version
+    let dslJson: unknown = null;
+    if (strategyVersionId) {
+      const sv = await prisma.strategyVersion.findUnique({ where: { id: strategyVersionId } });
+      dslJson = sv?.dslJson ?? null;
+    } else {
+      const bt = await prisma.backtestResult.findUnique({ where: { id: btId } });
+      if (bt) {
+        const strategy = await prisma.strategy.findUnique({
           where: { id: bt.strategyId },
           include: { versions: { orderBy: { version: "desc" }, take: 1 } },
-        })
-      : null;
+        });
+        dslJson = strategy?.versions[0]?.dslJson ?? null;
+      }
+    }
 
-    const riskPct = extractRiskPct(strategy?.versions[0]?.dslJson);
+    const riskPct = extractRiskPct(dslJson);
 
-    // Load dataset boundaries (needed for fromTsMs/toTsMs range)
+    // Load dataset boundaries
     const dataset = await prisma.marketDataset.findUnique({ where: { id: datasetId } });
     if (!dataset) throw new Error(`Dataset ${datasetId} not found`);
 
@@ -442,10 +479,12 @@ async function runBacktestAsync(
       volume: Number(c.volume),
     }));
 
-    // Stage 19c: pass fee/slippage params stored on the BacktestResult
+    // Fetch fee/slippage from the BacktestResult record
+    const btRecord = await prisma.backtestResult.findUnique({ where: { id: btId } });
+
     const report = runBacktest(candles, riskPct, {
-      feeBps:      bt?.feeBps      ?? 0,
-      slippageBps: bt?.slippageBps ?? 0,
+      feeBps:      btRecord?.feeBps      ?? 0,
+      slippageBps: btRecord?.slippageBps ?? 0,
       fillAt:      "CLOSE",
     });
 

@@ -100,9 +100,10 @@ model StrategyVersion {
   executionPlanJson Json
   createdAt         DateTime @default(now())
 
-  strategy      Strategy              @relation(fields: [strategyId], references: [id], onDelete: Cascade)
-  bots          Bot[]
-  graphVersions StrategyGraphVersion[]
+  strategy        Strategy              @relation(fields: [strategyId], references: [id], onDelete: Cascade)
+  bots            Bot[]
+  graphVersions   StrategyGraphVersion[]
+  backtestResults BacktestResult[]
 
   @@unique([strategyId, version])
   @@index([strategyId])
@@ -478,17 +479,22 @@ model BacktestResult {
   /// Fill price reference; Stage 19 v2.2 fixes to "CLOSE"
   fillAt        String         @default("CLOSE")
   engineVersion String         @default("unknown")
+  /// Phase 5 — explicit StrategyVersion binding for reproducible backtests
+  strategyVersionId String?
 
-  workspace Workspace      @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  strategy  Strategy       @relation(fields: [strategyId], references: [id], onDelete: Cascade)
+  workspace       Workspace       @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  strategy        Strategy        @relation(fields: [strategyId], references: [id], onDelete: Cascade)
   /// SetNull chosen: dataset records are historical snapshots; deleting a dataset should not
   /// cascade-delete backtest history. Reproducibility is preserved via datasetHash.
-  dataset   MarketDataset? @relation(fields: [datasetId], references: [id], onDelete: SetNull)
+  dataset         MarketDataset?  @relation(fields: [datasetId], references: [id], onDelete: SetNull)
+  /// SetNull: deleting a StrategyVersion should not cascade-delete backtest history.
+  strategyVersion StrategyVersion? @relation(fields: [strategyVersionId], references: [id], onDelete: SetNull)
 
   @@index([workspaceId])
   @@index([strategyId])
   @@index([workspaceId, createdAt(sort: Desc)])
   @@index([datasetId])
+  @@index([strategyVersionId])
 }
 
 // ── Research Lab — Graph authoring layer (Phase 4) ───────────────
