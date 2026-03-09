@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useCallback } from "react";
 import { Group, Panel, Separator } from "react-resizable-panels";
 import { useLabGraphStore } from "./useLabGraphStore";
 
@@ -27,14 +28,94 @@ function getActiveTab(pathname: string): TabId {
 }
 
 // ---------------------------------------------------------------------------
-// Context Bar — Phase 1B: reads from useLabGraphStore
+// Context Bar — Phase 1B + Phase 4B
+// Phase 4B: adds Compile & Save button + success badge
 // ---------------------------------------------------------------------------
 
-function LabContextBar() {
+function LabContextBar({ activeTab }: { activeTab: TabId }) {
   const activeConnectionId = useLabGraphStore((s) => s.activeConnectionId);
   const activeDatasetId    = useLabGraphStore((s) => s.activeDatasetId);
   const validationState    = useLabGraphStore((s) => s.validationState);
   const runState           = useLabGraphStore((s) => s.runState);
+  // Phase 4
+  const nodes              = useLabGraphStore((s) => s.nodes);
+  const edges              = useLabGraphStore((s) => s.edges);
+  const activeGraphId      = useLabGraphStore((s) => s.activeGraphId);
+  const compileState       = useLabGraphStore((s) => s.compileState);
+  const lastCompileResult  = useLabGraphStore((s) => s.lastCompileResult);
+  const setActiveGraphId   = useLabGraphStore((s) => s.setActiveGraphId);
+  const setCompileState    = useLabGraphStore((s) => s.setCompileState);
+  const setLastCompileResult = useLabGraphStore((s) => s.setLastCompileResult);
+  const setServerIssues    = useLabGraphStore((s) => s.setServerIssues);
+
+  const isOnBuildTab  = activeTab === "build";
+  const graphIsEmpty  = nodes.length === 0;
+  const compileDisabled = !isOnBuildTab || graphIsEmpty || compileState === "compiling";
+
+  const handleCompile = useCallback(async () => {
+    if (compileDisabled) return;
+    setCompileState("compiling");
+    setServerIssues([]);
+
+    const graphJson = { nodes, edges };
+
+    try {
+      // Step 1: ensure graph record exists
+      let graphId = activeGraphId;
+      if (!graphId) {
+        const createRes = await fetch("/api/v1/lab/graphs", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ name: "Untitled Graph", graphJson }),
+        });
+        if (!createRes.ok) throw new Error("Failed to create graph record");
+        const created = await createRes.json() as { id: string };
+        graphId = created.id;
+        setActiveGraphId(graphId);
+      }
+
+      // Step 2: compile
+      const compileRes = await fetch(`/api/v1/lab/graphs/${graphId}/compile`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ graphJson, symbol: "BTCUSDT", timeframe: "M15" }),
+      });
+
+      if (compileRes.status === 422) {
+        const body = await compileRes.json() as { validationIssues: import("./useLabGraphStore").ServerCompileIssue[] };
+        setServerIssues(body.validationIssues ?? []);
+        setCompileState("error");
+        return;
+      }
+
+      if (!compileRes.ok) {
+        setCompileState("error");
+        return;
+      }
+
+      const result = await compileRes.json() as import("./useLabGraphStore").CompileResult;
+      setLastCompileResult(result);
+      setServerIssues(result.validationIssues ?? []);
+      setCompileState("success");
+    } catch {
+      setCompileState("error");
+    }
+  }, [
+    compileDisabled, nodes, edges, activeGraphId,
+    setActiveGraphId, setCompileState, setLastCompileResult, setServerIssues,
+  ]);
+
+  const compileLabel =
+    compileState === "compiling" ? "Compiling…" :
+    compileState === "success"   ? "Compile & Save" :
+    "Compile & Save";
+
+  const compileBtnColor =
+    compileState === "success" ? "#52A97C" :
+    compileState === "error"   ? "#D44C4C" :
+    "#3B82F6";
 
   return (
     <div style={contextBarStyle}>
@@ -52,7 +133,38 @@ function LabContextBar() {
         />
         <CtxBadge label="Validation" value={validationState} dimmed />
         <CtxBadge label="Run"        value={runState}        dimmed />
+        {lastCompileResult && (
+          <CtxBadge
+            label="Saved"
+            value={`Strategy v${lastCompileResult.strategyVersion}`}
+            dimmed={false}
+          />
+        )}
       </div>
+
+      {/* Phase 4B: Compile & Save button — only meaningful on Build tab */}
+      {isOnBuildTab && (
+        <button
+          onClick={handleCompile}
+          disabled={compileDisabled}
+          style={{
+            marginLeft: "auto",
+            padding: "5px 14px",
+            fontSize: 12,
+            fontWeight: 600,
+            background: compileDisabled ? "rgba(255,255,255,0.06)" : compileBtnColor,
+            border: "none",
+            borderRadius: 5,
+            color: compileDisabled ? "rgba(255,255,255,0.3)" : "#fff",
+            cursor: compileDisabled ? "not-allowed" : "pointer",
+            transition: "background 0.15s",
+            flexShrink: 0,
+            fontFamily: "inherit",
+          }}
+        >
+          {compileLabel}
+        </button>
+      )}
     </div>
   );
 }
@@ -132,8 +244,8 @@ export function LabShell({ children }: LabShellProps) {
 
   return (
     <div style={shellStyle}>
-      {/* Top Context Bar — reads from useLabGraphStore */}
-      <LabContextBar />
+      {/* Top Context Bar — reads from useLabGraphStore; Phase 4: Compile & Save button */}
+      <LabContextBar activeTab={activeTab} />
 
       {/* Main resizable layout */}
       <Group orientation="vertical" style={{ flex: 1, minHeight: 0 }}>
