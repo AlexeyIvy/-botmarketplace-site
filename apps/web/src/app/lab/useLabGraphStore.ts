@@ -11,6 +11,22 @@ import { validateGraph, type ValidationIssue } from "./validationTypes";
 
 export type ValidationState = "idle" | "ok" | "warning" | "error" | "stale";
 export type RunState = "idle" | "running" | "done" | "failed";
+export type CompileState = "idle" | "compiling" | "success" | "error";
+
+/** Issue returned by the server compile endpoint */
+export interface ServerCompileIssue {
+  severity: "error" | "warning";
+  message: string;
+  nodeId?: string;
+}
+
+/** Result stored after a successful compile */
+export interface CompileResult {
+  strategyVersionId: string;
+  strategyVersion: number;
+  compiledDsl: Record<string, unknown>;
+  validationIssues: ServerCompileIssue[];
+}
 
 export type LabNode = Node<LabNodeData>;
 export type LabEdge = Edge;
@@ -25,6 +41,12 @@ export interface LabGraphState {
   edges: LabEdge[];
   /** Phase 3C: in-memory validation issues; never persisted */
   validationIssues: ValidationIssue[];
+  /** Phase 4: compile state */
+  compileState: CompileState;
+  /** Phase 4: last successful compile result */
+  lastCompileResult: CompileResult | null;
+  /** Phase 4: server-side issues from last compile attempt (mapped to nodes) */
+  serverIssues: ServerCompileIssue[];
 }
 
 interface LabGraphActions {
@@ -47,6 +69,10 @@ interface LabGraphActions {
   markDownstreamStale: (removedEdgeTargetId: string) => void;
   // Phase 3C: run graph validation and update validationIssues + validationState
   runValidation: () => void;
+  // Phase 4: compile state setters
+  setCompileState: (state: CompileState) => void;
+  setLastCompileResult: (result: CompileResult | null) => void;
+  setServerIssues: (issues: ServerCompileIssue[]) => void;
 }
 
 // ---------------------------------------------------------------------------
@@ -62,6 +88,9 @@ const initialState: LabGraphState = {
   nodes: [],
   edges: [],
   validationIssues: [],
+  compileState: "idle",
+  lastCompileResult: null,
+  serverIssues: [],
 };
 
 // ---------------------------------------------------------------------------
@@ -171,6 +200,11 @@ export const useLabGraphStore = create<LabGraphState & LabGraphActions>()(
           }),
         }));
       },
+
+      // Phase 4 — compile state setters
+      setCompileState: (state) => set({ compileState: state }),
+      setLastCompileResult: (result) => set({ lastCompileResult: result }),
+      setServerIssues: (issues) => set({ serverIssues: issues }),
 
       // Phase 3C — run validation synchronously, update issues + validationState
       runValidation: () => {

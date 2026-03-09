@@ -41,6 +41,7 @@ model Workspace {
   aiPlans             AiPlan[]
   aiActionAudits      AiActionAudit[]
   datasets            MarketDataset[]
+  strategyGraphs      StrategyGraph[]
 }
 
 model WorkspaceMember {
@@ -99,8 +100,9 @@ model StrategyVersion {
   executionPlanJson Json
   createdAt         DateTime @default(now())
 
-  strategy Strategy @relation(fields: [strategyId], references: [id], onDelete: Cascade)
-  bots     Bot[]
+  strategy      Strategy              @relation(fields: [strategyId], references: [id], onDelete: Cascade)
+  bots          Bot[]
+  graphVersions StrategyGraphVersion[]
 
   @@unique([strategyId, version])
   @@index([strategyId])
@@ -487,4 +489,53 @@ model BacktestResult {
   @@index([strategyId])
   @@index([workspaceId, createdAt(sort: Desc)])
   @@index([datasetId])
+}
+
+// ── Research Lab — Graph authoring layer (Phase 4) ───────────────
+
+/// Visual strategy graph draft (authoring layer). Created when user first
+/// opens the Build tab and has a named graph. Mutable — updated on every
+/// auto-save or compile.
+model StrategyGraph {
+  id                  String   @id @default(uuid())
+  workspaceId         String
+  /// Display name of the graph / strategy being authored
+  name                String
+  /// Semver of the block library used when this graph was last saved
+  blockLibraryVersion String   @default("0.3.0")
+  /// Target DSL version for the compiler
+  dslVersionTarget    Int      @default(1)
+  /// Serialized { nodes: LabNode[], edges: LabEdge[] }
+  graphJson           Json
+  /// Last client-side validation summary (nullable; in-memory summary persisted on save)
+  validationSummaryJson Json?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  workspace Workspace            @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  versions  StrategyGraphVersion[]
+
+  @@index([workspaceId])
+}
+
+/// Immutable snapshot of a StrategyGraph at compile time.
+/// Created by POST /lab/graphs/:id/compile. Never mutated after creation.
+model StrategyGraphVersion {
+  id                  String   @id @default(uuid())
+  strategyGraphId     String
+  /// Sequential version number within the graph (1, 2, 3, …)
+  version             Int
+  blockLibraryVersion String
+  /// Copy of graphJson at the time of this compile
+  graphSnapshotJson   Json
+  /// The StrategyVersion record produced by this compile
+  strategyVersionId   String
+  createdAt           DateTime @default(now())
+
+  strategyGraph   StrategyGraph   @relation(fields: [strategyGraphId], references: [id], onDelete: Cascade)
+  strategyVersion StrategyVersion @relation(fields: [strategyVersionId], references: [id], onDelete: Restrict)
+
+  @@unique([strategyGraphId, version])
+  @@index([strategyGraphId])
+  @@index([strategyVersionId])
 }

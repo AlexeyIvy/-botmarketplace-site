@@ -3,6 +3,8 @@ import { prisma } from "../lib/prisma.js";
 import { problem } from "../lib/problem.js";
 import { resolveWorkspace } from "../lib/workspace.js";
 import { runBacktest } from "../lib/backtest.js";
+import { compileGraph } from "../lib/graphCompiler.js";
+import type { GraphJson } from "../lib/graphCompiler.js";
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -56,7 +58,218 @@ const BACKTEST_SELECT = {
   engineVersion: true,
 } as const;
 
+// ---------------------------------------------------------------------------
+// Phase 4 — Graph endpoints
+// ---------------------------------------------------------------------------
+
+interface CreateGraphBody {
+  name: string;
+  graphJson: GraphJson;
+}
+
+interface CompileGraphBody {
+  graphJson: GraphJson;
+  /** Market symbol, e.g. "BTCUSDT" */
+  symbol?: string;
+  /** Timeframe key, e.g. "M15" */
+  timeframe?: string;
+  /** Attach to an existing Strategy; if omitted a new Strategy is created */
+  strategyId?: string;
+}
+
+const GRAPH_SELECT = {
+  id: true,
+  workspaceId: true,
+  name: true,
+  blockLibraryVersion: true,
+  dslVersionTarget: true,
+  graphJson: true,
+  validationSummaryJson: true,
+  createdAt: true,
+  updatedAt: true,
+} as const;
+
 export async function labRoutes(app: FastifyInstance) {
+  // ── POST /lab/graphs ── create a new StrategyGraph draft ─────────────────
+  app.post<{ Body: CreateGraphBody }>("/lab/graphs", {
+    config: { rateLimit: { max: 30, timeWindow: "1 minute" } },
+    onRequest: [app.authenticate],
+  }, async (request, reply) => {
+    const workspace = await resolveWorkspace(request, reply);
+    if (!workspace) return;
+
+    const { name, graphJson } = request.body ?? {};
+
+    if (!name || typeof name !== "string") {
+      return problem(reply, 400, "Validation Error", "name is required");
+    }
+    if (!graphJson || typeof graphJson !== "object") {
+      return problem(reply, 400, "Validation Error", "graphJson is required");
+    }
+
+    const graph = await prisma.strategyGraph.create({
+      data: {
+        workspaceId: workspace.id,
+        name,
+        graphJson: graphJson as object,
+      },
+      select: GRAPH_SELECT,
+    });
+
+    return reply.status(201).send(graph);
+  });
+
+  // ── GET /lab/graphs ── list StrategyGraphs for workspace ─────────────────
+  app.get("/lab/graphs", { onRequest: [app.authenticate] }, async (request, reply) => {
+    const workspace = await resolveWorkspace(request, reply);
+    if (!workspace) return;
+
+    const graphs = await prisma.strategyGraph.findMany({
+      where: { workspaceId: workspace.id },
+      orderBy: { updatedAt: "desc" },
+      take: 50,
+      select: GRAPH_SELECT,
+    });
+    return reply.send(graphs);
+  });
+
+  // ── GET /lab/graphs/:id ── get a single StrategyGraph ────────────────────
+  app.get<{ Params: { id: string } }>("/lab/graphs/:id", { onRequest: [app.authenticate] }, async (request, reply) => {
+    const workspace = await resolveWorkspace(request, reply);
+    if (!workspace) return;
+
+    const graph = await prisma.strategyGraph.findUnique({
+      where: { id: request.params.id },
+      select: GRAPH_SELECT,
+    });
+    if (!graph || graph.workspaceId !== workspace.id) {
+      return problem(reply, 404, "Not Found", "Graph not found");
+    }
+    return reply.send(graph);
+  });
+
+  // ── POST /lab/graphs/:id/compile ── compile graph → StrategyVersion ───────
+  // Per docs/23-lab-v2-ide-spec.md §19 Phase 4A
+  // Returns: { strategyVersionId, compiledDsl, validationIssues }
+  app.post<{ Params: { id: string }; Body: CompileGraphBody }>("/lab/graphs/:id/compile", {
+    config: { rateLimit: { max: 20, timeWindow: "1 minute" } },
+    onRequest: [app.authenticate],
+  }, async (request, reply) => {
+    const workspace = await resolveWorkspace(request, reply);
+    if (!workspace) return;
+
+    // Load graph — workspace isolation check
+    const graph = await prisma.strategyGraph.findUnique({
+      where: { id: request.params.id },
+    });
+    if (!graph || graph.workspaceId !== workspace.id) {
+      return problem(reply, 404, "Not Found", "Graph not found");
+    }
+
+    const { graphJson, symbol = "BTCUSDT", timeframe = "M15", strategyId } = request.body ?? {};
+
+    if (!graphJson || typeof graphJson !== "object") {
+      return problem(reply, 400, "Validation Error", "graphJson is required");
+    }
+
+    // Update graphJson on the StrategyGraph record (upsert-friendly: keep graph in sync)
+    await prisma.strategyGraph.update({
+      where: { id: graph.id },
+      data: { graphJson: graphJson as object },
+    });
+
+    // ── Compile ─────────────────────────────────────────────────────────────
+
+    // Resolve or create Strategy
+    let strategy: { id: string; name: string } | null = null;
+
+    if (strategyId) {
+      const found = await prisma.strategy.findUnique({ where: { id: strategyId } });
+      if (!found || found.workspaceId !== workspace.id) {
+        return problem(reply, 404, "Not Found", "Strategy not found");
+      }
+      strategy = found;
+    } else {
+      // Create a new Strategy for this graph
+      const strategyName = graph.name;
+      const existing = await prisma.strategy.findUnique({
+        where: { workspaceId_name: { workspaceId: workspace.id, name: strategyName } },
+      });
+      if (existing) {
+        strategy = existing;
+      } else {
+        strategy = await prisma.strategy.create({
+          data: {
+            workspaceId: workspace.id,
+            name: strategyName,
+            symbol,
+            timeframe: (["M1", "M5", "M15", "H1"].includes(timeframe)
+              ? timeframe
+              : "M15") as "M1" | "M5" | "M15" | "H1",
+            status: "DRAFT",
+          },
+        });
+      }
+    }
+
+    // Run compiler (docs/10-strategy-dsl.md §9)
+    const compileResult = compileGraph(
+      graphJson as GraphJson,
+      strategy.id,
+      strategy.name,
+      symbol,
+      timeframe
+    );
+
+    if (!compileResult.ok) {
+      return reply.status(422).send({
+        type: "about:blank",
+        title: "Compile Failed",
+        status: 422,
+        detail: "Graph compilation failed with validation errors",
+        validationIssues: compileResult.validationIssues,
+      });
+    }
+
+    // ── Persist StrategyVersion + StrategyGraphVersion ──────────────────────
+    const latestVersion = await prisma.strategyVersion.findFirst({
+      where: { strategyId: strategy.id },
+      orderBy: { version: "desc" },
+    });
+    const nextVersion = (latestVersion?.version ?? 0) + 1;
+
+    const strategyVersion = await prisma.strategyVersion.create({
+      data: {
+        strategyId: strategy.id,
+        version: nextVersion,
+        dslJson: compileResult.compiledDsl as object,
+        executionPlanJson: { kind: "compiled-graph", graphId: graph.id, compiledAt: new Date().toISOString() },
+      },
+    });
+
+    // Count existing StrategyGraphVersions for this graph to determine version number
+    const existingVersionCount = await prisma.strategyGraphVersion.count({
+      where: { strategyGraphId: graph.id },
+    });
+
+    await prisma.strategyGraphVersion.create({
+      data: {
+        strategyGraphId: graph.id,
+        version: existingVersionCount + 1,
+        blockLibraryVersion: graph.blockLibraryVersion,
+        graphSnapshotJson: graphJson as object,
+        strategyVersionId: strategyVersion.id,
+      },
+    });
+
+    return reply.status(201).send({
+      strategyVersionId: strategyVersion.id,
+      strategyVersion: nextVersion,
+      compiledDsl: compileResult.compiledDsl,
+      validationIssues: compileResult.validationIssues,
+    });
+  });
+
   // ── POST /lab/backtest ── trigger a new backtest (dataset-first) ──────────
   app.post<{ Body: StartBacktestBody }>("/lab/backtest", {
     config: { rateLimit: { max: 5, timeWindow: "1 minute" } },

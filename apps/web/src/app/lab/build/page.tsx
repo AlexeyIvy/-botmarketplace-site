@@ -3,7 +3,8 @@
 // ---------------------------------------------------------------------------
 // Phase 3B — Build tab: palette + canvas + inspector
 // Phase 3C — Validation drawer (§13.3, §28 Error presentation hierarchy)
-// Per docs/23-lab-v2-ide-spec.md §6.3, §6.3.1, §6.4, §13.3, §28
+// Phase 4B — DSL Preview tab + server-side error mapping in ValidationDrawer
+// Per docs/23-lab-v2-ide-spec.md §6.3, §6.3.1, §6.4, §13.3, §28, Phase 4B
 // ---------------------------------------------------------------------------
 
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -27,7 +28,7 @@ import {
 import "@xyflow/react/dist/style.css";
 
 import { useLabGraphStore } from "../useLabGraphStore";
-import type { LabNode, LabEdge, ValidationState } from "../useLabGraphStore";
+import type { LabNode, LabEdge, ValidationState, ServerCompileIssue } from "../useLabGraphStore";
 import type { ValidationIssue } from "../validationTypes";
 import {
   BLOCK_DEF_MAP,
@@ -145,16 +146,18 @@ function Toast({ message, onDone }: { message: ToastMessage; onDone: () => void 
 interface ValidationDrawerProps {
   issues: ValidationIssue[];
   validationState: ValidationState;
+  /** Phase 4B: server-side compile issues to show alongside client-side issues */
+  serverIssues?: ServerCompileIssue[];
 }
 
-function ValidationDrawer({ issues, validationState }: ValidationDrawerProps) {
+function ValidationDrawer({ issues, validationState, serverIssues = [] }: ValidationDrawerProps) {
   const [open, setOpen] = useState(true);
   const nodes = useLabGraphStore((s) => s.nodes);
   const setNodes = useLabGraphStore((s) => s.setNodes);
   const { setCenter } = useReactFlow();
 
-  const errorCount = issues.filter((i) => i.severity === "error").length;
-  const warnCount = issues.filter((i) => i.severity === "warning").length;
+  const errorCount = issues.filter((i) => i.severity === "error").length + serverIssues.filter((i) => i.severity === "error").length;
+  const warnCount = issues.filter((i) => i.severity === "warning").length + serverIssues.filter((i) => i.severity === "warning").length;
 
   const statusColor =
     validationState === "ok"
@@ -246,7 +249,38 @@ function ValidationDrawer({ issues, validationState }: ValidationDrawerProps) {
 
       {/* Issue list */}
       <div style={{ overflowY: "auto", flex: 1 }}>
-        {issues.length === 0 ? (
+        {/* Phase 4B: server-side compile issues */}
+        {serverIssues.length > 0 && (
+          <div style={{ padding: "4px 12px 0", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+            <span style={{ fontSize: 10, color: "rgba(255,255,255,0.3)", textTransform: "uppercase", letterSpacing: "0.08em" }}>
+              Server (compile)
+            </span>
+            {serverIssues.map((issue, idx) => (
+              <div
+                key={`srv_${idx}`}
+                onClick={() => issue.nodeId && focusNode(issue.nodeId)}
+                role={issue.nodeId ? "button" : undefined}
+                tabIndex={issue.nodeId ? 0 : undefined}
+                onKeyDown={(e) => {
+                  if (issue.nodeId && (e.key === "Enter" || e.key === " ")) focusNode(issue.nodeId);
+                }}
+                style={{
+                  display: "flex", alignItems: "flex-start", gap: 8,
+                  padding: "4px 0", cursor: issue.nodeId ? "pointer" : "default",
+                }}
+              >
+                <span style={{ fontSize: 12, color: issue.severity === "error" ? "#D44C4C" : "#FBBF24", flexShrink: 0, lineHeight: 1.4 }}>
+                  {issue.severity === "error" ? "⊗" : "⚠"}
+                </span>
+                <span style={{ fontSize: 11, color: "rgba(255,255,255,0.65)", lineHeight: 1.4 }}>
+                  {issue.message}
+                  {issue.nodeId && <span style={{ marginLeft: 5, fontSize: 10, color: "rgba(255,255,255,0.25)" }}>↗ focus</span>}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+        {issues.length === 0 && serverIssues.length === 0 ? (
           <div
             style={{
               padding: "8px 12px",
@@ -346,6 +380,10 @@ function LabBuildCanvas() {
   // Phase 3C: validation state
   const validationIssues = useLabGraphStore((s) => s.validationIssues);
   const validationState = useLabGraphStore((s) => s.validationState);
+  // Phase 4B: compile state + DSL preview
+  const lastCompileResult = useLabGraphStore((s) => s.lastCompileResult);
+  const serverIssues = useLabGraphStore((s) => s.serverIssues);
+  const [buildView, setBuildView] = useState<"canvas" | "dsl">("canvas");
 
   const { undo, redo } = useLabGraphStore.temporal.getState();
   const { getNodes, getEdges, screenToFlowPosition, setNodes } = useReactFlow<
@@ -589,101 +627,152 @@ function LabBuildCanvas() {
   const selectedEdges = edges.filter((e) => e.selected);
 
   return (
-    <div style={{ display: "flex", width: "100%", height: "100%", overflow: "hidden" }}>
-      {/* Left: Block Palette */}
-      <div style={{ width: 180, flexShrink: 0, height: "100%" }}>
-        <BlockPalette onAddBlock={handleAddBlock} />
+    <div style={{ display: "flex", flexDirection: "column", width: "100%", height: "100%", overflow: "hidden" }}>
+      {/* Phase 4B: Build view tab switcher — Canvas | DSL Preview */}
+      <div style={buildViewTabBarStyle}>
+        <button
+          onClick={() => setBuildView("canvas")}
+          style={{
+            ...buildViewTabStyle,
+            ...(buildView === "canvas" ? buildViewTabActiveStyle : {}),
+          }}
+        >
+          Canvas
+        </button>
+        <button
+          onClick={() => setBuildView("dsl")}
+          disabled={!lastCompileResult}
+          style={{
+            ...buildViewTabStyle,
+            ...(buildView === "dsl" ? buildViewTabActiveStyle : {}),
+            opacity: lastCompileResult ? 1 : 0.4,
+            cursor: lastCompileResult ? "pointer" : "not-allowed",
+          }}
+          title={lastCompileResult ? "View generated DSL" : "Compile the graph first to see DSL preview"}
+        >
+          DSL Preview {lastCompileResult ? `(v${lastCompileResult.strategyVersion})` : ""}
+        </button>
       </div>
 
-      {/* Center: React Flow Canvas + Validation Drawer */}
-      <div
-        style={{
-          flex: 1,
-          height: "100%",
-          display: "flex",
-          flexDirection: "column",
-          overflow: "hidden",
-        }}
-      >
-        {/* Canvas area */}
-        <div
-          style={{ flex: 1, position: "relative", overflow: "hidden" }}
-          onDragOver={onDragOver}
-          onDrop={onDrop}
-        >
-          <ReactFlow<LabNode, LabEdge>
-            nodes={nodes}
-            edges={edges}
-            onNodesChange={onNodesChange}
-            onEdgesChange={onEdgesChange}
-            onConnect={onConnect}
-            onConnectStart={onConnectStart}
-            onConnectEnd={onConnectEnd}
-            onEdgesDelete={onEdgesDelete}
-            isValidConnection={isValidConnection}
-            nodeTypes={nodeTypes}
-            edgeTypes={edgeTypes}
-            deleteKeyCode={["Delete", "Backspace"]}
-            selectionKeyCode="Shift"
-            multiSelectionKeyCode={["Meta", "Control"]}
-            connectionMode={ConnectionMode.Loose}
-            edgesReconnectable
-            fitView
-            colorMode="dark"
-            proOptions={{ hideAttribution: false }}
-          >
-            <Background
-              variant={BackgroundVariant.Dots}
-              gap={20}
-              size={1}
-              color="rgba(255,255,255,0.08)"
-            />
-            <Controls />
-            <MiniMap
-              style={minimapStyle}
-              nodeColor="rgba(255,255,255,0.15)"
-              maskColor="rgba(0,0,0,0.5)"
-            />
-          </ReactFlow>
+      {/* Main content area */}
+      {buildView === "dsl" && lastCompileResult ? (
+        /* DSL Preview — read-only JSON view of compiled strategy */
+        <div style={{ flex: 1, overflow: "auto", padding: 16, background: "rgba(8,12,18,0.98)" }}>
+          <div style={{ marginBottom: 10, fontSize: 11, color: "rgba(255,255,255,0.4)" }}>
+            Strategy v{lastCompileResult.strategyVersion} — {lastCompileResult.strategyVersionId}
+          </div>
+          <pre style={{
+            margin: 0,
+            fontSize: 12,
+            lineHeight: 1.6,
+            color: "rgba(255,255,255,0.82)",
+            fontFamily: "monospace",
+            whiteSpace: "pre-wrap",
+            wordBreak: "break-word",
+          }}>
+            {JSON.stringify(lastCompileResult.compiledDsl, null, 2)}
+          </pre>
+        </div>
+      ) : (
+        /* Canvas view */
+        <div style={{ display: "flex", flex: 1, overflow: "hidden" }}>
+          {/* Left: Block Palette */}
+          <div style={{ width: 180, flexShrink: 0, height: "100%" }}>
+            <BlockPalette onAddBlock={handleAddBlock} />
+          </div>
 
-          {/* Toasts — top-right per §6.3.1 */}
+          {/* Center: React Flow Canvas + Validation Drawer */}
           <div
             style={{
-              position: "absolute",
-              top: 12,
-              right: 12,
+              flex: 1,
+              height: "100%",
               display: "flex",
               flexDirection: "column",
-              gap: 8,
-              zIndex: 100,
-              pointerEvents: "none",
+              overflow: "hidden",
             }}
           >
-            {toasts.map((t) => (
-              <div key={t.id} style={{ pointerEvents: "all" }}>
-                <Toast message={t} onDone={() => dismissToast(t.id)} />
+            {/* Canvas area */}
+            <div
+              style={{ flex: 1, position: "relative", overflow: "hidden" }}
+              onDragOver={onDragOver}
+              onDrop={onDrop}
+            >
+              <ReactFlow<LabNode, LabEdge>
+                nodes={nodes}
+                edges={edges}
+                onNodesChange={onNodesChange}
+                onEdgesChange={onEdgesChange}
+                onConnect={onConnect}
+                onConnectStart={onConnectStart}
+                onConnectEnd={onConnectEnd}
+                onEdgesDelete={onEdgesDelete}
+                isValidConnection={isValidConnection}
+                nodeTypes={nodeTypes}
+                edgeTypes={edgeTypes}
+                deleteKeyCode={["Delete", "Backspace"]}
+                selectionKeyCode="Shift"
+                multiSelectionKeyCode={["Meta", "Control"]}
+                connectionMode={ConnectionMode.Loose}
+                edgesReconnectable
+                fitView
+                colorMode="dark"
+                proOptions={{ hideAttribution: false }}
+              >
+                <Background
+                  variant={BackgroundVariant.Dots}
+                  gap={20}
+                  size={1}
+                  color="rgba(255,255,255,0.08)"
+                />
+                <Controls />
+                <MiniMap
+                  style={minimapStyle}
+                  nodeColor="rgba(255,255,255,0.15)"
+                  maskColor="rgba(0,0,0,0.5)"
+                />
+              </ReactFlow>
+
+              {/* Toasts — top-right per §6.3.1 */}
+              <div
+                style={{
+                  position: "absolute",
+                  top: 12,
+                  right: 12,
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 8,
+                  zIndex: 100,
+                  pointerEvents: "none",
+                }}
+              >
+                {toasts.map((t) => (
+                  <div key={t.id} style={{ pointerEvents: "all" }}>
+                    <Toast message={t} onDone={() => dismissToast(t.id)} />
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
+
+            {/* Phase 3C + 4B: Validation Drawer — client + server issues */}
+            <ValidationDrawer
+              issues={validationIssues}
+              validationState={validationState}
+              serverIssues={serverIssues}
+            />
+          </div>
+
+          {/* Right: Inspector Panel */}
+          <div style={{ width: 220, flexShrink: 0, height: "100%" }}>
+            <InspectorPanel
+              selectedNodes={selectedNodes}
+              selectedEdges={selectedEdges}
+              allNodes={nodes}
+              allEdges={edges}
+              onParamChange={updateNodeParam}
+            />
           </div>
         </div>
-
-        {/* Phase 3C: Validation Drawer — docked at bottom per §28 Level 5 */}
-        <ValidationDrawer
-          issues={validationIssues}
-          validationState={validationState}
-        />
-      </div>
-
-      {/* Right: Inspector Panel */}
-      <div style={{ width: 220, flexShrink: 0, height: "100%" }}>
-        <InspectorPanel
-          selectedNodes={selectedNodes}
-          selectedEdges={selectedEdges}
-          allNodes={nodes}
-          allEdges={edges}
-          onParamChange={updateNodeParam}
-        />
-      </div>
+      )}
     </div>
   );
 }
@@ -710,4 +799,29 @@ const minimapStyle: React.CSSProperties = {
   background: "rgba(255,255,255,0.04)",
   border: "1px solid rgba(255,255,255,0.1)",
   borderRadius: 6,
+};
+
+// Phase 4B: Build view tab bar (Canvas | DSL Preview)
+const buildViewTabBarStyle: React.CSSProperties = {
+  display: "flex",
+  borderBottom: "1px solid rgba(255,255,255,0.07)",
+  background: "rgba(10,14,20,0.98)",
+  flexShrink: 0,
+};
+
+const buildViewTabStyle: React.CSSProperties = {
+  padding: "6px 14px",
+  fontSize: 12,
+  fontWeight: 500,
+  background: "none",
+  border: "none",
+  borderBottom: "2px solid transparent",
+  color: "rgba(255,255,255,0.4)",
+  cursor: "pointer",
+  fontFamily: "inherit",
+};
+
+const buildViewTabActiveStyle: React.CSSProperties = {
+  color: "rgba(255,255,255,0.88)",
+  borderBottom: "2px solid #3B82F6",
 };
