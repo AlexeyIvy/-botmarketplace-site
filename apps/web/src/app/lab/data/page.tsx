@@ -18,6 +18,16 @@ import { useLabGraphStore } from "../useLabGraphStore";
 import { DatasetPreview } from "../DatasetPreview";
 
 // ---------------------------------------------------------------------------
+// DatasetDetail — response shape for GET /lab/datasets/:id (quality fields)
+// ---------------------------------------------------------------------------
+
+interface DatasetDetail {
+  datasetId:     string;
+  qualityJson:   unknown;
+  engineVersion: string;
+}
+
+// ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
 
@@ -569,8 +579,6 @@ function DatasetResult({
   result: CreateDatasetResult;
   onNewDataset: () => void;
 }) {
-  const quality = result.qualityJson as Record<string, unknown> | null;
-
   return (
     <div style={formWrapStyle}>
       <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20 }}>
@@ -590,26 +598,26 @@ function DatasetResult({
       )}
 
       <div style={metaGridStyle}>
-        <MetaRow label="Dataset ID"  value={result.datasetId} mono />
-        <MetaRow label="Candles"     value={result.candleCount.toLocaleString()} />
-        <MetaRow label="Fetched at"  value={new Date(result.fetchedAt).toLocaleString()} />
-        <MetaRow label="Engine"      value={result.engineVersion} mono />
-        <MetaRow label="Hash"        value={result.datasetHash.slice(0, 16) + "…"} mono />
+        <MetaRow label="Dataset ID" value={result.datasetId} mono />
       </div>
 
-      {quality && (
-        <>
-          <div style={{ ...sectionLabelStyle, marginTop: 20, marginBottom: 8 }}>Quality</div>
-          <div style={metaGridStyle}>
-            {typeof quality.gapsCount       === "number" && <MetaRow label="Gaps"          value={String(quality.gapsCount)} />}
-            {typeof quality.maxGapMs        === "number" && <MetaRow label="Max gap"        value={`${Math.round(quality.maxGapMs as number / 60_000)} min`} />}
-            {typeof quality.dupeAttempts    === "number" && <MetaRow label="Dupe attempts"  value={String(quality.dupeAttempts)} />}
-            {typeof quality.sanityIssuesCount === "number" && <MetaRow label="Sanity issues" value={String(quality.sanityIssuesCount)} />}
-          </div>
-        </>
-      )}
+      <QualitySummary
+        status={result.status}
+        qualityJson={result.qualityJson}
+        candleCount={result.candleCount}
+        datasetHash={result.datasetHash}
+        fetchedAt={result.fetchedAt}
+        engineVersion={result.engineVersion}
+      />
 
-      <DatasetPreview datasetId={result.datasetId} status={result.status} />
+      {result.status !== "FAILED" && (
+        <DatasetPreview datasetId={result.datasetId} status={result.status} />
+      )}
+      {result.status === "FAILED" && (
+        <div style={{ ...errorBoxStyle, marginTop: 16 }}>
+          Preview unavailable — dataset is unusable. No candle data was stored.
+        </div>
+      )}
 
       <button onClick={onNewDataset} style={{ ...secondaryBtnStyle, marginTop: 20 }}>
         New Dataset
@@ -631,7 +639,18 @@ function ActiveDatasetInfo({
   datasets: DatasetListItem[];
   onNewDataset: () => void;
 }) {
-  const ds    = datasets.find((d) => d.datasetId === datasetId);
+  const ds = datasets.find((d) => d.datasetId === datasetId);
+
+  // Fetch full detail (qualityJson + engineVersion) from GET /lab/datasets/:id
+  const [detail, setDetail] = useState<DatasetDetail | null>(null);
+  useEffect(() => {
+    if (!datasetId || !getWorkspaceId()) return;
+    setDetail(null);
+    apiFetch<DatasetDetail>(`/lab/datasets/${datasetId}`).then((res) => {
+      if (res.ok) setDetail(res.data);
+    });
+  }, [datasetId]);
+
   if (!ds) {
     return (
       <div style={formWrapStyle}>
@@ -656,7 +675,12 @@ function ActiveDatasetInfo({
 
       {ds.status === "PARTIAL" && (
         <div style={warningBoxStyle}>
-          Dataset is PARTIAL — some candles could not be fetched.
+          Dataset is PARTIAL — some candles could not be fetched. See quality details below.
+        </div>
+      )}
+      {ds.status === "FAILED" && (
+        <div style={errorBoxStyle}>
+          Dataset FAILED — no usable candle data is available. Create a new dataset to continue.
         </div>
       )}
 
@@ -665,12 +689,26 @@ function ActiveDatasetInfo({
         <MetaRow label="Symbol"     value={ds.symbol} />
         <MetaRow label="Interval"   value={ds.interval} />
         <MetaRow label="Range"      value={`${from} → ${to}`} />
-        <MetaRow label="Candles"    value={ds.candleCount.toLocaleString()} />
         <MetaRow label="Dataset ID" value={ds.datasetId} mono />
-        <MetaRow label="Hash"       value={ds.datasetHash.slice(0, 16) + "…"} mono />
       </div>
 
-      <DatasetPreview datasetId={ds.datasetId} status={ds.status} />
+      <QualitySummary
+        status={ds.status}
+        qualityJson={detail?.qualityJson ?? null}
+        candleCount={ds.candleCount}
+        datasetHash={ds.datasetHash}
+        fetchedAt={ds.fetchedAt}
+        engineVersion={detail?.engineVersion}
+      />
+
+      {ds.status !== "FAILED" && (
+        <DatasetPreview datasetId={ds.datasetId} status={ds.status} />
+      )}
+      {ds.status === "FAILED" && (
+        <div style={{ ...errorBoxStyle, marginTop: 16 }}>
+          Preview unavailable — dataset is unusable. No candle data was stored.
+        </div>
+      )}
 
       <button onClick={onNewDataset} style={{ ...secondaryBtnStyle, marginTop: 20 }}>
         New Dataset
@@ -696,6 +734,161 @@ function EmptyState({ onNewDataset }: { onNewDataset: () => void }) {
       <button onClick={onNewDataset} style={submitBtnStyle}>
         New Dataset
       </button>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// QualitySummary — Phase 2C
+// Collapsible quality block: compact one-liner → expanded detail table.
+// Works for both DatasetResult (after submit) and ActiveDatasetInfo (selected).
+// ---------------------------------------------------------------------------
+
+type QualityStatus = "READY" | "PARTIAL" | "FAILED";
+
+const QUALITY_KNOWN_FIELDS = ["gapsCount", "maxGapMs", "dupeAttempts", "sanityIssuesCount"];
+
+const QUALITY_STATUS_META: Record<QualityStatus, { color: string; label: string; detail: string }> = {
+  READY:   {
+    color:  "#3fb950",
+    label:  "All clear",
+    detail: "All candles fetched and validated successfully.",
+  },
+  PARTIAL: {
+    color:  "#d29922",
+    label:  "Partial",
+    detail: "Some candles could not be fetched. Data may have gaps — use results with caution.",
+  },
+  FAILED:  {
+    color:  "#f85149",
+    label:  "Unusable",
+    detail: "Dataset build failed. No candle data is available. Adjust parameters and try again.",
+  },
+};
+
+function QualitySummary({
+  status,
+  qualityJson,
+  candleCount,
+  datasetHash,
+  fetchedAt,
+  engineVersion,
+}: {
+  status:        QualityStatus;
+  qualityJson:   unknown;
+  candleCount?:  number;
+  datasetHash?:  string;
+  fetchedAt?:    string | Date;
+  engineVersion?: string;
+}) {
+  const [expanded, setExpanded] = useState(false);
+  const [rawOpen,  setRawOpen]  = useState(false);
+
+  const q: Record<string, unknown> =
+    qualityJson != null && typeof qualityJson === "object" && !Array.isArray(qualityJson)
+      ? (qualityJson as Record<string, unknown>)
+      : {};
+
+  const gapsCount    = typeof q.gapsCount          === "number" ? (q.gapsCount as number)         : null;
+  const maxGapMs     = typeof q.maxGapMs            === "number" ? (q.maxGapMs as number)           : null;
+  const dupeAttempts = typeof q.dupeAttempts        === "number" ? (q.dupeAttempts as number)       : null;
+  const sanityIssues = typeof q.sanityIssuesCount   === "number" ? (q.sanityIssuesCount as number)  : null;
+
+  const extraEntries = Object.entries(q).filter(([k]) => !QUALITY_KNOWN_FIELDS.includes(k));
+  const issueCount   = (gapsCount ?? 0) + (dupeAttempts ?? 0) + (sanityIssues ?? 0);
+
+  const meta = QUALITY_STATUS_META[status];
+
+  // Compact summary suffix shown next to the status detail line
+  const compactSuffix =
+    status === "FAILED"
+      ? ""
+      : candleCount != null
+      ? ` · ${candleCount.toLocaleString()} candles · ${issueCount === 0 ? "no issues" : `${issueCount} issue${issueCount > 1 ? "s" : ""}`}`
+      : "";
+
+  return (
+    <div style={qualitySectionStyle}>
+      {/* Header row */}
+      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+        <span style={sectionLabelStyle}>Quality</span>
+        <span style={{ fontSize: 11, color: meta.color, fontWeight: 600 }}>{meta.label}</span>
+        <div style={{ flex: 1 }} />
+        <button
+          onClick={() => setExpanded((e) => !e)}
+          style={toggleBtnStyle}
+          aria-expanded={expanded}
+        >
+          {expanded ? "▲ Less" : "▼ Details"}
+        </button>
+      </div>
+
+      {/* Compact summary line */}
+      <div style={{ fontSize: 12, color: "var(--text-secondary)" }}>
+        {meta.detail}
+        {!expanded && compactSuffix}
+      </div>
+
+      {/* Expanded table */}
+      {expanded && (
+        <div style={{ marginTop: 12 }}>
+          <div style={metaGridStyle}>
+            {candleCount != null && (
+              <MetaRow label="Candles"       value={candleCount.toLocaleString()} />
+            )}
+            {gapsCount !== null && (
+              <MetaRow label="Gaps"          value={gapsCount === 0 ? "None" : String(gapsCount)} />
+            )}
+            {maxGapMs !== null && (
+              <MetaRow label="Max gap"       value={maxGapMs === 0 ? "—" : `${Math.round(maxGapMs / 60_000)} min`} />
+            )}
+            {dupeAttempts !== null && (
+              <MetaRow label="Dupe attempts" value={String(dupeAttempts)} />
+            )}
+            {sanityIssues !== null && (
+              <MetaRow label="Sanity issues" value={sanityIssues === 0 ? "None" : String(sanityIssues)} />
+            )}
+            {datasetHash && (
+              <MetaRow label="Hash"          value={datasetHash.slice(0, 20) + "…"} mono />
+            )}
+            {fetchedAt && (
+              <MetaRow label="Fetched at"    value={new Date(fetchedAt).toLocaleString()} />
+            )}
+            {engineVersion && (
+              <MetaRow label="Engine"        value={engineVersion} mono />
+            )}
+          </div>
+
+          {/* Raw details expander for unexpected qualityJson fields */}
+          {extraEntries.length > 0 && (
+            <div style={{ marginTop: 8 }}>
+              <button onClick={() => setRawOpen((r) => !r)} style={toggleBtnStyle}>
+                {rawOpen ? "▲ Hide raw" : "▼ Raw details"}
+              </button>
+              {rawOpen && (
+                <div style={{ marginTop: 6, border: "1px solid var(--border)", borderRadius: 4, padding: "6px 10px" }}>
+                  {extraEntries.map(([k, v]) => (
+                    <div
+                      key={k}
+                      style={{
+                        display: "flex", gap: 8, padding: "3px 0",
+                        borderBottom: "1px solid var(--border)", fontSize: 11,
+                      }}
+                    >
+                      <span style={{ color: "var(--text-secondary)", width: 140, flexShrink: 0, fontFamily: "monospace" }}>
+                        {k}
+                      </span>
+                      <span style={{ color: "var(--text-primary)", fontFamily: "monospace", wordBreak: "break-all" }}>
+                        {typeof v === "object" ? JSON.stringify(v) : String(v ?? "")}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
@@ -865,4 +1058,20 @@ const newBtnStyle: React.CSSProperties = {
   fontSize: 11,
   fontWeight: 600,
   cursor: "pointer",
+};
+
+const qualitySectionStyle: React.CSSProperties = {
+  marginTop: 20,
+  border: "1px solid var(--border)",
+  borderRadius: 6,
+  padding: "12px 14px",
+};
+
+const toggleBtnStyle: React.CSSProperties = {
+  background: "none",
+  border: "none",
+  color: "var(--text-secondary)",
+  fontSize: 11,
+  cursor: "pointer",
+  padding: 0,
 };

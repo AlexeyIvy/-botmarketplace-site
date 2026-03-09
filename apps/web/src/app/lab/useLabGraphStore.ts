@@ -1,5 +1,9 @@
 import { create } from "zustand";
 import { temporal } from "zundo";
+import type { Node, Edge, NodeChange, EdgeChange } from "@xyflow/react";
+import { applyNodeChanges, applyEdgeChanges } from "@xyflow/react";
+import { BLOCK_DEF_MAP, type LabNodeData } from "./build/blockDefs";
+import { validateGraph, type ValidationIssue } from "./validationTypes";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -7,17 +11,42 @@ import { temporal } from "zundo";
 
 export type ValidationState = "idle" | "ok" | "warning" | "error" | "stale";
 export type RunState = "idle" | "running" | "done" | "failed";
+export type CompileState = "idle" | "compiling" | "success" | "error";
 
-// Node / Edge are typed as unknown here — Phase 3 will narrow these with
-// React Flow types when the canvas is introduced.
+/** Issue returned by the server compile endpoint */
+export interface ServerCompileIssue {
+  severity: "error" | "warning";
+  message: string;
+  nodeId?: string;
+}
+
+/** Result stored after a successful compile */
+export interface CompileResult {
+  strategyVersionId: string;
+  strategyVersion: number;
+  compiledDsl: Record<string, unknown>;
+  validationIssues: ServerCompileIssue[];
+}
+
+export type LabNode = Node<LabNodeData>;
+export type LabEdge = Edge;
+
 export interface LabGraphState {
   activeConnectionId: string | null;
   activeDatasetId: string | null;
   activeGraphId: string | null;
   validationState: ValidationState;
   runState: RunState;
-  nodes: unknown[];
-  edges: unknown[];
+  nodes: LabNode[];
+  edges: LabEdge[];
+  /** Phase 3C: in-memory validation issues; never persisted */
+  validationIssues: ValidationIssue[];
+  /** Phase 4: compile state */
+  compileState: CompileState;
+  /** Phase 4: last successful compile result */
+  lastCompileResult: CompileResult | null;
+  /** Phase 4: server-side issues from last compile attempt (mapped to nodes) */
+  serverIssues: ServerCompileIssue[];
 }
 
 interface LabGraphActions {
@@ -26,6 +55,24 @@ interface LabGraphActions {
   setActiveGraphId: (id: string | null) => void;
   setValidationState: (state: ValidationState) => void;
   setRunState: (state: RunState) => void;
+  // Phase 3A: React Flow change handlers
+  onNodesChange: (changes: NodeChange<LabNode>[]) => void;
+  onEdgesChange: (changes: EdgeChange<LabEdge>[]) => void;
+  // Phase 3A: direct setters for undo/redo
+  setNodes: (nodes: LabNode[]) => void;
+  setEdges: (edges: LabEdge[]) => void;
+  // Phase 3B: add a block node at a given canvas position
+  addNode: (blockType: string, position: { x: number; y: number }) => void;
+  // Phase 3B: update a single param on a node
+  updateNodeParam: (nodeId: string, paramId: string, value: unknown) => void;
+  // Phase 3B: mark direct target of removed edge as stale
+  markDownstreamStale: (removedEdgeTargetId: string) => void;
+  // Phase 3C: run graph validation and update validationIssues + validationState
+  runValidation: () => void;
+  // Phase 4: compile state setters
+  setCompileState: (state: CompileState) => void;
+  setLastCompileResult: (result: CompileResult | null) => void;
+  setServerIssues: (issues: ServerCompileIssue[]) => void;
 }
 
 // ---------------------------------------------------------------------------
@@ -40,27 +87,150 @@ const initialState: LabGraphState = {
   runState: "idle",
   nodes: [],
   edges: [],
+  validationIssues: [],
+  compileState: "idle",
+  lastCompileResult: null,
+  serverIssues: [],
 };
 
 // ---------------------------------------------------------------------------
-// Store — Phase 1B
-// zundo provides undo/redo history wiring.
-// Graph functionality (nodes / edges mutations) is deferred to Phase 3.
+// ID generator
+// ---------------------------------------------------------------------------
+
+let _nodeSeq = 0;
+function nextNodeId(): string {
+  return `n${++_nodeSeq}_${Date.now()}`;
+}
+
+// ---------------------------------------------------------------------------
+// Debounce timer — module-level ref for the 500ms validation debounce
+// Per §13.3: "debounced 500ms after last graph mutation"
+// ---------------------------------------------------------------------------
+
+let _validationTimer: ReturnType<typeof setTimeout> | null = null;
+
+function scheduleValidation(runValidationFn: () => void) {
+  if (_validationTimer !== null) {
+    clearTimeout(_validationTimer);
+  }
+  _validationTimer = setTimeout(() => {
+    _validationTimer = null;
+    runValidationFn();
+  }, 500);
+}
+
+// ---------------------------------------------------------------------------
+// Store — Phase 3A base + Phase 3B additions + Phase 3C validation
+// zundo provides undo/redo history.
 // ---------------------------------------------------------------------------
 
 export const useLabGraphStore = create<LabGraphState & LabGraphActions>()(
   temporal(
-    (set) => ({
+    (set, get) => ({
       ...initialState,
+
       setActiveConnectionId: (id) => set({ activeConnectionId: id }),
       setActiveDatasetId: (id) => set({ activeDatasetId: id }),
       setActiveGraphId: (id) => set({ activeGraphId: id }),
       setValidationState: (state) => set({ validationState: state }),
       setRunState: (state) => set({ runState: state }),
+
+      onNodesChange: (changes) => {
+        set((state) => ({
+          nodes: applyNodeChanges(changes, state.nodes),
+        }));
+        scheduleValidation(get().runValidation);
+      },
+
+      onEdgesChange: (changes) => {
+        set((state) => ({
+          edges: applyEdgeChanges(changes, state.edges),
+        }));
+        scheduleValidation(get().runValidation);
+      },
+
+      setNodes: (nodes) => set({ nodes }),
+      setEdges: (edges) => {
+        set({ edges });
+        scheduleValidation(get().runValidation);
+      },
+
+      // Phase 3B — add block node to canvas
+      addNode: (blockType, position) => {
+        const def = BLOCK_DEF_MAP[blockType];
+        if (!def) return;
+
+        const params: Record<string, unknown> = {};
+        for (const p of def.params) {
+          params[p.id] = p.defaultValue;
+        }
+
+        const newNode: LabNode = {
+          id: nextNodeId(),
+          type: "strategyNode",
+          position,
+          data: { blockType, params, isStale: false },
+        };
+
+        set((state) => ({ nodes: [...state.nodes, newNode] }));
+        scheduleValidation(get().runValidation);
+      },
+
+      // Phase 3B — update single param on a node
+      updateNodeParam: (nodeId, paramId, value) => {
+        set((state) => ({
+          nodes: state.nodes.map((n) => {
+            if (n.id !== nodeId) return n;
+            return {
+              ...n,
+              data: { ...n.data, params: { ...n.data.params, [paramId]: value } },
+            };
+          }),
+        }));
+        scheduleValidation(get().runValidation);
+      },
+
+      // Phase 3B — mark direct target of removed edge as stale
+      // Full downstream propagation is Phase 3C.
+      markDownstreamStale: (removedEdgeTargetId) => {
+        set((state) => ({
+          nodes: state.nodes.map((n) => {
+            if (n.id !== removedEdgeTargetId) return n;
+            return { ...n, data: { ...n.data, isStale: true } };
+          }),
+        }));
+      },
+
+      // Phase 4 — compile state setters
+      setCompileState: (state) => set({ compileState: state }),
+      setLastCompileResult: (result) => set({ lastCompileResult: result }),
+      setServerIssues: (issues) => set({ serverIssues: issues }),
+
+      // Phase 3C — run validation synchronously, update issues + validationState
+      runValidation: () => {
+        const { nodes, edges } = get();
+        const issues = validateGraph(nodes, edges);
+
+        const hasErrors = issues.some((i) => i.severity === "error");
+        const hasWarnings = issues.some((i) => i.severity === "warning");
+
+        const newValidationState: ValidationState =
+          nodes.length === 0
+            ? "idle"
+            : hasErrors
+            ? "error"
+            : hasWarnings
+            ? "warning"
+            : "ok";
+
+        set({
+          validationIssues: issues,
+          validationState: newValidationState,
+        });
+      },
     }),
-    // zundo options: only track the fields relevant to undo/redo graph history.
-    // Connection / dataset selection is intentionally excluded (they are
-    // navigation choices, not graph mutations).
+    // zundo: only track graph state for undo/redo history.
+    // validationIssues is excluded — it's derived state, not source of truth.
     {
       partialize: (state) => ({
         activeGraphId: state.activeGraphId,
