@@ -3,6 +3,7 @@ import { temporal } from "zundo";
 import type { Node, Edge, NodeChange, EdgeChange } from "@xyflow/react";
 import { applyNodeChanges, applyEdgeChanges } from "@xyflow/react";
 import { BLOCK_DEF_MAP, type LabNodeData } from "./build/blockDefs";
+import { validateGraph, type ValidationIssue } from "./validationTypes";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -22,6 +23,8 @@ export interface LabGraphState {
   runState: RunState;
   nodes: LabNode[];
   edges: LabEdge[];
+  /** Phase 3C: in-memory validation issues; never persisted */
+  validationIssues: ValidationIssue[];
 }
 
 interface LabGraphActions {
@@ -42,6 +45,8 @@ interface LabGraphActions {
   updateNodeParam: (nodeId: string, paramId: string, value: unknown) => void;
   // Phase 3B: mark direct target of removed edge as stale
   markDownstreamStale: (removedEdgeTargetId: string) => void;
+  // Phase 3C: run graph validation and update validationIssues + validationState
+  runValidation: () => void;
 }
 
 // ---------------------------------------------------------------------------
@@ -56,6 +61,7 @@ const initialState: LabGraphState = {
   runState: "idle",
   nodes: [],
   edges: [],
+  validationIssues: [],
 };
 
 // ---------------------------------------------------------------------------
@@ -68,13 +74,30 @@ function nextNodeId(): string {
 }
 
 // ---------------------------------------------------------------------------
-// Store — Phase 3A base + Phase 3B additions
+// Debounce timer — module-level ref for the 500ms validation debounce
+// Per §13.3: "debounced 500ms after last graph mutation"
+// ---------------------------------------------------------------------------
+
+let _validationTimer: ReturnType<typeof setTimeout> | null = null;
+
+function scheduleValidation(runValidationFn: () => void) {
+  if (_validationTimer !== null) {
+    clearTimeout(_validationTimer);
+  }
+  _validationTimer = setTimeout(() => {
+    _validationTimer = null;
+    runValidationFn();
+  }, 500);
+}
+
+// ---------------------------------------------------------------------------
+// Store — Phase 3A base + Phase 3B additions + Phase 3C validation
 // zundo provides undo/redo history.
 // ---------------------------------------------------------------------------
 
 export const useLabGraphStore = create<LabGraphState & LabGraphActions>()(
   temporal(
-    (set) => ({
+    (set, get) => ({
       ...initialState,
 
       setActiveConnectionId: (id) => set({ activeConnectionId: id }),
@@ -83,18 +106,25 @@ export const useLabGraphStore = create<LabGraphState & LabGraphActions>()(
       setValidationState: (state) => set({ validationState: state }),
       setRunState: (state) => set({ runState: state }),
 
-      onNodesChange: (changes) =>
+      onNodesChange: (changes) => {
         set((state) => ({
           nodes: applyNodeChanges(changes, state.nodes),
-        })),
+        }));
+        scheduleValidation(get().runValidation);
+      },
 
-      onEdgesChange: (changes) =>
+      onEdgesChange: (changes) => {
         set((state) => ({
           edges: applyEdgeChanges(changes, state.edges),
-        })),
+        }));
+        scheduleValidation(get().runValidation);
+      },
 
       setNodes: (nodes) => set({ nodes }),
-      setEdges: (edges) => set({ edges }),
+      setEdges: (edges) => {
+        set({ edges });
+        scheduleValidation(get().runValidation);
+      },
 
       // Phase 3B — add block node to canvas
       addNode: (blockType, position) => {
@@ -114,6 +144,7 @@ export const useLabGraphStore = create<LabGraphState & LabGraphActions>()(
         };
 
         set((state) => ({ nodes: [...state.nodes, newNode] }));
+        scheduleValidation(get().runValidation);
       },
 
       // Phase 3B — update single param on a node
@@ -127,6 +158,7 @@ export const useLabGraphStore = create<LabGraphState & LabGraphActions>()(
             };
           }),
         }));
+        scheduleValidation(get().runValidation);
       },
 
       // Phase 3B — mark direct target of removed edge as stale
@@ -139,8 +171,32 @@ export const useLabGraphStore = create<LabGraphState & LabGraphActions>()(
           }),
         }));
       },
+
+      // Phase 3C — run validation synchronously, update issues + validationState
+      runValidation: () => {
+        const { nodes, edges } = get();
+        const issues = validateGraph(nodes, edges);
+
+        const hasErrors = issues.some((i) => i.severity === "error");
+        const hasWarnings = issues.some((i) => i.severity === "warning");
+
+        const newValidationState: ValidationState =
+          nodes.length === 0
+            ? "idle"
+            : hasErrors
+            ? "error"
+            : hasWarnings
+            ? "warning"
+            : "ok";
+
+        set({
+          validationIssues: issues,
+          validationState: newValidationState,
+        });
+      },
     }),
     // zundo: only track graph state for undo/redo history.
+    // validationIssues is excluded — it's derived state, not source of truth.
     {
       partialize: (state) => ({
         activeGraphId: state.activeGraphId,

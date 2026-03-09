@@ -2,7 +2,8 @@
 
 // ---------------------------------------------------------------------------
 // Phase 3B — Build tab: palette + canvas + inspector
-// Per docs/23-lab-v2-ide-spec.md §6.3, §6.3.1, §6.4
+// Phase 3C — Validation drawer (§13.3, §28 Error presentation hierarchy)
+// Per docs/23-lab-v2-ide-spec.md §6.3, §6.3.1, §6.4, §13.3, §28
 // ---------------------------------------------------------------------------
 
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -26,7 +27,8 @@ import {
 import "@xyflow/react/dist/style.css";
 
 import { useLabGraphStore } from "../useLabGraphStore";
-import type { LabNode, LabEdge } from "../useLabGraphStore";
+import type { LabNode, LabEdge, ValidationState } from "../useLabGraphStore";
+import type { ValidationIssue } from "../validationTypes";
 import {
   BLOCK_DEF_MAP,
   PORT_TYPE_COLOR,
@@ -136,6 +138,199 @@ function Toast({ message, onDone }: { message: ToastMessage; onDone: () => void 
 }
 
 // ---------------------------------------------------------------------------
+// ValidationDrawer — Phase 3C
+// Per §13.3 + §28 (Level 5: bottom drawer, persistent, clickable to focus node)
+// ---------------------------------------------------------------------------
+
+interface ValidationDrawerProps {
+  issues: ValidationIssue[];
+  validationState: ValidationState;
+}
+
+function ValidationDrawer({ issues, validationState }: ValidationDrawerProps) {
+  const [open, setOpen] = useState(true);
+  const nodes = useLabGraphStore((s) => s.nodes);
+  const setNodes = useLabGraphStore((s) => s.setNodes);
+  const { setCenter } = useReactFlow();
+
+  const errorCount = issues.filter((i) => i.severity === "error").length;
+  const warnCount = issues.filter((i) => i.severity === "warning").length;
+
+  const statusColor =
+    validationState === "ok"
+      ? "#52A97C"
+      : validationState === "warning"
+      ? "#FBBF24"
+      : validationState === "error"
+      ? "#D44C4C"
+      : "rgba(255,255,255,0.25)";
+
+  const statusLabel =
+    validationState === "idle"
+      ? "—"
+      : validationState === "ok"
+      ? "✓ Valid"
+      : validationState === "warning"
+      ? `${warnCount} warning${warnCount !== 1 ? "s" : ""}`
+      : errorCount > 0 && warnCount > 0
+      ? `${errorCount} error${errorCount !== 1 ? "s" : ""} · ${warnCount} warning${warnCount !== 1 ? "s" : ""}`
+      : `${errorCount} error${errorCount !== 1 ? "s" : ""}`;
+
+  const focusNode = useCallback(
+    (nodeId: string) => {
+      const node = nodes.find((n) => n.id === nodeId);
+      if (!node) return;
+      // Select the node and center canvas on it
+      setNodes(nodes.map((n) => ({ ...n, selected: n.id === nodeId })));
+      setCenter(node.position.x + 70, node.position.y + 40, {
+        zoom: 1.5,
+        duration: 400,
+      });
+    },
+    [nodes, setNodes, setCenter]
+  );
+
+  return (
+    <div
+      style={{
+        background: "rgba(10,14,20,0.97)",
+        borderTop: "1px solid rgba(255,255,255,0.07)",
+        flexShrink: 0,
+        maxHeight: open ? 200 : 28,
+        overflow: "hidden",
+        transition: "max-height 0.2s ease",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      {/* Drawer header — always visible, acts as tab */}
+      <div
+        onClick={() => setOpen((v) => !v)}
+        style={{
+          height: 28,
+          display: "flex",
+          alignItems: "center",
+          gap: 8,
+          padding: "0 12px",
+          cursor: "pointer",
+          userSelect: "none",
+          flexShrink: 0,
+          borderBottom: open ? "1px solid rgba(255,255,255,0.05)" : "none",
+        }}
+      >
+        <span
+          style={{
+            fontSize: 10,
+            color: "rgba(255,255,255,0.35)",
+            textTransform: "uppercase",
+            letterSpacing: "0.08em",
+          }}
+        >
+          Validation
+        </span>
+        <span
+          style={{ fontSize: 11, color: statusColor, fontWeight: 600, lineHeight: 1 }}
+        >
+          {statusLabel}
+        </span>
+        <span
+          style={{
+            marginLeft: "auto",
+            fontSize: 10,
+            color: "rgba(255,255,255,0.2)",
+          }}
+        >
+          {open ? "▼" : "▲"}
+        </span>
+      </div>
+
+      {/* Issue list */}
+      <div style={{ overflowY: "auto", flex: 1 }}>
+        {issues.length === 0 ? (
+          <div
+            style={{
+              padding: "8px 12px",
+              fontSize: 11,
+              color:
+                validationState === "idle"
+                  ? "rgba(255,255,255,0.25)"
+                  : "#52A97C",
+              lineHeight: 1.5,
+            }}
+          >
+            {validationState === "idle"
+              ? "Add blocks to the canvas to begin validation."
+              : "✓ Graph is valid. All required blocks are present and connected."}
+          </div>
+        ) : (
+          issues.map((issue) => (
+            <div
+              key={issue.id}
+              onClick={() => issue.nodeId && focusNode(issue.nodeId)}
+              role={issue.nodeId ? "button" : undefined}
+              tabIndex={issue.nodeId ? 0 : undefined}
+              onKeyDown={(e) => {
+                if (issue.nodeId && (e.key === "Enter" || e.key === " ")) {
+                  focusNode(issue.nodeId);
+                }
+              }}
+              style={{
+                display: "flex",
+                alignItems: "flex-start",
+                gap: 8,
+                padding: "5px 12px",
+                cursor: issue.nodeId ? "pointer" : "default",
+                transition: "background 0.1s",
+              }}
+              onMouseEnter={(e) => {
+                if (issue.nodeId)
+                  (e.currentTarget as HTMLDivElement).style.background =
+                    "rgba(255,255,255,0.04)";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLDivElement).style.background =
+                  "transparent";
+              }}
+            >
+              <span
+                style={{
+                  fontSize: 12,
+                  color: issue.severity === "error" ? "#D44C4C" : "#FBBF24",
+                  flexShrink: 0,
+                  lineHeight: 1.4,
+                }}
+              >
+                {issue.severity === "error" ? "⊗" : "⚠"}
+              </span>
+              <span
+                style={{
+                  fontSize: 11,
+                  color: "rgba(255,255,255,0.7)",
+                  lineHeight: 1.4,
+                }}
+              >
+                {issue.message}
+                {issue.nodeId && (
+                  <span
+                    style={{
+                      marginLeft: 5,
+                      fontSize: 10,
+                      color: "rgba(255,255,255,0.25)",
+                    }}
+                  >
+                    ↗ focus
+                  </span>
+                )}
+              </span>
+            </div>
+          ))
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // Canvas inner — must be inside ReactFlowProvider + ConnectionContextProvider
 // ---------------------------------------------------------------------------
 
@@ -148,6 +343,9 @@ function LabBuildCanvas() {
   const addNodeToStore = useLabGraphStore((s) => s.addNode);
   const updateNodeParam = useLabGraphStore((s) => s.updateNodeParam);
   const markDownstreamStale = useLabGraphStore((s) => s.markDownstreamStale);
+  // Phase 3C: validation state
+  const validationIssues = useLabGraphStore((s) => s.validationIssues);
+  const validationState = useLabGraphStore((s) => s.validationState);
 
   const { undo, redo } = useLabGraphStore.temporal.getState();
   const { getNodes, getEdges, screenToFlowPosition, setNodes } = useReactFlow<
@@ -397,66 +595,83 @@ function LabBuildCanvas() {
         <BlockPalette onAddBlock={handleAddBlock} />
       </div>
 
-      {/* Center: React Flow Canvas */}
+      {/* Center: React Flow Canvas + Validation Drawer */}
       <div
-        style={{ flex: 1, height: "100%", position: "relative" }}
-        onDragOver={onDragOver}
-        onDrop={onDrop}
+        style={{
+          flex: 1,
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          overflow: "hidden",
+        }}
       >
-        <ReactFlow<LabNode, LabEdge>
-          nodes={nodes}
-          edges={edges}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
-          onConnect={onConnect}
-          onConnectStart={onConnectStart}
-          onConnectEnd={onConnectEnd}
-          onEdgesDelete={onEdgesDelete}
-          isValidConnection={isValidConnection}
-          nodeTypes={nodeTypes}
-          edgeTypes={edgeTypes}
-          deleteKeyCode={["Delete", "Backspace"]}
-          selectionKeyCode="Shift"
-          multiSelectionKeyCode={["Meta", "Control"]}
-          connectionMode={ConnectionMode.Loose}
-          edgesReconnectable
-          fitView
-          colorMode="dark"
-          proOptions={{ hideAttribution: false }}
-        >
-          <Background
-            variant={BackgroundVariant.Dots}
-            gap={20}
-            size={1}
-            color="rgba(255,255,255,0.08)"
-          />
-          <Controls />
-          <MiniMap
-            style={minimapStyle}
-            nodeColor="rgba(255,255,255,0.15)"
-            maskColor="rgba(0,0,0,0.5)"
-          />
-        </ReactFlow>
-
-        {/* Toasts — top-right per §6.3.1 */}
+        {/* Canvas area */}
         <div
-          style={{
-            position: "absolute",
-            top: 12,
-            right: 12,
-            display: "flex",
-            flexDirection: "column",
-            gap: 8,
-            zIndex: 100,
-            pointerEvents: "none",
-          }}
+          style={{ flex: 1, position: "relative", overflow: "hidden" }}
+          onDragOver={onDragOver}
+          onDrop={onDrop}
         >
-          {toasts.map((t) => (
-            <div key={t.id} style={{ pointerEvents: "all" }}>
-              <Toast message={t} onDone={() => dismissToast(t.id)} />
-            </div>
-          ))}
+          <ReactFlow<LabNode, LabEdge>
+            nodes={nodes}
+            edges={edges}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            onConnect={onConnect}
+            onConnectStart={onConnectStart}
+            onConnectEnd={onConnectEnd}
+            onEdgesDelete={onEdgesDelete}
+            isValidConnection={isValidConnection}
+            nodeTypes={nodeTypes}
+            edgeTypes={edgeTypes}
+            deleteKeyCode={["Delete", "Backspace"]}
+            selectionKeyCode="Shift"
+            multiSelectionKeyCode={["Meta", "Control"]}
+            connectionMode={ConnectionMode.Loose}
+            edgesReconnectable
+            fitView
+            colorMode="dark"
+            proOptions={{ hideAttribution: false }}
+          >
+            <Background
+              variant={BackgroundVariant.Dots}
+              gap={20}
+              size={1}
+              color="rgba(255,255,255,0.08)"
+            />
+            <Controls />
+            <MiniMap
+              style={minimapStyle}
+              nodeColor="rgba(255,255,255,0.15)"
+              maskColor="rgba(0,0,0,0.5)"
+            />
+          </ReactFlow>
+
+          {/* Toasts — top-right per §6.3.1 */}
+          <div
+            style={{
+              position: "absolute",
+              top: 12,
+              right: 12,
+              display: "flex",
+              flexDirection: "column",
+              gap: 8,
+              zIndex: 100,
+              pointerEvents: "none",
+            }}
+          >
+            {toasts.map((t) => (
+              <div key={t.id} style={{ pointerEvents: "all" }}>
+                <Toast message={t} onDone={() => dismissToast(t.id)} />
+              </div>
+            ))}
+          </div>
         </div>
+
+        {/* Phase 3C: Validation Drawer — docked at bottom per §28 Level 5 */}
+        <ValidationDrawer
+          issues={validationIssues}
+          validationState={validationState}
+        />
       </div>
 
       {/* Right: Inspector Panel */}
