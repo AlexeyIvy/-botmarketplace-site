@@ -4,19 +4,20 @@
 **Repository:** `AlexeyIvy/-botmarketplace-site`
 **Status:** Planning — verified against existing code and docs (March 2026)
 **Author role:** Senior Software Engineer / Product Architect
-**Scope:** Forward planning for `/lab` after Phase 5 (backtest runner) is complete. Identifies the primary architectural blocker before Phase 6, defines the graph lifecycle model required for Phase 3A completion, and proposes a genuinely new post-Phase-6 expansion layer.
+**Scope:** Forward planning for `/lab` after Phase 5 (backtest runner) is complete. Identifies the primary architectural blocker before Phase 6, defines the graph lifecycle model required for Phase 3A completion, and provides a sliced task-pack roadmap for both the completion layer and the expansion layer.
 **Change type:** Docs-only planning document. No code changes, no migrations, no API changes.
 
 ---
 
 ## Document structure
 
-This document is organized into four distinct layers:
+This document is organized into five distinct layers:
 
 1. **Current implementation audit** (§2) — phase-by-phase status with explicit blocking analysis
 2. **Primary architectural blocker** (§3–§5) — Phase 3A graph persistence gap, lifecycle state model, backend contract
-3. **Existing next step from docs/23** (§6) — Phase 6 pointer; no re-specification
-4. **New proposals beyond docs/23** (§7–§9) — post-Phase-6 expansion; none start before Phase 3A is accepted
+3. **Completion layer** (§6–§7) — Phase 3A + Phase 6: the two remaining items that complete the existing spec
+4. **Expansion layer** (§8) — new proposals beyond docs/23 and docs/22; none start before completion layer is done
+5. **Execution plan** (§9–§12) — task-pack granularity, immediate next action, scope boundaries, acceptance discipline
 
 ---
 
@@ -29,8 +30,8 @@ This document defines what comes next for `/lab` after Phase 5 completion. It do
 - Identifies the primary architectural blocker (Phase 3A graph persistence) that must close before Phase 6 begins
 - Establishes the graph lifecycle state model that Phase 3A implementation must satisfy
 - Points to Phase 6 scope as already defined in `docs/23` — no re-specification here
-- Proposes a new, post-Phase-6 expansion layer (block library Tier 2, multi-dataset binding, parameter sweep) that is **not covered by any existing document**
-- Names the task packs that need to be created next
+- Proposes a new, post-Phase-6 expansion layer (block library Tier 2, governance/provenance, parameter sweep, research journal, AI explainability) not covered by any existing document
+- Provides practical task-pack slicing for both completion and expansion layers
 
 **What this document does NOT do:**
 - Re-specify anything already in `docs/23-lab-v2-ide-spec.md` (Phases 0–6) or `docs/22-productization-v2-plan.md` (Stages 7–14)
@@ -207,11 +208,28 @@ PATCH /api/v1/lab/graphs/:id           — save draft (patch semantics, auto-sav
 
 ---
 
-## 6. Phase 6 execution (already spec'd in docs/23)
+## COMPLETION LAYER
+
+> **Phases 3A and 6 complete the existing spec defined in `docs/23`. Nothing in the Expansion Layer (§8) starts before both are accepted.**
+
+---
+
+## 6. Phase 3A — graph persistence completion
+
+Phase 3A is the sole gating item before Phase 6. The full specification is in §3–§5 above.
+
+**Task pack:** `docs/steps/23a-lab-phase3a-graph-persistence.md`
+**Unblocks:** Phase 6 (all 23b sub-packs)
+
+---
+
+## 7. Phase 6 — completion (already spec'd in docs/23)
 
 Phase 6 scope is fully defined in `docs/23 §Phase 6`. Do not re-specify it here.
 
-Summary of what Phase 6 covers (for reference only):
+**Prerequisite:** Phase 3A (§6) accepted.
+
+### 7.1 Phase 6 scope summary
 
 - Private data input blocks: `ordersHistory`, `executionsHistory` — greyed out without active `ExchangeConnection`
 - Visual distinction for private blocks: orange dot + lock icon
@@ -219,78 +237,81 @@ Summary of what Phase 6 covers (for reference only):
 - Compare runs view: side-by-side `BacktestResult` metrics (`GET /api/v1/lab/backtests/compare` — already spec'd in `docs/23 §14`)
 - Advanced diagnostics: `annotate_event` block marks equity curve points
 
-**Prerequisite:** Phase 3A completion (§3 above).
+### 7.2 Phase 6 may be too large as a single task pack
 
-**Task pack to create:** `docs/steps/23b-lab-phase6.md`
+The full Phase 6 scope is significant. If any sub-phase grows beyond a focused, reviewable PR, it must be split. The **recommended split** is:
 
----
+| Sub-pack | Scope | Depends on |
+|---|---|---|
+| `23b1` | Compare runs UI + provenance block in results view | 23a |
+| `23b2` | Stale-state detection hardening (badges, dirty indicators after graph/dataset/connection change) | 23b1 |
+| `23b3` | Private data blocks + permission UX (`ordersHistory`, `executionsHistory`, ExchangeConnection gating) | 23b2 |
+| `23b4` | `annotate_event` block + advanced diagnostics polish | 23b3 |
 
-## 7. Overlap analysis: draft topics vs existing docs
+**Splitting rule:** If implementing any single 23b sub-pack requires touching more than 3 files in the frontend or more than 1 new backend endpoint, consider extracting that piece into its own PR rather than expanding scope. One PR = one focused deliverable.
 
-| Topic | Already in docs/23 | Already in docs/22 | In code | New proposal | Notes |
-|---|---|---|---|---|---|
-| Phase 6 private data blocks | ✅ §Phase 6 | — | ❌ | — | Fully spec'd; just needs task pack |
-| Phase 6 stale-state detection | ✅ §Phase 6 | — | ❌ | — | Fully spec'd |
-| Phase 6 compare runs | ✅ §Phase 6, §14 | — | ❌ | — | Endpoint spec'd; UI + endpoint not built |
-| Graph persistence (Phase 3A) | ✅ §Phase 3 | — | ❌ | — | Spec'd; identified here as gating blocker |
-| Block library expansion (beyond 9 blocks) | ✅ §6.3 (full list) | — | ❌ (partial) | **§8.1** | Not all spec'd blocks are implemented |
-| Multi-dataset binding | ✅ §26 (explicitly deferred) | — | ❌ | **§8.2** | Post-Phase-6 and post-governance only; see §8.2 |
-| Parameter sweep / optimization | — | ✅ §6 (explicitly deferred) | ❌ | **§8.3** | Narrow bounded proposal; see §8.3 for hard scope constraints |
-| DSL ↔ graph bidirectional view | ✅ §9.3 (optional) | — | ❌ | **§8.4** | High-risk; spike-only; not to be scheduled before persistence/governance stable |
-| Subgraphs / nested graphs | ✅ §26 (excluded Phase 3, deferred Phase 6+) | — | ❌ | — | Not proposed here; no spec exists yet |
-| Real-time collaboration | ✅ §26 (excluded) | — | ❌ | — | Not proposed; CRDT required |
-| Graph version branching | ✅ §26 (excluded) | — | ❌ | — | Not proposed; linear versions only |
-| Auth / workspace enforcement | — | ✅ Stage 7 | ✅ | — | Already implemented |
-| Exchange Connections | — | ✅ Stage 8 | ✅ | — | Already implemented |
-| Research Lab reproducibility | ✅ Phase 5 | ✅ Stage 12 | ✅ | — | Phase 5 satisfies Stage 12 |
-| Observability | — | ✅ Stage 13 | Partial | — | Not Lab-specific; see docs/22 |
+**Task pack:** `docs/steps/23b-lab-phase6.md` (with recommended 23b1–23b4 split documented inside)
 
 ---
 
-## 8. Post-Phase-6 expansion proposals
+## 8. Expansion layer — new proposals beyond docs/23
 
-These are genuinely new proposals not covered by `docs/23` or `docs/22`.
+> **Nothing in this section starts before Phase 3A AND Phase 6 (all 23b sub-packs) are accepted.**
+> These are genuinely new proposals not covered by `docs/23` or `docs/22`.
 
-**None of these should begin before Phase 3A is accepted AND Phase 6 is accepted.** See §9 (Immediate next action) for the authoritative execution gate.
+Priority order within the expansion layer:
+
+1. Block library Tier 2 (25a, 25b) — directly extends working infrastructure
+2. Governance / provenance (26) — foundational for research workflows; required before journal and explainability are meaningful
+3. Parameter sweep (27) — bounded, high-value; builds on compare runs
+4. Research journal (28) — requires governance/provenance to be useful
+5. AI explainability (29) — requires stable graph model and journal context
+6. Multi-dataset binding — later expansion; schema-heavy; lower priority than all of the above
+7. DSL ↔ graph bidirectional — spike only; not a task pack until feasibility is confirmed
 
 ### 8.1 Block library Tier 2
 
 **Context:** Current 9-block library covers minimal viable strategy composition. `docs/23 §6.3` lists the full intended library; the compiler infrastructure is ready to receive new block types.
 
-**Proposed tier 2 blocks (first batch):**
+**Split into two task packs to avoid context overload:**
 
-| Block | Category | DSL target field | Prerequisite |
-|---|---|---|---|
-| ATR | Indicator | `indicators[].type: "ATR"` | Needed for stop_loss `type: "atr"` to be useful |
-| MACD | Indicator | `indicators[].type: "MACD"` | Common strategy primitive |
-| AND / OR / NOT | Logic | `signals[].logic` compound | Multi-signal strategies |
-| confirm N bars | Logic | `signals[].confirm` | Signal persistence filter |
-| trailing_stop | Risk | `risk.trailingStop` | Already in DSL spec §6; block missing |
-| close | Execution | `execution.closeSignal` | Exit signal complement |
+**25a — Tier 2 indicators + logic:**
 
-**Constraint:** Any new block type that requires extending `StrategyVersion.body` schema must first update `docs/10-strategy-dsl.md`. No undocumented DSL extensions.
+| Block | Category | DSL target field |
+|---|---|---|
+| ATR | Indicator | `indicators[].type: "ATR"` |
+| MACD | Indicator | `indicators[].type: "MACD"` |
+| AND / OR / NOT | Logic | `signals[].logic` compound |
+| confirm N bars | Logic | `signals[].confirm` |
 
-**Task pack to create:** `docs/steps/25-lab-block-tier2.md`
+**25b — Tier 2 risk + execution:**
 
-### 8.2 Multi-dataset binding
+| Block | Category | DSL target field |
+|---|---|---|
+| trailing_stop | Risk | `risk.trailingStop` |
+| close | Execution | `execution.closeSignal` |
 
-> **Priority: Not immediate. Post-Phase-6 and post-governance only. Requires a separate schema decision before any implementation can begin.**
+**Constraint:** Any new block type that requires extending `StrategyVersion.body` schema must first update `docs/10-strategy-dsl.md`. No undocumented DSL extensions. 25b must not start before 25a is accepted.
 
-**Context:** `docs/23 §26` explicitly defers this: "One active dataset per LabWorkspace in Phase 3." This proposal is for after Phase 6 is accepted and the governance layer (docs/22 Stages 7–10) is confirmed stable.
+**Task packs to create:** `docs/steps/25a-lab-block-tier2-indicators.md`, `docs/steps/25b-lab-block-tier2-risk.md`
+
+### 8.2 Governance / provenance
+
+**Context:** Once compare runs exist (23b1), users need a way to track which version of a graph produced which result, and to explicitly label important versions. Without this layer, the research workflow degrades into an unstructured list of runs with no narrative.
 
 **Proposal:**
-- `LabWorkspace` holds up to 3 dataset slots (primary + 2 comparison)
-- `candles` block has a slot selector (`primary | comparison-1 | comparison-2`)
-- Backtest always runs on `primary` slot — comparison slots are visual reference only
-- `LabWorkspace.datasetSlots: uuid[]` field addition (schema change — requires `docs/07-data-model.md` update before implementation)
+- **Graph version labels/tags:** User can attach a label to a `StrategyGraphVersion` (e.g., `baseline`, `v2-tighter-stop`, `experiment-rsi-14`)
+- **Baseline promotion:** User can mark one compiled version as `baseline`; all future runs show delta vs baseline in results view
+- **Promote version:** User can explicitly promote a version (marks it as the current production candidate; does not deploy it — documentation only)
+- **Lineage display:** Results view shows the chain `StrategyGraphVersion → StrategyVersion → BacktestResult` as a readable provenance block — who compiled it, from which graph, with which dataset, at what time
+- **Provenance block in Test/results flows:** Compact version label + dataset hash + connection + compile timestamp shown alongside run metrics
 
-**Constraints:**
-- Requires a `LabWorkspace` schema migration. Must not be implemented without first updating `docs/07-data-model.md` and getting that doc change reviewed.
-- Must not begin before Phase 6 is accepted.
-- Must not begin before the governance layer (docs/22 Stages 7–10) is confirmed stable — multi-dataset binding interacts with workspace-level permissions.
-- The task pack for this proposal must not be created until the schema decision is documented in `docs/07-data-model.md`.
+**Why this is higher priority than multi-dataset binding:**
+- No schema migration required for MVP (labels are metadata on existing `StrategyGraphVersion`)
+- Directly enables the research journal (§8.4) and AI explainability (§8.5) to be meaningful
+- Solves an immediate pain point after compare runs exist
 
-**Task pack to create:** `docs/steps/26-lab-multi-dataset.md` — blocked on Phase 6 acceptance + schema decision.
+**Task pack to create:** `docs/steps/26-lab-governance-provenance.md`
 
 ### 8.3 Parameter sweep (basic)
 
@@ -312,9 +333,71 @@ These are genuinely new proposals not covered by `docs/23` or `docs/22`.
 - No new DB entity in the first version — sweep state is UI-only; each run is an independent `BacktestResult` record
 - Rate limits: respect existing `POST /lab/backtest` limits per workspace
 
+**Optional split if scope grows:** If the UI, execution, and result comparison ergonomics prove too large for a single reviewable PR, split into:
+- `27a` — sweep UI + sequential execution engine
+- `27b` — result comparison table + ergonomics polish
+
 **Task pack to create:** `docs/steps/27-lab-param-sweep.md`
 
-### 8.4 DSL ↔ graph bidirectional view
+### 8.4 Research journal / hypothesis tracking
+
+**Context:** After governance/provenance (§8.2) is stable, users have version labels and baseline markers. The next natural research workflow is structured hypothesis tracking — connecting graph versions and run results to explicit researcher intent.
+
+**Proposal:**
+- Notes attached to: graph version, strategy version, or individual backtest run
+- Hypothesis fields: `hypothesis`, `what_changed`, `expected_result`, `actual_result`, `next_step`
+- Status field: `baseline | promote | discard | keep_testing`
+- Read-only display in results view alongside provenance block
+- No AI generation in this task pack — plain text fields only
+
+**Dependency:** Requires governance/provenance (§8.2) to be accepted first. Journal entries reference version labels and the baseline marker.
+
+**Task pack to create:** `docs/steps/28-lab-research-journal.md`
+
+### 8.5 AI explainability
+
+**Context:** After graph persistence, governance, and journal are stable, the system has enough structured context to support targeted AI assistance in the research workflow.
+
+**Scoped proposals:**
+- **Explain graph:** Given the current graph structure, explain in plain language what strategy it implements and what market conditions it targets
+- **Explain validation issue:** Given a validation error on a node, explain why it is invalid and suggest a fix
+- **Explain run delta:** Given two backtest results (compare runs), summarize what changed and likely why (using graph diff + parameter diff as input, not market prediction)
+- **Suggest safer risk config:** Given current risk blocks (stop_loss, take_profit values), flag configurations that historically produce extreme drawdowns and suggest tighter bounds
+
+**Hard safety boundaries — these must never be violated in any AI explainability task pack:**
+- No bypass of the compiler — AI suggestions must go through the graph editor and compile flow like any other change
+- No bypass of validation — AI cannot produce a graph state that skips client-side or server-side validation
+- No trade execution — AI cannot trigger, schedule, or recommend live trades; it operates on backtest data only
+- No secret access — AI context must never include API keys, exchange credentials, or private user data beyond what the user has already loaded in the current session
+
+**Dependency:** Requires graph persistence (23a), governance/provenance (26), and ideally research journal (28) to be accepted. The quality of explanations degrades sharply without version labels and hypothesis context.
+
+**Task pack to create:** `docs/steps/29-lab-ai-explainability.md`
+
+### 8.6 Multi-dataset binding
+
+> **Priority: Later expansion only. Lower priority than governance, journal, and explainability. Not to be scheduled until compare/provenance workflows are proven useful in practice.**
+
+**Context:** `docs/23 §26` explicitly defers this: "One active dataset per LabWorkspace in Phase 3." This is lower priority because:
+- It requires a `LabWorkspace` schema migration (schema-heavy)
+- It is not directly useful without governance/provenance workflows being stable first — comparing across datasets requires knowing which version ran against which
+- The governance layer (§8.2) provides more immediate research value without schema risk
+
+**Proposal (when the time comes):**
+- `LabWorkspace` holds up to 3 dataset slots (primary + 2 comparison)
+- `candles` block has a slot selector (`primary | comparison-1 | comparison-2`)
+- Backtest always runs on `primary` slot — comparison slots are visual reference only
+- `LabWorkspace.datasetSlots: uuid[]` field addition — requires `docs/07-data-model.md` update before implementation
+
+**Gate conditions — all must be met before a task pack is created:**
+- Phase 6 accepted
+- Governance / provenance (§8.2) accepted and proven stable in practice
+- Compare/provenance workflows validated as useful by actual usage
+- Schema decision documented in `docs/07-data-model.md` and reviewed
+
+**Task pack:** `docs/steps/26-lab-multi-dataset.md` — do not create until all gate conditions are met.
+
+### 8.7 DSL ↔ graph bidirectional view
 
 > **Risk classification: HIGH. Not immediate. Spike-only first. Must not be scheduled before the persistence layer (Phase 3A) and governance layer are stable.**
 
@@ -333,19 +416,67 @@ These are genuinely new proposals not covered by `docs/23` or `docs/22`.
 
 ---
 
-## 9. Immediate next action
+## 9. Suggested task-pack granularity
+
+> **This section defines the intended slicing of work for Claude Code execution. Each task pack must be completable in a single focused context window. If a task grows beyond this boundary, it must be split before execution begins.**
+
+| Task pack | Scope | Layer | Depends on |
+|---|---|---|---|
+| `23a` | Graph persistence completion (mount, auto-save, empty-state, graph selector) | Completion | — |
+| `23b1` | Compare runs UI + provenance block in results view | Completion | 23a |
+| `23b2` | Stale-state detection (badges, dirty indicators) | Completion | 23b1 |
+| `23b3` | Private data blocks + permission UX | Completion | 23b2 |
+| `23b4` | `annotate_event` block + diagnostics polish | Completion | 23b3 |
+| `25a` | Tier 2 blocks: indicators (ATR, MACD) + logic (AND/OR/NOT, confirm N bars) | Expansion | 23b4 |
+| `25b` | Tier 2 blocks: risk (trailing_stop) + execution (close) | Expansion | 25a |
+| `26` | Governance / provenance: version labels, baseline, lineage display, provenance block | Expansion | 23b1 |
+| `27` | Parameter sweep: sweep UI + sequential execution + results table (split to 27a/27b if scope grows) | Expansion | 23b1, 26 |
+| `28` | Research journal: hypothesis fields, status, display in results view | Expansion | 26 |
+| `29` | AI explainability: explain graph, validate, run delta, risk config suggestion | Expansion | 26, 28 |
+| DSL↔graph | Spike only — no task pack until feasibility note written | — | 23a, Phase 6 |
+| Multi-dataset | Task pack creation blocked on governance stable + schema decision | Later expansion | 26 |
+
+**Granularity principle:** Each task pack above targets one focused concern. The 23b split ensures Phase 6 is never attempted as a single monolithic PR. The 25a/25b split separates compiler concerns (indicators + logic) from risk model concerns. Do not merge adjacent task packs to "save time" — this defeats the purpose of the slicing.
+
+---
+
+## 10. Overlap analysis: draft topics vs existing docs
+
+| Topic | Already in docs/23 | Already in docs/22 | In code | Task pack | Notes |
+|---|---|---|---|---|---|
+| Phase 6 private data blocks | ✅ §Phase 6 | — | ❌ | 23b3 | Fully spec'd |
+| Phase 6 stale-state detection | ✅ §Phase 6 | — | ❌ | 23b2 | Fully spec'd |
+| Phase 6 compare runs | ✅ §Phase 6, §14 | — | ❌ | 23b1 | Endpoint spec'd; UI not built |
+| Graph persistence (Phase 3A) | ✅ §Phase 3 | — | ❌ | 23a | Gating blocker |
+| Block library expansion | ✅ §6.3 (full list) | — | ❌ (partial) | 25a, 25b | Compiler infra ready |
+| Governance / provenance | — | — | ❌ | 26 | New proposal; §8.2 |
+| Parameter sweep | — | ✅ §6 (deferred) | ❌ | 27 | Bounded; §8.3 |
+| Research journal | — | — | ❌ | 28 | New proposal; §8.4 |
+| AI explainability | — | — | ❌ | 29 | New proposal; §8.5; hard safety boundaries |
+| Multi-dataset binding | ✅ §26 (deferred) | — | ❌ | later | Schema-heavy; §8.6 |
+| DSL ↔ graph bidirectional | ✅ §9.3 (optional) | — | ❌ | spike only | HIGH-risk; §8.7 |
+| Subgraphs / nested graphs | ✅ §26 (excluded) | — | ❌ | — | Not proposed |
+| Real-time collaboration | ✅ §26 (excluded) | — | ❌ | — | CRDT required |
+| Auth / workspace enforcement | — | ✅ Stage 7 | ✅ | — | Already implemented |
+| Exchange Connections | — | ✅ Stage 8 | ✅ | — | Already implemented |
+| Research Lab reproducibility | ✅ Phase 5 | ✅ Stage 12 | ✅ | — | Phase 5 satisfies Stage 12 |
+
+---
+
+## 11. Immediate next action
 
 **This section is the authoritative statement of what happens next. It overrides any ordering inference from other sections.**
 
 - **Next task pack to create:** `docs/steps/23a-lab-phase3a-graph-persistence.md`
 - **No other proposal in this document should start before `docs/steps/23a` is accepted.**
-- After `docs/steps/23a` is accepted: create `docs/steps/23b-lab-phase6.md` (per `docs/23 §Phase 6`).
-- After Phase 6 is accepted: block library Tier 2 (§8.1) may be scheduled.
-- Multi-dataset binding (§8.2), parameter sweep (§8.3), and DSL↔graph (§8.4) are not near-term items. Each has explicit preconditions listed in its section that must be satisfied before a task pack is created.
+- After `docs/steps/23a` is accepted: create `docs/steps/23b-lab-phase6.md`, structured around the 23b1–23b4 split.
+- After 23b4 is accepted: expansion layer begins, starting with 25a (block library) and 26 (governance/provenance) — these can be parallelized if team capacity allows.
+- Task packs 27, 28, 29 follow in order per §9.
+- Multi-dataset binding (§8.6) and DSL↔graph (§8.7) are blocked on their respective gate conditions.
 
 ---
 
-## 10. Scope boundaries
+## 12. Scope boundaries
 
 This roadmap explicitly does NOT propose:
 
@@ -360,25 +491,11 @@ This roadmap explicitly does NOT propose:
 | High-availability / cluster orchestration | Out of scope per `docs/22 §6` |
 | Arbitrary custom code blocks (user JS/Python) | Security model violation; excluded in `docs/23 §26` |
 | Changes to Stages 7–14 scope | Those stages are defined in `docs/22`; not modified here |
+| AI-triggered live trades or order execution | Hard safety boundary; see §8.5 |
 
 ---
 
-## 11. Recommended execution order
-
-```
-1. Phase 3A completion          → docs/steps/23a-lab-phase3a-graph-persistence.md
-2. Phase 6 execution            → docs/steps/23b-lab-phase6.md  (per docs/23 §Phase 6)
-3. Block library Tier 2         → docs/steps/25-lab-block-tier2.md  (after Phase 6 accepted)
-4. Multi-dataset binding        → docs/steps/26-lab-multi-dataset.md  (after Phase 6 + governance stable; schema decision required)
-5. Parameter sweep              → docs/steps/27-lab-param-sweep.md  (after Phase 6 accepted; bounded scope per §8.3)
-6. DSL ↔ graph bidirectional    → spike first; no task pack until feasibility confirmed AND Phase 6 accepted
-```
-
-The task packs listed above do not exist yet. They must be created before any implementation begins. Each task pack must follow the format defined in `docs/22 §8`.
-
----
-
-## 12. Stage acceptance discipline
+## 13. Stage acceptance discipline
 
 All task packs derived from this roadmap must comply with the acceptance rule from `docs/22 §7`:
 
@@ -388,4 +505,4 @@ All task packs derived from this roadmap must comply with the acceptance rule fr
 4. Documentation updated in the same PR
 5. Handover note prepared for the next task pack
 
-This applies equally to Phase completion items (Phase 3A) and new expansion proposals (§8).
+This applies equally to completion items (23a, 23b1–23b4) and expansion proposals (25a–29).
