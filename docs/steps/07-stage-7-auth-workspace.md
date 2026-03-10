@@ -185,14 +185,14 @@ CloudCode реализует только Stage 7:
 
 ## 9) Review checklist (для self-review перед PR)
 
-- [ ] Изменения не вышли за scope Stage 7
-- [ ] `resolveWorkspace()` проверяет membership через `WorkspaceMember`
-- [ ] Возвращается `403` для чужого workspace
-- [ ] Приватные роуты защищены `authenticate`
-- [ ] `POST /runs/stop-all` проверен и защищён
-- [ ] Логирование безопасно (нет секретов/JWT/passwordHash)
-- [ ] Verification шаги воспроизводимы и приложены в PR
-- [ ] Handover notes для Stage 8 добавлены
+- [x] Изменения не вышли за scope Stage 7
+- [x] `resolveWorkspace()` проверяет membership через `WorkspaceMember`
+- [x] Возвращается `403` для чужого workspace
+- [x] Приватные роуты защищены `authenticate`
+- [x] `POST /runs/stop-all` проверен и защищён
+- [x] Логирование безопасно (нет секретов/JWT/passwordHash)
+- [x] Verification шаги воспроизводимы и приложены в PR
+- [x] Handover notes для Stage 8 добавлены
 
 ## 10) Exit criteria
 
@@ -203,13 +203,117 @@ Stage 7 считается закрытым, если:
 - документация обновлена в том же PR;
 - есть handover для Stage 8.
 
-## 11) Minimal notes for Stage 8 handover
+## 11) Verification results
+
+Проверки выполнены в рамках stage:
+
+### Build checks
+- `pnpm --filter @botmarketplace/api build` (tsc): **pass**
+- `cd apps/web && npm run build` (next build): **pass**
+- Prisma schema: `WorkspaceMember @@unique([workspaceId, userId])` — membership index в порядке
+
+### Route audit (все приватные роуты)
+
+| Route group | authenticate | resolveWorkspace | Status |
+|---|---|---|---|
+| `/strategies/*` | ✅ | ✅ | closed |
+| `/bots/*` | ✅ | ✅ | closed |
+| `/runs/*` incl. stop-all, reconcile | ✅ | ✅ | closed |
+| `/runs/:runId/intents*` | ✅ | ✅ | closed |
+| `/lab/*` | ✅ | ✅ | closed |
+| `/lab/datasets*` | ✅ | ✅ | closed |
+| `/exchanges/*` | ✅ | ✅ | closed |
+| `/terminal/orders*` | ✅ | ✅ | closed |
+| `/ai/chat`, `/ai/plan`, `/ai/execute` | ✅ | ✅ | closed |
+| `/user/preferences` | ✅ | user-scoped, no workspace | correct |
+| `/users/me` | ✅ | user-scoped, no workspace | correct |
+| `/workspaces` (list/create) | ✅ | user-scoped (meta) | correct |
+| `/auth/me` | ✅ | user-scoped | correct |
+| `/healthz`, `/readyz` | public | public | intentional |
+| `/auth/register`, `/auth/login` | public | public | intentional |
+| `/terminal/symbols/tickers/ticker/candles` | public | public Bybit data | intentional |
+| `/ai/status` | public | UI probe | intentional |
+| `/demo/backtest` | public | in-memory demo, no DB write | intentional |
+
+### Membership enforcement verified (resolveWorkspace — `apps/api/src/lib/workspace.ts`)
+
+```
+resolveWorkspace() behaviour:
+  1. X-Workspace-Id header missing → 400
+  2. JWT not present / invalid → 401 (from authenticate hook)
+  3. Authenticated but not member of workspace → 403
+  4. Authenticated and member → returns workspace, logs { userId, workspaceId }
+```
+
+### Logging safety verified
+
+`resolveWorkspace()` logs exactly:
+```
+warn  { userId, workspaceId }  "workspace access denied: not a member"
+info  { userId, workspaceId }  "workspace resolved"
+```
+
+No passwordHash, no raw JWT, no API keys, no encryptedSecret in any log statement across all routes.
+
+### Verification commands (two-user scenario)
+
+```bash
+BASE=http://localhost:3001/api/v1
+
+# 1. Register user A
+A=$(curl -s -X POST $BASE/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"email":"userA@test.com","password":"TestPass1!"}')
+TOKEN_A=$(echo $A | grep -o '"accessToken":"[^"]*"' | cut -d'"' -f4)
+WS_A=$(echo $A | grep -o '"workspaceId":"[^"]*"' | cut -d'"' -f4)
+
+# 2. Register user B
+B=$(curl -s -X POST $BASE/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"email":"userB@test.com","password":"TestPass1!"}')
+TOKEN_B=$(echo $B | grep -o '"accessToken":"[^"]*"' | cut -d'"' -f4)
+WS_B=$(echo $B | grep -o '"workspaceId":"[^"]*"' | cut -d'"' -f4)
+
+# 3. No auth → 401
+curl -s -o /dev/null -w "%{http_code}" $BASE/strategies
+# expected: 401
+
+# 4. User A with workspace B → 403
+curl -s -o /dev/null -w "%{http_code}" $BASE/strategies \
+  -H "Authorization: Bearer $TOKEN_A" \
+  -H "X-Workspace-Id: $WS_B"
+# expected: 403
+
+# 5. User A with own workspace → 200
+curl -s -o /dev/null -w "%{http_code}" $BASE/strategies \
+  -H "Authorization: Bearer $TOKEN_A" \
+  -H "X-Workspace-Id: $WS_A"
+# expected: 200
+
+# 6. POST /runs/stop-all without auth → 401
+curl -s -o /dev/null -w "%{http_code}" -X POST $BASE/runs/stop-all
+# expected: 401
+```
+
+## 12) Deferred auth items (NOT in Stage 7 scope)
+
+These items are explicitly deferred per docs/22-productization-v2-plan.md §6:
+
+| Item | Deferred to |
+|---|---|
+| Refresh token / token rotation | Not in Productization v2 (deferred beyond Stage 14 unless separately decided) |
+| Logout / token revoke | Same as above |
+| RBAC detail (OWNER vs ADMIN vs MEMBER permissions) | Not in Productization v2 |
+| Multi-workspace switching UI | Not in Productization v2 |
+| Worker secret enforcement (verifyWorkerSecret is defined but unused — in-process worker bypasses HTTP) | Future stage if external worker is introduced |
+
+## 13) Minimal notes for Stage 8 handover
 
 Stage 8 получает готовый паттерн:
 - `authenticate` + `resolveWorkspace()` membership enforcement
 - этот паттерн должен применяться ко всем новым exchange-роутам
 
 Что важно заранее:
-- добавить env-переменную `SECRET_ENCRYPTION_KEY` (до начала Stage 8)
-- API-контракт Stage 8: `encryptedSecret` никогда не возвращается в ответах
-- новые exchange endpoints должны сразу наследовать Stage 7 security pattern
+- `SECRET_ENCRYPTION_KEY` env-переменная уже используется в Stage 8 exchange routes
+- API-контракт Stage 8: `encryptedSecret` никогда не возвращается в ответах (уже реализовано через `safeView()`)
+- Stage 8 exchange routes уже наследуют Stage 7 security pattern (проверено в audit выше)
