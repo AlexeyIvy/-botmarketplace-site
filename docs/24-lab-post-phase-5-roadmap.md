@@ -81,6 +81,8 @@ This gap does **not** block Phase 6. Phase 6 depends on:
 
 Neither dependency requires Phase 2B2 completion. Phase 2B2 is recommended before Phase 6 work begins, but it is not a hard gate. It should be tracked as a standalone cleanup item, not treated as a Phase 6 prerequisite.
 
+**Phase 2B2 cleanup status:** Phase 2B2 (OHLCV chart via `lightweight-charts`) remains a non-blocking verification item. It is not part of the Completion layer, not part of the Expansion layer, and not a dependency for any task pack in §9. It may be executed as a standalone cleanup only if it becomes a practical UX blocker (e.g., users cannot evaluate dataset quality without the chart). If executed, no roadmap revision is required — apply the standard acceptance checklist from `docs/22 §7`.
+
 ### 2.2 Block library — current vs spec'd
 
 The compiler currently handles 9 blocks. `docs/23 §6.3` defines the full intended library.
@@ -248,7 +250,11 @@ The full Phase 6 scope is significant. If any sub-phase grows beyond a focused, 
 | `23b3` | Private data blocks + permission UX (`ordersHistory`, `executionsHistory`, ExchangeConnection gating) | 23b2 |
 | `23b4` | `annotate_event` block + advanced diagnostics polish | 23b3 |
 
-**Splitting rule:** If implementing any single 23b sub-pack requires touching more than 3 files in the frontend or more than 1 new backend endpoint, consider extracting that piece into its own PR rather than expanding scope. One PR = one focused deliverable.
+**Scope boundary — 23b1 vs task pack 26:**
+`23b1` delivers a **minimal run-level provenance block** only — enough to support the compare runs UX: graph version reference, dataset identifier, and compile timestamp displayed alongside run metrics. It does not include version labels, baseline designation, or the full lineage chain.
+`26` (Governance / provenance, §8.2) builds the full governance model on top of this: version labels/tags, baseline promotion, promote workflow, and the complete `StrategyGraphVersion → StrategyVersion → BacktestResult` lineage display. Do not expand 23b1 to include governance features — that work belongs exclusively to task pack 26.
+
+**Split rule:** The primary criterion is **one focused reviewable concern per task pack**. If a sub-pack spans multiple independent concerns that could be reviewed and reverted separately, it must be split. Warning signals (heuristics, not hard gates): touching more than 3 files in the frontend, adding more than 1 new backend endpoint, or a PR description requiring more than 2–3 sentences to summarize. The heuristics support the primary criterion — they do not replace it.
 
 **Task pack:** `docs/steps/23b-lab-phase6.md` (with recommended 23b1–23b4 split documented inside)
 
@@ -296,6 +302,8 @@ Priority order within the expansion layer:
 **Task packs to create:** `docs/steps/25a-lab-block-tier2-indicators.md`, `docs/steps/25b-lab-block-tier2-risk.md`
 
 ### 8.2 Governance / provenance
+
+**Relationship to 23b1:** Task pack 23b1 delivers a minimal provenance block (graph version reference + dataset identifier + compile timestamp) as part of the compare runs UX. Task pack 26 does not reimplement that — it adds the governance model on top: version labels, baseline, promote, and full lineage display. The boundary is explicit: 23b1 = minimal run context; 26 = research governance layer.
 
 **Context:** Once compare runs exist (23b1), users need a way to track which version of a graph produced which result, and to explicitly label important versions. Without this layer, the research workflow degrades into an unstructured list of runs with no narrative.
 
@@ -395,7 +403,7 @@ Priority order within the expansion layer:
 - Compare/provenance workflows validated as useful by actual usage
 - Schema decision documented in `docs/07-data-model.md` and reviewed
 
-**Task pack:** `docs/steps/26-lab-multi-dataset.md` — do not create until all gate conditions are met.
+**Task pack:** `docs/steps/30-lab-multi-dataset.md` — do not create until all gate conditions are met. (Numbered 30 to avoid conflict with task pack 26 = governance/provenance.)
 
 ### 8.7 DSL ↔ graph bidirectional view
 
@@ -438,6 +446,34 @@ Priority order within the expansion layer:
 
 **Granularity principle:** Each task pack above targets one focused concern. The 23b split ensures Phase 6 is never attempted as a single monolithic PR. The 25a/25b split separates compiler concerns (indicators + logic) from risk model concerns. Do not merge adjacent task packs to "save time" — this defeats the purpose of the slicing.
 
+### Execution rules
+
+**Single-executor default:** For a single executor (including Claude Code), all task packs are sequential. No task pack starts before its listed dependency is fully satisfied. Any mention of parallel execution in this document applies only to multi-person team execution and must be explicitly authorized.
+
+**Dependency semantics:** A dependency listed in the "Depends on" column above is satisfied only when the dependent task pack is:
+- Merged to main
+- Acceptance checklist closed (all items verified)
+- Documentation updated in the same PR or confirmed current
+
+Starting a task pack while its dependency is only partially complete is not permitted.
+
+**Completion layer Definition of Done:** The Completion layer is closed only when all five task packs are accepted:
+- 23a accepted
+- 23b1 accepted
+- 23b2 accepted
+- 23b3 accepted
+- 23b4 accepted
+
+The Expansion layer (§8) must not start until all five are closed.
+
+**Task-pack naming discipline:**
+- Numeric order defined in this document is authoritative — do not reorder task packs
+- Do not merge adjacent task packs into a single PR to save time
+- Do not rename task packs ad hoc — use the roadmap number consistently in step docs, commits, and PRs
+- If a task pack needs to be further split, append a letter suffix (e.g., `23b2a` / `23b2b`) and update this roadmap before proceeding
+
+**Split rule (applies to all task packs):** The primary criterion is **one focused reviewable concern per task pack**. Warning signals (heuristics, not hard gates): touching more than 3 files in the frontend, adding more than 1 new backend endpoint, or a PR description requiring more than 2–3 sentences to summarize. The heuristics support the primary criterion — they do not replace it.
+
 ---
 
 ## 10. Overlap analysis: draft topics vs existing docs
@@ -470,7 +506,7 @@ Priority order within the expansion layer:
 - **Next task pack to create:** `docs/steps/23a-lab-phase3a-graph-persistence.md`
 - **No other proposal in this document should start before `docs/steps/23a` is accepted.**
 - After `docs/steps/23a` is accepted: create `docs/steps/23b-lab-phase6.md`, structured around the 23b1–23b4 split.
-- After 23b4 is accepted: expansion layer begins, starting with 25a (block library) and 26 (governance/provenance) — these can be parallelized if team capacity allows.
+- After 23b4 is accepted: expansion layer begins. For a single executor, start with 25a (block library), then 26 (governance/provenance) sequentially. Parallelization of 25a and 26 is permitted only under multi-person team execution — see execution rules in §9.
 - Task packs 27, 28, 29 follow in order per §9.
 - Multi-dataset binding (§8.6) and DSL↔graph (§8.7) are blocked on their respective gate conditions.
 
