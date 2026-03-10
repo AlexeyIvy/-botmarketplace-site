@@ -203,3 +203,64 @@ await prisma.exchangeConnection.update({
 
 Нет отклонений от заявленного scope Stage 8.
 `apiKey` хранится plain (по условию задачи: "apiKey можно хранить как обычное поле (demo-first)").
+
+---
+
+## 9) VPS Deploy Results — 2026-03-10
+
+### Environment
+- Node: v20.20.0
+- pnpm: 10.29.3
+- OS: Ubuntu 24.04, kernel 6.8.0-100-generic
+- Service manager: systemd
+- PostgreSQL: accessible
+- SECRET_ENCRYPTION_KEY: set (64 hex-символа, `3717d1e5…`)
+
+### Branch & Commit
+- HEAD SHA: `c2f4298cf2a263a4688f66aabfd42340adf98a1b` (merge commit)
+- Stage 8 PR SHA: `6b5a802` ✅
+- Diff vs Stage 7 (09bdd31): 3 файла (web/next-env.d.ts, exchanges/page.tsx, docs)
+- API-часть (crypto.ts, exchanges.ts, migration, schema): присутствовала ранее ✅
+
+### Build Results
+- pnpm install: success
+- db:migrate: `20260221a_add_exchange_connections` — already applied ✅
+- db:generate: success (Prisma Client v6.19.2)
+- TypeScript API: 0 errors
+- TypeScript Web: 0 errors
+- API build (dist/server.js): success
+- next build: success — 16 страниц, `/exchanges` 2.63 kB
+- Регрессия Phase 4/5: BacktestForm ✅ graphToDSL ✅
+
+### Security Smoke Tests — 19/19 ✅
+
+| Test | Expected | Actual | |
+|------|----------|--------|-|
+| GET /exchanges (no auth) | 401 | 401 | ✅ |
+| POST /exchanges (no auth) | 401 | 401 | ✅ |
+| POST /exchanges/:id/test (no auth) | 401 | 401 | ✅ |
+| GET /exchanges A → WS_A (own) | 200 | 200 | ✅ |
+| GET /exchanges A → WS_B (cross) | 403 | 403 | ✅ |
+| POST /exchanges A → WS_A | 201 | 201 | ✅ |
+| POST /exchanges A → WS_B (cross) | 403 | 403 | ✅ |
+| GET /exchanges/:id A → WS_A | 200 | 200 | ✅ |
+| GET /exchanges/:id B → WS_B (cross, другой owner) | 404 | 404 | ✅ |
+| POST /exchanges/:id/test | 200 | 200, status=CONNECTED | ✅ |
+| DELETE /exchanges/:id | 204 | 204 | ✅ |
+| safeView (no apiKey/secret in response) | absent | CLEAN | ✅ |
+| GET /strategies A → WS_B (Stage 7 regression) | 403 | 403 | ✅ |
+| GET /strategies A → WS_A | 200 | 200 | ✅ |
+| GET /lab/strategy-versions | 200 | 200 | ✅ |
+| GET /lab/backtests | 200 | 200 | ✅ |
+| GET /terminal/ticker (public) | 200 | 200 | ✅ |
+| Web /exchanges | 200 | 200 | ✅ |
+| API healthz | {"status":"ok"} | ok | ✅ |
+
+### Final Judgment
+- Stage 8 deployed: **yes**
+- SECRET_ENCRYPTION_KEY loaded (no 500): yes
+- safeView — apiKey/encryptedSecret не утекают: yes
+- Cross-workspace blocked (403): yes
+- Stage 7 regression: none
+- Phase 5 regression: none
+- Ready for Stage 9: **yes**
