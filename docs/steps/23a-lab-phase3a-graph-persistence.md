@@ -1,6 +1,6 @@
 # 23a — Phase 3A: Graph Persistence Completion
 
-## Status: PLANNED → IN PROGRESS
+## Status: COMPLETE
 
 ---
 
@@ -167,4 +167,4 @@ Phase 3A is complete when:
 5. No regressions in existing graph/build/test/data flows
 6. Typecheck and lint pass
 
-**Commit SHA:** (TBD — filled after implementation)
+**Commit SHA:** `0197ec3`
