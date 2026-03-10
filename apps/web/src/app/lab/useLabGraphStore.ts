@@ -70,6 +70,12 @@ export interface LabGraphState {
    * NOT tracked in undo history.
    */
   _hydrating: boolean;
+  /**
+   * Phase 3A corrective: true when graph has been mutated since the last successful compile.
+   * Drives the stale_against_last_compile save state after the next autosave.
+   * NOT tracked in undo history.
+   */
+  _graphChangedSinceCompile: boolean;
 }
 
 interface LabGraphActions {
@@ -129,6 +135,7 @@ const initialState: LabGraphState = {
   serverIssues: [],
   saveState: "clean",
   _hydrating: false,
+  _graphChangedSinceCompile: false,
 };
 
 // ---------------------------------------------------------------------------
@@ -191,7 +198,7 @@ export const useLabGraphStore = create<LabGraphState & LabGraphActions>()(
         }));
         scheduleValidation(get().runValidation);
         if (!get()._hydrating) {
-          set({ saveState: "dirty" });
+          set({ saveState: "dirty", _graphChangedSinceCompile: true });
           scheduleAutoSave(get().saveGraphNow);
         }
       },
@@ -202,7 +209,7 @@ export const useLabGraphStore = create<LabGraphState & LabGraphActions>()(
         }));
         scheduleValidation(get().runValidation);
         if (!get()._hydrating) {
-          set({ saveState: "dirty" });
+          set({ saveState: "dirty", _graphChangedSinceCompile: true });
           scheduleAutoSave(get().saveGraphNow);
         }
       },
@@ -210,7 +217,7 @@ export const useLabGraphStore = create<LabGraphState & LabGraphActions>()(
       setNodes: (nodes) => {
         set({ nodes });
         if (!get()._hydrating) {
-          set({ saveState: "dirty" });
+          set({ saveState: "dirty", _graphChangedSinceCompile: true });
           scheduleAutoSave(get().saveGraphNow);
         }
       },
@@ -219,7 +226,7 @@ export const useLabGraphStore = create<LabGraphState & LabGraphActions>()(
         set({ edges });
         scheduleValidation(get().runValidation);
         if (!get()._hydrating) {
-          set({ saveState: "dirty" });
+          set({ saveState: "dirty", _graphChangedSinceCompile: true });
           scheduleAutoSave(get().saveGraphNow);
         }
       },
@@ -244,7 +251,7 @@ export const useLabGraphStore = create<LabGraphState & LabGraphActions>()(
         set((state) => ({ nodes: [...state.nodes, newNode] }));
         scheduleValidation(get().runValidation);
         if (!get()._hydrating) {
-          set({ saveState: "dirty" });
+          set({ saveState: "dirty", _graphChangedSinceCompile: true });
           scheduleAutoSave(get().saveGraphNow);
         }
       },
@@ -262,7 +269,7 @@ export const useLabGraphStore = create<LabGraphState & LabGraphActions>()(
         }));
         scheduleValidation(get().runValidation);
         if (!get()._hydrating) {
-          set({ saveState: "dirty" });
+          set({ saveState: "dirty", _graphChangedSinceCompile: true });
           scheduleAutoSave(get().saveGraphNow);
         }
       },
@@ -282,11 +289,19 @@ export const useLabGraphStore = create<LabGraphState & LabGraphActions>()(
       // Phase 4 — compile state setters
       setCompileState: (state) => set({ compileState: state }),
       setLastCompileResult: (result) => {
-        set({ lastCompileResult: result });
-        // After a successful compile, mark graph as stale-against-last-compile
-        // only when it subsequently becomes dirty again (handled in mutations above).
-        // On compile success, transition save state: if currently clean, mark
-        // stale_against_last_compile will be set on next mutation. No change needed here.
+        // The compile endpoint implicitly saves the graph on the backend.
+        // Cancel any pending autosave, reset compile-divergence flag, and mark clean.
+        // Future mutations will set _graphChangedSinceCompile=true, and the next
+        // autosave will transition to stale_against_last_compile.
+        if (_saveTimer !== null) {
+          clearTimeout(_saveTimer);
+          _saveTimer = null;
+        }
+        set({
+          lastCompileResult: result,
+          saveState: "clean",
+          _graphChangedSinceCompile: false,
+        });
       },
       setServerIssues: (issues) => set({ serverIssues: issues }),
 
@@ -332,8 +347,8 @@ export const useLabGraphStore = create<LabGraphState & LabGraphActions>()(
       saveGraphNow: async () => {
         const { activeGraphId, nodes, edges, saveState } = get();
         if (!activeGraphId) return false;
-        // Nothing to save if already clean
-        if (saveState === "clean") return true;
+        // Already persisted — both clean and stale_against_last_compile mean graph is saved in DB
+        if (saveState === "clean" || saveState === "stale_against_last_compile") return true;
 
         set({ saveState: "saving" });
         try {
@@ -347,7 +362,15 @@ export const useLabGraphStore = create<LabGraphState & LabGraphActions>()(
             set({ saveState: "save_error" });
             return false;
           }
-          set({ saveState: "clean" });
+          // If graph has been mutated since last compile → stale_against_last_compile;
+          // otherwise clean. This is how stale_against_last_compile is actually reached.
+          const { lastCompileResult, _graphChangedSinceCompile } = get();
+          set({
+            saveState:
+              lastCompileResult !== null && _graphChangedSinceCompile
+                ? "stale_against_last_compile"
+                : "clean",
+          });
           return true;
         } catch {
           set({ saveState: "save_error" });

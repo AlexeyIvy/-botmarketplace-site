@@ -374,7 +374,8 @@ function ValidationDrawer({ issues, validationState, serverIssues = [] }: Valida
 
 interface PersistedGraph {
   id: string;
-  graphJson: { nodes: LabNode[]; edges: LabEdge[] };
+  name: string;
+  graphJson: { nodes: LabNode[]; edges: LabEdge[] } | null;
 }
 
 function LabBuildCanvas() {
@@ -393,11 +394,14 @@ function LabBuildCanvas() {
   const lastCompileResult = useLabGraphStore((s) => s.lastCompileResult);
   const serverIssues = useLabGraphStore((s) => s.serverIssues);
   const [buildView, setBuildView] = useState<"canvas" | "dsl">("canvas");
-  // Phase 3A: graph hydration
+  // Phase 3A: graph hydration + selector
   const activeGraphId = useLabGraphStore((s) => s.activeGraphId);
   const hydrateGraph = useLabGraphStore((s) => s.hydrateGraph);
+  const saveGraphNow = useLabGraphStore((s) => s.saveGraphNow);
+  const saveState = useLabGraphStore((s) => s.saveState);
   const [isInitializing, setIsInitializing] = useState(false);
   const [initError, setInitError] = useState<string | null>(null);
+  const [availableGraphs, setAvailableGraphs] = useState<PersistedGraph[]>([]);
   const initRanRef = useRef(false);
 
   const { undo, redo } = useLabGraphStore.temporal.getState();
@@ -431,10 +435,12 @@ function LabBuildCanvas() {
         const graphs = (await listRes.json()) as PersistedGraph[];
 
         let graph: PersistedGraph;
+        let allGraphs: PersistedGraph[];
 
         if (graphs.length > 0) {
           // Step 2a: hydrate from most recent graph
           graph = graphs[0];
+          allGraphs = graphs;
         } else {
           // Step 2b: create first draft
           const createRes = await fetch("/api/v1/lab/graphs", {
@@ -448,11 +454,13 @@ function LabBuildCanvas() {
           });
           if (!createRes.ok) throw new Error(`Failed to create graph (${createRes.status})`);
           graph = (await createRes.json()) as PersistedGraph;
+          allGraphs = [graph];
         }
 
         if (cancelled) return;
 
-        // Step 3: hydrate Zustand (suppresses autosave)
+        // Step 3: store available graphs for selector, hydrate Zustand (suppresses autosave)
+        setAvailableGraphs(allGraphs);
         const gj = graph.graphJson ?? { nodes: [], edges: [] };
         hydrateGraph(graph.id, gj.nodes ?? [], gj.edges ?? []);
       } catch (err) {
@@ -467,6 +475,18 @@ function LabBuildCanvas() {
     return () => { cancelled = true; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Phase 3A corrective: minimal graph selector — flush + hydrate on switch
+  const handleSelectGraph = useCallback(async (targetId: string) => {
+    if (!targetId || targetId === activeGraphId) return;
+    const target = availableGraphs.find((g) => g.id === targetId);
+    if (!target) return;
+    // Flush current dirty state before switching
+    await saveGraphNow();
+    // Hydrate the selected graph
+    const gj = target.graphJson ?? { nodes: [], edges: [] };
+    hydrateGraph(target.id, gj.nodes ?? [], gj.edges ?? []);
+  }, [activeGraphId, availableGraphs, saveGraphNow, hydrateGraph]);
 
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
   const showToast = useCallback((text: string) => {
@@ -742,6 +762,22 @@ function LabBuildCanvas() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", width: "100%", height: "100%", overflow: "hidden" }}>
+      {/* Phase 3A corrective: Graph selector — shown only when workspace has multiple graphs */}
+      {availableGraphs.length > 1 && (
+        <div style={graphSelectorBarStyle}>
+          <span style={{ fontSize: 11, color: "rgba(255,255,255,0.35)", flexShrink: 0 }}>Graph:</span>
+          <select
+            value={activeGraphId ?? ""}
+            onChange={(e) => { void handleSelectGraph(e.target.value); }}
+            disabled={saveState === "saving" || isInitializing}
+            style={graphSelectorStyle}
+          >
+            {availableGraphs.map((g) => (
+              <option key={g.id} value={g.id}>{g.name}</option>
+            ))}
+          </select>
+        </div>
+      )}
       {/* Phase 4B: Build view tab switcher — Canvas | DSL Preview */}
       <div style={buildViewTabBarStyle}>
         <button
@@ -913,6 +949,29 @@ const minimapStyle: React.CSSProperties = {
   background: "rgba(255,255,255,0.04)",
   border: "1px solid rgba(255,255,255,0.1)",
   borderRadius: 6,
+};
+
+// Phase 3A corrective: graph selector bar
+const graphSelectorBarStyle: React.CSSProperties = {
+  display: "flex",
+  alignItems: "center",
+  gap: 8,
+  padding: "4px 10px",
+  borderBottom: "1px solid rgba(255,255,255,0.06)",
+  background: "rgba(8,12,18,0.95)",
+  flexShrink: 0,
+};
+
+const graphSelectorStyle: React.CSSProperties = {
+  background: "rgba(255,255,255,0.06)",
+  border: "1px solid rgba(255,255,255,0.12)",
+  borderRadius: 4,
+  color: "rgba(255,255,255,0.8)",
+  fontSize: 12,
+  padding: "2px 6px",
+  fontFamily: "inherit",
+  cursor: "pointer",
+  outline: "none",
 };
 
 // Phase 4B: Build view tab bar (Canvas | DSL Preview)

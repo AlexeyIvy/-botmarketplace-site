@@ -124,19 +124,19 @@ function LabContextBar({ activeTab }: { activeTab: TabId }) {
 
   // Phase 3A: save state label + color (independent of compile/validation)
   const saveLabel =
-    saveState === "clean"                     ? "Saved" :
-    saveState === "dirty"                     ? "Unsaved" :
-    saveState === "saving"                    ? "Saving…" :
-    saveState === "save_error"                ? "Save Error" :
-    saveState === "stale_against_last_compile" ? "Saved*" :
+    saveState === "clean"                      ? "Saved" :
+    saveState === "dirty"                      ? "Unsaved" :
+    saveState === "saving"                     ? "Saving…" :
+    saveState === "save_error"                 ? "Save Error" :
+    saveState === "stale_against_last_compile" ? "Saved · recompile needed" :
     "—";
 
   const saveLabelColor =
-    saveState === "clean"                     ? "#52A97C" :
-    saveState === "dirty"                     ? "rgba(255,255,255,0.45)" :
-    saveState === "saving"                    ? "#FBBF24" :
-    saveState === "save_error"                ? "#D44C4C" :
-    saveState === "stale_against_last_compile" ? "rgba(255,255,255,0.45)" :
+    saveState === "clean"                      ? "#52A97C" :
+    saveState === "dirty"                      ? "rgba(255,255,255,0.45)" :
+    saveState === "saving"                     ? "#FBBF24" :
+    saveState === "save_error"                 ? "#D44C4C" :
+    saveState === "stale_against_last_compile" ? "#FBBF24" :
     "rgba(255,255,255,0.25)";
 
   return (
