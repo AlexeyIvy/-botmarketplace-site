@@ -68,6 +68,11 @@ interface CreateGraphBody {
   graphJson: GraphJson;
 }
 
+interface PatchGraphBody {
+  graphJson?: GraphJson;
+  name?: string;
+}
+
 interface CompileGraphBody {
   graphJson: GraphJson;
   /** Market symbol, e.g. "BTCUSDT" */
@@ -147,6 +152,49 @@ export async function labRoutes(app: FastifyInstance) {
       return problem(reply, 404, "Not Found", "Graph not found");
     }
     return reply.send(graph);
+  });
+
+  // ── PATCH /lab/graphs/:id ── update draft graph (auto-save) ─────────────
+  // Phase 3A: debounced auto-save from frontend calls this endpoint.
+  // Only graphJson and name may be updated; workspaceId is protected.
+  app.patch<{ Params: { id: string }; Body: PatchGraphBody }>("/lab/graphs/:id", {
+    config: { rateLimit: { max: 60, timeWindow: "1 minute" } },
+    onRequest: [app.authenticate],
+  }, async (request, reply) => {
+    const workspace = await resolveWorkspace(request, reply);
+    if (!workspace) return;
+
+    const graph = await prisma.strategyGraph.findUnique({
+      where: { id: request.params.id },
+    });
+    if (!graph || graph.workspaceId !== workspace.id) {
+      return problem(reply, 404, "Not Found", "Graph not found");
+    }
+
+    const { graphJson, name } = request.body ?? {};
+
+    if (graphJson !== undefined && (typeof graphJson !== "object" || graphJson === null)) {
+      return problem(reply, 400, "Validation Error", "graphJson must be an object");
+    }
+    if (name !== undefined && (typeof name !== "string" || name.trim().length === 0)) {
+      return problem(reply, 400, "Validation Error", "name must be a non-empty string");
+    }
+
+    const updateData: { graphJson?: object; name?: string } = {};
+    if (graphJson !== undefined) updateData.graphJson = graphJson as object;
+    if (name !== undefined) updateData.name = name.trim();
+
+    if (Object.keys(updateData).length === 0) {
+      return problem(reply, 400, "Validation Error", "No updatable fields provided");
+    }
+
+    const updated = await prisma.strategyGraph.update({
+      where: { id: graph.id },
+      data: updateData,
+      select: GRAPH_SELECT,
+    });
+
+    return reply.send(updated);
   });
 
   // ── POST /lab/graphs/:id/compile ── compile graph → StrategyVersion ───────

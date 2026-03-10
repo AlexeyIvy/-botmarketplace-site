@@ -13,6 +13,21 @@ export type ValidationState = "idle" | "ok" | "warning" | "error" | "stale";
 export type RunState = "idle" | "running" | "done" | "failed";
 export type CompileState = "idle" | "compiling" | "success" | "error";
 
+/**
+ * Phase 3A: Persistence lifecycle state.
+ * Invariants (docs/24 §4):
+ *   - saveState !== validationState (independent concerns)
+ *   - saveState !== compileState (independent concerns)
+ *   - dirty graph != invalid graph
+ *   - dirty graph != non-compilable graph
+ */
+export type SaveState =
+  | "clean"                     // persisted; matches DB
+  | "dirty"                     // local mutations not yet saved
+  | "saving"                    // PATCH in-flight
+  | "save_error"                // last PATCH failed
+  | "stale_against_last_compile"; // saved but graph changed since last compile
+
 /** Issue returned by the server compile endpoint */
 export interface ServerCompileIssue {
   severity: "error" | "warning";
@@ -47,6 +62,14 @@ export interface LabGraphState {
   lastCompileResult: CompileResult | null;
   /** Phase 4: server-side issues from last compile attempt (mapped to nodes) */
   serverIssues: ServerCompileIssue[];
+  /** Phase 3A: persistence lifecycle state (independent of validation/compile) */
+  saveState: SaveState;
+  /**
+   * Phase 3A: true while hydrateGraph is running.
+   * Prevents mutations during hydration from triggering autosave.
+   * NOT tracked in undo history.
+   */
+  _hydrating: boolean;
 }
 
 interface LabGraphActions {
@@ -73,6 +96,19 @@ interface LabGraphActions {
   setCompileState: (state: CompileState) => void;
   setLastCompileResult: (result: CompileResult | null) => void;
   setServerIssues: (issues: ServerCompileIssue[]) => void;
+  // Phase 3A: persistence actions
+  setSaveState: (state: SaveState) => void;
+  /**
+   * Hydrate the store from a persisted graph record.
+   * Sets _hydrating = true, restores nodes/edges/activeGraphId,
+   * then sets _hydrating = false. Does NOT schedule autosave.
+   */
+  hydrateGraph: (graphId: string, nodes: LabNode[], edges: LabEdge[]) => void;
+  /**
+   * Flush current graph to backend immediately (used before graph switch).
+   * Returns true on success, false on failure.
+   */
+  saveGraphNow: () => Promise<boolean>;
 }
 
 // ---------------------------------------------------------------------------
@@ -91,6 +127,8 @@ const initialState: LabGraphState = {
   compileState: "idle",
   lastCompileResult: null,
   serverIssues: [],
+  saveState: "clean",
+  _hydrating: false,
 };
 
 // ---------------------------------------------------------------------------
@@ -103,24 +141,35 @@ function nextNodeId(): string {
 }
 
 // ---------------------------------------------------------------------------
-// Debounce timer — module-level ref for the 500ms validation debounce
-// Per §13.3: "debounced 500ms after last graph mutation"
+// Debounce timers — module-level refs
 // ---------------------------------------------------------------------------
 
+/** 500ms validation debounce — per §13.3 */
 let _validationTimer: ReturnType<typeof setTimeout> | null = null;
 
 function scheduleValidation(runValidationFn: () => void) {
-  if (_validationTimer !== null) {
-    clearTimeout(_validationTimer);
-  }
+  if (_validationTimer !== null) clearTimeout(_validationTimer);
   _validationTimer = setTimeout(() => {
     _validationTimer = null;
     runValidationFn();
   }, 500);
 }
 
+/** 1500ms auto-save debounce — Phase 3A */
+let _saveTimer: ReturnType<typeof setTimeout> | null = null;
+
+function scheduleAutoSave(saveNowFn: () => Promise<boolean>) {
+  if (_saveTimer !== null) clearTimeout(_saveTimer);
+  _saveTimer = setTimeout(() => {
+    _saveTimer = null;
+    saveNowFn().catch(() => {
+      // failure is reflected in saveState; no unhandled rejection
+    });
+  }, 1500);
+}
+
 // ---------------------------------------------------------------------------
-// Store — Phase 3A base + Phase 3B additions + Phase 3C validation
+// Store — Phase 3A base + Phase 3B additions + Phase 3C validation + Phase 3A persistence
 // zundo provides undo/redo history.
 // ---------------------------------------------------------------------------
 
@@ -134,12 +183,17 @@ export const useLabGraphStore = create<LabGraphState & LabGraphActions>()(
       setActiveGraphId: (id) => set({ activeGraphId: id }),
       setValidationState: (state) => set({ validationState: state }),
       setRunState: (state) => set({ runState: state }),
+      setSaveState: (state) => set({ saveState: state }),
 
       onNodesChange: (changes) => {
         set((state) => ({
           nodes: applyNodeChanges(changes, state.nodes),
         }));
         scheduleValidation(get().runValidation);
+        if (!get()._hydrating) {
+          set({ saveState: "dirty" });
+          scheduleAutoSave(get().saveGraphNow);
+        }
       },
 
       onEdgesChange: (changes) => {
@@ -147,12 +201,27 @@ export const useLabGraphStore = create<LabGraphState & LabGraphActions>()(
           edges: applyEdgeChanges(changes, state.edges),
         }));
         scheduleValidation(get().runValidation);
+        if (!get()._hydrating) {
+          set({ saveState: "dirty" });
+          scheduleAutoSave(get().saveGraphNow);
+        }
       },
 
-      setNodes: (nodes) => set({ nodes }),
+      setNodes: (nodes) => {
+        set({ nodes });
+        if (!get()._hydrating) {
+          set({ saveState: "dirty" });
+          scheduleAutoSave(get().saveGraphNow);
+        }
+      },
+
       setEdges: (edges) => {
         set({ edges });
         scheduleValidation(get().runValidation);
+        if (!get()._hydrating) {
+          set({ saveState: "dirty" });
+          scheduleAutoSave(get().saveGraphNow);
+        }
       },
 
       // Phase 3B — add block node to canvas
@@ -174,6 +243,10 @@ export const useLabGraphStore = create<LabGraphState & LabGraphActions>()(
 
         set((state) => ({ nodes: [...state.nodes, newNode] }));
         scheduleValidation(get().runValidation);
+        if (!get()._hydrating) {
+          set({ saveState: "dirty" });
+          scheduleAutoSave(get().saveGraphNow);
+        }
       },
 
       // Phase 3B — update single param on a node
@@ -188,6 +261,10 @@ export const useLabGraphStore = create<LabGraphState & LabGraphActions>()(
           }),
         }));
         scheduleValidation(get().runValidation);
+        if (!get()._hydrating) {
+          set({ saveState: "dirty" });
+          scheduleAutoSave(get().saveGraphNow);
+        }
       },
 
       // Phase 3B — mark direct target of removed edge as stale
@@ -199,11 +276,18 @@ export const useLabGraphStore = create<LabGraphState & LabGraphActions>()(
             return { ...n, data: { ...n.data, isStale: true } };
           }),
         }));
+        // markDownstreamStale is a visual marker only; does not dirty the graph
       },
 
       // Phase 4 — compile state setters
       setCompileState: (state) => set({ compileState: state }),
-      setLastCompileResult: (result) => set({ lastCompileResult: result }),
+      setLastCompileResult: (result) => {
+        set({ lastCompileResult: result });
+        // After a successful compile, mark graph as stale-against-last-compile
+        // only when it subsequently becomes dirty again (handled in mutations above).
+        // On compile success, transition save state: if currently clean, mark
+        // stale_against_last_compile will be set on next mutation. No change needed here.
+      },
       setServerIssues: (issues) => set({ serverIssues: issues }),
 
       // Phase 3C — run validation synchronously, update issues + validationState
@@ -228,9 +312,51 @@ export const useLabGraphStore = create<LabGraphState & LabGraphActions>()(
           validationState: newValidationState,
         });
       },
+
+      // Phase 3A — hydrate from persisted graph record
+      // Sets _hydrating = true to suppress autosave during restore
+      hydrateGraph: (graphId, nodes, edges) => {
+        set({ _hydrating: true });
+        set({
+          activeGraphId: graphId,
+          nodes,
+          edges,
+          saveState: "clean",
+        });
+        set({ _hydrating: false });
+        // Run validation once after hydration (no autosave)
+        scheduleValidation(get().runValidation);
+      },
+
+      // Phase 3A — flush save immediately (called before graph switch or on demand)
+      saveGraphNow: async () => {
+        const { activeGraphId, nodes, edges, saveState } = get();
+        if (!activeGraphId) return false;
+        // Nothing to save if already clean
+        if (saveState === "clean") return true;
+
+        set({ saveState: "saving" });
+        try {
+          const res = await fetch(`/api/v1/lab/graphs/${activeGraphId}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ graphJson: { nodes, edges } }),
+          });
+          if (!res.ok) {
+            set({ saveState: "save_error" });
+            return false;
+          }
+          set({ saveState: "clean" });
+          return true;
+        } catch {
+          set({ saveState: "save_error" });
+          return false;
+        }
+      },
     }),
     // zundo: only track graph state for undo/redo history.
-    // validationIssues is excluded — it's derived state, not source of truth.
+    // saveState, _hydrating, validationIssues are excluded — derived or transient state.
     {
       partialize: (state) => ({
         activeGraphId: state.activeGraphId,

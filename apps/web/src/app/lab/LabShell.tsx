@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Group, Panel, Separator } from "react-resizable-panels";
 import { useLabGraphStore } from "./useLabGraphStore";
 
@@ -43,14 +43,26 @@ function LabContextBar({ activeTab }: { activeTab: TabId }) {
   const activeGraphId      = useLabGraphStore((s) => s.activeGraphId);
   const compileState       = useLabGraphStore((s) => s.compileState);
   const lastCompileResult  = useLabGraphStore((s) => s.lastCompileResult);
-  const setActiveGraphId   = useLabGraphStore((s) => s.setActiveGraphId);
   const setCompileState    = useLabGraphStore((s) => s.setCompileState);
   const setLastCompileResult = useLabGraphStore((s) => s.setLastCompileResult);
   const setServerIssues    = useLabGraphStore((s) => s.setServerIssues);
+  // Phase 3A: persistence state (independent of compile/validation)
+  const saveState          = useLabGraphStore((s) => s.saveState);
+
+  // Phase 3A: show toast when save_error transitions in
+  const [showSaveErrorToast, setShowSaveErrorToast] = useState(false);
+  useEffect(() => {
+    if (saveState === "save_error") {
+      setShowSaveErrorToast(true);
+      const t = setTimeout(() => setShowSaveErrorToast(false), 5000);
+      return () => clearTimeout(t);
+    }
+  }, [saveState]);
 
   const isOnBuildTab  = activeTab === "build";
   const graphIsEmpty  = nodes.length === 0;
-  const compileDisabled = !isOnBuildTab || graphIsEmpty || compileState === "compiling";
+  // Phase 3A: compile requires a persisted graph (activeGraphId set by mount hydration)
+  const compileDisabled = !isOnBuildTab || graphIsEmpty || compileState === "compiling" || !activeGraphId;
 
   const handleCompile = useCallback(async () => {
     if (compileDisabled) return;
@@ -60,22 +72,15 @@ function LabContextBar({ activeTab }: { activeTab: TabId }) {
     const graphJson = { nodes, edges };
 
     try {
-      // Step 1: ensure graph record exists
-      let graphId = activeGraphId;
+      // Phase 3A: activeGraphId must already be set by mount hydration.
+      // Compile is no longer the first persistence path.
+      const graphId = activeGraphId;
       if (!graphId) {
-        const createRes = await fetch("/api/v1/lab/graphs", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify({ name: "Untitled Graph", graphJson }),
-        });
-        if (!createRes.ok) throw new Error("Failed to create graph record");
-        const created = await createRes.json() as { id: string };
-        graphId = created.id;
-        setActiveGraphId(graphId);
+        setCompileState("error");
+        return;
       }
 
-      // Step 2: compile
+      // Compile against the persisted graph record
       const compileRes = await fetch(`/api/v1/lab/graphs/${graphId}/compile`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -104,7 +109,7 @@ function LabContextBar({ activeTab }: { activeTab: TabId }) {
     }
   }, [
     compileDisabled, nodes, edges, activeGraphId,
-    setActiveGraphId, setCompileState, setLastCompileResult, setServerIssues,
+    setCompileState, setLastCompileResult, setServerIssues,
   ]);
 
   const compileLabel =
@@ -116,6 +121,23 @@ function LabContextBar({ activeTab }: { activeTab: TabId }) {
     compileState === "success" ? "#52A97C" :
     compileState === "error"   ? "#D44C4C" :
     "#3B82F6";
+
+  // Phase 3A: save state label + color (independent of compile/validation)
+  const saveLabel =
+    saveState === "clean"                     ? "Saved" :
+    saveState === "dirty"                     ? "Unsaved" :
+    saveState === "saving"                    ? "Saving…" :
+    saveState === "save_error"                ? "Save Error" :
+    saveState === "stale_against_last_compile" ? "Saved*" :
+    "—";
+
+  const saveLabelColor =
+    saveState === "clean"                     ? "#52A97C" :
+    saveState === "dirty"                     ? "rgba(255,255,255,0.45)" :
+    saveState === "saving"                    ? "#FBBF24" :
+    saveState === "save_error"                ? "#D44C4C" :
+    saveState === "stale_against_last_compile" ? "rgba(255,255,255,0.45)" :
+    "rgba(255,255,255,0.25)";
 
   return (
     <div style={contextBarStyle}>
@@ -133,14 +155,51 @@ function LabContextBar({ activeTab }: { activeTab: TabId }) {
         />
         <CtxBadge label="Validation" value={validationState} dimmed />
         <CtxBadge label="Run"        value={runState}        dimmed />
+        {/* Phase 3A: save state badge — independent of compile/validation */}
+        {isOnBuildTab && activeGraphId && (
+          <div style={{ ...ctxBadgeStyle, borderColor: saveState === "save_error" ? "rgba(212,76,76,0.5)" : undefined }}>
+            <span style={{ color: "var(--text-secondary)", fontSize: 11 }}>Save:</span>
+            <span style={{ fontSize: 12, marginLeft: 4, color: saveLabelColor, fontWeight: saveState === "save_error" ? 600 : 400 }}>
+              {saveLabel}
+            </span>
+          </div>
+        )}
         {lastCompileResult && (
           <CtxBadge
-            label="Saved"
+            label="Compiled"
             value={`Strategy v${lastCompileResult.strategyVersion}`}
             dimmed={false}
           />
         )}
       </div>
+
+      {/* Phase 3A: save error toast (non-silent) */}
+      {showSaveErrorToast && (
+        <div style={{
+          position: "fixed",
+          top: 56,
+          right: 16,
+          zIndex: 9999,
+          background: "rgba(14,18,24,0.97)",
+          border: "1px solid rgba(212,76,76,0.5)",
+          borderRadius: 6,
+          padding: "7px 14px",
+          fontSize: 12,
+          color: "#D44C4C",
+          boxShadow: "0 4px 20px rgba(0,0,0,0.5)",
+          display: "flex",
+          alignItems: "center",
+          gap: 8,
+          fontFamily: "inherit",
+        }}>
+          <span>⚠</span>
+          <span>Auto-save failed — your changes may not be persisted.</span>
+          <button
+            onClick={() => setShowSaveErrorToast(false)}
+            style={{ background: "none", border: "none", cursor: "pointer", color: "rgba(255,255,255,0.3)", fontSize: 13, padding: 0, marginLeft: 4 }}
+          >✕</button>
+        </div>
+      )}
 
       {/* Phase 4B: Compile & Save button — only meaningful on Build tab */}
       {isOnBuildTab && (

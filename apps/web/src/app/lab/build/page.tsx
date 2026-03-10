@@ -368,6 +368,15 @@ function ValidationDrawer({ issues, validationState, serverIssues = [] }: Valida
 // Canvas inner — must be inside ReactFlowProvider + ConnectionContextProvider
 // ---------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------
+// Graph persistence types (Phase 3A)
+// ---------------------------------------------------------------------------
+
+interface PersistedGraph {
+  id: string;
+  graphJson: { nodes: LabNode[]; edges: LabEdge[] };
+}
+
 function LabBuildCanvas() {
   const nodes = useLabGraphStore((s) => s.nodes);
   const edges = useLabGraphStore((s) => s.edges);
@@ -384,6 +393,12 @@ function LabBuildCanvas() {
   const lastCompileResult = useLabGraphStore((s) => s.lastCompileResult);
   const serverIssues = useLabGraphStore((s) => s.serverIssues);
   const [buildView, setBuildView] = useState<"canvas" | "dsl">("canvas");
+  // Phase 3A: graph hydration
+  const activeGraphId = useLabGraphStore((s) => s.activeGraphId);
+  const hydrateGraph = useLabGraphStore((s) => s.hydrateGraph);
+  const [isInitializing, setIsInitializing] = useState(false);
+  const [initError, setInitError] = useState<string | null>(null);
+  const initRanRef = useRef(false);
 
   const { undo, redo } = useLabGraphStore.temporal.getState();
   const { getNodes, getEdges, screenToFlowPosition, setNodes } = useReactFlow<
@@ -393,6 +408,65 @@ function LabBuildCanvas() {
 
   const { setSourceType, setLastRejectionReason } = useConnectionContext();
   const lastRejectionRef = useRef<string | null>(null);
+
+  // Phase 3A: on mount, load or create persisted graph draft
+  useEffect(() => {
+    // If store already has an activeGraphId (e.g. from a prior navigation), skip init
+    if (activeGraphId !== null) return;
+    // Guard against StrictMode double-invoke
+    if (initRanRef.current) return;
+    initRanRef.current = true;
+
+    let cancelled = false;
+    setIsInitializing(true);
+    setInitError(null);
+
+    (async () => {
+      try {
+        // Step 1: list workspace graphs (most-recent first)
+        const listRes = await fetch("/api/v1/lab/graphs", {
+          credentials: "include",
+        });
+        if (!listRes.ok) throw new Error(`Failed to load graphs (${listRes.status})`);
+        const graphs = (await listRes.json()) as PersistedGraph[];
+
+        let graph: PersistedGraph;
+
+        if (graphs.length > 0) {
+          // Step 2a: hydrate from most recent graph
+          graph = graphs[0];
+        } else {
+          // Step 2b: create first draft
+          const createRes = await fetch("/api/v1/lab/graphs", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({
+              name: "Untitled Graph",
+              graphJson: { nodes: [], edges: [] },
+            }),
+          });
+          if (!createRes.ok) throw new Error(`Failed to create graph (${createRes.status})`);
+          graph = (await createRes.json()) as PersistedGraph;
+        }
+
+        if (cancelled) return;
+
+        // Step 3: hydrate Zustand (suppresses autosave)
+        const gj = graph.graphJson ?? { nodes: [], edges: [] };
+        hydrateGraph(graph.id, gj.nodes ?? [], gj.edges ?? []);
+      } catch (err) {
+        if (!cancelled) {
+          setInitError(err instanceof Error ? err.message : "Failed to load graph");
+        }
+      } finally {
+        if (!cancelled) setIsInitializing(false);
+      }
+    })();
+
+    return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
   const showToast = useCallback((text: string) => {
@@ -625,6 +699,46 @@ function LabBuildCanvas() {
 
   const selectedNodes = nodes.filter((n) => n.selected);
   const selectedEdges = edges.filter((e) => e.selected);
+
+  // Phase 3A: loading overlay while hydrating
+  if (isInitializing) {
+    return (
+      <div style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        width: "100%",
+        height: "100%",
+        background: "rgba(8,12,18,0.97)",
+        color: "rgba(255,255,255,0.45)",
+        fontSize: 13,
+        gap: 10,
+      }}>
+        <span style={{ opacity: 0.6 }}>⋯</span>
+        Loading graph…
+      </div>
+    );
+  }
+
+  if (initError) {
+    return (
+      <div style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        width: "100%",
+        height: "100%",
+        background: "rgba(8,12,18,0.97)",
+        color: "#D44C4C",
+        fontSize: 13,
+        flexDirection: "column",
+        gap: 8,
+      }}>
+        <span>Failed to load graph</span>
+        <span style={{ color: "rgba(255,255,255,0.3)", fontSize: 11 }}>{initError}</span>
+      </div>
+    );
+  }
 
   return (
     <div style={{ display: "flex", flexDirection: "column", width: "100%", height: "100%", overflow: "hidden" }}>
