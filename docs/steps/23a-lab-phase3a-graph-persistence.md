@@ -1,16 +1,31 @@
 # 23a — Phase 3A: Graph Persistence Completion
 
-## Status: COMPLETE (after corrective pass)
+## Status: COMPLETE (after verification pass)
 
 ---
 
-## Corrective Pass Summary
+## Pass History
 
-The initial 23a implementation (`0197ec3`) was not acceptance-ready due to three issues:
+### Initial implementation (`0197ec3`)
+Not acceptance-ready:
+1. `stale_against_last_compile` declared but unreachable — mutations always set `"dirty"`.
+2. Graph selector absent — mount always picked `graphs[0]` with no UI.
+3. Overstated acceptance claims without real verification.
 
-1. **`stale_against_last_compile` was declared but never reached** — mutations always set `"dirty"`, so `stale_against_last_compile` could never be transitioned to. Fixed in corrective pass.
-2. **Graph selector was absent** — mount always picked `graphs[0]` with no UI for multi-graph workspaces. A minimal `<select>` selector with pre-save flush is now implemented.
-3. **Overstated acceptance claims** — "smoke checks passed", "graph switch safe", "ready for 23b1" were asserted without manual verification or build checks. Corrective pass uses honest checklist.
+### Corrective pass (`6fd8371`)
+- Fixed `stale_against_last_compile` via `_graphChangedSinceCompile` flag.
+- Added minimal graph selector with pre-save flush.
+- Honest checklist replacing unsupported claims.
+
+### Verification pass (`see below`)
+- Ran `next build` — PASS.
+- Ran web `tsc --noEmit` — PASS.
+- Confirmed all API `lab.ts` errors are pre-existing (identical pre/post 23a).
+- Found and fixed stale-cache bug in graph selector: `handleSelectGraph` was using
+  `availableGraphs` local state (set at mount) instead of fetching fresh from
+  `GET /api/v1/lab/graphs/:id`. In a same-session multi-switch scenario this would
+  have silently shown stale graph data and potentially overwritten DB state on next
+  autosave. Fixed by fetching fresh from API on each switch.
 
 ---
 
@@ -151,6 +166,7 @@ Specifically:
 - [x] `saveState` is excluded from `validationState` logic
 - [x] Compile flow does not create new graph if `activeGraphId` is already set
 - [x] Graph switch flushes dirty state before hydrating new graph
+- [x] Graph switch fetches fresh graph data from API (not stale local cache)
 - [x] Save error is visible (UI badge + non-silent toast)
 - [x] `_hydrating` is excluded from undo history (zundo `partialize`)
 - [x] `_graphChangedSinceCompile` is excluded from undo history
@@ -163,34 +179,54 @@ Specifically:
 
 ## 8. Verification
 
-### Typecheck
+### Web typecheck
 - `cd apps/web && npx tsc --noEmit` → **PASS** (no output, no errors)
+- Reconfirmed after verification pass fix — still **PASS**
 
-### Build check
-- **NOT RUN** — no `npm run build` available in this environment; Prisma client not generated; pre-existing API typecheck errors exist (unrelated to 23a changes)
+### Web build
+- `cd apps/web && npx next build` → **PASS**
+- All 16 pages generated including `/lab/build` (8.93 kB, no errors)
+
+### API typecheck
+- `cd apps/api && npx tsc --noEmit` → **FAILS** with 27 errors
+- **All errors are pre-existing** — confirmed by running same command against pre-23a main branch
+- 23a PATCH endpoint (`lab.ts:160-198`) contributes **zero new errors**
+- Pre-existing errors are caused by un-generated Prisma client (missing `prisma generate`)
+  and are unrelated to any 23a changes
 
 ### Lint
 - **NOT RUN** — no lint script in web/api package.json
 
-### Manual verification
+### Manual/runtime verification
 - **NOT RUN** — no running dev server available in this environment
-- Code satisfies acceptance checks by logic inspection
+- Acceptance checks verified by code logic inspection + static analysis
+
+### Bug found and fixed during verification
+`handleSelectGraph` in `build/page.tsx` was using stale `availableGraphs` local state
+(populated at mount, never refreshed) to hydrate on graph switch. In a same-session
+multi-switch scenario (A→B→A), this would show stale data and risk overwriting correct
+DB state on the next autosave. Fixed: now fetches fresh from `GET /api/v1/lab/graphs/:id`
+before hydrating. Web typecheck and build remain PASS after fix.
 
 ### Limitations
-- Build check (next build) not executed — environment has no dev server
-- API typecheck has pre-existing Prisma generation errors — these existed before 23a and are not caused by 23a changes
-- All acceptance checks verified by code logic inspection only; runtime verification deferred to deployment environment
+- No running dev server; manual runtime verification not executed
+- API typecheck fails due to un-generated Prisma client (environment limitation, pre-existing)
 
 ---
 
 ## 9. Exit Criteria
 
-Phase 3A corrective pass is complete when:
+Phase 3A verification pass is complete when:
 1. `stale_against_last_compile` is reachable and correctly transitioned ✓
 2. Minimal graph selector implemented ✓
-3. Typecheck passes ✓
-4. Acceptance claims in this document match actual implementation ✓
-5. No deploy artifacts created ✓
+3. Graph selector uses fresh API data on switch (stale-cache bug fixed) ✓
+4. Web typecheck passes ✓
+5. Web build (`next build`) passes ✓
+6. API typecheck errors confirmed as pre-existing (zero new errors from 23a) ✓
+7. Acceptance claims in this document match actual implementation ✓
+8. No deploy artifacts created ✓
+9. Runtime verification: NOT RUN (no dev server in environment; remains open limitation)
 
 **Initial Commit SHA:** `0197ec3`
 **Corrective Pass Commit SHA:** `6fd8371`
+**Verification Pass Commit SHA:** *(see git log)*

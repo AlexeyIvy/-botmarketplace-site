@@ -479,13 +479,17 @@ function LabBuildCanvas() {
   // Phase 3A corrective: minimal graph selector — flush + hydrate on switch
   const handleSelectGraph = useCallback(async (targetId: string) => {
     if (!targetId || targetId === activeGraphId) return;
-    const target = availableGraphs.find((g) => g.id === targetId);
-    if (!target) return;
+    // Guard: target must be in the known list (prevents stray select values)
+    if (!availableGraphs.find((g) => g.id === targetId)) return;
     // Flush current dirty state before switching
     await saveGraphNow();
-    // Hydrate the selected graph
-    const gj = target.graphJson ?? { nodes: [], edges: [] };
-    hydrateGraph(target.id, gj.nodes ?? [], gj.edges ?? []);
+    // Fetch fresh from API — local availableGraphs cache may be stale if the
+    // user has made (and auto-saved) changes to this graph earlier in the session.
+    const freshRes = await fetch(`/api/v1/lab/graphs/${targetId}`, { credentials: "include" });
+    if (!freshRes.ok) return;
+    const fresh = (await freshRes.json()) as PersistedGraph;
+    const gj = fresh.graphJson ?? { nodes: [], edges: [] };
+    hydrateGraph(fresh.id, gj.nodes ?? [], gj.edges ?? []);
   }, [activeGraphId, availableGraphs, saveGraphNow, hydrateGraph]);
 
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
