@@ -17,7 +17,7 @@
 - Нет production-grade secret manager
 - Нет real-money execution или биржевых вызовов (Stage 9b)
 - Нет RBAC
-- Нет UI (backend + OpenAPI контракт)
+- UI: минимальная страница `/exchanges` — create / list / test / delete + StatusBadge (UNKNOWN/CONNECTED/FAILED)
 
 ## 3) Environment requirements
 
@@ -50,6 +50,8 @@ node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 | `apps/api/src/routes/exchanges.ts` | новый: CRUD + test connection |
 | `apps/api/src/app.ts` | регистрация `exchangeRoutes` |
 | `docs/openapi/openapi.yaml` | добавлены Exchange Connection endpoints + schemas |
+| `apps/web/src/app/exchanges/page.tsx` | новый: UI страница `/exchanges` — list / create / test / delete + StatusBadge |
+| `apps/web/src/app/factory/api.ts` | fix: `doFetch` корректно обрабатывает 204 (пустое тело) |
 | `docs/steps/08-stage-8-exchange-connections.md` | этот файл |
 
 ## 5) Verification commands
