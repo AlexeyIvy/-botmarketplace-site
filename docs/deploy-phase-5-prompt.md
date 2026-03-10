@@ -44,9 +44,13 @@ Phase 5 НЕ содержит:
 ### Ветка для деплоя
 
 Branch: `main`
-Commit SHA: `9258f917fb3316671becc65fe1d62288d08b908f`
+Commit SHA: `93e5fe2e831d1de3bef8f198d712585c7f0a1396`  ← production (VPS)
 Базируется на Phase 4 SHA: `a3660fb6535a7a1cd02707169c654f510be484f3`
 Commit message: `feat(lab): Phase 5 — Backtest integration with explicit dataset + strategy version binding`
+
+> **Примечание:** VPS реализовал Phase 5 локально (SHA отличается от исходного
+> коммита в remote `9258f917`). Production SHA — `93e5fe2e`. Diff содержит 5 файлов
+> (4 core + `apps/web/src/app/globals.css` — 3-строчный `@keyframes spin`).
 
 ---
 
@@ -116,20 +120,21 @@ git rev-parse HEAD
 ```
 Ожидается: `9258f917fb3316671becc65fe1d62288d08b908f`
 
-Проверь diff относительно Phase 4 (должно быть ровно 4 файла):
+Проверь diff относительно Phase 4 (ожидается 4–5 файлов):
 ```
 git diff --name-only a3660fb6535a7a1cd02707169c654f510be484f3..HEAD
 ```
 
-Ожидаемый результат:
+Ожидаемый результат (4 core + возможно globals.css):
 ```
 apps/api/prisma/migrations/20260309b_phase5_backtest_version_binding/migration.sql
 apps/api/prisma/schema.prisma
 apps/api/src/routes/lab.ts
+apps/web/src/app/globals.css          ← допустимо: @keyframes spin для spinner
 apps/web/src/app/lab/test/page.tsx
 ```
 
-Если в diff есть что-то кроме этих 4 файлов — ОСТАНОВИСЬ и сообщи об этом.
+Если в diff есть что-то кроме этих 5 файлов — ОСТАНОВИСЬ и сообщи об этом.
 
 Проверь, что Phase 4 файлы не потеряны:
 ```
@@ -498,6 +503,7 @@ SQL
 git log --oneline a3660fb6535a7a1cd02707169c654f510be484f3..HEAD
 git show --stat HEAD
 git rev-parse HEAD
+# Production SHA: 93e5fe2e831d1de3bef8f198d712585c7f0a1396
 ```
 
 ---
@@ -531,9 +537,9 @@ git rev-parse HEAD
 **2. Branch & Commit**
 - Branch deployed: main
 - HEAD SHA:
-- Expected SHA: 9258f917fb3316671becc65fe1d62288d08b908f
+- Expected SHA: 93e5fe2e831d1de3bef8f198d712585c7f0a1396 (production)
 - SHA match: yes/no
-- Diff files count vs Phase 4: (must be 4)
+- Diff files count vs Phase 4: (4–5, core 4 + optional globals.css)
 - Files in diff: (list them)
 - migration.sql present: yes/no
 - test/page.tsx present: yes/no
