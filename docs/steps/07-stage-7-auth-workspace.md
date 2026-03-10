@@ -307,7 +307,37 @@ These items are explicitly deferred per docs/22-productization-v2-plan.md §6:
 | Multi-workspace switching UI | Not in Productization v2 |
 | Worker secret enforcement (verifyWorkerSecret is defined but unused — in-process worker bypasses HTTP) | Future stage if external worker is introduced |
 
-## 13) Minimal notes for Stage 8 handover
+## 13) VPS Production Deploy — результаты
+
+Деплой выполнен на VPS. Merge commit: `cacb254` (Stage 7 merge).
+
+### Инфраструктурные проверки (все ✅)
+
+| Проверка | Результат |
+|---|---|
+| TypeScript API (tsc --noEmit) | 0 ошибок |
+| TypeScript Web (tsc --noEmit) | 0 ошибок |
+| API build (dist/server.js) | ✅ |
+| Next.js build | ✅ 15 страниц |
+| /lab/test в build output | ✅ 5.76 kB |
+| /lab, /lab/build, /lab/data | ✅ |
+| Сервисы перезапущены | ✅ оба active |
+| GET /lab/test → 200 | ✅ |
+| GET /lab/strategy-versions (no auth) → 401 | ✅ |
+| POST /lab/backtest (no auth) → 401 | ✅ |
+| BacktestForm в bundle | ✅ |
+| DatasetSnapshotBlock в bundle | ✅ |
+| healthz → `{"status":"ok"}` | ✅ |
+
+### Замечания
+
+- Единственное незакоммиченное изменение на VPS — `package-lock.json` (не влияет на деплой).
+- Stage 7 security smoke tests (двухпользовательский сценарий 401/403/200) выполнены
+  в рамках разработки PR (см. §11 Verification results). На VPS-деплое базовые
+  401-проверки (no auth → 401) подтверждены; полный сценарий с cross-workspace 403
+  может быть перепроверен командами из §11.
+
+## 14) Minimal notes for Stage 8 handover
 
 Stage 8 получает готовый паттерн:
 - `authenticate` + `resolveWorkspace()` membership enforcement
