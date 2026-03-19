@@ -9,7 +9,7 @@
 // ---------------------------------------------------------------------------
 
 import { useCallback } from "react";
-import type { Node, Edge } from "@xyflow/react";
+import type { LabNode, LabEdge } from "../useLabGraphStore";
 import {
   BLOCK_DEF_MAP,
   CATEGORY_COLOR,
@@ -17,7 +17,6 @@ import {
   type LabNodeData,
   type PortDataType,
 } from "./blockDefs";
-import type { StrategyEdgeData } from "./edges/StrategyEdge";
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -69,14 +68,14 @@ function SectionHeader({ title }: { title: string }) {
 // ---------------------------------------------------------------------------
 
 interface NodeInspectorProps {
-  node: Node;
-  allEdges: Edge[];
-  allNodes: Node[];
+  node: LabNode;
+  allEdges: LabEdge[];
+  allNodes: LabNode[];
   onParamChange: (nodeId: string, paramId: string, value: unknown) => void;
 }
 
 function NodeInspector({ node, allEdges, allNodes, onParamChange }: NodeInspectorProps) {
-  const data = node.data as LabNodeData;
+  const data = node.data;
   const blockDef = BLOCK_DEF_MAP[data.blockType];
 
   if (!blockDef) {
@@ -94,8 +93,7 @@ function NodeInspector({ node, allEdges, allNodes, onParamChange }: NodeInspecto
   for (const edge of allEdges) {
     if (edge.target === node.id && edge.targetHandle) {
       const sourceNode = allNodes.find((n) => n.id === edge.source);
-      const sourceNodeData = sourceNode?.data as LabNodeData | undefined;
-      const sourceLabel = sourceNodeData?.blockType ?? edge.source;
+      const sourceLabel = sourceNode?.data?.blockType ?? edge.source;
       incomingEdgeMap[edge.targetHandle] = {
         sourceNodeId: edge.source,
         sourceNodeLabel: sourceLabel,
@@ -311,19 +309,19 @@ function NodeInspector({ node, allEdges, allNodes, onParamChange }: NodeInspecto
 // ---------------------------------------------------------------------------
 
 interface EdgeInspectorProps {
-  edge: Edge;
-  allNodes: Node[];
+  edge: LabEdge;
+  allNodes: LabNode[];
 }
 
+// A1-4: edge.data is now typed as StrategyEdgeData — no cast needed
 function EdgeInspector({ edge, allNodes }: EdgeInspectorProps) {
-  const edgeData = edge.data as StrategyEdgeData | undefined;
-  const dataType = edgeData?.dataType;
+  const dataType = edge.data?.dataType;
 
   const sourceNode = allNodes.find((n) => n.id === edge.source);
   const targetNode = allNodes.find((n) => n.id === edge.target);
 
-  const sourceData = sourceNode?.data as LabNodeData | undefined;
-  const targetData = targetNode?.data as LabNodeData | undefined;
+  const sourceData = sourceNode?.data;
+  const targetData = targetNode?.data;
 
   return (
     <div style={{ padding: "10px 12px" }}>
@@ -353,7 +351,7 @@ function EdgeInspector({ edge, allNodes }: EdgeInspectorProps) {
       <div style={{ marginTop: 8, fontSize: 10, color: "rgba(255,255,255,0.3)" }}>
         id: {edge.id}
       </div>
-      {edgeData?.isStale && (
+      {edge.data?.isStale && (
         <div
           style={{
             marginTop: 8,
@@ -375,7 +373,7 @@ function EdgeInspector({ edge, allNodes }: EdgeInspectorProps) {
 // Multi-node summary view
 // ---------------------------------------------------------------------------
 
-function MultiSelectSummary({ nodes }: { nodes: Node[] }) {
+function MultiSelectSummary({ nodes }: { nodes: LabNode[] }) {
   return (
     <div style={{ padding: "10px 12px" }}>
       <div
@@ -384,7 +382,7 @@ function MultiSelectSummary({ nodes }: { nodes: Node[] }) {
         {nodes.length} nodes selected
       </div>
       {nodes.map((n) => {
-        const d = n.data as LabNodeData;
+        const d = n.data;
         const def = BLOCK_DEF_MAP[d.blockType];
         return (
           <div
@@ -431,10 +429,10 @@ function InspectorEmpty() {
 // ---------------------------------------------------------------------------
 
 interface InspectorPanelProps {
-  selectedNodes: Node[];
-  selectedEdges: Edge[];
-  allNodes: Node[];
-  allEdges: Edge[];
+  selectedNodes: LabNode[];
+  selectedEdges: LabEdge[];
+  allNodes: LabNode[];
+  allEdges: LabEdge[];
   onParamChange: (nodeId: string, paramId: string, value: unknown) => void;
 }
 

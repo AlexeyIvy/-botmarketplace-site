@@ -650,10 +650,25 @@ function LabBuildCanvas() {
     [markDownstreamStale]
   );
 
-  // ── Keyboard shortcuts ──────────────────────────────────────────────────
+  // ── Keyboard shortcuts (A1-3: scoped to canvas focus) ───────────────────
+  // Per docs/25 §A1-3: only fire when canvas container is focused or
+  // contains focus. Prevents undo/redo/select-all from firing when a modal,
+  // inspector input, or other non-canvas element is active.
+
+  const canvasContainerRef = useRef<HTMLDivElement>(null);
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
+      const canvasEl = canvasContainerRef.current;
+      if (!canvasEl) return;
+      // Only act when canvas container is focused or contains focus
+      if (
+        !canvasEl.contains(document.activeElement) &&
+        document.activeElement !== document.body
+      ) {
+        return;
+      }
+
       const meta = e.metaKey || e.ctrlKey;
       if (meta && e.key === "z" && !e.shiftKey) {
         e.preventDefault(); undo(); return;
@@ -842,9 +857,11 @@ function LabBuildCanvas() {
               overflow: "hidden",
             }}
           >
-            {/* Canvas area */}
+            {/* Canvas area — A1-3: ref + tabIndex for keyboard focus scoping */}
             <div
-              style={{ flex: 1, position: "relative", overflow: "hidden" }}
+              ref={canvasContainerRef}
+              tabIndex={0}
+              style={{ flex: 1, position: "relative", overflow: "hidden", outline: "none" }}
               onDragOver={onDragOver}
               onDrop={onDrop}
             >
