@@ -61,7 +61,7 @@ Each issue tracked here has a severity, a phase assignment, and a source referen
 | UX-06 | ~~Graph name hardcoded `"Untitled Graph"` — no rename affordance~~ | 🟡 MEDIUM | B1 ✅ |
 | UX-07 | ~~No keyboard shortcut help overlay (`?` or `Cmd+/`)~~ | 🟢 LOW | B1 ✅ |
 | FEAT-01 | Missing `Constant` block — `Compare` block unusable for numeric thresholds | 🔴 HIGH | A2 |
-| FEAT-02 | Missing `MACD`, `Bollinger`, `ATR`, `Volume`, `AND/OR Gate` blocks | 🟡 MEDIUM | B2 |
+| FEAT-02 | ~~Missing `MACD`, `Bollinger`, `ATR`, `Volume`, `AND/OR Gate` blocks~~ | 🟡 MEDIUM | B2 ✅ |
 | FEAT-03 | ~~Equity curve absent from Classic Mode results after backtest~~ | 🟡 MEDIUM | B1 ✅ |
 | FEAT-04 | Port highlight during drag missing — compatible targets not visualised | 🟡 MEDIUM | A2 |
 | FEAT-05 | Parametric optimisation (Grid Search) — run sweep over param range | 🟢 LOW | C1 |
@@ -647,15 +647,15 @@ All blocks are added to `blockDefs.ts` and require no backend changes.
 ```
 
 ### Acceptance checks
-- [ ] All 6 new blocks appear in the Block Palette under correct categories
-- [ ] `MACD` block shows 3 output ports (macd, signal, histogram)
-- [ ] `Bollinger` block shows 3 output ports (upper, middle, lower)
-- [ ] `ATR` block connects to `Candles` output (`Series<OHLCV>`) without type mismatch
-- [ ] `Volume` block connects to `Candles` output (`Series<OHLCV>`) without type mismatch
-- [ ] `AND` / `OR` gates accept `Series<boolean>` inputs and emit `Series<boolean>` output
-- [ ] Strategy `Candles → MACD → cross(macd, signal) → AND(cross, RSI filter) → EnterLong` is connectable without validation errors
-- [ ] No schema migrations in this PR
-- [ ] No new API endpoints in this PR
+- [x] All 6 new blocks appear in the Block Palette under correct categories
+- [x] `MACD` block shows 3 output ports (macd, signal, histogram)
+- [x] `Bollinger` block shows 3 output ports (upper, middle, lower)
+- [x] `ATR` block connects to `Candles` output (`Series<OHLCV>`) without type mismatch
+- [x] `Volume` block connects to `Candles` output (`Series<OHLCV>`) without type mismatch
+- [x] `AND` / `OR` gates accept `Series<boolean>` inputs and emit `Series<boolean>` output
+- [x] Strategy `Candles → MACD → cross(macd, signal) → AND(cross, RSI filter) → EnterLong` is connectable without validation errors
+- [x] No schema migrations in this PR
+- [x] No new API endpoints in this PR
 
 ---
 
