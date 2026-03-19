@@ -57,12 +57,12 @@ Each issue tracked here has a severity, a phase assignment, and a source referen
 | UX-02 | Dual Inspector — `LabShell` placeholder + `InspectorPanel` inside Build tab | 🟡 MEDIUM | A2 |
 | UX-03 | Graph selector hidden at single-graph state; no `+ New Graph` button | 🟡 MEDIUM | A2 |
 | UX-04 | DSL Preview — plain `JSON.stringify` without syntax highlighting | 🟡 MEDIUM | A2 |
-| UX-05 | Empty canvas — no onboarding state, no template shortcut | 🟡 MEDIUM | B1 |
-| UX-06 | Graph name hardcoded `"Untitled Graph"` — no rename affordance | 🟡 MEDIUM | B1 |
-| UX-07 | No keyboard shortcut help overlay (`?` or `Cmd+/`) | 🟢 LOW | B1 |
+| UX-05 | ~~Empty canvas — no onboarding state, no template shortcut~~ | 🟡 MEDIUM | B1 ✅ |
+| UX-06 | ~~Graph name hardcoded `"Untitled Graph"` — no rename affordance~~ | 🟡 MEDIUM | B1 ✅ |
+| UX-07 | ~~No keyboard shortcut help overlay (`?` or `Cmd+/`)~~ | 🟢 LOW | B1 ✅ |
 | FEAT-01 | Missing `Constant` block — `Compare` block unusable for numeric thresholds | 🔴 HIGH | A2 |
 | FEAT-02 | Missing `MACD`, `Bollinger`, `ATR`, `Volume`, `AND/OR Gate` blocks | 🟡 MEDIUM | B2 |
-| FEAT-03 | Equity curve absent from Classic Mode results after backtest | 🟡 MEDIUM | B1 |
+| FEAT-03 | ~~Equity curve absent from Classic Mode results after backtest~~ | 🟡 MEDIUM | B1 ✅ |
 | FEAT-04 | Port highlight during drag missing — compatible targets not visualised | 🟡 MEDIUM | A2 |
 | FEAT-05 | Parametric optimisation (Grid Search) — run sweep over param range | 🟢 LOW | C1 |
 | ARCH-01 | `LabEdge` typed as `Edge` — too wide; should be `Edge<StrategyEdgeData>` | 🟡 MEDIUM | A1 |

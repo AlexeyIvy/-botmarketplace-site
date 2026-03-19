@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Group, Panel, Separator } from "react-resizable-panels";
 import { useLabGraphStore } from "./useLabGraphStore";
 import { compileGraph } from "./labApi";
@@ -33,6 +33,61 @@ function getActiveTab(pathname: string): TabId {
 // Phase 4B: adds Compile & Save button + success badge
 // ---------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------
+// B1-4 — Keyboard shortcut help overlay
+// ---------------------------------------------------------------------------
+
+const SHORTCUTS = [
+  { keys: "\u2318Z", action: "Undo" },
+  { keys: "\u2318Y / \u2318\u21E7Z", action: "Redo" },
+  { keys: "\u2318A", action: "Select all nodes" },
+  { keys: "Del / \u232B", action: "Delete selected" },
+  { keys: "\u2318\u21E7F", action: "Search block palette" },
+  { keys: "Esc", action: "Deselect all" },
+  { keys: "\u2318S", action: "Save graph now" },
+  { keys: "?", action: "Toggle this help" },
+] as const;
+
+function ShortcutHelpModal({ onClose }: { onClose: () => void }) {
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [onClose]);
+
+  return (
+    <div
+      style={shortcutOverlayStyle}
+      onClick={onClose}
+    >
+      <div
+        style={shortcutModalStyle}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <h3 style={{ fontSize: 14, fontWeight: 600, color: "rgba(255,255,255,0.9)", margin: "0 0 14px" }}>
+          Keyboard Shortcuts
+        </h3>
+        <table style={{ width: "100%", borderCollapse: "collapse" }}>
+          <tbody>
+            {SHORTCUTS.map((s) => (
+              <tr key={s.action}>
+                <td style={{ padding: "5px 12px 5px 0", fontSize: 12 }}>
+                  <kbd style={shortcutKbdStyle}>{s.keys}</kbd>
+                </td>
+                <td style={{ padding: "5px 0", fontSize: 12, color: "rgba(255,255,255,0.6)" }}>
+                  {s.action}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
 function LabContextBar({ activeTab }: { activeTab: TabId }) {
   const activeConnectionId = useLabGraphStore((s) => s.activeConnectionId);
   const activeDatasetId    = useLabGraphStore((s) => s.activeDatasetId);
@@ -51,6 +106,8 @@ function LabContextBar({ activeTab }: { activeTab: TabId }) {
   const saveState          = useLabGraphStore((s) => s.saveState);
   // A2-1: retry save action
   const saveGraphNow       = useLabGraphStore((s) => s.saveGraphNow);
+  // B1-4: shortcut help modal state
+  const [shortcutHelpOpen, setShortcutHelpOpen] = useState(false);
 
   // Phase 3A: show toast when save_error transitions in
   const [showSaveErrorToast, setShowSaveErrorToast] = useState(false);
@@ -247,6 +304,20 @@ function LabContextBar({ activeTab }: { activeTab: TabId }) {
         >
           {compileLabel}
         </button>
+      )}
+
+      {/* B1-4: Shortcut help button */}
+      <button
+        onClick={() => setShortcutHelpOpen((v) => !v)}
+        style={helpButtonStyle}
+        title="Keyboard shortcuts"
+        aria-label="Keyboard shortcuts"
+      >
+        ?
+      </button>
+
+      {shortcutHelpOpen && (
+        <ShortcutHelpModal onClose={() => setShortcutHelpOpen(false)} />
       )}
     </div>
   );
@@ -542,4 +613,54 @@ const resizeHandleV: React.CSSProperties = {
   background: "var(--border)",
   cursor: "row-resize",
   flexShrink: 0,
+};
+
+// B1-4: shortcut help styles
+const helpButtonStyle: React.CSSProperties = {
+  width: 26,
+  height: 26,
+  borderRadius: "50%",
+  background: "rgba(255,255,255,0.06)",
+  border: "1px solid rgba(255,255,255,0.12)",
+  color: "rgba(255,255,255,0.5)",
+  fontSize: 13,
+  fontWeight: 700,
+  cursor: "pointer",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  flexShrink: 0,
+  fontFamily: "inherit",
+  padding: 0,
+};
+
+const shortcutOverlayStyle: React.CSSProperties = {
+  position: "fixed",
+  inset: 0,
+  zIndex: 10000,
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  background: "rgba(0,0,0,0.5)",
+};
+
+const shortcutModalStyle: React.CSSProperties = {
+  background: "rgba(10,14,20,0.97)",
+  border: "1px solid rgba(255,255,255,0.1)",
+  borderRadius: 8,
+  padding: "20px 24px",
+  minWidth: 300,
+  maxWidth: 400,
+  boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
+};
+
+const shortcutKbdStyle: React.CSSProperties = {
+  background: "rgba(255,255,255,0.08)",
+  border: "1px solid rgba(255,255,255,0.15)",
+  borderRadius: 3,
+  padding: "2px 6px",
+  fontSize: 11,
+  fontFamily: "'SF Mono', 'Fira Code', monospace",
+  color: "rgba(255,255,255,0.7)",
+  whiteSpace: "nowrap",
 };
