@@ -170,6 +170,73 @@ export const BLOCK_DEFS: BlockDef[] = [
     description: "Relative Strength Index (0–100 oscillator).",
   },
 
+  // ── B2 Indicators ────────────────────────────────────────────────────────
+  {
+    type: "macd",
+    label: "MACD",
+    category: "indicator",
+    inputs: [
+      { id: "price", label: "price", dataType: "Series<number>", required: true },
+    ],
+    outputs: [
+      { id: "macd", label: "macd", dataType: "Series<number>", required: false },
+      { id: "signal", label: "signal", dataType: "Series<number>", required: false },
+      { id: "histogram", label: "histogram", dataType: "Series<number>", required: false },
+    ],
+    params: [
+      { id: "fastPeriod", label: "Fast Period", type: "number", defaultValue: 12, min: 1, max: 200 },
+      { id: "slowPeriod", label: "Slow Period", type: "number", defaultValue: 26, min: 1, max: 500 },
+      { id: "signalPeriod", label: "Signal Period", type: "number", defaultValue: 9, min: 1, max: 100 },
+    ],
+    description: "Moving Average Convergence Divergence.",
+  },
+  {
+    type: "bollinger",
+    label: "Bollinger Bands",
+    category: "indicator",
+    inputs: [
+      { id: "candles", label: "candles", dataType: "Series<OHLCV>", required: true },
+    ],
+    outputs: [
+      { id: "upper", label: "upper", dataType: "Series<number>", required: false },
+      { id: "middle", label: "middle", dataType: "Series<number>", required: false },
+      { id: "lower", label: "lower", dataType: "Series<number>", required: false },
+    ],
+    params: [
+      { id: "period", label: "Period", type: "number", defaultValue: 20, min: 2, max: 500 },
+      { id: "stdDevMult", label: "Std Dev ×", type: "number", defaultValue: 2.0, min: 0.1, max: 10 },
+    ],
+    description: "Bollinger Bands — upper, middle (SMA), and lower bands.",
+  },
+  {
+    type: "atr",
+    label: "ATR",
+    category: "indicator",
+    inputs: [
+      { id: "candles", label: "candles", dataType: "Series<OHLCV>", required: true },
+    ],
+    outputs: [
+      { id: "atr", label: "atr", dataType: "Series<number>", required: false },
+    ],
+    params: [
+      { id: "period", label: "Period", type: "number", defaultValue: 14, min: 1, max: 500 },
+    ],
+    description: "Average True Range — volatility indicator.",
+  },
+  {
+    type: "volume",
+    label: "Volume",
+    category: "indicator",
+    inputs: [
+      { id: "candles", label: "candles", dataType: "Series<OHLCV>", required: true },
+    ],
+    outputs: [
+      { id: "volume", label: "volume", dataType: "Series<number>", required: false },
+    ],
+    params: [],
+    description: "Extracts the volume series from OHLCV candles.",
+  },
+
   // ── Logic ─────────────────────────────────────────────────────────────────
   {
     type: "compare",
@@ -214,6 +281,34 @@ export const BLOCK_DEFS: BlockDef[] = [
       },
     ],
     description: "Detects crossover / crossunder events between two series.",
+  },
+  {
+    type: "and_gate",
+    label: "AND",
+    category: "logic",
+    inputs: [
+      { id: "a", label: "a", dataType: "Series<boolean>", required: true },
+      { id: "b", label: "b", dataType: "Series<boolean>", required: true },
+    ],
+    outputs: [
+      { id: "out", label: "out", dataType: "Series<boolean>", required: false },
+    ],
+    params: [],
+    description: "True only when all inputs are true on the same bar.",
+  },
+  {
+    type: "or_gate",
+    label: "OR",
+    category: "logic",
+    inputs: [
+      { id: "a", label: "a", dataType: "Series<boolean>", required: true },
+      { id: "b", label: "b", dataType: "Series<boolean>", required: true },
+    ],
+    outputs: [
+      { id: "out", label: "out", dataType: "Series<boolean>", required: false },
+    ],
+    params: [],
+    description: "True when any input is true on the same bar.",
   },
 
   // ── Execution ─────────────────────────────────────────────────────────────
