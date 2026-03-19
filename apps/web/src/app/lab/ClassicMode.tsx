@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
 import { getWorkspaceId, apiFetch, apiFetchNoWorkspace } from "../../lib/api";
+import { createChart, LineSeries, type IChartApi, type LineData, type Time } from "lightweight-charts";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -392,6 +393,73 @@ function delay(ms: number) {
 }
 
 // ---------------------------------------------------------------------------
+// B1-3 — Equity curve chart component (lightweight-charts)
+// ---------------------------------------------------------------------------
+
+function buildEquitySeries(tradeLog: TradeRecord[]): LineData[] {
+  let equity = 100;
+  return tradeLog.map((trade) => {
+    equity *= 1 + trade.pnlPct / 100;
+    return { time: (trade.exitTime / 1000) as Time, value: equity };
+  });
+}
+
+function EquityCurveChart({ tradeLog }: { tradeLog: TradeRecord[] }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const chartRef = useRef<IChartApi | null>(null);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+    if (chartRef.current) {
+      chartRef.current.remove();
+      chartRef.current = null;
+    }
+
+    const data = buildEquitySeries(tradeLog);
+    if (data.length === 0) return;
+
+    const chart = createChart(containerRef.current, {
+      height: 200,
+      layout: {
+        background: { color: "transparent" },
+        textColor: "rgba(255,255,255,0.5)",
+        fontSize: 11,
+      },
+      grid: {
+        vertLines: { color: "rgba(255,255,255,0.04)" },
+        horzLines: { color: "rgba(255,255,255,0.04)" },
+      },
+      rightPriceScale: { borderColor: "rgba(255,255,255,0.1)" },
+      timeScale: { borderColor: "rgba(255,255,255,0.1)" },
+    });
+    chartRef.current = chart;
+
+    const series = chart.addSeries(LineSeries, {
+      color: "#3B82F6",
+      lineWidth: 2,
+      priceFormat: { type: "custom", formatter: (v: number) => v.toFixed(1) },
+    });
+    series.setData(data);
+    chart.timeScale().fitContent();
+
+    return () => {
+      chart.remove();
+      chartRef.current = null;
+    };
+  }, [tradeLog]);
+
+  if (tradeLog.length === 0) {
+    return (
+      <div style={{ height: 200, display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-secondary)", fontSize: 13 }}>
+        No trades to display equity curve.
+      </div>
+    );
+  }
+
+  return <div ref={containerRef} style={{ width: "100%", height: 200 }} />;
+}
+
+// ---------------------------------------------------------------------------
 // Authenticated Lab — Classic mode (StrategyList + DslEditor + AiChat + BacktestReport)
 // ---------------------------------------------------------------------------
 
@@ -406,6 +474,8 @@ export function AuthLabClassicMode() {
   const [activeBtId, setActiveBtId] = useState<string | null>(null);
   const [activeResult, setActiveResult] = useState<BacktestItem | null>(null);
   const [showTradeLog, setShowTradeLog] = useState(false);
+  // B1-3: result tab (metrics vs equity curve)
+  const [resultTab, setResultTab] = useState<"metrics" | "equity">("metrics");
   const [history, setHistory] = useState<BacktestItem[]>([]);
   const [historyLoading, setHistoryLoading] = useState(false);
 
@@ -593,72 +663,107 @@ export function AuthLabClassicMode() {
 
           {activeResult.status === "DONE" && report && (
             <>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
-                <MetricCard label="Trades" value={String(report.trades)} />
-                <MetricCard label="Wins" value={String(report.wins)} />
-                <MetricCard label="Winrate" value={fmtRate(report.winrate)} />
-                <MetricCard
-                  label="Total PnL"
-                  value={pct(report.totalPnlPct)}
-                  positive={report.totalPnlPct >= 0}
-                />
-                <MetricCard
-                  label="Max Drawdown"
-                  value={`-${report.maxDrawdownPct.toFixed(2)}%`}
-                  positive={false}
-                />
-                <MetricCard label="Candles" value={String(report.candles)} />
+              {/* B1-3: Tab bar — Metrics | Equity Curve */}
+              <div style={{ display: "flex", gap: 0, marginBottom: 16, borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
+                <button
+                  onClick={() => setResultTab("metrics")}
+                  style={{
+                    padding: "8px 16px", fontSize: 13, fontWeight: 500, background: "none",
+                    border: "none", borderBottom: resultTab === "metrics" ? "2px solid var(--accent, #0969da)" : "2px solid transparent",
+                    color: resultTab === "metrics" ? "var(--text-primary)" : "var(--text-secondary)",
+                    cursor: "pointer", fontFamily: "inherit",
+                  }}
+                >
+                  Metrics
+                </button>
+                <button
+                  onClick={() => setResultTab("equity")}
+                  style={{
+                    padding: "8px 16px", fontSize: 13, fontWeight: 500, background: "none",
+                    border: "none", borderBottom: resultTab === "equity" ? "2px solid var(--accent, #0969da)" : "2px solid transparent",
+                    color: resultTab === "equity" ? "var(--text-primary)" : "var(--text-secondary)",
+                    cursor: "pointer", fontFamily: "inherit",
+                  }}
+                >
+                  Equity Curve
+                </button>
               </div>
 
-              {/* Trade Log toggle */}
-              {tradeLog.length > 0 && (
-                <div style={{ marginTop: 16 }}>
-                  <button
-                    style={{ ...btnStyle, fontSize: 12, padding: "5px 14px", background: "rgba(255,255,255,0.08)", color: "inherit" }}
-                    onClick={() => setShowTradeLog((v) => !v)}
-                  >
-                    {showTradeLog ? "Hide" : "Show"} Trade Log ({tradeLog.length} trades)
-                  </button>
+              {resultTab === "metrics" && (
+                <>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
+                    <MetricCard label="Trades" value={String(report.trades)} />
+                    <MetricCard label="Wins" value={String(report.wins)} />
+                    <MetricCard label="Winrate" value={fmtRate(report.winrate)} />
+                    <MetricCard
+                      label="Total PnL"
+                      value={pct(report.totalPnlPct)}
+                      positive={report.totalPnlPct >= 0}
+                    />
+                    <MetricCard
+                      label="Max Drawdown"
+                      value={`-${report.maxDrawdownPct.toFixed(2)}%`}
+                      positive={false}
+                    />
+                    <MetricCard label="Candles" value={String(report.candles)} />
+                  </div>
 
-                  {showTradeLog && (
-                    <div style={{ marginTop: 12, overflowX: "auto" }}>
-                      <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
-                        <thead>
-                          <tr style={{ color: "var(--text-secondary)", textAlign: "left" }}>
-                            <th style={thStyle}>Entry</th>
-                            <th style={thStyle}>Exit</th>
-                            <th style={thStyle}>Entry $</th>
-                            <th style={thStyle}>Exit $</th>
-                            <th style={thStyle}>SL $</th>
-                            <th style={thStyle}>TP $</th>
-                            <th style={thStyle}>Outcome</th>
-                            <th style={thStyle}>PnL %</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {tradeLog.map((t, i) => (
-                            <tr key={i} style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
-                              <td style={tdStyle}>{fmtTs(t.entryTime)}</td>
-                              <td style={tdStyle}>{fmtTs(t.exitTime)}</td>
-                              <td style={tdStyle}>{t.entryPrice.toFixed(2)}</td>
-                              <td style={tdStyle}>{t.exitPrice.toFixed(2)}</td>
-                              <td style={tdStyle}>{t.slPrice.toFixed(2)}</td>
-                              <td style={tdStyle}>{t.tpPrice.toFixed(2)}</td>
-                              <td style={tdStyle}><OutcomeBadge outcome={t.outcome} /></td>
-                              <td style={{
-                                ...tdStyle,
-                                color: t.pnlPct >= 0 ? "#4ade80" : "#f87171",
-                                fontWeight: 600,
-                              }}>
-                                {pct(t.pnlPct)}
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                  {/* Trade Log toggle */}
+                  {tradeLog.length > 0 && (
+                    <div style={{ marginTop: 16 }}>
+                      <button
+                        style={{ ...btnStyle, fontSize: 12, padding: "5px 14px", background: "rgba(255,255,255,0.08)", color: "inherit" }}
+                        onClick={() => setShowTradeLog((v) => !v)}
+                      >
+                        {showTradeLog ? "Hide" : "Show"} Trade Log ({tradeLog.length} trades)
+                      </button>
+
+                      {showTradeLog && (
+                        <div style={{ marginTop: 12, overflowX: "auto" }}>
+                          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
+                            <thead>
+                              <tr style={{ color: "var(--text-secondary)", textAlign: "left" }}>
+                                <th style={thStyle}>Entry</th>
+                                <th style={thStyle}>Exit</th>
+                                <th style={thStyle}>Entry $</th>
+                                <th style={thStyle}>Exit $</th>
+                                <th style={thStyle}>SL $</th>
+                                <th style={thStyle}>TP $</th>
+                                <th style={thStyle}>Outcome</th>
+                                <th style={thStyle}>PnL %</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {tradeLog.map((t, i) => (
+                                <tr key={i} style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+                                  <td style={tdStyle}>{fmtTs(t.entryTime)}</td>
+                                  <td style={tdStyle}>{fmtTs(t.exitTime)}</td>
+                                  <td style={tdStyle}>{t.entryPrice.toFixed(2)}</td>
+                                  <td style={tdStyle}>{t.exitPrice.toFixed(2)}</td>
+                                  <td style={tdStyle}>{t.slPrice.toFixed(2)}</td>
+                                  <td style={tdStyle}>{t.tpPrice.toFixed(2)}</td>
+                                  <td style={tdStyle}><OutcomeBadge outcome={t.outcome} /></td>
+                                  <td style={{
+                                    ...tdStyle,
+                                    color: t.pnlPct >= 0 ? "#4ade80" : "#f87171",
+                                    fontWeight: 600,
+                                  }}>
+                                    {pct(t.pnlPct)}
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      )}
                     </div>
                   )}
-                </div>
+                </>
+              )}
+
+              {/* B1-3: Equity Curve tab */}
+              {resultTab === "equity" && (
+                <EquityCurveChart tradeLog={tradeLog} />
               )}
             </>
           )}

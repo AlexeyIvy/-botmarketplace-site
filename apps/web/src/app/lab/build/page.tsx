@@ -30,7 +30,8 @@ import "@xyflow/react/dist/style.css";
 import { useLabGraphStore } from "../useLabGraphStore";
 import type { LabNode, LabEdge, ValidationState, ServerCompileIssue } from "../useLabGraphStore";
 import type { ValidationIssue } from "../validationTypes";
-import { listGraphs, createGraph, fetchGraph, type PersistedGraph } from "../labApi";
+import { listGraphs, createGraph, fetchGraph, patchGraph, type PersistedGraph } from "../labApi";
+import { getTemplate } from "./templates";
 import {
   BLOCK_DEF_MAP,
   PORT_TYPE_COLOR,
@@ -397,6 +398,9 @@ function LabBuildCanvas() {
   const [initError, setInitError] = useState<string | null>(null);
   const [availableGraphs, setAvailableGraphs] = useState<PersistedGraph[]>([]);
   const initRanRef = useRef(false);
+  // B1-2: inline graph rename state
+  const [isRenaming, setIsRenaming] = useState(false);
+  const [draftName, setDraftName] = useState("");
 
   const { undo, redo } = useLabGraphStore.temporal.getState();
   const { getNodes, getEdges, screenToFlowPosition, setNodes } = useReactFlow<
@@ -484,6 +488,28 @@ function LabBuildCanvas() {
       // creation failed — stay on current graph
     }
   }, [saveGraphNow, hydrateGraph]);
+
+  // B1-1: load a hardcoded template into the canvas
+  const handleLoadTemplate = useCallback((templateId: string) => {
+    const tpl = getTemplate(templateId);
+    if (!tpl) return;
+    const store = useLabGraphStore.getState();
+    store.setNodes(tpl.nodes);
+    store.setEdges(tpl.edges);
+  }, []);
+
+  // B1-2: commit inline rename via PATCH
+  const commitRename = useCallback(async () => {
+    if (!activeGraphId || !draftName.trim()) return;
+    try {
+      await patchGraph(activeGraphId, { name: draftName.trim() });
+      setAvailableGraphs((prev) =>
+        prev.map((g) => (g.id === activeGraphId ? { ...g, name: draftName.trim() } : g)),
+      );
+    } catch {
+      // rename failed — revert silently
+    }
+  }, [activeGraphId, draftName]);
 
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
   const showToast = useCallback((text: string) => {
@@ -774,7 +800,7 @@ function LabBuildCanvas() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", width: "100%", height: "100%", overflow: "hidden" }}>
-      {/* A2-4: Graph selector always visible (even with 1 graph) + New Graph button */}
+      {/* A2-4 + B1-2: Graph selector with inline rename */}
       <div style={graphSelectorBarStyle}>
         <span style={{ fontSize: 11, color: "rgba(255,255,255,0.35)", flexShrink: 0 }}>Graph:</span>
         <select
@@ -787,6 +813,32 @@ function LabBuildCanvas() {
             <option key={g.id} value={g.id}>{g.name}</option>
           ))}
         </select>
+        {/* B1-2: inline editable graph name */}
+        {isRenaming ? (
+          <input
+            autoFocus
+            value={draftName}
+            onChange={(e) => setDraftName(e.target.value)}
+            onBlur={() => { void commitRename(); setIsRenaming(false); }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") { void commitRename(); setIsRenaming(false); }
+              if (e.key === "Escape") setIsRenaming(false);
+            }}
+            style={renameInputStyle}
+          />
+        ) : (
+          <span
+            onDoubleClick={() => {
+              const current = availableGraphs.find((g) => g.id === activeGraphId);
+              setDraftName(current?.name ?? "Untitled Graph");
+              setIsRenaming(true);
+            }}
+            style={graphNameLabelStyle}
+            title="Double-click to rename"
+          >
+            {availableGraphs.find((g) => g.id === activeGraphId)?.name ?? ""}
+          </span>
+        )}
         <button
           onClick={() => { void handleNewGraph(); }}
           disabled={saveState === "saving" || isInitializing}
@@ -868,6 +920,22 @@ function LabBuildCanvas() {
               onDragOver={onDragOver}
               onDrop={onDrop}
             >
+              {/* B1-1: Empty canvas onboarding hint */}
+              {nodes.length === 0 && (
+                <div style={emptyCanvasHintStyle}>
+                  <p style={emptyCanvasHintTextStyle}>
+                    Drag a block from the palette — or press{" "}
+                    <kbd style={kbdStyle}>&#8984;&#8679;F</kbd> to search
+                  </p>
+                  <button
+                    onClick={() => handleLoadTemplate("ema-crossover")}
+                    style={loadTemplateButtonStyle}
+                  >
+                    Load EMA Crossover example
+                  </button>
+                </div>
+              )}
+
               <ReactFlow<LabNode, LabEdge>
                 nodes={nodes}
                 edges={edges}
@@ -1018,4 +1086,71 @@ const buildViewTabStyle: React.CSSProperties = {
 const buildViewTabActiveStyle: React.CSSProperties = {
   color: "rgba(255,255,255,0.88)",
   borderBottom: "2px solid #3B82F6",
+};
+
+// B1-2: inline rename styles
+const renameInputStyle: React.CSSProperties = {
+  background: "rgba(255,255,255,0.08)",
+  border: "1px solid rgba(59,130,246,0.5)",
+  borderRadius: 4,
+  color: "rgba(255,255,255,0.9)",
+  fontSize: 12,
+  padding: "2px 6px",
+  fontFamily: "inherit",
+  outline: "none",
+  minWidth: 100,
+};
+
+const graphNameLabelStyle: React.CSSProperties = {
+  fontSize: 12,
+  color: "rgba(255,255,255,0.6)",
+  cursor: "default",
+  padding: "2px 4px",
+  borderRadius: 3,
+  userSelect: "none",
+  borderBottom: "1px dashed rgba(255,255,255,0.15)",
+};
+
+// B1-1: empty canvas onboarding styles
+const emptyCanvasHintStyle: React.CSSProperties = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  zIndex: 10,
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  gap: 14,
+  pointerEvents: "all",
+};
+
+const emptyCanvasHintTextStyle: React.CSSProperties = {
+  fontSize: 13,
+  color: "rgba(255,255,255,0.45)",
+  textAlign: "center",
+  lineHeight: 1.6,
+  margin: 0,
+};
+
+const kbdStyle: React.CSSProperties = {
+  background: "rgba(255,255,255,0.08)",
+  border: "1px solid rgba(255,255,255,0.15)",
+  borderRadius: 3,
+  padding: "1px 5px",
+  fontSize: 11,
+  fontFamily: "'SF Mono', 'Fira Code', monospace",
+  color: "rgba(255,255,255,0.6)",
+};
+
+const loadTemplateButtonStyle: React.CSSProperties = {
+  padding: "6px 16px",
+  fontSize: 12,
+  fontWeight: 600,
+  background: "rgba(59,130,246,0.15)",
+  border: "1px solid rgba(59,130,246,0.3)",
+  borderRadius: 5,
+  color: "#3B82F6",
+  cursor: "pointer",
+  fontFamily: "inherit",
 };
