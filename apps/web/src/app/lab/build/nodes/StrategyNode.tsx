@@ -55,6 +55,7 @@ function PortHandle({
   const position = side === "input" ? Position.Left : Position.Right;
 
   // Build the handle style per §6.3.1 port state table
+  // A2-7: transition for smooth drag feedback
   const handleStyle: React.CSSProperties = {
     width: 10,
     height: 10,
@@ -62,13 +63,15 @@ function PortHandle({
     border: "none",
     cursor: "crosshair",
     position: "relative",
+    transition: "all 0.12s ease",
     // Hit area is handled by React Flow's default invisible wrapper
   };
 
   if (incompatibleTarget) {
-    // Incompatible: red ring, scale 0.85, opacity 25%
+    // A2-7: Incompatible: red ring, scale 0.85, opacity 25%, borderColor #D44C4C
     handleStyle.background = "transparent";
     handleStyle.boxShadow = `0 0 0 2px #D44C4C`;
+    handleStyle.borderColor = "#D44C4C";
     handleStyle.transform = "scale(0.85)";
     handleStyle.opacity = 0.25;
   } else if (compatibleTarget) {

@@ -101,6 +101,28 @@ export const BLOCK_DEFS: BlockDef[] = [
     description: "Raw market candle stream bound to the active MarketDataset.",
   },
 
+  // A2-6: Constant — emits a fixed numeric value
+  {
+    type: "constant",
+    label: "Constant",
+    category: "input",
+    inputs: [],
+    outputs: [
+      { id: "value", label: "value", dataType: "Series<number>", required: false },
+    ],
+    params: [
+      {
+        id: "value",
+        label: "Value",
+        type: "number",
+        defaultValue: 0,
+        min: -1_000_000,
+        max: 1_000_000,
+      },
+    ],
+    description: "Emits a fixed numeric value as a constant series.",
+  },
+
   // ── Indicators ────────────────────────────────────────────────────────────
   {
     type: "SMA",

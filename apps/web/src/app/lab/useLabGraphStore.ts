@@ -5,6 +5,7 @@ import { applyNodeChanges, applyEdgeChanges } from "@xyflow/react";
 import { BLOCK_DEF_MAP, type LabNodeData } from "./build/blockDefs";
 import type { StrategyEdgeData } from "./build/edges/StrategyEdge";
 import { validateGraph, type ValidationIssue } from "./validationTypes";
+import { patchGraph } from "./labApi";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -348,6 +349,8 @@ export const useLabGraphStore = create<LabGraphState & LabGraphActions>()(
       },
 
       // Phase 3A — flush save immediately (called before graph switch or on demand)
+      // A2-1: retry with exponential backoff (max 3 attempts, 500/1000/2000ms)
+      // A2-2: uses labApi.patchGraph instead of inline fetch
       saveGraphNow: async () => {
         const { activeGraphId, nodes, edges, saveState } = get();
         if (!activeGraphId) return false;
@@ -355,31 +358,38 @@ export const useLabGraphStore = create<LabGraphState & LabGraphActions>()(
         if (saveState === "clean" || saveState === "stale_against_last_compile") return true;
 
         set({ saveState: "saving" });
-        try {
-          const res = await fetch(`/api/v1/lab/graphs/${activeGraphId}`, {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-            body: JSON.stringify({ graphJson: { nodes, edges } }),
-          });
-          if (!res.ok) {
-            set({ saveState: "save_error" });
-            return false;
+
+        const RETRY_DELAYS = [500, 1000, 2000];
+        for (let attempt = 0; attempt < 3; attempt++) {
+          try {
+            await patchGraph(activeGraphId, { graphJson: { nodes, edges } });
+            // Success — determine final save state
+            const { lastCompileResult, _graphChangedSinceCompile } = get();
+            set({
+              saveState:
+                lastCompileResult !== null && _graphChangedSinceCompile
+                  ? "stale_against_last_compile"
+                  : "clean",
+            });
+            return true;
+          } catch (err: unknown) {
+            // 4xx errors: no retry (client error, won't fix itself)
+            const is4xx =
+              err instanceof Error &&
+              /\b4\d{2}\b/.test(err.message);
+            if (is4xx) {
+              set({ saveState: "save_error" });
+              return false;
+            }
+            // 5xx / network error: retry after delay (unless last attempt)
+            if (attempt < 2) {
+              await new Promise((r) => setTimeout(r, RETRY_DELAYS[attempt]));
+            }
           }
-          // If graph has been mutated since last compile → stale_against_last_compile;
-          // otherwise clean. This is how stale_against_last_compile is actually reached.
-          const { lastCompileResult, _graphChangedSinceCompile } = get();
-          set({
-            saveState:
-              lastCompileResult !== null && _graphChangedSinceCompile
-                ? "stale_against_last_compile"
-                : "clean",
-          });
-          return true;
-        } catch {
-          set({ saveState: "save_error" });
-          return false;
         }
+        // All 3 attempts failed
+        set({ saveState: "save_error" });
+        return false;
       },
     }; },
     // zundo: only track graph state for undo/redo history.

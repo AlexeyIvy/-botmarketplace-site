@@ -30,6 +30,7 @@ import "@xyflow/react/dist/style.css";
 import { useLabGraphStore } from "../useLabGraphStore";
 import type { LabNode, LabEdge, ValidationState, ServerCompileIssue } from "../useLabGraphStore";
 import type { ValidationIssue } from "../validationTypes";
+import { listGraphs, createGraph, fetchGraph, type PersistedGraph } from "../labApi";
 import {
   BLOCK_DEF_MAP,
   PORT_TYPE_COLOR,
@@ -43,6 +44,7 @@ import StrategyNode from "./nodes/StrategyNode";
 import StrategyEdge from "./edges/StrategyEdge";
 import BlockPalette from "./BlockPalette";
 import InspectorPanel from "./InspectorPanel";
+import JsonHighlight from "./JsonHighlight";
 
 // ---------------------------------------------------------------------------
 // React Flow node/edge type registrations
@@ -368,15 +370,7 @@ function ValidationDrawer({ issues, validationState, serverIssues = [] }: Valida
 // Canvas inner — must be inside ReactFlowProvider + ConnectionContextProvider
 // ---------------------------------------------------------------------------
 
-// ---------------------------------------------------------------------------
-// Graph persistence types (Phase 3A)
-// ---------------------------------------------------------------------------
-
-interface PersistedGraph {
-  id: string;
-  name: string;
-  graphJson: { nodes: LabNode[]; edges: LabEdge[] } | null;
-}
+// PersistedGraph type imported from labApi.ts (A2-2)
 
 function LabBuildCanvas() {
   const nodes = useLabGraphStore((s) => s.nodes);
@@ -427,12 +421,8 @@ function LabBuildCanvas() {
 
     (async () => {
       try {
-        // Step 1: list workspace graphs (most-recent first)
-        const listRes = await fetch("/api/v1/lab/graphs", {
-          credentials: "include",
-        });
-        if (!listRes.ok) throw new Error(`Failed to load graphs (${listRes.status})`);
-        const graphs = (await listRes.json()) as PersistedGraph[];
+        // Step 1: list workspace graphs (most-recent first) — A2-2: via labApi
+        const graphs = await listGraphs();
 
         let graph: PersistedGraph;
         let allGraphs: PersistedGraph[];
@@ -442,18 +432,8 @@ function LabBuildCanvas() {
           graph = graphs[0];
           allGraphs = graphs;
         } else {
-          // Step 2b: create first draft
-          const createRes = await fetch("/api/v1/lab/graphs", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-            body: JSON.stringify({
-              name: "Untitled Graph",
-              graphJson: { nodes: [], edges: [] },
-            }),
-          });
-          if (!createRes.ok) throw new Error(`Failed to create graph (${createRes.status})`);
-          graph = (await createRes.json()) as PersistedGraph;
+          // Step 2b: create first draft — A2-2: via labApi
+          graph = await createGraph("Untitled Graph", { nodes: [], edges: [] });
           allGraphs = [graph];
         }
 
@@ -477,17 +457,33 @@ function LabBuildCanvas() {
   }, []);
 
   // Phase 3A corrective: minimal graph selector — flush + hydrate on switch
+  // A2-2: uses labApi.fetchGraph instead of inline fetch
   const handleSelectGraph = useCallback(async (targetId: string) => {
     if (!targetId || targetId === activeGraphId) return;
     // Flush current dirty state before switching
     await saveGraphNow();
     // Fetch fresh data from API to avoid stale-cache bug (A→B→A scenario)
-    const res = await fetch(`/api/v1/lab/graphs/${targetId}`, { credentials: "include" });
-    if (!res.ok) return;
-    const fresh = await res.json() as { id: string; graphJson?: { nodes?: LabNode[]; edges?: LabEdge[] } };
-    const gj = fresh.graphJson ?? { nodes: [], edges: [] };
-    hydrateGraph(fresh.id, gj.nodes ?? [], gj.edges ?? []);
+    try {
+      const fresh = await fetchGraph(targetId);
+      const gj = fresh.graphJson ?? { nodes: [], edges: [] };
+      hydrateGraph(fresh.id, gj.nodes ?? [], gj.edges ?? []);
+    } catch {
+      // fetch failed — stay on current graph
+    }
   }, [activeGraphId, saveGraphNow, hydrateGraph]);
+
+  // A2-4: create a new empty graph, add to selector, switch to it
+  const handleNewGraph = useCallback(async () => {
+    await saveGraphNow();
+    try {
+      const newGraph = await createGraph("Untitled Graph", { nodes: [], edges: [] });
+      setAvailableGraphs((prev) => [...prev, newGraph]);
+      const gj = newGraph.graphJson ?? { nodes: [], edges: [] };
+      hydrateGraph(newGraph.id, gj.nodes ?? [], gj.edges ?? []);
+    } catch {
+      // creation failed — stay on current graph
+    }
+  }, [saveGraphNow, hydrateGraph]);
 
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
   const showToast = useCallback((text: string) => {
@@ -778,22 +774,38 @@ function LabBuildCanvas() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", width: "100%", height: "100%", overflow: "hidden" }}>
-      {/* Phase 3A corrective: Graph selector — shown only when workspace has multiple graphs */}
-      {availableGraphs.length > 1 && (
-        <div style={graphSelectorBarStyle}>
-          <span style={{ fontSize: 11, color: "rgba(255,255,255,0.35)", flexShrink: 0 }}>Graph:</span>
-          <select
-            value={activeGraphId ?? ""}
-            onChange={(e) => { void handleSelectGraph(e.target.value); }}
-            disabled={saveState === "saving" || isInitializing}
-            style={graphSelectorStyle}
-          >
-            {availableGraphs.map((g) => (
-              <option key={g.id} value={g.id}>{g.name}</option>
-            ))}
-          </select>
-        </div>
-      )}
+      {/* A2-4: Graph selector always visible (even with 1 graph) + New Graph button */}
+      <div style={graphSelectorBarStyle}>
+        <span style={{ fontSize: 11, color: "rgba(255,255,255,0.35)", flexShrink: 0 }}>Graph:</span>
+        <select
+          value={activeGraphId ?? ""}
+          onChange={(e) => { void handleSelectGraph(e.target.value); }}
+          disabled={saveState === "saving" || isInitializing}
+          style={graphSelectorStyle}
+        >
+          {availableGraphs.map((g) => (
+            <option key={g.id} value={g.id}>{g.name}</option>
+          ))}
+        </select>
+        <button
+          onClick={() => { void handleNewGraph(); }}
+          disabled={saveState === "saving" || isInitializing}
+          style={{
+            padding: "2px 8px",
+            fontSize: 11,
+            fontWeight: 600,
+            background: "rgba(59,130,246,0.15)",
+            border: "1px solid rgba(59,130,246,0.3)",
+            borderRadius: 4,
+            color: "#3B82F6",
+            cursor: "pointer",
+            fontFamily: "inherit",
+            flexShrink: 0,
+          }}
+        >
+          + New
+        </button>
+      </div>
       {/* Phase 4B: Build view tab switcher — Canvas | DSL Preview */}
       <div style={buildViewTabBarStyle}>
         <button
@@ -827,17 +839,8 @@ function LabBuildCanvas() {
           <div style={{ marginBottom: 10, fontSize: 11, color: "rgba(255,255,255,0.4)" }}>
             Strategy v{lastCompileResult.strategyVersion} — {lastCompileResult.strategyVersionId}
           </div>
-          <pre style={{
-            margin: 0,
-            fontSize: 12,
-            lineHeight: 1.6,
-            color: "rgba(255,255,255,0.82)",
-            fontFamily: "monospace",
-            whiteSpace: "pre-wrap",
-            wordBreak: "break-word",
-          }}>
-            {JSON.stringify(lastCompileResult.compiledDsl, null, 2)}
-          </pre>
+          {/* A2-5: syntax-highlighted JSON via JsonHighlight + DOMPurify */}
+          <JsonHighlight data={lastCompileResult.compiledDsl} />
         </div>
       ) : (
         /* Canvas view */
