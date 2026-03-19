@@ -3,6 +3,7 @@ import { temporal } from "zundo";
 import type { Node, Edge, NodeChange, EdgeChange } from "@xyflow/react";
 import { applyNodeChanges, applyEdgeChanges } from "@xyflow/react";
 import { BLOCK_DEF_MAP, type LabNodeData } from "./build/blockDefs";
+import type { StrategyEdgeData } from "./build/edges/StrategyEdge";
 import { validateGraph, type ValidationIssue } from "./validationTypes";
 
 // ---------------------------------------------------------------------------
@@ -44,7 +45,9 @@ export interface CompileResult {
 }
 
 export type LabNode = Node<LabNodeData>;
-export type LabEdge = Edge;
+// A1-4 (docs/25): narrowed from `Edge` to `Edge<StrategyEdgeData>` —
+// eliminates `as StrategyEdgeData` casts throughout the codebase.
+export type LabEdge = Edge<StrategyEdgeData>;
 
 export interface LabGraphState {
   activeConnectionId: string | null;
@@ -139,50 +142,47 @@ const initialState: LabGraphState = {
 };
 
 // ---------------------------------------------------------------------------
-// ID generator
-// ---------------------------------------------------------------------------
-
-let _nodeSeq = 0;
-function nextNodeId(): string {
-  return `n${++_nodeSeq}_${Date.now()}`;
-}
-
-// ---------------------------------------------------------------------------
-// Debounce timers — module-level refs
-// ---------------------------------------------------------------------------
-
-/** 500ms validation debounce — per §13.3 */
-let _validationTimer: ReturnType<typeof setTimeout> | null = null;
-
-function scheduleValidation(runValidationFn: () => void) {
-  if (_validationTimer !== null) clearTimeout(_validationTimer);
-  _validationTimer = setTimeout(() => {
-    _validationTimer = null;
-    runValidationFn();
-  }, 500);
-}
-
-/** 1500ms auto-save debounce — Phase 3A */
-let _saveTimer: ReturnType<typeof setTimeout> | null = null;
-
-function scheduleAutoSave(saveNowFn: () => Promise<boolean>) {
-  if (_saveTimer !== null) clearTimeout(_saveTimer);
-  _saveTimer = setTimeout(() => {
-    _saveTimer = null;
-    saveNowFn().catch(() => {
-      // failure is reflected in saveState; no unhandled rejection
-    });
-  }, 1500);
-}
-
-// ---------------------------------------------------------------------------
 // Store — Phase 3A base + Phase 3B additions + Phase 3C validation + Phase 3A persistence
 // zundo provides undo/redo history.
+//
+// A1-2 (docs/25): All mutable timers and sequence counters are scoped inside
+// the create() closure, NOT at module level. This ensures:
+//   - SSR safety (no shared state between requests)
+//   - Test isolation (each create() call gets its own timers + counter)
 // ---------------------------------------------------------------------------
 
 export const useLabGraphStore = create<LabGraphState & LabGraphActions>()(
   temporal(
-    (set, get) => ({
+    (set, get) => {
+      // ── Closure-scoped mutable state (A1-2) ──────────────────────────────
+      let _nodeSeq = 0;
+      function nextNodeId(): string {
+        return `n${++_nodeSeq}_${Date.now()}`;
+      }
+
+      /** 500ms validation debounce — per §13.3 */
+      let _validationTimer: ReturnType<typeof setTimeout> | null = null;
+      function scheduleValidation(runValidationFn: () => void) {
+        if (_validationTimer !== null) clearTimeout(_validationTimer);
+        _validationTimer = setTimeout(() => {
+          _validationTimer = null;
+          runValidationFn();
+        }, 500);
+      }
+
+      /** 1500ms auto-save debounce — Phase 3A */
+      let _saveTimer: ReturnType<typeof setTimeout> | null = null;
+      function scheduleAutoSave(saveNowFn: () => Promise<boolean>) {
+        if (_saveTimer !== null) clearTimeout(_saveTimer);
+        _saveTimer = setTimeout(() => {
+          _saveTimer = null;
+          saveNowFn().catch(() => {
+            // failure is reflected in saveState; no unhandled rejection
+          });
+        }, 1500);
+      }
+
+      return {
       ...initialState,
 
       setActiveConnectionId: (id) => set({ activeConnectionId: id }),
@@ -329,7 +329,11 @@ export const useLabGraphStore = create<LabGraphState & LabGraphActions>()(
       },
 
       // Phase 3A — hydrate from persisted graph record
-      // Sets _hydrating = true to suppress autosave during restore
+      // Sets _hydrating = true to suppress autosave during restore.
+      // Two-call pattern (docs/25 §A1-1): first call sets the guard flag;
+      // second call is atomic — all fields land in a single Zustand update,
+      // eliminating the race-condition window between node/edge restore
+      // and the _hydrating flag clear.
       hydrateGraph: (graphId, nodes, edges) => {
         set({ _hydrating: true });
         set({
@@ -337,8 +341,8 @@ export const useLabGraphStore = create<LabGraphState & LabGraphActions>()(
           nodes,
           edges,
           saveState: "clean",
+          _hydrating: false,
         });
-        set({ _hydrating: false });
         // Run validation once after hydration (no autosave)
         scheduleValidation(get().runValidation);
       },
@@ -377,7 +381,7 @@ export const useLabGraphStore = create<LabGraphState & LabGraphActions>()(
           return false;
         }
       },
-    }),
+    }; },
     // zundo: only track graph state for undo/redo history.
     // saveState, _hydrating, validationIssues are excluded — derived or transient state.
     {

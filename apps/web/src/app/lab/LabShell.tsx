@@ -153,8 +153,19 @@ function LabContextBar({ activeTab }: { activeTab: TabId }) {
           value={activeDatasetId ?? "— not selected"}
           dimmed={activeDatasetId === null}
         />
-        <CtxBadge label="Validation" value={validationState} dimmed />
-        <CtxBadge label="Run"        value={runState}        dimmed />
+        {/* A1-5: dimmed only when idle; error/warning state surfaces with colour */}
+        <CtxBadge
+          label="Validation"
+          value={validationState}
+          dimmed={validationState === "idle"}
+          variant={validationState === "error" ? "error" : validationState === "warning" ? "warning" : undefined}
+        />
+        <CtxBadge
+          label="Run"
+          value={runState}
+          dimmed={runState === "idle"}
+          variant={runState === "failed" ? "error" : undefined}
+        />
         {/* Phase 3A: save state badge — independent of compile/validation */}
         {isOnBuildTab && activeGraphId && (
           <div style={{ ...ctxBadgeStyle, borderColor: saveState === "save_error" ? "rgba(212,76,76,0.5)" : undefined }}>
@@ -228,23 +239,43 @@ function LabContextBar({ activeTab }: { activeTab: TabId }) {
   );
 }
 
+// A1-5: variant prop drives badge colour for error/warning states
+const BADGE_VARIANT_COLOR: Record<string, string> = {
+  error: "#D44C4C",
+  warning: "#FBBF24",
+};
+
 function CtxBadge({
   label,
   value,
   dimmed,
+  variant,
 }: {
   label: string;
   value: string;
   dimmed?: boolean;
+  variant?: "error" | "warning";
 }) {
+  const valueColor = variant
+    ? BADGE_VARIANT_COLOR[variant]
+    : dimmed
+    ? "var(--text-secondary)"
+    : "var(--text-primary)";
+
   return (
-    <div style={ctxBadgeStyle}>
+    <div
+      style={{
+        ...ctxBadgeStyle,
+        borderColor: variant === "error" ? "rgba(212,76,76,0.4)" : variant === "warning" ? "rgba(251,191,36,0.3)" : undefined,
+      }}
+    >
       <span style={{ color: "var(--text-secondary)", fontSize: 11 }}>{label}:</span>
       <span
         style={{
           fontSize: 12,
           marginLeft: 4,
-          color: dimmed ? "var(--text-secondary)" : "var(--text-primary)",
+          color: valueColor,
+          fontWeight: variant ? 600 : 400,
         }}
       >
         {value}

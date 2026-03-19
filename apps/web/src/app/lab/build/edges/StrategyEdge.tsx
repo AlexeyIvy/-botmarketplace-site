@@ -35,6 +35,9 @@ function StrategyEdge({
   source,
   target,
 }: EdgeProps) {
+  // A1-4: LabEdge is now Edge<StrategyEdgeData> in the store.
+  // React Flow's EdgeProps component registration still passes untyped data,
+  // so we narrow it here at the component boundary.
   const edgeData = data as StrategyEdgeData | undefined;
   const dataType = edgeData?.dataType;
   const isStale = edgeData?.isStale ?? false;
