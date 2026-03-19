@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { Group, Panel, Separator } from "react-resizable-panels";
 import { useLabGraphStore } from "./useLabGraphStore";
+import { compileGraph } from "./labApi";
 
 // ---------------------------------------------------------------------------
 // Tab definitions — order matches spec
@@ -48,6 +49,8 @@ function LabContextBar({ activeTab }: { activeTab: TabId }) {
   const setServerIssues    = useLabGraphStore((s) => s.setServerIssues);
   // Phase 3A: persistence state (independent of compile/validation)
   const saveState          = useLabGraphStore((s) => s.saveState);
+  // A2-1: retry save action
+  const saveGraphNow       = useLabGraphStore((s) => s.saveGraphNow);
 
   // Phase 3A: show toast when save_error transitions in
   const [showSaveErrorToast, setShowSaveErrorToast] = useState(false);
@@ -80,29 +83,19 @@ function LabContextBar({ activeTab }: { activeTab: TabId }) {
         return;
       }
 
-      // Compile against the persisted graph record
-      const compileRes = await fetch(`/api/v1/lab/graphs/${graphId}/compile`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ graphJson, symbol: "BTCUSDT", timeframe: "M15" }),
-      });
-
-      if (compileRes.status === 422) {
-        const body = await compileRes.json() as { validationIssues: import("./useLabGraphStore").ServerCompileIssue[] };
-        setServerIssues(body.validationIssues ?? []);
-        setCompileState("error");
-        return;
-      }
+      // A2-2: Compile via labApi instead of inline fetch
+      const compileRes = await compileGraph(graphId, graphJson, "BTCUSDT", "M15");
 
       if (!compileRes.ok) {
+        if (compileRes.status === 422 && compileRes.validationIssues) {
+          setServerIssues(compileRes.validationIssues);
+        }
         setCompileState("error");
         return;
       }
 
-      const result = await compileRes.json() as import("./useLabGraphStore").CompileResult;
-      setLastCompileResult(result);
-      setServerIssues(result.validationIssues ?? []);
+      setLastCompileResult(compileRes.data);
+      setServerIssues(compileRes.data.validationIssues ?? []);
       setCompileState("success");
     } catch {
       setCompileState("error");
@@ -173,6 +166,26 @@ function LabContextBar({ activeTab }: { activeTab: TabId }) {
             <span style={{ fontSize: 12, marginLeft: 4, color: saveLabelColor, fontWeight: saveState === "save_error" ? 600 : 400 }}>
               {saveLabel}
             </span>
+            {/* A2-1: Retry save button — visible only on save_error */}
+            {saveState === "save_error" && (
+              <button
+                onClick={() => { void saveGraphNow(); }}
+                style={{
+                  marginLeft: 4,
+                  padding: "1px 6px",
+                  fontSize: 11,
+                  fontWeight: 600,
+                  background: "rgba(212,76,76,0.15)",
+                  border: "1px solid rgba(212,76,76,0.4)",
+                  borderRadius: 3,
+                  color: "#D44C4C",
+                  cursor: "pointer",
+                  fontFamily: "inherit",
+                }}
+              >
+                Retry save
+              </button>
+            )}
           </div>
         )}
         {lastCompileResult && (
@@ -377,13 +390,8 @@ export function LabShell({ children }: LabShellProps) {
               </div>
             </Panel>
 
-            {/* Resize handle (horizontal) */}
-            <Separator style={resizeHandleH} />
-
-            {/* Right: Inspector placeholder */}
-            <Panel defaultSize={22} minSize={8} collapsible>
-              <InspectorPlaceholder />
-            </Panel>
+            {/* A2-3 (Option A): Inspector placeholder removed from LabShell.
+                Each tab owns its own right-side content (Build tab has InspectorPanel internally). */}
 
           </Group>
         </Panel>
