@@ -13,6 +13,9 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { apiFetch, getWorkspaceId } from "../../../lib/api";
 import { useLabGraphStore } from "../useLabGraphStore";
 import type { IChartApi, LineData, Time } from "lightweight-charts";
+import OptimisePanel from "./OptimisePanel";
+
+type TopTab = "backtest" | "optimise";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -663,6 +666,7 @@ export default function LabTestPage() {
   const lastCompileResult = useLabGraphStore((s) => s.lastCompileResult);
   const lastCompileVersionId = lastCompileResult?.strategyVersionId ?? null;
 
+  const [topTab, setTopTab] = useState<TopTab>("backtest");
   const [backtests, setBacktests]               = useState<BacktestListItem[]>([]);
   const [datasets, setDatasets]                 = useState<DatasetListItem[]>([]);
   const [strategyVersions, setStrategyVersions] = useState<StrategyVersionItem[]>([]);
@@ -773,70 +777,101 @@ export default function LabTestPage() {
 
   return (
     <div style={pageStyle}>
-      {/* Left: backtest list */}
-      <div style={sidebarStyle}>
-        <div style={sidebarHeaderStyle}>
-          <span style={sectionLabelStyle}>Backtest runs</span>
-          <button
-            style={newBtnStyle}
-            onClick={() => setSelectedBtId(null)}
-            title="New run"
-          >
-            + New
-          </button>
-        </div>
-
-        {backtests.length === 0 && (
-          <div style={{ padding: "14px 16px", fontSize: 12, color: "rgba(255,255,255,0.3)" }}>
-            No runs yet. Configure and start a backtest.
+      {/* Left: sidebar (shown only in backtest mode) */}
+      {topTab === "backtest" && (
+        <div style={sidebarStyle}>
+          <div style={sidebarHeaderStyle}>
+            <span style={sectionLabelStyle}>Backtest runs</span>
+            <button
+              style={newBtnStyle}
+              onClick={() => setSelectedBtId(null)}
+              title="New run"
+            >
+              + New
+            </button>
           </div>
-        )}
 
-        {backtests.map((bt) => {
-          const isSelected = bt.id === selectedBtId;
-          const report = bt.reportJson as BacktestReport | null | undefined;
-          const label = `${bt.symbol} · ${bt.interval}`;
-          const pnl = report ? fmtPnl(report.totalPnlPct) : null;
-          return (
-            <div
-              key={bt.id}
-              onClick={() => setSelectedBtId(bt.id)}
+          {backtests.length === 0 && (
+            <div style={{ padding: "14px 16px", fontSize: 12, color: "rgba(255,255,255,0.3)" }}>
+              No runs yet. Configure and start a backtest.
+            </div>
+          )}
+
+          {backtests.map((bt) => {
+            const isSelected = bt.id === selectedBtId;
+            const report = bt.reportJson as BacktestReport | null | undefined;
+            const label = `${bt.symbol} · ${bt.interval}`;
+            const pnl = report ? fmtPnl(report.totalPnlPct) : null;
+            return (
+              <div
+                key={bt.id}
+                onClick={() => setSelectedBtId(bt.id)}
+                style={{
+                  padding: "10px 14px",
+                  borderBottom: "1px solid rgba(255,255,255,0.05)",
+                  cursor: "pointer",
+                  background: isSelected ? "rgba(59,130,246,0.08)" : "transparent",
+                  borderLeft: isSelected ? "3px solid #3b82f6" : "3px solid transparent",
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}>
+                  <span style={{ fontSize: 12, fontWeight: 500, color: "rgba(255,255,255,0.8)", flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    {label}
+                  </span>
+                  <StatusBadge status={bt.status} />
+                </div>
+                <div style={{ fontSize: 10, color: "rgba(255,255,255,0.3)" }}>
+                  {new Date(bt.createdAt).toLocaleDateString()}
+                  {pnl && <span style={{ marginLeft: 6, color: (report?.totalPnlPct ?? 0) >= 0 ? "#3fb950" : "#f85149", fontWeight: 600 }}>{pnl}</span>}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Right: main content area */}
+      <div style={mainStyle}>
+        {/* Top-level tab bar: Run Backtest | Optimise */}
+        <div style={topTabBarStyle}>
+          {([
+            { id: "backtest" as TopTab, label: "Run Backtest" },
+            { id: "optimise" as TopTab, label: "Optimise" },
+          ]).map((t) => (
+            <button
+              key={t.id}
+              onClick={() => setTopTab(t.id)}
               style={{
-                padding: "10px 14px",
-                borderBottom: "1px solid rgba(255,255,255,0.05)",
-                cursor: "pointer",
-                background: isSelected ? "rgba(59,130,246,0.08)" : "transparent",
-                borderLeft: isSelected ? "3px solid #3b82f6" : "3px solid transparent",
+                ...topTabStyle,
+                ...(topTab === t.id ? topTabActiveStyle : {}),
               }}
             >
-              <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}>
-                <span style={{ fontSize: 12, fontWeight: 500, color: "rgba(255,255,255,0.8)", flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                  {label}
-                </span>
-                <StatusBadge status={bt.status} />
-              </div>
-              <div style={{ fontSize: 10, color: "rgba(255,255,255,0.3)" }}>
-                {new Date(bt.createdAt).toLocaleDateString()}
-                {pnl && <span style={{ marginLeft: 6, color: (report?.totalPnlPct ?? 0) >= 0 ? "#3fb950" : "#f85149", fontWeight: 600 }}>{pnl}</span>}
-              </div>
-            </div>
-          );
-        })}
-      </div>
+              {t.label}
+            </button>
+          ))}
+        </div>
 
-      {/* Right: result detail */}
-      <div style={mainStyle}>
-        <ResultDetail
-          bt={selectedBt}
-          datasets={datasets}
-          strategyVersions={strategyVersions}
-          onStartNew={() => setSelectedBtId(null)}
-          submitting={submitting}
-          submitError={submitError}
-          activeDatasetId={activeDatasetId}
-          lastCompileVersionId={lastCompileVersionId}
-          onSubmit={handleSubmit}
-        />
+        {/* Tab content */}
+        {topTab === "backtest" && (
+          <ResultDetail
+            bt={selectedBt}
+            datasets={datasets}
+            strategyVersions={strategyVersions}
+            onStartNew={() => setSelectedBtId(null)}
+            submitting={submitting}
+            submitError={submitError}
+            activeDatasetId={activeDatasetId}
+            lastCompileVersionId={lastCompileVersionId}
+            onSubmit={handleSubmit}
+          />
+        )}
+
+        {topTab === "optimise" && (
+          <OptimisePanel
+            datasets={datasets}
+            strategyVersions={strategyVersions}
+          />
+        )}
       </div>
     </div>
   );
@@ -1006,4 +1041,28 @@ const newBtnStyle: React.CSSProperties = {
   fontSize: 11,
   fontWeight: 700,
   cursor: "pointer",
+};
+
+const topTabBarStyle: React.CSSProperties = {
+  display: "flex",
+  borderBottom: "1px solid rgba(255,255,255,0.07)",
+  background: "rgba(8,12,18,0.98)",
+  flexShrink: 0,
+};
+
+const topTabStyle: React.CSSProperties = {
+  padding: "9px 18px",
+  fontSize: 12,
+  fontWeight: 600,
+  background: "none",
+  border: "none",
+  borderBottom: "2px solid transparent",
+  color: "rgba(255,255,255,0.4)",
+  fontFamily: "inherit",
+  cursor: "pointer",
+};
+
+const topTabActiveStyle: React.CSSProperties = {
+  color: "rgba(255,255,255,0.88)",
+  borderBottom: "2px solid #3B82F6",
 };

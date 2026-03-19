@@ -42,6 +42,7 @@ model Workspace {
   aiActionAudits      AiActionAudit[]
   datasets            MarketDataset[]
   strategyGraphs      StrategyGraph[]
+  backtestSweeps      BacktestSweep[]
 }
 
 model WorkspaceMember {
@@ -544,4 +545,39 @@ model StrategyGraphVersion {
   @@unique([strategyGraphId, version])
   @@index([strategyGraphId])
   @@index([strategyVersionId])
+}
+
+// ── Research Lab — Parametric Optimisation (Phase C1) ─────────────
+
+enum SweepStatus {
+  PENDING
+  RUNNING
+  DONE
+  FAILED
+}
+
+/// Stores a parametric sweep (grid search) over one block parameter.
+/// Each sweep spawns N BacktestResult records (one per parameter value).
+model BacktestSweep {
+  id                String      @id @default(cuid())
+  workspaceId       String
+  strategyVersionId String
+  datasetId         String
+  /// { blockId, paramName, from, to, step }
+  sweepParamJson    Json
+  feeBps            Int
+  slippageBps       Int
+  status            SweepStatus @default(PENDING)
+  progress          Int         @default(0)
+  runCount          Int
+  /// SweepRow[] — filled progressively as runs complete
+  resultsJson       Json?
+  bestParamValue    Float?
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId])
+  @@index([workspaceId, createdAt(sort: Desc)])
 }
