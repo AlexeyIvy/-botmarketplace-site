@@ -460,6 +460,346 @@ export async function labRoutes(app: FastifyInstance) {
     });
     return reply.send(list);
   });
+
+  // ── POST /lab/backtest/sweep ── trigger parametric grid search (Phase C1) ──
+  // Per docs/25-lab-improvements-plan.md §Phase C1
+  app.post<{ Body: SweepRequestBody }>("/lab/backtest/sweep", {
+    config: { rateLimit: { max: 5, timeWindow: "1 minute" } },
+    onRequest: [app.authenticate],
+  }, async (request, reply) => {
+    const workspace = await resolveWorkspace(request, reply);
+    if (!workspace) return;
+
+    const {
+      datasetId,
+      strategyVersionId,
+      sweepParam,
+      feeBps = 0,
+      slippageBps = 0,
+    } = request.body ?? {};
+
+    // ── Validation ──────────────────────────────────────────────────────────
+    if (!datasetId || !strategyVersionId || !sweepParam) {
+      return problem(reply, 400, "Validation Error", "datasetId, strategyVersionId, and sweepParam are required");
+    }
+
+    if (!sweepParam.blockId || !sweepParam.paramName) {
+      return problem(reply, 400, "Validation Error", "sweepParam.blockId and sweepParam.paramName are required");
+    }
+
+    const { from, to, step } = sweepParam;
+    if (typeof from !== "number" || typeof to !== "number" || typeof step !== "number") {
+      return problem(reply, 400, "Validation Error", "sweepParam.from, .to, .step must be numbers");
+    }
+    if (from >= to) {
+      return problem(reply, 400, "Validation Error", "sweepParam.from must be less than sweepParam.to");
+    }
+    if (step <= 0) {
+      return problem(reply, 400, "Validation Error", "sweepParam.step must be greater than 0");
+    }
+
+    const runCount = Math.floor((to - from) / step) + 1;
+
+    // ── Guard: max 50 runs ──────────────────────────────────────────────────
+    if (runCount > 50) {
+      return problem(reply, 422, "Sweep Too Large", "Sweep exceeds maximum of 50 runs. Narrow the range or increase the step.");
+    }
+
+    if (!Number.isInteger(feeBps) || feeBps < 0 || feeBps > MAX_BPS) {
+      return problem(reply, 400, "Validation Error", `feeBps must be integer 0–${MAX_BPS}`);
+    }
+    if (!Number.isInteger(slippageBps) || slippageBps < 0 || slippageBps > MAX_BPS) {
+      return problem(reply, 400, "Validation Error", `slippageBps must be integer 0–${MAX_BPS}`);
+    }
+
+    // ── Resolve StrategyVersion (workspace isolation) ─────────────────────────
+    const strategyVersion = await prisma.strategyVersion.findUnique({
+      where: { id: strategyVersionId },
+      include: { strategy: true },
+    });
+    if (!strategyVersion || strategyVersion.strategy.workspaceId !== workspace.id) {
+      return problem(reply, 404, "Not Found", "StrategyVersion not found");
+    }
+
+    // ── Resolve dataset (workspace isolation) ────────────────────────────────
+    const dataset = await prisma.marketDataset.findUnique({ where: { id: datasetId } });
+    if (!dataset || dataset.workspaceId !== workspace.id) {
+      return problem(reply, 404, "Not Found", "Dataset not found");
+    }
+
+    // ── Guard: max 2 concurrent sweeps per workspace ─────────────────────────
+    const activeSweeps = await prisma.backtestSweep.count({
+      where: { workspaceId: workspace.id, status: { in: ["PENDING", "RUNNING"] } },
+    });
+    if (activeSweeps >= 2) {
+      return problem(reply, 429, "Too Many Sweeps", "Maximum 2 concurrent sweeps per workspace. Wait for an existing sweep to complete.");
+    }
+
+    // ── Create PENDING sweep record ─────────────────────────────────────────
+    const sweep = await prisma.backtestSweep.create({
+      data: {
+        workspaceId: workspace.id,
+        strategyVersionId,
+        datasetId,
+        sweepParamJson: sweepParam as object,
+        feeBps,
+        slippageBps,
+        runCount,
+        status: "PENDING",
+      },
+    });
+
+    // Fire-and-forget async sweep execution
+    runSweepAsync(sweep.id).catch(() => {});
+
+    return reply.status(202).send({
+      sweepId: sweep.id,
+      runCount,
+      estimatedSeconds: runCount * 5,
+    });
+  });
+
+  // ── GET /lab/backtest/sweep/:id ── poll sweep status/results (Phase C1) ────
+  app.get<{ Params: { id: string } }>("/lab/backtest/sweep/:id", { onRequest: [app.authenticate] }, async (request, reply) => {
+    const workspace = await resolveWorkspace(request, reply);
+    if (!workspace) return;
+
+    const sweep = await prisma.backtestSweep.findUnique({ where: { id: request.params.id } });
+    if (!sweep || sweep.workspaceId !== workspace.id) {
+      return problem(reply, 404, "Not Found", "Sweep not found");
+    }
+
+    const results = (sweep.resultsJson as SweepRow[] | null) ?? [];
+    const bestRow = results.length > 0
+      ? results.reduce((best, r) => r.pnlPct > best.pnlPct ? r : best, results[0])
+      : undefined;
+
+    return reply.send({
+      id: sweep.id,
+      status: sweep.status.toLowerCase(),
+      progress: sweep.progress,
+      runCount: sweep.runCount,
+      results,
+      bestRow,
+      createdAt: sweep.createdAt.toISOString(),
+      updatedAt: sweep.updatedAt.toISOString(),
+    });
+  });
+
+  // ── GET /lab/backtest/sweeps ── list sweeps for workspace ──────────────────
+  app.get("/lab/backtest/sweeps", { onRequest: [app.authenticate] }, async (request, reply) => {
+    const workspace = await resolveWorkspace(request, reply);
+    if (!workspace) return;
+
+    const list = await prisma.backtestSweep.findMany({
+      where: { workspaceId: workspace.id },
+      orderBy: { createdAt: "desc" },
+      take: 50,
+    });
+    return reply.send(list.map((s) => ({
+      id: s.id,
+      status: s.status.toLowerCase(),
+      progress: s.progress,
+      runCount: s.runCount,
+      sweepParamJson: s.sweepParamJson,
+      resultsJson: s.resultsJson,
+      bestParamValue: s.bestParamValue,
+      createdAt: s.createdAt.toISOString(),
+      updatedAt: s.updatedAt.toISOString(),
+    })));
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Sweep request / response types (Phase C1)
+// ---------------------------------------------------------------------------
+
+interface SweepRequestBody {
+  datasetId: string;
+  strategyVersionId: string;
+  sweepParam: {
+    blockId: string;
+    paramName: string;
+    from: number;
+    to: number;
+    step: number;
+  };
+  feeBps?: number;
+  slippageBps?: number;
+}
+
+interface SweepRow {
+  paramValue: number;
+  backtestResultId: string;
+  pnlPct: number;
+  winRate: number;
+  maxDrawdownPct: number;
+  tradeCount: number;
+  sharpe: number | null;
+}
+
+// ---------------------------------------------------------------------------
+// Async sweep runner (Phase C1) — sequential grid search
+// ---------------------------------------------------------------------------
+
+async function runSweepAsync(sweepId: string): Promise<void> {
+  try {
+    const sweep = await prisma.backtestSweep.findUnique({ where: { id: sweepId } });
+    if (!sweep) return;
+
+    await prisma.backtestSweep.update({
+      where: { id: sweepId },
+      data: { status: "RUNNING" },
+    });
+
+    const sweepParam = sweep.sweepParamJson as { blockId: string; paramName: string; from: number; to: number; step: number };
+
+    // Resolve strategy version and dataset
+    const strategyVersion = await prisma.strategyVersion.findUnique({
+      where: { id: sweep.strategyVersionId },
+      include: { strategy: true },
+    });
+    if (!strategyVersion) throw new Error("StrategyVersion not found");
+
+    const dataset = await prisma.marketDataset.findUnique({ where: { id: sweep.datasetId } });
+    if (!dataset) throw new Error("Dataset not found");
+
+    // Load candles once (shared across all runs)
+    const dbCandles = await prisma.marketCandle.findMany({
+      where: {
+        exchange: dataset.exchange,
+        symbol: dataset.symbol,
+        interval: dataset.interval,
+        openTimeMs: { gte: dataset.fromTsMs, lte: dataset.toTsMs },
+      },
+      orderBy: { openTimeMs: "asc" },
+    });
+
+    const candles = dbCandles.map((c) => ({
+      openTime: Number(c.openTimeMs),
+      open: Number(c.open),
+      high: Number(c.high),
+      low: Number(c.low),
+      close: Number(c.close),
+      volume: Number(c.volume),
+    }));
+
+    const riskPct = extractRiskPct(strategyVersion.dslJson);
+    const symbol = dataset.symbol;
+    const interval = candleIntervalToBybit(dataset.interval);
+    const fromTs = new Date(Number(dataset.fromTsMs));
+    const toTs = new Date(Number(dataset.toTsMs));
+    const engineVersion = process.env.COMMIT_SHA ?? "unknown";
+
+    const results: SweepRow[] = [];
+
+    // Sequential sweep
+    for (let paramValue = sweepParam.from; paramValue <= sweepParam.to; paramValue += sweepParam.step) {
+      // Round to avoid floating point drift
+      const roundedParam = Math.round(paramValue * 1e8) / 1e8;
+
+      // Create a BacktestResult record for this run
+      const bt = await prisma.backtestResult.create({
+        data: {
+          workspaceId: sweep.workspaceId,
+          strategyId: strategyVersion.strategyId,
+          strategyVersionId: strategyVersion.id,
+          symbol,
+          interval,
+          fromTs,
+          toTs,
+          status: "RUNNING",
+          datasetId: dataset.id,
+          datasetHash: dataset.datasetHash,
+          feeBps: sweep.feeBps,
+          slippageBps: sweep.slippageBps,
+          fillAt: "CLOSE",
+          engineVersion,
+        },
+      });
+
+      try {
+        const report = runBacktest(candles, riskPct, {
+          feeBps: sweep.feeBps,
+          slippageBps: sweep.slippageBps,
+          fillAt: "CLOSE",
+        });
+
+        await prisma.backtestResult.update({
+          where: { id: bt.id },
+          data: { status: "DONE", reportJson: report as unknown as object },
+        });
+
+        // Compute Sharpe ratio (annualised, assuming 365 trading days)
+        const sharpe = computeSharpe(report.tradeLog.map((t) => t.pnlPct));
+
+        results.push({
+          paramValue: roundedParam,
+          backtestResultId: bt.id,
+          pnlPct: report.totalPnlPct,
+          winRate: report.winrate,
+          maxDrawdownPct: report.maxDrawdownPct,
+          tradeCount: report.trades,
+          sharpe,
+        });
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : String(err);
+        await prisma.backtestResult.update({
+          where: { id: bt.id },
+          data: { status: "FAILED", errorMessage: msg },
+        }).catch(() => undefined);
+
+        results.push({
+          paramValue: roundedParam,
+          backtestResultId: bt.id,
+          pnlPct: 0,
+          winRate: 0,
+          maxDrawdownPct: 0,
+          tradeCount: 0,
+          sharpe: null,
+        });
+      }
+
+      // Update progress
+      await prisma.backtestSweep.update({
+        where: { id: sweepId },
+        data: {
+          progress: results.length,
+          resultsJson: results as unknown as object[],
+        },
+      });
+    }
+
+    // Find best param value by PnL
+    const bestRow = results.reduce((best, r) => r.pnlPct > best.pnlPct ? r : best, results[0]);
+
+    await prisma.backtestSweep.update({
+      where: { id: sweepId },
+      data: {
+        status: "DONE",
+        progress: results.length,
+        resultsJson: results as unknown as object[],
+        bestParamValue: bestRow?.paramValue ?? null,
+      },
+    });
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err);
+    await prisma.backtestSweep.update({
+      where: { id: sweepId },
+      data: { status: "FAILED" },
+    }).catch(() => undefined);
+    console.error(`Sweep ${sweepId} failed:`, msg);
+  }
+}
+
+/** Compute annualised Sharpe ratio from per-trade PnL % array */
+function computeSharpe(pnlPcts: number[]): number | null {
+  if (pnlPcts.length < 2) return null;
+  const mean = pnlPcts.reduce((s, v) => s + v, 0) / pnlPcts.length;
+  const variance = pnlPcts.reduce((s, v) => s + (v - mean) ** 2, 0) / (pnlPcts.length - 1);
+  const stdDev = Math.sqrt(variance);
+  if (stdDev === 0) return null;
+  return Math.round((mean / stdDev) * Math.sqrt(252) * 100) / 100;
 }
 
 // ---------------------------------------------------------------------------
