@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { compileGraph } from "../../src/lib/graphCompiler.js";
+import { compileGraph } from "../../src/lib/compiler/index.js";
 import {
   makeMinimalValidGraph,
   makeGraphMissingCandles,
