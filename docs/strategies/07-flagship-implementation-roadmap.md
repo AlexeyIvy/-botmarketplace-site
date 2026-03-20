@@ -40,9 +40,13 @@ The project already has a good product and documentation foundation, but the fla
 | Backtest engine does not execute the actual DSL strategy | Current backtests are not valid strategy verification |
 | Compiler covers only a narrow subset of blocks | UI can express more than backend can compile |
 | Runtime does not evaluate DSL into autonomous trading intents | Bot lifecycle exists, but strategy execution core is incomplete |
+| DSL has no first-class dynamic exit architecture | Flagship strategies require indicator-based exits, trailing logic, and stateful take-profit recalculation |
+| DSL entry model is effectively single-side | Regime strategies cannot express conditional long/short behavior inside one strategy version |
 | No proper automated test harness for strategy logic | Unsafe for trading system evolution |
 | No full position domain (`Position`, average entry, PnL, reconciliation) | Impossible to run advanced strategies safely |
+| No multi-interval data pipeline | MTF strategies cannot be backtested or executed honestly across 1m/5m/15m/1h dependencies |
 | No exchange normalization layer | Backtest/runtime/live behavior can drift from real Bybit rules |
+| No execution safety slice for partial fills and demo/live routing | Even the first demo strategy can fail on real exchange constraints |
 
 ### 2.2 Strategic principle
 
@@ -87,6 +91,7 @@ Before adding more strategy blocks, create a maintainable execution framework.
 - Refactor compiler from hardcoded logic into extensible block registry architecture
 - Introduce indicator engine layer separated from compiler and runtime
 - Introduce strategy capability matrix documenting support status for each block
+- Explicitly close or mark unsupported the current UI/compiler drift for: `macd`, `bollinger`, `atr`, `volume`, `constant`, `and_gate`, `or_gate`
 - Add golden tests for graph → DSL compilation
 - Add contract tests to detect drift between UI blocks and backend compiler support
 
@@ -128,6 +133,7 @@ Before adding more strategy blocks, create a maintainable execution framework.
 - Compiler no longer relies on ad hoc hardcoded expansion paths
 - There is a single registry / mapping source for block support
 - Engineering can add a new block without editing unrelated compiler logic
+- Existing blocks in `blockDefs.ts` either have compiler support or are explicitly marked unsupported with a failing/guarding test
 - Drift between UI block library and backend support is detectable by tests
 
 ### 4.7 Suggested issue split
@@ -150,12 +156,16 @@ Replace the current fixed backtest behavior with DSL-driven strategy execution a
 ### 5.2 Tasks
 
 - Extend `Strategy DSL` from MVP shape to DSL v2
+- Design first-class `exit` architecture in DSL v2 for conditional exits, indicator-based exits, and trailing logic
+- Extend entry model to support conditional side selection or bi-directional long/short behavior inside one strategy version
+- Define DSL version migration policy for v1 → v2 compatibility or explicit migration
 - Update `strategy.schema.json` to represent advanced strategy constructs
 - Implement `VWAP`
 - Implement `ADX`
 - Implement `SuperTrend`
 - Rewrite backtest engine to evaluate compiled DSL instead of using one hardcoded breakout algorithm
 - Ensure `POST /lab/backtest` uses real strategy semantics from `StrategyVersion`
+- Update `BacktestSweep` flow to use DSL-driven backtest execution
 - Add deterministic test datasets / fixtures for strategy backtesting
 
 ### 5.3 Expected files
@@ -168,10 +178,12 @@ Replace the current fixed backtest behavior with DSL-driven strategy execution a
 - `apps/api/src/lib/indicators/`
 - `apps/web/src/app/lab/build/blockDefs.ts`
 - `apps/api/tests/backtest/`
+- `apps/api/prisma/schema.prisma` (if `BacktestSweep` or version metadata needs alignment)
 
 ### 5.4 Data model / API changes
 
 - No mandatory Prisma change if the existing `StrategyVersion.dslJson` remains the source of truth
+- If DSL version metadata or sweep compatibility is persisted, align `StrategyVersion` / `BacktestSweep` semantics accordingly
 - API contract update needed for Lab backtest docs if the returned report shape changes
 
 ### 5.5 Tests required
@@ -180,25 +192,31 @@ Replace the current fixed backtest behavior with DSL-driven strategy execution a
   - `VWAP`
   - `ADX`
   - `SuperTrend`
+  - dynamic exit evaluation
+  - conditional side selection / dual-side entry rules
 - Golden backtest tests:
   - same DSL + same dataset = same report
 - Integration tests:
   - graph compile → strategy version → backtest → report
+  - `BacktestSweep` using DSL-driven evaluator
 - Regression tests:
   - unsupported DSL patterns must fail clearly, not silently degrade
+  - unsupported exit patterns must fail explicitly
 
 ### 5.6 Acceptance criteria
 
 - Backtest behavior is driven by compiled strategy DSL
+- DSL supports at least one dynamic exit condition beyond fixed percentage SL/TP
+- A strategy can express both long and short entry behavior within a single DSL version when strategy logic requires it
 - Backtest no longer ignores strategy entry/exit logic
 - At least one flagship-class DSL strategy can be truthfully simulated
 - Results are reproducible from `datasetId + datasetHash + strategyVersionId`
 
 ### 5.7 Suggested issue split
 
-- Issue 2A — Design and document Strategy DSL v2
+- Issue 2A — Design and document Strategy DSL v2, including dynamic exits and dual-side entry
 - Issue 2B — Implement VWAP, ADX, SuperTrend in indicator engine
-- Issue 2C — Replace hardcoded breakout backtest with DSL-driven evaluator
+- Issue 2C — Replace hardcoded breakout backtest with DSL-driven evaluator and sweep compatibility
 
 ---
 
@@ -214,22 +232,32 @@ Turn bot runtime from lifecycle manager into actual strategy executor.
 ### 6.2 Tasks
 
 - Introduce runtime signal evaluation layer
+- Introduce runtime exit evaluation layer for indicator/state-driven exits
 - Add position state tracking
 - Add runtime risk manager
+- Add runtime sizing engine to convert USD notional + leverage rules into exchange-valid quantity
 - Add runtime state snapshot / reconciliation primitives
+- Add early execution safety slice:
+  - exchange instrument info cache
+  - tick size / qty step / min notional normalization
+  - partial fill handling
+  - demo vs live endpoint routing
 - Wire compiled DSL into live/demo runtime
 - Implement `Adaptive Regime Bot` as the first fully tradable strategy
 
 ### 6.3 Expected files
 
 - `apps/api/src/lib/botWorker.ts`
+- `apps/api/src/lib/bybitOrder.ts`
 - `apps/api/src/routes/bots.ts`
 - `apps/api/src/routes/strategies.ts`
 - `apps/api/prisma/schema.prisma`
 - New runtime files:
   - `apps/api/src/lib/runtime/signalEngine.ts`
+  - `apps/api/src/lib/runtime/exitEngine.ts`
   - `apps/api/src/lib/runtime/positionManager.ts`
   - `apps/api/src/lib/runtime/riskManager.ts`
+  - `apps/api/src/lib/runtime/positionSizer.ts`
   - `apps/api/src/lib/runtime/stateReconciler.ts`
 - Strategy fixtures/tests under `apps/api/tests/runtime/`
 
@@ -249,30 +277,39 @@ Potential additions:
 - read endpoint for current position state
 - read endpoint for bot runtime state / health
 - richer bot detail response including active position and strategy state
+- visibility into exchange-normalized order sizing and partial-fill state
 
 ### 6.5 Tests required
 
 - Unit tests for:
   - regime switching logic
   - runtime signal generation
+  - runtime exit generation
+  - position sizing from USD notionals to exchange-valid quantity
   - position state transitions
 - Integration tests for:
   - bot run → signal → intent → position transition
+  - exchange normalization before order submission
+  - partial fill → position update flow
 - Replay tests for:
   - deterministic candle stream producing expected runtime decisions
 
 ### 6.6 Acceptance criteria
 
 - Runtime reads DSL and produces strategy-driven `BotIntent`s
+- Runtime can evaluate both entry and exit conditions from strategy state
 - Position state exists as first-class runtime concept
+- Orders are normalized against exchange instrument rules before submission
+- Partial fills are represented and reconciled in runtime state
 - `Adaptive Regime Bot` works in backtest and demo runtime
 - Restart / resume path preserves or reconciles active strategy state
 
 ### 6.7 Suggested issue split
 
 - Issue 3A — Add position domain to Prisma and runtime state layer
-- Issue 3B — Implement runtime signal engine from compiled DSL
-- Issue 3C — Ship Adaptive Regime Bot end-to-end in demo mode
+- Issue 3B — Implement runtime signal/exit engine from compiled DSL
+- Issue 3C — Add exchange normalization, sizing, partial-fill handling, and demo routing
+- Issue 3D — Ship Adaptive Regime Bot end-to-end in demo mode
 
 ---
 
@@ -288,6 +325,8 @@ Add a dedicated execution model for DCA and make `DCA Momentum Bot` production-s
 ### 7.2 Tasks
 
 - Extend DSL with DCA-specific section / block semantics
+- Redefine DCA position model as one logical position with multiple fills / ladder steps
+- Reinterpret or relax `maxOpenPositions` semantics so DCA ladders do not violate single-position guards
 - Add DCA runtime engine:
   - base order
   - safety orders
@@ -314,6 +353,7 @@ Add a dedicated execution model for DCA and make `DCA Momentum Bot` production-s
 Potential additions:
 - fields to `Position` / `PositionEvent` for ladder state
 - optional `DcaPlan` or equivalent JSON state on active position / bot state
+- explicit fill-level state so one logical DCA position can contain multiple entries without becoming multiple positions
 
 #### API
 
@@ -335,6 +375,7 @@ Potential additions:
 ### 7.6 Acceptance criteria
 
 - DCA strategy produces the same ladder behavior in backtest and runtime replay
+- One logical DCA position can hold multiple fills / safety orders without violating guard semantics
 - Capital exposure is explicitly bounded
 - Runtime can recover DCA state after restart
 - `DCA Momentum Bot` becomes executable end-to-end in demo
@@ -362,6 +403,8 @@ Implement the infrastructure required for `MTF Confluence Scalper`.
 - Implement `SessionFilter`
 - Implement `ProximityFilter`
 - Implement `MultiTimeframe` context support
+- Extend data pipeline to fetch, store, bundle, and align multiple intervals for one strategy
+- Define how backtest consumes multi-interval datasets, potentially via `DatasetBundle`-style abstraction
 - Extend ATR usage as first-class indicator / risk dependency
 - Add session-aware and timeframe-aware backtest / runtime behavior
 
@@ -374,11 +417,13 @@ Implement the infrastructure required for `MTF Confluence Scalper`.
 - `apps/api/src/lib/backtest.ts`
 - `apps/api/src/lib/runtime/`
 - `apps/api/tests/mtf/`
+- `apps/api/prisma/schema.prisma` or equivalent dataset metadata layer if multi-interval persistence is needed
 
 ### 8.4 Data model / API changes
 
-- No mandatory new Prisma model if MTF context is computed at runtime
+- No mandatory new Prisma model if MTF context is computed at runtime, but dataset bundling / interval linkage must be defined explicitly
 - Potential metadata expansion for backtest reports to record timeframe dependencies
+- Consider `DatasetBundle` or equivalent structure so one strategy version can depend on multiple intervals consistently
 
 ### 8.5 Tests required
 
@@ -389,18 +434,20 @@ Implement the infrastructure required for `MTF Confluence Scalper`.
   - volume profile core outputs
 - Integration tests for:
   - 1m execution using 5m/15m context
+  - 5m execution using 1h regime filter context
 - Regression tests for:
-  - identical dataset and strategy version producing stable confluence signals
+  - identical multi-interval dataset bundle and strategy version producing stable confluence signals
 
 ### 8.6 Acceptance criteria
 
 - Multi-timeframe context is represented in DSL and understood by compiler/backtest/runtime
+- Backtest can consume candle data from multiple intervals simultaneously for one strategy evaluation
 - Session-aware signals are handled consistently
 - `MTF Confluence Scalper` becomes executable in backtest and demo runtime
 
 ### 8.7 Suggested issue split
 
-- Issue 5A — Implement MTF/session context layer
+- Issue 5A — Implement multi-interval dataset pipeline and MTF/session context layer
 - Issue 5B — Implement VolumeProfile and ProximityFilter
 - Issue 5C — Ship MTF Confluence Scalper end-to-end
 
@@ -544,7 +591,7 @@ Potential additions:
 
 ---
 
-## 11. Stage 8 — Production hardening
+## 11. Stage 8 — Production hardening (early + late safety tracks)
 
 **Priority:** P0 for safety, continuous across all previous stages  
 **Outcome:** the strategy platform becomes safe enough for serious demo-first trading and later controlled live rollout.
@@ -555,6 +602,8 @@ Align runtime behavior with real exchange constraints and failure modes.
 
 ### 11.2 Tasks
 
+#### Early safety slice — required before first serious demo strategy
+
 - Add exchange normalization layer:
   - tick size
   - qty step
@@ -562,6 +611,11 @@ Align runtime behavior with real exchange constraints and failure modes.
   - leverage step
   - funding interval awareness
 - Implement partial fill handling
+- Add env-aware exchange routing for demo vs live endpoints
+- Add instrument metadata cache and validation before order submission
+
+#### Late safety slice — required before broader rollout
+
 - Implement startup reconciliation
 - Add dead-letter / failed intent handling
 - Add structured runtime observability
@@ -577,15 +631,19 @@ Align runtime behavior with real exchange constraints and failure modes.
 - `docs/15-operations.md`
 - `docs/runbooks/`
 - `apps/api/tests/safety/`
+- `apps/api/src/lib/exchange/` or equivalent instrument metadata cache layer
 
 ### 11.4 Data model / API changes
 
 - extend runtime entities as needed for reconciliation and execution safety
+- persist enough exchange/order state for partial fills and route-aware execution diagnostics
 - expose enough bot state for operator diagnosis
 
 ### 11.5 Tests required
 
 - Integration tests for:
+  - exchange normalization before submission
+  - demo endpoint routing
   - restart reconciliation
   - duplicate intent prevention
   - partial fill behavior
@@ -600,12 +658,13 @@ Align runtime behavior with real exchange constraints and failure modes.
 
 - Bot can recover from restart without losing active trading state
 - Exchange restrictions are normalized before order submission
+- Demo and live routing are environment-aware rather than hardcoded
 - Safety mechanisms are tested, not just documented
 - Demo environment is reliable enough to serve as pre-live validation layer
 
 ### 11.7 Suggested issue split
 
-- Issue 8A — Exchange normalization and execution safety layer
+- Issue 8A — Early safety slice: exchange normalization, demo routing, and partial-fill handling
 - Issue 8B — Runtime reconciliation and recovery path
 - Issue 8C — Safety automation and operational hardening
 
