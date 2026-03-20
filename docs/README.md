@@ -45,6 +45,10 @@
 - [Roadmap](16-roadmap.md)
 - [Acceptance criteria](15-acceptance-criteria.md)
 
+### Флагманские стратегии
+- [Flagship overview](strategies/01-flagship-overview.md)
+- [Flagship implementation roadmap](strategies/07-flagship-implementation-roadmap.md)
+
 ### Foundation (execution framework)
 - [Foundation v1 plan](18-foundation-v1-plan.md)
 - [CloudCode control loop](19-cloudcode-control-loop.md)
