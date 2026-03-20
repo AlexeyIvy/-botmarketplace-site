@@ -2,7 +2,7 @@
  * Shared graph fixtures for compiler tests.
  */
 
-import type { GraphJson } from "../../src/lib/graphCompiler.js";
+import type { GraphJson } from "../../src/lib/compiler/index.js";
 
 /**
  * Minimal valid graph: candles → SMA(10) → SMA(20) → cross → enter_long ← stop_loss + take_profit
