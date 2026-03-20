@@ -21,6 +21,8 @@ export type {
 export { BlockRegistry, createRegistry } from "./blockRegistry.js";
 export { defaultHandlers } from "./blockHandlers.js";
 export { compileGraph as compileGraphWithRegistry } from "./graphCompiler.js";
+export { BLOCK_SUPPORT_MAP } from "./supportMap.js";
+export type { BlockSupportStatus, BlockSupportEntry } from "./supportMap.js";
 
 import { createRegistry } from "./blockRegistry.js";
 import { defaultHandlers } from "./blockHandlers.js";
