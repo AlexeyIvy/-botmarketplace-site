@@ -145,6 +145,56 @@ export const volumeHandler: BlockHandler = {
   },
 };
 
+// Stage 2 indicator handlers (#125) — VWAP, ADX, SuperTrend
+
+export const vwapHandler: BlockHandler = {
+  blockType: "vwap",
+  category: "indicator",
+  validate() {},
+  extract(ctx) {
+    const nodes = nodesOf(ctx, "vwap");
+    return {
+      indicators: nodes.map((n) => ({
+        type: "vwap",
+        nodeId: n.id,
+      })),
+    };
+  },
+};
+
+export const adxHandler: BlockHandler = {
+  blockType: "adx",
+  category: "indicator",
+  validate() {},
+  extract(ctx) {
+    const nodes = nodesOf(ctx, "adx");
+    return {
+      indicators: nodes.map((n) => ({
+        type: "adx",
+        nodeId: n.id,
+        period: Number(n.data.params["period"] ?? 14),
+      })),
+    };
+  },
+};
+
+export const superTrendHandler: BlockHandler = {
+  blockType: "supertrend",
+  category: "indicator",
+  validate() {},
+  extract(ctx) {
+    const nodes = nodesOf(ctx, "supertrend");
+    return {
+      indicators: nodes.map((n) => ({
+        type: "supertrend",
+        nodeId: n.id,
+        atrPeriod: Number(n.data.params["atrPeriod"] ?? 10),
+        multiplier: Number(n.data.params["multiplier"] ?? 3),
+      })),
+    };
+  },
+};
+
 // ---------------------------------------------------------------------------
 // Logic blocks
 // ---------------------------------------------------------------------------
@@ -327,6 +377,9 @@ export function defaultHandlers(): BlockHandler[] {
     bollingerHandler,
     atrHandler,
     volumeHandler,
+    vwapHandler,
+    adxHandler,
+    superTrendHandler,
     // Logic
     crossHandler,
     compareHandler,

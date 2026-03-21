@@ -237,6 +237,55 @@ export const BLOCK_DEFS: BlockDef[] = [
     description: "Extracts the volume series from OHLCV candles.",
   },
 
+  // ── Stage 2 Indicators (#125) ──────────────────────────────────────────────
+  {
+    type: "vwap",
+    label: "VWAP",
+    category: "indicator",
+    inputs: [
+      { id: "candles", label: "candles", dataType: "Series<OHLCV>", required: true },
+    ],
+    outputs: [
+      { id: "vwap", label: "vwap", dataType: "Series<number>", required: false },
+    ],
+    params: [],
+    description: "Volume-Weighted Average Price — anchored from session start.",
+  },
+  {
+    type: "adx",
+    label: "ADX",
+    category: "indicator",
+    inputs: [
+      { id: "candles", label: "candles", dataType: "Series<OHLCV>", required: true },
+    ],
+    outputs: [
+      { id: "adx", label: "adx", dataType: "Series<number>", required: false },
+      { id: "plusDI", label: "+DI", dataType: "Series<number>", required: false },
+      { id: "minusDI", label: "−DI", dataType: "Series<number>", required: false },
+    ],
+    params: [
+      { id: "period", label: "Period", type: "number", defaultValue: 14, min: 2, max: 500 },
+    ],
+    description: "Average Directional Index — trend strength (0–100).",
+  },
+  {
+    type: "supertrend",
+    label: "SuperTrend",
+    category: "indicator",
+    inputs: [
+      { id: "candles", label: "candles", dataType: "Series<OHLCV>", required: true },
+    ],
+    outputs: [
+      { id: "supertrend", label: "supertrend", dataType: "Series<number>", required: false },
+      { id: "direction", label: "direction", dataType: "Series<number>", required: false },
+    ],
+    params: [
+      { id: "atrPeriod", label: "ATR Period", type: "number", defaultValue: 10, min: 1, max: 500 },
+      { id: "multiplier", label: "Multiplier", type: "number", defaultValue: 3, min: 0.1, max: 20 },
+    ],
+    description: "SuperTrend — ATR-based trend-following indicator with direction.",
+  },
+
   // ── Logic ─────────────────────────────────────────────────────────────────
   {
     type: "compare",
