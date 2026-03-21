@@ -1,8 +1,8 @@
 /**
  * Strategy DSL Validator (Ajv, JSON Schema 2020-12)
  *
- * Validates a strategy dslJson against the canonical schema in
- * docs/schema/strategy.schema.json.
+ * Validates a strategy dslJson against the canonical schema.
+ * Supports both v1 (MVP) and v2 (dynamic exits, conditional side) strategies.
  *
  * Returns null on success or an array of human-readable error messages.
  */
@@ -10,18 +10,46 @@
 import Ajv from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
 
-// Schema imported as a plain object (no dynamic FS reads in prod)
+// ---------------------------------------------------------------------------
+// Shared $defs
+// ---------------------------------------------------------------------------
+
+const EXIT_LEVEL_DEF = {
+  type: "object",
+  required: ["type", "value"],
+  additionalProperties: false,
+  properties: {
+    type: { enum: ["fixed_pct", "fixed_price", "atr_multiple"] },
+    value: { type: "number", exclusiveMinimum: 0 },
+    atrPeriod: { type: "integer", minimum: 1 },
+  },
+} as const;
+
+// ---------------------------------------------------------------------------
+// Schema (v1 + v2 unified)
+// ---------------------------------------------------------------------------
+
 const STRATEGY_SCHEMA = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "https://example.local/schema/strategy.schema.json",
-  title: "Strategy DSL (MVP)",
+  title: "Strategy DSL (v1 + v2)",
   type: "object",
   additionalProperties: false,
-  required: ["id", "name", "dslVersion", "enabled", "market", "entry", "risk", "execution", "guards"],
+  required: [
+    "id",
+    "name",
+    "dslVersion",
+    "enabled",
+    "market",
+    "entry",
+    "risk",
+    "execution",
+    "guards",
+  ],
   properties: {
     id: { type: "string", minLength: 1 },
     name: { type: "string", minLength: 1 },
-    dslVersion: { type: "integer", minimum: 1 },
+    dslVersion: { type: "integer", minimum: 1, maximum: 2 },
     enabled: { type: "boolean" },
 
     market: {
@@ -45,6 +73,98 @@ const STRATEGY_SCHEMA = {
     entry: {
       type: "object",
       additionalProperties: true,
+      properties: {
+        side: { enum: ["Buy", "Sell"] },
+        sideCondition: {
+          type: "object",
+          additionalProperties: false,
+          required: ["indicator", "long", "short"],
+          properties: {
+            indicator: {
+              type: "object",
+              required: ["type"],
+              properties: {
+                type: { type: "string", minLength: 1 },
+                length: { type: "integer", minimum: 1 },
+              },
+              additionalProperties: true,
+            },
+            source: {
+              type: "string",
+              enum: ["open", "high", "low", "close"],
+              default: "close",
+            },
+            long: {
+              type: "object",
+              required: ["op"],
+              properties: { op: { enum: ["gt", "gte", "lt", "lte"] } },
+              additionalProperties: false,
+            },
+            short: {
+              type: "object",
+              required: ["op"],
+              properties: { op: { enum: ["gt", "gte", "lt", "lte"] } },
+              additionalProperties: false,
+            },
+          },
+        },
+      },
+    },
+
+    exit: {
+      type: "object",
+      additionalProperties: false,
+      required: ["stopLoss", "takeProfit"],
+      properties: {
+        stopLoss: { $ref: "#/$defs/exitLevel" },
+        takeProfit: { $ref: "#/$defs/exitLevel" },
+        trailingStop: {
+          type: "object",
+          additionalProperties: false,
+          required: ["type"],
+          properties: {
+            type: { enum: ["trailing_pct", "trailing_atr"] },
+            activationPct: { type: "number", exclusiveMinimum: 0 },
+            callbackPct: { type: "number", exclusiveMinimum: 0 },
+            activationAtr: { type: "number", exclusiveMinimum: 0 },
+            callbackAtr: { type: "number", exclusiveMinimum: 0 },
+          },
+        },
+        indicatorExit: {
+          type: "object",
+          additionalProperties: false,
+          required: ["indicator", "condition"],
+          properties: {
+            indicator: {
+              type: "object",
+              required: ["type"],
+              properties: {
+                type: { type: "string", minLength: 1 },
+                length: { type: "integer", minimum: 1 },
+              },
+              additionalProperties: true,
+            },
+            condition: {
+              type: "object",
+              required: ["op", "value"],
+              properties: {
+                op: { enum: ["gt", "gte", "lt", "lte", "eq"] },
+                value: { type: "number" },
+              },
+              additionalProperties: false,
+            },
+            appliesTo: { enum: ["long", "short", "both"], default: "both" },
+          },
+        },
+        timeExit: {
+          type: "object",
+          additionalProperties: false,
+          required: ["maxBarsInPosition"],
+          properties: {
+            maxBarsInPosition: { type: "integer", minimum: 1 },
+          },
+        },
+      },
     },
 
     risk: {
@@ -53,7 +173,11 @@ const STRATEGY_SCHEMA = {
       required: ["maxPositionSizeUsd", "riskPerTradePct", "cooldownSeconds"],
       properties: {
         maxPositionSizeUsd: { type: "number", exclusiveMinimum: 0 },
-        riskPerTradePct: { type: "number", exclusiveMinimum: 0, maximum: 100 },
+        riskPerTradePct: {
+          type: "number",
+          exclusiveMinimum: 0,
+          maximum: 100,
+        },
         cooldownSeconds: { type: "integer", minimum: 0 },
         dailyLossLimitUsd: { type: "number", minimum: 0 },
       },
@@ -81,6 +205,10 @@ const STRATEGY_SCHEMA = {
       },
     },
   },
+
+  $defs: {
+    exitLevel: EXIT_LEVEL_DEF,
+  },
 };
 
 // Build Ajv instance once (module-level singleton)
@@ -96,6 +224,10 @@ export interface DslValidationError {
 /**
  * Validate a strategy dslJson object against the Strategy DSL schema.
  *
+ * Performs:
+ * 1. Ajv JSON Schema validation (structural)
+ * 2. Cross-field semantic checks (v1/v2 version consistency)
+ *
  * @returns null if valid, or an array of errors if invalid.
  */
 export function validateDsl(dslJson: unknown): DslValidationError[] | null {
@@ -107,16 +239,77 @@ export function validateDsl(dslJson: unknown): DslValidationError[] | null {
   }
 
   const valid = validateSchema(dslJson);
-  if (valid) return null;
 
-  const errors: DslValidationError[] = (validateSchema.errors ?? []).map((e) => {
-    const field = e.instancePath
-      ? e.instancePath.replace(/^\//, "").replace(/\//g, ".")
-      : (e.params as Record<string, unknown>)?.missingProperty
-        ? String((e.params as Record<string, unknown>).missingProperty)
-        : "dslJson";
-    return { field, message: e.message ?? "invalid" };
-  });
+  // Collect Ajv schema errors
+  const errors: DslValidationError[] = valid
+    ? []
+    : (validateSchema.errors ?? []).map((e) => {
+        const field = e.instancePath
+          ? e.instancePath.replace(/^\//, "").replace(/\//g, ".")
+          : (e.params as Record<string, unknown>)?.missingProperty
+            ? String((e.params as Record<string, unknown>).missingProperty)
+            : "dslJson";
+        return { field, message: e.message ?? "invalid" };
+      });
 
-  return errors.length > 0 ? errors : [{ field: "dslJson", message: "Validation failed" }];
+  // Cross-field semantic validation
+  const obj = dslJson as Record<string, unknown>;
+  const dslVersion =
+    typeof obj.dslVersion === "number" ? obj.dslVersion : undefined;
+  const entry = obj.entry as Record<string, unknown> | undefined;
+  const exit = obj.exit as Record<string, unknown> | undefined;
+
+  // v2 fields present in v1 strategy
+  if (dslVersion === 1) {
+    if (exit) {
+      errors.push({
+        field: "exit",
+        message:
+          'top-level "exit" section requires dslVersion >= 2',
+      });
+    }
+    if (entry?.sideCondition) {
+      errors.push({
+        field: "entry.sideCondition",
+        message:
+          '"entry.sideCondition" requires dslVersion >= 2',
+      });
+    }
+  }
+
+  // v2 requires exit section
+  if (dslVersion === 2 && !exit) {
+    errors.push({
+      field: "exit",
+      message:
+        'dslVersion 2 requires a top-level "exit" section with stopLoss and takeProfit',
+    });
+  }
+
+  // side and sideCondition are mutually exclusive
+  if (entry?.side && entry?.sideCondition) {
+    errors.push({
+      field: "entry",
+      message:
+        '"entry.side" and "entry.sideCondition" are mutually exclusive; use one or the other',
+    });
+  }
+
+  // sideCondition requires v2
+  if (entry?.sideCondition && dslVersion !== undefined && dslVersion < 2) {
+    // Already caught above for v1, but explicit for clarity
+  }
+
+  // At least one of side or sideCondition should be present in entry
+  if (entry && !entry.side && !entry.sideCondition) {
+    errors.push({
+      field: "entry",
+      message:
+        'entry must have either "side" or "sideCondition"',
+    });
+  }
+
+  return errors.length > 0
+    ? errors
+    : null;
 }
