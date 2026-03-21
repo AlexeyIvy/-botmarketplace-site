@@ -1,14 +1,14 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://example.local/schema/strategy.schema.json",
-  "title": "Strategy DSL (MVP)",
+  "title": "Strategy DSL (v1 + v2)",
   "type": "object",
   "additionalProperties": false,
   "required": ["id", "name", "dslVersion", "enabled", "market", "entry", "risk", "execution", "guards"],
   "properties": {
     "id": { "type": "string", "minLength": 1 },
     "name": { "type": "string", "minLength": 1 },
-    "dslVersion": { "type": "integer", "minimum": 1 },
+    "dslVersion": { "type": "integer", "minimum": 1, "maximum": 2 },
     "enabled": { "type": "boolean" },
 
     "market": {
@@ -31,7 +31,99 @@
 
     "entry": {
       "type": "object",
-      "additionalProperties": true
+      "additionalProperties": true,
+      "properties": {
+        "side": { "enum": ["Buy", "Sell"] },
+        "sideCondition": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["indicator", "long", "short"],
+          "properties": {
+            "indicator": {
+              "type": "object",
+              "required": ["type"],
+              "properties": {
+                "type": { "type": "string", "minLength": 1 },
+                "length": { "type": "integer", "minimum": 1 }
+              },
+              "additionalProperties": true
+            },
+            "source": { "type": "string", "enum": ["open", "high", "low", "close"], "default": "close" },
+            "long": {
+              "type": "object",
+              "required": ["op"],
+              "properties": {
+                "op": { "enum": ["gt", "gte", "lt", "lte"] }
+              },
+              "additionalProperties": false
+            },
+            "short": {
+              "type": "object",
+              "required": ["op"],
+              "properties": {
+                "op": { "enum": ["gt", "gte", "lt", "lte"] }
+              },
+              "additionalProperties": false
+            }
+          }
+        }
+      }
+    },
+
+    "exit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["stopLoss", "takeProfit"],
+      "properties": {
+        "stopLoss": { "$ref": "#/$defs/exitLevel" },
+        "takeProfit": { "$ref": "#/$defs/exitLevel" },
+        "trailingStop": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type"],
+          "properties": {
+            "type": { "enum": ["trailing_pct", "trailing_atr"] },
+            "activationPct": { "type": "number", "exclusiveMinimum": 0 },
+            "callbackPct": { "type": "number", "exclusiveMinimum": 0 },
+            "activationAtr": { "type": "number", "exclusiveMinimum": 0 },
+            "callbackAtr": { "type": "number", "exclusiveMinimum": 0 }
+          }
+        },
+        "indicatorExit": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["indicator", "condition"],
+          "properties": {
+            "indicator": {
+              "type": "object",
+              "required": ["type"],
+              "properties": {
+                "type": { "type": "string", "minLength": 1 },
+                "length": { "type": "integer", "minimum": 1 }
+              },
+              "additionalProperties": true
+            },
+            "condition": {
+              "type": "object",
+              "required": ["op", "value"],
+              "properties": {
+                "op": { "enum": ["gt", "gte", "lt", "lte", "eq"] },
+                "value": { "type": "number" }
+              },
+              "additionalProperties": false
+            },
+            "appliesTo": { "enum": ["long", "short", "both"], "default": "both" }
+          }
+        },
+        "timeExit": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["maxBarsInPosition"],
+          "properties": {
+            "maxBarsInPosition": { "type": "integer", "minimum": 1 }
+          }
+        }
+      }
     },
 
     "risk": {
@@ -65,6 +157,19 @@
         "maxOpenPositions": { "type": "integer", "const": 1 },
         "maxOrdersPerMinute": { "type": "integer", "minimum": 1, "maximum": 120 },
         "pauseOnError": { "type": "boolean" }
+      }
+    }
+  },
+
+  "$defs": {
+    "exitLevel": {
+      "type": "object",
+      "required": ["type", "value"],
+      "additionalProperties": false,
+      "properties": {
+        "type": { "enum": ["fixed_pct", "fixed_price", "atr_multiple"] },
+        "value": { "type": "number", "exclusiveMinimum": 0 },
+        "atrPeriod": { "type": "integer", "minimum": 1 }
       }
     }
   }

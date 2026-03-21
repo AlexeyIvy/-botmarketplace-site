@@ -178,4 +178,180 @@ describe("dslValidator – validateDsl", () => {
       expect(typeof err.message).toBe("string");
     }
   });
+
+  // ── DSL v2 ─────────────────────────────────────────────────────────────
+
+  describe("v2 – exit section", () => {
+    function makeValidV2Dsl(): Record<string, unknown> {
+      return {
+        id: "strat-v2-001",
+        name: "Test V2 Strategy",
+        dslVersion: 2,
+        enabled: true,
+        market: {
+          exchange: "bybit",
+          env: "demo",
+          category: "linear",
+          symbol: "BTCUSDT",
+        },
+        timeframes: ["M15"],
+        entry: {
+          side: "Buy",
+          signal: { type: "crossover" },
+          indicators: [],
+        },
+        exit: {
+          stopLoss: { type: "fixed_pct", value: 2.0 },
+          takeProfit: { type: "fixed_pct", value: 4.0 },
+        },
+        risk: {
+          maxPositionSizeUsd: 100,
+          riskPerTradePct: 2,
+          cooldownSeconds: 60,
+        },
+        execution: {
+          orderType: "Market",
+          clientOrderIdPrefix: "lab_",
+          maxSlippageBps: 50,
+        },
+        guards: {
+          maxOpenPositions: 1,
+          maxOrdersPerMinute: 10,
+          pauseOnError: true,
+        },
+      };
+    }
+
+    it("accepts a valid v2 DSL with exit section", () => {
+      expect(validateDsl(makeValidV2Dsl())).toBeNull();
+    });
+
+    it("accepts v2 with trailing stop", () => {
+      const dsl = makeValidV2Dsl();
+      (dsl.exit as Record<string, unknown>).trailingStop = {
+        type: "trailing_pct",
+        activationPct: 1.5,
+        callbackPct: 0.5,
+      };
+      expect(validateDsl(dsl)).toBeNull();
+    });
+
+    it("accepts v2 with indicator exit", () => {
+      const dsl = makeValidV2Dsl();
+      (dsl.exit as Record<string, unknown>).indicatorExit = {
+        indicator: { type: "RSI", length: 14 },
+        condition: { op: "gt", value: 70 },
+        appliesTo: "long",
+      };
+      expect(validateDsl(dsl)).toBeNull();
+    });
+
+    it("accepts v2 with time exit", () => {
+      const dsl = makeValidV2Dsl();
+      (dsl.exit as Record<string, unknown>).timeExit = { maxBarsInPosition: 50 };
+      expect(validateDsl(dsl)).toBeNull();
+    });
+
+    it("accepts v2 with atr_multiple stop-loss", () => {
+      const dsl = makeValidV2Dsl();
+      (dsl.exit as Record<string, unknown>).stopLoss = {
+        type: "atr_multiple",
+        value: 2.0,
+        atrPeriod: 14,
+      };
+      expect(validateDsl(dsl)).toBeNull();
+    });
+
+    it("rejects v2 without exit section", () => {
+      const dsl = makeValidV2Dsl();
+      delete dsl.exit;
+      const errors = validateDsl(dsl);
+      expect(errors).not.toBeNull();
+      expect(errors!.some((e) => e.field === "exit")).toBe(true);
+    });
+
+    it("rejects v1 with exit section", () => {
+      const dsl = makeValidV2Dsl();
+      dsl.dslVersion = 1;
+      const errors = validateDsl(dsl);
+      expect(errors).not.toBeNull();
+      expect(errors!.some((e) => e.message.includes("dslVersion >= 2"))).toBe(true);
+    });
+  });
+
+  describe("v2 – sideCondition", () => {
+    function makeV2WithSideCondition(): Record<string, unknown> {
+      return {
+        id: "strat-v2-sc",
+        name: "Side Condition Strategy",
+        dslVersion: 2,
+        enabled: true,
+        market: {
+          exchange: "bybit",
+          env: "demo",
+          category: "linear",
+          symbol: "ETHUSDT",
+        },
+        timeframes: ["H1"],
+        entry: {
+          sideCondition: {
+            indicator: { type: "EMA", length: 200 },
+            source: "close",
+            long: { op: "gt" },
+            short: { op: "lt" },
+          },
+          signal: { type: "crossover" },
+          indicators: [],
+        },
+        exit: {
+          stopLoss: { type: "fixed_pct", value: 1.5 },
+          takeProfit: { type: "fixed_pct", value: 3.0 },
+        },
+        risk: {
+          maxPositionSizeUsd: 200,
+          riskPerTradePct: 1,
+          cooldownSeconds: 120,
+        },
+        execution: {
+          orderType: "Market",
+          clientOrderIdPrefix: "lab_",
+          maxSlippageBps: 30,
+        },
+        guards: {
+          maxOpenPositions: 1,
+          maxOrdersPerMinute: 10,
+          pauseOnError: true,
+        },
+      };
+    }
+
+    it("accepts v2 with sideCondition (no side)", () => {
+      expect(validateDsl(makeV2WithSideCondition())).toBeNull();
+    });
+
+    it("rejects side + sideCondition together", () => {
+      const dsl = makeV2WithSideCondition();
+      (dsl.entry as Record<string, unknown>).side = "Buy";
+      const errors = validateDsl(dsl);
+      expect(errors).not.toBeNull();
+      expect(errors!.some((e) => e.message.includes("mutually exclusive"))).toBe(true);
+    });
+
+    it("rejects sideCondition in v1", () => {
+      const dsl = makeV2WithSideCondition();
+      dsl.dslVersion = 1;
+      delete (dsl as Record<string, unknown>).exit;
+      const errors = validateDsl(dsl);
+      expect(errors).not.toBeNull();
+      expect(errors!.some((e) => e.message.includes("dslVersion >= 2"))).toBe(true);
+    });
+
+    it("rejects entry without side or sideCondition", () => {
+      const dsl = makeV2WithSideCondition();
+      delete (dsl.entry as Record<string, unknown>).sideCondition;
+      const errors = validateDsl(dsl);
+      expect(errors).not.toBeNull();
+      expect(errors!.some((e) => e.message.includes("side") && e.message.includes("sideCondition"))).toBe(true);
+    });
+  });
 });
