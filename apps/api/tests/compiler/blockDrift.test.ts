@@ -152,19 +152,22 @@ describe("Support status snapshot", () => {
       .sort();
 
     expect(compileOnly).toEqual([
+      "adx",
       "and_gate",
       "atr",
       "bollinger",
       "constant",
       "macd",
       "or_gate",
+      "supertrend",
       "volume",
+      "vwap",
     ]);
   });
 
   it("block count matches expected total", () => {
-    expect(uiBlockTypes.length).toBe(17);
-    expect(compilerBlockTypes.length).toBe(17);
-    expect(supportMapTypes.length).toBe(17);
+    expect(uiBlockTypes.length).toBe(20);
+    expect(compilerBlockTypes.length).toBe(20);
+    expect(supportMapTypes.length).toBe(20);
   });
 });
