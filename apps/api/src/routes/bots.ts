@@ -2,6 +2,13 @@ import type { FastifyInstance } from "fastify";
 import { prisma } from "../lib/prisma.js";
 import { problem } from "../lib/problem.js";
 import { resolveWorkspace } from "../lib/workspace.js";
+import {
+  listBotPositions,
+  getActiveBotPosition,
+  getPositionEvents,
+  calcUnrealisedPnl,
+  type PositionSnapshot,
+} from "../lib/positionManager.js";
 
 const VALID_TIMEFRAMES = ["M1", "M5", "M15", "H1"] as const;
 
@@ -195,7 +202,15 @@ export async function botRoutes(app: FastifyInstance) {
     }
 
     const { runs, ...rest } = bot;
-    return reply.send({ ...rest, lastRun: runs[0] ?? null });
+
+    // Stage 3 (#127): include active position summary
+    const activePosition = await getActiveBotPosition(bot.id, bot.symbol);
+
+    return reply.send({
+      ...rest,
+      lastRun: runs[0] ?? null,
+      activePosition: activePosition ?? null,
+    });
   });
 
   // GET /bots/:id/runs — list runs for a bot
@@ -236,5 +251,71 @@ export async function botRoutes(app: FastifyInstance) {
     });
 
     return reply.send(runs);
+  });
+
+  // GET /bots/:id/positions — list positions for a bot
+  app.get<{
+    Params: { id: string };
+    Querystring: { limit?: string; status?: string };
+  }>("/bots/:id/positions", { onRequest: [app.authenticate] }, async (request, reply) => {
+    const workspace = await resolveWorkspace(request, reply);
+    if (!workspace) return;
+
+    const bot = await prisma.bot.findUnique({ where: { id: request.params.id } });
+    if (!bot || bot.workspaceId !== workspace.id) {
+      return problem(reply, 404, "Not Found", "Bot not found");
+    }
+
+    const limit = Math.min(Number(request.query?.limit ?? 20), 100);
+    const statusFilter = request.query?.status;
+
+    const validStatuses = ["OPEN", "CLOSED"] as const;
+    const status = statusFilter && validStatuses.includes(statusFilter as typeof validStatuses[number])
+      ? (statusFilter as "OPEN" | "CLOSED")
+      : undefined;
+
+    const positions = await listBotPositions(bot.id, { status, limit });
+    return reply.send(positions);
+  });
+
+  // GET /bots/:id/positions/:positionId/events — position event log
+  app.get<{
+    Params: { id: string; positionId: string };
+    Querystring: { limit?: string };
+  }>("/bots/:id/positions/:positionId/events", { onRequest: [app.authenticate] }, async (request, reply) => {
+    const workspace = await resolveWorkspace(request, reply);
+    if (!workspace) return;
+
+    const bot = await prisma.bot.findUnique({ where: { id: request.params.id } });
+    if (!bot || bot.workspaceId !== workspace.id) {
+      return problem(reply, 404, "Not Found", "Bot not found");
+    }
+
+    // Verify position belongs to this bot
+    const position = await prisma.position.findUnique({
+      where: { id: request.params.positionId },
+    });
+    if (!position || position.botId !== bot.id) {
+      return problem(reply, 404, "Not Found", "Position not found");
+    }
+
+    const limit = Math.min(Number(request.query?.limit ?? 50), 200);
+    const events = await getPositionEvents(request.params.positionId, { limit });
+
+    // Serialize Decimal fields to numbers for JSON response
+    const serialized = events.map((e) => ({
+      id: e.id,
+      positionId: e.positionId,
+      type: e.type,
+      qty: e.qty?.toNumber() ?? null,
+      price: e.price?.toNumber() ?? null,
+      realisedPnl: e.realisedPnl?.toNumber() ?? null,
+      snapshotJson: e.snapshotJson,
+      intentId: e.intentId,
+      metaJson: e.metaJson,
+      ts: e.ts,
+    }));
+
+    return reply.send(serialized);
   });
 }
