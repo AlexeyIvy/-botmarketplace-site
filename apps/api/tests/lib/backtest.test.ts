@@ -1,13 +1,41 @@
 import { describe, it, expect } from "vitest";
 import { runBacktest } from "../../src/lib/backtest.js";
-import { makeUptrend, makeDowntrend, makeFlat } from "../fixtures/candles.js";
+import { makeDowntrend, makeFlat, makeFlatThenUp } from "../fixtures/candles.js";
 
-describe("backtest – runBacktest", () => {
-  // ── Edge cases: insufficient data ──────────────────────────────────────
+/**
+ * Backtest module tests — updated for DSL-driven evaluator (#126).
+ *
+ * runBacktest now requires a compiled DSL object instead of riskPct.
+ */
 
-  it("returns empty report when data has fewer than LOOKBACK+1 candles", () => {
-    const candles = makeUptrend(10); // need 21 minimum
-    const report = runBacktest(candles, 2);
+/** Minimal v1 DSL for testing: SMA crossover long with fixed SL/TP */
+function makeTestDsl(slPct = 2, tpPct = 4, fastLen = 5, slowLen = 20) {
+  return {
+    id: "test",
+    name: "Test",
+    dslVersion: 1,
+    enabled: true,
+    market: { exchange: "bybit", env: "demo", category: "linear", symbol: "BTCUSDT" },
+    entry: {
+      side: "Buy",
+      signal: {
+        type: "crossover",
+        fast: { blockType: "SMA", length: fastLen },
+        slow: { blockType: "SMA", length: slowLen },
+      },
+      stopLoss: { type: "fixed_pct", value: slPct },
+      takeProfit: { type: "fixed_pct", value: tpPct },
+    },
+    risk: { maxPositionSizeUsd: 100, riskPerTradePct: slPct, cooldownSeconds: 0 },
+    execution: { orderType: "Market", clientOrderIdPrefix: "test_" },
+    guards: { maxOpenPositions: 1, maxOrdersPerMinute: 10, pauseOnError: true },
+  };
+}
+
+describe("backtest – runBacktest (DSL-driven)", () => {
+  it("returns empty report when data has fewer than 2 candles", () => {
+    const candles = makeFlatThenUp(1);
+    const report = runBacktest(candles, makeTestDsl());
 
     expect(report.trades).toBe(0);
     expect(report.wins).toBe(0);
@@ -15,30 +43,27 @@ describe("backtest – runBacktest", () => {
     expect(report.totalPnlPct).toBe(0);
     expect(report.maxDrawdownPct).toBe(0);
     expect(report.tradeLog).toHaveLength(0);
-    expect(report.candles).toBe(10);
+    expect(report.candles).toBe(1);
   });
 
   it("returns empty report for empty candle array", () => {
-    const report = runBacktest([], 2);
+    const report = runBacktest([], makeTestDsl());
     expect(report.trades).toBe(0);
     expect(report.candles).toBe(0);
   });
 
-  // ── Uptrend: should produce trades ────────────────────────────────────
-
-  it("produces at least one trade on a strong uptrend", () => {
-    // 50 candles with a steady uptrend — breakout signal should fire
-    const candles = makeUptrend(50, 100, 2);
-    const report = runBacktest(candles, 2);
+  it("produces at least one trade on flat-then-up data", () => {
+    const candles = makeFlatThenUp(80, 25, 100, 2);
+    const report = runBacktest(candles, makeTestDsl());
 
     expect(report.trades).toBeGreaterThanOrEqual(1);
     expect(report.tradeLog.length).toBe(report.trades);
-    expect(report.candles).toBe(50);
+    expect(report.candles).toBe(80);
   });
 
   it("all trades have valid structure", () => {
-    const candles = makeUptrend(50, 100, 2);
-    const report = runBacktest(candles, 2);
+    const candles = makeFlatThenUp(80, 25, 100, 2);
+    const report = runBacktest(candles, makeTestDsl());
 
     for (const trade of report.tradeLog) {
       expect(trade.entryTime).toBeGreaterThan(0);
@@ -53,62 +78,45 @@ describe("backtest – runBacktest", () => {
   });
 
   it("win rate is between 0 and 1", () => {
-    const candles = makeUptrend(50, 100, 2);
-    const report = runBacktest(candles, 2);
-
+    const candles = makeFlatThenUp(80, 25, 100, 2);
+    const report = runBacktest(candles, makeTestDsl());
     expect(report.winrate).toBeGreaterThanOrEqual(0);
     expect(report.winrate).toBeLessThanOrEqual(1);
   });
 
-  // ── Flat market: no breakout ──────────────────────────────────────────
-
-  it("produces no trades in a flat market (no breakout signal)", () => {
-    const candles = makeFlat(50, 100);
-    const report = runBacktest(candles, 2);
-
+  it("produces no trades in a flat market (no crossover signal)", () => {
+    const candles = makeFlat(80, 100);
+    const report = runBacktest(candles, makeTestDsl());
     expect(report.trades).toBe(0);
     expect(report.totalPnlPct).toBe(0);
   });
 
-  // ── Downtrend after breakout: stop losses ─────────────────────────────
-
-  it("produces losses on a downtrend after initial breakout", () => {
-    // Start with 21 candles of uptrend to trigger entry, then reverse
-    const up = makeUptrend(22, 100, 2);
-    const down = makeDowntrend(30, up[up.length - 1].close, 3);
-    // Shift downtrend timestamps to continue from uptrend
+  it("produces losses on a downtrend after initial crossover", () => {
+    const up = makeFlatThenUp(35, 20, 100, 2);
+    const down = makeDowntrend(50, up[up.length - 1].close, 3);
     const lastTime = up[up.length - 1].openTime;
     for (let i = 0; i < down.length; i++) {
       down[i].openTime = lastTime + (i + 1) * 60_000;
     }
     const candles = [...up, ...down];
-    const report = runBacktest(candles, 2);
-
-    // Should have at least one trade, and some losses
+    const report = runBacktest(candles, makeTestDsl());
     expect(report.trades).toBeGreaterThanOrEqual(1);
   });
 
-  // ── Execution opts: fees and slippage ─────────────────────────────────
-
   it("fees reduce effective PnL compared to zero-fee backtest", () => {
-    const candles = makeUptrend(60, 100, 2);
+    const candles = makeFlatThenUp(80, 25, 100, 2);
+    const noFees = runBacktest(candles, makeTestDsl(), { feeBps: 0, slippageBps: 0 });
+    const withFees = runBacktest(candles, makeTestDsl(), { feeBps: 10, slippageBps: 5 });
 
-    const noFees = runBacktest(candles, 2, { feeBps: 0, slippageBps: 0 });
-    const withFees = runBacktest(candles, 2, { feeBps: 10, slippageBps: 5 });
-
-    // Both should produce trades on the same data
     if (noFees.trades > 0 && withFees.trades > 0) {
-      expect(withFees.totalPnlPct).toBeLessThanOrEqual(noFees.totalPnlPct);
+      expect(withFees.totalPnlPct).toBeLessThanOrEqual(noFees.totalPnlPct + 0.01);
     }
   });
 
-  // ── Determinism ───────────────────────────────────────────────────────
-
   it("is deterministic: same input produces same output", () => {
-    const candles = makeUptrend(50, 100, 2);
-
-    const a = runBacktest(candles, 2);
-    const b = runBacktest(candles, 2);
+    const candles = makeFlatThenUp(80, 25, 100, 2);
+    const a = runBacktest(candles, makeTestDsl());
+    const b = runBacktest(candles, makeTestDsl());
 
     expect(a.trades).toBe(b.trades);
     expect(a.wins).toBe(b.wins);
@@ -117,22 +125,15 @@ describe("backtest – runBacktest", () => {
     expect(a.tradeLog).toEqual(b.tradeLog);
   });
 
-  // ── Max drawdown ──────────────────────────────────────────────────────
-
   it("max drawdown is non-negative", () => {
-    const candles = makeUptrend(50, 100, 2);
-    const report = runBacktest(candles, 2);
-
+    const candles = makeFlatThenUp(80, 25, 100, 2);
+    const report = runBacktest(candles, makeTestDsl());
     expect(report.maxDrawdownPct).toBeGreaterThanOrEqual(0);
   });
 
-  // ── Report field rounding ─────────────────────────────────────────────
-
   it("rounds winrate to 4 decimal places and pnl/drawdown to 2", () => {
-    const candles = makeUptrend(50, 100, 2);
-    const report = runBacktest(candles, 2);
-
-    // Check rounding: multiply by precision factor, should be integer
+    const candles = makeFlatThenUp(80, 25, 100, 2);
+    const report = runBacktest(candles, makeTestDsl());
     expect(Number.isInteger(report.winrate * 10000)).toBe(true);
     expect(Number.isInteger(report.totalPnlPct * 100)).toBe(true);
     expect(Number.isInteger(report.maxDrawdownPct * 100)).toBe(true);

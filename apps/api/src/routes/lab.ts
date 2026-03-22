@@ -3,6 +3,7 @@ import { prisma } from "../lib/prisma.js";
 import { problem } from "../lib/problem.js";
 import { resolveWorkspace } from "../lib/workspace.js";
 import { runBacktest } from "../lib/backtest.js";
+import { applyDslSweepParam } from "../lib/dslSweepParam.js";
 import { compileGraph } from "../lib/graphCompiler.js";
 import type { GraphJson } from "../lib/graphCompiler.js";
 
@@ -424,8 +425,8 @@ export async function labRoutes(app: FastifyInstance) {
       select: BACKTEST_SELECT,
     });
 
-    // Run async (fire-and-forget)
-    runBacktestAsync(bt.id, dataset.id, dataset.exchange, symbol, dataset.interval, strategyVersion.id).catch(() => {
+    // Run async (fire-and-forget) — pass dslJson for DSL-driven evaluation
+    runBacktestAsync(bt.id, dataset.id, dataset.exchange, symbol, dataset.interval, strategyVersion.dslJson).catch(() => {
       // errors handled inside runBacktestAsync
     });
 
@@ -684,7 +685,9 @@ async function runSweepAsync(sweepId: string): Promise<void> {
       volume: Number(c.volume),
     }));
 
-    const riskPct = extractRiskPct(strategyVersion.dslJson);
+    const dslJson = strategyVersion.dslJson;
+    if (!dslJson) throw new Error("StrategyVersion has no dslJson");
+
     const symbol = dataset.symbol;
     const interval = candleIntervalToBybit(dataset.interval);
     const fromTs = new Date(Number(dataset.fromTsMs));
@@ -693,10 +696,18 @@ async function runSweepAsync(sweepId: string): Promise<void> {
 
     const results: SweepRow[] = [];
 
-    // Sequential sweep
+    // Sequential sweep — mutate DSL per iteration
     for (let paramValue = sweepParam.from; paramValue <= sweepParam.to; paramValue += sweepParam.step) {
       // Round to avoid floating point drift
       const roundedParam = Math.round(paramValue * 1e8) / 1e8;
+
+      // Clone DSL and inject the sweep parameter value into the target block
+      const mutatedDsl = applyDslSweepParam(
+        dslJson as Record<string, unknown>,
+        sweepParam.blockId,
+        sweepParam.paramName,
+        roundedParam,
+      );
 
       // Create a BacktestResult record for this run
       const bt = await prisma.backtestResult.create({
@@ -719,7 +730,8 @@ async function runSweepAsync(sweepId: string): Promise<void> {
       });
 
       try {
-        const report = runBacktest(candles, riskPct, {
+        // DSL-driven backtest — sweep-mutated DSL for this iteration
+        const report = runBacktest(candles, mutatedDsl, {
           feeBps: sweep.feeBps,
           slippageBps: sweep.slippageBps,
           fillAt: "CLOSE",
@@ -813,7 +825,7 @@ async function runBacktestAsync(
   exchange: string,
   symbol: string,
   interval: import("@prisma/client").CandleInterval,
-  strategyVersionId?: string,
+  dslJson: unknown,
 ): Promise<void> {
   try {
     await prisma.backtestResult.update({
@@ -821,23 +833,7 @@ async function runBacktestAsync(
       data: { status: "RUNNING" },
     });
 
-    // Phase 5: use explicit strategyVersionId if provided; fall back to latest version
-    let dslJson: unknown = null;
-    if (strategyVersionId) {
-      const sv = await prisma.strategyVersion.findUnique({ where: { id: strategyVersionId } });
-      dslJson = sv?.dslJson ?? null;
-    } else {
-      const bt = await prisma.backtestResult.findUnique({ where: { id: btId } });
-      if (bt) {
-        const strategy = await prisma.strategy.findUnique({
-          where: { id: bt.strategyId },
-          include: { versions: { orderBy: { version: "desc" }, take: 1 } },
-        });
-        dslJson = strategy?.versions[0]?.dslJson ?? null;
-      }
-    }
-
-    const riskPct = extractRiskPct(dslJson);
+    if (!dslJson) throw new Error("dslJson is required for DSL-driven backtest");
 
     // Load dataset boundaries
     const dataset = await prisma.marketDataset.findUnique({ where: { id: datasetId } });
@@ -870,7 +866,8 @@ async function runBacktestAsync(
     // Fetch fee/slippage from the BacktestResult record
     const btRecord = await prisma.backtestResult.findUnique({ where: { id: btId } });
 
-    const report = runBacktest(candles, riskPct, {
+    // DSL-driven backtest — behavior determined entirely by compiled DSL
+    const report = runBacktest(candles, dslJson, {
       feeBps:      btRecord?.feeBps      ?? 0,
       slippageBps: btRecord?.slippageBps ?? 0,
       fillAt:      "CLOSE",
@@ -895,17 +892,6 @@ async function runBacktestAsync(
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
-
-/** Extract riskPerTradePct from DSL JSON, defaulting to 1.0 */
-function extractRiskPct(dslJson: unknown): number {
-  if (!dslJson || typeof dslJson !== "object") return 1.0;
-  const dsl = dslJson as Record<string, unknown>;
-  const risk = dsl["risk"];
-  if (!risk || typeof risk !== "object") return 1.0;
-  const r = risk as Record<string, unknown>;
-  const pct = Number(r["riskPerTradePct"]);
-  return Number.isFinite(pct) && pct > 0 ? pct : 1.0;
-}
 
 /** Map CandleInterval enum → Bybit kline interval string */
 function candleIntervalToBybit(interval: import("@prisma/client").CandleInterval): string {

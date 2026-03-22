@@ -62,3 +62,47 @@ export function makeFlat(n: number, startPrice = 100): Candle[] {
   }
   return candles;
 }
+
+/**
+ * Generate N candles: flat start then strong uptrend.
+ * This ensures SMA crossovers fire (fast SMA crosses above slow SMA).
+ * @param n          Total candle count
+ * @param flatBars   Number of initial flat bars (default: 25)
+ * @param startPrice Starting price (default: 100)
+ * @param trendStep  Price step per bar in trend phase (default: 2)
+ */
+export function makeFlatThenUp(n: number, flatBars = 25, startPrice = 100, trendStep = 2): Candle[] {
+  const candles: Candle[] = [];
+  for (let i = 0; i < n; i++) {
+    const close = i < flatBars ? startPrice : startPrice + (i - flatBars) * trendStep;
+    candles.push({
+      openTime: 1_700_000_000_000 + i * 60_000,
+      open: close - trendStep * 0.3,
+      high: close + trendStep * 0.5,
+      low: close - trendStep * 0.5,
+      close,
+      volume: 1000 + i,
+    });
+  }
+  return candles;
+}
+
+/**
+ * Generate N candles: flat start then strong downtrend.
+ * This ensures SMA crossunders fire (fast SMA crosses below slow SMA).
+ */
+export function makeFlatThenDown(n: number, flatBars = 25, startPrice = 200, trendStep = 2): Candle[] {
+  const candles: Candle[] = [];
+  for (let i = 0; i < n; i++) {
+    const close = i < flatBars ? startPrice : startPrice - (i - flatBars) * trendStep;
+    candles.push({
+      openTime: 1_700_000_000_000 + i * 60_000,
+      open: close + trendStep * 0.3,
+      high: close + trendStep * 0.5,
+      low: close - trendStep * 0.5,
+      close,
+      volume: 1000 + i,
+    });
+  }
+  return candles;
+}
