@@ -215,6 +215,7 @@ enum IntentType {
 enum IntentState {
   PENDING
   PLACED
+  PARTIALLY_FILLED
   FILLED
   CANCELLED
   FAILED
@@ -239,6 +240,10 @@ model BotIntent {
   price       Decimal?    @db.Decimal(18, 8)
   /// Exchange-assigned order ID, set after placement confirmation
   orderId     String?
+  /// Cumulative executed quantity reported by exchange (for partial fill tracking)
+  cumExecQty  Decimal?    @db.Decimal(18, 8)
+  /// Average fill price reported by exchange
+  avgFillPrice Decimal?   @db.Decimal(18, 8)
   /// Extra metadata (e.g., sl/tp prices, retry count, exchange response)
   metaJson    Json?
   createdAt   DateTime    @default(now())

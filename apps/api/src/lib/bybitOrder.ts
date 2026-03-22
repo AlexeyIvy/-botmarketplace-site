@@ -150,6 +150,8 @@ export interface OrderStatusResult {
   orderType: string;
   qty: string;
   price: string;
+  /** Actual average fill price reported by exchange ("0" if unfilled) */
+  avgPrice: string;
   cumExecQty: string;
   orderStatus: string; // Bybit raw status: New | PartiallyFilled | Filled | Cancelled | Rejected
   createdTime: string;
@@ -217,6 +219,7 @@ async function _fetchOrderFromEndpoint(
         orderType: string;
         qty: string;
         price: string;
+        avgPrice: string;
         cumExecQty: string;
         orderStatus: string;
         createdTime: string;
@@ -239,6 +242,7 @@ async function _fetchOrderFromEndpoint(
     orderType: item.orderType,
     qty: item.qty,
     price: item.price,
+    avgPrice: item.avgPrice,
     cumExecQty: item.cumExecQty,
     orderStatus: item.orderStatus,
     createdTime: item.createdTime,
