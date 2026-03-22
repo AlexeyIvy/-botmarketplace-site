@@ -25,11 +25,19 @@ import pino from "pino";
 import { Prisma } from "@prisma/client";
 import { prisma } from "./prisma.js";
 import { transition, isValidTransition } from "./stateMachine.js";
-import { bybitPlaceOrder, getBybitBaseUrl, isBybitLive } from "./bybitOrder.js";
+import {
+  bybitPlaceOrder,
+  bybitGetOrderStatus,
+  mapBybitStatus,
+  getBybitBaseUrl,
+  isBybitLive,
+} from "./bybitOrder.js";
 import { decrypt, getEncryptionKeyRaw } from "./crypto.js";
 import {
   getActivePosition,
+  openPosition,
   applyPartialFill,
+  closePosition,
   type PositionSnapshot,
 } from "./positionManager.js";
 import { evaluateEntry, type OpenSignal } from "./signalEngine.js";
@@ -558,6 +566,270 @@ async function processIntents() {
 }
 
 // ---------------------------------------------------------------------------
+// Partial-fill reconciliation (Stage 3, #129 follow-up)
+// ---------------------------------------------------------------------------
+
+/**
+ * Reconcile PLACED and PARTIALLY_FILLED intents against exchange order status.
+ *
+ * For each intent with an exchange orderId:
+ * 1. Fetch live status from Bybit
+ * 2. Compute fill delta (new cumExecQty - previously tracked cumExecQty)
+ * 3. Route fill through position lifecycle:
+ *    - ENTRY first fill → openPosition()
+ *    - ENTRY subsequent fills → applyPartialFill("entry")
+ *    - EXIT fills → applyPartialFill("exit") / closePosition()
+ * 4. Update intent state + cumExecQty
+ *
+ * This is a minimal reconciliation loop — not a full OMS.
+ * Runs once per poll cycle, processes up to 20 intents.
+ */
+async function reconcilePlacedIntents(): Promise<void> {
+  try {
+    const intents = await prisma.botIntent.findMany({
+      where: {
+        state: { in: ["PLACED", "PARTIALLY_FILLED"] },
+        orderId: { not: null },
+        botRun: { state: "RUNNING" },
+      },
+      include: {
+        botRun: {
+          include: {
+            bot: {
+              select: {
+                id: true,
+                symbol: true,
+                exchangeConnectionId: true,
+                exchangeConnection: {
+                  select: { apiKey: true, encryptedSecret: true },
+                },
+              },
+            },
+          },
+        },
+      },
+      orderBy: { createdAt: "asc" },
+      take: 20,
+    });
+
+    if (intents.length === 0) return;
+
+    const encKey = getEncryptionKeyRaw();
+    if (!encKey) {
+      workerLog.warn("SECRET_ENCRYPTION_KEY not set, skipping reconciliation");
+      return;
+    }
+
+    for (const intent of intents) {
+      const { bot } = intent.botRun;
+      if (!bot.exchangeConnection || !intent.orderId) continue;
+
+      try {
+        const secret = decrypt(bot.exchangeConnection.encryptedSecret, encKey);
+        const liveStatus = await bybitGetOrderStatus(
+          bot.exchangeConnection.apiKey,
+          secret,
+          intent.orderId,
+          bot.symbol,
+        );
+
+        const mapped = mapBybitStatus(liveStatus.orderStatus);
+        const exchangeCumQty = Number(liveStatus.cumExecQty || "0");
+        const prevCumQty = intent.cumExecQty ? intent.cumExecQty.toNumber() : 0;
+        const fillDelta = exchangeCumQty - prevCumQty;
+
+        // No new fills — skip
+        if (fillDelta <= 0 && mapped !== "CANCELLED" && mapped !== "REJECTED") {
+          continue;
+        }
+
+        // Derive fill price: use avg fill price from exchange if available,
+        // otherwise fall back to intent price or 0
+        const fillPrice = liveStatus.price && Number(liveStatus.price) > 0
+          ? Number(liveStatus.price)
+          : (intent.price ? intent.price.toNumber() : 0);
+
+        // Determine intent type from DB
+        const isEntry = intent.type === "ENTRY";
+        const isExit = intent.type === "EXIT";
+
+        // Route fill delta through position lifecycle
+        if (fillDelta > 0) {
+          const meta = intent.metaJson && typeof intent.metaJson === "object"
+            ? intent.metaJson as Record<string, unknown>
+            : {};
+
+          if (isEntry) {
+            await reconcileEntryFill(intent, bot, fillDelta, fillPrice, prevCumQty, meta);
+          } else if (isExit) {
+            await reconcileExitFill(intent, bot, fillDelta, fillPrice, meta);
+          }
+        }
+
+        // Determine new intent state
+        let newState: "PLACED" | "PARTIALLY_FILLED" | "FILLED" | "CANCELLED" | "FAILED" = intent.state as "PLACED" | "PARTIALLY_FILLED";
+        if (mapped === "FILLED") {
+          newState = "FILLED";
+        } else if (mapped === "PARTIALLY_FILLED") {
+          newState = "PARTIALLY_FILLED";
+        } else if (mapped === "CANCELLED" || mapped === "REJECTED") {
+          newState = mapped === "CANCELLED" ? "CANCELLED" : "FAILED";
+        }
+
+        // Update intent with fill progress
+        const updateMeta = {
+          ...(intent.metaJson && typeof intent.metaJson === "object" ? intent.metaJson as Record<string, unknown> : {}),
+          lastReconcileAt: new Date().toISOString(),
+          exchangeStatus: liveStatus.orderStatus,
+        };
+
+        await prisma.botIntent.update({
+          where: { id: intent.id },
+          data: {
+            state: newState,
+            cumExecQty: exchangeCumQty,
+            avgFillPrice: fillPrice > 0 ? fillPrice : undefined,
+            metaJson: updateMeta as Prisma.InputJsonValue,
+          },
+        });
+
+        if (fillDelta > 0 || newState !== intent.state) {
+          await prisma.botEvent.create({
+            data: {
+              botRunId: intent.botRun.id,
+              type: "intent_reconciled",
+              payloadJson: {
+                intentId: intent.intentId,
+                orderId: intent.orderId,
+                prevState: intent.state,
+                newState,
+                cumExecQty: exchangeCumQty,
+                fillDelta,
+                fillPrice,
+                exchangeStatus: liveStatus.orderStatus,
+                at: new Date().toISOString(),
+              } as Prisma.InputJsonValue,
+            },
+          });
+
+          workerLog.info(
+            {
+              intentId: intent.intentId,
+              orderId: intent.orderId,
+              prevState: intent.state,
+              newState,
+              fillDelta,
+              cumExecQty: exchangeCumQty,
+            },
+            "intent reconciled",
+          );
+        }
+      } catch (err) {
+        workerLog.warn(
+          { err, intentId: intent.intentId, orderId: intent.orderId },
+          "reconcile intent error (non-fatal)",
+        );
+      }
+    }
+  } catch (err) {
+    workerLog.error({ err }, "reconcilePlacedIntents error");
+  }
+}
+
+/**
+ * Handle entry-side fill: first fill opens position, subsequent fills add to it.
+ */
+async function reconcileEntryFill(
+  intent: { id: string; intentId: string; botRun: { id: string }; metaJson: Prisma.JsonValue },
+  bot: { id: string; symbol: string },
+  fillDelta: number,
+  fillPrice: number,
+  prevCumQty: number,
+  meta: Record<string, unknown>,
+): Promise<void> {
+  const position = await getActivePosition(intent.botRun.id, bot.symbol);
+
+  if (!position && prevCumQty === 0) {
+    // First fill on new entry — open position
+    const slPrice = typeof meta.slPrice === "number" ? meta.slPrice : undefined;
+    const tpPrice = typeof meta.tpPrice === "number" ? meta.tpPrice : undefined;
+
+    await openPosition({
+      botId: bot.id,
+      botRunId: intent.botRun.id,
+      symbol: bot.symbol,
+      side: meta.positionSide === "SHORT" || intent.intentId?.includes("short") ? "SHORT" : "LONG",
+      qty: fillDelta,
+      price: fillPrice,
+      slPrice,
+      tpPrice,
+      intentId: intent.intentId,
+      meta: { source: "reconciliation", orderId: intent.id },
+    });
+
+    workerLog.info(
+      { intentId: intent.intentId, qty: fillDelta, price: fillPrice },
+      "position opened from reconciled entry fill",
+    );
+  } else if (position) {
+    // Subsequent fill — add to existing position via partial fill
+    await applyPartialFill({
+      positionId: position.id,
+      filledQty: fillDelta,
+      fillPrice,
+      fillSide: "entry",
+      intentId: intent.intentId,
+      meta: { source: "reconciliation", orderId: intent.id },
+    });
+
+    workerLog.info(
+      { intentId: intent.intentId, positionId: position.id, fillDelta, fillPrice },
+      "partial entry fill applied to position",
+    );
+  }
+}
+
+/**
+ * Handle exit-side fill: reduce position through partial fill or close.
+ */
+async function reconcileExitFill(
+  intent: { id: string; intentId: string; botRun: { id: string }; metaJson: Prisma.JsonValue },
+  bot: { id: string; symbol: string },
+  fillDelta: number,
+  fillPrice: number,
+  meta: Record<string, unknown>,
+): Promise<void> {
+  const positionId = typeof meta.positionId === "string" ? meta.positionId : undefined;
+  const position = positionId
+    ? await prisma.position.findUnique({ where: { id: positionId } }).then((p) =>
+        p && p.status === "OPEN" ? { id: p.id, currentQty: p.currentQty.toNumber() } : null,
+      )
+    : await getActivePosition(intent.botRun.id, bot.symbol);
+
+  if (!position) {
+    workerLog.warn(
+      { intentId: intent.intentId },
+      "no open position found for exit fill reconciliation",
+    );
+    return;
+  }
+
+  await applyPartialFill({
+    positionId: position.id,
+    filledQty: fillDelta,
+    fillPrice,
+    fillSide: "exit",
+    intentId: intent.intentId,
+    meta: { source: "reconciliation", orderId: intent.id },
+  });
+
+  workerLog.info(
+    { intentId: intent.intentId, positionId: position.id, fillDelta, fillPrice },
+    "exit fill applied to position",
+  );
+}
+
+// ---------------------------------------------------------------------------
 // Stage 3 (#128): Runtime strategy evaluation — signal/exit engine
 // ---------------------------------------------------------------------------
 
@@ -879,6 +1151,9 @@ async function poll() {
 
     // Process PENDING intents on RUNNING runs (Stage 11)
     await processIntents();
+
+    // Reconcile PLACED/PARTIALLY_FILLED intents against exchange (Stage 3, #129 follow-up)
+    await reconcilePlacedIntents();
 
     // Stage 19c: run retention at most once per hour
     if (Date.now() - lastRetentionRunMs >= RETENTION_INTERVAL_MS) {
