@@ -3,7 +3,8 @@
  * Used by: lab routes (candles for backtest), terminal routes (ticker + candles).
  */
 
-const BYBIT_PUBLIC = "https://api.bybit.com";
+/** Public market data always uses main endpoint (no auth needed, works for both demo/live). */
+const BYBIT_PUBLIC = process.env.BYBIT_PUBLIC_URL ?? "https://api.bybit.com";
 /** Maximum candles per request (Bybit cap) */
 const PAGE_LIMIT = 1000;
 

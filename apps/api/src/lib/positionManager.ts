@@ -13,10 +13,10 @@
  * Designed for:
  * - long/short positions
  * - partial fills and DCA extensions
- * - future exchange reconciliation (#129)
+ * - exchange reconciliation (partial fills — #129)
  * - signal/exit engine integration (#128)
  *
- * Stage 3 — Issue #127
+ * Stage 3 — Issues #127, #129
  */
 
 import { Prisma } from "@prisma/client";
@@ -413,6 +413,61 @@ export async function updateSLTP(
   };
 
   return tx ? run(tx) : defaultPrisma.$transaction(run);
+}
+
+// ---------------------------------------------------------------------------
+// Partial fill handling (Stage 3, #129)
+// ---------------------------------------------------------------------------
+
+export interface PartialFillInput {
+  positionId: string;
+  /** Filled quantity in this fill event */
+  filledQty: number;
+  /** Fill price */
+  fillPrice: number;
+  /** Whether this is the opening side (adding to position) or closing side */
+  fillSide: "entry" | "exit";
+  intentId?: string;
+  meta?: Record<string, unknown>;
+}
+
+/**
+ * Apply a partial fill to an OPEN position.
+ *
+ * For entry-side fills: adds to position (increases currentQty, recalculates VWAP).
+ * For exit-side fills: reduces position (decreases currentQty, calculates realised PnL).
+ *
+ * This bridges the gap between "FILLED or nothing" and real exchange behavior
+ * where orders fill incrementally.
+ */
+export async function applyPartialFill(
+  input: PartialFillInput,
+  tx?: Prisma.TransactionClient,
+): Promise<PositionSnapshot> {
+  if (input.fillSide === "entry") {
+    return addToPosition(
+      {
+        positionId: input.positionId,
+        qty: input.filledQty,
+        price: input.fillPrice,
+        intentId: input.intentId,
+        meta: { ...input.meta, source: "partial_fill" },
+      },
+      tx,
+    );
+  }
+
+  // Exit side — partial close
+  return closePosition(
+    {
+      positionId: input.positionId,
+      qty: input.filledQty,
+      price: input.fillPrice,
+      intentId: input.intentId,
+      meta: { ...input.meta, source: "partial_fill" },
+    },
+    tx,
+  );
 }
 
 // ---------------------------------------------------------------------------

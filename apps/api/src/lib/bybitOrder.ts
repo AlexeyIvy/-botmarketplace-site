@@ -1,14 +1,49 @@
 /**
  * Bybit V5 private order API helpers (requires API key + secret).
- * Used by: terminal order routes (Stage 9b).
+ * Used by: terminal order routes (Stage 9b), botWorker (Stage 11).
  *
  * Authentication: HMAC-SHA256 over timestamp + apiKey + recvWindow + payload.
  * Ref: https://bybit-exchange.github.io/docs/v5/guide/authentication
+ *
+ * Environment routing (Stage 3, #129):
+ *   BYBIT_ENV=demo  → https://api-demo.bybit.com (default)
+ *   BYBIT_ENV=live  → https://api.bybit.com
+ *   BYBIT_BASE_URL  → explicit override (takes precedence)
  */
 
 import { createHmac } from "node:crypto";
 
-const BYBIT_BASE = "https://api.bybit.com";
+// ---------------------------------------------------------------------------
+// Environment-aware base URL
+// ---------------------------------------------------------------------------
+
+const BYBIT_LIVE_URL = "https://api.bybit.com";
+const BYBIT_DEMO_URL = "https://api-demo.bybit.com";
+
+/**
+ * Resolve the Bybit base URL from environment config.
+ *
+ * Priority:
+ *   1. BYBIT_BASE_URL env var (explicit override)
+ *   2. BYBIT_ENV=live → live endpoint
+ *   3. BYBIT_ENV=demo or unset → demo endpoint (safe default)
+ */
+export function getBybitBaseUrl(): string {
+  if (process.env.BYBIT_BASE_URL) {
+    return process.env.BYBIT_BASE_URL;
+  }
+  if (process.env.BYBIT_ENV === "live") {
+    return BYBIT_LIVE_URL;
+  }
+  // Default to demo — safe for development
+  return BYBIT_DEMO_URL;
+}
+
+/** Check if currently configured for live trading. */
+export function isBybitLive(): boolean {
+  return getBybitBaseUrl() === BYBIT_LIVE_URL;
+}
+
 const RECV_WINDOW = "5000";
 
 // ---------------------------------------------------------------------------
@@ -78,7 +113,7 @@ export async function bybitPlaceOrder(
 
   const timestamp = Date.now().toString();
 
-  const res = await fetch(`${BYBIT_BASE}/v5/order/create`, {
+  const res = await fetch(`${getBybitBaseUrl()}/v5/order/create`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -163,7 +198,7 @@ async function _fetchOrderFromEndpoint(
   const qs = new URLSearchParams(params).toString();
   const timestamp = Date.now().toString();
 
-  const res = await fetch(`${BYBIT_BASE}${path}?${qs}`, {
+  const res = await fetch(`${getBybitBaseUrl()}${path}?${qs}`, {
     headers: authHeaders(apiKey, secret, timestamp, qs),
   });
 
