@@ -202,19 +202,21 @@ describe("exitEngine – take profit", () => {
 // ---------------------------------------------------------------------------
 
 describe("exitEngine – indicator exit", () => {
-  it("triggers indicator exit when RSI > threshold", () => {
-    // Build a strong uptrend so RSI goes overbought
+  it("triggers indicator exit when RSI > threshold on strong uptrend", () => {
+    // 20 flat bars then 80 bars of aggressive +5 step → RSI will be overbought
     const candles = makeFlatThenUp(100, 20, 100, 5);
+    // Position opened early in trend with very wide SL/TP so they don't fire first
+    const entryPrice = candles[30].close;
     const position = makeLongPosition(
-      candles[30].close,
+      entryPrice,
       0.01,
-      candles[30].close * 0.8, // wide SL
-      candles[30].close * 1.5, // wide TP
+      entryPrice * 0.5, // extremely wide SL — will not trigger
+      entryPrice * 3.0, // extremely wide TP — will not trigger
     );
 
     const dsl = makeBaseDsl({
-      stopLoss: { type: "fixed_pct", value: 20 },
-      takeProfit: { type: "fixed_pct", value: 50 },
+      stopLoss: { type: "fixed_pct", value: 50 },
+      takeProfit: { type: "fixed_pct", value: 200 },
       indicatorExit: {
         indicator: { type: "RSI", length: 14 },
         condition: { op: "gt", value: 70 },
@@ -227,23 +229,25 @@ describe("exitEngine – indicator exit", () => {
       dslJson: dsl,
       position,
       barsHeld: 70,
-      trailingState: createTrailingStopState(candles[30].close),
+      trailingState: createTrailingStopState(entryPrice),
     });
 
-    // May or may not fire depending on RSI — but shouldn't throw
-    if (result && result.reason === "indicator_exit") {
-      expect(result.action).toBe("close");
-      expect(result.description).toContain("RSI");
-    }
+    // With 80 consecutive +5 bars, RSI must be well above 70 — assert deterministically
+    expect(result).not.toBeNull();
+    expect(result!.action).toBe("close");
+    expect(result!.reason).toBe("indicator_exit");
+    expect(result!.description).toContain("RSI");
   });
 
-  it("respects appliesTo filter", () => {
+  it("respects appliesTo=long filter — does not fire for short position", () => {
     const candles = makeFlatThenUp(100, 20, 100, 5);
-    const position = makeShortPosition(candles[30].close, 0.01, candles[30].close * 1.2, candles[30].close * 0.5);
+    const entryPrice = candles[30].close;
+    // Short position with extremely wide SL/TP
+    const position = makeShortPosition(entryPrice, 0.01, entryPrice * 2.0, entryPrice * 0.1);
 
     const dsl = makeBaseDsl({
-      stopLoss: { type: "fixed_pct", value: 20 },
-      takeProfit: { type: "fixed_pct", value: 50 },
+      stopLoss: { type: "fixed_pct", value: 100 },
+      takeProfit: { type: "fixed_pct", value: 90 },
       indicatorExit: {
         indicator: { type: "RSI", length: 14 },
         condition: { op: "gt", value: 70 },
@@ -256,13 +260,46 @@ describe("exitEngine – indicator exit", () => {
       dslJson: dsl,
       position,
       barsHeld: 70,
-      trailingState: createTrailingStopState(candles[30].close),
+      trailingState: createTrailingStopState(entryPrice),
     });
 
-    // Should NOT trigger indicator exit for short position when appliesTo=long
+    // Indicator exit must NOT fire for a short position with appliesTo=long.
+    // SL/TP are wide enough they shouldn't fire either, so result should be null.
+    // But even if SL/TP fires, the important thing is it's NOT indicator_exit.
     if (result) {
       expect(result.reason).not.toBe("indicator_exit");
+    } else {
+      expect(result).toBeNull();
     }
+  });
+
+  it("fires indicator exit for short when appliesTo=both", () => {
+    // Strong downtrend → RSI will be oversold (< 30)
+    const candles = makeFlatThenDown(100, 20, 200, 3);
+    const entryPrice = candles[30].close;
+    const position = makeShortPosition(entryPrice, 0.01, entryPrice * 2.0, entryPrice * 0.1);
+
+    const dsl = makeBaseDsl({
+      stopLoss: { type: "fixed_pct", value: 100 },
+      takeProfit: { type: "fixed_pct", value: 90 },
+      indicatorExit: {
+        indicator: { type: "RSI", length: 14 },
+        condition: { op: "lt", value: 30 },
+        appliesTo: "both",
+      },
+    });
+
+    const result = evaluateExit({
+      candles,
+      dslJson: dsl,
+      position,
+      barsHeld: 70,
+      trailingState: createTrailingStopState(entryPrice),
+    });
+
+    expect(result).not.toBeNull();
+    expect(result!.reason).toBe("indicator_exit");
+    expect(result!.description).toContain("RSI");
   });
 });
 

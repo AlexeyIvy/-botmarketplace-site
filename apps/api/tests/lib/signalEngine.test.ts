@@ -182,23 +182,60 @@ describe("signalEngine – evaluateEntry", () => {
     expect(foundSignal).toBe(true);
   });
 
-  it("supports dual-side DSL with sideCondition", () => {
-    const allCandles = makeFlatThenUp(80, 15, 100, 2);
+  it("supports dual-side DSL with sideCondition (long)", () => {
+    // Flat then up: fast SMA will cross slow SMA, and price > EMA(20) → long
+    const allCandles = makeFlatThenUp(80, 25, 100, 2);
     let foundSignal = false;
 
-    for (let end = 15; end <= allCandles.length; end++) {
+    for (let end = 12; end <= allCandles.length; end++) {
       const window = allCandles.slice(0, end);
       const result = evaluateEntry({ candles: window, dslJson: makeDualSideDsl(), position: null });
       if (result) {
         expect(result.action).toBe("open");
-        expect(["long", "short"]).toContain(result.side);
+        expect(result.side).toBe("long");
+        expect(result.price).toBeGreaterThan(0);
         foundSignal = true;
         break;
       }
     }
 
-    // It's OK if no signal fires — the important thing is the code doesn't throw
-    expect(true).toBe(true);
+    expect(foundSignal).toBe(true);
+  });
+
+  it("supports dual-side DSL with sideCondition (short)", () => {
+    // Flat then down: crossover of SMA(5)/SMA(10) in downtrend + price < EMA(20) → short
+    const allCandles = makeFlatThenDown(80, 25, 200, 2);
+
+    const dsl = {
+      ...makeDualSideDsl(),
+      entry: {
+        sideCondition: {
+          indicator: { type: "EMA", length: 20 },
+          long: { op: "gt" },
+          short: { op: "lt" },
+        },
+        signal: {
+          type: "crossunder",
+          fast: { blockType: "SMA", length: 5 },
+          slow: { blockType: "SMA", length: 10 },
+        },
+      },
+    };
+
+    let foundSignal = false;
+    for (let end = 12; end <= allCandles.length; end++) {
+      const window = allCandles.slice(0, end);
+      const result = evaluateEntry({ candles: window, dslJson: dsl, position: null });
+      if (result) {
+        expect(result.action).toBe("open");
+        expect(result.side).toBe("short");
+        expect(result.price).toBeGreaterThan(0);
+        foundSignal = true;
+        break;
+      }
+    }
+
+    expect(foundSignal).toBe(true);
   });
 
   it("is deterministic: same input produces same output", () => {
