@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { evaluateEntry, generateOpenIntent } from "../../src/lib/signalEngine.js";
+import { evaluateExit, createTrailingStopState } from "../../src/lib/exitEngine.js";
 import { runDslBacktest } from "../../src/lib/dslEvaluator.js";
 import type { PositionSnapshot } from "../../src/lib/positionManager.js";
 import {
@@ -182,23 +183,23 @@ describe("signalEngine – evaluateEntry", () => {
     expect(foundSignal).toBe(true);
   });
 
-  it("supports dual-side DSL with sideCondition", () => {
+  it("does not throw on dual-side DSL with sideCondition", () => {
     const allCandles = makeFlatThenUp(80, 15, 100, 2);
-    let foundSignal = false;
 
+    // Evaluate across all windows — must never throw
     for (let end = 15; end <= allCandles.length; end++) {
       const window = allCandles.slice(0, end);
       const result = evaluateEntry({ candles: window, dslJson: makeDualSideDsl(), position: null });
       if (result) {
         expect(result.action).toBe("open");
         expect(["long", "short"]).toContain(result.side);
-        foundSignal = true;
-        break;
+        expect(result.price).toBeGreaterThan(0);
+        return; // signal found and validated — pass
       }
     }
 
-    // It's OK if no signal fires — the important thing is the code doesn't throw
-    expect(true).toBe(true);
+    // If no signal fires across all windows, that's still a valid outcome
+    // for this particular data shape. The test ensures no runtime errors.
   });
 
   it("is deterministic: same input produces same output", () => {
@@ -277,5 +278,171 @@ describe("signalEngine – parity with backtest evaluator", () => {
         break;
       }
     }
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Replay sequence test: fixed candle stream → deterministic intent sequence
+// ---------------------------------------------------------------------------
+
+describe("signalEngine + exitEngine – replay sequence", () => {
+  it("produces deterministic entry→exit sequence over a fixed candle stream", () => {
+    const dsl = makeSmaLongDsl(5, 20, 2, 4);
+    // 25 flat bars then strong uptrend — guarantees SMA crossover entry
+    const candles = makeFlatThenUp(80, 25, 100, 2);
+
+    type Intent = { type: "ENTRY" | "EXIT"; bar: number; side: string; price: number; reason?: string };
+    const intents: Intent[] = [];
+
+    let inPosition = false;
+    let entryPrice = 0;
+    let slPrice = 0;
+    let tpPrice = 0;
+    let entryBar = 0;
+
+    // Simulate tick-by-tick evaluation
+    for (let end = 2; end <= candles.length; end++) {
+      const window = candles.slice(0, end);
+      const currentCandle = candles[end - 1];
+
+      if (!inPosition) {
+        const signal = evaluateEntry({ candles: window, dslJson: dsl, position: null });
+        if (signal) {
+          intents.push({
+            type: "ENTRY",
+            bar: end - 1,
+            side: signal.side,
+            price: signal.price,
+            reason: signal.signalType,
+          });
+          inPosition = true;
+          entryPrice = signal.price;
+          slPrice = signal.slPrice;
+          tpPrice = signal.tpPrice;
+          entryBar = end - 1;
+        }
+      } else {
+        const position = {
+          id: "replay-pos",
+          botId: "bot-1",
+          botRunId: "run-1",
+          symbol: "BTCUSDT",
+          side: "LONG" as const,
+          status: "OPEN" as const,
+          entryQty: 0.01,
+          avgEntryPrice: entryPrice,
+          costBasis: 0.01 * entryPrice,
+          currentQty: 0.01,
+          realisedPnl: 0,
+          slPrice,
+          tpPrice,
+          openedAt: new Date(candles[entryBar].openTime),
+          closedAt: null,
+        };
+        const barsHeld = end - 1 - entryBar;
+        const trailingState = createTrailingStopState(entryPrice);
+
+        const exitSignal = evaluateExit({
+          candles: window,
+          dslJson: dsl,
+          position,
+          barsHeld,
+          trailingState,
+        });
+
+        if (exitSignal) {
+          intents.push({
+            type: "EXIT",
+            bar: end - 1,
+            side: exitSignal.side,
+            price: exitSignal.price,
+            reason: exitSignal.reason,
+          });
+          inPosition = false;
+        }
+      }
+    }
+
+    // Must have at least one entry
+    expect(intents.length).toBeGreaterThanOrEqual(1);
+    expect(intents[0].type).toBe("ENTRY");
+
+    // If we got an exit, it must come after entry
+    if (intents.length >= 2) {
+      expect(intents[1].type).toBe("EXIT");
+      expect(intents[1].bar).toBeGreaterThan(intents[0].bar);
+    }
+
+    // Replay determinism: run the exact same loop again
+    const intents2: Intent[] = [];
+    let inPosition2 = false;
+    let entryPrice2 = 0;
+    let slPrice2 = 0;
+    let tpPrice2 = 0;
+    let entryBar2 = 0;
+
+    for (let end = 2; end <= candles.length; end++) {
+      const window = candles.slice(0, end);
+
+      if (!inPosition2) {
+        const signal = evaluateEntry({ candles: window, dslJson: dsl, position: null });
+        if (signal) {
+          intents2.push({
+            type: "ENTRY",
+            bar: end - 1,
+            side: signal.side,
+            price: signal.price,
+            reason: signal.signalType,
+          });
+          inPosition2 = true;
+          entryPrice2 = signal.price;
+          slPrice2 = signal.slPrice;
+          tpPrice2 = signal.tpPrice;
+          entryBar2 = end - 1;
+        }
+      } else {
+        const position = {
+          id: "replay-pos",
+          botId: "bot-1",
+          botRunId: "run-1",
+          symbol: "BTCUSDT",
+          side: "LONG" as const,
+          status: "OPEN" as const,
+          entryQty: 0.01,
+          avgEntryPrice: entryPrice2,
+          costBasis: 0.01 * entryPrice2,
+          currentQty: 0.01,
+          realisedPnl: 0,
+          slPrice: slPrice2,
+          tpPrice: tpPrice2,
+          openedAt: new Date(candles[entryBar2].openTime),
+          closedAt: null,
+        };
+        const barsHeld = end - 1 - entryBar2;
+        const trailingState = createTrailingStopState(entryPrice2);
+
+        const exitSignal = evaluateExit({
+          candles: window,
+          dslJson: dsl,
+          position,
+          barsHeld,
+          trailingState,
+        });
+
+        if (exitSignal) {
+          intents2.push({
+            type: "EXIT",
+            bar: end - 1,
+            side: exitSignal.side,
+            price: exitSignal.price,
+            reason: exitSignal.reason,
+          });
+          inPosition2 = false;
+        }
+      }
+    }
+
+    // Identical intent sequences
+    expect(intents).toEqual(intents2);
   });
 });
