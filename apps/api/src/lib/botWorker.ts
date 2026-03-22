@@ -643,11 +643,14 @@ async function reconcilePlacedIntents(): Promise<void> {
           continue;
         }
 
-        // Derive fill price: use avg fill price from exchange if available,
-        // otherwise fall back to intent price or 0
-        const fillPrice = liveStatus.price && Number(liveStatus.price) > 0
-          ? Number(liveStatus.price)
-          : (intent.price ? intent.price.toNumber() : 0);
+        // Derive fill price: use actual avg fill price from exchange,
+        // fall back to order price, then intent price
+        const avgP = Number(liveStatus.avgPrice || "0");
+        const fillPrice = avgP > 0
+          ? avgP
+          : (Number(liveStatus.price || "0") > 0
+            ? Number(liveStatus.price)
+            : (intent.price ? intent.price.toNumber() : 0));
 
         // Determine intent type from DB
         const isEntry = intent.type === "ENTRY";
@@ -660,7 +663,7 @@ async function reconcilePlacedIntents(): Promise<void> {
             : {};
 
           if (isEntry) {
-            await reconcileEntryFill(intent, bot, fillDelta, fillPrice, prevCumQty, meta);
+            await reconcileEntryFill(intent, bot, fillDelta, fillPrice, prevCumQty, meta, intent.side);
           } else if (isExit) {
             await reconcileExitFill(intent, bot, fillDelta, fillPrice, meta);
           }
@@ -746,6 +749,7 @@ async function reconcileEntryFill(
   fillPrice: number,
   prevCumQty: number,
   meta: Record<string, unknown>,
+  intentSide: string,
 ): Promise<void> {
   const position = await getActivePosition(intent.botRun.id, bot.symbol);
 
@@ -754,11 +758,14 @@ async function reconcileEntryFill(
     const slPrice = typeof meta.slPrice === "number" ? meta.slPrice : undefined;
     const tpPrice = typeof meta.tpPrice === "number" ? meta.tpPrice : undefined;
 
+    // Derive position side from intent side (BUY→LONG, SELL→SHORT)
+    const positionSide = intentSide === "SELL" ? "SHORT" as const : "LONG" as const;
+
     await openPosition({
       botId: bot.id,
       botRunId: intent.botRun.id,
       symbol: bot.symbol,
-      side: meta.positionSide === "SHORT" || intent.intentId?.includes("short") ? "SHORT" : "LONG",
+      side: positionSide,
       qty: fillDelta,
       price: fillPrice,
       slPrice,

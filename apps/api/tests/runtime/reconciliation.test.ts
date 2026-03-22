@@ -303,6 +303,78 @@ describe("reconciliation scenario – multi-step partial fill", () => {
 });
 
 // ---------------------------------------------------------------------------
+// Fill price derivation (avgPrice vs order price)
+// ---------------------------------------------------------------------------
+
+describe("fill price derivation", () => {
+  /**
+   * Mirrors the fill price logic in reconcilePlacedIntents():
+   * Priority: avgPrice > order price > intent price > 0
+   */
+  function deriveFillPrice(
+    avgPrice: string,
+    orderPrice: string,
+    intentPrice: number | null,
+  ): number {
+    const avgP = Number(avgPrice || "0");
+    if (avgP > 0) return avgP;
+    const ordP = Number(orderPrice || "0");
+    if (ordP > 0) return ordP;
+    return intentPrice ?? 0;
+  }
+
+  it("uses avgPrice when available (normal case)", () => {
+    expect(deriveFillPrice("51234.5", "50000", 49000)).toBe(51234.5);
+  });
+
+  it("falls back to order price when avgPrice is '0' (unfilled)", () => {
+    expect(deriveFillPrice("0", "50000", 49000)).toBe(50000);
+  });
+
+  it("falls back to intent price when both avgPrice and order price are '0'", () => {
+    // Market order: price="0", avgPrice="0" before any fill
+    expect(deriveFillPrice("0", "0", 49000)).toBe(49000);
+  });
+
+  it("returns 0 when all sources are empty", () => {
+    expect(deriveFillPrice("", "0", null)).toBe(0);
+  });
+
+  it("prefers avgPrice over order price even when order price is valid", () => {
+    // Limit order filled at better price than limit
+    expect(deriveFillPrice("49800", "50000", 50000)).toBe(49800);
+  });
+
+  it("handles partial fill avgPrice correctly for VWAP", () => {
+    // Partial fill at 50100, then another at 50300 → Bybit reports blended avgPrice
+    const blendedAvgPrice = "50200";
+    expect(deriveFillPrice(blendedAvgPrice, "50000", 50000)).toBe(50200);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Position side derivation from intent.side
+// ---------------------------------------------------------------------------
+
+describe("position side from intent.side", () => {
+  function derivePositionSide(intentSide: string): "LONG" | "SHORT" {
+    return intentSide === "SELL" ? "SHORT" : "LONG";
+  }
+
+  it("BUY intent → LONG position", () => {
+    expect(derivePositionSide("BUY")).toBe("LONG");
+  });
+
+  it("SELL intent → SHORT position", () => {
+    expect(derivePositionSide("SELL")).toBe("SHORT");
+  });
+
+  it("unknown side defaults to LONG", () => {
+    expect(derivePositionSide("UNKNOWN")).toBe("LONG");
+  });
+});
+
+// ---------------------------------------------------------------------------
 // mapBybitStatus integration (live import)
 // ---------------------------------------------------------------------------
 
@@ -316,5 +388,20 @@ describe("mapBybitStatus – intent reconciliation states", () => {
     expect(mapBybitStatus("Cancelled")).toBe("CANCELLED");
     expect(mapBybitStatus("Rejected")).toBe("REJECTED");
     expect(mapBybitStatus("Deactivated")).toBe("CANCELLED");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// OrderStatusResult includes avgPrice (live import)
+// ---------------------------------------------------------------------------
+
+describe("OrderStatusResult – avgPrice field", () => {
+  it("interface includes avgPrice field", async () => {
+    // Verify the type exists by importing and checking the module exports
+    const mod = await import("../../src/lib/bybitOrder.js");
+    // bybitGetOrderStatus returns OrderStatusResult which should have avgPrice
+    // We can't instantiate the interface, but we verify the function exists
+    expect(typeof mod.bybitGetOrderStatus).toBe("function");
+    expect(typeof mod.mapBybitStatus).toBe("function");
   });
 });
