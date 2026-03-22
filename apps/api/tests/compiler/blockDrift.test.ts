@@ -135,13 +135,16 @@ describe("Support status snapshot", () => {
       "EMA",
       "RSI",
       "SMA",
+      "adx",
       "candles",
       "compare",
       "cross",
       "enter_long",
       "enter_short",
       "stop_loss",
+      "supertrend",
       "take_profit",
+      "vwap",
     ]);
   });
 
@@ -152,16 +155,13 @@ describe("Support status snapshot", () => {
       .sort();
 
     expect(compileOnly).toEqual([
-      "adx",
       "and_gate",
       "atr",
       "bollinger",
       "constant",
       "macd",
       "or_gate",
-      "supertrend",
       "volume",
-      "vwap",
     ]);
   });
 

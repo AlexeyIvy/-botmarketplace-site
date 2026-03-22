@@ -42,9 +42,9 @@ export const BLOCK_SUPPORT_MAP: Record<string, BlockSupportEntry> = {
   bollinger:    { status: "compile-only", note: "Compiler handler added in #122; backtest runtime pending (#125)" },
   atr:          { status: "compile-only", note: "Compiler handler added in #122; backtest runtime pending (#125)" },
   volume:       { status: "compile-only", note: "Compiler handler added in #122; backtest runtime pending (#125)" },
-  vwap:         { status: "compile-only", note: "Indicator engine + compiler handler added in #125; runtime pending (#126)" },
-  adx:          { status: "compile-only", note: "Indicator engine + compiler handler added in #125; runtime pending (#126)" },
-  supertrend:   { status: "compile-only", note: "Indicator engine + compiler handler added in #125; runtime pending (#126)" },
+  vwap:         { status: "supported",    note: "Indicator engine #125 + DSL evaluator runtime #126" },
+  adx:          { status: "supported",    note: "Indicator engine #125 + DSL evaluator runtime #126" },
+  supertrend:   { status: "supported",    note: "Indicator engine #125 + DSL evaluator runtime #126" },
 
   // ── Logic ───────────────────────────────────────────────────────────────────
   compare:      { status: "supported",    note: "Fully supported since Phase 4" },
