@@ -135,6 +135,7 @@ model Bot {
   strategyVersion    StrategyVersion     @relation(fields: [strategyVersionId], references: [id], onDelete: Restrict)
   exchangeConnection ExchangeConnection? @relation(fields: [exchangeConnectionId], references: [id], onDelete: SetNull)
   runs               BotRun[]
+  positions          Position[]
 
   @@unique([workspaceId, name])
   @@index([workspaceId])
@@ -177,6 +178,7 @@ model BotRun {
   workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   events    BotEvent[]
   intents   BotIntent[]
+  positions Position[]
 
   // NOTE: partial unique index (one active run per workspace+symbol)
   // is defined in the migration SQL because Prisma cannot express
@@ -248,6 +250,97 @@ model BotIntent {
   @@index([botRunId])
   @@index([orderLinkId])
   @@index([botRunId, state])
+}
+
+// ── Position domain (Stage 3 — #127) ─────────────────────────────
+
+enum PositionSide {
+  LONG
+  SHORT
+}
+
+enum PositionStatus {
+  OPEN
+  CLOSED
+}
+
+/// Tracks a logical position for a bot run on a symbol.
+/// Supports long/short, partial fills, DCA (add-to), partial close,
+/// average entry recalculation, and realised/unrealised PnL.
+model Position {
+  id            String         @id @default(uuid())
+  botId         String
+  botRunId      String
+  symbol        String
+  side          PositionSide
+  status        PositionStatus @default(OPEN)
+  /// Cumulative filled quantity (updated on each add/partial-close)
+  entryQty      Decimal        @db.Decimal(18, 8)
+  /// Volume-weighted average entry price (recalculated on add)
+  avgEntryPrice Decimal        @db.Decimal(18, 8)
+  /// Running total cost basis (qty × price for each fill), used for VWAP calc
+  costBasis     Decimal        @db.Decimal(18, 8)
+  /// Current remaining quantity (entryQty minus partial closes)
+  currentQty    Decimal        @db.Decimal(18, 8)
+  /// Cumulative realised PnL from partial/full closes
+  realisedPnl   Decimal        @db.Decimal(18, 8) @default(0)
+  /// Optional SL price tracked at position level
+  slPrice       Decimal?       @db.Decimal(18, 8)
+  /// Optional TP price tracked at position level
+  tpPrice       Decimal?       @db.Decimal(18, 8)
+  openedAt      DateTime       @default(now())
+  closedAt      DateTime?
+  /// Extensibility: extra metadata (e.g. DCA level, exchange fills, notes)
+  metaJson      Json?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  bot    Bot          @relation(fields: [botId], references: [id], onDelete: Cascade)
+  botRun BotRun       @relation(fields: [botRunId], references: [id], onDelete: Cascade)
+  events PositionEvent[]
+
+  @@index([botId])
+  @@index([botRunId])
+  @@index([botRunId, status])
+  @@index([botId, status])
+  @@index([botId, symbol, status])
+}
+
+enum PositionEventType {
+  OPEN
+  ADD
+  PARTIAL_CLOSE
+  CLOSE
+  SL_UPDATE
+  TP_UPDATE
+}
+
+/// Immutable event log for position state changes.
+/// Every mutation to a Position creates a PositionEvent for auditability
+/// and reconciliation / restart recovery.
+model PositionEvent {
+  id         String            @id @default(uuid())
+  positionId String
+  type       PositionEventType
+  /// Quantity involved in this event (fill qty for OPEN/ADD/PARTIAL_CLOSE/CLOSE)
+  qty        Decimal?          @db.Decimal(18, 8)
+  /// Price at which the event occurred (fill price)
+  price      Decimal?          @db.Decimal(18, 8)
+  /// Realised PnL from this event (for PARTIAL_CLOSE / CLOSE)
+  realisedPnl Decimal?         @db.Decimal(18, 8)
+  /// Snapshot of position state after this event
+  /// { avgEntryPrice, currentQty, costBasis, realisedPnl, slPrice, tpPrice }
+  snapshotJson Json?
+  /// Link to BotIntent that triggered this event (nullable for manual adjustments)
+  intentId    String?
+  /// Extra metadata
+  metaJson    Json?
+  ts          DateTime          @default(now())
+
+  position Position @relation(fields: [positionId], references: [id], onDelete: Cascade)
+
+  @@index([positionId, ts(sort: Desc)])
+  @@index([positionId, type])
 }
 
 // ── Exchange Connections ─────────────────────────────────────────

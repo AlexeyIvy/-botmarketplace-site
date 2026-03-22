@@ -27,6 +27,7 @@ import { prisma } from "./prisma.js";
 import { transition, isValidTransition } from "./stateMachine.js";
 import { bybitPlaceOrder } from "./bybitOrder.js";
 import { decrypt, getEncryptionKeyRaw } from "./crypto.js";
+import { getActivePosition, type PositionSnapshot } from "./positionManager.js";
 
 const workerLog = pino({
   name: "botWorker",
@@ -100,7 +101,10 @@ async function activateRun(runId: string) {
     await sleep(1_200);
 
     // SYNCING → RUNNING
-    const afterSync = await prisma.botRun.findUnique({ where: { id: runId } });
+    const afterSync = await prisma.botRun.findUnique({
+      where: { id: runId },
+      include: { bot: { select: { id: true, symbol: true } } },
+    });
     if (!afterSync || afterSync.state !== "SYNCING") return; // aborted
     await transition(runId, "RUNNING", {
       eventType: "RUN_RUNNING",
@@ -114,9 +118,40 @@ async function activateRun(runId: string) {
       data: { leaseOwner: WORKER_ID, leaseUntil: new Date(Date.now() + 30_000) },
     });
 
+    // Stage 3 (#127): read existing position state on startup for recovery
+    try {
+      const existingPosition = await getActivePosition(runId, afterSync.bot.symbol);
+      if (existingPosition) {
+        workerLog.info(
+          {
+            runId,
+            positionId: existingPosition.id,
+            side: existingPosition.side,
+            currentQty: existingPosition.currentQty,
+            avgEntryPrice: existingPosition.avgEntryPrice,
+          },
+          "recovered existing open position on startup",
+        );
+        await prisma.botEvent.create({
+          data: {
+            botRunId: runId,
+            type: "position_recovered",
+            payloadJson: {
+              positionId: existingPosition.id,
+              side: existingPosition.side,
+              currentQty: existingPosition.currentQty,
+              avgEntryPrice: existingPosition.avgEntryPrice,
+              realisedPnl: existingPosition.realisedPnl,
+            } as Prisma.InputJsonValue,
+          },
+        });
+      }
+    } catch (err) {
+      workerLog.warn({ err, runId }, "failed to read position on startup (non-fatal)");
+    }
+
     // Sync Bot.status → ACTIVE
-    const run = await prisma.botRun.findUnique({ where: { id: runId }, select: { botId: true } });
-    if (run) await syncBotStatus(run.botId);
+    await syncBotStatus(afterSync.bot.id);
   } catch (err) {
     // If another worker won or run was stopped, ignore
     workerLog.error({ err, runId }, "activateRun error");
