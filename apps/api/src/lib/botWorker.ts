@@ -28,6 +28,14 @@ import { transition, isValidTransition } from "./stateMachine.js";
 import { bybitPlaceOrder } from "./bybitOrder.js";
 import { decrypt, getEncryptionKeyRaw } from "./crypto.js";
 import { getActivePosition, type PositionSnapshot } from "./positionManager.js";
+import { evaluateEntry, type OpenSignal } from "./signalEngine.js";
+import {
+  evaluateExit,
+  createTrailingStopState,
+  type CloseSignal,
+  type TrailingStopState,
+} from "./exitEngine.js";
+import { computeSizing } from "./riskManager.js";
 
 const workerLog = pino({
   name: "botWorker",
@@ -504,6 +512,241 @@ async function processIntents() {
 }
 
 // ---------------------------------------------------------------------------
+// Stage 3 (#128): Runtime strategy evaluation — signal/exit engine
+// ---------------------------------------------------------------------------
+
+/** Per-run trailing stop state, keyed by runId. */
+const trailingStopStates = new Map<string, TrailingStopState>();
+
+/** Per-run last trade close time, keyed by runId. */
+const lastTradeCloseTimes = new Map<string, number>();
+
+/**
+ * Evaluate DSL strategy for all RUNNING runs with compiled DSL.
+ *
+ * For each run:
+ *  1. Load recent candles from MarketCandle table
+ *  2. Load current position state
+ *  3. If no position → evaluate entry via signalEngine → create ENTRY intent
+ *  4. If in position → evaluate exit via exitEngine → create EXIT intent
+ *
+ * Intent creation is idempotent: uses intentId derived from trigger timestamp
+ * to prevent duplicates.
+ */
+async function evaluateStrategies(): Promise<void> {
+  try {
+    const runningRuns = await prisma.botRun.findMany({
+      where: { state: "RUNNING" },
+      select: {
+        id: true,
+        startedAt: true,
+        bot: {
+          select: {
+            id: true,
+            symbol: true,
+            strategyVersion: { select: { dslJson: true } },
+          },
+        },
+      },
+      take: 20,
+    });
+
+    for (const run of runningRuns) {
+      const dslJson = run.bot?.strategyVersion?.dslJson;
+      if (!dslJson || typeof dslJson !== "object") continue;
+
+      // Check if strategy is enabled
+      const dsl = dslJson as Record<string, unknown>;
+      if (dsl["enabled"] === false) continue;
+
+      const symbol = run.bot.symbol;
+
+      try {
+        // Load recent candles (enough for indicator warm-up, ~200 bars)
+        const recentCandles = await prisma.marketCandle.findMany({
+          where: { symbol },
+          orderBy: { openTimeMs: "desc" },
+          take: 200,
+        });
+
+        if (recentCandles.length < 2) continue; // not enough data
+
+        // Convert to Candle format and reverse to ascending order
+        const candles = recentCandles
+          .reverse()
+          .map((mc) => ({
+            openTime: Number(mc.openTimeMs),
+            open: mc.open.toNumber(),
+            high: mc.high.toNumber(),
+            low: mc.low.toNumber(),
+            close: mc.close.toNumber(),
+            volume: mc.volume.toNumber(),
+          }));
+
+        // Get current position
+        const position = await getActivePosition(run.id, symbol);
+
+        if (!position) {
+          // --- No position: evaluate entry ---
+          const lastCloseTime = lastTradeCloseTimes.get(run.id) ?? 0;
+          const sizing = computeSizing({
+            dslJson,
+            currentPrice: candles[candles.length - 1].close,
+            hasOpenPosition: false,
+            lastTradeCloseTime: lastCloseTime,
+            now: Date.now(),
+          });
+
+          if (!sizing.eligible) {
+            workerLog.debug({ runId: run.id, reason: sizing.reason }, "entry not eligible");
+            continue;
+          }
+
+          const signal = evaluateEntry({
+            candles,
+            dslJson,
+            position: null,
+          });
+
+          if (signal) {
+            // Check idempotency: don't create duplicate intent for same trigger
+            const intentId = `entry_${signal.triggerTime}_${signal.side}`;
+            const existing = await prisma.botIntent.findFirst({
+              where: { botRunId: run.id, intentId },
+            });
+            if (existing) continue;
+
+            const orderLinkId = `lab_${run.id.slice(0, 8)}_${Date.now()}`;
+            await prisma.botIntent.create({
+              data: {
+                botRunId: run.id,
+                intentId,
+                orderLinkId,
+                side: signal.side === "long" ? "BUY" : "SELL",
+                qty: sizing.qty,
+                price: signal.price,
+                type: "ENTRY",
+                state: "PENDING",
+                metaJson: {
+                  signalType: signal.signalType,
+                  reason: signal.reason,
+                  slPrice: signal.slPrice,
+                  tpPrice: signal.tpPrice,
+                  sizingQty: sizing.qty,
+                  notionalUsd: sizing.notionalUsd,
+                } as Prisma.InputJsonValue,
+              },
+            });
+
+            // Initialize trailing stop state for new position
+            trailingStopStates.set(run.id, createTrailingStopState(signal.price));
+
+            await prisma.botEvent.create({
+              data: {
+                botRunId: run.id,
+                type: "signal_entry",
+                payloadJson: {
+                  intentId,
+                  side: signal.side,
+                  price: signal.price,
+                  slPrice: signal.slPrice,
+                  tpPrice: signal.tpPrice,
+                  reason: signal.reason,
+                  at: new Date().toISOString(),
+                } as Prisma.InputJsonValue,
+              },
+            });
+
+            workerLog.info(
+              { runId: run.id, intentId, side: signal.side, price: signal.price },
+              "entry signal → intent created",
+            );
+          }
+        } else {
+          // --- In position: evaluate exit ---
+          const trailingState = trailingStopStates.get(run.id)
+            ?? createTrailingStopState(position.avgEntryPrice);
+          trailingStopStates.set(run.id, trailingState);
+
+          // Estimate bars held: count candles since position open
+          const openTimeMs = position.openedAt.getTime();
+          const barsHeld = candles.filter((c) => c.openTime > openTimeMs).length;
+
+          const closeSignal = evaluateExit({
+            candles,
+            dslJson,
+            position,
+            barsHeld,
+            trailingState,
+          });
+
+          if (closeSignal) {
+            const intentId = `exit_${closeSignal.triggerTime}_${closeSignal.reason}`;
+            const existing = await prisma.botIntent.findFirst({
+              where: { botRunId: run.id, intentId },
+            });
+            if (existing) continue;
+
+            const closeSide = closeSignal.side === "long" ? "SELL" : "BUY";
+            const orderLinkId = `lab_${run.id.slice(0, 8)}_${Date.now()}`;
+
+            await prisma.botIntent.create({
+              data: {
+                botRunId: run.id,
+                intentId,
+                orderLinkId,
+                side: closeSide,
+                qty: position.currentQty,
+                price: closeSignal.price,
+                type: "EXIT",
+                state: "PENDING",
+                metaJson: {
+                  reason: closeSignal.reason,
+                  description: closeSignal.description,
+                  positionId: position.id,
+                  positionSide: position.side,
+                  avgEntryPrice: position.avgEntryPrice,
+                } as Prisma.InputJsonValue,
+              },
+            });
+
+            // Record last trade close time for cooldown
+            lastTradeCloseTimes.set(run.id, Date.now());
+
+            // Clean up trailing stop state
+            trailingStopStates.delete(run.id);
+
+            await prisma.botEvent.create({
+              data: {
+                botRunId: run.id,
+                type: "signal_exit",
+                payloadJson: {
+                  intentId,
+                  reason: closeSignal.reason,
+                  description: closeSignal.description,
+                  price: closeSignal.price,
+                  positionId: position.id,
+                  at: new Date().toISOString(),
+                } as Prisma.InputJsonValue,
+              },
+            });
+
+            workerLog.info(
+              { runId: run.id, intentId, reason: closeSignal.reason, price: closeSignal.price },
+              "exit signal → intent created",
+            );
+          }
+        }
+      } catch (err) {
+        workerLog.error({ err, runId: run.id }, "evaluateStrategies: run evaluation error");
+      }
+    }
+  } catch (err) {
+    workerLog.error({ err }, "evaluateStrategies error");
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Stage 19c: MarketCandle retention job
 // ---------------------------------------------------------------------------
 
@@ -562,6 +805,9 @@ async function poll() {
 
     // Renew leases on our RUNNING runs
     await renewLeases();
+
+    // Stage 3 (#128): Evaluate DSL strategies for RUNNING runs
+    await evaluateStrategies();
 
     // Process PENDING intents on RUNNING runs (Stage 11)
     await processIntents();

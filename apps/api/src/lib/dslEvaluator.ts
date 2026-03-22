@@ -66,7 +66,7 @@ export interface DslExecOpts {
 // DSL shape types (mirrors compiled DSL structure)
 // ---------------------------------------------------------------------------
 
-interface DslIndicatorRef {
+export interface DslIndicatorRef {
   type: string;
   length?: number;
   period?: number;
@@ -78,7 +78,7 @@ interface DslIndicatorRef {
   stdDevMult?: number;
 }
 
-interface DslSignal {
+export interface DslSignal {
   type: string; // "crossover" | "crossunder" | "compare" | "direct" | "raw"
   op?: string;
   fast?: { blockType: string; length?: number } | null;
@@ -87,19 +87,19 @@ interface DslSignal {
   right?: { blockType: string; length?: number } | null;
 }
 
-interface DslExitLevel {
+export interface DslExitLevel {
   type: "fixed_pct" | "fixed_price" | "atr_multiple";
   value: number;
   atrPeriod?: number;
 }
 
-interface DslIndicatorExit {
+export interface DslIndicatorExit {
   indicator: DslIndicatorRef;
   condition: { op: string; value: number };
   appliesTo?: "long" | "short" | "both";
 }
 
-interface DslTrailingStop {
+export interface DslTrailingStop {
   type: "trailing_pct" | "trailing_atr";
   activationPct?: number;
   callbackPct?: number;
@@ -107,18 +107,18 @@ interface DslTrailingStop {
   callbackAtr?: number;
 }
 
-interface DslTimeExit {
+export interface DslTimeExit {
   maxBarsInPosition: number;
 }
 
-interface DslSideCondition {
+export interface DslSideCondition {
   indicator: DslIndicatorRef;
   source?: string;
   long: { op: string };
   short: { op: string };
 }
 
-interface DslEntry {
+export interface DslEntry {
   side?: "Buy" | "Sell";
   sideCondition?: DslSideCondition;
   signal?: DslSignal;
@@ -127,7 +127,7 @@ interface DslEntry {
   takeProfit?: DslExitLevel; // v1 embedded
 }
 
-interface DslExit {
+export interface DslExit {
   stopLoss: DslExitLevel;
   takeProfit: DslExitLevel;
   indicatorExit?: DslIndicatorExit;
@@ -135,7 +135,7 @@ interface DslExit {
   timeExit?: DslTimeExit;
 }
 
-interface DslRisk {
+export interface DslRisk {
   riskPerTradePct: number;
   maxPositionSizeUsd?: number;
   cooldownSeconds?: number;
@@ -152,7 +152,7 @@ export interface ParsedDsl {
 // Indicator computation cache
 // ---------------------------------------------------------------------------
 
-interface IndicatorCache {
+export interface IndicatorCache {
   sma: Map<number, (number | null)[]>;
   ema: Map<number, (number | null)[]>;
   rsi: Map<number, (number | null)[]>;
@@ -162,7 +162,7 @@ interface IndicatorCache {
   vwap: (number | null)[] | null;
 }
 
-function createIndicatorCache(): IndicatorCache {
+export function createIndicatorCache(): IndicatorCache {
   return {
     sma: new Map(),
     ema: new Map(),
@@ -246,7 +246,7 @@ function calcRSI(candles: Candle[], length: number): (number | null)[] {
 // Indicator resolution — get cached indicator values for a block type + params
 // ---------------------------------------------------------------------------
 
-function getIndicatorValues(
+export function getIndicatorValues(
   blockType: string,
   params: { length?: number; period?: number; atrPeriod?: number; multiplier?: number },
   candles: Candle[],
@@ -327,7 +327,7 @@ function getSuperTrendDirection(
 // Comparison operators
 // ---------------------------------------------------------------------------
 
-function evalOp(op: string, a: number, b: number): boolean {
+export function evalOp(op: string, a: number, b: number): boolean {
   switch (op) {
     case "gt":
     case ">": return a > b;
@@ -365,7 +365,7 @@ export function parseDsl(dslJson: unknown): ParsedDsl {
 // Entry signal evaluation
 // ---------------------------------------------------------------------------
 
-function evaluateSignal(
+export function evaluateSignal(
   signal: DslSignal | undefined,
   i: number,
   candles: Candle[],
@@ -413,7 +413,7 @@ function evaluateSignal(
 // Side determination
 // ---------------------------------------------------------------------------
 
-function determineSide(
+export function determineSide(
   entry: DslEntry,
   i: number,
   candles: Candle[],
@@ -459,7 +459,7 @@ function determineSide(
 // Exit level computation
 // ---------------------------------------------------------------------------
 
-function computeExitLevels(
+export function computeExitLevels(
   sl: DslExitLevel,
   tp: DslExitLevel,
   effectiveEntry: number,
