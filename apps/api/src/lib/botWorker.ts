@@ -25,9 +25,13 @@ import pino from "pino";
 import { Prisma } from "@prisma/client";
 import { prisma } from "./prisma.js";
 import { transition, isValidTransition } from "./stateMachine.js";
-import { bybitPlaceOrder } from "./bybitOrder.js";
+import { bybitPlaceOrder, getBybitBaseUrl, isBybitLive } from "./bybitOrder.js";
 import { decrypt, getEncryptionKeyRaw } from "./crypto.js";
-import { getActivePosition, type PositionSnapshot } from "./positionManager.js";
+import {
+  getActivePosition,
+  applyPartialFill,
+  type PositionSnapshot,
+} from "./positionManager.js";
 import { evaluateEntry, type OpenSignal } from "./signalEngine.js";
 import {
   evaluateExit,
@@ -36,6 +40,9 @@ import {
   type TrailingStopState,
 } from "./exitEngine.js";
 import { computeSizing } from "./riskManager.js";
+import { getInstrument, type InstrumentInfo } from "./exchange/instrumentCache.js";
+import { normalizeOrder } from "./exchange/normalizer.js";
+import { sizeOrder } from "./runtime/positionSizer.js";
 
 const workerLog = pino({
   name: "botWorker",
@@ -315,6 +322,45 @@ async function executeIntent(intent: {
 
       const side = intent.side === "BUY" ? "Buy" : "Sell";
 
+      // Stage 3 (#129): normalize order through instrument rules
+      let qtyStr = intent.qty.toString();
+      let priceStr = intent.price && orderType === "Limit" ? intent.price.toString() : undefined;
+
+      try {
+        const instrument = await getInstrument(bot.symbol);
+        const normalized = normalizeOrder(
+          {
+            symbol: bot.symbol,
+            side,
+            orderType,
+            qty: Number(intent.qty.toString()),
+            price: intent.price ? Number(intent.price.toString()) : undefined,
+          },
+          instrument,
+        );
+
+        if (!normalized.valid) {
+          throw new Error(`Order normalization failed: ${normalized.reason}`);
+        }
+
+        qtyStr = normalized.order.qty;
+        priceStr = normalized.order.price;
+
+        workerLog.info(
+          {
+            intentId: intent.intentId,
+            diagnostics: normalized.order.diagnostics,
+            env: isBybitLive() ? "live" : "demo",
+            baseUrl: getBybitBaseUrl(),
+          },
+          "order normalized",
+        );
+      } catch (normErr) {
+        // If normalization itself fails (e.g. instrument not found), log and throw
+        workerLog.warn({ err: normErr, intentId: intent.intentId }, "order normalization error");
+        throw normErr;
+      }
+
       const result = await bybitPlaceOrder(
         bot.exchangeConnection.apiKey,
         plainSecret,
@@ -322,8 +368,8 @@ async function executeIntent(intent: {
           symbol: bot.symbol,
           side,
           orderType,
-          qty: intent.qty.toString(),
-          ...(intent.price && orderType === "Limit" ? { price: intent.price.toString() } : {}),
+          qty: qtyStr,
+          ...(priceStr ? { price: priceStr } : {}),
         },
       );
 
@@ -588,10 +634,11 @@ async function evaluateStrategies(): Promise<void> {
 
         if (!position) {
           // --- No position: evaluate entry ---
+          const currentPrice = candles[candles.length - 1].close;
           const lastCloseTime = lastTradeCloseTimes.get(run.id) ?? 0;
           const sizing = computeSizing({
             dslJson,
-            currentPrice: candles[candles.length - 1].close,
+            currentPrice,
             hasOpenPosition: false,
             lastTradeCloseTime: lastCloseTime,
             now: Date.now(),
@@ -600,6 +647,26 @@ async function evaluateStrategies(): Promise<void> {
           if (!sizing.eligible) {
             workerLog.debug({ runId: run.id, reason: sizing.reason }, "entry not eligible");
             continue;
+          }
+
+          // Stage 3 (#129): normalize sizing through instrument rules
+          let exchangeQty = sizing.qty;
+          try {
+            const instrument = await getInstrument(symbol);
+            const sized = sizeOrder(
+              { notionalUsd: sizing.notionalUsd, currentPrice, leverage: 1 },
+              instrument,
+            );
+            if (!sized.valid) {
+              workerLog.warn(
+                { runId: run.id, reason: sized.reason },
+                "sizing produces invalid exchange qty, skipping entry",
+              );
+              continue;
+            }
+            exchangeQty = sized.qty;
+          } catch (instrErr) {
+            workerLog.warn({ err: instrErr, runId: run.id }, "instrument lookup failed, using raw sizing");
           }
 
           const signal = evaluateEntry({
@@ -623,7 +690,7 @@ async function evaluateStrategies(): Promise<void> {
                 intentId,
                 orderLinkId,
                 side: signal.side === "long" ? "BUY" : "SELL",
-                qty: sizing.qty,
+                qty: exchangeQty,
                 price: signal.price,
                 type: "ENTRY",
                 state: "PENDING",
@@ -632,7 +699,8 @@ async function evaluateStrategies(): Promise<void> {
                   reason: signal.reason,
                   slPrice: signal.slPrice,
                   tpPrice: signal.tpPrice,
-                  sizingQty: sizing.qty,
+                  rawSizingQty: sizing.qty,
+                  exchangeQty,
                   notionalUsd: sizing.notionalUsd,
                 } as Prisma.InputJsonValue,
               },

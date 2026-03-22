@@ -11,6 +11,8 @@ import {
   mapBybitStatus,
   sanitizeBybitError,
 } from "../lib/bybitOrder.js";
+import { getInstrument } from "../lib/exchange/instrumentCache.js";
+import { normalizeOrder } from "../lib/exchange/normalizer.js";
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -73,7 +75,8 @@ const SUPPORTED_EXCHANGES = ["bybit"] as const;
 const SUPPORTED_MARKETS = ["linear", "spot"] as const;
 type SupportedMarket = (typeof SUPPORTED_MARKETS)[number];
 
-const BYBIT_PUBLIC_BASE = "https://api.bybit.com";
+/** Public market data endpoint (always main API, works for both demo/live accounts). */
+const BYBIT_PUBLIC_BASE = process.env.BYBIT_PUBLIC_URL ?? "https://api.bybit.com";
 const MAX_TICKER_SYMBOLS = 30;
 
 /** Map our "market" param to Bybit category */
@@ -462,8 +465,36 @@ export function registerOrderRoutes(app: FastifyInstance) {
       }
 
       const sym = symbol.trim().toUpperCase();
-      const priceStr = normalizedType === "LIMIT" ? String(Number(price)) : undefined;
-      const qtyStr = String(qtyNum);
+      const priceNum = normalizedType === "LIMIT" ? Number(price) : undefined;
+
+      // --- Stage 3 (#129): normalize through instrument rules ---
+      let qtyStr = String(qtyNum);
+      let priceStr = priceNum !== undefined ? String(priceNum) : undefined;
+
+      try {
+        const instrument = await getInstrument(sym);
+        const normalized = normalizeOrder(
+          {
+            symbol: sym,
+            side: normalizedSide === "BUY" ? "Buy" : "Sell",
+            orderType: normalizedType === "MARKET" ? "Market" : "Limit",
+            qty: qtyNum,
+            price: priceNum,
+          },
+          instrument,
+        );
+
+        if (!normalized.valid) {
+          return problem(reply, 422, "Unprocessable Content", normalized.reason);
+        }
+
+        qtyStr = normalized.order.qty;
+        priceStr = normalized.order.price;
+      } catch (instrErr) {
+        // If instrument info unavailable, proceed with raw values
+        // (exchange will validate)
+        request.log.warn({ symbol: sym, err: instrErr }, "instrument lookup failed, using raw values");
+      }
 
       // --- Create DB record (PENDING) ---
       const order = await prisma.terminalOrder.create({
