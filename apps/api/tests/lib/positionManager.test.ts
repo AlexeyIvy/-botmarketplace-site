@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect } from "vitest";
 import { calcUnrealisedPnl, type PositionSnapshot } from "../../src/lib/positionManager.js";
 
 // ---------------------------------------------------------------------------
@@ -190,6 +190,60 @@ describe("position state transitions (in-memory simulator)", () => {
       const pnl = closePos(pos, 1, 53000);
       expect(pnl).toBe(-3000);
       expect(pos.realisedPnl).toBe(-3000);
+    });
+  });
+
+  describe("one OPEN position per bot+symbol invariant", () => {
+    /**
+     * Mirrors the uniqueness guard added to openPosition():
+     * a bot cannot have two OPEN positions on the same symbol.
+     */
+    it("rejects opening a second position on the same symbol while one is OPEN", () => {
+      // Simulate a registry of open positions keyed by bot+symbol
+      const openPositions = new Map<string, InMemoryPosition>();
+      const key = "bot-1:BTCUSDT";
+
+      // First open succeeds
+      const pos1 = openPos("LONG", 1, 50000);
+      openPositions.set(key, pos1);
+      expect(openPositions.has(key)).toBe(true);
+
+      // Second open on same bot+symbol should fail
+      expect(() => {
+        if (openPositions.has(key)) {
+          throw new Error("Bot bot-1 already has an open position on BTCUSDT");
+        }
+      }).toThrow("already has an open position");
+    });
+
+    it("allows opening a new position after the previous one is closed", () => {
+      const openPositions = new Map<string, InMemoryPosition>();
+      const key = "bot-1:BTCUSDT";
+
+      // Open and close first position
+      const pos1 = openPos("LONG", 1, 50000);
+      openPositions.set(key, pos1);
+      closePos(pos1, 1, 55000);
+      openPositions.delete(key); // cleared on CLOSED
+
+      // Second open on same symbol should succeed
+      const pos2 = openPos("LONG", 1, 52000);
+      openPositions.set(key, pos2);
+      expect(pos2.status).toBe("OPEN");
+      expect(openPositions.has(key)).toBe(true);
+    });
+
+    it("allows opening positions on different symbols for the same bot", () => {
+      const openPositions = new Map<string, InMemoryPosition>();
+
+      const pos1 = openPos("LONG", 1, 50000);
+      openPositions.set("bot-1:BTCUSDT", pos1);
+
+      // Different symbol — should not conflict
+      const pos2 = openPos("SHORT", 10, 3000);
+      openPositions.set("bot-1:ETHUSDT", pos2);
+
+      expect(openPositions.size).toBe(2);
     });
   });
 

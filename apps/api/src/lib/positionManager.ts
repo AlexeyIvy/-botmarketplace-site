@@ -160,49 +160,61 @@ export async function openPosition(
   input: OpenPositionInput,
   tx?: Prisma.TransactionClient,
 ): Promise<PositionSnapshot> {
-  const db = tx ?? defaultPrisma;
+  const run = async (db: Prisma.TransactionClient) => {
+    // Enforce one OPEN position per bot+symbol
+    const existing = await db.position.findFirst({
+      where: { botId: input.botId, symbol: input.symbol, status: "OPEN" },
+    });
+    if (existing) {
+      throw new Error(
+        `Bot ${input.botId} already has an open position on ${input.symbol} (${existing.id})`,
+      );
+    }
 
-  const costBasis = input.qty * input.price;
+    const costBasis = input.qty * input.price;
 
-  const position = await db.position.create({
-    data: {
-      botId: input.botId,
-      botRunId: input.botRunId,
-      symbol: input.symbol,
-      side: input.side,
-      status: "OPEN",
-      entryQty: input.qty,
-      avgEntryPrice: input.price,
-      costBasis,
-      currentQty: input.qty,
-      realisedPnl: 0,
-      slPrice: input.slPrice ?? null,
-      tpPrice: input.tpPrice ?? null,
-      metaJson: (input.meta as Prisma.InputJsonValue) ?? undefined,
-    },
-  });
-
-  await db.positionEvent.create({
-    data: {
-      positionId: position.id,
-      type: "OPEN",
-      qty: input.qty,
-      price: input.price,
-      realisedPnl: 0,
-      intentId: input.intentId ?? null,
-      metaJson: (input.meta as Prisma.InputJsonValue) ?? undefined,
-      snapshotJson: makeSnapshotJson({
+    const position = await db.position.create({
+      data: {
+        botId: input.botId,
+        botRunId: input.botRunId,
+        symbol: input.symbol,
+        side: input.side,
+        status: "OPEN",
+        entryQty: input.qty,
         avgEntryPrice: input.price,
-        currentQty: input.qty,
         costBasis,
+        currentQty: input.qty,
         realisedPnl: 0,
         slPrice: input.slPrice ?? null,
         tpPrice: input.tpPrice ?? null,
-      }),
-    },
-  });
+        metaJson: (input.meta as Prisma.InputJsonValue) ?? undefined,
+      },
+    });
 
-  return toSnapshot(position);
+    await db.positionEvent.create({
+      data: {
+        positionId: position.id,
+        type: "OPEN",
+        qty: input.qty,
+        price: input.price,
+        realisedPnl: 0,
+        intentId: input.intentId ?? null,
+        metaJson: (input.meta as Prisma.InputJsonValue) ?? undefined,
+        snapshotJson: makeSnapshotJson({
+          avgEntryPrice: input.price,
+          currentQty: input.qty,
+          costBasis,
+          realisedPnl: 0,
+          slPrice: input.slPrice ?? null,
+          tpPrice: input.tpPrice ?? null,
+        }),
+      },
+    });
+
+    return toSnapshot(position);
+  };
+
+  return tx ? run(tx) : defaultPrisma.$transaction(run);
 }
 
 /**
@@ -215,53 +227,55 @@ export async function addToPosition(
   input: AddToPositionInput,
   tx?: Prisma.TransactionClient,
 ): Promise<PositionSnapshot> {
-  const db = tx ?? defaultPrisma;
+  const run = async (db: Prisma.TransactionClient) => {
+    const pos = await db.position.findUniqueOrThrow({ where: { id: input.positionId } });
+    if (pos.status !== "OPEN") {
+      throw new Error(`Cannot add to position ${input.positionId}: status is ${pos.status}`);
+    }
 
-  const pos = await db.position.findUniqueOrThrow({ where: { id: input.positionId } });
-  if (pos.status !== "OPEN") {
-    throw new Error(`Cannot add to position ${input.positionId}: status is ${pos.status}`);
-  }
+    const oldQty = pos.entryQty.toNumber();
+    const oldCostBasis = pos.costBasis.toNumber();
+    const addCost = input.qty * input.price;
 
-  const oldQty = pos.entryQty.toNumber();
-  const oldCostBasis = pos.costBasis.toNumber();
-  const addCost = input.qty * input.price;
+    const newEntryQty = oldQty + input.qty;
+    const newCostBasis = oldCostBasis + addCost;
+    const newAvgEntry = newCostBasis / newEntryQty;
+    const newCurrentQty = pos.currentQty.toNumber() + input.qty;
 
-  const newEntryQty = oldQty + input.qty;
-  const newCostBasis = oldCostBasis + addCost;
-  const newAvgEntry = newCostBasis / newEntryQty;
-  const newCurrentQty = pos.currentQty.toNumber() + input.qty;
-
-  const updated = await db.position.update({
-    where: { id: input.positionId },
-    data: {
-      entryQty: newEntryQty,
-      avgEntryPrice: newAvgEntry,
-      costBasis: newCostBasis,
-      currentQty: newCurrentQty,
-    },
-  });
-
-  await db.positionEvent.create({
-    data: {
-      positionId: input.positionId,
-      type: "ADD",
-      qty: input.qty,
-      price: input.price,
-      realisedPnl: 0,
-      intentId: input.intentId ?? null,
-      metaJson: (input.meta as Prisma.InputJsonValue) ?? undefined,
-      snapshotJson: makeSnapshotJson({
+    const updated = await db.position.update({
+      where: { id: input.positionId },
+      data: {
+        entryQty: newEntryQty,
         avgEntryPrice: newAvgEntry,
-        currentQty: newCurrentQty,
         costBasis: newCostBasis,
-        realisedPnl: updated.realisedPnl,
-        slPrice: updated.slPrice,
-        tpPrice: updated.tpPrice,
-      }),
-    },
-  });
+        currentQty: newCurrentQty,
+      },
+    });
 
-  return toSnapshot(updated);
+    await db.positionEvent.create({
+      data: {
+        positionId: input.positionId,
+        type: "ADD",
+        qty: input.qty,
+        price: input.price,
+        realisedPnl: 0,
+        intentId: input.intentId ?? null,
+        metaJson: (input.meta as Prisma.InputJsonValue) ?? undefined,
+        snapshotJson: makeSnapshotJson({
+          avgEntryPrice: newAvgEntry,
+          currentQty: newCurrentQty,
+          costBasis: newCostBasis,
+          realisedPnl: updated.realisedPnl,
+          slPrice: updated.slPrice,
+          tpPrice: updated.tpPrice,
+        }),
+      },
+    });
+
+    return toSnapshot(updated);
+  };
+
+  return tx ? run(tx) : defaultPrisma.$transaction(run);
 }
 
 /**
@@ -279,71 +293,73 @@ export async function closePosition(
   input: ClosePositionInput,
   tx?: Prisma.TransactionClient,
 ): Promise<PositionSnapshot> {
-  const db = tx ?? defaultPrisma;
+  const run = async (db: Prisma.TransactionClient) => {
+    const pos = await db.position.findUniqueOrThrow({ where: { id: input.positionId } });
+    if (pos.status !== "OPEN") {
+      throw new Error(`Cannot close position ${input.positionId}: status is ${pos.status}`);
+    }
 
-  const pos = await db.position.findUniqueOrThrow({ where: { id: input.positionId } });
-  if (pos.status !== "OPEN") {
-    throw new Error(`Cannot close position ${input.positionId}: status is ${pos.status}`);
-  }
+    const currentQty = pos.currentQty.toNumber();
+    const avgEntry = pos.avgEntryPrice.toNumber();
 
-  const currentQty = pos.currentQty.toNumber();
-  const avgEntry = pos.avgEntryPrice.toNumber();
+    if (input.qty > currentQty + 1e-12) {
+      throw new Error(
+        `Cannot close ${input.qty} from position ${input.positionId}: only ${currentQty} remaining`,
+      );
+    }
 
-  if (input.qty > currentQty + 1e-12) {
-    throw new Error(
-      `Cannot close ${input.qty} from position ${input.positionId}: only ${currentQty} remaining`,
-    );
-  }
+    // Determine if this is a full close (within floating point tolerance)
+    const isFullClose = Math.abs(input.qty - currentQty) < 1e-12;
+    const closeQty = isFullClose ? currentQty : input.qty;
 
-  // Determine if this is a full close (within floating point tolerance)
-  const isFullClose = Math.abs(input.qty - currentQty) < 1e-12;
-  const closeQty = isFullClose ? currentQty : input.qty;
+    // Calculate realised PnL for this close
+    const priceDiff = pos.side === "LONG"
+      ? input.price - avgEntry
+      : avgEntry - input.price;
+    const eventPnl = priceDiff * closeQty;
 
-  // Calculate realised PnL for this close
-  const priceDiff = pos.side === "LONG"
-    ? input.price - avgEntry
-    : avgEntry - input.price;
-  const eventPnl = priceDiff * closeQty;
+    const newCurrentQty = isFullClose ? 0 : currentQty - closeQty;
+    const newRealisedPnl = pos.realisedPnl.toNumber() + eventPnl;
 
-  const newCurrentQty = isFullClose ? 0 : currentQty - closeQty;
-  const newRealisedPnl = pos.realisedPnl.toNumber() + eventPnl;
+    const updateData: Record<string, unknown> = {
+      currentQty: newCurrentQty,
+      realisedPnl: newRealisedPnl,
+    };
 
-  const updateData: Record<string, unknown> = {
-    currentQty: newCurrentQty,
-    realisedPnl: newRealisedPnl,
+    if (isFullClose) {
+      updateData.status = "CLOSED";
+      updateData.closedAt = new Date();
+    }
+
+    const updated = await db.position.update({
+      where: { id: input.positionId },
+      data: updateData,
+    });
+
+    await db.positionEvent.create({
+      data: {
+        positionId: input.positionId,
+        type: isFullClose ? "CLOSE" : "PARTIAL_CLOSE",
+        qty: closeQty,
+        price: input.price,
+        realisedPnl: eventPnl,
+        intentId: input.intentId ?? null,
+        metaJson: (input.meta as Prisma.InputJsonValue) ?? undefined,
+        snapshotJson: makeSnapshotJson({
+          avgEntryPrice: avgEntry,
+          currentQty: newCurrentQty,
+          costBasis: updated.costBasis,
+          realisedPnl: newRealisedPnl,
+          slPrice: updated.slPrice,
+          tpPrice: updated.tpPrice,
+        }),
+      },
+    });
+
+    return toSnapshot(updated);
   };
 
-  if (isFullClose) {
-    updateData.status = "CLOSED";
-    updateData.closedAt = new Date();
-  }
-
-  const updated = await db.position.update({
-    where: { id: input.positionId },
-    data: updateData,
-  });
-
-  await db.positionEvent.create({
-    data: {
-      positionId: input.positionId,
-      type: isFullClose ? "CLOSE" : "PARTIAL_CLOSE",
-      qty: closeQty,
-      price: input.price,
-      realisedPnl: eventPnl,
-      intentId: input.intentId ?? null,
-      metaJson: (input.meta as Prisma.InputJsonValue) ?? undefined,
-      snapshotJson: makeSnapshotJson({
-        avgEntryPrice: avgEntry,
-        currentQty: newCurrentQty,
-        costBasis: updated.costBasis,
-        realisedPnl: newRealisedPnl,
-        slPrice: updated.slPrice,
-        tpPrice: updated.tpPrice,
-      }),
-    },
-  });
-
-  return toSnapshot(updated);
+  return tx ? run(tx) : defaultPrisma.$transaction(run);
 }
 
 /**
@@ -354,47 +370,49 @@ export async function updateSLTP(
   input: UpdateSLTPInput,
   tx?: Prisma.TransactionClient,
 ): Promise<PositionSnapshot> {
-  const db = tx ?? defaultPrisma;
+  const run = async (db: Prisma.TransactionClient) => {
+    const pos = await db.position.findUniqueOrThrow({ where: { id: input.positionId } });
+    if (pos.status !== "OPEN") {
+      throw new Error(`Cannot update SL/TP on position ${input.positionId}: status is ${pos.status}`);
+    }
 
-  const pos = await db.position.findUniqueOrThrow({ where: { id: input.positionId } });
-  if (pos.status !== "OPEN") {
-    throw new Error(`Cannot update SL/TP on position ${input.positionId}: status is ${pos.status}`);
-  }
+    const updateData: Record<string, unknown> = {};
+    if (input.slPrice !== undefined) updateData.slPrice = input.slPrice;
+    if (input.tpPrice !== undefined) updateData.tpPrice = input.tpPrice;
 
-  const updateData: Record<string, unknown> = {};
-  if (input.slPrice !== undefined) updateData.slPrice = input.slPrice;
-  if (input.tpPrice !== undefined) updateData.tpPrice = input.tpPrice;
-
-  const updated = await db.position.update({
-    where: { id: input.positionId },
-    data: updateData,
-  });
-
-  // Log SL_UPDATE and/or TP_UPDATE events
-  const events: Array<{ type: PositionEventType; price: number | null }> = [];
-  if (input.slPrice !== undefined) events.push({ type: "SL_UPDATE", price: input.slPrice });
-  if (input.tpPrice !== undefined) events.push({ type: "TP_UPDATE", price: input.tpPrice });
-
-  for (const evt of events) {
-    await db.positionEvent.create({
-      data: {
-        positionId: input.positionId,
-        type: evt.type,
-        price: evt.price,
-        metaJson: (input.meta as Prisma.InputJsonValue) ?? undefined,
-        snapshotJson: makeSnapshotJson({
-          avgEntryPrice: updated.avgEntryPrice,
-          currentQty: updated.currentQty,
-          costBasis: updated.costBasis,
-          realisedPnl: updated.realisedPnl,
-          slPrice: updated.slPrice,
-          tpPrice: updated.tpPrice,
-        }),
-      },
+    const updated = await db.position.update({
+      where: { id: input.positionId },
+      data: updateData,
     });
-  }
 
-  return toSnapshot(updated);
+    // Log SL_UPDATE and/or TP_UPDATE events
+    const events: Array<{ type: PositionEventType; price: number | null }> = [];
+    if (input.slPrice !== undefined) events.push({ type: "SL_UPDATE", price: input.slPrice });
+    if (input.tpPrice !== undefined) events.push({ type: "TP_UPDATE", price: input.tpPrice });
+
+    for (const evt of events) {
+      await db.positionEvent.create({
+        data: {
+          positionId: input.positionId,
+          type: evt.type,
+          price: evt.price,
+          metaJson: (input.meta as Prisma.InputJsonValue) ?? undefined,
+          snapshotJson: makeSnapshotJson({
+            avgEntryPrice: updated.avgEntryPrice,
+            currentQty: updated.currentQty,
+            costBasis: updated.costBasis,
+            realisedPnl: updated.realisedPnl,
+            slPrice: updated.slPrice,
+            tpPrice: updated.tpPrice,
+          }),
+        },
+      });
+    }
+
+    return toSnapshot(updated);
+  };
+
+  return tx ? run(tx) : defaultPrisma.$transaction(run);
 }
 
 // ---------------------------------------------------------------------------
