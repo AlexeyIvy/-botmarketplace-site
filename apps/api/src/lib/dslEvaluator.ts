@@ -759,7 +759,12 @@ export function runDslBacktest(
   if (inPosition) {
     const last = candles[candles.length - 1];
     const barsHeld = candles.length - 1 - entryBarIndex;
-    recordTrade(last.openTime, last.close, "NEUTRAL", "end_of_data", barsHeld);
+    const eodExitPrice = last.close * exitMult;
+    const eodPnlDirection = positionSide === "long"
+      ? eodExitPrice - effectiveEntry
+      : effectiveEntry - eodExitPrice;
+    const eodOutcome = eodPnlDirection > 0 ? "WIN" : eodPnlDirection < 0 ? "LOSS" : "NEUTRAL";
+    recordTrade(last.openTime, last.close, eodOutcome, "end_of_data", barsHeld);
   }
 
   const trades = tradeLog.length;

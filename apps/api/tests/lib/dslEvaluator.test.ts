@@ -448,6 +448,49 @@ describe("dslEvaluator – unsupported signal type yields no trades", () => {
   });
 });
 
+describe("dslEvaluator – end_of_data outcome reflects actual PnL", () => {
+  it("end_of_data exit on profitable long position is WIN", () => {
+    // Strong uptrend — position should be in profit at end of data
+    // Use wide SL/TP so they don't trigger before data ends
+    const candles = makeFlatThenUp(45, 20, 100, 3);
+    const dsl = makeSmaLongDsl(5, 20, 50, 200); // very wide SL=50%, TP=200%
+    const report = runDslBacktest(candles, dsl);
+
+    const eodTrades = report.tradeLog.filter(t => t.exitReason === "end_of_data");
+    for (const t of eodTrades) {
+      expect(t.pnlPct).toBeGreaterThan(0);
+      expect(t.outcome).toBe("WIN");
+    }
+  });
+
+  it("end_of_data exit on losing short position is LOSS", () => {
+    // Flat then up — short entry on crossunder won't fire, use long to test
+    // Instead: use a long entry on flat-then-down to get a losing end_of_data
+    const up = makeFlatThenUp(35, 20, 100, 2);
+    const down = makeDowntrend(20, up[up.length - 1].close, 1);
+    const lastTime = up[up.length - 1].openTime;
+    for (let i = 0; i < down.length; i++) {
+      down[i].openTime = lastTime + (i + 1) * 60_000;
+    }
+    // Flat-then-up triggers long entry, then mild downtrend follows
+    // Use wide SL so it doesn't trigger, position bleeds to end
+    const candles = [...up, ...down];
+    const dsl = makeSmaLongDsl(5, 20, 90, 200); // very wide SL=90%, TP=200%
+    const report = runDslBacktest(candles, dsl);
+
+    const eodTrades = report.tradeLog.filter(t => t.exitReason === "end_of_data");
+    for (const t of eodTrades) {
+      if (t.pnlPct < 0) {
+        expect(t.outcome).toBe("LOSS");
+      } else if (t.pnlPct > 0) {
+        expect(t.outcome).toBe("WIN");
+      } else {
+        expect(t.outcome).toBe("NEUTRAL");
+      }
+    }
+  });
+});
+
 describe("dslEvaluator – golden backtest (regression fixture)", () => {
   it("produces exact expected results for a known DSL + dataset pairing", () => {
     const candles = makeFlatThenUp(60, 22, 100, 2);

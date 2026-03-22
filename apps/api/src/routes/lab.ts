@@ -3,6 +3,7 @@ import { prisma } from "../lib/prisma.js";
 import { problem } from "../lib/problem.js";
 import { resolveWorkspace } from "../lib/workspace.js";
 import { runBacktest } from "../lib/backtest.js";
+import { applyDslSweepParam } from "../lib/dslSweepParam.js";
 import { compileGraph } from "../lib/graphCompiler.js";
 import type { GraphJson } from "../lib/graphCompiler.js";
 
@@ -695,10 +696,18 @@ async function runSweepAsync(sweepId: string): Promise<void> {
 
     const results: SweepRow[] = [];
 
-    // Sequential sweep
+    // Sequential sweep — mutate DSL per iteration
     for (let paramValue = sweepParam.from; paramValue <= sweepParam.to; paramValue += sweepParam.step) {
       // Round to avoid floating point drift
       const roundedParam = Math.round(paramValue * 1e8) / 1e8;
+
+      // Clone DSL and inject the sweep parameter value into the target block
+      const mutatedDsl = applyDslSweepParam(
+        dslJson as Record<string, unknown>,
+        sweepParam.blockId,
+        sweepParam.paramName,
+        roundedParam,
+      );
 
       // Create a BacktestResult record for this run
       const bt = await prisma.backtestResult.create({
@@ -721,8 +730,8 @@ async function runSweepAsync(sweepId: string): Promise<void> {
       });
 
       try {
-        // DSL-driven backtest — same evaluator path as single backtest
-        const report = runBacktest(candles, dslJson, {
+        // DSL-driven backtest — sweep-mutated DSL for this iteration
+        const report = runBacktest(candles, mutatedDsl, {
           feeBps: sweep.feeBps,
           slippageBps: sweep.slippageBps,
           fillAt: "CLOSE",
