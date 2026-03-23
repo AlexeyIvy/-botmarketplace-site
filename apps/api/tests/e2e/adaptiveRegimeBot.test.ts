@@ -5,19 +5,13 @@
  * Adaptive Regime Bot strategy.
  *
  * Current state:
- *   - Compilation tests verify graph→DSL v1 output independently.
- *   - Backtest / signal / exit / parity tests use hand-authored DSL
- *     fixtures (v1 and v2), NOT the compiler output.
- *   - Section 6 proves compiler→consumer continuity: compiled DSL fed
- *     directly into backtest and signal engine with parity checks.
- *   - The compiler emits DSL v1 only; DSL v2 (sideCondition, top-level
- *     exit) is hand-authored for now.
- *
- * NOT covered by this slice:
- *   - Adaptive regime switching (ADX zones → trend vs range mode)
- *   - Range-mode substrategy (BB + RSI)
- *   - Restart/resume/reconciliation acceptance
- *   - Demo lifecycle completeness
+ *   - Section 1: Compilation tests verify graph→DSL v1 output (enter_long path).
+ *   - Section 2–5: Backtest / signal / exit / parity tests use hand-authored DSL.
+ *   - Section 6: Compiler→consumer continuity for compiled v1 DSL.
+ *   - Section 7: Compiler v2 emission — graph with enter_adaptive compiles to
+ *     DSL v2 with sideCondition and top-level exit. Compiled v2 is fed directly
+ *     into backtest and signal engine.
+ *   - Section 8: Compiled v2 → hand-authored v2 parity.
  *
  * All fixtures are deterministic: no randomness, no time-dependence, no I/O.
  */
@@ -35,7 +29,7 @@ import { evaluateEntry, generateOpenIntent } from "../../src/lib/signalEngine.js
 import { evaluateExit, createTrailingStopState } from "../../src/lib/exitEngine.js";
 import type { PositionSnapshot } from "../../src/lib/positionManager.js";
 
-import { makeAdaptiveRegimeBotGraph } from "../fixtures/graphs.js";
+import { makeAdaptiveRegimeBotGraph, makeAdaptiveRegimeBotV2Graph } from "../fixtures/graphs.js";
 import { makeStrongUptrend, makeStrongDowntrend } from "../fixtures/candles.js";
 import {
   makeAdaptiveRegimeTrendDsl,
@@ -595,11 +589,11 @@ describe("Adaptive Regime Bot — parity", () => {
 });
 
 // ---------------------------------------------------------------------------
-// 5. Compiler limitations: document remaining gaps in compiled DSL
+// 5. Compiler version modes: v1 (enter_long/short) and v2 (enter_adaptive)
 // ---------------------------------------------------------------------------
 
-describe("Adaptive Regime Bot — compiler limitations", () => {
-  it("compiled DSL is v1 only — no sideCondition or top-level exit", () => {
+describe("Adaptive Regime Bot — compiler version modes", () => {
+  it("enter_long graph compiles to DSL v1 — no sideCondition or top-level exit", () => {
     const graph = makeAdaptiveRegimeBotGraph();
     const result = compileGraph(graph, "arb-lim-1", "ARB", "BTCUSDT", "5m");
 
@@ -608,10 +602,10 @@ describe("Adaptive Regime Bot — compiler limitations", () => {
 
     const dsl = result.compiledDsl as Record<string, unknown>;
 
-    // Compiler currently emits DSL v1
+    // enter_long graph emits DSL v1
     expect(dsl["dslVersion"]).toBe(1);
 
-    // DSL v2 features are absent from compiled output
+    // DSL v2 features are absent from v1 output
     const entry = dsl["entry"] as Record<string, unknown>;
     expect(entry["sideCondition"]).toBeUndefined();
     expect(dsl["exit"]).toBeUndefined();
@@ -919,6 +913,287 @@ describe("Adaptive Regime Bot — compiler→consumer continuity", () => {
       expect(compiledReport.tradeLog[i].entryTime).toBe(handReport.tradeLog[i].entryTime);
       expect(compiledReport.tradeLog[i].side).toBe(handReport.tradeLog[i].side);
       expect(compiledReport.tradeLog[i].exitReason).toBe(handReport.tradeLog[i].exitReason);
+    }
+  });
+});
+
+// ---------------------------------------------------------------------------
+// 7. Compiled DSL v2: enter_adaptive graph → sideCondition + top-level exit
+// ---------------------------------------------------------------------------
+
+describe("Adaptive Regime Bot — compiled DSL v2", () => {
+  function compileAdaptiveV2Dsl() {
+    const graph = makeAdaptiveRegimeBotV2Graph();
+    const result = compileGraph(graph, "arb-v2", "Adaptive Regime Bot v2", "BTCUSDT", "5m");
+    expect(result.ok).toBe(true);
+    if (!result.ok) throw new Error("V2 compilation failed");
+    return result.compiledDsl as Record<string, unknown>;
+  }
+
+  it("compiles to dslVersion 2", () => {
+    const dsl = compileAdaptiveV2Dsl();
+    expect(dsl["dslVersion"]).toBe(2);
+  });
+
+  it("emits sideCondition with EMA indicator", () => {
+    const dsl = compileAdaptiveV2Dsl();
+    const entry = dsl["entry"] as Record<string, unknown>;
+
+    expect(entry["side"]).toBeUndefined();
+    expect(entry["sideCondition"]).toBeDefined();
+
+    const sc = entry["sideCondition"] as Record<string, unknown>;
+    const ind = sc["indicator"] as Record<string, unknown>;
+    expect(ind["type"]).toBe("EMA");
+    expect(ind["length"]).toBe(50);
+    expect(sc["source"]).toBe("close");
+
+    const longCond = sc["long"] as Record<string, unknown>;
+    const shortCond = sc["short"] as Record<string, unknown>;
+    expect(longCond["op"]).toBe("gt");
+    expect(shortCond["op"]).toBe("lt");
+  });
+
+  it("emits top-level exit section instead of entry-embedded SL/TP", () => {
+    const dsl = compileAdaptiveV2Dsl();
+    const entry = dsl["entry"] as Record<string, unknown>;
+    const exit = dsl["exit"] as Record<string, unknown>;
+
+    // No SL/TP in entry
+    expect(entry["stopLoss"]).toBeUndefined();
+    expect(entry["takeProfit"]).toBeUndefined();
+
+    // Top-level exit
+    expect(exit).toBeDefined();
+    const sl = exit["stopLoss"] as Record<string, unknown>;
+    const tp = exit["takeProfit"] as Record<string, unknown>;
+    expect(sl["type"]).toBe("fixed_pct");
+    expect(sl["value"]).toBe(2.0);
+    expect(tp["type"]).toBe("fixed_pct");
+    expect(tp["value"]).toBe(4.0);
+  });
+
+  it("emits correct signal and indicators", () => {
+    const dsl = compileAdaptiveV2Dsl();
+    const entry = dsl["entry"] as Record<string, unknown>;
+
+    // Signal: ADX > 25
+    const signal = entry["signal"] as Record<string, unknown>;
+    expect(signal["type"]).toBe("compare");
+    expect(signal["op"]).toBe(">");
+
+    // Indicators include both ADX and EMA
+    const indicators = entry["indicators"] as Array<Record<string, unknown>>;
+    const adxInd = indicators.find((i) => String(i["type"]).toLowerCase() === "adx");
+    const emaInd = indicators.find((i) => String(i["type"]).toUpperCase() === "EMA");
+    expect(adxInd).toBeDefined();
+    expect(emaInd).toBeDefined();
+  });
+
+  it("compiled v2 DSL passes schema validation", () => {
+    const graph = makeAdaptiveRegimeBotV2Graph();
+    const result = compileGraph(graph, "arb-v2-schema", "ARB v2", "BTCUSDT", "5m");
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+
+    // compileGraph runs validateDsl internally — if ok=true, it passed
+    const errors = result.validationIssues.filter((i) => i.severity === "error");
+    expect(errors).toHaveLength(0);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// 8. Compiled v2 → Consumer continuity: backtest + signal + exit
+// ---------------------------------------------------------------------------
+
+describe("Adaptive Regime Bot — compiled v2→consumer continuity", () => {
+  function compileAdaptiveV2Dsl() {
+    const graph = makeAdaptiveRegimeBotV2Graph();
+    const result = compileGraph(graph, "arb-v2-cont", "ARB v2 Continuity", "BTCUSDT", "5m");
+    expect(result.ok).toBe(true);
+    if (!result.ok) throw new Error("V2 compilation failed");
+    return result.compiledDsl as Record<string, unknown>;
+  }
+
+  it("compiled v2 DSL produces trades on strong uptrend", () => {
+    const dsl = compileAdaptiveV2Dsl();
+    const candles = makeStrongUptrend(100);
+
+    const report = runDslBacktest(candles, dsl);
+    expect(report.trades).toBeGreaterThan(0);
+
+    // With sideCondition (EMA), on uptrend all entries should be long
+    for (const trade of report.tradeLog) {
+      expect(trade.side).toBe("long");
+      expect(trade.entryPrice).toBeGreaterThan(0);
+      expect(["WIN", "LOSS", "NEUTRAL"]).toContain(trade.outcome);
+    }
+  });
+
+  it("compiled v2 DSL produces short trades on strong downtrend", () => {
+    const dsl = compileAdaptiveV2Dsl();
+    const candles = makeStrongDowntrend(100);
+
+    const report = runDslBacktest(candles, dsl);
+    expect(report.trades).toBeGreaterThan(0);
+
+    // On downtrend, sideCondition (close < EMA) → short entries
+    for (const trade of report.tradeLog) {
+      expect(trade.side).toBe("short");
+    }
+  });
+
+  it("compiled v2 DSL backtest is deterministic", () => {
+    const dsl = compileAdaptiveV2Dsl();
+    const candles = makeStrongUptrend(100);
+
+    const r1 = runDslBacktest(candles, dsl);
+    const r2 = runDslBacktest(candles, dsl);
+
+    expect(r1.trades).toBe(r2.trades);
+    expect(r1.totalPnlPct).toBe(r2.totalPnlPct);
+    expect(r1.tradeLog).toEqual(r2.tradeLog);
+  });
+
+  it("compiled v2 DSL signal engine fires entry on uptrend", () => {
+    const dsl = compileAdaptiveV2Dsl();
+    const candles = makeStrongUptrend(100);
+
+    let signal = null;
+    for (let end = 52; end <= candles.length; end++) {
+      signal = evaluateEntry({ candles: candles.slice(0, end), dslJson: dsl, position: null });
+      if (signal) break;
+    }
+
+    expect(signal).not.toBeNull();
+    expect(signal!.action).toBe("open");
+    expect(signal!.side).toBe("long");
+    expect(signal!.slPrice).toBeLessThan(signal!.price);
+    expect(signal!.tpPrice).toBeGreaterThan(signal!.price);
+  });
+
+  it("compiled v2 DSL signal engine fires short on downtrend", () => {
+    const dsl = compileAdaptiveV2Dsl();
+    const candles = makeStrongDowntrend(100);
+
+    let signal = null;
+    for (let end = 52; end <= candles.length; end++) {
+      signal = evaluateEntry({ candles: candles.slice(0, end), dslJson: dsl, position: null });
+      if (signal) break;
+    }
+
+    expect(signal).not.toBeNull();
+    expect(signal!.action).toBe("open");
+    expect(signal!.side).toBe("short");
+  });
+
+  it("compiled v2 DSL: signal fires at same candle as backtest first entry", () => {
+    const dsl = compileAdaptiveV2Dsl();
+    const candles = makeStrongUptrend(100);
+
+    const report = runDslBacktest(candles, dsl);
+    expect(report.trades).toBeGreaterThan(0);
+    const btFirstEntry = report.tradeLog[0].entryTime;
+
+    let signalTime: number | null = null;
+    for (let end = 2; end <= candles.length; end++) {
+      const signal = evaluateEntry({ candles: candles.slice(0, end), dslJson: dsl, position: null });
+      if (signal) {
+        signalTime = signal.triggerTime;
+        break;
+      }
+    }
+
+    expect(signalTime).not.toBeNull();
+    expect(signalTime).toBe(btFirstEntry);
+  });
+
+  it("compiled v2 DSL: exit engine works with compiled v2 artifact", () => {
+    const dsl = compileAdaptiveV2Dsl();
+    const candles = makeStrongUptrend(100);
+
+    let entrySignal = null;
+    for (let end = 52; end <= candles.length; end++) {
+      entrySignal = evaluateEntry({ candles: candles.slice(0, end), dslJson: dsl, position: null });
+      if (entrySignal) break;
+    }
+    expect(entrySignal).not.toBeNull();
+
+    const position = makePosition({
+      avgEntryPrice: entrySignal!.price,
+      slPrice: entrySignal!.slPrice,
+      tpPrice: entrySignal!.tpPrice,
+      side: "LONG",
+    });
+
+    const slCandle = [{
+      openTime: 1_700_100_000_000,
+      open: entrySignal!.price,
+      high: entrySignal!.price + 1,
+      low: entrySignal!.slPrice - 1,
+      close: entrySignal!.slPrice - 0.5,
+      volume: 1000,
+    }];
+
+    const exit = evaluateExit({
+      candles: slCandle,
+      dslJson: dsl,
+      position,
+      barsHeld: 1,
+      trailingState: createTrailingStopState(entrySignal!.price),
+    });
+
+    expect(exit).not.toBeNull();
+    expect(exit!.action).toBe("close");
+    expect(exit!.reason).toBe("sl");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// 9. Compiled v2 ↔ hand-authored v2 parity
+// ---------------------------------------------------------------------------
+
+describe("Adaptive Regime Bot — compiled v2 vs hand-authored v2 parity", () => {
+  it("compiled v2 backtest matches hand-authored v2 backtest on uptrend", () => {
+    const graph = makeAdaptiveRegimeBotV2Graph();
+    const compileResult = compileGraph(graph, "arb-parity", "ARB Parity", "BTCUSDT", "5m");
+    expect(compileResult.ok).toBe(true);
+    if (!compileResult.ok) return;
+
+    const compiledDsl = compileResult.compiledDsl;
+    const handAuthored = makeAdaptiveRegimeTrendDsl();
+    const candles = makeStrongUptrend(100);
+
+    const compiledReport = runDslBacktest(candles, compiledDsl);
+    const handReport = runDslBacktest(candles, handAuthored);
+
+    expect(compiledReport.trades).toBe(handReport.trades);
+    expect(compiledReport.trades).toBeGreaterThan(0);
+
+    for (let i = 0; i < compiledReport.tradeLog.length; i++) {
+      expect(compiledReport.tradeLog[i].entryTime).toBe(handReport.tradeLog[i].entryTime);
+      expect(compiledReport.tradeLog[i].side).toBe(handReport.tradeLog[i].side);
+      expect(compiledReport.tradeLog[i].exitReason).toBe(handReport.tradeLog[i].exitReason);
+    }
+  });
+
+  it("compiled v2 backtest matches hand-authored v2 backtest on downtrend", () => {
+    const graph = makeAdaptiveRegimeBotV2Graph();
+    const compileResult = compileGraph(graph, "arb-parity-down", "ARB Parity", "BTCUSDT", "5m");
+    expect(compileResult.ok).toBe(true);
+    if (!compileResult.ok) return;
+
+    const compiledDsl = compileResult.compiledDsl;
+    const handAuthored = makeAdaptiveRegimeTrendDsl();
+    const candles = makeStrongDowntrend(100);
+
+    const compiledReport = runDslBacktest(candles, compiledDsl);
+    const handReport = runDslBacktest(candles, handAuthored);
+
+    expect(compiledReport.trades).toBe(handReport.trades);
+
+    for (let i = 0; i < compiledReport.tradeLog.length; i++) {
+      expect(compiledReport.tradeLog[i].side).toBe(handReport.tradeLog[i].side);
     }
   });
 });

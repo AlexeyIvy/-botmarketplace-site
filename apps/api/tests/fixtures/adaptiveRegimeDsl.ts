@@ -2,8 +2,9 @@
  * Adaptive Regime Bot — hand-authored DSL fixtures.
  *
  * These represent the target DSL output for the Adaptive Regime Bot strategy.
- * They exercise DSL v2 features (sideCondition, top-level exit) that the
- * runtime already supports but the compiler does not yet emit.
+ * They exercise DSL v2 features (sideCondition, top-level exit). The compiler
+ * now emits equivalent DSL v2 via the enter_adaptive block. These fixtures
+ * remain as reference/parity targets and for isolated unit tests.
  *
  * Strategy logic:
  *   Trend mode (ADX > 25):

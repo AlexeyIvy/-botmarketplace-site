@@ -186,12 +186,16 @@ export function compileGraph(
     }
   }
 
-  // ── 4. Extract entry side ──────────────────────────────────────────────
+  // ── 4. Determine entry mode (fixed side vs adaptive sideCondition) ────
   const enterLongNodes = ctx.nodesByType["enter_long"] ?? [];
   const enterShortNodes = ctx.nodesByType["enter_short"] ?? [];
-  const entryNodes = [...enterLongNodes, ...enterShortNodes];
+  const enterAdaptiveNodes = ctx.nodesByType["enter_adaptive"] ?? [];
+  const isAdaptive = enterAdaptiveNodes.length > 0;
+
+  const entryNodes = isAdaptive
+    ? enterAdaptiveNodes
+    : [...enterLongNodes, ...enterShortNodes];
   const entryNode = entryNodes[0]!;
-  const side = enterLongNodes.length > 0 ? "Buy" : "Sell";
 
   // ── 5. Extract signal info ─────────────────────────────────────────────
   const signalInfo = extractSignalInfo(ctx, entryNode);
@@ -204,31 +208,73 @@ export function compileGraph(
   const riskPerTradePct = Math.max(0.01, Math.min(stopLoss.value, 100));
 
   // ── 7. Assemble DSL ──────────────────────────────────────────────────
-  const compiledDsl: Record<string, unknown> = {
-    id: strategyId,
-    name,
-    dslVersion: DSL_VERSION,
-    enabled: true,
-    market: {
-      ...MARKET_DEFAULTS,
-      symbol,
-    },
-    timeframes: [timeframe],
-    entry: {
-      side,
-      signal: signalInfo,
-      indicators,
-      order: { type: "Market", maxSlippageBps: 50 },
-      stopLoss,
-      takeProfit,
-    },
-    risk: {
-      ...RISK_DEFAULTS,
-      riskPerTradePct,
-    },
-    execution: EXECUTION_DEFAULTS,
-    guards: GUARDS_DEFAULTS,
-  };
+  let compiledDsl: Record<string, unknown>;
+
+  if (isAdaptive) {
+    // DSL v2: sideCondition + top-level exit
+    const adaptiveExtracted = registry.get("enter_adaptive")!.extract(ctx);
+    const sideCondition = adaptiveExtracted["sideCondition"];
+
+    // Normalize SL/TP type: "fixed" → "fixed_pct" for DSL schema compliance
+    const slType = stopLoss.type === "fixed" ? "fixed_pct" : stopLoss.type;
+    const tpType = takeProfit.type === "fixed" ? "fixed_pct" : takeProfit.type;
+
+    compiledDsl = {
+      id: strategyId,
+      name,
+      dslVersion: 2,
+      enabled: true,
+      market: {
+        ...MARKET_DEFAULTS,
+        symbol,
+      },
+      timeframes: [timeframe],
+      entry: {
+        sideCondition,
+        signal: signalInfo,
+        indicators,
+      },
+      exit: {
+        stopLoss: { type: slType, value: stopLoss.value },
+        takeProfit: { type: tpType, value: takeProfit.value },
+      },
+      risk: {
+        ...RISK_DEFAULTS,
+        riskPerTradePct,
+      },
+      execution: EXECUTION_DEFAULTS,
+      guards: GUARDS_DEFAULTS,
+    };
+  } else {
+    // DSL v1: fixed side + embedded SL/TP
+    const side = enterLongNodes.length > 0 ? "Buy" : "Sell";
+
+    compiledDsl = {
+      id: strategyId,
+      name,
+      dslVersion: DSL_VERSION,
+      enabled: true,
+      market: {
+        ...MARKET_DEFAULTS,
+        symbol,
+      },
+      timeframes: [timeframe],
+      entry: {
+        side,
+        signal: signalInfo,
+        indicators,
+        order: { type: "Market", maxSlippageBps: 50 },
+        stopLoss,
+        takeProfit,
+      },
+      risk: {
+        ...RISK_DEFAULTS,
+        riskPerTradePct,
+      },
+      execution: EXECUTION_DEFAULTS,
+      guards: GUARDS_DEFAULTS,
+    };
+  }
 
   // ── 8. Validate DSL against schema ───────────────────────────────────
   const dslErrors = validateDsl(compiledDsl);

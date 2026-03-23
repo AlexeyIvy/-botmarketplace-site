@@ -35,9 +35,10 @@ candles(BTCUSDT, 5m) → ADX(14) → compare(> 25) → enter_long ← stop_loss(
 `compileGraph(graph, strategyId, name, symbol, timeframe)` transforms the graph JSON into a Strategy DSL JSON object.
 
 **Current state:**
-- Compiler emits **DSL v1**: fixed side (`Buy`/`Sell`), single entry signal, SL/TP on entry
-- **DSL v2** features (`sideCondition`, top-level `exit`, regime dispatch) are hand-authored
-- Compiler limitation is documented and tested (`adaptiveRegimeBot.test.ts` section 6)
+- `enter_long`/`enter_short` graphs compile to **DSL v1**: fixed side, SL/TP in entry
+- `enter_adaptive` graphs compile to **DSL v2**: `sideCondition`, top-level `exit`
+- The Adaptive Regime Bot v2 graph (with EMA side condition) compiles directly to DSL v2
+- Compiled v2 output is functionally equivalent to hand-authored v2 fixtures
 
 **Output:** `CompileResult { ok: true, compiledDsl: Record<string, unknown> }`
 
@@ -155,7 +156,7 @@ Worker lease: 30s renewal, `WORKER_ID` ownership.
 
 | Limitation | Status | Impact |
 |---|---|---|
-| Compiler emits DSL v1 only (no sideCondition, no top-level exit) | Documented | Hand-authored DSL v2 used for adaptive features |
+| ~~Compiler emits DSL v1 only~~ | **Resolved** | `enter_adaptive` block emits DSL v2 with `sideCondition` and top-level `exit` |
 | Single timeframe (5m) | By design for MVP | MTF is out of scope (#130) |
 | BB band proximity not used as explicit range entry filter | Documented | RSI < 40 used instead, effective in low-ADX regimes |
 | Range-mode short entries not in adaptive config | Documented | Long-only mean reversion currently |
@@ -180,10 +181,10 @@ Worker lease: 30s renewal, `WORKER_ID` ownership.
 
 | Test Suite | Count | What it covers |
 |---|---|---|
-| `adaptiveRegimeBot.test.ts` | 39 | Compilation, backtest, signals, exits, parity, compiler continuity |
+| `adaptiveRegimeBot.test.ts` | 56 | Compilation v1/v2, backtest, signals, exits, parity, compiler continuity, compiled v2→consumer |
 | `adaptiveRegimeSwitching.test.ts` | 31 | Regime detection, range/trend/neutral, adaptive backtest, transitions |
 | `restartResume.test.ts` | 29 | State reconstruction, no duplicate entry, exit after restart, idempotency |
-| `demoLifecycleAcceptance.test.ts` | 22 | Full pipeline: graph → compile → backtest → runtime → lifecycle |
+| `demoLifecycleAcceptance.test.ts` | 26 | Full pipeline: graph → compile (v1+v2) → backtest → runtime → lifecycle |
 
 All tests are deterministic: fixed fixtures, no randomness, no I/O.
 

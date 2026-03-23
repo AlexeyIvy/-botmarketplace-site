@@ -7,7 +7,7 @@
  *   exit evaluation → position close → restart/resume → stop
  *
  * Each section maps directly to an acceptance criterion from issue #130:
- *   1. Graph authoring (fixture) → compilation to DSL v1
+ *   1. Graph authoring (fixture) → compilation to DSL v1 and v2
  *   2. Backtest produces reproducible, truthful results
  *   3. Runtime signal evaluation → entry intent → simulated fill → position open
  *   4. Exit evaluation → close intent → position close (demo path)
@@ -36,7 +36,7 @@ import { reconstructRunState } from "../../src/lib/recoveryManager.js";
 import type { PositionSnapshot } from "../../src/lib/positionManager.js";
 
 // --- Fixtures ---
-import { makeAdaptiveRegimeBotGraph } from "../fixtures/graphs.js";
+import { makeAdaptiveRegimeBotGraph, makeAdaptiveRegimeBotV2Graph } from "../fixtures/graphs.js";
 import {
   makeStrongUptrend,
   makeStrongDowntrend,
@@ -95,6 +95,22 @@ describe("Demo Lifecycle — graph authoring and compilation", () => {
     expect(dsl.entry.side).toBeDefined();
   });
 
+  it("adaptive regime bot v2 graph compiles to valid DSL v2", () => {
+    const graph = makeAdaptiveRegimeBotV2Graph();
+    const result = compileGraph(graph, "arb-lifecycle-v2", "ARB v2", "BTCUSDT", "5m");
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+
+    const dsl = result.compiledDsl as Record<string, any>;
+    expect(dsl.dslVersion).toBe(2);
+    expect(dsl.entry.sideCondition).toBeDefined();
+    expect(dsl.entry.side).toBeUndefined();
+    expect(dsl.exit).toBeDefined();
+    expect(dsl.exit.stopLoss).toBeDefined();
+    expect(dsl.exit.takeProfit).toBeDefined();
+  });
+
   it("compiled DSL produces backtest results on fixture candles", () => {
     const graph = makeAdaptiveRegimeBotGraph();
     const result = compileGraph(graph, "arb-lifecycle-2", "ARB", "BTCUSDT", "5m");
@@ -109,6 +125,23 @@ describe("Demo Lifecycle — graph authoring and compilation", () => {
     expect(typeof report.winrate).toBe("number");
   });
 
+  it("compiled v2 DSL produces backtest results with dynamic side", () => {
+    const graph = makeAdaptiveRegimeBotV2Graph();
+    const result = compileGraph(graph, "arb-lifecycle-v2-bt", "ARB v2", "BTCUSDT", "5m");
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+
+    const candles = makeStrongUptrend(100);
+    const report = runBacktest(candles, result.compiledDsl);
+
+    expect(report).toBeDefined();
+    expect(report.trades).toBeGreaterThan(0);
+    // Dynamic side on uptrend → long
+    for (const trade of report.tradeLog) {
+      expect(trade.side).toBe("long");
+    }
+  });
+
   it("compiled DSL can be fed into signal engine for runtime evaluation", () => {
     const graph = makeAdaptiveRegimeBotGraph();
     const result = compileGraph(graph, "arb-lifecycle-3", "ARB", "BTCUSDT", "5m");
@@ -120,6 +153,23 @@ describe("Demo Lifecycle — graph authoring and compilation", () => {
     const signal = evaluateEntry({ candles, dslJson: result.compiledDsl, position: null });
     // Signal may or may not fire — the point is the pipeline doesn't throw
     expect(signal === null || signal.action === "open").toBe(true);
+  });
+
+  it("compiled v2 DSL can be fed into signal engine for adaptive evaluation", () => {
+    const graph = makeAdaptiveRegimeBotV2Graph();
+    const result = compileGraph(graph, "arb-lifecycle-v2-sig", "ARB v2", "BTCUSDT", "5m");
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+
+    const candles = makeStrongUptrend(100);
+    let signal = null;
+    for (let end = 52; end <= candles.length; end++) {
+      signal = evaluateEntry({ candles: candles.slice(0, end), dslJson: result.compiledDsl, position: null });
+      if (signal) break;
+    }
+
+    expect(signal).not.toBeNull();
+    expect(signal!.side).toBe("long"); // uptrend → close > EMA → long
   });
 });
 
@@ -572,5 +622,39 @@ describe("Demo Lifecycle — full pipeline coherence", () => {
     if (bt.trades > 0) {
       expect(signal).not.toBeNull();
     }
+  });
+
+  it("compiled v2 graph → backtest → signal engine: complete v2 chain works", () => {
+    // Step 1: Graph authoring (v2 fixture with enter_adaptive)
+    const graph = makeAdaptiveRegimeBotV2Graph();
+
+    // Step 2: Compile to DSL v2
+    const compiled = compileGraph(graph, "arb-v2-pipeline", "ARB v2", "BTCUSDT", "5m");
+    expect(compiled.ok).toBe(true);
+    if (!compiled.ok) return;
+
+    const dsl = compiled.compiledDsl as Record<string, any>;
+    expect(dsl.dslVersion).toBe(2);
+
+    // Step 3: Backtest with compiled DSL v2
+    const candles = makeStrongUptrend(100);
+    const bt = runBacktest(candles, dsl);
+    expect(bt).toBeDefined();
+    expect(bt.trades).toBeGreaterThan(0);
+
+    // Step 4: Signal engine with compiled DSL v2 (runtime)
+    let signal = null;
+    for (let end = 52; end <= candles.length; end++) {
+      signal = evaluateEntry({
+        candles: candles.slice(0, end),
+        dslJson: dsl,
+        position: null,
+      });
+      if (signal) break;
+    }
+
+    expect(signal).not.toBeNull();
+    expect(signal!.action).toBe("open");
+    expect(signal!.side).toBe("long"); // uptrend → close > EMA → long
   });
 });
