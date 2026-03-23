@@ -51,6 +51,7 @@ import { computeSizing } from "./riskManager.js";
 import { getInstrument, type InstrumentInfo } from "./exchange/instrumentCache.js";
 import { normalizeOrder } from "./exchange/normalizer.js";
 import { sizeOrder } from "./runtime/positionSizer.js";
+import { reconstructRunState } from "./recoveryManager.js";
 
 const workerLog = pino({
   name: "botWorker",
@@ -141,9 +142,39 @@ async function activateRun(runId: string) {
       data: { leaseOwner: WORKER_ID, leaseUntil: new Date(Date.now() + 30_000) },
     });
 
-    // Stage 3 (#127): read existing position state on startup for recovery
+    // Stage 3 (#127/#130): reconstruct ephemeral state after restart/resume
     try {
       const existingPosition = await getActivePosition(runId, afterSync.bot.symbol);
+
+      // Query last trade close timestamp from PositionEvent log
+      let lastCloseEventTimestamp = 0;
+      try {
+        const lastCloseEvent = await prisma.positionEvent.findFirst({
+          where: {
+            position: { botRunId: runId },
+            type: "CLOSE",
+          },
+          orderBy: { ts: "desc" },
+          select: { ts: true },
+        });
+        if (lastCloseEvent) {
+          lastCloseEventTimestamp = lastCloseEvent.ts.getTime();
+        }
+      } catch (_err) {
+        // Non-fatal: if we can't find close events, cooldown starts fresh
+      }
+
+      // Reconstruct all ephemeral state from persistent data
+      const recovered = reconstructRunState(existingPosition, lastCloseEventTimestamp);
+
+      // Apply to in-memory maps
+      if (recovered.trailingStopState) {
+        trailingStopStates.set(runId, recovered.trailingStopState);
+      }
+      if (recovered.lastTradeCloseTime > 0) {
+        lastTradeCloseTimes.set(runId, recovered.lastTradeCloseTime);
+      }
+
       if (existingPosition) {
         workerLog.info(
           {
@@ -152,8 +183,10 @@ async function activateRun(runId: string) {
             side: existingPosition.side,
             currentQty: existingPosition.currentQty,
             avgEntryPrice: existingPosition.avgEntryPrice,
+            trailingStopReconstructed: !!recovered.trailingStopState,
+            lastTradeCloseTimeReconstructed: recovered.lastTradeCloseTime > 0,
           },
-          "recovered existing open position on startup",
+          "recovered existing open position and ephemeral state on startup",
         );
         await prisma.botEvent.create({
           data: {
@@ -165,9 +198,16 @@ async function activateRun(runId: string) {
               currentQty: existingPosition.currentQty,
               avgEntryPrice: existingPosition.avgEntryPrice,
               realisedPnl: existingPosition.realisedPnl,
+              trailingStopReconstructed: !!recovered.trailingStopState,
+              lastTradeCloseTime: recovered.lastTradeCloseTime,
             } as Prisma.InputJsonValue,
           },
         });
+      } else if (recovered.lastTradeCloseTime > 0) {
+        workerLog.info(
+          { runId, lastTradeCloseTime: recovered.lastTradeCloseTime },
+          "recovered cooldown state on startup (no open position)",
+        );
       }
     } catch (err) {
       workerLog.warn({ err, runId }, "failed to read position on startup (non-fatal)");
