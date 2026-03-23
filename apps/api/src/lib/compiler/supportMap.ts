@@ -53,8 +53,9 @@ export const BLOCK_SUPPORT_MAP: Record<string, BlockSupportEntry> = {
   or_gate:      { status: "compile-only", note: "Compiler handler added in #122; runtime pending (#124)" },
 
   // ── Execution ───────────────────────────────────────────────────────────────
-  enter_long:   { status: "supported",    note: "Fully supported since Phase 3" },
-  enter_short:  { status: "supported",    note: "Fully supported since Phase 4" },
+  enter_long:     { status: "supported",    note: "Fully supported since Phase 3" },
+  enter_short:    { status: "supported",    note: "Fully supported since Phase 4" },
+  enter_adaptive: { status: "supported",    note: "DSL v2 sideCondition emission, #130" },
 
   // ── Risk ────────────────────────────────────────────────────────────────────
   stop_loss:    { status: "supported",    note: "Fully supported since Phase 3" },

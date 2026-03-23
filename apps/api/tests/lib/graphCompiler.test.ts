@@ -117,7 +117,7 @@ describe("graphCompiler – compileGraph", () => {
   it("fails when entry block is missing", () => {
     const result = compileGraph(makeGraphMissingEntry(), STRATEGY_ID, NAME, SYMBOL, TIMEFRAME);
     expect(result.ok).toBe(false);
-    expect(result.validationIssues.some((i) => i.message.includes("Enter Long or Enter Short"))).toBe(true);
+    expect(result.validationIssues.some((i) => i.message.includes("Enter Long") || i.message.includes("Enter Short") || i.message.includes("Enter Adaptive"))).toBe(true);
   });
 
   it("fails when both enter_long and enter_short are present", () => {

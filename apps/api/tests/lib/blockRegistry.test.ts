@@ -274,7 +274,7 @@ describe("compileGraph – golden output stability", () => {
           type: "compare",
           op: ">",
           left: { blockType: "RSI", nodeId: "n2", length: 14 },
-          right: { blockType: "constant", nodeId: "n3", length: undefined },
+          right: { blockType: "constant", nodeId: "n3", length: 70 },
         },
         indicators: [
           { type: "RSI", length: 14, nodeId: "n2" },

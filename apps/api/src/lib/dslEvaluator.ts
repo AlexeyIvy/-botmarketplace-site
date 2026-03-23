@@ -152,6 +152,12 @@ export interface ParsedDsl {
 // Indicator computation cache
 // ---------------------------------------------------------------------------
 
+export interface BollingerBandsResult {
+  upper: (number | null)[];
+  middle: (number | null)[];
+  lower: (number | null)[];
+}
+
 export interface IndicatorCache {
   sma: Map<number, (number | null)[]>;
   ema: Map<number, (number | null)[]>;
@@ -160,6 +166,7 @@ export interface IndicatorCache {
   adx: Map<number, { adx: (number | null)[]; plusDI: (number | null)[]; minusDI: (number | null)[] }>;
   supertrend: Map<string, { supertrend: (number | null)[]; direction: (1 | -1 | null)[] }>;
   vwap: (number | null)[] | null;
+  bollinger: Map<string, BollingerBandsResult>;
 }
 
 export function createIndicatorCache(): IndicatorCache {
@@ -171,6 +178,7 @@ export function createIndicatorCache(): IndicatorCache {
     adx: new Map(),
     supertrend: new Map(),
     vwap: null,
+    bollinger: new Map(),
   };
 }
 
@@ -243,6 +251,55 @@ function calcRSI(candles: Candle[], length: number): (number | null)[] {
 }
 
 // ---------------------------------------------------------------------------
+// Bollinger Bands computation
+// ---------------------------------------------------------------------------
+
+function calcBollingerBands(
+  candles: Candle[],
+  period: number,
+  stdDevMult: number,
+): BollingerBandsResult {
+  const n = candles.length;
+  const upper: (number | null)[] = new Array(n).fill(null);
+  const middle: (number | null)[] = new Array(n).fill(null);
+  const lower: (number | null)[] = new Array(n).fill(null);
+  if (n < period) return { upper, middle, lower };
+
+  for (let i = period - 1; i < n; i++) {
+    let sum = 0;
+    for (let j = i - period + 1; j <= i; j++) sum += candles[j].close;
+    const mean = sum / period;
+
+    let sqSum = 0;
+    for (let j = i - period + 1; j <= i; j++) {
+      const diff = candles[j].close - mean;
+      sqSum += diff * diff;
+    }
+    const stdDev = Math.sqrt(sqSum / period);
+
+    middle[i] = mean;
+    upper[i] = mean + stdDevMult * stdDev;
+    lower[i] = mean - stdDevMult * stdDev;
+  }
+
+  return { upper, middle, lower };
+}
+
+function getBollingerBands(
+  params: { period?: number; length?: number; stdDevMult?: number; multiplier?: number },
+  candles: Candle[],
+  cache: IndicatorCache,
+): BollingerBandsResult {
+  const period = params.period ?? params.length ?? 20;
+  const mult = params.stdDevMult ?? params.multiplier ?? 2;
+  const key = `${period}_${mult}`;
+  if (!cache.bollinger.has(key)) {
+    cache.bollinger.set(key, calcBollingerBands(candles, period, mult));
+  }
+  return cache.bollinger.get(key)!;
+}
+
+// ---------------------------------------------------------------------------
 // Indicator resolution — get cached indicator values for a block type + params
 // ---------------------------------------------------------------------------
 
@@ -299,9 +356,24 @@ export function getIndicatorValues(
     return cache.vwap;
   }
 
+  if (type === "bollinger_lower" || type === "bb_lower") {
+    const bb = getBollingerBands(params, candles, cache);
+    return bb.lower;
+  }
+
+  if (type === "bollinger_upper" || type === "bb_upper") {
+    const bb = getBollingerBands(params, candles, cache);
+    return bb.upper;
+  }
+
+  if (type === "bollinger_middle" || type === "bb_middle" || type === "bollinger") {
+    const bb = getBollingerBands(params, candles, cache);
+    return bb.middle;
+  }
+
   if (type === "constant") {
-    // Constant value — fill with the value
-    const val = params.length ?? 0;
+    // Constant value — DSL convention stores threshold in "length" field
+    const val = params.length ?? (params as Record<string, unknown>)["value"] ?? 0;
     return new Array(candles.length).fill(val);
   }
 

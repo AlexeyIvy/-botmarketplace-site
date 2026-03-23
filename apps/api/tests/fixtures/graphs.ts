@@ -126,6 +126,68 @@ export function makeGraphWithADX(): GraphJson {
   };
 }
 
+/**
+ * Adaptive Regime Bot — trend mode graph.
+ * candles → ADX(14) → compare(adx > 25) → enter_long ← stop_loss(2%) + take_profit(4%)
+ *
+ * This represents the trend-detection entry: when ADX > 25 (strong trend), enter long.
+ * Used for graph → compile → DSL pipeline validation.
+ */
+export function makeAdaptiveRegimeBotGraph(): GraphJson {
+  return {
+    nodes: [
+      { id: "n1", data: { blockType: "candles", params: { symbol: "BTCUSDT", interval: "M5" } } },
+      { id: "n2", data: { blockType: "adx", params: { period: 14 } } },
+      { id: "n3", data: { blockType: "constant", params: { value: 25 } } },
+      { id: "n4", data: { blockType: "compare", params: { op: ">" } } },
+      { id: "n5", data: { blockType: "enter_long", params: {} } },
+      { id: "n6", data: { blockType: "stop_loss", params: { type: "fixed", value: 2.0 } } },
+      { id: "n7", data: { blockType: "take_profit", params: { type: "fixed", value: 4.0 } } },
+    ],
+    edges: [
+      { id: "e1", source: "n1", target: "n2", sourceHandle: null, targetHandle: null },
+      { id: "e2", source: "n2", target: "n4", sourceHandle: "adx", targetHandle: "a" },
+      { id: "e3", source: "n3", target: "n4", sourceHandle: "value", targetHandle: "b" },
+      { id: "e4", source: "n4", target: "n5", sourceHandle: null, targetHandle: "signal" },
+      { id: "e5", source: "n6", target: "n5", sourceHandle: null, targetHandle: "risk" },
+      { id: "e6", source: "n7", target: "n5", sourceHandle: null, targetHandle: null },
+    ],
+  };
+}
+
+/**
+ * Adaptive Regime Bot — v2 graph with dynamic side condition.
+ *
+ * candles → ADX(14) → compare(> 25) → enter_adaptive ← stop_loss(2%) + take_profit(4%)
+ * candles → EMA(50) ────────────────→ enter_adaptive (sideIndicator)
+ *
+ * Compiles to DSL v2 with sideCondition (close vs EMA → long/short) and top-level exit.
+ */
+export function makeAdaptiveRegimeBotV2Graph(): GraphJson {
+  return {
+    nodes: [
+      { id: "n1", data: { blockType: "candles", params: { symbol: "BTCUSDT", interval: "M5" } } },
+      { id: "n2", data: { blockType: "adx", params: { period: 14 } } },
+      { id: "n3", data: { blockType: "constant", params: { value: 25 } } },
+      { id: "n4", data: { blockType: "compare", params: { op: ">" } } },
+      { id: "n5", data: { blockType: "enter_adaptive", params: { source: "close", longOp: "gt", shortOp: "lt" } } },
+      { id: "n6", data: { blockType: "stop_loss", params: { type: "fixed_pct", value: 2.0 } } },
+      { id: "n7", data: { blockType: "take_profit", params: { type: "fixed_pct", value: 4.0 } } },
+      { id: "n8", data: { blockType: "EMA", params: { length: 50 } } },
+    ],
+    edges: [
+      { id: "e1", source: "n1", target: "n2", sourceHandle: null, targetHandle: null },
+      { id: "e2", source: "n2", target: "n4", sourceHandle: "adx", targetHandle: "a" },
+      { id: "e3", source: "n3", target: "n4", sourceHandle: "value", targetHandle: "b" },
+      { id: "e4", source: "n4", target: "n5", sourceHandle: null, targetHandle: "signal" },
+      { id: "e5", source: "n6", target: "n5", sourceHandle: null, targetHandle: "risk" },
+      { id: "e6", source: "n7", target: "n5", sourceHandle: null, targetHandle: null },
+      { id: "e7", source: "n1", target: "n8", sourceHandle: null, targetHandle: null },
+      { id: "e8", source: "n8", target: "n5", sourceHandle: null, targetHandle: "sideIndicator" },
+    ],
+  };
+}
+
 /** Graph with SuperTrend indicator: candles → SuperTrend(10,3) → compare → enter_short ← SL + TP */
 export function makeGraphWithSuperTrend(): GraphJson {
   return {

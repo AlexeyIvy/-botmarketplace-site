@@ -254,10 +254,14 @@ export const orGateHandler: BlockHandler = {
 function makeEntryValidator(ctx: CompileContext): void {
   const enterLongNodes = nodesOf(ctx, "enter_long");
   const enterShortNodes = nodesOf(ctx, "enter_short");
-  const entryNodes = [...enterLongNodes, ...enterShortNodes];
+  const enterAdaptiveNodes = nodesOf(ctx, "enter_adaptive");
+  const entryNodes = [...enterLongNodes, ...enterShortNodes, ...enterAdaptiveNodes];
 
   if (entryNodes.length === 0) {
-    ctx.issues.push({ severity: "error", message: "Graph must have an Enter Long or Enter Short block." });
+    ctx.issues.push({ severity: "error", message: "Graph must have an Enter Long, Enter Short, or Enter Adaptive block." });
+  } else if (enterAdaptiveNodes.length > 0) {
+    // enter_adaptive is validated by its own handler; skip dual-entry check
+    return;
   } else if (enterLongNodes.length > 0 && enterShortNodes.length > 0) {
     ctx.issues.push({
       severity: "error",
@@ -313,6 +317,90 @@ export const enterShortHandler: BlockHandler = {
   extract(ctx) {
     const nodes = nodesOf(ctx, "enter_short");
     return { side: nodes.length > 0 ? "Sell" : null };
+  },
+};
+
+/**
+ * Adaptive entry block — DSL v2.
+ *
+ * Emits `sideCondition` instead of fixed `side`. The side-determining indicator
+ * is connected via the "sideIndicator" target handle. The block params specify
+ * the comparison ops for long/short (e.g. close > EMA → long, close < EMA → short).
+ *
+ * Graph pattern:
+ *   candles → EMA(50) ─────────────────────→ enter_adaptive (sideIndicator)
+ *   candles → ADX(14) → compare(> 25) ────→ enter_adaptive (signal)
+ *                              stop_loss ──→ enter_adaptive (risk)
+ */
+export const enterAdaptiveHandler: BlockHandler = {
+  blockType: "enter_adaptive",
+  category: "execution",
+  validate(ctx) {
+    const nodes = nodesOf(ctx, "enter_adaptive");
+    if (nodes.length === 0) return; // not present — skip
+
+    // enter_adaptive is mutually exclusive with enter_long / enter_short
+    const hasLong = nodesOf(ctx, "enter_long").length > 0;
+    const hasShort = nodesOf(ctx, "enter_short").length > 0;
+    if (hasLong || hasShort) {
+      ctx.issues.push({
+        severity: "error",
+        message: "enter_adaptive cannot coexist with enter_long or enter_short.",
+      });
+      return;
+    }
+
+    const entryNode = nodes[0];
+    const incoming = ctx.incomingEdges[entryNode.id] ?? [];
+
+    if (!incoming.find((e) => e.targetHandle === "signal")) {
+      ctx.issues.push({
+        severity: "error",
+        message: "enter_adaptive signal input is not connected.",
+        nodeId: entryNode.id,
+      });
+    }
+    if (!incoming.find((e) => e.targetHandle === "risk")) {
+      ctx.issues.push({
+        severity: "error",
+        message: "enter_adaptive risk input is not connected.",
+        nodeId: entryNode.id,
+      });
+    }
+    if (!incoming.find((e) => e.targetHandle === "sideIndicator")) {
+      ctx.issues.push({
+        severity: "error",
+        message: "enter_adaptive requires a side-determining indicator connected to sideIndicator.",
+        nodeId: entryNode.id,
+      });
+    }
+  },
+  extract(ctx) {
+    const nodes = nodesOf(ctx, "enter_adaptive");
+    if (nodes.length === 0) return {};
+
+    const entryNode = nodes[0];
+    const incoming = ctx.incomingEdges[entryNode.id] ?? [];
+    const sideEdge = incoming.find((e) => e.targetHandle === "sideIndicator");
+    const sideNode = sideEdge ? ctx.nodeById[sideEdge.source] : undefined;
+
+    if (!sideNode) return {};
+
+    const indicatorType = sideNode.data.blockType.toUpperCase();
+    const length = Number(sideNode.data.params["length"] ?? sideNode.data.params["period"] ?? 14);
+    const source = String(entryNode.data.params["source"] ?? "close");
+    const longOp = String(entryNode.data.params["longOp"] ?? "gt");
+    const shortOp = String(entryNode.data.params["shortOp"] ?? "lt");
+
+    return {
+      adaptive: true,
+      sideCondition: {
+        indicator: { type: indicatorType, length },
+        source,
+        long: { op: longOp },
+        short: { op: shortOp },
+      },
+    };
   },
 };
 
@@ -388,6 +476,7 @@ export function defaultHandlers(): BlockHandler[] {
     // Execution
     enterLongHandler,
     enterShortHandler,
+    enterAdaptiveHandler,
     // Risk
     stopLossHandler,
     takeProfitHandler,

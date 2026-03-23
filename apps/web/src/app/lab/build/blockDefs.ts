@@ -385,6 +385,23 @@ export const BLOCK_DEFS: BlockDef[] = [
     params: [],
     description: "Opens a short position when the signal fires, applying the provided risk params.",
   },
+  {
+    type: "enter_adaptive",
+    label: "Enter Adaptive",
+    category: "execution",
+    inputs: [
+      { id: "signal", label: "signal", dataType: "Series<boolean>", required: true },
+      { id: "risk", label: "risk", dataType: "RiskParams", required: true },
+      { id: "sideIndicator", label: "side indicator", dataType: "Series<number>", required: true },
+    ],
+    outputs: [],
+    params: [
+      { id: "source", label: "Source", type: "select", defaultValue: "close", options: ["open", "high", "low", "close"] },
+      { id: "longOp", label: "Long Op", type: "select", defaultValue: "gt", options: ["gt", "gte", "lt", "lte"] },
+      { id: "shortOp", label: "Short Op", type: "select", defaultValue: "lt", options: ["gt", "gte", "lt", "lte"] },
+    ],
+    description: "Adaptive entry with dynamic long/short side determined by a side-condition indicator (DSL v2).",
+  },
 
   // ── Risk ──────────────────────────────────────────────────────────────────
   {

@@ -139,6 +139,7 @@ describe("Support status snapshot", () => {
       "candles",
       "compare",
       "cross",
+      "enter_adaptive",
       "enter_long",
       "enter_short",
       "stop_loss",
@@ -166,8 +167,8 @@ describe("Support status snapshot", () => {
   });
 
   it("block count matches expected total", () => {
-    expect(uiBlockTypes.length).toBe(20);
-    expect(compilerBlockTypes.length).toBe(20);
-    expect(supportMapTypes.length).toBe(20);
+    expect(uiBlockTypes.length).toBe(21);
+    expect(compilerBlockTypes.length).toBe(21);
+    expect(supportMapTypes.length).toBe(21);
   });
 });
