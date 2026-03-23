@@ -79,6 +79,21 @@ function buildContext(graphJson: GraphJson): CompileContext {
 }
 
 // ---------------------------------------------------------------------------
+// Node descriptor extraction — maps graph-node params to DSL-signal shape
+// ---------------------------------------------------------------------------
+
+function nodeToSignalDescriptor(node: GraphNode): Record<string, unknown> {
+  const bt = node.data.blockType;
+  if (bt === "constant") {
+    // Constant blocks store threshold in params["value"], not params["length"]
+    return { blockType: bt, nodeId: node.id, length: Number(node.data.params["value"] ?? 0) };
+  }
+  // Indicators may use "length" or "period" depending on block type
+  const length = node.data.params["length"] ?? node.data.params["period"];
+  return { blockType: bt, nodeId: node.id, length };
+}
+
+// ---------------------------------------------------------------------------
 // Signal extraction (walks backwards from entry signal port)
 // ---------------------------------------------------------------------------
 
@@ -95,12 +110,8 @@ function extractSignalInfo(ctx: CompileContext, entryNode: GraphNode): Record<st
 
     return {
       type: mode,
-      fast: nodeA
-        ? { blockType: nodeA.data.blockType, nodeId: nodeA.id, length: nodeA.data.params["length"] }
-        : null,
-      slow: nodeB
-        ? { blockType: nodeB.data.blockType, nodeId: nodeB.id, length: nodeB.data.params["length"] }
-        : null,
+      fast: nodeA ? nodeToSignalDescriptor(nodeA) : null,
+      slow: nodeB ? nodeToSignalDescriptor(nodeB) : null,
     };
   }
 
@@ -114,12 +125,8 @@ function extractSignalInfo(ctx: CompileContext, entryNode: GraphNode): Record<st
     return {
       type: "compare",
       op,
-      left: nodeA
-        ? { blockType: nodeA.data.blockType, nodeId: nodeA.id, length: nodeA.data.params["length"] }
-        : null,
-      right: nodeB
-        ? { blockType: nodeB.data.blockType, nodeId: nodeB.id, length: nodeB.data.params["length"] }
-        : null,
+      left: nodeA ? nodeToSignalDescriptor(nodeA) : null,
+      right: nodeB ? nodeToSignalDescriptor(nodeB) : null,
     };
   }
 

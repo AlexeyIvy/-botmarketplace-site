@@ -2,18 +2,18 @@
  * Adaptive Regime Bot — Trend-Mode Test Foundation (#130)
  *
  * Validates trend-mode fixtures and runtime/backtest parity for the
- * Adaptive Regime Bot strategy. This is one slice toward #130 — it does
- * NOT prove a continuous graph→compiled-DSL→runtime pipeline.
+ * Adaptive Regime Bot strategy.
  *
  * Current state:
  *   - Compilation tests verify graph→DSL v1 output independently.
  *   - Backtest / signal / exit / parity tests use hand-authored DSL
  *     fixtures (v1 and v2), NOT the compiler output.
+ *   - Section 6 proves compiler→consumer continuity: compiled DSL fed
+ *     directly into backtest and signal engine with parity checks.
  *   - The compiler emits DSL v1 only; DSL v2 (sideCondition, top-level
  *     exit) is hand-authored for now.
  *
  * NOT covered by this slice:
- *   - Compiled DSL fed directly into backtest/runtime (pipeline continuity)
  *   - Adaptive regime switching (ADX zones → trend vs range mode)
  *   - Range-mode substrategy (BB + RSI)
  *   - Restart/resume/reconciliation acceptance
@@ -25,7 +25,12 @@
 import { describe, it, expect } from "vitest";
 import { compileGraph } from "../../src/lib/compiler/index.js";
 import { runBacktest } from "../../src/lib/backtest.js";
-import { runDslBacktest } from "../../src/lib/dslEvaluator.js";
+import {
+  runDslBacktest,
+  evaluateSignal,
+  getIndicatorValues,
+  createIndicatorCache,
+} from "../../src/lib/dslEvaluator.js";
 import { evaluateEntry, generateOpenIntent } from "../../src/lib/signalEngine.js";
 import { evaluateExit, createTrailingStopState } from "../../src/lib/exitEngine.js";
 import type { PositionSnapshot } from "../../src/lib/positionManager.js";
@@ -590,7 +595,7 @@ describe("Adaptive Regime Bot — parity", () => {
 });
 
 // ---------------------------------------------------------------------------
-// 5. Compiler limitations: document current gaps in compiled DSL
+// 5. Compiler limitations: document remaining gaps in compiled DSL
 // ---------------------------------------------------------------------------
 
 describe("Adaptive Regime Bot — compiler limitations", () => {
@@ -615,10 +620,11 @@ describe("Adaptive Regime Bot — compiler limitations", () => {
     expect(entry["side"]).toBe("Buy");
   });
 
-  it("constant block value not extracted correctly in compiled compare signal", () => {
-    // Documents pre-existing bug: graphCompiler uses params["length"] for all
+  it("constant block value is correctly extracted in compiled compare signal", () => {
+    // Previously documented as a bug: graphCompiler used params["length"] for all
     // signal nodes, but constant blocks store their value in params["value"].
-    // This means the compiled DSL has an incorrect threshold for compare signals.
+    // Fixed: compiler now uses nodeToSignalDescriptor() which maps params["value"]
+    // to the DSL "length" field for constant blocks.
     const graph = makeAdaptiveRegimeBotGraph();
     const result = compileGraph(graph, "arb-lim-2", "ARB", "BTCUSDT", "5m");
 
@@ -630,17 +636,13 @@ describe("Adaptive Regime Bot — compiler limitations", () => {
     const signal = entry["signal"] as Record<string, unknown>;
     const right = signal["right"] as Record<string, unknown>;
 
-    // The constant block has value=25 in the graph, but the compiler reads
-    // params["length"] which is undefined for constant blocks.
-    // This is a known gap: compiled DSL cannot be used as-is for correct
-    // ADX > 25 evaluation in the runtime.
     expect(right["blockType"]).toBe("constant");
-    expect(right["length"]).not.toBe(25); // Bug: should be 25 but isn't
+    expect(right["length"]).toBe(25); // Fixed: constant value now correctly extracted
   });
 
-  it("compiled DSL and hand-authored DSL are structurally different", () => {
-    // This test documents WHY compiled DSL is not used for backtest/runtime
-    // tests: the structures diverge significantly.
+  it("compiled DSL v1 vs hand-authored v2 — structural differences remain", () => {
+    // Documents structural differences between compiled (v1) and hand-authored (v2) DSL.
+    // Signal semantics now match, but DSL version and exit placement still differ.
     const graph = makeAdaptiveRegimeBotGraph();
     const result = compileGraph(graph, "arb-lim-3", "ARB", "BTCUSDT", "5m");
     expect(result.ok).toBe(true);
@@ -659,5 +661,264 @@ describe("Adaptive Regime Bot — compiler limitations", () => {
     expect(compiledEntry["takeProfit"]).toBeDefined();
     expect(handAuthored.exit).toBeDefined();
     expect((handAuthored.entry as Record<string, unknown>)["stopLoss"]).toBeUndefined();
+
+    // Signal semantics now match: both have ADX > 25 compare signal
+    const compiledSignal = compiledEntry["signal"] as Record<string, unknown>;
+    const compiledRight = compiledSignal["right"] as Record<string, unknown>;
+    expect(compiledRight["length"]).toBe(25); // constant threshold preserved
+  });
+});
+
+// ---------------------------------------------------------------------------
+// 6. Compiler→Consumer continuity: compiled DSL fed into backtest/runtime
+// ---------------------------------------------------------------------------
+
+describe("Adaptive Regime Bot — compiler→consumer continuity", () => {
+  // Helper: compile the trend-mode graph and return the DSL
+  function compileTrendModeDsl() {
+    const graph = makeAdaptiveRegimeBotGraph();
+    const result = compileGraph(
+      graph,
+      "arb-continuity",
+      "Adaptive Regime Bot — Compiled",
+      "BTCUSDT",
+      "5m",
+    );
+    expect(result.ok).toBe(true);
+    if (!result.ok) throw new Error("Compilation failed");
+    return result.compiledDsl as Record<string, unknown>;
+  }
+
+  it("graph fixture compiles successfully with correct threshold semantics", () => {
+    const dsl = compileTrendModeDsl();
+
+    expect(dsl["dslVersion"]).toBe(1);
+    expect(dsl["enabled"]).toBe(true);
+
+    const entry = dsl["entry"] as Record<string, unknown>;
+    const signal = entry["signal"] as Record<string, unknown>;
+
+    // Signal is ADX > 25 (compare type)
+    expect(signal["type"]).toBe("compare");
+    expect(signal["op"]).toBe(">");
+
+    const left = signal["left"] as Record<string, unknown>;
+    expect(left["blockType"]).toBe("adx");
+    expect(left["length"]).toBe(14); // period extracted via fallback
+
+    const right = signal["right"] as Record<string, unknown>;
+    expect(right["blockType"]).toBe("constant");
+    expect(right["length"]).toBe(25); // threshold correctly extracted from params.value
+
+    // SL/TP embedded in entry (v1 style)
+    expect(entry["stopLoss"]).toBeDefined();
+    expect(entry["takeProfit"]).toBeDefined();
+  });
+
+  it("compiled DSL produces trades when fed to backtest on strong uptrend", () => {
+    const dsl = compileTrendModeDsl();
+    const candles = makeStrongUptrend(80);
+
+    const report = runDslBacktest(candles, dsl);
+
+    expect(report.candles).toBe(80);
+    expect(report.trades).toBeGreaterThan(0);
+    expect(report.tradeLog.length).toBe(report.trades);
+
+    // All trades should be long (compiled DSL is v1 with fixed side "Buy")
+    for (const trade of report.tradeLog) {
+      expect(trade.side).toBe("long");
+      expect(trade.entryPrice).toBeGreaterThan(0);
+      expect(trade.exitPrice).toBeGreaterThan(0);
+      expect(["WIN", "LOSS", "NEUTRAL"]).toContain(trade.outcome);
+      expect(["sl", "tp", "end_of_data"]).toContain(trade.exitReason);
+    }
+  });
+
+  it("compiled DSL backtest is deterministic", () => {
+    const dsl = compileTrendModeDsl();
+    const candles = makeStrongUptrend(80);
+
+    const r1 = runDslBacktest(candles, dsl);
+    const r2 = runDslBacktest(candles, dsl);
+
+    expect(r1.trades).toBe(r2.trades);
+    expect(r1.totalPnlPct).toBe(r2.totalPnlPct);
+    expect(r1.tradeLog).toEqual(r2.tradeLog);
+  });
+
+  it("compiled DSL signal evaluates correctly against indicator values", () => {
+    const dsl = compileTrendModeDsl();
+    const candles = makeStrongUptrend(80);
+    const cache = createIndicatorCache();
+
+    const entry = dsl["entry"] as Record<string, unknown>;
+    const signal = entry["signal"] as { type: string; op?: string; left?: { blockType: string; length?: number } | null; right?: { blockType: string; length?: number } | null };
+
+    // ADX values should exceed 25 at some point in a strong uptrend
+    const adxVals = getIndicatorValues("adx", { period: 14 }, candles, cache);
+    const constVals = getIndicatorValues("constant", { length: 25 }, candles, cache);
+
+    // Verify constant fills correctly
+    expect(constVals[0]).toBe(25);
+    expect(constVals[candles.length - 1]).toBe(25);
+
+    // Find first bar where compiled signal fires
+    let firstSignalBar = -1;
+    for (let i = 1; i < candles.length; i++) {
+      if (evaluateSignal(signal, i, candles, cache)) {
+        firstSignalBar = i;
+        break;
+      }
+    }
+
+    expect(firstSignalBar).toBeGreaterThan(0);
+
+    // At the signal bar, ADX should actually be > 25
+    const adxAtSignal = adxVals[firstSignalBar];
+    expect(adxAtSignal).not.toBeNull();
+    expect(adxAtSignal!).toBeGreaterThan(25);
+  });
+
+  it("compiled DSL signal engine fires entry on strong uptrend", () => {
+    const dsl = compileTrendModeDsl();
+    const candles = makeStrongUptrend(80);
+
+    let signal = null;
+    for (let end = 28; end <= candles.length; end++) {
+      const window = candles.slice(0, end);
+      signal = evaluateEntry({ candles: window, dslJson: dsl, position: null });
+      if (signal) break;
+    }
+
+    expect(signal).not.toBeNull();
+    expect(signal!.action).toBe("open");
+    expect(signal!.side).toBe("long"); // v1 compiled DSL → always "Buy" → long
+    expect(signal!.price).toBeGreaterThan(0);
+    expect(signal!.slPrice).toBeLessThan(signal!.price);
+    expect(signal!.tpPrice).toBeGreaterThan(signal!.price);
+    expect(signal!.signalType).toBe("compare");
+  });
+
+  it("compiled DSL: signal engine fires at same candle as backtest first entry", () => {
+    const dsl = compileTrendModeDsl();
+    const candles = makeStrongUptrend(80);
+
+    // Backtest first entry
+    const report = runDslBacktest(candles, dsl);
+    expect(report.trades).toBeGreaterThan(0);
+    const backtestFirstEntryTime = report.tradeLog[0].entryTime;
+
+    // Signal engine first entry
+    let signalTime: number | null = null;
+    for (let end = 2; end <= candles.length; end++) {
+      const window = candles.slice(0, end);
+      const signal = evaluateEntry({ candles: window, dslJson: dsl, position: null });
+      if (signal) {
+        signalTime = signal.triggerTime;
+        break;
+      }
+    }
+
+    expect(signalTime).not.toBeNull();
+    expect(signalTime).toBe(backtestFirstEntryTime);
+  });
+
+  it("compiled DSL: backtest entry side matches signal engine side", () => {
+    const dsl = compileTrendModeDsl();
+    const candles = makeStrongUptrend(80);
+
+    const report = runDslBacktest(candles, dsl);
+    expect(report.trades).toBeGreaterThan(0);
+    const backtestSide = report.tradeLog[0].side;
+
+    let signalSide: string | null = null;
+    for (let end = 2; end <= candles.length; end++) {
+      const window = candles.slice(0, end);
+      const signal = evaluateEntry({ candles: window, dslJson: dsl, position: null });
+      if (signal) {
+        signalSide = signal.side;
+        break;
+      }
+    }
+
+    expect(signalSide).toBe(backtestSide);
+  });
+
+  it("compiled DSL: exit engine triggers on position from compiled artifact", () => {
+    const dsl = compileTrendModeDsl();
+    const candles = makeStrongUptrend(80);
+
+    // Use signal engine to find entry from compiled DSL
+    let entrySignal = null;
+    for (let end = 28; end <= candles.length; end++) {
+      const window = candles.slice(0, end);
+      entrySignal = evaluateEntry({ candles: window, dslJson: dsl, position: null });
+      if (entrySignal) break;
+    }
+    expect(entrySignal).not.toBeNull();
+
+    // Create a position based on the entry signal
+    const position = makePosition({
+      avgEntryPrice: entrySignal!.price,
+      slPrice: entrySignal!.slPrice,
+      tpPrice: entrySignal!.tpPrice,
+      side: "LONG",
+    });
+
+    // Create a candle that drops below SL
+    const slCandle = [
+      {
+        openTime: 1_700_100_000_000,
+        open: entrySignal!.price,
+        high: entrySignal!.price + 1,
+        low: entrySignal!.slPrice - 1,
+        close: entrySignal!.slPrice - 0.5,
+        volume: 1000,
+      },
+    ];
+
+    const exitResult = evaluateExit({
+      candles: slCandle,
+      dslJson: dsl,
+      position,
+      barsHeld: 1,
+      trailingState: createTrailingStopState(entrySignal!.price),
+    });
+
+    expect(exitResult).not.toBeNull();
+    expect(exitResult!.action).toBe("close");
+    expect(exitResult!.reason).toBe("sl");
+  });
+
+  it("compiled DSL: no trades with insufficient ADX warm-up candles", () => {
+    const dsl = compileTrendModeDsl();
+    const candles = makeStrongUptrend(20); // too few for ADX(14)
+
+    const report = runDslBacktest(candles, dsl);
+    expect(report.trades).toBe(0);
+  });
+
+  it("compiled DSL backtest matches hand-authored v1 backtest results", () => {
+    // Both compiled and hand-authored v1 DSL encode the same strategy:
+    // ADX(14) > 25, Buy side, SL 2%, TP 4%
+    // They should produce identical trade signals.
+    const candles = makeStrongUptrend(80);
+
+    const compiled = compileTrendModeDsl();
+    const handAuthored = makeAdaptiveRegimeLongOnlyDsl();
+
+    const compiledReport = runDslBacktest(candles, compiled);
+    const handReport = runDslBacktest(candles, handAuthored);
+
+    expect(compiledReport.trades).toBe(handReport.trades);
+    expect(compiledReport.trades).toBeGreaterThan(0);
+
+    // Entry timing and side should match exactly
+    for (let i = 0; i < compiledReport.tradeLog.length; i++) {
+      expect(compiledReport.tradeLog[i].entryTime).toBe(handReport.tradeLog[i].entryTime);
+      expect(compiledReport.tradeLog[i].side).toBe(handReport.tradeLog[i].side);
+      expect(compiledReport.tradeLog[i].exitReason).toBe(handReport.tradeLog[i].exitReason);
+    }
   });
 });

@@ -300,8 +300,8 @@ export function getIndicatorValues(
   }
 
   if (type === "constant") {
-    // Constant value — fill with the value
-    const val = params.length ?? 0;
+    // Constant value — DSL convention stores threshold in "length" field
+    const val = params.length ?? (params as Record<string, unknown>)["value"] ?? 0;
     return new Array(candles.length).fill(val);
   }
 
