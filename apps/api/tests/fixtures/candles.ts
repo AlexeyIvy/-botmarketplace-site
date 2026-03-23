@@ -106,3 +106,62 @@ export function makeFlatThenDown(n: number, flatBars = 25, startPrice = 200, tre
   }
   return candles;
 }
+
+/**
+ * Generate N candles with a strong, steady uptrend.
+ *
+ * Designed for Adaptive Regime Bot testing: produces high ADX (>25)
+ * and bullish SuperTrend direction after indicator warm-up.
+ *
+ * Each bar has consistent directional movement:
+ *   - High makes higher highs (step increase each bar)
+ *   - Low makes higher lows
+ *   - Range (high-low) stays proportional to step
+ *
+ * Deterministic: same inputs always produce identical candles.
+ *
+ * @param n          Total candle count (recommend ≥80 for ADX(14) warm-up)
+ * @param startPrice Starting close price (default: 100)
+ * @param step       Price increase per bar (default: 3)
+ */
+export function makeStrongUptrend(n: number, startPrice = 100, step = 3): Candle[] {
+  const candles: Candle[] = [];
+  for (let i = 0; i < n; i++) {
+    const close = startPrice + i * step;
+    candles.push({
+      openTime: 1_700_000_000_000 + i * 60_000,
+      open: close - step * 0.4,
+      high: close + step * 0.6,
+      low: close - step * 0.6,
+      close,
+      volume: 1000 + i * 10,
+    });
+  }
+  return candles;
+}
+
+/**
+ * Generate N candles with a strong, steady downtrend.
+ *
+ * Mirror of makeStrongUptrend for short-side testing.
+ * Produces high ADX (>25) and bearish SuperTrend direction.
+ *
+ * @param n          Total candle count
+ * @param startPrice Starting close price (default: 300)
+ * @param step       Price decrease per bar (default: 3)
+ */
+export function makeStrongDowntrend(n: number, startPrice = 300, step = 3): Candle[] {
+  const candles: Candle[] = [];
+  for (let i = 0; i < n; i++) {
+    const close = startPrice - i * step;
+    candles.push({
+      openTime: 1_700_000_000_000 + i * 60_000,
+      open: close + step * 0.4,
+      high: close + step * 0.6,
+      low: close - step * 0.6,
+      close,
+      volume: 1000 + i * 10,
+    });
+  }
+  return candles;
+}
