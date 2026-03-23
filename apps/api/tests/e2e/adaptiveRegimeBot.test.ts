@@ -1,14 +1,23 @@
 /**
- * Adaptive Regime Bot — End-to-End Tests (#130)
+ * Adaptive Regime Bot — Trend-Mode Test Foundation (#130)
  *
- * Validates the graph → compile → DSL → backtest → runtime pipeline
- * for the Adaptive Regime Bot trend-mode strategy.
+ * Validates trend-mode fixtures and runtime/backtest parity for the
+ * Adaptive Regime Bot strategy. This is one slice toward #130 — it does
+ * NOT prove a continuous graph→compiled-DSL→runtime pipeline.
  *
- * Test categories:
- *   1. Compilation: graph → compile → valid DSL v1
- *   2. Backtest:    DSL v2 → deterministic, reproducible results
- *   3. Runtime:     signal engine + exit engine correctness
- *   4. Parity:      signal engine fires at same bar as backtest entry
+ * Current state:
+ *   - Compilation tests verify graph→DSL v1 output independently.
+ *   - Backtest / signal / exit / parity tests use hand-authored DSL
+ *     fixtures (v1 and v2), NOT the compiler output.
+ *   - The compiler emits DSL v1 only; DSL v2 (sideCondition, top-level
+ *     exit) is hand-authored for now.
+ *
+ * NOT covered by this slice:
+ *   - Compiled DSL fed directly into backtest/runtime (pipeline continuity)
+ *   - Adaptive regime switching (ADX zones → trend vs range mode)
+ *   - Range-mode substrategy (BB + RSI)
+ *   - Restart/resume/reconciliation acceptance
+ *   - Demo lifecycle completeness
  *
  * All fixtures are deterministic: no randomness, no time-dependence, no I/O.
  */
@@ -54,7 +63,7 @@ function makePosition(overrides: Partial<PositionSnapshot> = {}): PositionSnapsh
 }
 
 // ---------------------------------------------------------------------------
-// 1. Compilation pipeline: graph → compile → DSL v1
+// 1. Compilation: graph → DSL v1 (independent of backtest/runtime tests)
 // ---------------------------------------------------------------------------
 
 describe("Adaptive Regime Bot — compilation", () => {
@@ -138,7 +147,7 @@ describe("Adaptive Regime Bot — compilation", () => {
 });
 
 // ---------------------------------------------------------------------------
-// 2. Backtest pipeline: DSL v2 → deterministic results
+// 2. Backtest: hand-authored DSL → deterministic results
 // ---------------------------------------------------------------------------
 
 describe("Adaptive Regime Bot — backtest", () => {
@@ -254,7 +263,7 @@ describe("Adaptive Regime Bot — backtest", () => {
 });
 
 // ---------------------------------------------------------------------------
-// 3. Runtime pipeline: signal engine + exit engine
+// 3. Runtime: signal engine + exit engine (hand-authored DSL)
 // ---------------------------------------------------------------------------
 
 describe("Adaptive Regime Bot — signal engine", () => {
@@ -484,7 +493,7 @@ describe("Adaptive Regime Bot — exit engine", () => {
 });
 
 // ---------------------------------------------------------------------------
-// 4. Parity: signal engine ↔ backtest evaluator
+// 4. Parity: signal engine ↔ backtest (hand-authored DSL)
 // ---------------------------------------------------------------------------
 
 describe("Adaptive Regime Bot — parity", () => {
@@ -577,5 +586,78 @@ describe("Adaptive Regime Bot — parity", () => {
     }
 
     expect(signalSide).toBe(firstTradeSide);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// 5. Compiler limitations: document current gaps in compiled DSL
+// ---------------------------------------------------------------------------
+
+describe("Adaptive Regime Bot — compiler limitations", () => {
+  it("compiled DSL is v1 only — no sideCondition or top-level exit", () => {
+    const graph = makeAdaptiveRegimeBotGraph();
+    const result = compileGraph(graph, "arb-lim-1", "ARB", "BTCUSDT", "5m");
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+
+    const dsl = result.compiledDsl as Record<string, unknown>;
+
+    // Compiler currently emits DSL v1
+    expect(dsl["dslVersion"]).toBe(1);
+
+    // DSL v2 features are absent from compiled output
+    const entry = dsl["entry"] as Record<string, unknown>;
+    expect(entry["sideCondition"]).toBeUndefined();
+    expect(dsl["exit"]).toBeUndefined();
+
+    // Entry has fixed side (v1 style), not dynamic
+    expect(entry["side"]).toBe("Buy");
+  });
+
+  it("constant block value not extracted correctly in compiled compare signal", () => {
+    // Documents pre-existing bug: graphCompiler uses params["length"] for all
+    // signal nodes, but constant blocks store their value in params["value"].
+    // This means the compiled DSL has an incorrect threshold for compare signals.
+    const graph = makeAdaptiveRegimeBotGraph();
+    const result = compileGraph(graph, "arb-lim-2", "ARB", "BTCUSDT", "5m");
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+
+    const dsl = result.compiledDsl as Record<string, unknown>;
+    const entry = dsl["entry"] as Record<string, unknown>;
+    const signal = entry["signal"] as Record<string, unknown>;
+    const right = signal["right"] as Record<string, unknown>;
+
+    // The constant block has value=25 in the graph, but the compiler reads
+    // params["length"] which is undefined for constant blocks.
+    // This is a known gap: compiled DSL cannot be used as-is for correct
+    // ADX > 25 evaluation in the runtime.
+    expect(right["blockType"]).toBe("constant");
+    expect(right["length"]).not.toBe(25); // Bug: should be 25 but isn't
+  });
+
+  it("compiled DSL and hand-authored DSL are structurally different", () => {
+    // This test documents WHY compiled DSL is not used for backtest/runtime
+    // tests: the structures diverge significantly.
+    const graph = makeAdaptiveRegimeBotGraph();
+    const result = compileGraph(graph, "arb-lim-3", "ARB", "BTCUSDT", "5m");
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+
+    const compiled = result.compiledDsl as Record<string, unknown>;
+    const handAuthored = makeAdaptiveRegimeTrendDsl();
+
+    // Version mismatch: compiler emits v1, hand-authored is v2
+    expect(compiled["dslVersion"]).toBe(1);
+    expect(handAuthored.dslVersion).toBe(2);
+
+    // Compiled has embedded SL/TP in entry; hand-authored has top-level exit
+    const compiledEntry = compiled["entry"] as Record<string, unknown>;
+    expect(compiledEntry["stopLoss"]).toBeDefined();
+    expect(compiledEntry["takeProfit"]).toBeDefined();
+    expect(handAuthored.exit).toBeDefined();
+    expect((handAuthored.entry as Record<string, unknown>)["stopLoss"]).toBeUndefined();
   });
 });
