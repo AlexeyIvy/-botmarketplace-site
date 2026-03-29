@@ -1,7 +1,9 @@
 import type { FastifyInstance } from "fastify";
 import { prisma } from "../lib/prisma.js";
+import { Prisma } from "@prisma/client";
 import { problem } from "../lib/problem.js";
 import { resolveWorkspace } from "../lib/workspace.js";
+import { transition, isValidTransition, isTerminalState } from "../lib/stateMachine.js";
 import {
   listBotPositions,
   getActiveBotPosition,
@@ -318,4 +320,110 @@ export async function botRoutes(app: FastifyInstance) {
 
     return reply.send(serialized);
   });
+
+  // ── POST /bots/:id/kill ── emergency kill switch (#141) ───────────────────
+  //
+  // Immediately stops all bot activity:
+  //   1. Transitions all non-terminal runs to STOPPED
+  //   2. Cancels all PENDING intents (prevent stale actions)
+  //   3. Syncs Bot.status to DRAFT
+  //
+  // Idempotent: calling kill on an already-stopped bot is a safe no-op.
+  // Does NOT cancel PLACED orders on the exchange — that requires exchange API
+  // calls which are handled by the reconciliation loop or manual intervention.
+  //
+  app.post<{ Params: { id: string } }>(
+    "/bots/:id/kill",
+    { onRequest: [app.authenticate] },
+    async (request, reply) => {
+      const workspace = await resolveWorkspace(request, reply);
+      if (!workspace) return;
+
+      const bot = await prisma.bot.findUnique({ where: { id: request.params.id } });
+      if (!bot || bot.workspaceId !== workspace.id) {
+        return problem(reply, 404, "Not Found", "Bot not found");
+      }
+
+      // Find all non-terminal runs for this bot
+      const activeRuns = await prisma.botRun.findMany({
+        where: {
+          botId: bot.id,
+          state: { notIn: ["STOPPED", "FAILED", "TIMED_OUT"] },
+        },
+        select: { id: true, state: true },
+      });
+
+      const stoppedRuns: string[] = [];
+      const runErrors: { id: string; error: string }[] = [];
+
+      for (const run of activeRuns) {
+        try {
+          if (isValidTransition(run.state, "STOPPING")) {
+            await transition(run.id, "STOPPING", {
+              eventType: "RUN_STOPPING",
+              message: "Kill switch activated",
+            });
+          }
+          if (!isTerminalState(run.state === "STOPPING" ? "STOPPING" : run.state)) {
+            await transition(run.id, "STOPPED", {
+              eventType: "RUN_STOPPED",
+              message: "Killed by kill switch",
+              stoppedAt: new Date(),
+            });
+          }
+          stoppedRuns.push(run.id);
+        } catch (err) {
+          runErrors.push({ id: run.id, error: String(err) });
+        }
+      }
+
+      // Cancel all PENDING intents for this bot's runs
+      const cancelResult = await prisma.botIntent.updateMany({
+        where: {
+          state: "PENDING",
+          botRun: { botId: bot.id },
+        },
+        data: {
+          state: "CANCELLED",
+          metaJson: {
+            reason: "kill_switch",
+            cancelledAt: new Date().toISOString(),
+          } as Prisma.InputJsonValue,
+        },
+      });
+
+      // Sync bot status to DRAFT
+      await prisma.bot.update({
+        where: { id: bot.id },
+        data: { status: "DRAFT" },
+      });
+
+      // Record kill event
+      if (activeRuns.length > 0 || cancelResult.count > 0) {
+        // Use the first active run for the event, or skip if none
+        const eventRunId = activeRuns[0]?.id;
+        if (eventRunId) {
+          await prisma.botEvent.create({
+            data: {
+              botRunId: eventRunId,
+              type: "kill_switch",
+              payloadJson: {
+                botId: bot.id,
+                stoppedRuns: stoppedRuns.length,
+                cancelledIntents: cancelResult.count,
+                at: new Date().toISOString(),
+              } as Prisma.InputJsonValue,
+            },
+          });
+        }
+      }
+
+      return reply.send({
+        killed: true,
+        stoppedRuns,
+        cancelledIntents: cancelResult.count,
+        errors: runErrors,
+      });
+    },
+  );
 }
