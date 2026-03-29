@@ -57,6 +57,11 @@ import { normalizeOrder } from "./exchange/normalizer.js";
 import { sizeOrder } from "./runtime/positionSizer.js";
 import { reconstructRunState } from "./recoveryManager.js";
 import {
+  reconcileStartupState,
+  detectStartupInconsistencies,
+  type StartupIntent,
+} from "./stateReconciler.js";
+import {
   parseDailyLossConfig,
   parseGuardsConfig,
   shouldTriggerDailyLossLimit,
@@ -222,6 +227,103 @@ async function activateRun(runId: string) {
       }
     } catch (err) {
       workerLog.warn({ err, runId }, "failed to read position on startup (non-fatal)");
+    }
+
+    // Stage 8 (#141): startup intent reconciliation
+    // Cancel stale PENDING intents from before restart and audit in-flight state.
+    try {
+      const allIntents = await prisma.botIntent.findMany({
+        where: { botRunId: runId },
+        select: {
+          id: true,
+          intentId: true,
+          state: true,
+          type: true,
+          side: true,
+          orderId: true,
+          createdAt: true,
+        },
+        orderBy: { createdAt: "desc" },
+        take: 50,
+      });
+
+      const existingPosition = await getActivePosition(runId, afterSync.bot.symbol);
+
+      // Pre-cancellation consistency check (for logging)
+      const inconsistencies = detectStartupInconsistencies(
+        allIntents as StartupIntent[],
+        existingPosition,
+      );
+      if (inconsistencies.length > 0) {
+        workerLog.warn(
+          { runId, inconsistencies },
+          "startup inconsistencies detected (will be resolved by reconciliation)",
+        );
+      }
+
+      const result = reconcileStartupState(
+        allIntents as StartupIntent[],
+        existingPosition,
+      );
+
+      // Cancel stale PENDING intents
+      if (result.toCancel.length > 0) {
+        const cancelIds = result.toCancel.map((c) => c.id);
+        await prisma.botIntent.updateMany({
+          where: {
+            id: { in: cancelIds },
+            state: "PENDING", // guard: only cancel if still PENDING
+          },
+          data: {
+            state: "CANCELLED",
+            metaJson: {
+              reason: "startup_reconciliation",
+              cancelledAt: new Date().toISOString(),
+            } as Prisma.InputJsonValue,
+          },
+        });
+
+        await prisma.botEvent.create({
+          data: {
+            botRunId: runId,
+            type: "startup_reconciliation",
+            payloadJson: {
+              action: "cancel_stale_intents",
+              cancelledCount: result.toCancel.length,
+              cancelledIntentIds: result.toCancel.map((c) => c.intentId),
+              inconsistencies,
+              summary: result.summary,
+              counts: result.counts,
+            } as Prisma.InputJsonValue,
+          },
+        });
+
+        workerLog.info(
+          { runId, cancelledCount: result.toCancel.length, summary: result.summary },
+          "startup reconciliation: cancelled stale intents",
+        );
+      } else if (result.toMonitor.length > 0) {
+        // No stale intents but some in-flight — log for visibility
+        await prisma.botEvent.create({
+          data: {
+            botRunId: runId,
+            type: "startup_reconciliation",
+            payloadJson: {
+              action: "audit_only",
+              inFlightCount: result.toMonitor.length,
+              summary: result.summary,
+              counts: result.counts,
+            } as Prisma.InputJsonValue,
+          },
+        });
+
+        workerLog.info(
+          { runId, inFlightCount: result.toMonitor.length, summary: result.summary },
+          "startup reconciliation: in-flight intents will be tracked by exchange loop",
+        );
+      }
+    } catch (err) {
+      workerLog.warn({ err, runId }, "startup reconciliation error (non-fatal)");
     }
 
     // Sync Bot.status → ACTIVE
