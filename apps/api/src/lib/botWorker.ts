@@ -61,6 +61,7 @@ import {
   detectStartupInconsistencies,
   type StartupIntent,
 } from "./stateReconciler.js";
+import { classifyExecutionError } from "./errorClassifier.js";
 import {
   parseDailyLossConfig,
   parseGuardsConfig,
@@ -558,10 +559,15 @@ async function executeIntent(intent: {
       workerLog.info({ intentId: intent.intentId, orderId: result.orderId }, "intent placed");
     }
   } catch (err) {
-    // Placement failed — mark intent as FAILED
+    // Stage 8 (#141): classify execution error for retry/dead-letter semantics
+    const classification = classifyExecutionError(err);
+
     const meta = {
       ...(intent.metaJson && typeof intent.metaJson === "object" ? intent.metaJson as Record<string, unknown> : {}),
       error: String(err),
+      errorClass: classification.errorClass,
+      retryable: classification.retryable,
+      classificationReason: classification.reason,
       failedAt: new Date().toISOString(),
     };
     await prisma.botIntent.update({
@@ -575,11 +581,22 @@ async function executeIntent(intent: {
         payloadJson: {
           intentId: intent.intentId,
           error: String(err),
+          errorClass: classification.errorClass,
+          retryable: classification.retryable,
+          classificationReason: classification.reason,
           at: new Date().toISOString(),
         } as Prisma.InputJsonValue,
       },
     });
-    workerLog.error({ err, intentId: intent.intentId }, "executeIntent error");
+    workerLog.error(
+      {
+        err,
+        intentId: intent.intentId,
+        errorClass: classification.errorClass,
+        retryable: classification.retryable,
+      },
+      `executeIntent error (${classification.errorClass})`,
+    );
   }
 }
 
