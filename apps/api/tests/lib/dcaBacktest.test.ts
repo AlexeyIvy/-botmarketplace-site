@@ -361,4 +361,33 @@ describe("dslEvaluator – DCA backtest integration (#131)", () => {
     expect(report.totalPnlPct).toBe(report2.totalPnlPct);
     expect(report.tradeLog).toEqual(report2.tradeLog);
   });
+
+  it("DCA with fixed_price SL recalculates correctly after SO fills", () => {
+    const candles = makeDcaScenario();
+    // Use fixed_price SL set far below entry so it doesn't trigger during dip
+    const dsl = makeDcaLongDsl({
+      exit: {
+        stopLoss: { type: "fixed_price", value: 80 }, // absolute price
+        takeProfit: { type: "fixed_pct", value: 5 },
+      },
+    });
+    const report = runDslBacktest(candles, dsl);
+
+    expect(report.trades).toBeGreaterThanOrEqual(1);
+
+    for (const t of report.tradeLog) {
+      expect(t.dcaSafetyOrdersFilled).toBeDefined();
+      // SL must NOT collapse to avg entry (which would happen if dcaSlPctResolved = 0)
+      expect(t.slPrice).toBeLessThan(t.entryPrice * 0.99);
+      // SL must be positive and below the averaged entry
+      expect(t.slPrice).toBeGreaterThan(0);
+
+      if (t.dcaSafetyOrdersFilled! > 0) {
+        // After SO fills, SL should still maintain a meaningful distance
+        // from the averaged entry — not collapse to it
+        const slDistPct = Math.abs(t.dcaAvgEntry! - t.slPrice) / t.dcaAvgEntry! * 100;
+        expect(slDistPct).toBeGreaterThan(1); // at least 1% distance
+      }
+    }
+  });
 });

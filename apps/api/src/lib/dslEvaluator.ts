@@ -644,7 +644,10 @@ export function runDslBacktest(
   }
 
   // For DCA, derive SL% from the exit-level definition for consistent recalculation.
-  // ATR-based SL is computed per-bar at entry and frozen as a percentage for DCA recalc.
+  // Supported SL types for DCA recalc:
+  //   fixed_pct   → use value directly
+  //   atr_multiple → derive % from (entryPrice, slPrice) at entry time
+  //   fixed_price  → derive % from (entryPrice, slPrice) at entry time
   const dcaSlPct = isDca && slDef.type === "fixed_pct" ? slDef.value : 0;
 
   // Need at least 2 candles for any signal evaluation
@@ -896,8 +899,9 @@ export function runDslBacktest(
 
       // DCA entry: initialize DCA state and override TP + SL from DCA planning
       if (isDca && dcaConfig) {
-        // For ATR-based SL, convert the computed SL distance to a percentage at entry time
-        if (slDef.type === "atr_multiple") {
+        // For non-fixed_pct SL types (atr_multiple, fixed_price), derive the
+        // SL distance as a frozen percentage from the computed entry-time levels.
+        if (slDef.type !== "fixed_pct") {
           dcaSlPctResolved = effectiveEntry > 0
             ? Math.abs(effectiveEntry - slPrice) / effectiveEntry * 100
             : dcaSlPct;
