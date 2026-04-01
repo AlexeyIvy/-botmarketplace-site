@@ -354,4 +354,142 @@ describe("dslValidator – validateDsl", () => {
       expect(errors!.some((e) => e.message.includes("side") && e.message.includes("sideCondition"))).toBe(true);
     });
   });
+
+  describe("v2 – DCA config (#131)", () => {
+    function makeV2WithDca(): Record<string, unknown> {
+      return {
+        id: "strat-v2-dca",
+        name: "DCA Strategy",
+        dslVersion: 2,
+        enabled: true,
+        market: {
+          exchange: "bybit",
+          env: "demo",
+          category: "linear",
+          symbol: "BTCUSDT",
+        },
+        timeframes: ["M15"],
+        entry: {
+          side: "Buy",
+          signal: { type: "crossover" },
+          indicators: [],
+        },
+        exit: {
+          stopLoss: { type: "fixed_pct", value: 10 },
+          takeProfit: { type: "fixed_pct", value: 5 },
+        },
+        risk: {
+          maxPositionSizeUsd: 1000,
+          riskPerTradePct: 2,
+          cooldownSeconds: 60,
+        },
+        execution: {
+          orderType: "Market",
+          clientOrderIdPrefix: "lab_",
+          maxSlippageBps: 50,
+        },
+        guards: {
+          maxOpenPositions: 1,
+          maxOrdersPerMinute: 10,
+          pauseOnError: true,
+        },
+        dca: {
+          baseOrderSizeUsd: 100,
+          maxSafetyOrders: 3,
+          priceStepPct: 1.0,
+          stepScale: 1.0,
+          volumeScale: 1.5,
+          takeProfitPct: 1.5,
+        },
+      };
+    }
+
+    it("accepts valid v2 DSL with DCA config", () => {
+      expect(validateDsl(makeV2WithDca())).toBeNull();
+    });
+
+    it("rejects DCA in v1", () => {
+      const dsl = makeV2WithDca();
+      dsl.dslVersion = 1;
+      delete dsl.exit;
+      const errors = validateDsl(dsl);
+      expect(errors).not.toBeNull();
+      expect(errors!.some((e) => e.field === "dca")).toBe(true);
+    });
+
+    it("rejects DCA when total exposure exceeds maxPositionSizeUsd", () => {
+      const dsl = makeV2WithDca();
+      // base=100 + SO1=150 + SO2=225 + SO3=337.5 = 812.5 > 500
+      (dsl.risk as Record<string, unknown>).maxPositionSizeUsd = 500;
+      const errors = validateDsl(dsl);
+      expect(errors).not.toBeNull();
+      expect(errors!.some((e) => e.message.includes("exposure"))).toBe(true);
+    });
+
+    it("accepts DCA when exposure fits within maxPositionSizeUsd", () => {
+      const dsl = makeV2WithDca();
+      (dsl.risk as Record<string, unknown>).maxPositionSizeUsd = 1000;
+      expect(validateDsl(dsl)).toBeNull();
+    });
+
+    it("rejects DCA with missing required fields", () => {
+      const dsl = makeV2WithDca();
+      dsl.dca = { baseOrderSizeUsd: 100 }; // missing other fields
+      const errors = validateDsl(dsl);
+      expect(errors).not.toBeNull();
+    });
+
+    it("rejects DCA with invalid field values", () => {
+      const dsl = makeV2WithDca();
+      (dsl.dca as Record<string, unknown>).maxSafetyOrders = 0; // minimum is 1
+      const errors = validateDsl(dsl);
+      expect(errors).not.toBeNull();
+    });
+
+    it("rejects DCA with stepScale < 1", () => {
+      const dsl = makeV2WithDca();
+      (dsl.dca as Record<string, unknown>).stepScale = 0.5;
+      const errors = validateDsl(dsl);
+      expect(errors).not.toBeNull();
+    });
+
+    it("rejects DCA with volumeScale < 1", () => {
+      const dsl = makeV2WithDca();
+      (dsl.dca as Record<string, unknown>).volumeScale = 0.9;
+      const errors = validateDsl(dsl);
+      expect(errors).not.toBeNull();
+    });
+
+    it("accepts v2 without DCA (optional)", () => {
+      const dsl = makeV2WithDca();
+      delete dsl.dca;
+      expect(validateDsl(dsl)).toBeNull();
+    });
+
+    it("rejects DCA without risk.maxPositionSizeUsd", () => {
+      const dsl = makeV2WithDca();
+      delete (dsl.risk as Record<string, unknown>).maxPositionSizeUsd;
+      const errors = validateDsl(dsl);
+      expect(errors).not.toBeNull();
+      expect(errors!.some((e) => e.field === "risk.maxPositionSizeUsd")).toBe(true);
+      expect(errors!.some((e) => e.message.includes("required"))).toBe(true);
+    });
+
+    it("rejects DCA config that would produce non-positive trigger prices", () => {
+      const dsl = makeV2WithDca();
+      // 50 SOs at 5% step → 250% deviation → negative trigger prices
+      (dsl.dca as Record<string, unknown>).maxSafetyOrders = 50;
+      (dsl.dca as Record<string, unknown>).priceStepPct = 5.0;
+      (dsl.risk as Record<string, unknown>).maxPositionSizeUsd = 999999;
+      const errors = validateDsl(dsl);
+      expect(errors).not.toBeNull();
+      expect(errors!.some((e) => e.message.includes("deviation"))).toBe(true);
+    });
+
+    it("accepts DCA config where deviation is safely under 100%", () => {
+      const dsl = makeV2WithDca();
+      // 3 SOs at 1% step → 3% deviation → fine
+      expect(validateDsl(dsl)).toBeNull();
+    });
+  });
 });

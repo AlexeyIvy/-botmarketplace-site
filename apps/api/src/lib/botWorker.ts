@@ -17,6 +17,10 @@
  *   risk.dailyLossLimitUsd → RUNNING run transitions to STOPPING when estimated
  *                            daily loss (FAILED intents × loss-per-trade) exceeds limit
  *
+ * Safety circuit breakers (Stage 8, #141):
+ *   guards.pauseOnError    → RUNNING run transitions to STOPPING when N consecutive
+ *                            intents are FAILED (default threshold: 3)
+ *
  * The worker runs in the same process. For production, extract into a
  * dedicated worker process.
  */
@@ -52,6 +56,19 @@ import { getInstrument, type InstrumentInfo } from "./exchange/instrumentCache.j
 import { normalizeOrder } from "./exchange/normalizer.js";
 import { sizeOrder } from "./runtime/positionSizer.js";
 import { reconstructRunState } from "./recoveryManager.js";
+import {
+  reconcileStartupState,
+  detectStartupInconsistencies,
+  type StartupIntent,
+} from "./stateReconciler.js";
+import { classifyExecutionError } from "./errorClassifier.js";
+import {
+  parseDailyLossConfig,
+  parseGuardsConfig,
+  shouldTriggerDailyLossLimit,
+  shouldPauseOnError,
+  DEFAULT_ERROR_PAUSE_THRESHOLD,
+} from "./safetyGuards.js";
 
 const workerLog = pino({
   name: "botWorker",
@@ -211,6 +228,103 @@ async function activateRun(runId: string) {
       }
     } catch (err) {
       workerLog.warn({ err, runId }, "failed to read position on startup (non-fatal)");
+    }
+
+    // Stage 8 (#141): startup intent reconciliation
+    // Cancel stale PENDING intents from before restart and audit in-flight state.
+    try {
+      const allIntents = await prisma.botIntent.findMany({
+        where: { botRunId: runId },
+        select: {
+          id: true,
+          intentId: true,
+          state: true,
+          type: true,
+          side: true,
+          orderId: true,
+          createdAt: true,
+        },
+        orderBy: { createdAt: "desc" },
+        take: 50,
+      });
+
+      const existingPosition = await getActivePosition(runId, afterSync.bot.symbol);
+
+      // Pre-cancellation consistency check (for logging)
+      const inconsistencies = detectStartupInconsistencies(
+        allIntents as StartupIntent[],
+        existingPosition,
+      );
+      if (inconsistencies.length > 0) {
+        workerLog.warn(
+          { runId, inconsistencies },
+          "startup inconsistencies detected (will be resolved by reconciliation)",
+        );
+      }
+
+      const result = reconcileStartupState(
+        allIntents as StartupIntent[],
+        existingPosition,
+      );
+
+      // Cancel stale PENDING intents
+      if (result.toCancel.length > 0) {
+        const cancelIds = result.toCancel.map((c) => c.id);
+        await prisma.botIntent.updateMany({
+          where: {
+            id: { in: cancelIds },
+            state: "PENDING", // guard: only cancel if still PENDING
+          },
+          data: {
+            state: "CANCELLED",
+            metaJson: {
+              reason: "startup_reconciliation",
+              cancelledAt: new Date().toISOString(),
+            } as Prisma.InputJsonValue,
+          },
+        });
+
+        await prisma.botEvent.create({
+          data: {
+            botRunId: runId,
+            type: "startup_reconciliation",
+            payloadJson: {
+              action: "cancel_stale_intents",
+              cancelledCount: result.toCancel.length,
+              cancelledIntentIds: result.toCancel.map((c) => c.intentId),
+              inconsistencies,
+              summary: result.summary,
+              counts: result.counts,
+            } as Prisma.InputJsonValue,
+          },
+        });
+
+        workerLog.info(
+          { runId, cancelledCount: result.toCancel.length, summary: result.summary },
+          "startup reconciliation: cancelled stale intents",
+        );
+      } else if (result.toMonitor.length > 0) {
+        // No stale intents but some in-flight — log for visibility
+        await prisma.botEvent.create({
+          data: {
+            botRunId: runId,
+            type: "startup_reconciliation",
+            payloadJson: {
+              action: "audit_only",
+              inFlightCount: result.toMonitor.length,
+              summary: result.summary,
+              counts: result.counts,
+            } as Prisma.InputJsonValue,
+          },
+        });
+
+        workerLog.info(
+          { runId, inFlightCount: result.toMonitor.length, summary: result.summary },
+          "startup reconciliation: in-flight intents will be tracked by exchange loop",
+        );
+      }
+    } catch (err) {
+      workerLog.warn({ err, runId }, "startup reconciliation error (non-fatal)");
     }
 
     // Sync Bot.status → ACTIVE
@@ -445,10 +559,15 @@ async function executeIntent(intent: {
       workerLog.info({ intentId: intent.intentId, orderId: result.orderId }, "intent placed");
     }
   } catch (err) {
-    // Placement failed — mark intent as FAILED
+    // Stage 8 (#141): classify execution error for retry/dead-letter semantics
+    const classification = classifyExecutionError(err);
+
     const meta = {
       ...(intent.metaJson && typeof intent.metaJson === "object" ? intent.metaJson as Record<string, unknown> : {}),
       error: String(err),
+      errorClass: classification.errorClass,
+      retryable: classification.retryable,
+      classificationReason: classification.reason,
       failedAt: new Date().toISOString(),
     };
     await prisma.botIntent.update({
@@ -462,11 +581,22 @@ async function executeIntent(intent: {
         payloadJson: {
           intentId: intent.intentId,
           error: String(err),
+          errorClass: classification.errorClass,
+          retryable: classification.retryable,
+          classificationReason: classification.reason,
           at: new Date().toISOString(),
         } as Prisma.InputJsonValue,
       },
     });
-    workerLog.error({ err, intentId: intent.intentId }, "executeIntent error");
+    workerLog.error(
+      {
+        err,
+        intentId: intent.intentId,
+        errorClass: classification.errorClass,
+        retryable: classification.retryable,
+      },
+      `executeIntent error (${classification.errorClass})`,
+    );
   }
 }
 
@@ -477,8 +607,8 @@ async function executeIntent(intent: {
 /**
  * Enforce risk.dailyLossLimitUsd for all RUNNING bot runs.
  *
- * Heuristic: failed_intents_today × estimated_loss_per_intent ≥ dailyLossLimitUsd
- * where estimated_loss_per_intent = (riskPerTradePct / 100) × maxPositionSizeUsd.
+ * Uses pure decision function from safetyGuards.ts:
+ *   failed_intents_today × estimated_loss_per_intent ≥ dailyLossLimitUsd
  *
  * When the limit is exceeded the run is transitioned to STOPPING.
  */
@@ -501,15 +631,8 @@ async function enforceDailyLossLimit(): Promise<void> {
     todayStart.setHours(0, 0, 0, 0);
 
     for (const run of runningRuns) {
-      const dsl = run.bot?.strategyVersion?.dslJson as Record<string, unknown> | null;
-      const risk = dsl?.["risk"] as Record<string, unknown> | undefined;
-      const dailyLossLimitUsd = typeof risk?.["dailyLossLimitUsd"] === "number"
-        ? risk["dailyLossLimitUsd"] as number : null;
-      if (!dailyLossLimitUsd || dailyLossLimitUsd <= 0) continue;
-
-      const riskPerTradePct   = typeof risk?.["riskPerTradePct"]   === "number" ? risk["riskPerTradePct"]   as number : 1;
-      const maxPositionSizeUsd = typeof risk?.["maxPositionSizeUsd"] === "number" ? risk["maxPositionSizeUsd"] as number : 100;
-      const estimatedLossPerTrade = (riskPerTradePct / 100) * maxPositionSizeUsd;
+      const config = parseDailyLossConfig(run.bot?.strategyVersion?.dslJson);
+      if (config.dailyLossLimitUsd === null) continue;
 
       const failedToday = await prisma.botIntent.count({
         where: {
@@ -519,21 +642,93 @@ async function enforceDailyLossLimit(): Promise<void> {
         },
       });
 
-      const estimatedDailyLoss = failedToday * estimatedLossPerTrade;
-      if (estimatedDailyLoss < dailyLossLimitUsd) continue;
+      const result = shouldTriggerDailyLossLimit(config, failedToday);
+      if (!result.triggered) continue;
 
       try {
         await transition(run.id, "STOPPING", {
           eventType: "RUN_STOPPING",
-          message: `Daily loss limit $${dailyLossLimitUsd} exceeded (estimated loss: $${estimatedDailyLoss.toFixed(2)} from ${failedToday} failed intent(s))`,
+          message: `Daily loss limit: ${result.reason}`,
         });
-        workerLog.info({ runId: run.id, estimatedDailyLoss, dailyLossLimitUsd }, "daily loss limit exceeded, stopping run");
+        workerLog.info(
+          { runId: run.id, estimatedLoss: result.estimatedLoss, dailyLossLimitUsd: config.dailyLossLimitUsd },
+          "daily loss limit exceeded, stopping run",
+        );
       } catch (err) {
-        workerLog.error({ err, runId: run.id }, "enforceDailyLossLimit error");
+        workerLog.error({ err, runId: run.id }, "enforceDailyLossLimit transition error");
       }
     }
   } catch (err) {
     workerLog.error({ err }, "enforceDailyLossLimit error");
+  }
+}
+
+/**
+ * Enforce guards.pauseOnError for all RUNNING bot runs (#141).
+ *
+ * When pauseOnError is true (default) and the most recent N intents
+ * on a run are all FAILED, the run is transitioned to STOPPING.
+ *
+ * Uses pure decision function from safetyGuards.ts.
+ */
+async function enforceErrorPause(): Promise<void> {
+  try {
+    const runningRuns = await prisma.botRun.findMany({
+      where: { state: "RUNNING" },
+      select: {
+        id: true,
+        bot: {
+          select: {
+            strategyVersion: { select: { dslJson: true } },
+          },
+        },
+      },
+      take: 50,
+    });
+
+    for (const run of runningRuns) {
+      const guards = parseGuardsConfig(run.bot?.strategyVersion?.dslJson);
+      if (!guards.pauseOnError) continue;
+
+      // Count consecutive FAILED intents from most recent
+      const recentIntents = await prisma.botIntent.findMany({
+        where: { botRunId: run.id },
+        orderBy: { createdAt: "desc" },
+        take: DEFAULT_ERROR_PAUSE_THRESHOLD,
+        select: { state: true },
+      });
+
+      // If fewer intents than threshold exist, can't trigger
+      if (recentIntents.length < DEFAULT_ERROR_PAUSE_THRESHOLD) continue;
+
+      // Count how many of the most recent intents are FAILED
+      let consecutiveFailed = 0;
+      for (const intent of recentIntents) {
+        if (intent.state === "FAILED") {
+          consecutiveFailed++;
+        } else {
+          break;
+        }
+      }
+
+      const result = shouldPauseOnError(guards.pauseOnError, consecutiveFailed);
+      if (!result.triggered) continue;
+
+      try {
+        await transition(run.id, "STOPPING", {
+          eventType: "RUN_STOPPING",
+          message: `Pause on error: ${result.reason}`,
+        });
+        workerLog.info(
+          { runId: run.id, consecutiveFailed, threshold: result.threshold },
+          "pauseOnError triggered, stopping run",
+        );
+      } catch (err) {
+        workerLog.error({ err, runId: run.id }, "enforceErrorPause transition error");
+      }
+    }
+  } catch (err) {
+    workerLog.error({ err }, "enforceErrorPause error");
   }
 }
 
@@ -1192,6 +1387,10 @@ async function poll() {
 
     // Renew leases on our RUNNING runs
     await renewLeases();
+
+    // Stage 8 (#141): enforce safety circuit breakers before evaluation
+    await enforceDailyLossLimit();
+    await enforceErrorPause();
 
     // Stage 3 (#128): Evaluate DSL strategies for RUNNING runs
     await evaluateStrategies();

@@ -9,6 +9,8 @@
 
 import Ajv from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
+import { calculateMaxExposure, calculateMaxDeviation } from "./dcaPlanning.js";
+import type { DcaConfig } from "./dcaPlanning.js";
 
 // ---------------------------------------------------------------------------
 // Shared $defs
@@ -22,6 +24,31 @@ const EXIT_LEVEL_DEF = {
     type: { enum: ["fixed_pct", "fixed_price", "atr_multiple"] },
     value: { type: "number", exclusiveMinimum: 0 },
     atrPeriod: { type: "integer", minimum: 1 },
+  },
+} as const;
+
+// ---------------------------------------------------------------------------
+// DCA config $def (#131)
+// ---------------------------------------------------------------------------
+
+const DCA_CONFIG_DEF = {
+  type: "object",
+  additionalProperties: false,
+  required: [
+    "baseOrderSizeUsd",
+    "maxSafetyOrders",
+    "priceStepPct",
+    "stepScale",
+    "volumeScale",
+    "takeProfitPct",
+  ],
+  properties: {
+    baseOrderSizeUsd: { type: "number", exclusiveMinimum: 0 },
+    maxSafetyOrders: { type: "integer", minimum: 1, maximum: 50 },
+    priceStepPct: { type: "number", exclusiveMinimum: 0, maximum: 50 },
+    stepScale: { type: "number", minimum: 1, maximum: 10 },
+    volumeScale: { type: "number", minimum: 1, maximum: 10 },
+    takeProfitPct: { type: "number", exclusiveMinimum: 0, maximum: 100 },
   },
 } as const;
 
@@ -204,10 +231,13 @@ const STRATEGY_SCHEMA = {
         pauseOnError: { type: "boolean" },
       },
     },
+
+    dca: { $ref: "#/$defs/dcaConfig" },
   },
 
   $defs: {
     exitLevel: EXIT_LEVEL_DEF,
+    dcaConfig: DCA_CONFIG_DEF,
   },
 };
 
@@ -307,6 +337,78 @@ export function validateDsl(dslJson: unknown): DslValidationError[] | null {
       message:
         'entry must have either "side" or "sideCondition"',
     });
+  }
+
+  // DCA semantic validation (#131)
+  const dca = obj.dca as Record<string, unknown> | undefined;
+  if (dca) {
+    // DCA requires v2
+    if (dslVersion === 1) {
+      errors.push({
+        field: "dca",
+        message: '"dca" section requires dslVersion >= 2',
+      });
+    }
+
+    // DCA requires risk.maxPositionSizeUsd as an exposure cap
+    const risk = obj.risk as Record<string, unknown> | undefined;
+    const maxPosUsd =
+      typeof risk?.maxPositionSizeUsd === "number"
+        ? risk.maxPositionSizeUsd
+        : undefined;
+
+    if (maxPosUsd === undefined) {
+      errors.push({
+        field: "risk.maxPositionSizeUsd",
+        message:
+          '"risk.maxPositionSizeUsd" is required when "dca" is configured, to cap total ladder exposure',
+      });
+    }
+
+    // Build a DcaConfig for domain validation (only if all fields pass schema)
+    const baseUsd =
+      typeof dca.baseOrderSizeUsd === "number" ? dca.baseOrderSizeUsd : 0;
+    const maxSO =
+      typeof dca.maxSafetyOrders === "number" ? dca.maxSafetyOrders : 0;
+    const stepPct =
+      typeof dca.priceStepPct === "number" ? dca.priceStepPct : 0;
+    const stepSc =
+      typeof dca.stepScale === "number" ? dca.stepScale : 1;
+    const volScale =
+      typeof dca.volumeScale === "number" ? dca.volumeScale : 1;
+    const tpPct =
+      typeof dca.takeProfitPct === "number" ? dca.takeProfitPct : 0;
+
+    if (baseUsd > 0 && maxSO > 0 && stepPct > 0) {
+      const dcaCfg: DcaConfig = {
+        baseOrderSizeUsd: baseUsd,
+        maxSafetyOrders: maxSO,
+        priceStepPct: stepPct,
+        stepScale: stepSc,
+        volumeScale: volScale,
+        takeProfitPct: tpPct,
+      };
+
+      // Check cumulative deviation stays below 100%
+      const maxDev = calculateMaxDeviation(dcaCfg);
+      if (maxDev >= 100) {
+        errors.push({
+          field: "dca",
+          message: `DCA cumulative price deviation reaches ${maxDev.toFixed(2)}%, which would produce non-positive trigger prices; reduce maxSafetyOrders, priceStepPct, or stepScale`,
+        });
+      }
+
+      // Check total exposure against maxPositionSizeUsd
+      if (maxPosUsd !== undefined) {
+        const totalExposure = calculateMaxExposure(dcaCfg);
+        if (totalExposure > maxPosUsd) {
+          errors.push({
+            field: "dca",
+            message: `DCA total exposure (${totalExposure.toFixed(2)} USD) exceeds risk.maxPositionSizeUsd (${maxPosUsd} USD)`,
+          });
+        }
+      }
+    }
   }
 
   return errors.length > 0
