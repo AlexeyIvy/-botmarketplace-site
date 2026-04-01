@@ -26,6 +26,31 @@ const EXIT_LEVEL_DEF = {
 } as const;
 
 // ---------------------------------------------------------------------------
+// DCA config $def (#131)
+// ---------------------------------------------------------------------------
+
+const DCA_CONFIG_DEF = {
+  type: "object",
+  additionalProperties: false,
+  required: [
+    "baseOrderSizeUsd",
+    "maxSafetyOrders",
+    "priceStepPct",
+    "stepScale",
+    "volumeScale",
+    "takeProfitPct",
+  ],
+  properties: {
+    baseOrderSizeUsd: { type: "number", exclusiveMinimum: 0 },
+    maxSafetyOrders: { type: "integer", minimum: 1, maximum: 50 },
+    priceStepPct: { type: "number", exclusiveMinimum: 0, maximum: 50 },
+    stepScale: { type: "number", minimum: 1, maximum: 10 },
+    volumeScale: { type: "number", minimum: 1, maximum: 10 },
+    takeProfitPct: { type: "number", exclusiveMinimum: 0, maximum: 100 },
+  },
+} as const;
+
+// ---------------------------------------------------------------------------
 // Schema (v1 + v2 unified)
 // ---------------------------------------------------------------------------
 
@@ -204,10 +229,13 @@ const STRATEGY_SCHEMA = {
         pauseOnError: { type: "boolean" },
       },
     },
+
+    dca: { $ref: "#/$defs/dcaConfig" },
   },
 
   $defs: {
     exitLevel: EXIT_LEVEL_DEF,
+    dcaConfig: DCA_CONFIG_DEF,
   },
 };
 
@@ -307,6 +335,48 @@ export function validateDsl(dslJson: unknown): DslValidationError[] | null {
       message:
         'entry must have either "side" or "sideCondition"',
     });
+  }
+
+  // DCA semantic validation (#131)
+  const dca = obj.dca as Record<string, unknown> | undefined;
+  if (dca) {
+    // DCA requires v2
+    if (dslVersion === 1) {
+      errors.push({
+        field: "dca",
+        message: '"dca" section requires dslVersion >= 2',
+      });
+    }
+
+    // DCA exposure must not exceed maxPositionSizeUsd
+    const risk = obj.risk as Record<string, unknown> | undefined;
+    const maxPosUsd =
+      typeof risk?.maxPositionSizeUsd === "number"
+        ? risk.maxPositionSizeUsd
+        : undefined;
+    if (maxPosUsd !== undefined) {
+      const baseUsd =
+        typeof dca.baseOrderSizeUsd === "number" ? dca.baseOrderSizeUsd : 0;
+      const maxSO =
+        typeof dca.maxSafetyOrders === "number" ? dca.maxSafetyOrders : 0;
+      const volScale =
+        typeof dca.volumeScale === "number" ? dca.volumeScale : 1;
+
+      // Calculate total exposure: base + sum of SO sizes
+      let totalExposure = baseUsd;
+      let soSize = baseUsd * volScale;
+      for (let i = 0; i < maxSO; i++) {
+        totalExposure += soSize;
+        soSize *= volScale;
+      }
+
+      if (totalExposure > maxPosUsd) {
+        errors.push({
+          field: "dca",
+          message: `DCA total exposure (${totalExposure.toFixed(2)} USD) exceeds risk.maxPositionSizeUsd (${maxPosUsd} USD)`,
+        });
+      }
+    }
   }
 
   return errors.length > 0

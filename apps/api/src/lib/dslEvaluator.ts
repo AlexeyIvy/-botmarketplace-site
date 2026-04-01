@@ -26,6 +26,12 @@ import { calcATR } from "./indicators/atr.js";
 import { calcADX } from "./indicators/adx.js";
 import { calcSuperTrend } from "./indicators/supertrend.js";
 import { calcVWAP } from "./indicators/vwap.js";
+import type { DcaConfig, SafetyOrderLevel, DcaPositionState } from "./dcaPlanning.js";
+import {
+  generateSafetyOrderSchedule,
+  openDcaPosition,
+  applySafetyOrderFill,
+} from "./dcaPlanning.js";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -45,6 +51,10 @@ export interface DslTradeRecord {
   pnlPct: number;
   exitReason: "sl" | "tp" | "indicator_exit" | "time_exit" | "trailing_stop" | "end_of_data";
   barsHeld: number;
+  /** DCA-specific: number of safety orders filled during this trade (0 for non-DCA) */
+  dcaSafetyOrdersFilled?: number;
+  /** DCA-specific: average entry after all fills */
+  dcaAvgEntry?: number;
 }
 
 export interface DslBacktestReport {
@@ -146,6 +156,7 @@ export interface ParsedDsl {
   entry: DslEntry;
   exit?: DslExit;
   risk: DslRisk;
+  dca?: DcaConfig;
 }
 
 // ---------------------------------------------------------------------------
@@ -429,8 +440,9 @@ export function parseDsl(dslJson: unknown): ParsedDsl {
   const entry = (dsl.entry ?? {}) as DslEntry;
   const exit = dsl.exit as DslExit | undefined;
   const risk = (dsl.risk ?? { riskPerTradePct: 1 }) as DslRisk;
+  const dca = dsl.dca as DcaConfig | undefined;
 
-  return { dslVersion, entry, exit, risk };
+  return { dslVersion, entry, exit, risk, dca };
 }
 
 // ---------------------------------------------------------------------------
@@ -609,7 +621,7 @@ export function runDslBacktest(
   };
 
   const parsed = parseDsl(dslJson);
-  const { entry, exit, risk } = parsed;
+  const { entry, exit, risk, dca: dcaConfig } = parsed;
 
   // Resolve SL/TP from v2 exit section or v1 entry-embedded
   const slDef: DslExitLevel = exit?.stopLoss
@@ -618,6 +630,9 @@ export function runDslBacktest(
   const tpDef: DslExitLevel = exit?.takeProfit
     ?? entry.takeProfit
     ?? { type: "fixed_pct", value: risk.riskPerTradePct * 2 };
+
+  // DCA mode: when dcaConfig is present, TP is driven by DCA planning, not exit section
+  const isDca = !!dcaConfig;
 
   // Need at least 2 candles for any signal evaluation
   if (candles.length < 2) return emptyReport;
@@ -643,6 +658,10 @@ export function runDslBacktest(
   let trailingStopPrice = 0;
   let trailingActivated = false;
 
+  // DCA state (#131)
+  let dcaState: DcaPositionState | null = null;
+  let dcaPendingSOs: SafetyOrderLevel[] = [];
+
   let cumulativePnl = 0;
   let peakPnl = 0;
   let maxDrawdownPct = 0;
@@ -662,7 +681,7 @@ export function runDslBacktest(
       pnlPct = ((effectiveEntry - effectiveExit) / effectiveEntry) * 100;
     }
 
-    tradeLog.push({
+    const record: DslTradeRecord = {
       entryTime,
       exitTime,
       side: positionSide,
@@ -674,7 +693,15 @@ export function runDslBacktest(
       pnlPct,
       exitReason,
       barsHeld,
-    });
+    };
+
+    // Attach DCA metadata if applicable
+    if (dcaState) {
+      record.dcaSafetyOrdersFilled = dcaState.safetyOrdersFilled;
+      record.dcaAvgEntry = dcaState.avgEntryPrice;
+    }
+
+    tradeLog.push(record);
 
     cumulativePnl += pnlPct;
     if (cumulativePnl > peakPnl) peakPnl = cumulativePnl;
@@ -682,6 +709,8 @@ export function runDslBacktest(
     if (dd > maxDrawdownPct) maxDrawdownPct = dd;
 
     inPosition = false;
+    dcaState = null;
+    dcaPendingSOs = [];
   }
 
   // Determine minimum lookback — start from bar 1 to allow prev-bar checks
@@ -692,6 +721,36 @@ export function runDslBacktest(
 
     if (inPosition) {
       const barsHeld = i - entryBarIndex;
+
+      // --- DCA safety order fills (#131) ---
+      // Check before exit evaluation: SO fills change avg entry and TP
+      if (isDca && dcaState && dcaPendingSOs.length > 0) {
+        // Fill all SOs whose trigger price was reached on this bar
+        let soFilled = true;
+        while (soFilled && dcaPendingSOs.length > 0) {
+          const nextSO = dcaPendingSOs[0];
+          const triggered =
+            positionSide === "long"
+              ? c.low <= nextSO.triggerPrice
+              : c.high >= nextSO.triggerPrice;
+
+          if (triggered) {
+            dcaPendingSOs.shift();
+            dcaState = applySafetyOrderFill(
+              dcaState,
+              nextSO.triggerPrice,
+              nextSO.qty,
+              nextSO.orderSizeUsd,
+              dcaConfig!.takeProfitPct,
+            );
+            // Update position-level state from DCA state
+            effectiveEntry = dcaState.avgEntryPrice;
+            tpPrice = dcaState.tpPrice;
+          } else {
+            soFilled = false;
+          }
+        }
+      }
 
       // --- Exit checks (priority: SL → trailing → indicator → TP → time) ---
 
@@ -817,7 +876,25 @@ export function runDslBacktest(
       // Compute SL/TP levels
       const levels = computeExitLevels(slDef, tpDef, effectiveEntry, side, i, candles, cache);
       slPrice = levels.slPrice;
-      tpPrice = levels.tpPrice;
+
+      // DCA entry: initialize DCA state and override TP from DCA planning
+      if (isDca && dcaConfig) {
+        const schedule = generateSafetyOrderSchedule(dcaConfig, effectiveEntry, side);
+        const baseQty = dcaConfig.baseOrderSizeUsd / effectiveEntry;
+        dcaState = openDcaPosition(
+          effectiveEntry,
+          baseQty,
+          dcaConfig.baseOrderSizeUsd,
+          dcaConfig.takeProfitPct,
+          side,
+        );
+        dcaPendingSOs = [...schedule.safetyOrders];
+        tpPrice = dcaState.tpPrice;
+      } else {
+        tpPrice = levels.tpPrice;
+        dcaState = null;
+        dcaPendingSOs = [];
+      }
 
       // Reset trailing stop state
       trailingHigh = c.close;
