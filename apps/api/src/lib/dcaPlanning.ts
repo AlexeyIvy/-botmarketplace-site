@@ -82,12 +82,64 @@ export interface DcaPositionState {
   avgEntryPrice: number;
   /** Total cost basis in USD */
   totalCostUsd: number;
-  /** Current take-profit price */
+  /** Current take-profit price (recalculated from avg entry after each fill) */
   tpPrice: number;
+  /** Current stop-loss price (recalculated from avg entry after each fill) */
+  slPrice: number;
   /** Number of safety orders filled (0 = only base order) */
   safetyOrdersFilled: number;
   /** Side of the position */
   side: "long" | "short";
+}
+
+// ---------------------------------------------------------------------------
+// Config validation
+// ---------------------------------------------------------------------------
+
+/**
+ * Validate a DCA config for correctness.
+ * Returns null if valid, or an error message string if invalid.
+ *
+ * Checks:
+ *   - All numeric fields are finite and positive where required
+ *   - Cumulative deviation never reaches 100% (which would produce zero/negative trigger prices)
+ */
+export function validateDcaConfig(config: DcaConfig): string | null {
+  if (!config || typeof config !== "object") return "dca config is required";
+  if (!Number.isFinite(config.baseOrderSizeUsd) || config.baseOrderSizeUsd <= 0)
+    return "baseOrderSizeUsd must be a positive finite number";
+  if (!Number.isInteger(config.maxSafetyOrders) || config.maxSafetyOrders < 0)
+    return "maxSafetyOrders must be a non-negative integer";
+  if (!Number.isFinite(config.priceStepPct) || config.priceStepPct <= 0)
+    return "priceStepPct must be a positive finite number";
+  if (!Number.isFinite(config.stepScale) || config.stepScale < 1)
+    return "stepScale must be >= 1";
+  if (!Number.isFinite(config.volumeScale) || config.volumeScale < 1)
+    return "volumeScale must be >= 1";
+  if (!Number.isFinite(config.takeProfitPct) || config.takeProfitPct <= 0)
+    return "takeProfitPct must be a positive finite number";
+
+  // Check that cumulative deviation stays below 100%
+  const maxDev = calculateMaxDeviation(config);
+  if (maxDev >= 100) {
+    return `cumulative price deviation reaches ${maxDev.toFixed(2)}% which would produce non-positive trigger prices; reduce maxSafetyOrders, priceStepPct, or stepScale`;
+  }
+
+  return null;
+}
+
+/**
+ * Calculate the maximum cumulative price deviation for a DCA config.
+ * Used for validation: deviation must stay below 100% for long-side triggers.
+ */
+export function calculateMaxDeviation(config: DcaConfig): number {
+  let cumulative = 0;
+  let step = config.priceStepPct;
+  for (let i = 0; i < config.maxSafetyOrders; i++) {
+    cumulative += step;
+    step *= config.stepScale;
+  }
+  return cumulative;
 }
 
 // ---------------------------------------------------------------------------
@@ -108,12 +160,20 @@ export interface DcaPositionState {
  * @param config  DCA configuration
  * @param baseEntryPrice  The base entry price
  * @param side    Position side ("long" = SOs below entry, "short" = SOs above)
+ * @throws Error if config is invalid or would produce non-positive trigger prices
  */
 export function generateSafetyOrderSchedule(
   config: DcaConfig,
   baseEntryPrice: number,
   side: "long" | "short",
 ): DcaSchedule {
+  // Defensive: reject invalid configs
+  const configErr = validateDcaConfig(config);
+  if (configErr) throw new Error(`Invalid DCA config: ${configErr}`);
+  if (!Number.isFinite(baseEntryPrice) || baseEntryPrice <= 0) {
+    throw new Error("baseEntryPrice must be a positive finite number");
+  }
+
   const safetyOrders: SafetyOrderLevel[] = [];
 
   const baseQty = config.baseOrderSizeUsd / baseEntryPrice;
@@ -127,10 +187,16 @@ export function generateSafetyOrderSchedule(
   for (let i = 0; i < config.maxSafetyOrders; i++) {
     cumulativeDeviation += currentStepPct;
 
+    // Defensive: break if deviation would produce invalid trigger price
+    if (cumulativeDeviation >= 100) break;
+
     const triggerPrice =
       side === "long"
         ? baseEntryPrice * (1 - cumulativeDeviation / 100)
         : baseEntryPrice * (1 + cumulativeDeviation / 100);
+
+    // Defensive: skip if trigger price is non-positive or non-finite
+    if (!Number.isFinite(triggerPrice) || triggerPrice <= 0) break;
 
     const qty = currentSizeUsd / triggerPrice;
 
@@ -150,7 +216,7 @@ export function generateSafetyOrderSchedule(
     currentSizeUsd *= config.volumeScale;
   }
 
-  const worstCaseAvgEntry = totalCostUsd / totalQty;
+  const worstCaseAvgEntry = totalQty > 0 ? totalCostUsd / totalQty : baseEntryPrice;
   const worstCaseTpPrice =
     side === "long"
       ? worstCaseAvgEntry * (1 + config.takeProfitPct / 100)
@@ -211,6 +277,26 @@ export function recalcTakeProfit(
 }
 
 // ---------------------------------------------------------------------------
+// SL recalculation
+// ---------------------------------------------------------------------------
+
+/**
+ * Recalculate stop-loss price from the current average entry.
+ *
+ * For long: SL = avgEntry * (1 - stopLossPct / 100)
+ * For short: SL = avgEntry * (1 + stopLossPct / 100)
+ */
+export function recalcStopLoss(
+  avgEntryPrice: number,
+  stopLossPct: number,
+  side: "long" | "short",
+): number {
+  return side === "long"
+    ? avgEntryPrice * (1 - stopLossPct / 100)
+    : avgEntryPrice * (1 + stopLossPct / 100);
+}
+
+// ---------------------------------------------------------------------------
 // Exposure bound
 // ---------------------------------------------------------------------------
 
@@ -242,15 +328,18 @@ export function openDcaPosition(
   baseQty: number,
   baseSizeUsd: number,
   takeProfitPct: number,
+  stopLossPct: number,
   side: "long" | "short",
 ): DcaPositionState {
   const tpPrice = recalcTakeProfit(basePrice, takeProfitPct, side);
+  const slPrice = recalcStopLoss(basePrice, stopLossPct, side);
   return {
     fills: [{ price: basePrice, qty: baseQty, sizeUsd: baseSizeUsd }],
     totalQty: baseQty,
     avgEntryPrice: basePrice,
     totalCostUsd: baseSizeUsd,
     tpPrice,
+    slPrice,
     safetyOrdersFilled: 0,
     side,
   };
@@ -259,7 +348,7 @@ export function openDcaPosition(
 /**
  * Apply a safety order fill to an existing DCA position.
  *
- * Recalculates average entry and TP. Returns a new state (immutable).
+ * Recalculates average entry, TP, and SL. Returns a new state (immutable).
  */
 export function applySafetyOrderFill(
   state: DcaPositionState,
@@ -267,12 +356,14 @@ export function applySafetyOrderFill(
   fillQty: number,
   fillSizeUsd: number,
   takeProfitPct: number,
+  stopLossPct: number,
 ): DcaPositionState {
   const newFills = [...state.fills, { price: fillPrice, qty: fillQty, sizeUsd: fillSizeUsd }];
   const newTotalQty = state.totalQty + fillQty;
   const newTotalCost = state.totalCostUsd + fillSizeUsd;
   const newAvgEntry = calculateAvgEntry(newFills);
   const newTp = recalcTakeProfit(newAvgEntry, takeProfitPct, state.side);
+  const newSl = recalcStopLoss(newAvgEntry, stopLossPct, state.side);
 
   return {
     fills: newFills,
@@ -280,6 +371,7 @@ export function applySafetyOrderFill(
     avgEntryPrice: newAvgEntry,
     totalCostUsd: newTotalCost,
     tpPrice: newTp,
+    slPrice: newSl,
     safetyOrdersFilled: state.safetyOrdersFilled + 1,
     side: state.side,
   };

@@ -31,6 +31,7 @@ import {
   generateSafetyOrderSchedule,
   openDcaPosition,
   applySafetyOrderFill,
+  validateDcaConfig,
 } from "./dcaPlanning.js";
 
 // ---------------------------------------------------------------------------
@@ -631,8 +632,20 @@ export function runDslBacktest(
     ?? entry.takeProfit
     ?? { type: "fixed_pct", value: risk.riskPerTradePct * 2 };
 
-  // DCA mode: when dcaConfig is present, TP is driven by DCA planning, not exit section
-  const isDca = !!dcaConfig;
+  // DCA mode: when dcaConfig is present, TP and SL are driven by DCA planning
+  let isDca = !!dcaConfig;
+
+  // Defensive: validate DCA config before use; skip DCA if invalid
+  if (isDca && dcaConfig) {
+    const dcaErr = validateDcaConfig(dcaConfig);
+    if (dcaErr) {
+      isDca = false; // fall back to non-DCA behavior rather than producing corrupt state
+    }
+  }
+
+  // For DCA, derive SL% from the exit-level definition for consistent recalculation.
+  // ATR-based SL is computed per-bar at entry and frozen as a percentage for DCA recalc.
+  const dcaSlPct = isDca && slDef.type === "fixed_pct" ? slDef.value : 0;
 
   // Need at least 2 candles for any signal evaluation
   if (candles.length < 2) return emptyReport;
@@ -661,6 +674,8 @@ export function runDslBacktest(
   // DCA state (#131)
   let dcaState: DcaPositionState | null = null;
   let dcaPendingSOs: SafetyOrderLevel[] = [];
+  // Resolved SL% for DCA recalculation (set at entry, frozen for position lifetime)
+  let dcaSlPctResolved = dcaSlPct;
 
   let cumulativePnl = 0;
   let peakPnl = 0;
@@ -742,10 +757,12 @@ export function runDslBacktest(
               nextSO.qty,
               nextSO.orderSizeUsd,
               dcaConfig!.takeProfitPct,
+              dcaSlPctResolved,
             );
             // Update position-level state from DCA state
             effectiveEntry = dcaState.avgEntryPrice;
             tpPrice = dcaState.tpPrice;
+            slPrice = dcaState.slPrice;
           } else {
             soFilled = false;
           }
@@ -877,8 +894,17 @@ export function runDslBacktest(
       const levels = computeExitLevels(slDef, tpDef, effectiveEntry, side, i, candles, cache);
       slPrice = levels.slPrice;
 
-      // DCA entry: initialize DCA state and override TP from DCA planning
+      // DCA entry: initialize DCA state and override TP + SL from DCA planning
       if (isDca && dcaConfig) {
+        // For ATR-based SL, convert the computed SL distance to a percentage at entry time
+        if (slDef.type === "atr_multiple") {
+          dcaSlPctResolved = effectiveEntry > 0
+            ? Math.abs(effectiveEntry - slPrice) / effectiveEntry * 100
+            : dcaSlPct;
+        } else {
+          dcaSlPctResolved = dcaSlPct;
+        }
+
         const schedule = generateSafetyOrderSchedule(dcaConfig, effectiveEntry, side);
         const baseQty = dcaConfig.baseOrderSizeUsd / effectiveEntry;
         dcaState = openDcaPosition(
@@ -886,10 +912,12 @@ export function runDslBacktest(
           baseQty,
           dcaConfig.baseOrderSizeUsd,
           dcaConfig.takeProfitPct,
+          dcaSlPctResolved,
           side,
         );
         dcaPendingSOs = [...schedule.safetyOrders];
         tpPrice = dcaState.tpPrice;
+        slPrice = dcaState.slPrice;
       } else {
         tpPrice = levels.tpPrice;
         dcaState = null;

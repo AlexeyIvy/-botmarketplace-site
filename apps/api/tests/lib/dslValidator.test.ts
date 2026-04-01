@@ -465,5 +465,31 @@ describe("dslValidator – validateDsl", () => {
       delete dsl.dca;
       expect(validateDsl(dsl)).toBeNull();
     });
+
+    it("rejects DCA without risk.maxPositionSizeUsd", () => {
+      const dsl = makeV2WithDca();
+      delete (dsl.risk as Record<string, unknown>).maxPositionSizeUsd;
+      const errors = validateDsl(dsl);
+      expect(errors).not.toBeNull();
+      expect(errors!.some((e) => e.field === "risk.maxPositionSizeUsd")).toBe(true);
+      expect(errors!.some((e) => e.message.includes("required"))).toBe(true);
+    });
+
+    it("rejects DCA config that would produce non-positive trigger prices", () => {
+      const dsl = makeV2WithDca();
+      // 50 SOs at 5% step → 250% deviation → negative trigger prices
+      (dsl.dca as Record<string, unknown>).maxSafetyOrders = 50;
+      (dsl.dca as Record<string, unknown>).priceStepPct = 5.0;
+      (dsl.risk as Record<string, unknown>).maxPositionSizeUsd = 999999;
+      const errors = validateDsl(dsl);
+      expect(errors).not.toBeNull();
+      expect(errors!.some((e) => e.message.includes("deviation"))).toBe(true);
+    });
+
+    it("accepts DCA config where deviation is safely under 100%", () => {
+      const dsl = makeV2WithDca();
+      // 3 SOs at 1% step → 3% deviation → fine
+      expect(validateDsl(dsl)).toBeNull();
+    });
   });
 });
