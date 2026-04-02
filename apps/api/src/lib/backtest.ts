@@ -16,10 +16,10 @@
 
 import type { Candle } from "./bybitCandles.js";
 import { runDslBacktest } from "./dslEvaluator.js";
-import type { DslBacktestReport, DslTradeRecord } from "./dslEvaluator.js";
+import type { DslBacktestReport, DslTradeRecord, MtfBacktestContext } from "./dslEvaluator.js";
 
 // Re-export DSL evaluator types as canonical backtest types
-export type { DslBacktestReport as BacktestReport, DslTradeRecord as TradeRecord };
+export type { DslBacktestReport as BacktestReport, DslTradeRecord as TradeRecord, MtfBacktestContext };
 
 export interface ExecOpts {
   feeBps: number;
@@ -30,18 +30,20 @@ export interface ExecOpts {
 /**
  * Run a DSL-driven backtest.
  *
- * @param candleData  Sorted OHLCV candle array
+ * @param candleData  Sorted OHLCV candle array (primary timeframe)
  * @param dslJson     Compiled strategy DSL (from StrategyVersion.dslJson)
  * @param opts        Execution options (feeBps, slippageBps, fillAt)
+ * @param mtfContext  Optional multi-timeframe context for MTF strategies (#134)
  * @returns           Deterministic backtest report
  */
 export function runBacktest(
   candleData: Candle[],
   dslJson: unknown,
   opts: Partial<ExecOpts> = {},
+  mtfContext?: MtfBacktestContext,
 ): DslBacktestReport {
   return runDslBacktest(candleData, dslJson, {
     feeBps: opts.feeBps ?? 0,
     slippageBps: opts.slippageBps ?? 0,
-  });
+  }, mtfContext);
 }
