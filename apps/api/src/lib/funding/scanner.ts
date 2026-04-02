@@ -45,6 +45,10 @@ export function averageFundingRate(snapshots: FundingSnapshot[]): number {
  * A streak of 5 means the last 5 funding periods all had the same sign
  * (all positive or all negative). This indicates persistent funding direction.
  *
+ * Note: a zero funding rate (Math.sign(0) === 0) is non-directional and
+ * always returns streak=1, regardless of preceding zeros. This is intentional:
+ * zero-rate periods do not confirm either direction.
+ *
  * @param snapshots  Funding snapshots for one symbol, sorted by timestamp ascending.
  * @returns Streak count (minimum 1 if at least one snapshot, 0 if empty).
  */
