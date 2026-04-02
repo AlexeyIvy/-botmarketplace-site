@@ -630,6 +630,12 @@ export function runDslBacktest(
 ): DslBacktestReport {
   const { feeBps = 0, slippageBps = 0 } = opts;
 
+  // TODO(#134-slice4): use mtfContext with resolveMtfIndicator from
+  // mtf/mtfIndicatorResolver.ts for DslIndicatorRef entries that have
+  // sourceTimeframe set. Currently mtfContext is threaded through the
+  // signature but indicator resolution still uses single-TF getIndicatorValues.
+  void mtfContext; // suppress unused-param lint until wired
+
   const emptyReport: DslBacktestReport = {
     trades: 0, wins: 0, winrate: 0, totalPnlPct: 0, maxDrawdownPct: 0,
     candles: candles.length, tradeLog: [],
