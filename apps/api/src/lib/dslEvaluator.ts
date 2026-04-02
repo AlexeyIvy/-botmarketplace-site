@@ -26,6 +26,7 @@ import { calcATR } from "./indicators/atr.js";
 import { calcADX } from "./indicators/adx.js";
 import { calcSuperTrend } from "./indicators/supertrend.js";
 import { calcVWAP } from "./indicators/vwap.js";
+import { resolveMtfIndicator, createMtfCache } from "./mtf/mtfIndicatorResolver.js";
 import type { DcaConfig, SafetyOrderLevel, DcaPositionState } from "./dcaPlanning.js";
 import {
   generateSafetyOrderSchedule,
@@ -630,11 +631,28 @@ export function runDslBacktest(
 ): DslBacktestReport {
   const { feeBps = 0, slippageBps = 0 } = opts;
 
-  // TODO(#134-slice4): use mtfContext with resolveMtfIndicator from
-  // mtf/mtfIndicatorResolver.ts for DslIndicatorRef entries that have
-  // sourceTimeframe set. Currently mtfContext is threaded through the
-  // signature but indicator resolution still uses single-TF getIndicatorValues.
-  void mtfContext; // suppress unused-param lint until wired
+  // MTF-aware indicator resolution helper (#134-slice4):
+  // When mtfContext is provided, indicator refs with sourceTimeframe resolve
+  // from context-TF candles. Otherwise falls back to single-TF getIndicatorValues.
+  const mtfCache = mtfContext
+    ? createMtfCache()
+    : null;
+
+  function resolveIndicator(
+    ref: DslIndicatorRef,
+    primaryCandles: Candle[],
+    singleTfCache: IndicatorCache,
+  ): (number | null)[] {
+    if (mtfCache && mtfContext) {
+      return resolveMtfIndicator(ref, primaryCandles, mtfCache, mtfContext.bundle);
+    }
+    return getIndicatorValues(ref.type, {
+      length: ref.length,
+      period: ref.period,
+      atrPeriod: ref.atrPeriod,
+      multiplier: ref.multiplier,
+    }, primaryCandles, singleTfCache);
+  }
 
   const emptyReport: DslBacktestReport = {
     trades: 0, wins: 0, winrate: 0, totalPnlPct: 0, maxDrawdownPct: 0,
@@ -844,17 +862,7 @@ export function runDslBacktest(
         const ie = exit.indicatorExit;
         const appliesTo = ie.appliesTo ?? "both";
         if (appliesTo === "both" || appliesTo === positionSide) {
-          const indVals = getIndicatorValues(
-            ie.indicator.type,
-            {
-              length: ie.indicator.length,
-              period: (ie.indicator as unknown as Record<string, unknown>).period as number | undefined,
-              atrPeriod: ie.indicator.atrPeriod,
-              multiplier: ie.indicator.multiplier,
-            },
-            candles,
-            cache,
-          );
+          const indVals = resolveIndicator(ie.indicator, candles, cache);
           const val = indVals[i];
           if (val !== null && evalOp(ie.condition.op, val, ie.condition.value)) {
             const exitPrice = c.close;
@@ -898,8 +906,21 @@ export function runDslBacktest(
     } else {
       // --- Entry evaluation ---
 
-      // Determine side
-      const side = determineSide(entry, i, candles, cache);
+      // Determine side (MTF-aware: uses resolveIndicator for sideCondition)
+      let side: TradeSide | null = null;
+      if (entry.side) {
+        side = entry.side === "Buy" ? "long" : "short";
+      } else if (entry.sideCondition) {
+        const sc = entry.sideCondition;
+        const indValues = resolveIndicator(sc.indicator, candles, cache);
+        const val = indValues[i];
+        if (val !== null) {
+          const source = sc.source ?? "close";
+          const price = candles[i][source as keyof Candle] as number;
+          if (evalOp(sc.long.op, price, val)) side = "long";
+          else if (evalOp(sc.short.op, price, val)) side = "short";
+        }
+      }
       if (!side) continue;
 
       // Evaluate entry signal
