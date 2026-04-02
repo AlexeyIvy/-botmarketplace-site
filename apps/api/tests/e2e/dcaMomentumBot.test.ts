@@ -155,15 +155,24 @@ describe("DCA Momentum Bot — backtest (#133)", () => {
     }
   });
 
-  it("DCA trades show averaged entry below base entry (after SO fills)", () => {
+  it("DCA trades with SO fills have lower avg entry than base-only trades", () => {
     const candles = makeDcaScenario();
     const report = runDslBacktest(candles, makeDcaMomentumBotDsl());
 
+    // Run a non-DCA backtest with same signal to get a base-only entry price
+    const { dca: _, ...noDcaDsl } = makeDcaMomentumBotDsl() as Record<string, unknown>;
+    const noDcaReport = runDslBacktest(candles, noDcaDsl);
+
     const dcaTrades = report.tradeLog.filter(t => t.dcaSafetyOrdersFilled! > 0);
-    for (const t of dcaTrades) {
-      // After SOs filled, entryPrice (=avgEntry) should be below the initial base
-      // because SOs buy at lower prices
-      expect(t.dcaAvgEntry).toBeDefined();
+    if (dcaTrades.length > 0 && noDcaReport.trades > 0) {
+      // The non-DCA entry price is the "base" entry
+      const baseEntry = noDcaReport.tradeLog[0].entryPrice;
+      for (const t of dcaTrades) {
+        // After SOs filled at lower prices, the averaged entry (dcaAvgEntry)
+        // must be below the base-only entry
+        expect(t.dcaAvgEntry).toBeDefined();
+        expect(t.dcaAvgEntry!).toBeLessThan(baseEntry);
+      }
     }
   });
 
@@ -198,29 +207,48 @@ describe("DCA Momentum Bot — backtest (#133)", () => {
 // ---------------------------------------------------------------------------
 
 describe("DCA Momentum Bot — runtime DCA lifecycle (#133)", () => {
-  it("entry signal → DCA engine → base fill → SO fills → complete", () => {
+  it("signal engine fires entry when evaluated at crossover bar", () => {
     const dsl = makeDcaMomentumBotDsl();
-    const candles = makeDcaScenario();
+    // The signal engine evaluates only the last bar. To get a crossover at the
+    // last bar, we use progressively longer candle arrays until one fires.
+    // This mirrors how the worker calls evaluateEntry each poll cycle.
+    const allCandles = makeFlatThenUp(80, 25, 100, 2);
 
-    // Step 1: Signal engine produces entry
-    const signal = evaluateEntry({ candles, dslJson: dsl, position: null });
-    // Signal may or may not fire depending on candle data — test the DCA path if it does
-    if (!signal) return; // signal depends on SMA crossover timing
+    let foundSignal = false;
+    for (let n = 26; n <= allCandles.length; n++) {
+      const slice = allCandles.slice(0, n);
+      const signal = evaluateEntry({ candles: slice, dslJson: dsl, position: null });
+      if (signal) {
+        expect(signal.side).toBe("long");
+        expect(signal.price).toBeGreaterThan(0);
+        foundSignal = true;
+        break;
+      }
+    }
+    // The crossover must fire at some point in the flat→up transition
+    expect(foundSignal).toBe(true);
+  });
 
-    // Step 2: DCA engine init
+  it("DCA engine full lifecycle from known entry price (signal-independent)", () => {
+    // Test the DCA engine independently of signal timing —
+    // uses a fixed entry price to guarantee all assertions run.
+    const dsl = makeDcaMomentumBotDsl();
     const dcaConfig = extractDcaConfig(dsl)!;
     const slPct = extractSlPct(dsl);
+    const entryPrice = 10000;
+
+    // Step 1: Init
     const ladder = initializeDcaLadder(dcaConfig, "long", slPct);
     expect(ladder.dcaState.phase).toBe("awaiting_base");
 
-    // Step 3: Base fill at signal price
-    const baseResult = handleDcaBaseFill(ladder.dcaState, signal.price, 0.01);
+    // Step 2: Base fill
+    const baseResult = handleDcaBaseFill(ladder.dcaState, entryPrice, 0.01);
     expect(baseResult.state.phase).toBe("ladder_active");
     expect(baseResult.pendingSOs).toHaveLength(3);
-    expect(baseResult.state.tpPrice).toBeGreaterThan(signal.price);
-    expect(baseResult.state.slPrice).toBeLessThan(signal.price);
+    expect(baseResult.state.tpPrice).toBeGreaterThan(entryPrice);
+    expect(baseResult.state.slPrice).toBeLessThan(entryPrice);
 
-    // Step 4: Simulate price dropping to SO triggers
+    // Step 3: SO fills
     let state = baseResult.state;
     for (let i = 0; i < state.schedule!.safetyOrders.length; i++) {
       const so = state.schedule!.safetyOrders[i];
@@ -233,19 +261,43 @@ describe("DCA Momentum Bot — runtime DCA lifecycle (#133)", () => {
     }
 
     expect(state.safetyOrdersFilled).toBe(3);
-    expect(state.avgEntryPrice).toBeLessThan(signal.price);
+    expect(state.avgEntryPrice).toBeLessThan(entryPrice);
     expect(state.nextSoIndex).toBe(-1);
 
-    // Step 5: TP hit → finalize
+    // Step 4: Finalize
     const finalized = finalizeDcaLadder(state, "tp_hit");
     expect(finalized.state.phase).toBe("completed");
 
-    // Step 6: State survives serialization (simulates DB round-trip)
+    // Step 5: Serialization round-trip
     const serialized = serializeDcaState(state);
     const json = JSON.parse(JSON.stringify({ dcaState: serialized }));
     const recovered = recoverDcaState(json);
     expect(recovered).not.toBeNull();
     expect(recovered!.avgEntryPrice).toBe(state.avgEntryPrice);
+  });
+
+  it("signal-driven DCA lifecycle: signal → engine init → base fill", () => {
+    const dsl = makeDcaMomentumBotDsl();
+    // Find the crossover bar by scanning progressively
+    const allCandles = makeFlatThenUp(80, 25, 100, 2);
+    let signal = null;
+    let candles = allCandles;
+    for (let n = 26; n <= allCandles.length; n++) {
+      candles = allCandles.slice(0, n);
+      signal = evaluateEntry({ candles, dslJson: dsl, position: null });
+      if (signal) break;
+    }
+    expect(signal).not.toBeNull();
+
+    const dcaConfig = extractDcaConfig(dsl)!;
+    const slPct = extractSlPct(dsl);
+    const ladder = initializeDcaLadder(dcaConfig, "long", slPct);
+    const baseResult = handleDcaBaseFill(ladder.dcaState, signal!.price, 0.01);
+
+    // Verify the signal-driven path produces the same structure
+    expect(baseResult.state.phase).toBe("ladder_active");
+    expect(baseResult.state.baseEntryPrice).toBe(signal!.price);
+    expect(baseResult.pendingSOs).toHaveLength(dcaConfig.maxSafetyOrders);
   });
 
   it("runtime sizing uses DCA base order size, not riskManager sizing", () => {

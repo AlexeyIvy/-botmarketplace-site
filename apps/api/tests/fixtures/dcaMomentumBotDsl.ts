@@ -2,7 +2,8 @@
  * DCA Momentum Bot — Strategy DSL Fixtures (#133)
  *
  * Hand-authored DSL v2 for the DCA Momentum Bot flagship strategy.
- * Entry: RSI(14) crossunder 40 + price < EMA(21) → long entry
+ * Entry: SMA(5) crossover SMA(20) → long entry (deterministic signal
+ *        for test fixtures; production variant uses RSI(14) < 40 + EMA(21) filter)
  * DCA: 3 safety orders, 1% step, 1.5x volume scale, 1.5% TP from avg
  * Exit: 10% SL from avg entry, 1.5% TP from avg entry (DCA-managed)
  */
@@ -11,7 +12,7 @@
  * Standard DCA Momentum Bot DSL (conservative variant).
  *
  * Designed for deterministic candle fixtures:
- *   - RSI crossunder signal fires on transition from flat to up
+ *   - SMA(5)/SMA(20) crossover fires on transition from flat to up
  *   - Price dips trigger safety orders
  *   - Recovery triggers TP at avg entry + 1.5%
  */
