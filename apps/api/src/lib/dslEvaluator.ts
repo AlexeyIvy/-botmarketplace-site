@@ -87,6 +87,10 @@ export interface DslIndicatorRef {
   slowPeriod?: number;
   signalPeriod?: number;
   stdDevMult?: number;
+  /** Optional: resolve this indicator from a different timeframe's candle data.
+   *  When set, the evaluator looks up candles from the CandleBundle's context TF
+   *  instead of the primary candle array. Requires MTF evaluation mode (#134). */
+  sourceTimeframe?: string;
 }
 
 export interface DslSignal {
