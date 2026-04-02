@@ -95,13 +95,20 @@ export interface DslIndicatorRef {
   sourceTimeframe?: string;
 }
 
+export interface DslSignalRef {
+  blockType: string;
+  length?: number;
+  period?: number;
+  multiplier?: number;
+}
+
 export interface DslSignal {
   type: string; // "crossover" | "crossunder" | "compare" | "direct" | "raw"
   op?: string;
-  fast?: { blockType: string; length?: number } | null;
-  slow?: { blockType: string; length?: number } | null;
-  left?: { blockType: string; length?: number } | null;
-  right?: { blockType: string; length?: number } | null;
+  fast?: DslSignalRef | null;
+  slow?: DslSignalRef | null;
+  left?: DslSignalRef | null;
+  right?: DslSignalRef | null;
 }
 
 export interface DslExitLevel {
@@ -510,8 +517,8 @@ export function evaluateSignal(
   if (signal.type === "crossover" || signal.type === "crossunder") {
     // Cross signal: fast crosses over/under slow
     if (!signal.fast || !signal.slow || i < 1) return false;
-    const fastVals = getIndicatorValues(signal.fast.blockType, { length: signal.fast.length }, candles, cache);
-    const slowVals = getIndicatorValues(signal.slow.blockType, { length: signal.slow.length }, candles, cache);
+    const fastVals = getIndicatorValues(signal.fast.blockType, signal.fast, candles, cache);
+    const slowVals = getIndicatorValues(signal.slow.blockType, signal.slow, candles, cache);
 
     const curFast = fastVals[i];
     const curSlow = slowVals[i];
@@ -529,8 +536,8 @@ export function evaluateSignal(
 
   if (signal.type === "compare") {
     if (!signal.left || !signal.right) return false;
-    const leftVals = getIndicatorValues(signal.left.blockType, { length: signal.left.length }, candles, cache);
-    const rightVals = getIndicatorValues(signal.right.blockType, { length: signal.right.length }, candles, cache);
+    const leftVals = getIndicatorValues(signal.left.blockType, signal.left, candles, cache);
+    const rightVals = getIndicatorValues(signal.right.blockType, signal.right, candles, cache);
 
     const l = leftVals[i];
     const r = rightVals[i];

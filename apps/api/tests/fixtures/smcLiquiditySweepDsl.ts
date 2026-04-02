@@ -1,12 +1,17 @@
 /**
  * SMC Liquidity Sweep Flagship — DSL fixture.
  *
- * Strategy: Enter when a liquidity sweep coincides with a fair value gap.
- * - Entry signal: liquidity_sweep > 0 (bullish sweep detected)
- * - Side condition: fair_value_gap indicator (positive = bullish bias)
+ * Strategy: Enter long when a bullish liquidity sweep is detected.
+ * - Entry signal: liquidity_sweep > 0 (bullish sweep fires the signal)
+ * - Side: fixed Buy (long only — the signal already filters for bullish sweeps)
  * - Exit: 2% fixed SL, 4% fixed TP
  *
- * This is a DSL v2 strategy using adaptive side from the FVG indicator.
+ * Note: sideCondition (DSL v2) compares price vs indicator value, which is
+ * designed for continuous indicators (e.g., close > SMA). For discrete SMC
+ * signals (+1/-1), use fixed side + directional compare signal instead.
+ * Future enhancement: "direct" sideCondition mode for discrete signals.
+ *
+ * DSL v2 for exit section support.
  */
 export function makeSmcLiquiditySweepDsl(): Record<string, unknown> {
   return {
@@ -22,12 +27,7 @@ export function makeSmcLiquiditySweepDsl(): Record<string, unknown> {
     },
     timeframes: ["M15"],
     entry: {
-      sideCondition: {
-        indicator: { type: "liquidity_sweep", length: 2, period: 50 },
-        source: "close",
-        long: { op: "gt" },
-        short: { op: "lt" },
-      },
+      side: "Buy",
       signal: {
         type: "compare",
         op: ">",

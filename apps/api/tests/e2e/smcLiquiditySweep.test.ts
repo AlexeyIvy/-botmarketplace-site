@@ -72,12 +72,13 @@ describe("SMC Liquidity Sweep — DSL (#138)", () => {
     expect(errors).toBeNull();
   });
 
-  it("DSL has SMC indicator types", () => {
+  it("DSL has SMC indicator in signal and fixed Buy side", () => {
     const dsl = makeSmcLiquiditySweepDsl();
     const entry = dsl.entry as Record<string, unknown>;
-    const sc = entry.sideCondition as Record<string, unknown>;
-    const ind = sc.indicator as Record<string, unknown>;
-    expect(ind.type).toBe("liquidity_sweep");
+    expect(entry.side).toBe("Buy");
+    const signal = entry.signal as Record<string, unknown>;
+    const left = signal.left as Record<string, unknown>;
+    expect(left.blockType).toBe("liquidity_sweep");
   });
 });
 
@@ -123,8 +124,7 @@ describe("SMC Liquidity Sweep — backtest (#138)", () => {
     const report = runDslBacktest(candles, dsl);
 
     // Our scenario has a clear bullish sweep at bar 15
-    // The compare signal (sweep > 0) should fire, and sideCondition
-    // should resolve to long (sweep indicator = +1 > 0)
+    // The compare signal (sweep > 0) fires, side is fixed Buy → long
     expect(report.trades).toBeGreaterThanOrEqual(1);
 
     if (report.tradeLog.length > 0) {
@@ -133,10 +133,33 @@ describe("SMC Liquidity Sweep — backtest (#138)", () => {
       expect(trade.entryPrice).toBeGreaterThan(0);
     }
   });
+
+  it("produces zero trades on a flat market with no sweeps", () => {
+    // 30 bars of flat price — no swing points, no sweeps
+    const flat: Candle[] = Array.from({ length: 30 }, (_, i) => c(i, 100, 100.5, 99.5, 100));
+    const dsl = makeSmcLiquiditySweepDsl();
+    const report = runDslBacktest(flat, dsl);
+    expect(report.trades).toBe(0);
+  });
 });
 
 // ---------------------------------------------------------------------------
-// 3. Compile → Backtest parity (identical DSL, same result)
+// 3. MSS CHoCH encoding through evaluator
+// ---------------------------------------------------------------------------
+
+describe("SMC MSS CHoCH encoding (#138)", () => {
+  it("CHoCH bearish encodes as -2 through getIndicatorValues", async () => {
+    const { getIndicatorValues: giv, createIndicatorCache: cic } = await import("../../src/lib/dslEvaluator.js");
+    const { makeChochBearishFixture } = await import("../smc/smcFixtures.js");
+    const candles = makeChochBearishFixture();
+    const cache = cic();
+    const values = giv("market_structure_shift", { length: 2 }, candles, cache);
+    expect(values[14]).toBe(-2); // CHoCH bearish
+  });
+});
+
+// ---------------------------------------------------------------------------
+// 4. Compile → Backtest parity (identical DSL, same result)
 // ---------------------------------------------------------------------------
 
 describe("SMC Liquidity Sweep — compile→backtest parity (#138)", () => {
