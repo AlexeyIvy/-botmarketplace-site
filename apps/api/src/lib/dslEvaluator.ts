@@ -906,7 +906,9 @@ export function runDslBacktest(
     } else {
       // --- Entry evaluation ---
 
-      // Determine side (MTF-aware: uses resolveIndicator for sideCondition)
+      // Determine side (MTF-aware: uses resolveIndicator for sideCondition).
+      // Note: this inlines the logic from determineSide() to use resolveIndicator.
+      // Keep in sync with determineSide() if sideCondition evaluation changes.
       let side: TradeSide | null = null;
       if (entry.side) {
         side = entry.side === "Buy" ? "long" : "short";
