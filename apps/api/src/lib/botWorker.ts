@@ -1151,6 +1151,42 @@ async function reconcileExitFill(
     meta: { source: "reconciliation", orderId: intent.id },
   });
 
+  // DCA ladder finalization (#132 slice 3): if position had DCA state,
+  // mark ladder as completed on exit fill. This is best-effort — if
+  // position is fully closed, the DCA ladder is done regardless.
+  try {
+    const posRow = await prisma.position.findUnique({
+      where: { id: position.id },
+      select: { metaJson: true, currentQty: true },
+    });
+    if (posRow) {
+      const dcaState = recoverDcaState(posRow.metaJson);
+      if (dcaState && dcaState.phase === "ladder_active" && posRow.currentQty.toNumber() <= 0) {
+        // Only finalize when position is fully closed (currentQty = 0).
+        // Partial exits don't end the DCA ladder.
+        const finalized = finalizeDcaLadder(dcaState, "position_closed");
+        if (finalized.state.phase !== dcaState.phase) {
+          const existingMeta = (posRow.metaJson as Record<string, unknown>) ?? {};
+          await prisma.position.update({
+            where: { id: position.id },
+            data: {
+              metaJson: {
+                ...existingMeta,
+                dcaState: serializeDcaState(finalized.state),
+              } as Prisma.InputJsonValue,
+            },
+          });
+          workerLog.info(
+            { positionId: position.id, sosFilled: dcaState.safetyOrdersFilled, reason },
+            "DCA ladder finalized on exit fill",
+          );
+        }
+      }
+    }
+  } catch (dcaErr) {
+    workerLog.warn({ err: dcaErr, positionId: position.id }, "DCA finalization error (non-fatal)");
+  }
+
   workerLog.info(
     { intentId: intent.intentId, positionId: position.id, fillDelta, fillPrice },
     "exit fill applied to position",
@@ -1373,7 +1409,69 @@ async function evaluateStrategies(): Promise<void> {
             );
           }
         } else {
-          // --- In position: evaluate exit ---
+          // --- In position ---
+
+          // DCA SO trigger evaluation (#132 slice 3): check if current price
+          // triggers any pending safety orders and create ENTRY intents for them.
+          const currentPrice = candles[candles.length - 1].close;
+          const dcaConfig = extractDcaConfig(dslJson);
+          if (dcaConfig) {
+            try {
+              const posRow = await prisma.position.findUnique({
+                where: { id: position.id },
+                select: { metaJson: true },
+              });
+              const dcaState = recoverDcaState(posRow?.metaJson);
+              if (dcaState && dcaState.phase === "ladder_active" && dcaState.nextSoIndex >= 0) {
+                const triggered = checkAndTriggerSOs(dcaState, currentPrice);
+                for (const so of triggered) {
+                  const soIntentId = `entry_so${so.index}_${run.id.slice(0, 8)}_${position.id.slice(0, 8)}`;
+                  const existing = await prisma.botIntent.findFirst({
+                    where: { botRunId: run.id, intentId: soIntentId },
+                  });
+                  if (existing) continue;
+
+                  const soSide = dcaState.side === "long" ? "BUY" as const : "SELL" as const;
+                  const orderLinkId = `lab_${run.id.slice(0, 8)}_so${so.index}_${Date.now()}`;
+
+                  await prisma.botIntent.create({
+                    data: {
+                      botRunId: run.id,
+                      intentId: soIntentId,
+                      orderLinkId,
+                      side: soSide,
+                      qty: so.qty,
+                      price: so.triggerPrice,
+                      type: "ENTRY",
+                      state: "PENDING",
+                      metaJson: {
+                        dca: true,
+                        dcaSafetyOrder: true,
+                        soIndex: so.index,
+                        triggerPrice: so.triggerPrice,
+                        positionId: position.id,
+                      } as Prisma.InputJsonValue,
+                    },
+                  });
+
+                  workerLog.info(
+                    {
+                      runId: run.id,
+                      soIndex: so.index,
+                      triggerPrice: so.triggerPrice,
+                      qty: so.qty,
+                      intentId: soIntentId,
+                    },
+                    "DCA SO triggered → intent created",
+                  );
+                }
+              }
+            } catch (dcaErr) {
+              workerLog.warn({ err: dcaErr, runId: run.id }, "DCA SO trigger evaluation error (non-fatal)");
+            }
+          }
+
+          // --- Evaluate exit ---
           const trailingState = trailingStopStates.get(run.id)
             ?? createTrailingStopState(position.avgEntryPrice);
           trailingStopStates.set(run.id, trailingState);

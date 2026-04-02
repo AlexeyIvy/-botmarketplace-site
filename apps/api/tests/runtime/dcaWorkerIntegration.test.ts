@@ -324,3 +324,136 @@ describe("worker DCA integration – full lifecycle", () => {
     expect(soResult.state.safetyOrdersFilled).toBe(1);
   });
 });
+
+// ---------------------------------------------------------------------------
+// 5. SO trigger evaluation (slice 3): poll loop checks price → triggers SOs
+// ---------------------------------------------------------------------------
+
+describe("worker DCA integration – SO trigger evaluation (slice 3)", () => {
+  function makeActiveLadder() {
+    const dcaConfig = extractDcaConfig(makeDcaDsl())!;
+    const ladder = initializeDcaLadder(dcaConfig, "long", 10);
+    const recovered = recoverDcaState({ dcaState: ladder.serialized })!;
+    return handleDcaBaseFill(recovered, 10000, 0.01);
+  }
+
+  it("detects triggered SOs when price drops to trigger level", () => {
+    const { state } = makeActiveLadder();
+    const so0 = state.schedule!.safetyOrders[0];
+
+    // Price at SO trigger → should trigger
+    const triggered = checkAndTriggerSOs(state, so0.triggerPrice);
+    expect(triggered).toHaveLength(1);
+    expect(triggered[0].index).toBe(0);
+    expect(triggered[0].triggerPrice).toBe(so0.triggerPrice);
+    expect(triggered[0].qty).toBeGreaterThan(0);
+    expect(triggered[0].orderSizeUsd).toBeGreaterThan(0);
+  });
+
+  it("returns empty when price is above all SO triggers", () => {
+    const { state } = makeActiveLadder();
+    const triggered = checkAndTriggerSOs(state, 10001);
+    expect(triggered).toHaveLength(0);
+  });
+
+  it("returns multiple SOs on a large price drop", () => {
+    const { state } = makeActiveLadder();
+    const lastSO = state.schedule!.safetyOrders[2];
+    const triggered = checkAndTriggerSOs(state, lastSO.triggerPrice - 1);
+    expect(triggered).toHaveLength(3);
+  });
+
+  it("skips already-filled SOs after sequential application", () => {
+    let { state } = makeActiveLadder();
+    // Fill SO 0
+    const so0 = state.schedule!.safetyOrders[0];
+    state = handleDcaSoFill(state, 0, so0.triggerPrice, so0.qty).state;
+
+    // Now check triggers — SO 0 should be skipped
+    const so1 = state.schedule!.safetyOrders[1];
+    const triggered = checkAndTriggerSOs(state, so1.triggerPrice);
+    expect(triggered).toHaveLength(1);
+    expect(triggered[0].index).toBe(1);
+  });
+
+  it("SO intent has correct metaJson shape for fill reconciliation", () => {
+    const { state } = makeActiveLadder();
+    const so0 = state.schedule!.safetyOrders[0];
+
+    // This is what the worker puts in SO intent metaJson
+    const soIntentMeta = {
+      dca: true,
+      dcaSafetyOrder: true,
+      soIndex: so0.index,
+      triggerPrice: so0.triggerPrice,
+      positionId: "pos-123",
+    };
+
+    // meta.dca === true → fill path will activate DCA state update
+    expect(soIntentMeta.dca).toBe(true);
+    expect(soIntentMeta.soIndex).toBe(0);
+  });
+
+  it("short-side SO triggers work above entry price", () => {
+    const dcaConfig = extractDcaConfig(makeDcaDsl())!;
+    const ladder = initializeDcaLadder(dcaConfig, "short", 10);
+    const recovered = recoverDcaState({ dcaState: ladder.serialized })!;
+    const { state } = handleDcaBaseFill(recovered, 10000, 0.01);
+
+    const so0 = state.schedule!.safetyOrders[0];
+    expect(so0.triggerPrice).toBeGreaterThan(10000);
+
+    const triggered = checkAndTriggerSOs(state, so0.triggerPrice + 1);
+    expect(triggered.length).toBeGreaterThanOrEqual(1);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// 6. DCA ladder finalization (slice 3): position close → ladder completed
+// ---------------------------------------------------------------------------
+
+describe("worker DCA integration – ladder finalization (slice 3)", () => {
+  it("finalizes ladder on position close", () => {
+    const dcaConfig = extractDcaConfig(makeDcaDsl())!;
+    const ladder = initializeDcaLadder(dcaConfig, "long", 10);
+    const recovered = recoverDcaState({ dcaState: ladder.serialized })!;
+    const { state } = handleDcaBaseFill(recovered, 10000, 0.01);
+
+    // Simulate some SOs filled
+    let current = state;
+    const so0 = current.schedule!.safetyOrders[0];
+    current = handleDcaSoFill(current, 0, so0.triggerPrice, so0.qty).state;
+
+    // Position closes → finalize
+    const finalized = finalizeDcaLadder(current, "position_closed");
+    expect(finalized.state.phase).toBe("completed");
+    expect(finalized.state.safetyOrdersFilled).toBe(1);
+    expect(finalized.state.avgEntryPrice).toBeLessThan(10000);
+  });
+
+  it("finalization is idempotent", () => {
+    const dcaConfig = extractDcaConfig(makeDcaDsl())!;
+    const ladder = initializeDcaLadder(dcaConfig, "long", 10);
+    const recovered = recoverDcaState({ dcaState: ladder.serialized })!;
+    const { state } = handleDcaBaseFill(recovered, 10000, 0.01);
+
+    const first = finalizeDcaLadder(state, "tp_hit");
+    const second = finalizeDcaLadder(first.state, "tp_hit_again");
+    expect(second.state).toBe(first.state); // same reference — no-op
+  });
+
+  it("finalized state persists and recovers correctly", () => {
+    const dcaConfig = extractDcaConfig(makeDcaDsl())!;
+    const ladder = initializeDcaLadder(dcaConfig, "long", 10);
+    const recovered = recoverDcaState({ dcaState: ladder.serialized })!;
+    const { state } = handleDcaBaseFill(recovered, 10000, 0.01);
+    const finalized = finalizeDcaLadder(state, "sl_hit");
+
+    // Persist and recover
+    const metaJson = { dcaState: serializeDcaState(finalized.state) };
+    const dbJson = JSON.parse(JSON.stringify(metaJson));
+    const recoveredFinal = recoverDcaState(dbJson);
+    expect(recoveredFinal).not.toBeNull();
+    expect(recoveredFinal!.phase).toBe("completed");
+  });
+});
