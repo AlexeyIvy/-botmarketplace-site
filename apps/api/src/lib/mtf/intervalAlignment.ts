@@ -17,7 +17,13 @@
  *   - No assumptions about candle source (works with any OHLCV data)
  */
 
-/** Standard OHLCV candle (compatible with bybitCandles.Candle) */
+/**
+ * Standard OHLCV candle (compatible with bybitCandles.Candle).
+ *
+ * Intentionally duplicated here to keep this module free of exchange imports.
+ * TypeScript structural typing means bybitCandles.Candle satisfies MtfCandle
+ * without explicit conversion. Unify if a shared types package is introduced.
+ */
 export interface MtfCandle {
   openTime: number;
   open: number;
@@ -67,6 +73,9 @@ export const INTERVAL_ORDER: Interval[] = ["1m", "5m", "15m", "1h", "4h", "1d"];
  *   alignToInterval(ts, "5m") → start of that 5m period
  *
  * Uses floor division on UTC epoch — deterministic, no timezone ambiguity.
+ * All intervals are anchored to the Unix epoch (1970-01-01 00:00:00 UTC).
+ * This is correct for 24/7 crypto markets with no DST. 4h boundaries fall
+ * at 00:00, 04:00, 08:00, 12:00, 16:00, 20:00 UTC.
  */
 export function alignToInterval(timestampMs: number, interval: Interval): number {
   const ms = INTERVAL_MS[interval];
@@ -112,6 +121,9 @@ export function findContextCandleIndex(
  * result[i] = index into contextCandles, or -1 if no match.
  *
  * Optimized: walks both arrays in parallel (O(n+m) instead of O(n log m)).
+ *
+ * @precondition Both primaryCandles and contextCandles must be sorted by
+ *               openTime ascending. Unsorted input produces undefined results.
  */
 export function buildAlignmentMap(
   primaryCandles: MtfCandle[],

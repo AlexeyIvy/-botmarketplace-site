@@ -273,6 +273,36 @@ describe("isSessionBoundary", () => {
     const t2 = Date.UTC(2024, 0, 15, 10, 1, 0);
     expect(isSessionBoundary(t2, t1, london)).toBe(false);
   });
+
+  it("UTC day session detects midnight boundary (VWAP reset)", () => {
+    const utc = SESSIONS.utc_day;
+    const beforeMidnight = Date.UTC(2024, 0, 15, 23, 59, 0);
+    const afterMidnight = Date.UTC(2024, 0, 16, 0, 0, 0);
+    expect(isSessionBoundary(afterMidnight, beforeMidnight, utc)).toBe(true);
+  });
+
+  it("UTC day same day → no boundary", () => {
+    const utc = SESSIONS.utc_day;
+    const t1 = Date.UTC(2024, 0, 15, 12, 0, 0);
+    const t2 = Date.UTC(2024, 0, 15, 12, 1, 0);
+    expect(isSessionBoundary(t2, t1, utc)).toBe(false);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// 4h alignment
+// ---------------------------------------------------------------------------
+
+describe("alignToInterval — 4h", () => {
+  it("aligns to 4h UTC boundaries", () => {
+    const midnight = Date.UTC(2024, 0, 15, 0, 0, 0);
+    // 02:30 UTC → aligns to 00:00
+    expect(alignToInterval(Date.UTC(2024, 0, 15, 2, 30, 0), "4h")).toBe(midnight);
+    // 05:00 UTC → aligns to 04:00
+    expect(alignToInterval(Date.UTC(2024, 0, 15, 5, 0, 0), "4h")).toBe(Date.UTC(2024, 0, 15, 4, 0, 0));
+    // 23:59 → aligns to 20:00
+    expect(alignToInterval(Date.UTC(2024, 0, 15, 23, 59, 0), "4h")).toBe(Date.UTC(2024, 0, 15, 20, 0, 0));
+  });
 });
 
 // ---------------------------------------------------------------------------
