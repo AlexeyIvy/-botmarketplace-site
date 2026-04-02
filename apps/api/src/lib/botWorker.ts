@@ -1064,7 +1064,9 @@ async function reconcileEntryFill(
       meta: { source: "reconciliation", orderId: intent.id },
     });
 
-    // DCA SO fill (#132): if position has DCA state, advance the ladder
+    // DCA SO fill (#132): if position has DCA state, advance the ladder.
+    // Contract: SO intents (created in slice 3) must also carry meta.dca === true
+    // for this path to activate on their fills.
     if (isDcaEntry) {
       const existingPos = await prisma.position.findUnique({
         where: { id: position.id },
@@ -1074,16 +1076,22 @@ async function reconcileEntryFill(
       if (dcaState && dcaState.nextSoIndex >= 0) {
         const soResult = handleDcaSoFill(dcaState, dcaState.nextSoIndex, fillPrice, fillDelta);
         if (soResult.exitLevelsChanged) {
-          // Persist updated DCA state and update SL/TP on position
+          // Merge updated DCA state into existing metaJson (preserve other fields)
+          const existingMeta = (existingPos?.metaJson as Record<string, unknown>) ?? {};
           await prisma.position.update({
             where: { id: position.id },
-            data: { metaJson: { dcaState: serializeDcaState(soResult.state) } as Prisma.InputJsonValue },
+            data: {
+              metaJson: {
+                ...existingMeta,
+                dcaState: serializeDcaState(soResult.state),
+              } as Prisma.InputJsonValue,
+            },
           });
           await updateSLTP({
             positionId: position.id,
             slPrice: soResult.state.slPrice,
             tpPrice: soResult.state.tpPrice,
-            intentId: intent.intentId,
+            meta: { intentId: intent.intentId, source: "dca_so_fill" },
           });
 
           workerLog.info(
