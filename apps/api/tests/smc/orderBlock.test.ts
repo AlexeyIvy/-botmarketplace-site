@@ -69,4 +69,23 @@ describe("detectOrderBlocks", () => {
     const b = detectOrderBlocks(candles);
     expect(a).toEqual(b);
   });
+
+  it("deduplicates OBs when multiple impulse candles reference the same opposing candle", () => {
+    // Build fixture: 14 bars of ATR baseline, then a bearish candle,
+    // then TWO consecutive bullish impulse candles.
+    const candles = makeBullishObFixture();
+    // Add a second impulse candle right after the first one
+    candles.push({
+      openTime: 1_700_000_000_000 + 17 * 60_000,
+      open: 102.5,
+      high: 106,
+      low: 102,
+      close: 105.5,
+      volume: 1000,
+    });
+    const obs = detectOrderBlocks(candles);
+    // The OB at index 15 should appear only once despite two impulse candles
+    const obsAtIndex15 = obs.filter((o) => o.index === 15);
+    expect(obsAtIndex15.length).toBe(1);
+  });
 });

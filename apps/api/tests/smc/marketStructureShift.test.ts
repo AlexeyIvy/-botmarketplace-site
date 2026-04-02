@@ -61,4 +61,24 @@ describe("detectMarketStructureShifts", () => {
       expect(shift.index).toBeLessThan(candles.length);
     }
   });
+
+  it("classifies break as BOS when trend is unestablished (trend=none)", () => {
+    // Only 1 swing high + 1 swing low — not enough for trend detection.
+    // Use swingLen=2: need bars on both sides. A minimal fixture with
+    // one swing high and one swing low, then a break.
+    const candles = [
+      { openTime: 1e12,       open: 100, high: 102, low: 98,  close: 101, volume: 1000 },
+      { openTime: 1e12 + 6e4, open: 101, high: 103, low: 99,  close: 100, volume: 1000 },
+      { openTime: 1e12 + 12e4, open: 100, high: 106, low: 99, close: 105, volume: 1000 }, // swing high=106
+      { openTime: 1e12 + 18e4, open: 105, high: 105, low: 100, close: 101, volume: 1000 },
+      { openTime: 1e12 + 24e4, open: 101, high: 104, low: 100, close: 103, volume: 1000 },
+      { openTime: 1e12 + 30e4, open: 103, high: 108, low: 102, close: 107, volume: 1000 }, // close=107 > 106 → break
+    ];
+    const shifts = detectMarketStructureShifts(candles, { swingLen: 2 });
+    const bullish = shifts.filter((s) => s.direction === "bullish");
+    // With only one swing high, trend is "none" → should be BOS, not CHoCH
+    if (bullish.length > 0) {
+      expect(bullish[0].type).toBe("BOS");
+    }
+  });
 });

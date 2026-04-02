@@ -16,9 +16,14 @@
  *
  * 3. For each candle after a swing point:
  *    - If candle.close breaks above a prior swing high:
- *      → BOS (bullish) if already in uptrend, CHoCH (bullish) if in downtrend
+ *      → BOS (bullish) if already in uptrend or trend is unestablished
+ *      → CHoCH (bullish) if in downtrend
  *    - If candle.close breaks below a prior swing low:
- *      → BOS (bearish) if already in downtrend, CHoCH (bearish) if in uptrend
+ *      → BOS (bearish) if already in downtrend or trend is unestablished
+ *      → CHoCH (bearish) if in uptrend
+ *
+ * When trend is "none" (insufficient swings to determine), breaks are
+ * classified as BOS (establishing structure, not changing it).
  *
  * Each swing level is only broken once (first break wins).
  *
@@ -58,33 +63,42 @@ export function detectMarketStructureShifts(
   const swings = findSwingPoints(candles, swingLen);
   if (swings.length < 2) return results;
 
-  // Track the most recent unbroken swing high and swing low
   const swingHighs = swings.filter((s) => s.type === "high");
   const swingLows = swings.filter((s) => s.type === "low");
 
-  // Determine initial trend from swing sequence
+  // Pointer-based trend tracking: index of the last two confirmed
+  // swing highs/lows before the current candle (avoids O(n*s) filter).
+  let highPtr = -1; // index into swingHighs[] of last confirmed before candle i
+  let lowPtr = -1;  // index into swingLows[] of last confirmed before candle i
   let trend: Trend = "none";
 
-  // Set of swing indices already broken (each level breaks only once)
   const brokenSwings = new Set<number>();
-
-  // Process candles after the first swing is confirmed
   const firstSwingEnd = swings[0].index + swingLen;
 
   for (let i = firstSwingEnd + 1; i < n; i++) {
     const candle = candles[i];
 
-    // Update trend from confirmed swings before this candle
-    trend = deriveTrend(swingHighs, swingLows, i);
+    // Advance pointers to include all swings confirmed before candle i
+    while (highPtr + 1 < swingHighs.length && swingHighs[highPtr + 1].index < i) {
+      highPtr++;
+    }
+    while (lowPtr + 1 < swingLows.length && swingLows[lowPtr + 1].index < i) {
+      lowPtr++;
+    }
 
-    // Check for breaks of prior swing highs (bullish break)
+    // Derive trend from the last two confirmed swing highs/lows
+    trend = deriveTrendFromPointers(swingHighs, swingLows, highPtr, lowPtr);
+
+    // Check for breaks of prior swing highs (bullish break).
+    // Only check the most recent unbroken swing high.
     for (let sh = swingHighs.length - 1; sh >= 0; sh--) {
       const swing = swingHighs[sh];
       if (swing.index >= i) continue;
       if (brokenSwings.has(swing.index)) continue;
 
       if (candle.close > swing.level) {
-        const type: MssType = trend === "up" ? "BOS" : "CHoCH";
+        // BOS if trend is already up or unestablished; CHoCH if trend is down
+        const type: MssType = trend === "down" ? "CHoCH" : "BOS";
         results.push({
           index: i,
           type,
@@ -93,19 +107,19 @@ export function detectMarketStructureShifts(
           timestamp: candle.openTime,
         });
         brokenSwings.add(swing.index);
-        break; // only break the most recent unbroken swing
       }
       break; // only check the most recent unbroken swing high
     }
 
-    // Check for breaks of prior swing lows (bearish break)
+    // Check for breaks of prior swing lows (bearish break).
     for (let sl = swingLows.length - 1; sl >= 0; sl--) {
       const swing = swingLows[sl];
       if (swing.index >= i) continue;
       if (brokenSwings.has(swing.index)) continue;
 
       if (candle.close < swing.level) {
-        const type: MssType = trend === "down" ? "BOS" : "CHoCH";
+        // BOS if trend is already down or unestablished; CHoCH if trend is up
+        const type: MssType = trend === "up" ? "CHoCH" : "BOS";
         results.push({
           index: i,
           type,
@@ -114,7 +128,6 @@ export function detectMarketStructureShifts(
           timestamp: candle.openTime,
         });
         brokenSwings.add(swing.index);
-        break;
       }
       break;
     }
@@ -124,26 +137,23 @@ export function detectMarketStructureShifts(
 }
 
 /**
- * Derive the prevailing trend from swing points confirmed before `beforeIndex`.
+ * Derive trend from pointer positions into pre-sorted swing arrays.
+ * O(1) per call instead of O(s) filter.
  */
-function deriveTrend(
+function deriveTrendFromPointers(
   swingHighs: { index: number; level: number }[],
   swingLows: { index: number; level: number }[],
-  beforeIndex: number,
+  highPtr: number,
+  lowPtr: number,
 ): Trend {
-  // Get the last two swing highs before this index
-  const recentHighs = swingHighs.filter((s) => s.index < beforeIndex);
-  const recentLows = swingLows.filter((s) => s.index < beforeIndex);
+  if (highPtr < 1 || lowPtr < 1) return "none";
 
-  if (recentHighs.length >= 2 && recentLows.length >= 2) {
-    const hh = recentHighs[recentHighs.length - 1].level > recentHighs[recentHighs.length - 2].level;
-    const hl = recentLows[recentLows.length - 1].level > recentLows[recentLows.length - 2].level;
-    const lh = recentHighs[recentHighs.length - 1].level < recentHighs[recentHighs.length - 2].level;
-    const ll = recentLows[recentLows.length - 1].level < recentLows[recentLows.length - 2].level;
+  const hh = swingHighs[highPtr].level > swingHighs[highPtr - 1].level;
+  const hl = swingLows[lowPtr].level > swingLows[lowPtr - 1].level;
+  const lh = swingHighs[highPtr].level < swingHighs[highPtr - 1].level;
+  const ll = swingLows[lowPtr].level < swingLows[lowPtr - 1].level;
 
-    if (hh && hl) return "up";
-    if (lh && ll) return "down";
-  }
-
+  if (hh && hl) return "up";
+  if (lh && ll) return "down";
   return "none";
 }

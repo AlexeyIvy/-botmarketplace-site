@@ -3,14 +3,7 @@
  * known pattern outcomes for deterministic regression testing.
  */
 
-interface Candle {
-  openTime: number;
-  open: number;
-  high: number;
-  low: number;
-  close: number;
-  volume: number;
-}
+import type { Candle } from "../../src/lib/patterns/types.js";
 
 const T0 = 1_700_000_000_000;
 const M1 = 60_000; // 1-minute interval

@@ -72,6 +72,7 @@ export function detectOrderBlocks(
   if (n < atrPeriod + 1) return results;
 
   const tr = trueRanges(candles);
+  const emittedObIndices = new Set<number>();
 
   // Rolling ATR (simple moving average of TR)
   let trSum = 0;
@@ -82,7 +83,7 @@ export function detectOrderBlocks(
     trSum += tr[i] - tr[i - atrPeriod];
     const atr = trSum / atrPeriod;
 
-    if (atr === 0) continue;
+    if (atr === 0 || !isFinite(atr)) continue;
 
     const candle = candles[i];
     const body = candle.close - candle.open; // positive = bullish, negative = bearish
@@ -100,7 +101,9 @@ export function detectOrderBlocks(
       const prevBody = prev.close - prev.open;
 
       if (isBullishImpulse && prevBody < 0) {
-        // Found a bearish candle before bullish impulse → bullish OB
+        // Dedup: skip if this OB candle was already emitted
+        if (emittedObIndices.has(j)) break;
+        emittedObIndices.add(j);
         results.push({
           index: j,
           direction: "bullish",
@@ -113,7 +116,8 @@ export function detectOrderBlocks(
       }
 
       if (!isBullishImpulse && prevBody > 0) {
-        // Found a bullish candle before bearish impulse → bearish OB
+        if (emittedObIndices.has(j)) break;
+        emittedObIndices.add(j);
         results.push({
           index: j,
           direction: "bearish",
