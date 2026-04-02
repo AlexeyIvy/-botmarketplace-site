@@ -468,6 +468,49 @@ export const BLOCK_DEFS: BlockDef[] = [
     ],
     description: "Configures DCA ladder: base order, safety orders with step/volume scaling, and TP recalculation from averaged entry.",
   },
+
+  // ── MTF Confluence Indicators (#135) ──────────────────────────────────────
+  {
+    type: "volume_profile",
+    label: "Volume Profile",
+    category: "indicator",
+    inputs: [
+      { id: "candles", label: "candles", dataType: "Series<OHLCV>", required: true },
+    ],
+    outputs: [
+      { id: "poc", label: "POC", dataType: "Series<number>", required: false },
+      { id: "vah", label: "VAH", dataType: "Series<number>", required: false },
+      { id: "val", label: "VAL", dataType: "Series<number>", required: false },
+    ],
+    params: [
+      { id: "period", label: "Period", type: "number", defaultValue: 20, min: 5, max: 200 },
+      { id: "bins", label: "Bins", type: "number", defaultValue: 24, min: 6, max: 100 },
+    ],
+    description: "Volume distribution profile: POC (highest volume price), VAH/VAL (value area bounds).",
+  },
+  {
+    type: "proximity_filter",
+    label: "Proximity Filter",
+    category: "logic",
+    inputs: [
+      { id: "price", label: "price", dataType: "Series<number>", required: true },
+      { id: "level", label: "level", dataType: "Series<number>", required: true },
+    ],
+    outputs: [
+      { id: "near", label: "near", dataType: "Series<boolean>", required: false },
+    ],
+    params: [
+      { id: "threshold", label: "Threshold", type: "number", defaultValue: 1.0, min: 0.01, max: 50 },
+      {
+        id: "mode",
+        label: "Mode",
+        type: "select",
+        defaultValue: "percentage",
+        options: ["percentage", "absolute"],
+      },
+    ],
+    description: "Gates signals by proximity to a reference level (e.g., near POC/VAH/VAL).",
+  },
 ];
 
 // ---------------------------------------------------------------------------

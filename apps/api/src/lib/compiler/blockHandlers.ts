@@ -479,6 +479,47 @@ export const dcaConfigHandler: BlockHandler = {
 };
 
 // ---------------------------------------------------------------------------
+// MTF Confluence indicators (#135)
+// ---------------------------------------------------------------------------
+
+export const volumeProfileHandler: BlockHandler = {
+  blockType: "volume_profile",
+  category: "indicator",
+  validate(ctx) {
+    // Optional — not required for every strategy
+  },
+  extract(ctx) {
+    const node = nodesOf(ctx, "volume_profile")[0];
+    if (!node) return {};
+    return {
+      indicators: [{
+        type: "volume_profile",
+        period: Number(node.data.params["period"] ?? 20),
+        bins: Number(node.data.params["bins"] ?? 24),
+      }],
+    };
+  },
+};
+
+export const proximityFilterHandler: BlockHandler = {
+  blockType: "proximity_filter",
+  category: "logic",
+  validate(ctx) {
+    // Optional — not required for every strategy
+  },
+  extract(ctx) {
+    const node = nodesOf(ctx, "proximity_filter")[0];
+    if (!node) return {};
+    return {
+      proximityFilter: {
+        threshold: Number(node.data.params["threshold"] ?? 1.0),
+        mode: String(node.data.params["mode"] ?? "percentage"),
+      },
+    };
+  },
+};
+
+// ---------------------------------------------------------------------------
 // Default handler set — all MVP block types
 // ---------------------------------------------------------------------------
 
@@ -512,5 +553,8 @@ export function defaultHandlers(): BlockHandler[] {
     takeProfitHandler,
     // DCA
     dcaConfigHandler,
+    // MTF Confluence (#135)
+    volumeProfileHandler,
+    proximityFilterHandler,
   ];
 }
