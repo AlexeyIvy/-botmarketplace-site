@@ -1161,9 +1161,10 @@ async function reconcileExitFill(
     });
     if (posRow) {
       const dcaState = recoverDcaState(posRow.metaJson);
-      if (dcaState && dcaState.phase === "ladder_active") {
-        const reason = posRow.currentQty.toNumber() <= 0 ? "position_closed" : "partial_exit";
-        const finalized = finalizeDcaLadder(dcaState, reason);
+      if (dcaState && dcaState.phase === "ladder_active" && posRow.currentQty.toNumber() <= 0) {
+        // Only finalize when position is fully closed (currentQty = 0).
+        // Partial exits don't end the DCA ladder.
+        const finalized = finalizeDcaLadder(dcaState, "position_closed");
         if (finalized.state.phase !== dcaState.phase) {
           const existingMeta = (posRow.metaJson as Record<string, unknown>) ?? {};
           await prisma.position.update({
