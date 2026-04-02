@@ -42,6 +42,7 @@ import {
   openPosition,
   applyPartialFill,
   closePosition,
+  updateSLTP,
   type PositionSnapshot,
 } from "./positionManager.js";
 import { evaluateEntry, type OpenSignal } from "./signalEngine.js";
@@ -55,6 +56,17 @@ import { computeSizing } from "./riskManager.js";
 import { getInstrument, type InstrumentInfo } from "./exchange/instrumentCache.js";
 import { normalizeOrder } from "./exchange/normalizer.js";
 import { sizeOrder } from "./runtime/positionSizer.js";
+import {
+  extractDcaConfig,
+  extractSlPct,
+  initializeDcaLadder,
+  handleDcaBaseFill,
+  handleDcaSoFill,
+  finalizeDcaLadder,
+  recoverDcaState,
+  checkAndTriggerSOs,
+} from "./runtime/dcaBridge.js";
+import { serializeDcaState, type DcaRuntimeState } from "./runtime/dcaEngine.js";
 import { reconstructRunState } from "./recoveryManager.js";
 import {
   reconcileStartupState,
@@ -988,10 +1000,38 @@ async function reconcileEntryFill(
 ): Promise<void> {
   const position = await getActivePosition(intent.botRun.id, bot.symbol);
 
+  // Check if this is a DCA entry
+  const isDcaEntry = meta.dca === true;
+
   if (!position && prevCumQty === 0) {
     // First fill on new entry — open position
-    const slPrice = typeof meta.slPrice === "number" ? meta.slPrice : undefined;
-    const tpPrice = typeof meta.tpPrice === "number" ? meta.tpPrice : undefined;
+    let slPrice = typeof meta.slPrice === "number" ? meta.slPrice : undefined;
+    let tpPrice = typeof meta.tpPrice === "number" ? meta.tpPrice : undefined;
+    let positionMeta: Record<string, unknown> | undefined;
+
+    // DCA base fill (#132): apply base fill to DCA state, persist to position metaJson
+    if (isDcaEntry && meta.dcaState) {
+      const recoveredState = recoverDcaState({ dcaState: meta.dcaState });
+      if (recoveredState) {
+        const baseResult = handleDcaBaseFill(recoveredState, fillPrice, fillDelta);
+        const dcaState = baseResult.state;
+        // Override SL/TP with DCA-computed values
+        slPrice = dcaState.slPrice;
+        tpPrice = dcaState.tpPrice;
+        positionMeta = { dcaState: serializeDcaState(dcaState) };
+
+        workerLog.info(
+          {
+            intentId: intent.intentId,
+            avgEntry: dcaState.avgEntryPrice,
+            tp: dcaState.tpPrice,
+            sl: dcaState.slPrice,
+            pendingSOs: baseResult.pendingSOs.length,
+          },
+          "DCA base fill: ladder activated",
+        );
+      }
+    }
 
     // Derive position side from intent side (BUY→LONG, SELL→SHORT)
     const positionSide = intentSide === "SELL" ? "SHORT" as const : "LONG" as const;
@@ -1006,11 +1046,11 @@ async function reconcileEntryFill(
       slPrice,
       tpPrice,
       intentId: intent.intentId,
-      meta: { source: "reconciliation", orderId: intent.id },
+      meta: positionMeta ?? { source: "reconciliation", orderId: intent.id },
     });
 
     workerLog.info(
-      { intentId: intent.intentId, qty: fillDelta, price: fillPrice },
+      { intentId: intent.intentId, qty: fillDelta, price: fillPrice, dca: isDcaEntry },
       "position opened from reconciled entry fill",
     );
   } else if (position) {
@@ -1023,6 +1063,52 @@ async function reconcileEntryFill(
       intentId: intent.intentId,
       meta: { source: "reconciliation", orderId: intent.id },
     });
+
+    // DCA SO fill (#132): if position has DCA state, advance the ladder.
+    // Contract: SO intents (created in slice 3) must also carry meta.dca === true
+    // for this path to activate on their fills.
+    if (isDcaEntry) {
+      const existingPos = await prisma.position.findUnique({
+        where: { id: position.id },
+        select: { metaJson: true },
+      });
+      const dcaState = recoverDcaState(existingPos?.metaJson);
+      if (dcaState && dcaState.nextSoIndex >= 0) {
+        const soResult = handleDcaSoFill(dcaState, dcaState.nextSoIndex, fillPrice, fillDelta);
+        if (soResult.exitLevelsChanged) {
+          // Merge updated DCA state into existing metaJson (preserve other fields)
+          const existingMeta = (existingPos?.metaJson as Record<string, unknown>) ?? {};
+          await prisma.position.update({
+            where: { id: position.id },
+            data: {
+              metaJson: {
+                ...existingMeta,
+                dcaState: serializeDcaState(soResult.state),
+              } as Prisma.InputJsonValue,
+            },
+          });
+          await updateSLTP({
+            positionId: position.id,
+            slPrice: soResult.state.slPrice,
+            tpPrice: soResult.state.tpPrice,
+            meta: { intentId: intent.intentId, source: "dca_so_fill" },
+          });
+
+          workerLog.info(
+            {
+              intentId: intent.intentId,
+              positionId: position.id,
+              soIndex: dcaState.nextSoIndex,
+              avgEntry: soResult.state.avgEntryPrice,
+              tp: soResult.state.tpPrice,
+              sl: soResult.state.slPrice,
+              sosFilled: soResult.state.safetyOrdersFilled,
+            },
+            "DCA SO fill: ladder advanced",
+          );
+        }
+      }
+    }
 
     workerLog.info(
       { intentId: intent.intentId, positionId: position.id, fillDelta, fillPrice },
@@ -1197,6 +1283,56 @@ async function evaluateStrategies(): Promise<void> {
             });
             if (existing) continue;
 
+            // DCA-aware entry (#132): if DCA config present, use base order sizing
+            // and attach initial DCA state to intent metaJson
+            const dcaConfig = extractDcaConfig(dslJson);
+            let intentMeta: Record<string, unknown> = {
+              signalType: signal.signalType,
+              reason: signal.reason,
+              slPrice: signal.slPrice,
+              tpPrice: signal.tpPrice,
+              rawSizingQty: sizing.qty,
+              exchangeQty,
+              notionalUsd: sizing.notionalUsd,
+            };
+
+            if (dcaConfig) {
+              // Override qty with DCA base order sizing
+              const dcaBaseQty = dcaConfig.baseOrderSizeUsd / currentPrice;
+              try {
+                const instrument = await getInstrument(symbol);
+                const dcaSized = sizeOrder(
+                  { notionalUsd: dcaConfig.baseOrderSizeUsd, currentPrice, leverage: 1 },
+                  instrument,
+                );
+                if (dcaSized.valid) {
+                  exchangeQty = dcaSized.qty;
+                } else {
+                  exchangeQty = dcaBaseQty;
+                }
+              } catch {
+                exchangeQty = dcaBaseQty;
+              }
+
+              const dcaSide = signal.side === "long" ? "long" as const : "short" as const;
+              const stopLossPct = extractSlPct(dslJson);
+              const ladder = initializeDcaLadder(dcaConfig, dcaSide, stopLossPct);
+
+              intentMeta = {
+                ...intentMeta,
+                dca: true,
+                dcaBaseOrder: true,
+                exchangeQty,
+                notionalUsd: dcaConfig.baseOrderSizeUsd,
+                dcaState: ladder.serialized,
+              };
+
+              workerLog.info(
+                { runId: run.id, side: dcaSide, baseUsd: dcaConfig.baseOrderSizeUsd, maxSOs: dcaConfig.maxSafetyOrders },
+                "DCA entry: creating base order intent",
+              );
+            }
+
             const orderLinkId = `lab_${run.id.slice(0, 8)}_${Date.now()}`;
             await prisma.botIntent.create({
               data: {
@@ -1208,15 +1344,7 @@ async function evaluateStrategies(): Promise<void> {
                 price: signal.price,
                 type: "ENTRY",
                 state: "PENDING",
-                metaJson: {
-                  signalType: signal.signalType,
-                  reason: signal.reason,
-                  slPrice: signal.slPrice,
-                  tpPrice: signal.tpPrice,
-                  rawSizingQty: sizing.qty,
-                  exchangeQty,
-                  notionalUsd: sizing.notionalUsd,
-                } as Prisma.InputJsonValue,
+                metaJson: intentMeta as Prisma.InputJsonValue,
               },
             });
 
