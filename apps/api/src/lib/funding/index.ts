@@ -24,6 +24,25 @@ export type {
   BybitLinearTicker,
   BybitSpotTicker,
 } from "./ingestion.js";
+export {
+  shouldEnterHedge,
+  planHedge,
+  applySpotFill,
+  applyPerpFill,
+  applyFundingPayment,
+  shouldExitHedge,
+  beginClose,
+  finalizeClose,
+  computeHedgePnl,
+} from "./hedgePlanner.js";
+export type {
+  HedgePosition,
+  HedgeConfig,
+  HedgeStatus,
+  LegSide,
+  LegExecution,
+} from "./hedgeTypes.js";
+export type { ExitReason } from "./hedgePlanner.js";
 export type {
   FundingSnapshot,
   SpreadSnapshot,
