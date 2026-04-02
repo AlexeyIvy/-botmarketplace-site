@@ -13,6 +13,17 @@ export {
   buildCandidate,
   scanFundingCandidates,
 } from "./scanner.js";
+export {
+  parseFundingHistoryItem,
+  parseFundingHistory,
+  parseLinearTicker,
+  buildSpreadFromTickers,
+} from "./ingestion.js";
+export type {
+  BybitFundingHistoryItem,
+  BybitLinearTicker,
+  BybitSpotTicker,
+} from "./ingestion.js";
 export type {
   FundingSnapshot,
   SpreadSnapshot,
