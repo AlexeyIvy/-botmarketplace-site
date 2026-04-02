@@ -60,4 +60,7 @@ export const BLOCK_SUPPORT_MAP: Record<string, BlockSupportEntry> = {
   // ── Risk ────────────────────────────────────────────────────────────────────
   stop_loss:    { status: "supported",    note: "Fully supported since Phase 3" },
   take_profit:  { status: "supported",    note: "Fully supported since Phase 3" },
+
+  // ── DCA ─────────────────────────────────────────────────────────────────────
+  dca_config:   { status: "supported",    note: "DCA ladder config block, #133. Compiles to DSL dca section, runtime engine #132" },
 };

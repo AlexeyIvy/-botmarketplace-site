@@ -448,6 +448,26 @@ export const BLOCK_DEFS: BlockDef[] = [
     ],
     description: "Computes take-profit risk parameters (fixed % or R-multiple).",
   },
+
+  // ── DCA ───────────────────────────────────────────────────────────────────
+  {
+    type: "dca_config",
+    label: "DCA Config",
+    category: "risk",
+    inputs: [],
+    outputs: [
+      { id: "risk", label: "dca", dataType: "RiskParams", required: false },
+    ],
+    params: [
+      { id: "baseOrderSizeUsd", label: "Base Order (USD)", type: "number", defaultValue: 100, min: 1, max: 100000 },
+      { id: "maxSafetyOrders", label: "Max Safety Orders", type: "number", defaultValue: 3, min: 1, max: 50 },
+      { id: "priceStepPct", label: "Price Step %", type: "number", defaultValue: 1.0, min: 0.1, max: 50 },
+      { id: "stepScale", label: "Step Scale", type: "number", defaultValue: 1.0, min: 1.0, max: 10 },
+      { id: "volumeScale", label: "Volume Scale", type: "number", defaultValue: 1.5, min: 1.0, max: 10 },
+      { id: "takeProfitPct", label: "TP from Avg %", type: "number", defaultValue: 1.5, min: 0.1, max: 100 },
+    ],
+    description: "Configures DCA ladder: base order, safety orders with step/volume scaling, and TP recalculation from averaged entry.",
+  },
 ];
 
 // ---------------------------------------------------------------------------

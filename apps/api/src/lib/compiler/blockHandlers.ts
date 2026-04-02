@@ -449,6 +449,36 @@ export const takeProfitHandler: BlockHandler = {
 };
 
 // ---------------------------------------------------------------------------
+// DCA block (#133)
+// ---------------------------------------------------------------------------
+
+export const dcaConfigHandler: BlockHandler = {
+  blockType: "dca_config",
+  category: "risk",
+  validate(ctx) {
+    const nodes = nodesOf(ctx, "dca_config");
+    // Optional block — not required for non-DCA strategies
+    if (nodes.length > 1) {
+      ctx.issues.push({ severity: "error", message: "Only one DCA Config block is allowed." });
+    }
+  },
+  extract(ctx) {
+    const node = nodesOf(ctx, "dca_config")[0];
+    if (!node) return {};
+    return {
+      dca: {
+        baseOrderSizeUsd: Number(node.data.params["baseOrderSizeUsd"] ?? 100),
+        maxSafetyOrders: Number(node.data.params["maxSafetyOrders"] ?? 3),
+        priceStepPct: Number(node.data.params["priceStepPct"] ?? 1.0),
+        stepScale: Number(node.data.params["stepScale"] ?? 1.0),
+        volumeScale: Number(node.data.params["volumeScale"] ?? 1.5),
+        takeProfitPct: Number(node.data.params["takeProfitPct"] ?? 1.5),
+      },
+    };
+  },
+};
+
+// ---------------------------------------------------------------------------
 // Default handler set — all MVP block types
 // ---------------------------------------------------------------------------
 
@@ -480,5 +510,7 @@ export function defaultHandlers(): BlockHandler[] {
     // Risk
     stopLossHandler,
     takeProfitHandler,
+    // DCA
+    dcaConfigHandler,
   ];
 }
