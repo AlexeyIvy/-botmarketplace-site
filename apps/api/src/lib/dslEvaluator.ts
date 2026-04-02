@@ -613,10 +613,20 @@ export function computeExitLevels(
  * @param opts       Execution options (fees, slippage)
  * @returns          Deterministic backtest report
  */
+/**
+ * Optional multi-timeframe context for backtest evaluation.
+ * When provided, indicator refs with `sourceTimeframe` resolve
+ * from the bundle's context-TF candles via the MTF resolver.
+ */
+export interface MtfBacktestContext {
+  bundle: import("./mtf/intervalAlignment.js").CandleBundle;
+}
+
 export function runDslBacktest(
   candles: Candle[],
   dslJson: unknown,
   opts: Partial<DslExecOpts> = {},
+  mtfContext?: MtfBacktestContext,
 ): DslBacktestReport {
   const { feeBps = 0, slippageBps = 0 } = opts;
 
