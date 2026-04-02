@@ -11,6 +11,7 @@ import {
   calcUnrealisedPnl,
   type PositionSnapshot,
 } from "../lib/positionManager.js";
+import { recoverDcaState } from "../lib/runtime/dcaBridge.js";
 
 const VALID_TIMEFRAMES = ["M1", "M5", "M15", "H1"] as const;
 
@@ -208,10 +209,39 @@ export async function botRoutes(app: FastifyInstance) {
     // Stage 3 (#127): include active position summary
     const activePosition = await getActiveBotPosition(bot.id, bot.symbol);
 
+    // Stage 4 (#132): include DCA ladder state if present
+    let dcaLadder: Record<string, unknown> | null = null;
+    if (activePosition) {
+      try {
+        const posRow = await prisma.position.findUnique({
+          where: { id: activePosition.id },
+          select: { metaJson: true },
+        });
+        const dcaState = recoverDcaState(posRow?.metaJson);
+        if (dcaState) {
+          dcaLadder = {
+            phase: dcaState.phase,
+            side: dcaState.side,
+            baseEntryPrice: dcaState.baseEntryPrice,
+            avgEntryPrice: dcaState.avgEntryPrice,
+            tpPrice: dcaState.tpPrice,
+            slPrice: dcaState.slPrice,
+            safetyOrdersFilled: dcaState.safetyOrdersFilled,
+            nextSoIndex: dcaState.nextSoIndex,
+            totalCostUsd: dcaState.totalCostUsd,
+            fillCount: dcaState.fills.length,
+          };
+        }
+      } catch (_dcaErr) {
+        // Non-fatal: DCA state not available
+      }
+    }
+
     return reply.send({
       ...rest,
       lastRun: runs[0] ?? null,
       activePosition: activePosition ?? null,
+      dcaLadder,
     });
   });
 

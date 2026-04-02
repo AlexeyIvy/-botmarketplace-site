@@ -205,6 +205,27 @@ async function activateRun(runId: string) {
       }
 
       if (existingPosition) {
+        // DCA recovery (#132 slice 4): check if position has active DCA ladder state.
+        // The DCA state in Position.metaJson is already persistent — the poll loop
+        // reads it on each evaluation. Log recovery for diagnostics.
+        let dcaRecovered = false;
+        let dcaLadderPhase: string | undefined;
+        let dcaSosFilled: number | undefined;
+        try {
+          const posRow = await prisma.position.findUnique({
+            where: { id: existingPosition.id },
+            select: { metaJson: true },
+          });
+          const dcaState = recoverDcaState(posRow?.metaJson);
+          if (dcaState) {
+            dcaRecovered = true;
+            dcaLadderPhase = dcaState.phase;
+            dcaSosFilled = dcaState.safetyOrdersFilled;
+          }
+        } catch (_dcaErr) {
+          // Non-fatal: if DCA state can't be read, poll loop will handle it
+        }
+
         workerLog.info(
           {
             runId,
@@ -214,6 +235,8 @@ async function activateRun(runId: string) {
             avgEntryPrice: existingPosition.avgEntryPrice,
             trailingStopReconstructed: !!recovered.trailingStopState,
             lastTradeCloseTimeReconstructed: recovered.lastTradeCloseTime > 0,
+            dcaRecovered,
+            ...(dcaRecovered ? { dcaLadderPhase, dcaSosFilled } : {}),
           },
           "recovered existing open position and ephemeral state on startup",
         );
@@ -229,6 +252,7 @@ async function activateRun(runId: string) {
               realisedPnl: existingPosition.realisedPnl,
               trailingStopReconstructed: !!recovered.trailingStopState,
               lastTradeCloseTime: recovered.lastTradeCloseTime,
+              ...(dcaRecovered ? { dcaRecovered, dcaLadderPhase, dcaSosFilled } : {}),
             } as Prisma.InputJsonValue,
           },
         });

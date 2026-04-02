@@ -457,3 +457,112 @@ describe("worker DCA integration – ladder finalization (slice 3)", () => {
     expect(recoveredFinal!.phase).toBe("completed");
   });
 });
+
+// ---------------------------------------------------------------------------
+// 7. Startup recovery (slice 4): DCA state survives restart
+// ---------------------------------------------------------------------------
+
+describe("worker DCA integration – startup recovery (slice 4)", () => {
+  it("recovers active DCA ladder from position metaJson on startup", () => {
+    // Simulate: position has DCA state persisted from before restart
+    const dcaConfig = extractDcaConfig(makeDcaDsl())!;
+    const ladder = initializeDcaLadder(dcaConfig, "long", 10);
+    const recovered = recoverDcaState({ dcaState: ladder.serialized })!;
+    const { state } = handleDcaBaseFill(recovered, 10000, 0.01);
+
+    // Fill one SO before "restart"
+    const so0 = state.schedule!.safetyOrders[0];
+    const afterSo = handleDcaSoFill(state, 0, so0.triggerPrice, so0.qty).state;
+
+    // Persist → simulate restart → recover
+    const posMetaJson = JSON.parse(JSON.stringify({
+      dcaState: serializeDcaState(afterSo),
+    }));
+
+    const recoveredAfterRestart = recoverDcaState(posMetaJson);
+    expect(recoveredAfterRestart).not.toBeNull();
+    expect(recoveredAfterRestart!.phase).toBe("ladder_active");
+    expect(recoveredAfterRestart!.safetyOrdersFilled).toBe(1);
+    expect(recoveredAfterRestart!.nextSoIndex).toBe(1);
+    expect(recoveredAfterRestart!.avgEntryPrice).toBeLessThan(10000);
+
+    // Can continue filling SOs from recovered state
+    const so1 = recoveredAfterRestart!.schedule!.safetyOrders[1];
+    const soResult = handleDcaSoFill(recoveredAfterRestart!, 1, so1.triggerPrice, so1.qty);
+    expect(soResult.state.safetyOrdersFilled).toBe(2);
+    expect(soResult.state.nextSoIndex).toBe(2);
+  });
+
+  it("recovery returns null for non-DCA position", () => {
+    const posMetaJson = { source: "reconciliation", orderId: "abc" };
+    expect(recoverDcaState(posMetaJson)).toBeNull();
+  });
+
+  it("recovery returns null for corrupted DCA state", () => {
+    const posMetaJson = { dcaState: { phase: "ladder_active", corrupted: true } };
+    expect(recoverDcaState(posMetaJson)).toBeNull();
+  });
+
+  it("completed ladder survives restart and is recognized as terminal", () => {
+    const dcaConfig = extractDcaConfig(makeDcaDsl())!;
+    const ladder = initializeDcaLadder(dcaConfig, "long", 10);
+    const recovered = recoverDcaState({ dcaState: ladder.serialized })!;
+    const { state } = handleDcaBaseFill(recovered, 10000, 0.01);
+    const finalized = finalizeDcaLadder(state, "tp_hit");
+
+    const posMetaJson = JSON.parse(JSON.stringify({
+      dcaState: serializeDcaState(finalized.state),
+    }));
+
+    const recoveredAfterRestart = recoverDcaState(posMetaJson);
+    expect(recoveredAfterRestart).not.toBeNull();
+    expect(recoveredAfterRestart!.phase).toBe("completed");
+    // Poll loop won't trigger SOs on completed ladders
+    const triggered = checkAndTriggerSOs(recoveredAfterRestart!, 5000);
+    expect(triggered).toHaveLength(0);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// 8. Bot detail API response shape (slice 4)
+// ---------------------------------------------------------------------------
+
+describe("worker DCA integration – API response shape (slice 4)", () => {
+  it("DCA ladder response has expected fields", () => {
+    const dcaConfig = extractDcaConfig(makeDcaDsl())!;
+    const ladder = initializeDcaLadder(dcaConfig, "long", 10);
+    const recovered = recoverDcaState({ dcaState: ladder.serialized })!;
+    const { state } = handleDcaBaseFill(recovered, 10000, 0.01);
+
+    // Simulate what the API route constructs from dcaState
+    const dcaLadder = {
+      phase: state.phase,
+      side: state.side,
+      baseEntryPrice: state.baseEntryPrice,
+      avgEntryPrice: state.avgEntryPrice,
+      tpPrice: state.tpPrice,
+      slPrice: state.slPrice,
+      safetyOrdersFilled: state.safetyOrdersFilled,
+      nextSoIndex: state.nextSoIndex,
+      totalCostUsd: state.totalCostUsd,
+      fillCount: state.fills.length,
+    };
+
+    expect(dcaLadder.phase).toBe("ladder_active");
+    expect(dcaLadder.side).toBe("long");
+    expect(dcaLadder.baseEntryPrice).toBe(10000);
+    expect(dcaLadder.avgEntryPrice).toBe(10000);
+    expect(dcaLadder.safetyOrdersFilled).toBe(0);
+    expect(dcaLadder.nextSoIndex).toBe(0);
+    expect(dcaLadder.fillCount).toBe(1);
+    expect(dcaLadder.tpPrice).toBeGreaterThan(10000);
+    expect(dcaLadder.slPrice).toBeLessThan(10000);
+    expect(dcaLadder.totalCostUsd).toBeGreaterThan(0);
+  });
+
+  it("no dcaLadder for non-DCA position", () => {
+    // When recoverDcaState returns null, API sets dcaLadder = null
+    const result = recoverDcaState(null);
+    expect(result).toBeNull();
+  });
+});
