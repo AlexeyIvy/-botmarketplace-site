@@ -1042,7 +1042,11 @@ async function reconcileEntryFill(
         // Override SL/TP with DCA-computed values
         slPrice = dcaState.slPrice;
         tpPrice = dcaState.tpPrice;
-        positionMeta = { dcaState: serializeDcaState(dcaState) };
+        positionMeta = {
+          source: "reconciliation",
+          orderId: intent.id,
+          dcaState: serializeDcaState(dcaState),
+        };
 
         workerLog.info(
           {
