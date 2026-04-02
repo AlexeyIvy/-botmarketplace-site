@@ -83,6 +83,8 @@ export function resolveMtfIndicator(
     period: ref.period,
     atrPeriod: ref.atrPeriod,
     multiplier: ref.multiplier,
+    // TODO: forward stdDevMult, fastPeriod, slowPeriod, signalPeriod
+    // when Bollinger/MACD are promoted from compile-only to supported
   };
 
   // No MTF: use primary candles directly
@@ -123,7 +125,8 @@ export function resolveMtfIndicator(
 /**
  * Convenience: resolve indicator for a specific bar index.
  *
- * Used in signal evaluation where only the current bar's value is needed.
+ * Computes the full array internally, but the MtfIndicatorCache ensures
+ * this is O(1) after the first call for the same indicator type + params + TF.
  */
 export function resolveMtfIndicatorAt(
   ref: DslIndicatorRef,
