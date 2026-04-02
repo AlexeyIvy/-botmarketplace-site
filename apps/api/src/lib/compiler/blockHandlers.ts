@@ -520,6 +520,77 @@ export const proximityFilterHandler: BlockHandler = {
 };
 
 // ---------------------------------------------------------------------------
+// SMC Pattern Primitives (#137)
+// ---------------------------------------------------------------------------
+
+export const liquiditySweepHandler: BlockHandler = {
+  blockType: "liquidity_sweep",
+  category: "indicator",
+  validate() {},
+  extract(ctx) {
+    const nodes = nodesOf(ctx, "liquidity_sweep");
+    return {
+      indicators: nodes.map((n) => ({
+        type: "liquidity_sweep",
+        nodeId: n.id,
+        length: Number(n.data.params["swingLen"] ?? 3),
+        period: Number(n.data.params["maxAge"] ?? 50),
+      })),
+    };
+  },
+};
+
+export const fairValueGapHandler: BlockHandler = {
+  blockType: "fair_value_gap",
+  category: "indicator",
+  validate() {},
+  extract(ctx) {
+    const nodes = nodesOf(ctx, "fair_value_gap");
+    return {
+      indicators: nodes.map((n) => ({
+        type: "fair_value_gap",
+        nodeId: n.id,
+        multiplier: Number(n.data.params["minGapRatio"] ?? 0),
+      })),
+    };
+  },
+};
+
+export const orderBlockHandler: BlockHandler = {
+  blockType: "order_block",
+  category: "indicator",
+  validate() {},
+  extract(ctx) {
+    const nodes = nodesOf(ctx, "order_block");
+    return {
+      indicators: nodes.map((n) => ({
+        type: "order_block",
+        nodeId: n.id,
+        period: Number(n.data.params["atrPeriod"] ?? 14),
+        multiplier: Number(n.data.params["minImpulseMultiple"] ?? 1.5),
+        length: Number(n.data.params["maxLookback"] ?? 5),
+      })),
+    };
+  },
+};
+
+export const marketStructureShiftHandler: BlockHandler = {
+  blockType: "market_structure_shift",
+  category: "indicator",
+  validate() {},
+  extract(ctx) {
+    const nodes = nodesOf(ctx, "market_structure_shift");
+    return {
+      indicators: nodes.map((n) => ({
+        type: "market_structure_shift",
+        nodeId: n.id,
+        length: Number(n.data.params["swingLen"] ?? 3),
+      })),
+    };
+  },
+};
+
+// ---------------------------------------------------------------------------
 // Default handler set — all MVP block types
 // ---------------------------------------------------------------------------
 
@@ -556,5 +627,10 @@ export function defaultHandlers(): BlockHandler[] {
     // MTF Confluence (#135)
     volumeProfileHandler,
     proximityFilterHandler,
+    // SMC Pattern Primitives (#137)
+    liquiditySweepHandler,
+    fairValueGapHandler,
+    orderBlockHandler,
+    marketStructureShiftHandler,
   ];
 }

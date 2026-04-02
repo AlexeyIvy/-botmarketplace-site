@@ -143,6 +143,10 @@ describe("Support status snapshot", () => {
       "enter_adaptive",
       "enter_long",
       "enter_short",
+      "fair_value_gap",
+      "liquidity_sweep",
+      "market_structure_shift",
+      "order_block",
       "stop_loss",
       "supertrend",
       "take_profit",
@@ -170,8 +174,8 @@ describe("Support status snapshot", () => {
   });
 
   it("block count matches expected total", () => {
-    expect(uiBlockTypes.length).toBe(24);
-    expect(compilerBlockTypes.length).toBe(24);
-    expect(supportMapTypes.length).toBe(24);
+    expect(uiBlockTypes.length).toBe(28);
+    expect(compilerBlockTypes.length).toBe(28);
+    expect(supportMapTypes.length).toBe(28);
   });
 });

@@ -67,4 +67,10 @@ export const BLOCK_SUPPORT_MAP: Record<string, BlockSupportEntry> = {
   // ── MTF Confluence (#135) ──────────────────────────────────────────────────
   volume_profile:    { status: "compile-only", note: "VolumeProfile indicator #135. Compiler handler extracts params; evaluator runtime pending #134" },
   proximity_filter:  { status: "compile-only", note: "ProximityFilter #135. Compiler handler extracts params; evaluator runtime pending #134" },
+
+  // ── SMC Pattern Primitives (#137, #138) ────────────────────────────────────
+  liquidity_sweep:         { status: "supported", note: "SMC liquidity sweep #137/#138. Detects swing sweeps, pattern engine + evaluator wired" },
+  fair_value_gap:          { status: "supported", note: "SMC fair value gap #137/#138. Detects 3-candle imbalances, pattern engine + evaluator wired" },
+  order_block:             { status: "supported", note: "SMC order block #137/#138. Detects institutional order zones, pattern engine + evaluator wired" },
+  market_structure_shift:  { status: "supported", note: "SMC market structure shift #137/#138. Detects BOS/CHoCH, pattern engine + evaluator wired" },
 };

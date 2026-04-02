@@ -27,6 +27,7 @@ import { calcADX } from "./indicators/adx.js";
 import { calcSuperTrend } from "./indicators/supertrend.js";
 import { calcVWAP } from "./indicators/vwap.js";
 import { resolveMtfIndicator, createMtfCache } from "./mtf/mtfIndicatorResolver.js";
+import { fvgSeries, sweepSeries, orderBlockSeries, mssSeries } from "./runtime/patternEngine.js";
 import type { DcaConfig, SafetyOrderLevel, DcaPositionState } from "./dcaPlanning.js";
 import {
   generateSafetyOrderSchedule,
@@ -94,13 +95,20 @@ export interface DslIndicatorRef {
   sourceTimeframe?: string;
 }
 
+export interface DslSignalRef {
+  blockType: string;
+  length?: number;
+  period?: number;
+  multiplier?: number;
+}
+
 export interface DslSignal {
   type: string; // "crossover" | "crossunder" | "compare" | "direct" | "raw"
   op?: string;
-  fast?: { blockType: string; length?: number } | null;
-  slow?: { blockType: string; length?: number } | null;
-  left?: { blockType: string; length?: number } | null;
-  right?: { blockType: string; length?: number } | null;
+  fast?: DslSignalRef | null;
+  slow?: DslSignalRef | null;
+  left?: DslSignalRef | null;
+  right?: DslSignalRef | null;
 }
 
 export interface DslExitLevel {
@@ -184,6 +192,8 @@ export interface IndicatorCache {
   supertrend: Map<string, { supertrend: (number | null)[]; direction: (1 | -1 | null)[] }>;
   vwap: (number | null)[] | null;
   bollinger: Map<string, BollingerBandsResult>;
+  /** SMC pattern series cache (keyed by "type_params" string). */
+  smcPatterns: Map<string, (number | null)[]>;
 }
 
 export function createIndicatorCache(): IndicatorCache {
@@ -196,6 +206,7 @@ export function createIndicatorCache(): IndicatorCache {
     supertrend: new Map(),
     vwap: null,
     bollinger: new Map(),
+    smcPatterns: new Map(),
   };
 }
 
@@ -394,6 +405,46 @@ export function getIndicatorValues(
     return new Array(candles.length).fill(val);
   }
 
+  // ── SMC Pattern Primitives (#137/#138) ──────────────────────────────────
+  if (type === "fair_value_gap") {
+    const minGapRatio = params.multiplier ?? 0;
+    const key = `fvg_${minGapRatio}`;
+    if (!cache.smcPatterns.has(key)) {
+      cache.smcPatterns.set(key, fvgSeries(candles, { minGapRatio }));
+    }
+    return cache.smcPatterns.get(key)!;
+  }
+
+  if (type === "liquidity_sweep") {
+    const swingLen = params.length ?? 3;
+    const maxAge = params.period ?? 50;
+    const key = `sweep_${swingLen}_${maxAge}`;
+    if (!cache.smcPatterns.has(key)) {
+      cache.smcPatterns.set(key, sweepSeries(candles, { swingLen, maxAge }));
+    }
+    return cache.smcPatterns.get(key)!;
+  }
+
+  if (type === "order_block") {
+    const atrPeriod = params.period ?? 14;
+    const minImpulseMultiple = params.multiplier ?? 1.5;
+    const maxLookback = params.length ?? 5;
+    const key = `ob_${atrPeriod}_${minImpulseMultiple}_${maxLookback}`;
+    if (!cache.smcPatterns.has(key)) {
+      cache.smcPatterns.set(key, orderBlockSeries(candles, { atrPeriod, minImpulseMultiple, maxLookback }));
+    }
+    return cache.smcPatterns.get(key)!;
+  }
+
+  if (type === "market_structure_shift") {
+    const swingLen = params.length ?? 3;
+    const key = `mss_${swingLen}`;
+    if (!cache.smcPatterns.has(key)) {
+      cache.smcPatterns.set(key, mssSeries(candles, { swingLen }));
+    }
+    return cache.smcPatterns.get(key)!;
+  }
+
   // Unknown indicator — return all nulls
   return new Array(candles.length).fill(null);
 }
@@ -466,8 +517,8 @@ export function evaluateSignal(
   if (signal.type === "crossover" || signal.type === "crossunder") {
     // Cross signal: fast crosses over/under slow
     if (!signal.fast || !signal.slow || i < 1) return false;
-    const fastVals = getIndicatorValues(signal.fast.blockType, { length: signal.fast.length }, candles, cache);
-    const slowVals = getIndicatorValues(signal.slow.blockType, { length: signal.slow.length }, candles, cache);
+    const fastVals = getIndicatorValues(signal.fast.blockType, signal.fast, candles, cache);
+    const slowVals = getIndicatorValues(signal.slow.blockType, signal.slow, candles, cache);
 
     const curFast = fastVals[i];
     const curSlow = slowVals[i];
@@ -485,8 +536,8 @@ export function evaluateSignal(
 
   if (signal.type === "compare") {
     if (!signal.left || !signal.right) return false;
-    const leftVals = getIndicatorValues(signal.left.blockType, { length: signal.left.length }, candles, cache);
-    const rightVals = getIndicatorValues(signal.right.blockType, { length: signal.right.length }, candles, cache);
+    const leftVals = getIndicatorValues(signal.left.blockType, signal.left, candles, cache);
+    const rightVals = getIndicatorValues(signal.right.blockType, signal.right, candles, cache);
 
     const l = leftVals[i];
     const r = rightVals[i];
