@@ -163,13 +163,15 @@ describe("Support status snapshot", () => {
       "constant",
       "macd",
       "or_gate",
+      "proximity_filter",
       "volume",
+      "volume_profile",
     ]);
   });
 
   it("block count matches expected total", () => {
-    expect(uiBlockTypes.length).toBe(22);
-    expect(compilerBlockTypes.length).toBe(22);
-    expect(supportMapTypes.length).toBe(22);
+    expect(uiBlockTypes.length).toBe(24);
+    expect(compilerBlockTypes.length).toBe(24);
+    expect(supportMapTypes.length).toBe(24);
   });
 });

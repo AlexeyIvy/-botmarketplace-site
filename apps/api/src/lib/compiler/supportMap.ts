@@ -63,4 +63,8 @@ export const BLOCK_SUPPORT_MAP: Record<string, BlockSupportEntry> = {
 
   // ── DCA ─────────────────────────────────────────────────────────────────────
   dca_config:   { status: "supported",    note: "DCA ladder config block, #133. Compiles to DSL dca section, runtime engine #132" },
+
+  // ── MTF Confluence (#135) ──────────────────────────────────────────────────
+  volume_profile:    { status: "compile-only", note: "VolumeProfile indicator #135. Compiler handler extracts params; evaluator runtime pending #134" },
+  proximity_filter:  { status: "compile-only", note: "ProximityFilter #135. Compiler handler extracts params; evaluator runtime pending #134" },
 };
