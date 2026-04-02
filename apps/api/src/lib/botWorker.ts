@@ -1074,6 +1074,17 @@ async function reconcileEntryFill(
       });
       const dcaState = recoverDcaState(existingPos?.metaJson);
       if (dcaState && dcaState.nextSoIndex >= 0) {
+        // Validate soIndex from intent matches expected nextSoIndex from state.
+        // In normal sequential processing these always agree; a mismatch means
+        // a race or replay anomaly — log warning but proceed with state's index
+        // since the engine enforces sequential fill guards.
+        const intentSoIndex = typeof meta.soIndex === "number" ? meta.soIndex : undefined;
+        if (intentSoIndex !== undefined && intentSoIndex !== dcaState.nextSoIndex) {
+          workerLog.warn(
+            { intentSoIndex, stateNextSoIndex: dcaState.nextSoIndex, intentId: intent.intentId },
+            "DCA SO index mismatch: intent soIndex differs from state nextSoIndex",
+          );
+        }
         const soResult = handleDcaSoFill(dcaState, dcaState.nextSoIndex, fillPrice, fillDelta);
         if (soResult.exitLevelsChanged) {
           // Merge updated DCA state into existing metaJson (preserve other fields)
@@ -1177,7 +1188,7 @@ async function reconcileExitFill(
             },
           });
           workerLog.info(
-            { positionId: position.id, sosFilled: dcaState.safetyOrdersFilled, reason },
+            { positionId: position.id, sosFilled: dcaState.safetyOrdersFilled, reason: "position_closed" },
             "DCA ladder finalized on exit fill",
           );
         }
@@ -1450,6 +1461,8 @@ async function evaluateStrategies(): Promise<void> {
                         soIndex: so.index,
                         triggerPrice: so.triggerPrice,
                         positionId: position.id,
+                        slPrice: dcaState.slPrice,
+                        tpPrice: dcaState.tpPrice,
                       } as Prisma.InputJsonValue,
                     },
                   });
