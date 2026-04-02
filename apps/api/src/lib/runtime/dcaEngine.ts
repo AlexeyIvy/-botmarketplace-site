@@ -33,7 +33,6 @@ import {
   recalcTakeProfit,
   recalcStopLoss,
   validateDcaConfig,
-  calculateMaxExposure,
 } from "../dcaPlanning.js";
 
 // ---------------------------------------------------------------------------
@@ -235,6 +234,17 @@ export function applySafetyOrderFillRT(
     };
   }
 
+  // Sequential fill guard: reject out-of-order fills that would skip SOs.
+  // SOs must fill in index order (0, 1, 2, ...). If the worker or reconciler
+  // submits SO 2 while nextSoIndex is 0, something is wrong upstream.
+  if (soIndex > state.nextSoIndex) {
+    return {
+      state,
+      description: `No-op: SO ${soIndex} is out of order (expected nextSoIndex=${state.nextSoIndex}); SOs must fill sequentially`,
+      exitLevelsChanged: false,
+    };
+  }
+
   const fillSizeUsd = fillPrice * fillQty;
   const newFills = [...state.fills, { price: fillPrice, qty: fillQty, sizeUsd: fillSizeUsd }];
   const newAvgEntry = calculateAvgEntry(newFills);
@@ -275,10 +285,12 @@ export function completeDcaLadder(
   reason: string = "position_closed",
   now: number = Date.now(),
 ): DcaTransitionResult {
-  if (state.phase === "completed" || state.phase === "cancelled") {
+  // Only ladder_active can be completed — awaiting_base has no position to close,
+  // and terminal states are already final.
+  if (state.phase !== "ladder_active") {
     return {
       state,
-      description: `No-op: already in terminal phase "${state.phase}"`,
+      description: `No-op: cannot complete ladder in phase "${state.phase}" (requires "ladder_active")`,
       exitLevelsChanged: false,
     };
   }
@@ -410,13 +422,23 @@ export function deserializeDcaState(obj: unknown): DcaRuntimeState | null {
   if (!obj || typeof obj !== "object") return null;
   const o = obj as Record<string, unknown>;
 
-  // Check for required shape markers
-  if (typeof o.phase !== "string" || !o.config || typeof o.side !== "string") {
-    return null;
-  }
-
+  // Structural validation: check all fields the engine accesses at runtime.
+  // This runs on bot restart recovery — corrupted or outdated metaJson must
+  // not crash the engine.
   const validPhases: DcaPhase[] = ["awaiting_base", "ladder_active", "completed", "cancelled"];
-  if (!validPhases.includes(o.phase as DcaPhase)) return null;
+  if (typeof o.phase !== "string" || !validPhases.includes(o.phase as DcaPhase)) return null;
+  if (!o.config || typeof o.config !== "object") return null;
+  if (typeof o.side !== "string" || (o.side !== "long" && o.side !== "short")) return null;
+  if (!Array.isArray(o.fills)) return null;
+  if (typeof o.avgEntryPrice !== "number" || !Number.isFinite(o.avgEntryPrice)) return null;
+  if (typeof o.totalQty !== "number" || !Number.isFinite(o.totalQty)) return null;
+  if (typeof o.totalCostUsd !== "number" || !Number.isFinite(o.totalCostUsd)) return null;
+  if (typeof o.tpPrice !== "number") return null;
+  if (typeof o.slPrice !== "number") return null;
+  if (typeof o.safetyOrdersFilled !== "number") return null;
+  if (typeof o.nextSoIndex !== "number") return null;
+  if (typeof o.stopLossPct !== "number") return null;
+  if (typeof o.baseEntryPrice !== "number") return null;
 
   return o as unknown as DcaRuntimeState;
 }

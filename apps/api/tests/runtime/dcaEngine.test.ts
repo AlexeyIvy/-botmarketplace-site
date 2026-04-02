@@ -201,6 +201,30 @@ describe("dcaEngine – applySafetyOrderFillRT", () => {
     expect(result2.exitLevelsChanged).toBe(false);
   });
 
+  it("rejects out-of-order SO fill (gap skip)", () => {
+    const active = makeActiveLadder();
+    // Try to fill SO 2 while nextSoIndex is 0 — must be rejected
+    const so2 = active.schedule!.safetyOrders[2];
+    const result = applySafetyOrderFillRT(active, 2, so2.triggerPrice, so2.qty);
+    expect(result.state).toBe(active); // unchanged
+    expect(result.exitLevelsChanged).toBe(false);
+    expect(result.description).toContain("out of order");
+  });
+
+  it("rejects SO fill one step ahead of nextSoIndex", () => {
+    const active = makeActiveLadder();
+    // Fill SO 0 correctly
+    const so0 = active.schedule!.safetyOrders[0];
+    const after0 = applySafetyOrderFillRT(active, 0, so0.triggerPrice, so0.qty).state;
+    expect(after0.nextSoIndex).toBe(1);
+
+    // Try to fill SO 2 while nextSoIndex is 1 — must be rejected
+    const so2 = after0.schedule!.safetyOrders[2];
+    const result = applySafetyOrderFillRT(after0, 2, so2.triggerPrice, so2.qty);
+    expect(result.state).toBe(after0);
+    expect(result.exitLevelsChanged).toBe(false);
+  });
+
   it("no-ops in wrong phase", () => {
     const state = initDcaState(makeConfig(), "long", 10, NOW);
     const result = applySafetyOrderFillRT(state, 0, 9900, 0.015);
@@ -298,9 +322,31 @@ describe("dcaEngine – terminal transitions", () => {
     expect(result.state.nextSoIndex).toBe(-1);
   });
 
+  it("completeDcaLadder rejects awaiting_base (no position to close)", () => {
+    const awaiting = initDcaState(makeConfig(), "long", 10, NOW);
+    const result = completeDcaLadder(awaiting, "tp_hit");
+    expect(result.state).toBe(awaiting); // unchanged
+    expect(result.state.phase).toBe("awaiting_base");
+    expect(result.exitLevelsChanged).toBe(false);
+  });
+
+  it("completeDcaLadder rejects already-cancelled state", () => {
+    const active = makeActiveLadder();
+    const cancelled = cancelDcaLadder(active, "err").state;
+    const result = completeDcaLadder(cancelled, "late");
+    expect(result.state).toBe(cancelled);
+    expect(result.state.phase).toBe("cancelled");
+  });
+
   it("cancelDcaLadder → cancelled phase", () => {
     const active = makeActiveLadder();
     const result = cancelDcaLadder(active, "bot_stopped");
+    expect(result.state.phase).toBe("cancelled");
+  });
+
+  it("cancelDcaLadder works from awaiting_base (valid: cancel before fill)", () => {
+    const awaiting = initDcaState(makeConfig(), "long", 10, NOW);
+    const result = cancelDcaLadder(awaiting, "signal_expired");
     expect(result.state.phase).toBe("cancelled");
   });
 
@@ -390,6 +436,70 @@ describe("dcaEngine – serialization", () => {
     expect(deserializeDcaState({})).toBeNull();
     expect(deserializeDcaState({ phase: "invalid" })).toBeNull();
     expect(deserializeDcaState("string")).toBeNull();
+  });
+
+  it("deserialize returns null for partially corrupted objects", () => {
+    // Has phase/config/side but missing critical numeric fields
+    expect(deserializeDcaState({
+      phase: "ladder_active",
+      config: { baseOrderSizeUsd: 100 },
+      side: "long",
+      // missing: fills, avgEntryPrice, totalQty, etc.
+    })).toBeNull();
+  });
+
+  it("deserialize returns null when fills is not an array", () => {
+    expect(deserializeDcaState({
+      phase: "ladder_active",
+      config: { baseOrderSizeUsd: 100 },
+      side: "long",
+      fills: "not_an_array",
+      avgEntryPrice: 10000,
+      totalQty: 0.01,
+      totalCostUsd: 100,
+      tpPrice: 10150,
+      slPrice: 9000,
+      safetyOrdersFilled: 0,
+      nextSoIndex: 0,
+      stopLossPct: 10,
+      baseEntryPrice: 10000,
+    })).toBeNull();
+  });
+
+  it("deserialize returns null when avgEntryPrice is NaN", () => {
+    expect(deserializeDcaState({
+      phase: "ladder_active",
+      config: { baseOrderSizeUsd: 100 },
+      side: "long",
+      fills: [],
+      avgEntryPrice: NaN,
+      totalQty: 0.01,
+      totalCostUsd: 100,
+      tpPrice: 10150,
+      slPrice: 9000,
+      safetyOrdersFilled: 0,
+      nextSoIndex: 0,
+      stopLossPct: 10,
+      baseEntryPrice: 10000,
+    })).toBeNull();
+  });
+
+  it("deserialize returns null for invalid side value", () => {
+    expect(deserializeDcaState({
+      phase: "ladder_active",
+      config: { baseOrderSizeUsd: 100 },
+      side: "both", // invalid
+      fills: [],
+      avgEntryPrice: 10000,
+      totalQty: 0.01,
+      totalCostUsd: 100,
+      tpPrice: 10150,
+      slPrice: 9000,
+      safetyOrdersFilled: 0,
+      nextSoIndex: 0,
+      stopLossPct: 10,
+      baseEntryPrice: 10000,
+    })).toBeNull();
   });
 });
 

@@ -53,6 +53,12 @@ export function extractDcaConfig(dslJson: unknown): DcaConfig | null {
 /**
  * Extract stop-loss percentage from DSL exit configuration.
  * Falls back to risk.riskPerTradePct if exit.stopLoss is not fixed_pct.
+ *
+ * TODO(#132-slice2): For atr_multiple and fixed_price SL types, the backtest
+ * evaluator derives SL% from abs(entry - slPrice) / entry * 100 at entry time.
+ * This bridge currently falls back to riskPerTradePct for those types, which will
+ * produce different SL levels than backtest. When worker integration is wired,
+ * accept a computedSlPrice parameter and derive % the same way the evaluator does.
  */
 export function extractSlPct(dslJson: unknown): number {
   if (!dslJson || typeof dslJson !== "object") return 5;
