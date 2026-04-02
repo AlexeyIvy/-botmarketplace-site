@@ -72,6 +72,11 @@ describe("annualizedBasisYieldPct", () => {
     expect(annualizedBasisYieldPct(50, -1)).toBe(0);
   });
 
+  it("handles negative basis (backwardation)", () => {
+    // -50 bps daily → -50/10000 * 365 * 100 = -182.5%
+    expect(annualizedBasisYieldPct(-50, 1)).toBeCloseTo(-182.5, 1);
+  });
+
   it("scales with holding period", () => {
     const daily = annualizedBasisYieldPct(10, 1);
     const weekly = annualizedBasisYieldPct(10, 7);

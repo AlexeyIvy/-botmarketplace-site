@@ -109,6 +109,11 @@ describe("fundingStreak", () => {
     const snaps = makeSnapshots([0.0001, 0.0002, 0.0003, 0.0004, 0.0005]);
     expect(fundingStreak(snaps)).toBe(5);
   });
+
+  it("all-zero rates → streak = 1 (zero is non-directional)", () => {
+    const snaps = makeSnapshots([0, 0, 0]);
+    expect(fundingStreak(snaps)).toBe(1);
+  });
 });
 
 // ── buildCandidate ──────────────────────────────────────────────────────────
@@ -138,6 +143,14 @@ describe("buildCandidate", () => {
     expect(c.currentRate).toBe(0);
     expect(c.annualizedYieldPct).toBe(0);
     expect(c.streak).toBe(0);
+  });
+
+  it("handles negative funding rates (short-pay)", () => {
+    const snaps = makeSnapshots([-0.0002, -0.0003, -0.0004]);
+    const c = buildCandidate("ETHUSDT", snaps, null);
+    expect(c.currentRate).toBe(-0.0004);
+    expect(c.annualizedYieldPct).toBeLessThan(0);
+    expect(c.streak).toBe(3);
   });
 });
 
@@ -217,6 +230,22 @@ describe("scanFundingCandidates", () => {
   it("returns empty for empty input", () => {
     const results = scanFundingCandidates(new Map());
     expect(results).toEqual([]);
+  });
+
+  it("ranks all-negative funding candidates by absolute yield", () => {
+    const data = new Map<string, { snapshots: FundingSnapshot[]; spread: SpreadSnapshot | null }>();
+    data.set("BTCUSDT", {
+      snapshots: makeSnapshots([-0.0005, -0.0005, -0.0005, -0.0005], "BTCUSDT"),
+      spread: makeSpread("BTCUSDT", 67000, 66990),
+    });
+    data.set("ETHUSDT", {
+      snapshots: makeSnapshots([-0.001, -0.001, -0.001, -0.001], "ETHUSDT"),
+      spread: makeSpread("ETHUSDT", 3500, 3499),
+    });
+    const results = scanFundingCandidates(data, { minAnnualizedYieldPct: 5, minStreak: 3, maxBasisBps: 50 });
+    expect(results.length).toBe(2);
+    expect(results[0].symbol).toBe("ETHUSDT"); // higher abs yield
+    expect(results[0].annualizedYieldPct).toBeLessThan(0);
   });
 
   it("is deterministic", () => {

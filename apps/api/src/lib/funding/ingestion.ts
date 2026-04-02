@@ -65,12 +65,19 @@ export function parseFundingHistory(items: BybitFundingHistoryItem[]): FundingSn
 /**
  * Parse a Bybit linear ticker into a FundingSnapshot (current rate).
  */
-export function parseLinearTicker(ticker: BybitLinearTicker): FundingSnapshot {
+/**
+ * Parse a Bybit linear ticker into a FundingSnapshot (current rate).
+ *
+ * @param ticker    Bybit linear ticker.
+ * @param timestamp Observation time (ms epoch). Defaults to Date.now() for live use;
+ *                  pass explicitly for deterministic testing.
+ */
+export function parseLinearTicker(ticker: BybitLinearTicker, timestamp?: number): FundingSnapshot {
   return {
     symbol: ticker.symbol,
     fundingRate: parseFloat(ticker.fundingRate),
     nextFundingAt: Number(ticker.nextFundingTime),
-    timestamp: Date.now(), // current observation time
+    timestamp: timestamp ?? Date.now(),
   };
 }
 

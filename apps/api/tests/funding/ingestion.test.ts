@@ -37,6 +37,40 @@ describe("parseFundingHistoryItem", () => {
   });
 });
 
+// ── parseLinearTicker ───────────────────────────────────────────────────────
+
+describe("parseLinearTicker", () => {
+  it("parses ticker fields correctly with explicit timestamp", async () => {
+    const { parseLinearTicker } = await import("../../src/lib/funding/ingestion.js");
+    const ticker: BybitLinearTicker = {
+      symbol: "ETHUSDT",
+      fundingRate: "-0.00015",
+      nextFundingTime: "1700028800000",
+      lastPrice: "3500.50",
+    };
+    const snap = parseLinearTicker(ticker, 1700000000000);
+    expect(snap.symbol).toBe("ETHUSDT");
+    expect(snap.fundingRate).toBe(-0.00015);
+    expect(snap.nextFundingAt).toBe(1700028800000);
+    expect(snap.timestamp).toBe(1700000000000);
+  });
+
+  it("uses Date.now() when no timestamp provided", async () => {
+    const { parseLinearTicker } = await import("../../src/lib/funding/ingestion.js");
+    const ticker: BybitLinearTicker = {
+      symbol: "BTCUSDT",
+      fundingRate: "0.0001",
+      nextFundingTime: "1700028800000",
+      lastPrice: "67000",
+    };
+    const before = Date.now();
+    const snap = parseLinearTicker(ticker);
+    const after = Date.now();
+    expect(snap.timestamp).toBeGreaterThanOrEqual(before);
+    expect(snap.timestamp).toBeLessThanOrEqual(after);
+  });
+});
+
 // ── parseFundingHistory ─────────────────────────────────────────────────────
 
 describe("parseFundingHistory", () => {
