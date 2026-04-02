@@ -679,3 +679,65 @@ model BacktestSweep {
   @@index([workspaceId])
   @@index([workspaceId, createdAt(sort: Desc)])
 }
+
+// ── Stage 7: Funding Rate Arbitrage (#139, #140) ─────────────────────────────
+
+model FundingSnapshot {
+  id            String   @id @default(cuid())
+  symbol        String
+  fundingRate   Float
+  nextFundingAt DateTime
+  timestamp     DateTime
+
+  @@index([symbol, timestamp])
+}
+
+model SpreadSnapshot {
+  id        String   @id @default(cuid())
+  symbol    String
+  spotPrice Float
+  perpPrice Float
+  basisBps  Float
+  timestamp DateTime
+
+  @@index([symbol, timestamp])
+}
+
+enum HedgeStatus {
+  PLANNED
+  OPENING
+  OPEN
+  CLOSING
+  CLOSED
+  FAILED
+}
+
+model HedgePosition {
+  id              String      @id @default(cuid())
+  botRunId        String
+  symbol          String
+  status          HedgeStatus @default(PLANNED)
+  entryBasisBps   Float
+  fundingCollected Float      @default(0)
+  createdAt       DateTime    @default(now())
+  closedAt        DateTime?
+
+  legs LegExecution[]
+
+  @@index([botRunId])
+  @@index([symbol, status])
+}
+
+model LegExecution {
+  id        String   @id @default(cuid())
+  hedgeId   String
+  side      String   // SPOT_BUY | PERP_SHORT | SPOT_SELL | PERP_CLOSE
+  price     Float
+  quantity  Float
+  fee       Float    @default(0)
+  timestamp DateTime @default(now())
+
+  hedge HedgePosition @relation(fields: [hedgeId], references: [id], onDelete: Cascade)
+
+  @@index([hedgeId])
+}
