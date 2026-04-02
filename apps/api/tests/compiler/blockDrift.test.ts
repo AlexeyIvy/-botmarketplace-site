@@ -161,8 +161,12 @@ describe("Support status snapshot", () => {
       "atr",
       "bollinger",
       "constant",
+      "fair_value_gap",
+      "liquidity_sweep",
       "macd",
+      "market_structure_shift",
       "or_gate",
+      "order_block",
       "proximity_filter",
       "volume",
       "volume_profile",
@@ -170,8 +174,8 @@ describe("Support status snapshot", () => {
   });
 
   it("block count matches expected total", () => {
-    expect(uiBlockTypes.length).toBe(24);
-    expect(compilerBlockTypes.length).toBe(24);
-    expect(supportMapTypes.length).toBe(24);
+    expect(uiBlockTypes.length).toBe(28);
+    expect(compilerBlockTypes.length).toBe(28);
+    expect(supportMapTypes.length).toBe(28);
   });
 });

@@ -511,6 +511,71 @@ export const BLOCK_DEFS: BlockDef[] = [
     ],
     description: "Gates signals by proximity to a reference level (e.g., near POC/VAH/VAL).",
   },
+
+  // ── SMC Pattern Primitives (#137) ──────────────────────────────────────────
+  {
+    type: "liquidity_sweep",
+    label: "Liquidity Sweep",
+    category: "indicator",
+    inputs: [
+      { id: "candles", label: "candles", dataType: "Series<OHLCV>", required: true },
+    ],
+    outputs: [
+      { id: "sweep", label: "sweep", dataType: "Series<number>", required: false },
+    ],
+    params: [
+      { id: "swingLen", label: "Swing Length", type: "number", defaultValue: 3, min: 1, max: 20 },
+      { id: "maxAge", label: "Max Age (bars)", type: "number", defaultValue: 50, min: 5, max: 200 },
+    ],
+    description: "Detects liquidity sweeps at swing highs/lows. Output: +1 bullish sweep, -1 bearish sweep, 0 no sweep.",
+  },
+  {
+    type: "fair_value_gap",
+    label: "Fair Value Gap",
+    category: "indicator",
+    inputs: [
+      { id: "candles", label: "candles", dataType: "Series<OHLCV>", required: true },
+    ],
+    outputs: [
+      { id: "fvg", label: "fvg", dataType: "Series<number>", required: false },
+    ],
+    params: [
+      { id: "minGapRatio", label: "Min Gap Ratio", type: "number", defaultValue: 0, min: 0, max: 5 },
+    ],
+    description: "Detects fair value gaps (3-candle imbalances). Output: +1 bullish FVG, -1 bearish FVG, 0 none.",
+  },
+  {
+    type: "order_block",
+    label: "Order Block",
+    category: "indicator",
+    inputs: [
+      { id: "candles", label: "candles", dataType: "Series<OHLCV>", required: true },
+    ],
+    outputs: [
+      { id: "ob", label: "ob", dataType: "Series<number>", required: false },
+    ],
+    params: [
+      { id: "atrPeriod", label: "ATR Period", type: "number", defaultValue: 14, min: 2, max: 50 },
+      { id: "minImpulseMultiple", label: "Min Impulse (×ATR)", type: "number", defaultValue: 1.5, min: 0.5, max: 10 },
+      { id: "maxLookback", label: "Max Lookback", type: "number", defaultValue: 5, min: 1, max: 20 },
+    ],
+    description: "Detects order blocks (last opposing candle before impulse). Output: +1 bullish OB, -1 bearish OB, 0 none.",
+  },
+  {
+    type: "market_structure_shift",
+    label: "Market Structure",
+    category: "indicator",
+    inputs: [
+      { id: "candles", label: "candles", dataType: "Series<OHLCV>", required: true },
+    ],
+    outputs: [
+      { id: "mss", label: "mss", dataType: "Series<number>", required: false },
+    ],
+    params: [
+      { id: "swingLen", label: "Swing Length", type: "number", defaultValue: 3, min: 1, max: 20 },
+    ],
+    description: "Detects market structure shifts (BOS/CHoCH). Output: +1 bullish BOS, -1 bearish BOS, +2 bullish CHoCH, -2 bearish CHoCH, 0 none.",
+  },
 ];
 
 // ---------------------------------------------------------------------------

@@ -67,4 +67,10 @@ export const BLOCK_SUPPORT_MAP: Record<string, BlockSupportEntry> = {
   // ── MTF Confluence (#135) ──────────────────────────────────────────────────
   volume_profile:    { status: "compile-only", note: "VolumeProfile indicator #135. Compiler handler extracts params; evaluator runtime pending #134" },
   proximity_filter:  { status: "compile-only", note: "ProximityFilter #135. Compiler handler extracts params; evaluator runtime pending #134" },
+
+  // ── SMC Pattern Primitives (#137, #138) ────────────────────────────────────
+  liquidity_sweep:         { status: "compile-only", note: "SMC liquidity sweep #137. Compiler handler extracts swingLen/maxAge; evaluator runtime pending #138" },
+  fair_value_gap:          { status: "compile-only", note: "SMC fair value gap #137. Compiler handler extracts minGapRatio; evaluator runtime pending #138" },
+  order_block:             { status: "compile-only", note: "SMC order block #137. Compiler handler extracts atrPeriod/impulseMultiple; evaluator runtime pending #138" },
+  market_structure_shift:  { status: "compile-only", note: "SMC market structure shift #137. Compiler handler extracts swingLen; evaluator runtime pending #138" },
 };
