@@ -32,15 +32,15 @@ export interface BlockSupportEntry {
 export const BLOCK_SUPPORT_MAP: Record<string, BlockSupportEntry> = {
   // ── Input ───────────────────────────────────────────────────────────────────
   candles:      { status: "supported",    note: "Core input block, fully supported since Phase 3" },
-  constant:     { status: "compile-only", note: "Compiler handler extracts value; runtime DSL execution pending (#124)" },
+  constant:     { status: "supported",    note: "Evaluator runtime wired in dslEvaluator getIndicatorValues" },
 
   // ── Indicators ──────────────────────────────────────────────────────────────
   SMA:          { status: "supported",    note: "Fully supported since Phase 3" },
   EMA:          { status: "supported",    note: "Fully supported since Phase 3" },
   RSI:          { status: "supported",    note: "Fully supported since Phase 3" },
   macd:         { status: "compile-only", note: "Compiler handler added in #122; backtest runtime pending (#125)" },
-  bollinger:    { status: "compile-only", note: "Compiler handler added in #122; backtest runtime pending (#125)" },
-  atr:          { status: "compile-only", note: "Compiler handler added in #122; backtest runtime pending (#125)" },
+  bollinger:    { status: "supported",    note: "Evaluator runtime wired in dslEvaluator getIndicatorValues (bb_lower/upper/middle)" },
+  atr:          { status: "supported",    note: "Evaluator runtime wired in dslEvaluator getIndicatorValues" },
   volume:       { status: "compile-only", note: "Compiler handler added in #122; backtest runtime pending (#125)" },
   vwap:         { status: "supported",    note: "Indicator engine #125 + DSL evaluator runtime #126" },
   adx:          { status: "supported",    note: "Indicator engine #125 + DSL evaluator runtime #126" },

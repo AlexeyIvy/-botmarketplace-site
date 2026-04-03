@@ -136,8 +136,11 @@ describe("Support status snapshot", () => {
       "RSI",
       "SMA",
       "adx",
+      "atr",
+      "bollinger",
       "candles",
       "compare",
+      "constant",
       "cross",
       "dca_config",
       "enter_adaptive",
@@ -162,9 +165,6 @@ describe("Support status snapshot", () => {
 
     expect(compileOnly).toEqual([
       "and_gate",
-      "atr",
-      "bollinger",
-      "constant",
       "macd",
       "or_gate",
       "proximity_filter",
