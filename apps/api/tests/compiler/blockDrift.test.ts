@@ -136,6 +136,7 @@ describe("Support status snapshot", () => {
       "RSI",
       "SMA",
       "adx",
+      "and_gate",
       "atr",
       "bollinger",
       "candles",
@@ -149,6 +150,7 @@ describe("Support status snapshot", () => {
       "fair_value_gap",
       "liquidity_sweep",
       "market_structure_shift",
+      "or_gate",
       "order_block",
       "stop_loss",
       "supertrend",
@@ -164,9 +166,7 @@ describe("Support status snapshot", () => {
       .sort();
 
     expect(compileOnly).toEqual([
-      "and_gate",
       "macd",
-      "or_gate",
       "proximity_filter",
       "volume",
       "volume_profile",

@@ -49,8 +49,8 @@ export const BLOCK_SUPPORT_MAP: Record<string, BlockSupportEntry> = {
   // ── Logic ───────────────────────────────────────────────────────────────────
   compare:      { status: "supported",    note: "Fully supported since Phase 4" },
   cross:        { status: "supported",    note: "Fully supported since Phase 3" },
-  and_gate:     { status: "compile-only", note: "Compiler handler added in #122; runtime pending (#124)" },
-  or_gate:      { status: "compile-only", note: "Compiler handler added in #122; runtime pending (#124)" },
+  and_gate:     { status: "supported",    note: "Recursive evaluateSignal with conditions.every(), maxDepth=5" },
+  or_gate:      { status: "supported",    note: "Recursive evaluateSignal with conditions.some(), maxDepth=5" },
 
   // ── Execution ───────────────────────────────────────────────────────────────
   enter_long:     { status: "supported",    note: "Fully supported since Phase 3" },

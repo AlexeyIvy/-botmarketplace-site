@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { runDslBacktest, parseDsl } from "../../src/lib/dslEvaluator.js";
+import { runDslBacktest, parseDsl, evaluateSignal } from "../../src/lib/dslEvaluator.js";
+import type { DslSignal } from "../../src/lib/dslEvaluator.js";
 import { makeUptrend, makeDowntrend, makeFlat, makeFlatThenUp, makeFlatThenDown } from "../fixtures/candles.js";
 
 // ---------------------------------------------------------------------------
@@ -504,5 +505,86 @@ describe("dslEvaluator – golden backtest (regression fixture)", () => {
     // Save and re-run to verify determinism
     const report2 = runDslBacktest(candles, dsl);
     expect(report).toEqual(report2);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Composed signals: and_gate / or_gate (Phase 10.2)
+// ---------------------------------------------------------------------------
+
+describe("evaluateSignal – composed and/or gates", () => {
+  // Helpers: minimal candles + cache for unit-level signal tests
+  const candles = makeUptrend(30, 100, 1);
+  const cache = {} as Parameters<typeof evaluateSignal>[3];
+
+  const compareTrue: DslSignal = {
+    type: "compare",
+    op: ">",
+    left: { blockType: "constant", value: 10 } as unknown as DslSignal["left"],
+    right: { blockType: "constant", value: 5 } as unknown as DslSignal["right"],
+  };
+
+  const compareFalse: DslSignal = {
+    type: "compare",
+    op: ">",
+    left: { blockType: "constant", value: 3 } as unknown as DslSignal["left"],
+    right: { blockType: "constant", value: 5 } as unknown as DslSignal["right"],
+  };
+
+  it("and(true, true) → true", () => {
+    const signal: DslSignal = { type: "and", conditions: [compareTrue, compareTrue] };
+    expect(evaluateSignal(signal, 10, candles, cache)).toBe(true);
+  });
+
+  it("and(true, false) → false", () => {
+    const signal: DslSignal = { type: "and", conditions: [compareTrue, compareFalse] };
+    expect(evaluateSignal(signal, 10, candles, cache)).toBe(false);
+  });
+
+  it("and(false, false) → false", () => {
+    const signal: DslSignal = { type: "and", conditions: [compareFalse, compareFalse] };
+    expect(evaluateSignal(signal, 10, candles, cache)).toBe(false);
+  });
+
+  it("or(false, true) → true", () => {
+    const signal: DslSignal = { type: "or", conditions: [compareFalse, compareTrue] };
+    expect(evaluateSignal(signal, 10, candles, cache)).toBe(true);
+  });
+
+  it("or(false, false) → false", () => {
+    const signal: DslSignal = { type: "or", conditions: [compareFalse, compareFalse] };
+    expect(evaluateSignal(signal, 10, candles, cache)).toBe(false);
+  });
+
+  it("nested: and(or(false, true), true) → true", () => {
+    const orSignal: DslSignal = { type: "or", conditions: [compareFalse, compareTrue] };
+    const signal: DslSignal = { type: "and", conditions: [orSignal, compareTrue] };
+    expect(evaluateSignal(signal, 10, candles, cache)).toBe(true);
+  });
+
+  it("nested: or(and(true, false), and(true, true)) → true", () => {
+    const andFalse: DslSignal = { type: "and", conditions: [compareTrue, compareFalse] };
+    const andTrue: DslSignal = { type: "and", conditions: [compareTrue, compareTrue] };
+    const signal: DslSignal = { type: "or", conditions: [andFalse, andTrue] };
+    expect(evaluateSignal(signal, 10, candles, cache)).toBe(true);
+  });
+
+  it("maxDepth exceeded → false", () => {
+    // Build 6-level deep nesting (exceeds MAX_SIGNAL_DEPTH=5)
+    let deep: DslSignal = compareTrue;
+    for (let d = 0; d < 6; d++) {
+      deep = { type: "and", conditions: [deep] };
+    }
+    expect(evaluateSignal(deep, 10, candles, cache)).toBe(false);
+  });
+
+  it("empty conditions → false", () => {
+    expect(evaluateSignal({ type: "and", conditions: [] }, 10, candles, cache)).toBe(false);
+    expect(evaluateSignal({ type: "or", conditions: [] }, 10, candles, cache)).toBe(false);
+  });
+
+  it("undefined conditions → false", () => {
+    expect(evaluateSignal({ type: "and" }, 10, candles, cache)).toBe(false);
+    expect(evaluateSignal({ type: "or" }, 10, candles, cache)).toBe(false);
   });
 });
