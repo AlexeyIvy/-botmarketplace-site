@@ -13,9 +13,9 @@
  * Stage 3 — Issue #129
  */
 
-import pino from "pino";
+import { logger } from "../logger.js";
 
-const log = pino({ name: "instrumentCache" });
+const log = logger.child({ module: "instrumentCache" });
 
 // ---------------------------------------------------------------------------
 // Types
