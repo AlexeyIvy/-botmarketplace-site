@@ -12,3 +12,5 @@ export { calcADX } from "./adx.js";
 export type { ADXResult } from "./adx.js";
 export { calcSuperTrend } from "./supertrend.js";
 export type { SuperTrendResult } from "./supertrend.js";
+export { calcMACD } from "./macd.js";
+export type { MACDResult } from "./macd.js";
