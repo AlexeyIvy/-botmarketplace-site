@@ -25,7 +25,7 @@
  * dedicated worker process.
  */
 
-import pino from "pino";
+import { logger } from "./logger.js";
 import { Prisma } from "@prisma/client";
 import { prisma } from "./prisma.js";
 import { transition, isValidTransition } from "./stateMachine.js";
@@ -82,13 +82,7 @@ import {
   DEFAULT_ERROR_PAUSE_THRESHOLD,
 } from "./safetyGuards.js";
 
-const workerLog = pino({
-  name: "botWorker",
-  transport:
-    process.env.NODE_ENV !== "production"
-      ? { target: "pino-pretty" }
-      : undefined,
-});
+const workerLog = logger.child({ module: "botWorker" });
 
 const WORKER_ID = `worker-${process.pid}`;
 const POLL_INTERVAL_MS = 4_000;

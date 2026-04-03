@@ -127,6 +127,15 @@ export async function buildApp() {
     });
   });
 
+  // Top-level /health for nginx/monitoring (no auth, no prefix)
+  app.get("/health", async (_request, reply) => {
+    return reply.send({
+      status: "ok",
+      uptime: process.uptime(),
+      timestamp: new Date().toISOString(),
+    });
+  });
+
   // Primary versioned routes: /api/v1/*
   await app.register(registerRoutes, { prefix: "/api/v1" });
 
