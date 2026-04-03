@@ -103,12 +103,14 @@ export interface DslSignalRef {
 }
 
 export interface DslSignal {
-  type: string; // "crossover" | "crossunder" | "compare" | "direct" | "raw"
+  type: string; // "crossover" | "crossunder" | "compare" | "and" | "or" | "direct" | "raw"
   op?: string;
   fast?: DslSignalRef | null;
   slow?: DslSignalRef | null;
   left?: DslSignalRef | null;
   right?: DslSignalRef | null;
+  /** Sub-conditions for composed signals (type "and" / "or") */
+  conditions?: DslSignal[];
 }
 
 export interface DslExitLevel {
@@ -506,13 +508,27 @@ export function parseDsl(dslJson: unknown): ParsedDsl {
 // Entry signal evaluation
 // ---------------------------------------------------------------------------
 
+const MAX_SIGNAL_DEPTH = 5;
+
 export function evaluateSignal(
   signal: DslSignal | undefined,
   i: number,
   candles: Candle[],
   cache: IndicatorCache,
+  _depth = 0,
 ): boolean {
   if (!signal) return false;
+  if (_depth >= MAX_SIGNAL_DEPTH) return false;
+
+  // Composed conditions: and / or
+  if (signal.type === "and") {
+    if (!signal.conditions || signal.conditions.length === 0) return false;
+    return signal.conditions.every((sub) => evaluateSignal(sub, i, candles, cache, _depth + 1));
+  }
+  if (signal.type === "or") {
+    if (!signal.conditions || signal.conditions.length === 0) return false;
+    return signal.conditions.some((sub) => evaluateSignal(sub, i, candles, cache, _depth + 1));
+  }
 
   if (signal.type === "crossover" || signal.type === "crossunder") {
     // Cross signal: fast crosses over/under slow
