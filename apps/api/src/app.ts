@@ -47,7 +47,7 @@ async function registerRoutes(scope: import("fastify").FastifyInstance) {
   await scope.register(botRoutes);
   await scope.register(runRoutes);
   await scope.register(intentRoutes);
-  await scope.register(withRateLimit(labRoutes, 10, "1 minute"));   // /lab/backtest*: 10 req/min
+  await scope.register(labRoutes);   // backtest routes have per-route rateLimit (5 req/min)
   await scope.register(datasetRoutes);
   await scope.register(exchangeRoutes);
   await scope.register(withRateLimit(terminalRoutes, 30, "1 minute")); // /terminal/*: 30 req/min
