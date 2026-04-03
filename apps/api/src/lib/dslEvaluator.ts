@@ -26,6 +26,8 @@ import { calcATR } from "./indicators/atr.js";
 import { calcADX } from "./indicators/adx.js";
 import { calcSuperTrend } from "./indicators/supertrend.js";
 import { calcVWAP } from "./indicators/vwap.js";
+import { calcMACD } from "./indicators/macd.js";
+import type { MACDResult } from "./indicators/macd.js";
 import { resolveMtfIndicator, createMtfCache } from "./mtf/mtfIndicatorResolver.js";
 import { fvgSeries, sweepSeries, orderBlockSeries, mssSeries } from "./runtime/patternEngine.js";
 import type { DcaConfig, SafetyOrderLevel, DcaPositionState } from "./dcaPlanning.js";
@@ -194,6 +196,8 @@ export interface IndicatorCache {
   supertrend: Map<string, { supertrend: (number | null)[]; direction: (1 | -1 | null)[] }>;
   vwap: (number | null)[] | null;
   bollinger: Map<string, BollingerBandsResult>;
+  macd: Map<string, MACDResult>;
+  volume: (number | null)[] | null;
   /** SMC pattern series cache (keyed by "type_params" string). */
   smcPatterns: Map<string, (number | null)[]>;
 }
@@ -208,6 +212,8 @@ export function createIndicatorCache(): IndicatorCache {
     supertrend: new Map(),
     vwap: null,
     bollinger: new Map(),
+    macd: new Map(),
+    volume: null,
     smcPatterns: new Map(),
   };
 }
@@ -335,7 +341,10 @@ function getBollingerBands(
 
 export function getIndicatorValues(
   blockType: string,
-  params: { length?: number; period?: number; atrPeriod?: number; multiplier?: number },
+  params: {
+    length?: number; period?: number; atrPeriod?: number; multiplier?: number;
+    fastPeriod?: number; slowPeriod?: number; signalPeriod?: number;
+  },
   candles: Candle[],
   cache: IndicatorCache,
 ): (number | null)[] {
@@ -399,6 +408,27 @@ export function getIndicatorValues(
   if (type === "bollinger_middle" || type === "bb_middle" || type === "bollinger") {
     const bb = getBollingerBands(params, candles, cache);
     return bb.middle;
+  }
+
+  if (type === "macd" || type === "macd_signal" || type === "macd_histogram") {
+    const fast = params.fastPeriod ?? 12;
+    const slow = params.slowPeriod ?? 26;
+    const sig = params.signalPeriod ?? 9;
+    const key = `${fast}_${slow}_${sig}`;
+    if (!cache.macd.has(key)) {
+      cache.macd.set(key, calcMACD(candles, fast, slow, sig));
+    }
+    const result = cache.macd.get(key)!;
+    if (type === "macd_signal") return result.signal;
+    if (type === "macd_histogram") return result.histogram;
+    return result.histogram; // "macd" block returns histogram (primary signal for compare)
+  }
+
+  if (type === "volume") {
+    if (!cache.volume) {
+      cache.volume = candles.map((c) => c.volume);
+    }
+    return cache.volume;
   }
 
   if (type === "constant") {

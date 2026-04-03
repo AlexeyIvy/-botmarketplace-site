@@ -149,12 +149,14 @@ describe("Support status snapshot", () => {
       "enter_short",
       "fair_value_gap",
       "liquidity_sweep",
+      "macd",
       "market_structure_shift",
       "or_gate",
       "order_block",
       "stop_loss",
       "supertrend",
       "take_profit",
+      "volume",
       "vwap",
     ]);
   });
@@ -166,9 +168,7 @@ describe("Support status snapshot", () => {
       .sort();
 
     expect(compileOnly).toEqual([
-      "macd",
       "proximity_filter",
-      "volume",
       "volume_profile",
     ]);
   });
