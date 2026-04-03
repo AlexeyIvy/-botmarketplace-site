@@ -20,6 +20,23 @@ import { preferencesRoutes } from "./routes/preferences.js";
 import { usersRoutes } from "./routes/users.js";
 import { demoRoutes } from "./routes/demo.js";
 
+/** Wrap a route plugin with a per-route rate-limit override. */
+function withRateLimit(
+  plugin: import("fastify").FastifyPluginAsync,
+  max: number,
+  timeWindow: string,
+): import("fastify").FastifyPluginAsync {
+  return async function rateLimitedPlugin(scope) {
+    scope.addHook("onRoute", (routeOptions) => {
+      routeOptions.config = {
+        ...(routeOptions.config as Record<string, unknown> | undefined),
+        rateLimit: { max, timeWindow },
+      };
+    });
+    await scope.register(plugin);
+  };
+}
+
 /** Registers all domain routes. */
 async function registerRoutes(scope: import("fastify").FastifyInstance) {
   await scope.register(healthzRoutes);
@@ -30,10 +47,10 @@ async function registerRoutes(scope: import("fastify").FastifyInstance) {
   await scope.register(botRoutes);
   await scope.register(runRoutes);
   await scope.register(intentRoutes);
-  await scope.register(labRoutes);
+  await scope.register(labRoutes);   // backtest routes have per-route rateLimit (5 req/min)
   await scope.register(datasetRoutes);
   await scope.register(exchangeRoutes);
-  await scope.register(terminalRoutes);
+  await scope.register(withRateLimit(terminalRoutes, 30, "1 minute")); // /terminal/*: 30 req/min
   await scope.register(aiRoutes);
   await scope.register(preferencesRoutes);
   await scope.register(usersRoutes);
@@ -54,10 +71,10 @@ export async function buildApp() {
 
   await app.register(cors, { origin: true });
 
-  // Global rate limit — generous baseline; sensitive routes override below
+  // Global rate limit — 100 req/min baseline; lab & terminal routes override below
   await app.register(rateLimit, {
     global: true,
-    max: 200,
+    max: 100,
     timeWindow: "1 minute",
     errorResponseBuilder: (_req, context) => ({
       type: "about:blank",

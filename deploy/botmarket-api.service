@@ -11,7 +11,7 @@ Wants=network-online.target
 
 [Service]
 Type=simple
-User=root
+User=botmarket
 WorkingDirectory=/opt/-botmarketplace-site/apps/api
 EnvironmentFile=/opt/-botmarketplace-site/.env
 ExecStart=/usr/bin/node dist/server.js
@@ -23,7 +23,7 @@ SyslogIdentifier=botmarket-api
 
 # Ensure node_modules/.bin is reachable (for prisma etc.)
 Environment=NODE_ENV=production
-Environment=PATH=/usr/bin:/usr/local/bin:/root/.local/share/pnpm
+Environment=PATH=/usr/bin:/usr/local/bin:/usr/local/share/pnpm
 
 [Install]
 WantedBy=multi-user.target
