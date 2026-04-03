@@ -1,6 +1,7 @@
 import type { FastifyInstance } from "fastify";
 import { prisma } from "../lib/prisma.js";
 import { problem } from "../lib/problem.js";
+import { logger } from "../lib/logger.js";
 import { resolveWorkspace } from "../lib/workspace.js";
 import { runBacktest } from "../lib/backtest.js";
 import { applyDslSweepParam } from "../lib/dslSweepParam.js";
@@ -800,7 +801,7 @@ async function runSweepAsync(sweepId: string): Promise<void> {
       where: { id: sweepId },
       data: { status: "FAILED" },
     }).catch(() => undefined);
-    console.error(`Sweep ${sweepId} failed:`, msg);
+    logger.error({ sweepId, error: msg }, "Sweep failed");
   }
 }
 
