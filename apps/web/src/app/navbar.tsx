@@ -7,6 +7,7 @@ import { getToken, clearAuth, apiFetchNoWorkspace } from "../lib/api";
 
 const NAV_ITEMS = [
   { href: "/terminal", label: "Terminal" },
+  { href: "/terminal/funding", label: "Funding" },
   { href: "/lab", label: "Lab" },
   { href: "/factory", label: "Factory" },
 ] as const;
