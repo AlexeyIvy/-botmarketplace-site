@@ -49,6 +49,7 @@
               "additionalProperties": true
             },
             "source": { "type": "string", "enum": ["open", "high", "low", "close"], "default": "close" },
+            "mode": { "type": "string", "enum": ["price_vs_indicator", "indicator_sign"], "default": "price_vs_indicator" },
             "long": {
               "type": "object",
               "required": ["op"],
