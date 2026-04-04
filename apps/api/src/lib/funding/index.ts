@@ -49,3 +49,13 @@ export type {
   FundingCandidate,
   ScannerThresholds,
 } from "./types.js";
+export {
+  fetchFundingHistory,
+  fetchLinearTickers,
+  fetchSpotTickers,
+} from "./fetcher.js";
+export {
+  ingestFundingRates,
+  ingestSpreads,
+  runIngestion,
+} from "./ingestJob.js";
