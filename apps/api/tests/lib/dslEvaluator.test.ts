@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { runDslBacktest, parseDsl, evaluateSignal } from "../../src/lib/dslEvaluator.js";
-import type { DslSignal } from "../../src/lib/dslEvaluator.js";
+import { runDslBacktest, parseDsl, evaluateSignal, getIndicatorValues, createIndicatorCache, determineSide } from "../../src/lib/dslEvaluator.js";
+import type { DslSignal, DslEntry } from "../../src/lib/dslEvaluator.js";
 import { makeUptrend, makeDowntrend, makeFlat, makeFlatThenUp, makeFlatThenDown } from "../fixtures/candles.js";
 
 // ---------------------------------------------------------------------------
@@ -586,5 +586,66 @@ describe("evaluateSignal – composed and/or gates", () => {
   it("undefined conditions → false", () => {
     expect(evaluateSignal({ type: "and" }, 10, candles, cache)).toBe(false);
     expect(evaluateSignal({ type: "or" }, 10, candles, cache)).toBe(false);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Phase 12.2 — Unknown indicator type returns nulls
+// ---------------------------------------------------------------------------
+
+describe("dslEvaluator – unknown indicator type", () => {
+  it("returns array of nulls with correct length for unknown indicator type", () => {
+    const candles = makeFlat(30, 100);
+    const cache = createIndicatorCache();
+    const result = getIndicatorValues("nonexistent_typo", {}, candles, cache);
+
+    expect(result.length).toBe(candles.length);
+    expect(result.every(v => v === null)).toBe(true);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Phase 12.1 — determineSide with indicator_sign mode
+// ---------------------------------------------------------------------------
+
+describe("dslEvaluator – sideCondition indicator_sign mode", () => {
+  const candles = makeFlat(30, 100);
+  const cache = createIndicatorCache();
+
+  // Pre-fill cache with known constant values for testing
+  function makeEntry(mode: string | undefined, constantVal: number): DslEntry {
+    return {
+      sideCondition: {
+        indicator: { type: "constant", length: constantVal } as any,
+        long: { op: "gt" },
+        short: { op: "lt" },
+        ...(mode ? { mode: mode as any } : {}),
+      },
+    };
+  }
+
+  it("mode=indicator_sign, positive value → long", () => {
+    const entry = makeEntry("indicator_sign", 1);
+    const side = determineSide(entry, 15, candles, cache);
+    expect(side).toBe("long");
+  });
+
+  it("mode=indicator_sign, negative value → short", () => {
+    const entry = makeEntry("indicator_sign", -1);
+    const side = determineSide(entry, 15, candles, cache);
+    expect(side).toBe("short");
+  });
+
+  it("mode=indicator_sign, zero value → null", () => {
+    const entry = makeEntry("indicator_sign", 0);
+    const side = determineSide(entry, 15, candles, cache);
+    expect(side).toBeNull();
+  });
+
+  it("mode=undefined → current behavior (price_vs_indicator)", () => {
+    // constant=50, close=100, so close > 50 → long (op "gt")
+    const entry = makeEntry(undefined, 50);
+    const side = determineSide(entry, 15, candles, cache);
+    expect(side).toBe("long");
   });
 });

@@ -30,6 +30,7 @@ import { calcMACD } from "./indicators/macd.js";
 import type { MACDResult } from "./indicators/macd.js";
 import { resolveMtfIndicator, createMtfCache } from "./mtf/mtfIndicatorResolver.js";
 import { fvgSeries, sweepSeries, orderBlockSeries, mssSeries } from "./runtime/patternEngine.js";
+import { logger } from "./logger.js";
 import type { DcaConfig, SafetyOrderLevel, DcaPositionState } from "./dcaPlanning.js";
 import {
   generateSafetyOrderSchedule,
@@ -142,6 +143,7 @@ export interface DslTimeExit {
 export interface DslSideCondition {
   indicator: DslIndicatorRef;
   source?: string;
+  mode?: "price_vs_indicator" | "indicator_sign";
   long: { op: string };
   short: { op: string };
 }
@@ -478,6 +480,7 @@ export function getIndicatorValues(
   }
 
   // Unknown indicator — return all nulls
+  logger.warn({ blockType: type }, "Unknown indicator type — returning nulls");
   return new Array(candles.length).fill(null);
 }
 
@@ -629,7 +632,14 @@ export function determineSide(
     const val = indValues[i];
     if (val === null) return null;
 
-    // For sideCondition, the source defaults to "close"
+    // Discrete signal mode: sign of indicator value determines side
+    if (sc.mode === "indicator_sign") {
+      if (val > 0) return "long";
+      if (val < 0) return "short";
+      return null;
+    }
+
+    // Default mode (price_vs_indicator): compare price to indicator value
     const source = sc.source ?? "close";
     const price = candles[i][source as keyof Candle] as number;
 
