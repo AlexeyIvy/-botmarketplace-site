@@ -2,7 +2,7 @@ import { buildApp } from "./app.js";
 import { startBotWorker } from "./lib/botWorker.js";
 import cron from "node-cron";
 import { runIngestion } from "./lib/funding/ingestJob.js";
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "./lib/prisma.js";
 import { logger } from "./lib/logger.js";
 
 const PORT = parseInt(process.env.API_PORT || "4000", 10);
@@ -19,7 +19,6 @@ async function main() {
     const stopWorker = startBotWorker();
 
     // Funding ingestion cron — every 8 hours (matches Bybit settlement schedule)
-    const prisma = new PrismaClient();
     const fundingCron = cron.schedule("0 */8 * * *", () => {
       logger.info("Funding cron triggered");
       runIngestion(prisma);

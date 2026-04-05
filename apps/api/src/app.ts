@@ -67,11 +67,16 @@ export async function buildApp() {
           ? { target: "pino-pretty" }
           : undefined,
     },
+    trustProxy: "127.0.0.1",
     genReqId: (req) =>
       (req.headers["x-request-id"] as string) || randomUUID(),
   });
 
-  await app.register(cors, { origin: true });
+  await app.register(cors, {
+    origin: process.env.NODE_ENV === "production"
+      ? ["https://botmarketplace.store"]
+      : true,
+  });
 
   // Global rate limit — 100 req/min baseline; lab & terminal routes override below
   await app.register(rateLimit, {
