@@ -59,7 +59,9 @@ export async function authRoutes(app: FastifyInstance) {
   });
 
   // ── POST /auth/login ───────────────────────────────────────────────────────
-  app.post<{ Body: LoginBody }>("/auth/login", async (request, reply) => {
+  app.post<{ Body: LoginBody }>("/auth/login", {
+    config: { rateLimit: { max: 5, timeWindow: "15 minutes" } },
+  }, async (request, reply) => {
     const { email, password } = request.body ?? {};
 
     if (!email || !password) {
