@@ -537,9 +537,6 @@ async function executeIntent(intent: {
     } else {
       // ── Live mode: place order on Bybit ──────────────────────────────────
       const encKey = getEncryptionKeyRaw();
-      if (!encKey) {
-        throw new Error("SECRET_ENCRYPTION_KEY not configured");
-      }
       const plainSecret = decrypt(bot.exchangeConnection.encryptedSecret, encKey);
 
       // Determine orderType from strategy DSL or default to Market
@@ -915,10 +912,6 @@ async function reconcilePlacedIntents(): Promise<void> {
     if (intents.length === 0) return;
 
     const encKey = getEncryptionKeyRaw();
-    if (!encKey) {
-      workerLog.warn("SECRET_ENCRYPTION_KEY not set, skipping reconciliation");
-      return;
-    }
 
     for (const intent of intents) {
       const { bot } = intent.botRun;
