@@ -8,7 +8,21 @@ import { logger } from "./lib/logger.js";
 const PORT = parseInt(process.env.API_PORT || "4000", 10);
 const HOST = process.env.API_HOST || "0.0.0.0";
 
+/** Fail fast if required env vars are missing. */
+function validateEnv() {
+  const required = ["DATABASE_URL", "JWT_SECRET"];
+  const requiredInProd = ["SECRET_ENCRYPTION_KEY"];
+  const missing = required.filter((k) => !process.env[k]);
+  if (process.env.NODE_ENV === "production") {
+    missing.push(...requiredInProd.filter((k) => !process.env[k]));
+  }
+  if (missing.length > 0) {
+    throw new Error(`Missing required env vars: ${missing.join(", ")}`);
+  }
+}
+
 async function main() {
+  validateEnv();
   const app = await buildApp();
 
   try {

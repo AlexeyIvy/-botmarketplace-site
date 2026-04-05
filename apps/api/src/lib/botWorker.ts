@@ -1647,10 +1647,18 @@ async function runMarketCandleRetention(): Promise<void> {
 // Main polling loop
 // ---------------------------------------------------------------------------
 
+/** Run a named poll step, catching and logging errors so subsequent steps still execute. */
+async function safeStep(name: string, fn: () => Promise<void>) {
+  try {
+    await fn();
+  } catch (err) {
+    workerLog.error({ err, step: name }, `poll step "${name}" failed (non-fatal)`);
+  }
+}
+
 /** Main polling loop. */
 async function poll() {
-  try {
-    // Pick up QUEUED runs (up to 5 at a time)
+  await safeStep("activateRuns", async () => {
     const queued = await prisma.botRun.findMany({
       where: { state: "QUEUED" },
       take: 5,
@@ -1660,8 +1668,9 @@ async function poll() {
     for (const { id } of queued) {
       await activateRun(id);
     }
+  });
 
-    // Complete STOPPING runs
+  await safeStep("stopRuns", async () => {
     const stopping = await prisma.botRun.findMany({
       where: { state: "STOPPING" },
       take: 10,
@@ -1670,32 +1679,27 @@ async function poll() {
     for (const { id } of stopping) {
       await stopRun(id);
     }
+  });
 
-    // Timeout runs that exceeded max duration
-    await timeoutExpiredRuns();
+  await safeStep("timeoutExpiredRuns", () => timeoutExpiredRuns());
+  await safeStep("renewLeases", () => renewLeases());
 
-    // Renew leases on our RUNNING runs
-    await renewLeases();
+  // Stage 8 (#141): enforce safety circuit breakers before evaluation
+  await safeStep("enforceDailyLossLimit", () => enforceDailyLossLimit());
+  await safeStep("enforceErrorPause", () => enforceErrorPause());
 
-    // Stage 8 (#141): enforce safety circuit breakers before evaluation
-    await enforceDailyLossLimit();
-    await enforceErrorPause();
+  // Stage 3 (#128): Evaluate DSL strategies for RUNNING runs
+  await safeStep("evaluateStrategies", () => evaluateStrategies());
 
-    // Stage 3 (#128): Evaluate DSL strategies for RUNNING runs
-    await evaluateStrategies();
+  // Process PENDING intents on RUNNING runs (Stage 11)
+  await safeStep("processIntents", () => processIntents());
 
-    // Process PENDING intents on RUNNING runs (Stage 11)
-    await processIntents();
+  // Reconcile PLACED/PARTIALLY_FILLED intents against exchange (Stage 3, #129 follow-up)
+  await safeStep("reconcilePlacedIntents", () => reconcilePlacedIntents());
 
-    // Reconcile PLACED/PARTIALLY_FILLED intents against exchange (Stage 3, #129 follow-up)
-    await reconcilePlacedIntents();
-
-    // Stage 19c: run retention at most once per hour
-    if (Date.now() - lastRetentionRunMs >= RETENTION_INTERVAL_MS) {
-      await runMarketCandleRetention();
-    }
-  } catch (err) {
-    workerLog.error({ err }, "poll error");
+  // Stage 19c: run retention at most once per hour
+  if (Date.now() - lastRetentionRunMs >= RETENTION_INTERVAL_MS) {
+    await safeStep("marketCandleRetention", () => runMarketCandleRetention());
   }
 }
 
