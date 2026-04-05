@@ -39,11 +39,16 @@ export function encrypt(plaintext: string, key: Buffer): string {
 
 /**
  * Get the encryption key directly (no Fastify reply required).
- * Returns null if the key is missing or invalid — caller decides what to do.
+ * Throws if the key is missing or invalid — fail fast, never silently skip.
  */
-export function getEncryptionKeyRaw(): Buffer | null {
+export function getEncryptionKeyRaw(): Buffer {
   const raw = process.env.SECRET_ENCRYPTION_KEY;
-  if (!raw || raw.length !== 64) return null;
+  if (!raw) {
+    throw new Error("SECRET_ENCRYPTION_KEY is not set — cannot decrypt exchange credentials");
+  }
+  if (raw.length !== KEY_HEX_LENGTH) {
+    throw new Error(`SECRET_ENCRYPTION_KEY has wrong length: expected ${KEY_HEX_LENGTH} hex chars, got ${raw.length}`);
+  }
   return Buffer.from(raw, "hex");
 }
 
