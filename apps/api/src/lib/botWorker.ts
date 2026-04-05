@@ -90,6 +90,9 @@ const POLL_INTERVAL_MS = 4_000;
 // Max time a run can stay in RUNNING state before auto-timeout (default: 4 hours)
 const MAX_RUN_DURATION_MS = parseInt(process.env.MAX_RUN_DURATION_MS ?? "", 10) || 4 * 60 * 60 * 1000;
 
+/** Max time a run can stay in STARTING/SYNCING before being marked FAILED. */
+const EPHEMERAL_TIMEOUT_MS = 5 * 60 * 1000; // 5 min
+
 // Stage 19c: MarketCandle retention
 const RETENTION_DAYS = parseInt(process.env.MARKET_CANDLE_RETENTION_DAYS ?? "", 10) || 90;
 const RETENTION_INTERVAL_MS = 60 * 60 * 1000; // minimum gap between retention runs (1 hour)
@@ -360,8 +363,16 @@ async function activateRun(runId: string) {
     // Sync Bot.status → ACTIVE
     await syncBotStatus(afterSync.bot.id);
   } catch (err) {
-    // If another worker won or run was stopped, ignore
     workerLog.error({ err, runId }, "activateRun error");
+    try {
+      await transition(runId, "FAILED", {
+        eventType: "RUN_FAILED",
+        message: `activateRun crashed: ${err instanceof Error ? err.message : String(err)}`,
+        errorCode: "ACTIVATE_CRASH",
+      });
+    } catch (transitionErr) {
+      workerLog.warn({ err: transitionErr, runId }, "failed to transition crashed run to FAILED");
+    }
   }
 }
 
@@ -387,6 +398,30 @@ async function stopRun(runId: string) {
  */
 async function timeoutExpiredRuns() {
   const now = Date.now();
+
+  // Catch runs stuck in ephemeral states (STARTING/SYNCING) due to activateRun crashes
+  const stuckEphemeral = await prisma.botRun.findMany({
+    where: {
+      state: { in: ["STARTING", "SYNCING"] },
+      updatedAt: { lt: new Date(now - EPHEMERAL_TIMEOUT_MS) },
+    },
+    select: { id: true, botId: true, state: true, updatedAt: true },
+    take: 20,
+  });
+
+  for (const run of stuckEphemeral) {
+    try {
+      await transition(run.id, "FAILED", {
+        eventType: "RUN_FAILED",
+        message: `Run stuck in ${run.state} for over 5 minutes`,
+        errorCode: "EPHEMERAL_STATE_TIMEOUT",
+      });
+      workerLog.warn({ runId: run.id, state: run.state }, "stuck ephemeral run → FAILED");
+      await syncBotStatus(run.botId);
+    } catch (err) {
+      workerLog.error({ err, runId: run.id }, "failed to timeout stuck ephemeral run");
+    }
+  }
 
   const candidates = await prisma.botRun.findMany({
     where: {
@@ -1630,7 +1665,7 @@ async function poll() {
       select: { id: true },
     });
     for (const { id } of queued) {
-      activateRun(id); // fire-and-forget, don't await to stay non-blocking
+      await activateRun(id);
     }
 
     // Complete STOPPING runs
