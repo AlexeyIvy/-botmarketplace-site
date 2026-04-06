@@ -38,13 +38,13 @@ async function main() {
       runIngestion(prisma);
     });
 
-    // Graceful shutdown
+    // Graceful shutdown — wait for in-flight poll before disconnecting
     for (const signal of ["SIGINT", "SIGTERM"]) {
       process.once(signal, async () => {
         fundingCron.stop();
-        stopWorker();
-        await prisma.$disconnect();
+        await stopWorker();
         await app.close();
+        await prisma.$disconnect();
         process.exit(0);
       });
     }

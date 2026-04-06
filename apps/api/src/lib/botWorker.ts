@@ -1373,12 +1373,7 @@ async function evaluateStrategies(): Promise<void> {
           });
 
           if (signal) {
-            // Check idempotency: don't create duplicate intent for same trigger
             const intentId = `entry_${signal.triggerTime}_${signal.side}`;
-            const existing = await prisma.botIntent.findFirst({
-              where: { botRunId: run.id, intentId },
-            });
-            if (existing) continue;
 
             // DCA-aware entry (#132): if DCA config present, use base order sizing
             // and attach initial DCA state to intent metaJson
@@ -1431,19 +1426,24 @@ async function evaluateStrategies(): Promise<void> {
             }
 
             const orderLinkId = `lab_${run.id.slice(0, 8)}_${Date.now()}`;
-            await prisma.botIntent.create({
-              data: {
-                botRunId: run.id,
-                intentId,
-                orderLinkId,
-                side: signal.side === "long" ? "BUY" : "SELL",
-                qty: exchangeQty,
-                price: signal.price,
-                type: "ENTRY",
-                state: "PENDING",
-                metaJson: intentMeta as Prisma.InputJsonValue,
-              },
-            });
+            try {
+              await prisma.botIntent.create({
+                data: {
+                  botRunId: run.id,
+                  intentId,
+                  orderLinkId,
+                  side: signal.side === "long" ? "BUY" : "SELL",
+                  qty: exchangeQty,
+                  price: signal.price,
+                  type: "ENTRY",
+                  state: "PENDING",
+                  metaJson: intentMeta as Prisma.InputJsonValue,
+                },
+              });
+            } catch (createErr) {
+              if ((createErr as { code?: string }).code === "P2002") continue; // duplicate intent
+              throw createErr;
+            }
 
             // Initialize trailing stop state for new position
             trailingStopStates.set(run.id, createTrailingStopState(signal.price));
@@ -1487,35 +1487,35 @@ async function evaluateStrategies(): Promise<void> {
                 const triggered = checkAndTriggerSOs(dcaState, currentPrice);
                 for (const so of triggered) {
                   const soIntentId = `entry_so${so.index}_${run.id.slice(0, 8)}_${position.id.slice(0, 8)}`;
-                  const existing = await prisma.botIntent.findFirst({
-                    where: { botRunId: run.id, intentId: soIntentId },
-                  });
-                  if (existing) continue;
-
                   const soSide = dcaState.side === "long" ? "BUY" as const : "SELL" as const;
                   const orderLinkId = `lab_${run.id.slice(0, 8)}_so${so.index}_${Date.now()}`;
 
-                  await prisma.botIntent.create({
-                    data: {
-                      botRunId: run.id,
-                      intentId: soIntentId,
-                      orderLinkId,
-                      side: soSide,
-                      qty: so.qty,
-                      price: so.triggerPrice,
-                      type: "ENTRY",
-                      state: "PENDING",
-                      metaJson: {
-                        dca: true,
-                        dcaSafetyOrder: true,
-                        soIndex: so.index,
-                        triggerPrice: so.triggerPrice,
-                        positionId: position.id,
-                        slPrice: dcaState.slPrice,
-                        tpPrice: dcaState.tpPrice,
-                      } as Prisma.InputJsonValue,
-                    },
-                  });
+                  try {
+                    await prisma.botIntent.create({
+                      data: {
+                        botRunId: run.id,
+                        intentId: soIntentId,
+                        orderLinkId,
+                        side: soSide,
+                        qty: so.qty,
+                        price: so.triggerPrice,
+                        type: "ENTRY",
+                        state: "PENDING",
+                        metaJson: {
+                          dca: true,
+                          dcaSafetyOrder: true,
+                          soIndex: so.index,
+                          triggerPrice: so.triggerPrice,
+                          positionId: position.id,
+                          slPrice: dcaState.slPrice,
+                          tpPrice: dcaState.tpPrice,
+                        } as Prisma.InputJsonValue,
+                      },
+                    });
+                  } catch (createErr) {
+                    if ((createErr as { code?: string }).code === "P2002") continue; // duplicate SO intent
+                    throw createErr;
+                  }
 
                   workerLog.info(
                     {
@@ -1553,33 +1553,33 @@ async function evaluateStrategies(): Promise<void> {
 
           if (closeSignal) {
             const intentId = `exit_${closeSignal.triggerTime}_${closeSignal.reason}`;
-            const existing = await prisma.botIntent.findFirst({
-              where: { botRunId: run.id, intentId },
-            });
-            if (existing) continue;
-
             const closeSide = closeSignal.side === "long" ? "SELL" : "BUY";
             const orderLinkId = `lab_${run.id.slice(0, 8)}_${Date.now()}`;
 
-            await prisma.botIntent.create({
-              data: {
-                botRunId: run.id,
-                intentId,
-                orderLinkId,
-                side: closeSide,
-                qty: position.currentQty,
-                price: closeSignal.price,
-                type: "EXIT",
-                state: "PENDING",
-                metaJson: {
-                  reason: closeSignal.reason,
-                  description: closeSignal.description,
-                  positionId: position.id,
-                  positionSide: position.side,
-                  avgEntryPrice: position.avgEntryPrice,
-                } as Prisma.InputJsonValue,
-              },
-            });
+            try {
+              await prisma.botIntent.create({
+                data: {
+                  botRunId: run.id,
+                  intentId,
+                  orderLinkId,
+                  side: closeSide,
+                  qty: position.currentQty,
+                  price: closeSignal.price,
+                  type: "EXIT",
+                  state: "PENDING",
+                  metaJson: {
+                    reason: closeSignal.reason,
+                    description: closeSignal.description,
+                    positionId: position.id,
+                    positionSide: position.side,
+                    avgEntryPrice: position.avgEntryPrice,
+                  } as Prisma.InputJsonValue,
+                },
+              });
+            } catch (createErr) {
+              if ((createErr as { code?: string }).code === "P2002") continue; // duplicate exit intent
+              throw createErr;
+            }
 
             // Record last trade close time for cooldown
             lastTradeCloseTimes.set(run.id, Date.now());
@@ -1647,8 +1647,12 @@ async function runMarketCandleRetention(): Promise<void> {
 // Main polling loop
 // ---------------------------------------------------------------------------
 
+let isShuttingDown = false;
+let pollInFlight: Promise<void> | null = null;
+
 /** Run a named poll step, catching and logging errors so subsequent steps still execute. */
 async function safeStep(name: string, fn: () => Promise<void>) {
+  if (isShuttingDown) return;
   try {
     await fn();
   } catch (err) {
@@ -1703,13 +1707,39 @@ async function poll() {
   }
 }
 
-/** Start the background worker. Returns a cleanup function. */
-export function startBotWorker(): () => void {
+/**
+ * Start the background worker.
+ * Returns an async cleanup function that:
+ *   1. Stops the interval timer (no new polls)
+ *   2. Waits for the in-flight poll to finish (up to GRACE_PERIOD_MS)
+ */
+const GRACE_PERIOD_MS = 30_000;
+
+export function startBotWorker(): () => Promise<void> {
   workerLog.info({ workerId: WORKER_ID, interval: POLL_INTERVAL_MS }, "botWorker started");
-  const timer = setInterval(poll, POLL_INTERVAL_MS);
+
+  async function wrappedPoll() {
+    pollInFlight = poll();
+    await pollInFlight;
+    pollInFlight = null;
+  }
+
+  const timer = setInterval(wrappedPoll, POLL_INTERVAL_MS);
   // Run poll once immediately
-  poll();
+  wrappedPoll();
   // Run retention once immediately so the log line appears without waiting an hour
   runMarketCandleRetention();
-  return () => clearInterval(timer);
+
+  return async () => {
+    isShuttingDown = true;
+    clearInterval(timer);
+    workerLog.info("botWorker shutting down, waiting for in-flight poll…");
+
+    if (pollInFlight) {
+      const timeout = new Promise<void>((resolve) => setTimeout(resolve, GRACE_PERIOD_MS));
+      await Promise.race([pollInFlight, timeout]);
+    }
+
+    workerLog.info("botWorker stopped");
+  };
 }
