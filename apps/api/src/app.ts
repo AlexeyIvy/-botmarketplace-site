@@ -76,6 +76,7 @@ export async function buildApp() {
     origin: process.env.NODE_ENV === "production"
       ? ["https://botmarketplace.store"]
       : true,
+    credentials: true,
   });
 
   // Global rate limit — 100 req/min baseline; lab & terminal routes override below
@@ -91,8 +92,12 @@ export async function buildApp() {
     }),
   });
 
-  // JWT plugin — secret from env or a fallback for dev
-  const jwtSecret = process.env.JWT_SECRET ?? "dev-secret-change-in-production-please";
+  // JWT plugin — secret from env; dev fallback only in non-production
+  const jwtSecret = process.env.JWT_SECRET ?? (
+    process.env.NODE_ENV === "production"
+      ? (() => { throw new Error("JWT_SECRET must be set in production"); })()
+      : "dev-secret-change-in-production-please"
+  );
   await app.register(jwt, { secret: jwtSecret });
 
   // Authenticate decorator used by protected routes

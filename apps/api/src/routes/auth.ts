@@ -1,4 +1,4 @@
-import type { FastifyInstance, FastifyReply } from "fastify";
+import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import bcrypt from "bcryptjs";
 import { prisma } from "../lib/prisma.js";
 
@@ -12,9 +12,40 @@ interface LoginBody {
   password: string;
 }
 
+const ACCESS_TOKEN_EXPIRY = "1h";
+const REFRESH_TOKEN_EXPIRY = "7d";
+const REFRESH_COOKIE_NAME = "refreshToken";
+const REFRESH_COOKIE_MAX_AGE = 7 * 24 * 60 * 60; // 7 days in seconds
+
 function authProblem(reply: FastifyReply, status: number, detail: string) {
   const titles: Record<number, string> = { 400: "Bad Request", 401: "Unauthorized", 409: "Conflict" };
   return reply.status(status).send({ type: "about:blank", title: titles[status] ?? "Error", status, detail });
+}
+
+/** Set refresh token as httpOnly cookie. */
+function setRefreshCookie(reply: FastifyReply, token: string) {
+  const isProduction = process.env.NODE_ENV === "production";
+  reply.header(
+    "Set-Cookie",
+    `${REFRESH_COOKIE_NAME}=${token}; HttpOnly; Path=/api; Max-Age=${REFRESH_COOKIE_MAX_AGE}; SameSite=Strict${isProduction ? "; Secure" : ""}`,
+  );
+}
+
+/** Clear refresh token cookie. */
+function clearRefreshCookie(reply: FastifyReply) {
+  const isProduction = process.env.NODE_ENV === "production";
+  reply.header(
+    "Set-Cookie",
+    `${REFRESH_COOKIE_NAME}=; HttpOnly; Path=/api; Max-Age=0; SameSite=Strict${isProduction ? "; Secure" : ""}`,
+  );
+}
+
+/** Parse a specific cookie from the Cookie header. */
+function parseCookie(request: FastifyRequest, name: string): string | undefined {
+  const header = request.headers.cookie;
+  if (!header) return undefined;
+  const match = header.split(";").map((s) => s.trim()).find((s) => s.startsWith(`${name}=`));
+  return match ? match.slice(name.length + 1) : undefined;
 }
 
 export async function authRoutes(app: FastifyInstance) {
@@ -49,10 +80,12 @@ export async function authRoutes(app: FastifyInstance) {
       },
     });
 
-    const token = await reply.jwtSign({ sub: user.id, email: user.email }, { expiresIn: "30d" });
+    const accessToken = await reply.jwtSign({ sub: user.id, email: user.email }, { expiresIn: ACCESS_TOKEN_EXPIRY });
+    const refreshToken = await reply.jwtSign({ sub: user.id, type: "refresh" }, { expiresIn: REFRESH_TOKEN_EXPIRY });
+    setRefreshCookie(reply, refreshToken);
 
     return reply.status(201).send({
-      accessToken: token,
+      accessToken,
       workspaceId: workspace.id,
       user: { id: user.id, email: user.email },
     });
@@ -84,13 +117,67 @@ export async function authRoutes(app: FastifyInstance) {
       orderBy: { createdAt: "asc" },
     });
 
-    const token = await reply.jwtSign({ sub: user.id, email: user.email }, { expiresIn: "30d" });
+    const accessToken = await reply.jwtSign({ sub: user.id, email: user.email }, { expiresIn: ACCESS_TOKEN_EXPIRY });
+    const refreshToken = await reply.jwtSign({ sub: user.id, type: "refresh" }, { expiresIn: REFRESH_TOKEN_EXPIRY });
+    setRefreshCookie(reply, refreshToken);
 
     return reply.send({
-      accessToken: token,
+      accessToken,
       workspaceId: membership?.workspaceId ?? null,
       user: { id: user.id, email: user.email },
     });
+  });
+
+  // ── POST /auth/refresh ─────────────────────────────────────────────────────
+  app.post("/auth/refresh", {
+    config: { rateLimit: { max: 10, timeWindow: "1 minute" } },
+  }, async (request, reply) => {
+    const token = parseCookie(request, REFRESH_COOKIE_NAME);
+    if (!token) {
+      return authProblem(reply, 401, "refresh token missing");
+    }
+
+    let payload: { sub: string; type?: string };
+    try {
+      payload = app.jwt.verify<{ sub: string; type?: string }>(token);
+    } catch {
+      clearRefreshCookie(reply);
+      return authProblem(reply, 401, "refresh token expired or invalid");
+    }
+
+    if (payload.type !== "refresh") {
+      clearRefreshCookie(reply);
+      return authProblem(reply, 401, "invalid token type");
+    }
+
+    // Verify user still exists
+    const user = await prisma.user.findUnique({ where: { id: payload.sub } });
+    if (!user) {
+      clearRefreshCookie(reply);
+      return authProblem(reply, 401, "user not found");
+    }
+
+    const membership = await prisma.workspaceMember.findFirst({
+      where: { userId: user.id },
+      orderBy: { createdAt: "asc" },
+    });
+
+    // Rotate: issue new access + refresh tokens
+    const newAccessToken = await reply.jwtSign({ sub: user.id, email: user.email }, { expiresIn: ACCESS_TOKEN_EXPIRY });
+    const newRefreshToken = await reply.jwtSign({ sub: user.id, type: "refresh" }, { expiresIn: REFRESH_TOKEN_EXPIRY });
+    setRefreshCookie(reply, newRefreshToken);
+
+    return reply.send({
+      accessToken: newAccessToken,
+      workspaceId: membership?.workspaceId ?? null,
+      user: { id: user.id, email: user.email },
+    });
+  });
+
+  // ── POST /auth/logout ──────────────────────────────────────────────────────
+  app.post("/auth/logout", async (_request, reply) => {
+    clearRefreshCookie(reply);
+    return reply.send({ ok: true });
   });
 
   // ── GET /auth/me ───────────────────────────────────────────────────────────
