@@ -67,9 +67,44 @@
 ## Dependency notes
 
 ```
-Task #10 (poll per-step isolation) → решает замечание 2.1 (demo-mode resilience)
-Task #12 (env validation)          → решает замечание 2.1 (startup fail-fast)
+Task #10 (poll per-step isolation) → решает замечание 2.1 (demo-mode resilience)  ✅ DONE
+Task #12 (env validation)          → решает замечание 2.1 (startup fail-fast)     ✅ DONE
 Task #15 (botWorker тесты)         → решает замечание 1.1 (плацебо-тесты)
 Task #A  (убрать sleep)            → решает замечание 1.3 (poll duration)
 Task #13 (crypto тесты)            → решает замечание 2.2 (tampered ciphertext)
 ```
+
+---
+
+## Task #7 — Nginx HSTS + CSP (VPS config)
+
+### Статус: CSP в режиме Report-Only
+
+**Заголовки добавлены:**
+- `Strict-Transport-Security: max-age=63072000; includeSubDomains` — **active**
+- `Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; frame-ancestors 'none';` — **report-only**
+
+**TODO**: после проверки browser console на CSP violations — переключить `Content-Security-Policy-Report-Only` на `Content-Security-Policy` в nginx конфиге на VPS.
+
+### Замечание 7.1 — Расхождение имён nginx конфигов (severity: INFO)
+
+На VPS реально активен `/etc/nginx/sites-enabled/botmarketplace.conf`, а не `botmarketplace.store`. Файл `deploy/nginx.conf` в репо синхронизирован с актуальной структурой (включая upstream блоки).
+
+---
+
+## Tier 1 — Final Status
+
+| # | Задача | PR/Commit | Статус |
+|---|--------|-----------|--------|
+| 1 | activateRun fix | PR #196 | done |
+| 2 | encryption key throw | PR #197 | done |
+| 3 | JWT 1h + refresh + prod secret | PR #201 | done |
+| 4 | CORS whitelist | PR #198 | done |
+| 5 | PrismaClient singleton | PR #198 | done |
+| 6 | trustProxy | PR #198 | done |
+| 7 | Nginx HSTS + CSP | VPS commit 5202f4f | done (CSP report-only) |
+| 8 | Login rate limit | PR #199 | done |
+| 9 | Graceful shutdown | PR #200 | done |
+| 10 | poll per-step isolation | PR #199 | done |
+| 11 | TOCTOU unique constraint | PR #200 | done |
+| 12 | Env validation | PR #199 | done |
