@@ -1,0 +1,33 @@
+# systemd service for BotMarketplace Worker (standalone bot worker process)
+# Roadmap V3, Task #21 — Worker extraction
+#
+# Install: cp deploy/botmarket-worker.service /etc/systemd/system/
+# Enable:  systemctl daemon-reload && systemctl enable botmarket-worker
+# Start:   systemctl start botmarket-worker
+# Logs:    journalctl -u botmarket-worker -f
+#
+# When using standalone worker, set DISABLE_EMBEDDED_WORKER=1 in
+# the API service environment so the API does not start its own worker.
+
+[Unit]
+Description=BotMarketplace Worker
+After=network-online.target postgresql.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=botmarket
+WorkingDirectory=/opt/-botmarketplace-site/apps/api
+EnvironmentFile=/opt/-botmarketplace-site/.env
+ExecStart=/usr/bin/node dist/worker.js
+Restart=on-failure
+RestartSec=5s
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=botmarket-worker
+
+Environment=NODE_ENV=production
+Environment=PATH=/usr/bin:/usr/local/bin:/usr/local/share/pnpm
+
+[Install]
+WantedBy=multi-user.target
