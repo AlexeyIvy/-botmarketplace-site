@@ -1715,6 +1715,11 @@ async function poll() {
  */
 const GRACE_PERIOD_MS = 30_000;
 
+// Test-only exports — prefixed with underscore to signal internal use
+export { activateRun as _activateRun };
+export { timeoutExpiredRuns as _timeoutExpiredRuns };
+export { stopRun as _stopRun };
+
 export function startBotWorker(): () => Promise<void> {
   workerLog.info({ workerId: WORKER_ID, interval: POLL_INTERVAL_MS }, "botWorker started");
 
