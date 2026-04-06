@@ -246,6 +246,8 @@ model BotIntent {
   cumExecQty  Decimal?    @db.Decimal(18, 8)
   /// Average fill price reported by exchange
   avgFillPrice Decimal?   @db.Decimal(18, 8)
+  /// Number of retry attempts after transient failures (Task #22)
+  retryCount  Int         @default(0)
   /// Extra metadata (e.g., sl/tp prices, retry count, exchange response)
   metaJson    Json?
   createdAt   DateTime    @default(now())
