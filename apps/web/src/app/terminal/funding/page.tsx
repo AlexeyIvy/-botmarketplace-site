@@ -47,6 +47,13 @@ export default function FundingScannerPage() {
   const [sortKey, setSortKey] = useState<SortKey>("annualizedYieldPct");
   const [sortAsc, setSortAsc] = useState(false);
 
+  // Hedge entry modal
+  const [hedgeCandidate, setHedgeCandidate] = useState<FundingCandidate | null>(null);
+  const [hedgeSize, setHedgeSize] = useState("1000");
+  const [hedgeBotRunId, setHedgeBotRunId] = useState("");
+  const [hedgeSubmitting, setHedgeSubmitting] = useState(false);
+  const [hedgeResult, setHedgeResult] = useState<{ ok: boolean; message: string } | null>(null);
+
   const fetchData = useCallback(async () => {
     setLoading(true);
     setError(null);
@@ -99,6 +106,74 @@ export default function FundingScannerPage() {
     } else {
       setSortKey(key);
       setSortAsc(false);
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Hedge entry handlers
+  // ---------------------------------------------------------------------------
+
+  function openHedgeModal(candidate: FundingCandidate) {
+    setHedgeCandidate(candidate);
+    setHedgeResult(null);
+    setHedgeSubmitting(false);
+  }
+
+  function closeHedgeModal() {
+    setHedgeCandidate(null);
+    setHedgeResult(null);
+  }
+
+  async function handleHedgeEntry() {
+    if (!hedgeCandidate || !hedgeBotRunId.trim()) return;
+
+    setHedgeSubmitting(true);
+    setHedgeResult(null);
+
+    // Step 1: Create hedge position (PLANNED)
+    const entryRes = await apiFetch<{ id: string; symbol: string; status: string }>(
+      "/hedges/entry",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          symbol: hedgeCandidate.symbol,
+          botRunId: hedgeBotRunId.trim(),
+          positionSizeUsd: parseFloat(hedgeSize),
+          entryBasisBps: hedgeCandidate.basisBps,
+        }),
+      },
+    );
+
+    if (!entryRes.ok) {
+      setHedgeSubmitting(false);
+      setHedgeResult({ ok: false, message: entryRes.problem.detail });
+      return;
+    }
+
+    // Step 2: Execute entry (spot buy + perp short)
+    const hedgeId = entryRes.data.id;
+    const sizeUsd = parseFloat(hedgeSize);
+    // Estimate quantity: positionSize / spotPrice approximation
+    // For now, pass the USD size as qty placeholder — the botWorker will normalize
+    const quantity = hedgeCandidate.currentRate !== 0 ? sizeUsd / 100 : sizeUsd;
+
+    const execRes = await apiFetch<{ hedgeId: string; status: string }>(
+      `/hedges/${hedgeId}/execute`,
+      {
+        method: "POST",
+        body: JSON.stringify({ quantity }),
+      },
+    );
+
+    setHedgeSubmitting(false);
+
+    if (execRes.ok) {
+      setHedgeResult({
+        ok: true,
+        message: `Hedge ${hedgeCandidate.symbol} opened. Status: ${execRes.data.status}`,
+      });
+    } else {
+      setHedgeResult({ ok: false, message: execRes.problem.detail });
     }
   }
 
@@ -156,6 +231,13 @@ export default function FundingScannerPage() {
       <h1 style={heading}>Funding Scanner</h1>
       <p style={subtitle}>
         Ranked funding arbitrage candidates from the last 7 days of data.
+        {" "}
+        <button
+          onClick={() => router.push("/terminal/hedges")}
+          style={{ ...linkBtn, fontSize: 14 }}
+        >
+          View Hedge Dashboard
+        </button>
       </p>
 
       {/* Filters */}
@@ -236,6 +318,7 @@ export default function FundingScannerPage() {
                 <th style={thRight} onClick={() => handleSort("currentRate")}>
                   Current Rate{sortIndicator("currentRate")}
                 </th>
+                <th style={{ ...th, textAlign: "center" }}>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -249,10 +332,97 @@ export default function FundingScannerPage() {
                   <td style={tdRight}>{c.streak}</td>
                   <td style={tdRight}>{formatRate(c.avgRate)}</td>
                   <td style={tdRight}>{formatRate(c.currentRate)}</td>
+                  <td style={{ ...td, textAlign: "center" }}>
+                    <button
+                      onClick={() => openHedgeModal(c)}
+                      style={hedgeBtn}
+                    >
+                      Hedge
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
+        </div>
+      )}
+
+      {/* Hedge Entry Modal */}
+      {hedgeCandidate && (
+        <div style={modalOverlay} onClick={closeHedgeModal}>
+          <div style={modalContent} onClick={(e) => e.stopPropagation()}>
+            <h2 style={modalTitle}>Open Hedge: {hedgeCandidate.symbol}</h2>
+
+            <div style={modalInfoGrid}>
+              <div style={modalInfoItem}>
+                <span style={modalInfoLabel}>Yield</span>
+                <span style={{ ...modalInfoValue, color: yieldColor(hedgeCandidate.annualizedYieldPct) }}>
+                  {formatYield(hedgeCandidate.annualizedYieldPct)}
+                </span>
+              </div>
+              <div style={modalInfoItem}>
+                <span style={modalInfoLabel}>Basis</span>
+                <span style={modalInfoValue}>{formatBasis(hedgeCandidate.basisBps)}</span>
+              </div>
+              <div style={modalInfoItem}>
+                <span style={modalInfoLabel}>Streak</span>
+                <span style={modalInfoValue}>{hedgeCandidate.streak}</span>
+              </div>
+              <div style={modalInfoItem}>
+                <span style={modalInfoLabel}>Current Rate</span>
+                <span style={modalInfoValue}>{formatRate(hedgeCandidate.currentRate)}</span>
+              </div>
+            </div>
+
+            <div style={{ marginBottom: 16 }}>
+              <label style={filterLabel}>
+                Position Size (USD)
+                <input
+                  type="number"
+                  value={hedgeSize}
+                  onChange={(e) => setHedgeSize(e.target.value)}
+                  style={{ ...filterInput, width: "100%" }}
+                  min="10"
+                  step="100"
+                />
+              </label>
+            </div>
+
+            <div style={{ marginBottom: 20 }}>
+              <label style={filterLabel}>
+                Bot Run ID
+                <input
+                  type="text"
+                  value={hedgeBotRunId}
+                  onChange={(e) => setHedgeBotRunId(e.target.value)}
+                  style={{ ...filterInput, width: "100%" }}
+                  placeholder="Enter active bot run ID"
+                />
+              </label>
+            </div>
+
+            {hedgeResult && (
+              <p style={{ ...hedgeResult.ok ? successText : errorText, marginBottom: 12 }}>
+                {hedgeResult.message}
+              </p>
+            )}
+
+            <div style={modalActions}>
+              <button onClick={closeHedgeModal} style={cancelBtn}>
+                Cancel
+              </button>
+              <button
+                onClick={handleHedgeEntry}
+                disabled={hedgeSubmitting || !hedgeBotRunId.trim() || !hedgeSize}
+                style={{
+                  ...confirmBtn,
+                  opacity: hedgeSubmitting || !hedgeBotRunId.trim() ? 0.6 : 1,
+                }}
+              >
+                {hedgeSubmitting ? "Submitting..." : "Confirm Entry"}
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
@@ -325,6 +495,12 @@ const errorText: React.CSSProperties = {
   marginBottom: 12,
 };
 
+const successText: React.CSSProperties = {
+  color: "#3fb950",
+  fontSize: 14,
+  marginBottom: 12,
+};
+
 const updatedText: React.CSSProperties = {
   fontSize: 12,
   color: "var(--text-secondary)",
@@ -378,6 +554,17 @@ const tdRight: React.CSSProperties = { ...td, textAlign: "right" };
 
 const row: React.CSSProperties = {};
 
+const hedgeBtn: React.CSSProperties = {
+  padding: "4px 12px",
+  borderRadius: 4,
+  border: "1px solid var(--accent)",
+  background: "transparent",
+  color: "var(--accent)",
+  fontSize: 12,
+  fontWeight: 600,
+  cursor: "pointer",
+};
+
 const expiredBanner: React.CSSProperties = {
   padding: 24,
   textAlign: "center",
@@ -392,4 +579,85 @@ const linkBtn: React.CSSProperties = {
   cursor: "pointer",
   textDecoration: "underline",
   fontSize: 16,
+};
+
+// Modal styles
+
+const modalOverlay: React.CSSProperties = {
+  position: "fixed",
+  inset: 0,
+  background: "rgba(0, 0, 0, 0.6)",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  zIndex: 1000,
+};
+
+const modalContent: React.CSSProperties = {
+  background: "var(--bg-card, #1c1c1e)",
+  borderRadius: 12,
+  padding: "28px 32px",
+  maxWidth: 440,
+  width: "90%",
+  border: "1px solid var(--border)",
+};
+
+const modalTitle: React.CSSProperties = {
+  fontSize: 20,
+  fontWeight: 700,
+  color: "var(--text-primary)",
+  marginBottom: 20,
+};
+
+const modalInfoGrid: React.CSSProperties = {
+  display: "grid",
+  gridTemplateColumns: "1fr 1fr",
+  gap: 12,
+  marginBottom: 20,
+};
+
+const modalInfoItem: React.CSSProperties = {
+  display: "flex",
+  flexDirection: "column",
+  gap: 2,
+};
+
+const modalInfoLabel: React.CSSProperties = {
+  fontSize: 11,
+  color: "var(--text-secondary)",
+  textTransform: "uppercase",
+  letterSpacing: "0.5px",
+};
+
+const modalInfoValue: React.CSSProperties = {
+  fontSize: 16,
+  fontWeight: 600,
+  color: "var(--text-primary)",
+};
+
+const modalActions: React.CSSProperties = {
+  display: "flex",
+  gap: 12,
+  justifyContent: "flex-end",
+};
+
+const cancelBtn: React.CSSProperties = {
+  padding: "8px 20px",
+  borderRadius: 6,
+  border: "1px solid var(--border)",
+  background: "transparent",
+  color: "var(--text-secondary)",
+  fontSize: 14,
+  cursor: "pointer",
+};
+
+const confirmBtn: React.CSSProperties = {
+  padding: "8px 20px",
+  borderRadius: 6,
+  border: "1px solid var(--accent)",
+  background: "var(--accent)",
+  color: "#fff",
+  fontSize: 14,
+  fontWeight: 600,
+  cursor: "pointer",
 };

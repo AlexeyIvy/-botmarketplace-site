@@ -85,6 +85,8 @@ export interface PlaceOrderParams {
   price?: string;
   /** Time-in-force; defaults to GTC for Limit, IOC for Market */
   timeInForce?: string;
+  /** Product category; defaults to "linear" for backward compatibility */
+  category?: "linear" | "spot";
 }
 
 export interface PlaceOrderResult {
@@ -102,7 +104,7 @@ export async function bybitPlaceOrder(
   params: PlaceOrderParams,
 ): Promise<PlaceOrderResult> {
   const body = JSON.stringify({
-    category: "linear",
+    category: params.category ?? "linear",
     symbol: params.symbol,
     side: params.side,
     orderType: params.orderType,
@@ -169,13 +171,14 @@ export async function bybitGetOrderStatus(
   secret: string,
   orderId: string,
   symbol: string,
+  category: "linear" | "spot" = "linear",
 ): Promise<OrderStatusResult> {
   // Try history first (covers all terminal statuses)
   const historyResult = await _fetchOrderFromEndpoint(
     apiKey,
     secret,
     "/v5/order/history",
-    { category: "linear", orderId, symbol },
+    { category, orderId, symbol },
   );
   if (historyResult) return historyResult;
 
@@ -184,7 +187,7 @@ export async function bybitGetOrderStatus(
     apiKey,
     secret,
     "/v5/order/realtime",
-    { category: "linear", orderId, symbol },
+    { category, orderId, symbol },
   );
   if (realtimeResult) return realtimeResult;
 
