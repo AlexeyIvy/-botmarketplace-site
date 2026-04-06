@@ -29,8 +29,12 @@ async function main() {
     await app.listen({ port: PORT, host: HOST });
     app.log.info(`API server listening on http://${HOST}:${PORT}`);
 
-    // Start bot worker background loop
-    const stopWorker = startBotWorker();
+    // Start bot worker background loop (skip if running as separate process — Task #21)
+    const embeddedWorker = !process.env.DISABLE_EMBEDDED_WORKER;
+    const stopWorker = embeddedWorker ? startBotWorker() : null;
+    if (!embeddedWorker) {
+      app.log.info("Embedded worker disabled (DISABLE_EMBEDDED_WORKER set). Use standalone worker process.");
+    }
 
     // Funding ingestion cron — every 8 hours (matches Bybit settlement schedule)
     const fundingCron = cron.schedule("0 */8 * * *", () => {
@@ -42,7 +46,7 @@ async function main() {
     for (const signal of ["SIGINT", "SIGTERM"]) {
       process.once(signal, async () => {
         fundingCron.stop();
-        await stopWorker();
+        if (stopWorker) await stopWorker();
         await app.close();
         await prisma.$disconnect();
         process.exit(0);

@@ -23,7 +23,12 @@ export async function readyzRoutes(app: FastifyInstance) {
     // 2. Worker health — has poll run recently?
     const now = Date.now();
     const maxStaleMs = POLL_INTERVAL_MS * WORKER_STALENESS_FACTOR;
-    if (lastPollTimestampMs === 0) {
+    const workerExternal = !!process.env.DISABLE_EMBEDDED_WORKER;
+
+    if (workerExternal) {
+      // Task #21: Worker runs in separate process — skip in-process health check
+      checks.worker = { ok: true, detail: "Worker runs in separate process" };
+    } else if (lastPollTimestampMs === 0) {
       // Worker hasn't completed its first poll yet — may still be starting
       checks.worker = { ok: true, detail: "Worker starting (no poll completed yet)" };
     } else {
