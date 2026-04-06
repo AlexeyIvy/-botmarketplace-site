@@ -100,4 +100,27 @@ describe("POST /api/v1/client-errors", () => {
     expect(res.statusCode).toBe(204);
     await app.close();
   });
+
+  it("rate-limits at 10 requests per minute", async () => {
+    const app = await buildApp();
+
+    // Send 11 requests — first 10 should succeed, 11th should be rate-limited
+    const results: number[] = [];
+    for (let i = 0; i < 11; i++) {
+      const res = await app.inject({
+        method: "POST",
+        url: "/api/v1/client-errors",
+        payload: { message: `Error ${i}` },
+        remoteAddress: "10.0.0.99", // consistent source IP for rate limiting
+      });
+      results.push(res.statusCode);
+    }
+
+    // First 10: 204 (success)
+    expect(results.slice(0, 10).every((c) => c === 204)).toBe(true);
+    // 11th: 429 (rate limited)
+    expect(results[10]).toBe(429);
+
+    await app.close();
+  });
 });
