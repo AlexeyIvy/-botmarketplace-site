@@ -6,6 +6,7 @@ import {
   makeGraphMissingEntry,
   makeGraphDualEntry,
   makeEmptyGraph,
+  makeGraphWithMtfIndicator,
 } from "../fixtures/graphs.js";
 
 const STRATEGY_ID = "test-strat-001";
@@ -139,5 +140,37 @@ describe("graphCompiler – compileGraph", () => {
     const errors = result.validationIssues.filter((i) => i.severity === "error");
     // Missing: candles, entry, stop_loss, take_profit
     expect(errors.length).toBeGreaterThanOrEqual(3);
+  });
+
+  // ── MTF sourceTimeframe (#27) ─────────────────────────────────────────
+
+  it("extracts sourceTimeframe from indicator with MTF param", () => {
+    const result = compileGraph(makeGraphWithMtfIndicator(), STRATEGY_ID, NAME, SYMBOL, TIMEFRAME);
+    if (!result.ok) throw new Error("Expected compile success");
+
+    const entry = result.compiledDsl["entry"] as Record<string, unknown>;
+    const indicators = entry["indicators"] as Array<Record<string, unknown>>;
+
+    // SMA(20) with sourceTimeframe: "1h"
+    const mtfInd = indicators.find((ind) => ind["length"] === 20);
+    expect(mtfInd).toBeDefined();
+    expect(mtfInd!["sourceTimeframe"]).toBe("1h");
+
+    // SMA(10) without sourceTimeframe (auto)
+    const primaryInd = indicators.find((ind) => ind["length"] === 10);
+    expect(primaryInd).toBeDefined();
+    expect(primaryInd!["sourceTimeframe"]).toBeUndefined();
+  });
+
+  it("omits sourceTimeframe when set to 'auto'", () => {
+    const result = compileGraph(makeMinimalValidGraph(), STRATEGY_ID, NAME, SYMBOL, TIMEFRAME);
+    if (!result.ok) throw new Error("Expected compile success");
+
+    const entry = result.compiledDsl["entry"] as Record<string, unknown>;
+    const indicators = entry["indicators"] as Array<Record<string, unknown>>;
+    // No indicator should have sourceTimeframe
+    for (const ind of indicators) {
+      expect(ind["sourceTimeframe"]).toBeUndefined();
+    }
   });
 });

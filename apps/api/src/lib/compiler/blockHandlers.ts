@@ -53,6 +53,12 @@ export const constantHandler: BlockHandler = {
 // Indicator blocks — generic handler factory
 // ---------------------------------------------------------------------------
 
+/** Extract optional sourceTimeframe from node params; returns undefined if "auto" or absent. */
+function extractSourceTimeframe(node: GraphNode): string | undefined {
+  const tf = String(node.data.params["sourceTimeframe"] ?? "auto");
+  return tf !== "auto" ? tf : undefined;
+}
+
 function makeIndicatorHandler(blockType: string): BlockHandler {
   return {
     blockType,
@@ -67,6 +73,7 @@ function makeIndicatorHandler(blockType: string): BlockHandler {
           type: blockType,
           length: Number(n.data.params["length"] ?? 14),
           nodeId: n.id,
+          ...(extractSourceTimeframe(n) ? { sourceTimeframe: extractSourceTimeframe(n) } : {}),
         })),
       };
     },
@@ -92,6 +99,7 @@ export const macdHandler: BlockHandler = {
         fastPeriod: Number(n.data.params["fastPeriod"] ?? 12),
         slowPeriod: Number(n.data.params["slowPeriod"] ?? 26),
         signalPeriod: Number(n.data.params["signalPeriod"] ?? 9),
+        ...(extractSourceTimeframe(n) ? { sourceTimeframe: extractSourceTimeframe(n) } : {}),
       })),
     };
   },
@@ -109,6 +117,7 @@ export const bollingerHandler: BlockHandler = {
         nodeId: n.id,
         period: Number(n.data.params["period"] ?? 20),
         stdDevMult: Number(n.data.params["stdDevMult"] ?? 2.0),
+        ...(extractSourceTimeframe(n) ? { sourceTimeframe: extractSourceTimeframe(n) } : {}),
       })),
     };
   },
@@ -125,6 +134,7 @@ export const atrHandler: BlockHandler = {
         type: "atr",
         nodeId: n.id,
         period: Number(n.data.params["period"] ?? 14),
+        ...(extractSourceTimeframe(n) ? { sourceTimeframe: extractSourceTimeframe(n) } : {}),
       })),
     };
   },
@@ -140,6 +150,7 @@ export const volumeHandler: BlockHandler = {
       indicators: nodes.map((n) => ({
         type: "volume",
         nodeId: n.id,
+        ...(extractSourceTimeframe(n) ? { sourceTimeframe: extractSourceTimeframe(n) } : {}),
       })),
     };
   },
@@ -157,6 +168,7 @@ export const vwapHandler: BlockHandler = {
       indicators: nodes.map((n) => ({
         type: "vwap",
         nodeId: n.id,
+        ...(extractSourceTimeframe(n) ? { sourceTimeframe: extractSourceTimeframe(n) } : {}),
       })),
     };
   },
@@ -173,6 +185,7 @@ export const adxHandler: BlockHandler = {
         type: "adx",
         nodeId: n.id,
         period: Number(n.data.params["period"] ?? 14),
+        ...(extractSourceTimeframe(n) ? { sourceTimeframe: extractSourceTimeframe(n) } : {}),
       })),
     };
   },
@@ -190,6 +203,7 @@ export const superTrendHandler: BlockHandler = {
         nodeId: n.id,
         atrPeriod: Number(n.data.params["atrPeriod"] ?? 10),
         multiplier: Number(n.data.params["multiplier"] ?? 3),
+        ...(extractSourceTimeframe(n) ? { sourceTimeframe: extractSourceTimeframe(n) } : {}),
       })),
     };
   },
@@ -496,6 +510,7 @@ export const volumeProfileHandler: BlockHandler = {
         type: "volume_profile",
         period: Number(node.data.params["period"] ?? 20),
         bins: Number(node.data.params["bins"] ?? 24),
+        ...(extractSourceTimeframe(node) ? { sourceTimeframe: extractSourceTimeframe(node) } : {}),
       }],
     };
   },
@@ -535,6 +550,7 @@ export const liquiditySweepHandler: BlockHandler = {
         nodeId: n.id,
         length: Number(n.data.params["swingLen"] ?? 3),
         period: Number(n.data.params["maxAge"] ?? 50),
+        ...(extractSourceTimeframe(n) ? { sourceTimeframe: extractSourceTimeframe(n) } : {}),
       })),
     };
   },
@@ -551,6 +567,7 @@ export const fairValueGapHandler: BlockHandler = {
         type: "fair_value_gap",
         nodeId: n.id,
         multiplier: Number(n.data.params["minGapRatio"] ?? 0),
+        ...(extractSourceTimeframe(n) ? { sourceTimeframe: extractSourceTimeframe(n) } : {}),
       })),
     };
   },
@@ -569,6 +586,7 @@ export const orderBlockHandler: BlockHandler = {
         period: Number(n.data.params["atrPeriod"] ?? 14),
         multiplier: Number(n.data.params["minImpulseMultiple"] ?? 1.5),
         length: Number(n.data.params["maxLookback"] ?? 5),
+        ...(extractSourceTimeframe(n) ? { sourceTimeframe: extractSourceTimeframe(n) } : {}),
       })),
     };
   },
@@ -585,6 +603,7 @@ export const marketStructureShiftHandler: BlockHandler = {
         type: "market_structure_shift",
         nodeId: n.id,
         length: Number(n.data.params["swingLen"] ?? 3),
+        ...(extractSourceTimeframe(n) ? { sourceTimeframe: extractSourceTimeframe(n) } : {}),
       })),
     };
   },
