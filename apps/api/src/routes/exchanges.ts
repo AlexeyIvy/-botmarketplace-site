@@ -135,6 +135,13 @@ export async function exchangeRoutes(app: FastifyInstance) {
 
     const { name, apiKey, secret } = request.body ?? {};
 
+    // Validate apiKey if provided
+    if (apiKey !== undefined) {
+      if (typeof apiKey !== "string" || !apiKey.trim()) {
+        return problem(reply, 400, "Validation Error", "apiKey must be a non-empty string");
+      }
+    }
+
     // If secret is being updated we need the encryption key
     let encryptedSecret: string | undefined;
     if (secret !== undefined) {
