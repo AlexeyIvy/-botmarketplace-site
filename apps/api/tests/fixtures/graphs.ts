@@ -210,3 +210,31 @@ export function makeGraphWithSuperTrend(): GraphJson {
     ],
   };
 }
+
+// ---------------------------------------------------------------------------
+// MTF indicator graph (#27)
+// ---------------------------------------------------------------------------
+
+/** Graph with SMA using sourceTimeframe = "1h" (multi-timeframe). */
+export function makeGraphWithMtfIndicator(): GraphJson {
+  return {
+    nodes: [
+      { id: "m1", data: { blockType: "candles", params: { symbol: "BTCUSDT", interval: "M15" } } },
+      { id: "m2", data: { blockType: "SMA", params: { length: 20, sourceTimeframe: "1h" } } },
+      { id: "m3", data: { blockType: "SMA", params: { length: 10 } } },
+      { id: "m4", data: { blockType: "cross", params: { mode: "crossover" } } },
+      { id: "m5", data: { blockType: "enter_long", params: {} } },
+      { id: "m6", data: { blockType: "stop_loss", params: { type: "fixed", value: 2.0 } } },
+      { id: "m7", data: { blockType: "take_profit", params: { type: "fixed", value: 4.0 } } },
+    ],
+    edges: [
+      { id: "me1", source: "m1", target: "m2", sourceHandle: null, targetHandle: null },
+      { id: "me2", source: "m1", target: "m3", sourceHandle: null, targetHandle: null },
+      { id: "me3", source: "m2", target: "m4", sourceHandle: null, targetHandle: "a" },
+      { id: "me4", source: "m3", target: "m4", sourceHandle: null, targetHandle: "b" },
+      { id: "me5", source: "m4", target: "m5", sourceHandle: null, targetHandle: "signal" },
+      { id: "me6", source: "m6", target: "m5", sourceHandle: null, targetHandle: "risk" },
+      { id: "me7", source: "m7", target: "m5", sourceHandle: null, targetHandle: null },
+    ],
+  };
+}

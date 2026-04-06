@@ -16,6 +16,7 @@ import type { PositionSnapshot } from "./positionManager.js";
 import {
   parseDsl,
   evaluateSignal,
+  evaluateProximityFilter,
   determineSide,
   computeExitLevels,
   createIndicatorCache,
@@ -92,6 +93,9 @@ export function evaluateEntry(ctx: SignalEngineContext): OpenSignal | null {
   // Evaluate entry signal
   const signalFired = evaluateSignal(entry.signal, i, candles, cache);
   if (!signalFired) return null;
+
+  // Proximity filter gate: block signal if price is too far from reference level
+  if (!evaluateProximityFilter(entry.proximityFilter, i, candles, cache)) return null;
 
   // Compute exit levels
   const slDef: DslExitLevel = exit?.stopLoss

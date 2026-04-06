@@ -30,6 +30,8 @@ import { calcMACD } from "./indicators/macd.js";
 import type { MACDResult } from "./indicators/macd.js";
 import { resolveMtfIndicator, createMtfCache } from "./mtf/mtfIndicatorResolver.js";
 import { fvgSeries, sweepSeries, orderBlockSeries, mssSeries } from "./runtime/patternEngine.js";
+import { calcVolumeProfile, type VolumeProfileResult } from "./indicators/volumeProfile.js";
+import { calcProximityFilter, type ProximityMode } from "./indicators/proximityFilter.js";
 import { logger } from "./logger.js";
 import type { DcaConfig, SafetyOrderLevel, DcaPositionState } from "./dcaPlanning.js";
 import {
@@ -92,6 +94,7 @@ export interface DslIndicatorRef {
   slowPeriod?: number;
   signalPeriod?: number;
   stdDevMult?: number;
+  bins?: number;
   /** Optional: resolve this indicator from a different timeframe's candle data.
    *  When set, the evaluator looks up candles from the CandleBundle's context TF
    *  instead of the primary candle array. Requires MTF evaluation mode (#134). */
@@ -148,11 +151,19 @@ export interface DslSideCondition {
   short: { op: string };
 }
 
+export interface DslProximityFilter {
+  threshold: number;
+  mode: ProximityMode;
+  /** Optional: indicator type providing the reference level (default: volume_profile POC). */
+  levelSource?: string;
+}
+
 export interface DslEntry {
   side?: "Buy" | "Sell";
   sideCondition?: DslSideCondition;
   signal?: DslSignal;
   indicators?: DslIndicatorRef[];
+  proximityFilter?: DslProximityFilter;
   stopLoss?: DslExitLevel; // v1 embedded
   takeProfit?: DslExitLevel; // v1 embedded
 }
@@ -202,6 +213,8 @@ export interface IndicatorCache {
   volume: (number | null)[] | null;
   /** SMC pattern series cache (keyed by "type_params" string). */
   smcPatterns: Map<string, (number | null)[]>;
+  /** Volume profile cache (keyed by "period_bins"). */
+  volumeProfile: Map<string, VolumeProfileResult>;
 }
 
 export function createIndicatorCache(): IndicatorCache {
@@ -217,6 +230,7 @@ export function createIndicatorCache(): IndicatorCache {
     macd: new Map(),
     volume: null,
     smcPatterns: new Map(),
+    volumeProfile: new Map(),
   };
 }
 
@@ -346,6 +360,7 @@ export function getIndicatorValues(
   params: {
     length?: number; period?: number; atrPeriod?: number; multiplier?: number;
     fastPeriod?: number; slowPeriod?: number; signalPeriod?: number;
+    bins?: number;
   },
   candles: Candle[],
   cache: IndicatorCache,
@@ -479,9 +494,37 @@ export function getIndicatorValues(
     return cache.smcPatterns.get(key)!;
   }
 
+  // ── Volume Profile (#135) ─────────────────────────────────────────────
+  if (type === "volume_profile" || type === "volume_profile_poc") {
+    const vp = getVolumeProfileCached(params, candles, cache);
+    return vp.poc;
+  }
+  if (type === "volume_profile_vah") {
+    const vp = getVolumeProfileCached(params, candles, cache);
+    return vp.vah;
+  }
+  if (type === "volume_profile_val") {
+    const vp = getVolumeProfileCached(params, candles, cache);
+    return vp.val;
+  }
+
   // Unknown indicator — return all nulls
   logger.warn({ blockType: type }, "Unknown indicator type — returning nulls");
   return new Array(candles.length).fill(null);
+}
+
+function getVolumeProfileCached(
+  params: { period?: number; bins?: number },
+  candles: Candle[],
+  cache: IndicatorCache,
+): VolumeProfileResult {
+  const period = params.period ?? 20;
+  const bins = params.bins ?? 24;
+  const key = `${period}_${bins}`;
+  if (!cache.volumeProfile.has(key)) {
+    cache.volumeProfile.set(key, calcVolumeProfile(candles, period, bins));
+  }
+  return cache.volumeProfile.get(key)!;
 }
 
 function getSuperTrendDirection(
@@ -597,6 +640,39 @@ export function evaluateSignal(
 
   // "direct" or "raw" — no structured signal, skip
   return false;
+}
+
+// ---------------------------------------------------------------------------
+// Proximity filter gate
+// ---------------------------------------------------------------------------
+
+/**
+ * Evaluate proximity filter at bar index `i`.
+ * Returns true if price is near the reference level (signal allowed),
+ * false if too far (signal blocked), or true if no filter configured.
+ */
+export function evaluateProximityFilter(
+  pf: DslProximityFilter | undefined,
+  i: number,
+  candles: Candle[],
+  cache: IndicatorCache,
+): boolean {
+  if (!pf) return true; // no filter → pass through
+
+  // Get reference level series (default: volume_profile POC)
+  const levelSource = pf.levelSource ?? "volume_profile";
+  const levelVals = getIndicatorValues(levelSource, {}, candles, cache);
+
+  const price = candles[i]?.close ?? null;
+  const level = levelVals[i];
+  if (price === null || level === null || level === 0) return true; // insufficient data → pass through
+
+  const distance = Math.abs(price - level);
+  if (pf.mode === "absolute") {
+    return distance <= pf.threshold;
+  }
+  // percentage mode
+  return (distance / level) * 100 <= pf.threshold;
 }
 
 // ---------------------------------------------------------------------------
@@ -1035,6 +1111,9 @@ export function runDslBacktest(
       // Evaluate entry signal
       const signalFired = evaluateSignal(entry.signal, i, candles, cache);
       if (!signalFired) continue;
+
+      // Proximity filter gate
+      if (!evaluateProximityFilter(entry.proximityFilter, i, candles, cache)) continue;
 
       // Enter position
       inPosition = true;

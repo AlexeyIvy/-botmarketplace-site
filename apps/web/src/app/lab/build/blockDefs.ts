@@ -579,6 +579,25 @@ export const BLOCK_DEFS: BlockDef[] = [
 ];
 
 // ---------------------------------------------------------------------------
+// MTF (#27): inject sourceTimeframe selector into all indicator blocks
+// "auto" means use the strategy's primary timeframe (no MTF).
+// ---------------------------------------------------------------------------
+
+const TIMEFRAME_PARAM: ParamDef = {
+  id: "sourceTimeframe",
+  label: "Timeframe",
+  type: "select",
+  defaultValue: "auto",
+  options: ["auto", "1m", "5m", "15m", "1h", "4h", "1d"],
+};
+
+for (const def of BLOCK_DEFS) {
+  if (def.category === "indicator") {
+    def.params.push(TIMEFRAME_PARAM);
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Node data shape stored in React Flow node.data
 // ---------------------------------------------------------------------------
 
