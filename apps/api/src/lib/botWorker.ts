@@ -111,10 +111,6 @@ const RETENTION_DAYS = parseInt(process.env.MARKET_CANDLE_RETENTION_DAYS ?? "", 
 const RETENTION_INTERVAL_MS = 60 * 60 * 1000; // minimum gap between retention runs (1 hour)
 let lastRetentionRunMs = 0;
 
-async function sleep(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
 // ---------------------------------------------------------------------------
 // Bot.status sync
 // ---------------------------------------------------------------------------
@@ -152,7 +148,6 @@ async function activateRun(runId: string) {
       eventType: "RUN_STARTING",
       message: "Worker picked up run, initializing",
     });
-    await sleep(800);
 
     // STARTING → SYNCING
     const afterStart = await prisma.botRun.findUnique({ where: { id: runId } });
@@ -161,7 +156,6 @@ async function activateRun(runId: string) {
       eventType: "RUN_SYNCING",
       message: "Syncing market data",
     });
-    await sleep(1_200);
 
     // SYNCING → RUNNING
     const afterSync = await prisma.botRun.findUnique({

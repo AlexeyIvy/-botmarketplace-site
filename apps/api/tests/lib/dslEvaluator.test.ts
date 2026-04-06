@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { runDslBacktest, parseDsl, evaluateSignal, getIndicatorValues, createIndicatorCache, determineSide } from "../../src/lib/dslEvaluator.js";
-import type { DslSignal, DslEntry } from "../../src/lib/dslEvaluator.js";
+import { runDslBacktest, parseDsl, evaluateSignal, getIndicatorValues, createIndicatorCache, determineSide, evaluateProximityFilter } from "../../src/lib/dslEvaluator.js";
+import type { DslSignal, DslEntry, DslProximityFilter } from "../../src/lib/dslEvaluator.js";
 import { makeUptrend, makeDowntrend, makeFlat, makeFlatThenUp, makeFlatThenDown } from "../fixtures/candles.js";
 
 // ---------------------------------------------------------------------------
@@ -647,5 +647,114 @@ describe("dslEvaluator – sideCondition indicator_sign mode", () => {
     const entry = makeEntry(undefined, 50);
     const side = determineSide(entry, 15, candles, cache);
     expect(side).toBe("long");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Volume Profile runtime integration (#24)
+// ---------------------------------------------------------------------------
+
+describe("getIndicatorValues — volume_profile", () => {
+  const candles = makeFlat(40, 100);
+
+  it("returns POC series for 'volume_profile' block type", () => {
+    const cache = createIndicatorCache();
+    const result = getIndicatorValues("volume_profile", { period: 20, bins: 24 }, candles, cache);
+    expect(result).toHaveLength(40);
+    // First 19 bars are null (warm-up)
+    for (let i = 0; i < 19; i++) {
+      expect(result[i]).toBeNull();
+    }
+    // Bar 19+ should have non-null POC
+    expect(result[19]).not.toBeNull();
+    expect(typeof result[19]).toBe("number");
+  });
+
+  it("returns VAH series for 'volume_profile_vah'", () => {
+    const cache = createIndicatorCache();
+    const result = getIndicatorValues("volume_profile_vah", { period: 20, bins: 24 }, candles, cache);
+    expect(result[19]).not.toBeNull();
+  });
+
+  it("returns VAL series for 'volume_profile_val'", () => {
+    const cache = createIndicatorCache();
+    const result = getIndicatorValues("volume_profile_val", { period: 20, bins: 24 }, candles, cache);
+    expect(result[19]).not.toBeNull();
+  });
+
+  it("caches volume profile results", () => {
+    const cache = createIndicatorCache();
+    const a = getIndicatorValues("volume_profile", { period: 20, bins: 24 }, candles, cache);
+    const b = getIndicatorValues("volume_profile", { period: 20, bins: 24 }, candles, cache);
+    expect(a).toBe(b); // same reference = cached
+  });
+
+  it("VAL <= POC <= VAH for uptrend candles", () => {
+    const cache = createIndicatorCache();
+    const trendCandles = makeUptrend(40, 100, 0.5);
+    const poc = getIndicatorValues("volume_profile", { period: 20, bins: 24 }, trendCandles, cache);
+    const vah = getIndicatorValues("volume_profile_vah", { period: 20, bins: 24 }, trendCandles, cache);
+    const val = getIndicatorValues("volume_profile_val", { period: 20, bins: 24 }, trendCandles, cache);
+    for (let i = 19; i < 40; i++) {
+      expect(val[i]!).toBeLessThanOrEqual(poc[i]!);
+      expect(poc[i]!).toBeLessThanOrEqual(vah[i]!);
+    }
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Proximity Filter runtime gate (#24)
+// ---------------------------------------------------------------------------
+
+describe("evaluateProximityFilter", () => {
+  // Candles at close ~100
+  const candles = makeFlat(5, 100);
+
+  it("returns true when no filter configured", () => {
+    const cache = createIndicatorCache();
+    expect(evaluateProximityFilter(undefined, 2, candles, cache)).toBe(true);
+  });
+
+  it("returns true when price is near the reference level (percentage mode)", () => {
+    const cache = createIndicatorCache();
+    // Mock: use 'constant' as level source — constant 100 vs close ~100
+    const pf: DslProximityFilter = { threshold: 2, mode: "percentage", levelSource: "constant" };
+    // constant returns 0 by default, so let's use a different approach
+    // We'll set levelSource to 'vwap' which will compute from the candles
+    const pfVwap: DslProximityFilter = { threshold: 5, mode: "percentage", levelSource: "vwap" };
+    const result = evaluateProximityFilter(pfVwap, 2, candles, cache);
+    // VWAP of flat candles ≈ close, so distance ≈ 0% → should pass
+    expect(result).toBe(true);
+  });
+
+  it("returns false when price is far from reference level", () => {
+    const cache = createIndicatorCache();
+    // Use SMA(1) as reference level on uptrend candles where close diverges from SMA(20)
+    const trendCandles = makeUptrend(30, 100, 5);
+    // At bar 29, close = 100+29*5=245, but SMA(20) over bars 10-29 ≈ 195
+    // Distance ≈ 50/195 ≈ 25.6% → threshold 1% should fail
+    const pf: DslProximityFilter = { threshold: 1, mode: "percentage", levelSource: "sma" };
+    const result = evaluateProximityFilter(pf, 29, trendCandles, cache);
+    expect(result).toBe(false);
+  });
+
+  it("returns true when insufficient data (null level)", () => {
+    const cache = createIndicatorCache();
+    // SMA(20) on first bar will be null → should pass through
+    const pf: DslProximityFilter = { threshold: 1, mode: "percentage", levelSource: "sma" };
+    const result = evaluateProximityFilter(pf, 0, candles, cache);
+    expect(result).toBe(true);
+  });
+
+  it("absolute mode works correctly", () => {
+    const cache = createIndicatorCache();
+    const trendCandles = makeUptrend(30, 100, 5);
+    // At bar 29, close=245, SMA(14) default ≈ close of bars 16-29 ≈ 100+22.5*5=212.5
+    // Distance ≈ 32.5, threshold=50 → should pass
+    const pfPass: DslProximityFilter = { threshold: 50, mode: "absolute", levelSource: "sma" };
+    expect(evaluateProximityFilter(pfPass, 29, trendCandles, cache)).toBe(true);
+    // threshold=1 → should fail
+    const pfFail: DslProximityFilter = { threshold: 1, mode: "absolute", levelSource: "sma" };
+    expect(evaluateProximityFilter(pfFail, 29, trendCandles, cache)).toBe(false);
   });
 });

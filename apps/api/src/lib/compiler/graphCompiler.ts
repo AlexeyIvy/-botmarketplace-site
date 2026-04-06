@@ -177,11 +177,18 @@ export function compileGraph(
 
   // ── 3. Extract indicator data from all indicator handlers ───────────────
   const indicators: Array<Record<string, unknown>> = [];
+  let proximityFilter: Record<string, unknown> | undefined;
   for (const handler of registry.allHandlers()) {
     if (handler.category === "indicator") {
       const extracted = handler.extract(ctx);
       if (extracted["indicators"]) {
         indicators.push(...(extracted["indicators"] as Array<Record<string, unknown>>));
+      }
+    }
+    if (handler.category === "logic") {
+      const extracted = handler.extract(ctx);
+      if (extracted["proximityFilter"]) {
+        proximityFilter = extracted["proximityFilter"] as Record<string, unknown>;
       }
     }
   }
@@ -233,6 +240,7 @@ export function compileGraph(
         sideCondition,
         signal: signalInfo,
         indicators,
+        ...(proximityFilter ? { proximityFilter } : {}),
       },
       exit: {
         stopLoss: { type: slType, value: stopLoss.value },
@@ -263,6 +271,7 @@ export function compileGraph(
         side,
         signal: signalInfo,
         indicators,
+        ...(proximityFilter ? { proximityFilter } : {}),
         order: { type: "Market", maxSlippageBps: 50 },
         stopLoss,
         takeProfit,
