@@ -22,7 +22,13 @@ import { demoRoutes } from "./routes/demo.js";
 import { fundingRoutes } from "./routes/funding.js";
 import { clientErrorRoutes } from "./routes/clientErrors.js";
 
-/** Wrap a route plugin with a per-route rate-limit override. */
+/**
+ * Wrap a route plugin with a per-route rate-limit override.
+ *
+ * Uses the `rateLimit()` decorator provided by @fastify/rate-limit
+ * instead of the onRoute hook approach (which suffers from hook ordering
+ * issues — the global rate-limit plugin's onRoute runs before ours).
+ */
 function withRateLimit(
   plugin: import("fastify").FastifyPluginAsync,
   max: number,
@@ -30,11 +36,14 @@ function withRateLimit(
 ): import("fastify").FastifyPluginAsync {
   return async function rateLimitedPlugin(scope) {
     scope.addHook("onRoute", (routeOptions) => {
+      // Disable the global rate limit for this route (avoid double-counting)
       routeOptions.config = {
         ...(routeOptions.config as Record<string, unknown> | undefined),
-        rateLimit: { max, timeWindow },
+        rateLimit: false,
       };
     });
+    // Apply custom rate limit as a scope-level onRequest hook
+    scope.addHook("onRequest", scope.rateLimit({ max, timeWindow: timeWindow as never }));
     await scope.register(plugin);
   };
 }
