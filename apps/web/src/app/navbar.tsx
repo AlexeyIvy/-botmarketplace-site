@@ -51,6 +51,8 @@ export function Navbar() {
   }, [dropdownOpen]);
 
   function handleLogout() {
+    // Clear server-side refresh token cookie
+    fetch("/api/v1/auth/logout", { method: "POST", credentials: "include" }).catch(() => {});
     clearAuth();
     setIsAuth(false);
     setUserInfo(null);
