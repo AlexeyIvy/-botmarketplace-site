@@ -97,6 +97,9 @@ export let lastPollTimestampMs = 0;
 /** Exported for /readyz to check if worker is alive. */
 export { POLL_INTERVAL_MS };
 
+/** Max retries for transient intent failures before dead-lettering (Task #22). */
+const MAX_INTENT_RETRIES = parseInt(process.env.MAX_INTENT_RETRIES ?? "", 10) || 3;
+
 // Max time a run can stay in RUNNING state before auto-timeout (default: 4 hours)
 const MAX_RUN_DURATION_MS = parseInt(process.env.MAX_RUN_DURATION_MS ?? "", 10) || 4 * 60 * 60 * 1000;
 
@@ -495,6 +498,7 @@ async function executeIntent(intent: {
   side: string;
   qty: { toString: () => string };
   price: { toString: () => string } | null;
+  retryCount: number;
   metaJson: Prisma.JsonValue;
   botRun: {
     id: string;
@@ -631,44 +635,98 @@ async function executeIntent(intent: {
       workerLog.info({ intentId: intent.intentId, orderId: result.orderId }, "intent placed");
     }
   } catch (err) {
-    // Stage 8 (#141): classify execution error for retry/dead-letter semantics
+    // Stage 8 (#141) + Task #22: classify error and decide retry vs dead-letter
     const classification = classifyExecutionError(err);
+    const currentRetry = intent.retryCount;
+    const canRetry = classification.retryable && currentRetry < MAX_INTENT_RETRIES;
 
-    const meta = {
-      ...(intent.metaJson && typeof intent.metaJson === "object" ? intent.metaJson as Record<string, unknown> : {}),
-      error: String(err),
-      errorClass: classification.errorClass,
-      retryable: classification.retryable,
-      classificationReason: classification.reason,
-      failedAt: new Date().toISOString(),
-    };
-    await prisma.botIntent.update({
-      where: { id: intent.id },
-      data: { state: "FAILED", metaJson: meta as Prisma.InputJsonValue },
-    });
-    await prisma.botEvent.create({
-      data: {
-        botRunId: botRun.id,
-        type: "intent_failed",
-        payloadJson: {
+    if (canRetry) {
+      // ── Retry: put back to PENDING with incremented retryCount ──
+      const meta = {
+        ...(intent.metaJson && typeof intent.metaJson === "object" ? intent.metaJson as Record<string, unknown> : {}),
+        lastError: String(err),
+        errorClass: classification.errorClass,
+        retryAttempt: currentRetry + 1,
+        retriedAt: new Date().toISOString(),
+      };
+      await prisma.botIntent.update({
+        where: { id: intent.id },
+        data: {
+          state: "PENDING",
+          retryCount: currentRetry + 1,
+          metaJson: meta as Prisma.InputJsonValue,
+        },
+      });
+      await prisma.botEvent.create({
+        data: {
+          botRunId: botRun.id,
+          type: "intent_retry",
+          payloadJson: {
+            intentId: intent.intentId,
+            error: String(err),
+            errorClass: classification.errorClass,
+            retryAttempt: currentRetry + 1,
+            maxRetries: MAX_INTENT_RETRIES,
+            at: new Date().toISOString(),
+          } as Prisma.InputJsonValue,
+        },
+      });
+      workerLog.warn(
+        {
           intentId: intent.intentId,
-          error: String(err),
           errorClass: classification.errorClass,
-          retryable: classification.retryable,
-          classificationReason: classification.reason,
-          at: new Date().toISOString(),
-        } as Prisma.InputJsonValue,
-      },
-    });
-    workerLog.error(
-      {
-        err,
-        intentId: intent.intentId,
+          retryAttempt: currentRetry + 1,
+          maxRetries: MAX_INTENT_RETRIES,
+        },
+        `executeIntent transient error — retry ${currentRetry + 1}/${MAX_INTENT_RETRIES}`,
+      );
+    } else {
+      // ── Dead-letter: max retries exhausted or permanent error ──
+      const deadLetterReason = classification.retryable
+        ? `max retries exhausted (${currentRetry}/${MAX_INTENT_RETRIES})`
+        : `permanent error: ${classification.reason}`;
+
+      const meta = {
+        ...(intent.metaJson && typeof intent.metaJson === "object" ? intent.metaJson as Record<string, unknown> : {}),
+        error: String(err),
         errorClass: classification.errorClass,
         retryable: classification.retryable,
-      },
-      `executeIntent error (${classification.errorClass})`,
-    );
+        classificationReason: classification.reason,
+        retryCount: currentRetry,
+        deadLetterReason,
+        failedAt: new Date().toISOString(),
+      };
+      await prisma.botIntent.update({
+        where: { id: intent.id },
+        data: { state: "FAILED", metaJson: meta as Prisma.InputJsonValue },
+      });
+      await prisma.botEvent.create({
+        data: {
+          botRunId: botRun.id,
+          type: classification.retryable ? "intent_dead_lettered" : "intent_failed",
+          payloadJson: {
+            intentId: intent.intentId,
+            error: String(err),
+            errorClass: classification.errorClass,
+            retryable: classification.retryable,
+            retryCount: currentRetry,
+            deadLetterReason,
+            at: new Date().toISOString(),
+          } as Prisma.InputJsonValue,
+        },
+      });
+      workerLog.error(
+        {
+          err,
+          intentId: intent.intentId,
+          errorClass: classification.errorClass,
+          retryable: classification.retryable,
+          retryCount: currentRetry,
+          deadLetterReason,
+        },
+        `executeIntent ${classification.retryable ? "dead-lettered" : "permanent failure"}`,
+      );
+    }
   }
 }
 
