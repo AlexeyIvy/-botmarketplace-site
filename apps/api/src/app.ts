@@ -20,6 +20,7 @@ import { preferencesRoutes } from "./routes/preferences.js";
 import { usersRoutes } from "./routes/users.js";
 import { demoRoutes } from "./routes/demo.js";
 import { fundingRoutes } from "./routes/funding.js";
+import { clientErrorRoutes } from "./routes/clientErrors.js";
 
 /** Wrap a route plugin with a per-route rate-limit override. */
 function withRateLimit(
@@ -57,6 +58,7 @@ async function registerRoutes(scope: import("fastify").FastifyInstance) {
   await scope.register(preferencesRoutes);
   await scope.register(usersRoutes);
   await scope.register(demoRoutes);
+  await scope.register(withRateLimit(clientErrorRoutes, 10, "1 minute")); // 10 req/min
 }
 
 export async function buildApp() {
