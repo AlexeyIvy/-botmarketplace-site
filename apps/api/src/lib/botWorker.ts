@@ -87,6 +87,16 @@ const workerLog = logger.child({ module: "botWorker" });
 const WORKER_ID = `worker-${process.pid}`;
 const POLL_INTERVAL_MS = 4_000;
 
+// ---------------------------------------------------------------------------
+// Worker health observability (Task #18)
+// ---------------------------------------------------------------------------
+
+/** Timestamp (ms) of the last completed poll cycle. 0 = worker never ran. */
+export let lastPollTimestampMs = 0;
+
+/** Exported for /readyz to check if worker is alive. */
+export { POLL_INTERVAL_MS };
+
 // Max time a run can stay in RUNNING state before auto-timeout (default: 4 hours)
 const MAX_RUN_DURATION_MS = parseInt(process.env.MAX_RUN_DURATION_MS ?? "", 10) || 4 * 60 * 60 * 1000;
 
@@ -1705,6 +1715,9 @@ async function poll() {
   if (Date.now() - lastRetentionRunMs >= RETENTION_INTERVAL_MS) {
     await safeStep("marketCandleRetention", () => runMarketCandleRetention());
   }
+
+  // Mark poll completion for health checks (Task #18)
+  lastPollTimestampMs = Date.now();
 }
 
 /**
