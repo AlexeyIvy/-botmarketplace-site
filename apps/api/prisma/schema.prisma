@@ -164,6 +164,8 @@ model BotRun {
   workspaceId     String
   symbol          String
   state           BotRunState  @default(CREATED)
+  /// Optimistic lock version — incremented on every state transition (Task #20)
+  version         Int          @default(0)
   leaseOwner      String?
   leaseUntil      DateTime?
   startedAt       DateTime?

@@ -60,6 +60,16 @@ export class RunNotFoundError extends Error {
   }
 }
 
+export class StaleStateError extends Error {
+  constructor(
+    public readonly runId: string,
+    public readonly expectedVersion: number,
+  ) {
+    super(`Optimistic lock conflict on BotRun ${runId} (expected version ${expectedVersion})`);
+    this.name = "StaleStateError";
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Transition function
 // ---------------------------------------------------------------------------
@@ -82,6 +92,7 @@ export interface TransitionOptions {
 export interface TransitionResult {
   id: string;
   state: BotRunState;
+  version: number;
   stoppedAt: Date | null;
   startedAt: Date | null;
   errorCode: string | null;
@@ -91,8 +102,12 @@ export interface TransitionResult {
 /**
  * Atomically transition a BotRun to a new state and record the event.
  *
+ * Uses optimistic locking via `version` field to prevent race conditions
+ * when multiple workers attempt concurrent state transitions (Task #20).
+ *
  * @throws {RunNotFoundError}       if runId doesn't exist
  * @throws {InvalidTransitionError} if the transition is not allowed
+ * @throws {StaleStateError}        if another process already modified the run
  */
 export async function transition(
   runId: string,
@@ -107,6 +122,7 @@ export async function transition(
     throw new InvalidTransitionError(from, to);
   }
 
+  const currentVersion = run.version;
   const now = new Date();
   const eventType = options.eventType ?? `RUN_${to}`;
   const payload: Record<string, unknown> = {
@@ -117,7 +133,10 @@ export async function transition(
     ...(options.meta ?? {}),
   };
 
-  const updateData: Record<string, unknown> = { state: to };
+  const updateData: Record<string, unknown> = {
+    state: to,
+    version: currentVersion + 1,
+  };
   if (to === "RUNNING" && options.startedAt) updateData.startedAt = options.startedAt;
   if (isTerminalState(to)) {
     updateData.stoppedAt = options.stoppedAt ?? now;
@@ -125,18 +144,15 @@ export async function transition(
   }
 
   const updated = await defaultPrisma.$transaction(async (tx) => {
-    const result = await tx.botRun.update({
-      where: { id: runId },
+    // Optimistic lock: only update if version hasn't changed since we read it
+    const result = await tx.botRun.updateMany({
+      where: { id: runId, version: currentVersion },
       data: updateData,
-      select: {
-        id: true,
-        state: true,
-        stoppedAt: true,
-        startedAt: true,
-        errorCode: true,
-        updatedAt: true,
-      },
     });
+
+    if (result.count === 0) {
+      throw new StaleStateError(runId, currentVersion);
+    }
 
     await tx.botEvent.create({
       data: {
@@ -146,7 +162,21 @@ export async function transition(
       },
     });
 
-    return result;
+    // Re-read the updated row to return the result
+    const updated = await tx.botRun.findUniqueOrThrow({
+      where: { id: runId },
+      select: {
+        id: true,
+        state: true,
+        version: true,
+        stoppedAt: true,
+        startedAt: true,
+        errorCode: true,
+        updatedAt: true,
+      },
+    });
+
+    return updated;
   });
 
   return updated as TransitionResult;
