@@ -143,6 +143,7 @@ async function syncBotStatus(botId: string): Promise<void> {
 
 /** Advance a single QUEUED run through STARTING → SYNCING → RUNNING. */
 async function activateRun(runId: string) {
+  const runLog = workerLog.child({ runId });
   try {
     // QUEUED → STARTING
     await transition(runId, "STARTING", {
@@ -164,6 +165,7 @@ async function activateRun(runId: string) {
       include: { bot: { select: { id: true, symbol: true } } },
     });
     if (!afterSync || afterSync.state !== "SYNCING") return; // aborted
+    runLog.info({ symbol: afterSync.bot?.symbol }, "run activated → RUNNING");
     await transition(runId, "RUNNING", {
       eventType: "RUN_RUNNING",
       message: "Bot is running",
@@ -529,6 +531,7 @@ async function executeIntent(intent: {
 }) {
   const { botRun } = intent;
   const { bot } = botRun;
+  const intentLog = workerLog.child({ runId: botRun.id, intentId: intent.intentId, symbol: bot.symbol });
 
   // Atomically claim the intent (optimistic lock)
   const claimed = await prisma.botIntent.updateMany({
@@ -563,7 +566,7 @@ async function executeIntent(intent: {
           } as Prisma.InputJsonValue,
         },
       });
-      workerLog.info({ intentId: intent.intentId }, "intent simulated (demo mode)");
+      intentLog.info("intent simulated (demo mode)");
     } else {
       // ── Live mode: place order on Bybit ──────────────────────────────────
       const encKey = getEncryptionKeyRaw();
@@ -600,9 +603,8 @@ async function executeIntent(intent: {
         qtyStr = normalized.order.qty;
         priceStr = normalized.order.price;
 
-        workerLog.info(
+        intentLog.info(
           {
-            intentId: intent.intentId,
             diagnostics: normalized.order.diagnostics,
             env: isBybitLive() ? "live" : "demo",
             baseUrl: getBybitBaseUrl(),
@@ -611,7 +613,7 @@ async function executeIntent(intent: {
         );
       } catch (normErr) {
         // If normalization itself fails (e.g. instrument not found), log and throw
-        workerLog.warn({ err: normErr, intentId: intent.intentId }, "order normalization error");
+        intentLog.warn({ err: normErr }, "order normalization error");
         throw normErr;
       }
 
@@ -648,7 +650,7 @@ async function executeIntent(intent: {
           } as Prisma.InputJsonValue,
         },
       });
-      workerLog.info({ intentId: intent.intentId, orderId: result.orderId }, "intent placed");
+      intentLog.info({ orderId: result.orderId }, "intent placed");
     }
   } catch (err) {
     // Stage 8 (#141) + Task #22: classify error and decide retry vs dead-letter
@@ -687,9 +689,8 @@ async function executeIntent(intent: {
           } as Prisma.InputJsonValue,
         },
       });
-      workerLog.warn(
+      intentLog.warn(
         {
-          intentId: intent.intentId,
           errorClass: classification.errorClass,
           retryAttempt: currentRetry + 1,
           maxRetries: MAX_INTENT_RETRIES,
@@ -731,10 +732,9 @@ async function executeIntent(intent: {
           } as Prisma.InputJsonValue,
         },
       });
-      workerLog.error(
+      intentLog.error(
         {
           err,
-          intentId: intent.intentId,
           errorClass: classification.errorClass,
           retryable: classification.retryable,
           retryCount: currentRetry,
@@ -950,7 +950,7 @@ async function processIntents() {
             } as Prisma.InputJsonValue,
           },
         });
-        workerLog.info({ intentId: intent.intentId }, "intent cancelled — strategy disabled");
+        workerLog.info({ intentId: intent.intentId, runId: intent.botRun.id, symbol: intent.botRun.bot.symbol }, "intent cancelled — strategy disabled");
         continue;
       }
 
@@ -1016,6 +1016,7 @@ async function reconcilePlacedIntents(): Promise<void> {
     for (const intent of intents) {
       const { bot } = intent.botRun;
       if (!bot.exchangeConnection || !intent.orderId) continue;
+      const reconLog = workerLog.child({ runId: intent.botRun.id, intentId: intent.intentId, symbol: bot.symbol });
 
       try {
         const secret = decrypt(bot.exchangeConnection.encryptedSecret, encKey);
@@ -1108,9 +1109,8 @@ async function reconcilePlacedIntents(): Promise<void> {
             },
           });
 
-          workerLog.info(
+          reconLog.info(
             {
-              intentId: intent.intentId,
               orderId: intent.orderId,
               prevState: intent.state,
               newState,
@@ -1121,8 +1121,8 @@ async function reconcilePlacedIntents(): Promise<void> {
           );
         }
       } catch (err) {
-        workerLog.warn(
-          { err, intentId: intent.intentId, orderId: intent.orderId },
+        reconLog.warn(
+          { err, orderId: intent.orderId },
           "reconcile intent error (non-fatal)",
         );
       }

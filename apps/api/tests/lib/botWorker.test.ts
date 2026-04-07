@@ -66,15 +66,19 @@ vi.mock("../../src/lib/prisma.js", () => ({
   },
 }));
 
+function createMockLogger(): Record<string, unknown> {
+  const mock: Record<string, unknown> = {
+    info: vi.fn(),
+    warn: vi.fn(),
+    error: vi.fn(),
+    debug: vi.fn(),
+    child: () => createMockLogger(),
+  };
+  return mock;
+}
+
 vi.mock("../../src/lib/logger.js", () => ({
-  logger: {
-    child: () => ({
-      info: vi.fn(),
-      warn: vi.fn(),
-      error: vi.fn(),
-      debug: vi.fn(),
-    }),
-  },
+  logger: createMockLogger(),
 }));
 
 vi.mock("../../src/lib/bybitOrder.js", () => ({
@@ -167,6 +171,10 @@ vi.mock("../../src/lib/safetyGuards.js", () => ({
   DEFAULT_ERROR_PAUSE_THRESHOLD: 3,
 }));
 
+vi.mock("../../src/lib/notify.js", () => ({
+  notifyRunEvent: vi.fn(),
+}));
+
 // ---------------------------------------------------------------------------
 // Import the real functions (after mocks are set up)
 // ---------------------------------------------------------------------------
@@ -228,7 +236,10 @@ describe("activateRun (real function)", () => {
       .mockResolvedValueOnce(undefined); // FAILED transition in catch
 
     // findUnique after STARTING returns STARTING state
-    mockBotRunFindUnique.mockResolvedValueOnce({ id: runId, state: "STARTING", botId: "bot-1" });
+    mockBotRunFindUnique
+      .mockResolvedValueOnce({ id: runId, state: "STARTING", botId: "bot-1" })
+      // catch block queries for workspaceId/symbol for notification
+      .mockResolvedValueOnce({ id: runId, workspaceId: "ws-1", symbol: "BTCUSDT" });
 
     await activateRun(runId);
 
@@ -285,6 +296,9 @@ describe("activateRun (real function)", () => {
     mockTransition
       .mockRejectedValueOnce(new Error("Initial crash"))
       .mockRejectedValueOnce(new Error("Cannot transition"));
+
+    // catch block queries for workspaceId/symbol for notification
+    mockBotRunFindUnique.mockResolvedValueOnce({ id: runId, workspaceId: "ws-1", symbol: "BTCUSDT" });
 
     // Should not throw — double fault is logged but swallowed
     await expect(activateRun(runId)).resolves.toBeUndefined();

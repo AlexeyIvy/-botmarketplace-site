@@ -2,7 +2,7 @@ import { buildApp } from "./app.js";
 import { startBotWorker } from "./lib/botWorker.js";
 import cron from "node-cron";
 import { runIngestion } from "./lib/funding/ingestJob.js";
-import { prisma } from "./lib/prisma.js";
+import { prisma, startPoolMetricsLogging, stopPoolMetricsLogging } from "./lib/prisma.js";
 import { logger } from "./lib/logger.js";
 
 const PORT = parseInt(process.env.API_PORT || "4000", 10);
@@ -36,6 +36,9 @@ async function main() {
       app.log.info("Embedded worker disabled (DISABLE_EMBEDDED_WORKER set). Use standalone worker process.");
     }
 
+    // Start pool metrics logging (Rec C)
+    startPoolMetricsLogging();
+
     // Funding ingestion cron — every 8 hours (matches Bybit settlement schedule)
     const fundingCron = cron.schedule("0 */8 * * *", () => {
       logger.info("Funding cron triggered");
@@ -46,6 +49,7 @@ async function main() {
     for (const signal of ["SIGINT", "SIGTERM"]) {
       process.once(signal, async () => {
         fundingCron.stop();
+        stopPoolMetricsLogging();
         if (stopWorker) await stopWorker();
         await app.close();
         await prisma.$disconnect();

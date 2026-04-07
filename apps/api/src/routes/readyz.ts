@@ -1,5 +1,5 @@
 import type { FastifyInstance } from "fastify";
-import { prisma } from "../lib/prisma.js";
+import { prisma, getPoolMetrics } from "../lib/prisma.js";
 import { lastPollTimestampMs, POLL_INTERVAL_MS } from "../lib/botWorker.js";
 
 /**
@@ -72,6 +72,21 @@ export async function readyzRoutes(app: FastifyInstance) {
       }
     } catch {
       checks.stuckRuns = { ok: true, detail: "Could not check (non-critical)" };
+    }
+
+    // 5. Connection pool metrics (Rec C)
+    try {
+      const poolMetrics = await getPoolMetrics();
+      if (poolMetrics) {
+        checks.connectionPool = {
+          ok: poolMetrics.waitCount < 5,
+          detail: `active=${poolMetrics.activeConnections} idle=${poolMetrics.idleConnections} waiting=${poolMetrics.waitCount}`,
+        };
+      } else {
+        checks.connectionPool = { ok: true, detail: "Metrics unavailable (non-critical)" };
+      }
+    } catch {
+      checks.connectionPool = { ok: true, detail: "Could not check (non-critical)" };
     }
 
     // Overall status: database + worker are critical; others are warnings
