@@ -21,6 +21,7 @@ import { usersRoutes } from "./routes/users.js";
 import { demoRoutes } from "./routes/demo.js";
 import { fundingRoutes } from "./routes/funding.js";
 import { hedgeRoutes } from "./routes/hedges.js";
+import { notificationRoutes } from "./routes/notifications.js";
 import { clientErrorRoutes } from "./routes/clientErrors.js";
 
 /**
@@ -67,6 +68,7 @@ async function registerRoutes(scope: import("fastify").FastifyInstance) {
   await scope.register(withRateLimit(hedgeRoutes, 30, "1 minute"));   // /hedges/*: 30 req/min
   await scope.register(aiRoutes);
   await scope.register(preferencesRoutes);
+  await scope.register(notificationRoutes);
   await scope.register(usersRoutes);
   await scope.register(demoRoutes);
   await scope.register(withRateLimit(clientErrorRoutes, 10, "1 minute")); // 10 req/min

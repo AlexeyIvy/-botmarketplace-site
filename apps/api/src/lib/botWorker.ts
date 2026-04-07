@@ -81,6 +81,7 @@ import {
   shouldPauseOnError,
   DEFAULT_ERROR_PAUSE_THRESHOLD,
 } from "./safetyGuards.js";
+import { notifyRunEvent } from "./notify.js";
 
 const workerLog = logger.child({ module: "botWorker" });
 
@@ -372,11 +373,20 @@ async function activateRun(runId: string) {
   } catch (err) {
     workerLog.error({ err, runId }, "activateRun error");
     try {
+      const failedRun = await prisma.botRun.findUnique({ where: { id: runId }, select: { workspaceId: true, symbol: true } });
       await transition(runId, "FAILED", {
         eventType: "RUN_FAILED",
         message: `activateRun crashed: ${err instanceof Error ? err.message : String(err)}`,
         errorCode: "ACTIVATE_CRASH",
       });
+      if (failedRun) {
+        notifyRunEvent(failedRun.workspaceId, {
+          eventType: "RUN_FAILED",
+          runId,
+          symbol: failedRun.symbol,
+          message: `Run activation crashed: ${err instanceof Error ? err.message : String(err)}`,
+        });
+      }
     } catch (transitionErr) {
       workerLog.warn({ err: transitionErr, runId }, "failed to transition crashed run to FAILED");
     }
@@ -412,7 +422,7 @@ async function timeoutExpiredRuns() {
       state: { in: ["STARTING", "SYNCING"] },
       updatedAt: { lt: new Date(now - EPHEMERAL_TIMEOUT_MS) },
     },
-    select: { id: true, botId: true, state: true, updatedAt: true },
+    select: { id: true, botId: true, state: true, updatedAt: true, workspaceId: true, symbol: true },
     take: 20,
   });
 
@@ -425,6 +435,12 @@ async function timeoutExpiredRuns() {
       });
       workerLog.warn({ runId: run.id, state: run.state }, "stuck ephemeral run → FAILED");
       await syncBotStatus(run.botId);
+      notifyRunEvent(run.workspaceId, {
+        eventType: "RUN_FAILED",
+        runId: run.id,
+        symbol: run.symbol,
+        message: `Run stuck in ${run.state} for over 5 minutes — moved to FAILED`,
+      });
     } catch (err) {
       workerLog.error({ err, runId: run.id }, "failed to timeout stuck ephemeral run");
     }
@@ -435,7 +451,7 @@ async function timeoutExpiredRuns() {
       state: "RUNNING",
       startedAt: { not: null },
     },
-    select: { id: true, botId: true, startedAt: true, durationMinutes: true },
+    select: { id: true, botId: true, startedAt: true, durationMinutes: true, workspaceId: true, symbol: true },
     take: 20,
   });
 
@@ -458,6 +474,12 @@ async function timeoutExpiredRuns() {
       });
       workerLog.info({ runId: run.id, elapsed, maxDurationMs }, "run timed out");
       await syncBotStatus(run.botId);
+      notifyRunEvent(run.workspaceId, {
+        eventType: "RUN_TIMED_OUT",
+        runId: run.id,
+        symbol: run.symbol,
+        message: `Run exceeded max duration of ${Math.round(maxDurationMs / 60000)} minutes`,
+      });
     } catch (err) {
       workerLog.error({ err, runId: run.id }, "timeoutExpiredRuns error");
     }
@@ -778,6 +800,12 @@ async function enforceDailyLossLimit(): Promise<void> {
           { runId: run.id, estimatedLoss: result.estimatedLoss, dailyLossLimitUsd: config.dailyLossLimitUsd },
           "daily loss limit exceeded, stopping run",
         );
+        notifyRunEvent(run.workspaceId, {
+          eventType: "RUN_STOPPING",
+          runId: run.id,
+          symbol: run.symbol,
+          message: `Daily loss limit breached: ${result.reason}`,
+        });
       } catch (err) {
         workerLog.error({ err, runId: run.id }, "enforceDailyLossLimit transition error");
       }
@@ -847,6 +875,12 @@ async function enforceErrorPause(): Promise<void> {
           { runId: run.id, consecutiveFailed, threshold: result.threshold },
           "pauseOnError triggered, stopping run",
         );
+        notifyRunEvent(run.workspaceId, {
+          eventType: "RUN_STOPPING",
+          runId: run.id,
+          symbol: run.symbol,
+          message: `Circuit breaker: ${consecutiveFailed} consecutive failed intents`,
+        });
       } catch (err) {
         workerLog.error({ err, runId: run.id }, "enforceErrorPause transition error");
       }

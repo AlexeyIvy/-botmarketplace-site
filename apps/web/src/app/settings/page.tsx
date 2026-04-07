@@ -236,6 +236,30 @@ export default function SettingsPage() {
     <div style={wrap}>
       <h1 style={{ fontSize: 26, marginBottom: 24, fontWeight: 700 }}>Settings</h1>
 
+      {/* Notifications link */}
+      <div style={{ marginBottom: 16 }}>
+        <button
+          onClick={() => router.push("/settings/notifications")}
+          style={{
+            background: "none",
+            border: "1px solid var(--border)",
+            borderRadius: 8,
+            padding: "12px 16px",
+            color: "var(--text-primary)",
+            fontSize: 14,
+            cursor: "pointer",
+            width: "100%",
+            textAlign: "left",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <span>Telegram Notifications</span>
+          <span style={{ color: "var(--text-secondary)", fontSize: 13 }}>Configure &rarr;</span>
+        </button>
+      </div>
+
       {/* Account block */}
       <section style={card}>
         <h2 style={sectionTitle}>Account</h2>
