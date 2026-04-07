@@ -764,6 +764,8 @@ async function enforceDailyLossLimit(): Promise<void> {
       where: { state: "RUNNING" },
       select: {
         id: true,
+        workspaceId: true,
+        symbol: true,
         bot: {
           select: {
             strategyVersion: { select: { dslJson: true } },
@@ -829,6 +831,8 @@ async function enforceErrorPause(): Promise<void> {
       where: { state: "RUNNING" },
       select: {
         id: true,
+        workspaceId: true,
+        symbol: true,
         bot: {
           select: {
             strategyVersion: { select: { dslJson: true } },
