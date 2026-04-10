@@ -6,6 +6,7 @@
 > **Общая оценка**: 7.3/10. Архитектура зрелая, trading core хорошо покрыт, но бизнес-CRUD и безопасность — главные пробелы.
 >
 > **Цель документа**: зафиксировать следующий batch доработок с приоритизацией по impact.
+> **GitHub Issues**: #223-#235 (13 задач)
 
 ---
 
@@ -38,7 +39,7 @@
 
 ## Tier A — Критические (бизнес-ядро без тестов)
 
-### A1. Route tests: bots.ts
+### A1. Route tests: bots.ts (#223)
 
 | | |
 |---|---|
@@ -60,7 +61,7 @@
 
 ---
 
-### A2. Route tests: runs.ts
+### A2. Route tests: runs.ts (#224)
 
 | | |
 |---|---|
@@ -82,7 +83,7 @@
 
 ---
 
-### A3. Route tests: strategies.ts
+### A3. Route tests: strategies.ts (#225)
 
 | | |
 |---|---|
@@ -102,7 +103,7 @@
 
 ---
 
-### A4. Crypto roundtrip тесты
+### A4. Crypto roundtrip тесты (#226)
 
 | | |
 |---|---|
@@ -127,7 +128,7 @@
 
 ## Tier B — Важные (надёжность и изоляция)
 
-### B1. Route tests: intents.ts + datasets.ts
+### B1. Route tests: intents.ts + datasets.ts (#227)
 
 | | |
 |---|---|
@@ -152,7 +153,7 @@
 
 ---
 
-### B2. Actions layer tests
+### B2. Actions layer tests (#228)
 
 | | |
 |---|---|
@@ -173,7 +174,7 @@
 
 ---
 
-### B3. Workspace isolation тесты
+### B3. Workspace isolation тесты (#229)
 
 | | |
 |---|---|
@@ -193,7 +194,7 @@ Multi-tenant isolation через `resolveWorkspace()` middleware — крити
 
 ---
 
-### B4. Worker extraction refactor (botWorker.ts split)
+### B4. Worker extraction refactor (botWorker.ts split) (#230)
 
 | | |
 |---|---|
@@ -219,7 +220,7 @@ Multi-tenant isolation через `resolveWorkspace()` middleware — крити
 
 ## Tier C — Средний приоритет (безопасность и quality)
 
-### C1. Telegram token encryption
+### C1. Telegram token encryption (#231)
 
 | | |
 |---|---|
@@ -238,7 +239,7 @@ Telegram `botToken` хранится в `UserPreference.notifyJson` в plain tex
 
 ---
 
-### C2. AI input sanitization
+### C2. AI input sanitization (#232)
 
 | | |
 |---|---|
@@ -256,7 +257,7 @@ Telegram `botToken` хранится в `UserPreference.notifyJson` в plain tex
 
 ---
 
-### C3. CSP enforcement transition
+### C3. CSP enforcement transition (#233)
 
 | | |
 |---|---|
@@ -274,7 +275,7 @@ Content-Security-Policy в report-only mode (V3 Tier 1 рекомендация)
 
 ---
 
-### C4. PATCH /exchanges apiKey validation
+### C4. PATCH /exchanges apiKey validation (#234)
 
 | | |
 |---|---|
@@ -294,7 +295,7 @@ if (body.apiKey !== undefined && (!body.apiKey || body.apiKey.length < 10)) {
 
 ---
 
-### C5. Route tests: lab.ts + ai.ts
+### C5. Route tests: lab.ts + ai.ts (#235)
 
 | | |
 |---|---|
