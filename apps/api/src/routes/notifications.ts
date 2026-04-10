@@ -9,7 +9,7 @@
 import type { FastifyInstance } from "fastify";
 import { prisma } from "../lib/prisma.js";
 import { problem } from "../lib/problem.js";
-import { parseNotifyConfig, sendTelegramMessage } from "../lib/notify.js";
+import { parseNotifyConfig, sendTelegramMessage, invalidateNotifyCache } from "../lib/notify.js";
 
 // ---------------------------------------------------------------------------
 // Validation
@@ -102,6 +102,9 @@ export async function notificationRoutes(app: FastifyInstance) {
           notifyJson: body.notifyJson as object,
         },
       });
+
+      // Invalidate notification cache so changes take effect immediately
+      invalidateNotifyCache(payload.sub);
 
       // Redact botToken in response
       const config = row.notifyJson as Record<string, unknown> | null;

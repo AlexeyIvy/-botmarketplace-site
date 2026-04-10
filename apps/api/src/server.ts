@@ -46,8 +46,24 @@ async function main() {
     });
 
     // Graceful shutdown — wait for in-flight poll before disconnecting
+    const SHUTDOWN_TIMEOUT_MS = 30_000;
+    let isShuttingDown = false;
+
     for (const signal of ["SIGINT", "SIGTERM"]) {
       process.once(signal, async () => {
+        if (isShuttingDown) {
+          logger.warn("Duplicate shutdown signal received — ignoring");
+          return;
+        }
+        isShuttingDown = true;
+        logger.info({ signal }, "Graceful shutdown initiated");
+
+        const forceTimer = setTimeout(() => {
+          logger.error("Graceful shutdown timeout — forcing exit");
+          process.exit(1);
+        }, SHUTDOWN_TIMEOUT_MS);
+        forceTimer.unref();
+
         fundingCron.stop();
         stopPoolMetricsLogging();
         if (stopWorker) await stopWorker();

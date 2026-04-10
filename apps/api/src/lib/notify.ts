@@ -174,6 +174,18 @@ const configCache = new Map<string, { config: NotifyConfig | null; ts: number }>
 const CACHE_TTL_MS = 5 * 60 * 1000;
 
 /**
+ * Invalidate cached notification config for a specific user.
+ * Call after PUT /user/notifications to ensure changes take effect immediately.
+ */
+export function invalidateNotifyCache(userId: string): void {
+  for (const [wsId, entry] of configCache) {
+    // Force expiry so next read re-fetches from DB
+    if (entry) entry.ts = 0;
+  }
+  notifyLog.debug({ userId }, "notify config cache invalidated");
+}
+
+/**
  * Load notification config for a workspace's owner.
  * Cached for 5 minutes to avoid DB queries on every poll cycle.
  */
