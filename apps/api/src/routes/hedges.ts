@@ -207,6 +207,10 @@ export async function hedgeRoutes(app: FastifyInstance) {
     const spotLeg = hedge.legs.find((l) => l.side === "SPOT_BUY");
     const exitQty = request.body?.quantity ?? spotLeg?.quantity ?? 0;
 
+    if (exitQty <= 0) {
+      return problem(reply, 400, "Bad Request", "Cannot determine exit quantity — no filled entry legs");
+    }
+
     const spotExitIntentId = `hedge-${hedge.id}-spot-exit`;
     const perpExitIntentId = `hedge-${hedge.id}-perp-exit`;
 

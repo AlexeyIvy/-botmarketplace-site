@@ -405,6 +405,8 @@ async function stopRun(runId: string) {
       message: "Worker completed stop",
       stoppedAt: new Date(),
     });
+    trailingStopStates.delete(runId);
+    lastTradeCloseTimes.delete(runId);
     await syncBotStatus(run.botId);
   } catch (err) {
     workerLog.error({ err, runId }, "stopRun error");
@@ -435,6 +437,8 @@ async function timeoutExpiredRuns() {
         message: `Run stuck in ${run.state} for over 5 minutes`,
         errorCode: "EPHEMERAL_STATE_TIMEOUT",
       });
+      trailingStopStates.delete(run.id);
+      lastTradeCloseTimes.delete(run.id);
       workerLog.warn({ runId: run.id, state: run.state }, "stuck ephemeral run → FAILED");
       await syncBotStatus(run.botId);
       notifyRunEvent(run.workspaceId, {
@@ -474,6 +478,8 @@ async function timeoutExpiredRuns() {
         message: `Run exceeded max duration of ${maxDurationMs / 1000}s`,
         errorCode: "MAX_DURATION_EXCEEDED",
       });
+      trailingStopStates.delete(run.id);
+      lastTradeCloseTimes.delete(run.id);
       workerLog.info({ runId: run.id, elapsed, maxDurationMs }, "run timed out");
       await syncBotStatus(run.botId);
       notifyRunEvent(run.workspaceId, {

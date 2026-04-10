@@ -82,15 +82,17 @@ export async function buildApp() {
           ? { target: "pino-pretty" }
           : undefined,
     },
-    trustProxy: "127.0.0.1",
+    trustProxy: process.env.TRUST_PROXY || "127.0.0.1",
     genReqId: (req) =>
       (req.headers["x-request-id"] as string) || randomUUID(),
   });
 
+  const corsOrigin = process.env.CORS_ORIGIN
+    ? process.env.CORS_ORIGIN.split(",")
+    : (process.env.NODE_ENV === "production" ? ["https://botmarketplace.store"] : true);
+
   await app.register(cors, {
-    origin: process.env.NODE_ENV === "production"
-      ? ["https://botmarketplace.store"]
-      : true,
+    origin: corsOrigin,
     credentials: true,
   });
 
