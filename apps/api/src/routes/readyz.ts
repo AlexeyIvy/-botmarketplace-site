@@ -7,6 +7,7 @@ import { lastPollTimestampMs, POLL_INTERVAL_MS } from "../lib/botWorker.js";
  * 3× the poll interval ago (default: 12 seconds).
  */
 const WORKER_STALENESS_FACTOR = 3;
+const POOL_WAIT_THRESHOLD = parseInt(process.env.POOL_WAIT_THRESHOLD || "5", 10);
 
 export async function readyzRoutes(app: FastifyInstance) {
   app.get("/readyz", async (_request, reply) => {
@@ -79,7 +80,7 @@ export async function readyzRoutes(app: FastifyInstance) {
       const poolMetrics = await getPoolMetrics();
       if (poolMetrics) {
         checks.connectionPool = {
-          ok: poolMetrics.waitCount < 5,
+          ok: poolMetrics.waitCount < POOL_WAIT_THRESHOLD,
           detail: `active=${poolMetrics.activeConnections} idle=${poolMetrics.idleConnections} waiting=${poolMetrics.waitCount}`,
         };
       } else {

@@ -39,6 +39,9 @@ function validateNotifyJson(val: unknown): string | null {
     if (tg.chatId.length > 50) {
       return "notifyJson.telegram.chatId is too long";
     }
+    if (!/^-?\d+$/.test(tg.chatId as string) && !/^@[a-zA-Z0-9_]+$/.test(tg.chatId as string)) {
+      return "notifyJson.telegram.chatId must be a numeric ID or @username";
+    }
     if (tg.enabled !== undefined && typeof tg.enabled !== "boolean") {
       return "notifyJson.telegram.enabled must be a boolean";
     }

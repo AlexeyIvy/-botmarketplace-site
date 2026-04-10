@@ -785,6 +785,7 @@ async function enforceDailyLossLimit(): Promise<void> {
     todayStart.setHours(0, 0, 0, 0);
 
     for (const run of runningRuns) {
+      const runLog = workerLog.child({ runId: run.id, symbol: run.symbol, workspaceId: run.workspaceId });
       const config = parseDailyLossConfig(run.bot?.strategyVersion?.dslJson);
       if (config.dailyLossLimitUsd === null) continue;
 
@@ -804,8 +805,8 @@ async function enforceDailyLossLimit(): Promise<void> {
           eventType: "RUN_STOPPING",
           message: `Daily loss limit: ${result.reason}`,
         });
-        workerLog.info(
-          { runId: run.id, estimatedLoss: result.estimatedLoss, dailyLossLimitUsd: config.dailyLossLimitUsd },
+        runLog.info(
+          { estimatedLoss: result.estimatedLoss, dailyLossLimitUsd: config.dailyLossLimitUsd },
           "daily loss limit exceeded, stopping run",
         );
         notifyRunEvent(run.workspaceId, {
@@ -815,7 +816,7 @@ async function enforceDailyLossLimit(): Promise<void> {
           message: `Daily loss limit breached: ${result.reason}`,
         });
       } catch (err) {
-        workerLog.error({ err, runId: run.id }, "enforceDailyLossLimit transition error");
+        runLog.error({ err }, "enforceDailyLossLimit transition error");
       }
     }
   } catch (err) {
@@ -849,6 +850,7 @@ async function enforceErrorPause(): Promise<void> {
     });
 
     for (const run of runningRuns) {
+      const runLog = workerLog.child({ runId: run.id, symbol: run.symbol, workspaceId: run.workspaceId });
       const guards = parseGuardsConfig(run.bot?.strategyVersion?.dslJson);
       if (!guards.pauseOnError) continue;
 
@@ -881,8 +883,8 @@ async function enforceErrorPause(): Promise<void> {
           eventType: "RUN_STOPPING",
           message: `Pause on error: ${result.reason}`,
         });
-        workerLog.info(
-          { runId: run.id, consecutiveFailed, threshold: result.threshold },
+        runLog.info(
+          { consecutiveFailed, threshold: result.threshold },
           "pauseOnError triggered, stopping run",
         );
         notifyRunEvent(run.workspaceId, {
@@ -892,7 +894,7 @@ async function enforceErrorPause(): Promise<void> {
           message: `Circuit breaker: ${consecutiveFailed} consecutive failed intents`,
         });
       } catch (err) {
-        workerLog.error({ err, runId: run.id }, "enforceErrorPause transition error");
+        runLog.error({ err }, "enforceErrorPause transition error");
       }
     }
   } catch (err) {

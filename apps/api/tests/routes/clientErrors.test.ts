@@ -101,12 +101,12 @@ describe("POST /api/v1/client-errors", () => {
     await app.close();
   });
 
-  it("rate-limits at 10 requests per minute", async () => {
+  it("rate-limits at 3 requests per minute", async () => {
     const app = await buildApp();
 
-    // Send 11 requests — first 10 should succeed, 11th should be rate-limited
+    // Send 4 requests — first 3 should succeed, 4th should be rate-limited
     const results: number[] = [];
-    for (let i = 0; i < 11; i++) {
+    for (let i = 0; i < 4; i++) {
       const res = await app.inject({
         method: "POST",
         url: "/api/v1/client-errors",
@@ -116,10 +116,10 @@ describe("POST /api/v1/client-errors", () => {
       results.push(res.statusCode);
     }
 
-    // First 10: 204 (success)
-    expect(results.slice(0, 10).every((c) => c === 204)).toBe(true);
-    // 11th: 429 (rate limited)
-    expect(results[10]).toBe(429);
+    // First 3: 204 (success)
+    expect(results.slice(0, 3).every((c) => c === 204)).toBe(true);
+    // 4th: 429 (rate limited)
+    expect(results[3]).toBe(429);
 
     await app.close();
   });

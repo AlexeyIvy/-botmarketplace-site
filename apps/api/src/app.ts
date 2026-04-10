@@ -71,7 +71,7 @@ async function registerRoutes(scope: import("fastify").FastifyInstance) {
   await scope.register(notificationRoutes);
   await scope.register(usersRoutes);
   await scope.register(demoRoutes);
-  await scope.register(withRateLimit(clientErrorRoutes, 10, "1 minute")); // 10 req/min
+  await scope.register(withRateLimit(clientErrorRoutes, 3, "1 minute")); // 3 req/min
 }
 
 export async function buildApp() {
