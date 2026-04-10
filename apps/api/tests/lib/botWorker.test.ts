@@ -27,6 +27,7 @@ const mockBotRunUpdateMany = vi.fn();
 const mockBotUpdate = vi.fn();
 const mockBotIntentFindMany = vi.fn().mockResolvedValue([]);
 const mockBotIntentUpdateMany = vi.fn();
+const mockBotIntentUpdate = vi.fn();
 const mockBotEventCreate = vi.fn();
 const mockPositionEventFindFirst = vi.fn().mockResolvedValue(null);
 const mockPositionFindUnique = vi.fn().mockResolvedValue(null);
@@ -52,6 +53,7 @@ vi.mock("../../src/lib/prisma.js", () => ({
     },
     botIntent: {
       findMany: (...args: unknown[]) => mockBotIntentFindMany(...args),
+      update: (...args: unknown[]) => mockBotIntentUpdate(...args),
       updateMany: (...args: unknown[]) => mockBotIntentUpdateMany(...args),
     },
     botEvent: {
@@ -183,7 +185,16 @@ import {
   _activateRun as activateRun,
   _timeoutExpiredRuns as timeoutExpiredRuns,
   _stopRun as stopRun,
+  _processIntents as processIntents,
+  _executeIntent as executeIntent,
+  _reconcilePlacedIntents as reconcilePlacedIntents,
 } from "../../src/lib/botWorker.js";
+
+import { bybitPlaceOrder, bybitGetOrderStatus, mapBybitStatus } from "../../src/lib/bybitOrder.js";
+import { classifyExecutionError } from "../../src/lib/errorClassifier.js";
+import { getInstrument } from "../../src/lib/exchange/instrumentCache.js";
+import { normalizeOrder } from "../../src/lib/exchange/normalizer.js";
+import { getActivePosition } from "../../src/lib/positionManager.js";
 
 // ---------------------------------------------------------------------------
 // Tests
@@ -492,5 +503,562 @@ describe("stopRun (real function)", () => {
     mockBotRunFindUnique.mockRejectedValueOnce(new Error("DB error"));
 
     await expect(stopRun("run-err")).resolves.toBeUndefined();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// executeIntent tests (B3, issue #216)
+// ---------------------------------------------------------------------------
+
+describe("executeIntent (real function)", () => {
+  const demoIntent = {
+    id: "intent-1",
+    intentId: "int-uuid-1",
+    orderLinkId: "link-1",
+    side: "BUY",
+    qty: { toString: () => "0.01" },
+    price: { toString: () => "50000" },
+    retryCount: 0,
+    metaJson: {},
+    botRun: {
+      id: "run-1",
+      bot: {
+        id: "bot-1",
+        symbol: "BTCUSDT",
+        exchangeConnectionId: null,
+        exchangeConnection: null,
+        strategyVersion: { dslJson: { enabled: true } },
+      },
+    },
+  };
+
+  const liveIntent = {
+    ...demoIntent,
+    botRun: {
+      id: "run-1",
+      bot: {
+        id: "bot-1",
+        symbol: "BTCUSDT",
+        exchangeConnectionId: "exc-1",
+        exchangeConnection: {
+          apiKey: "test-api-key",
+          encryptedSecret: "encrypted-secret",
+        },
+        strategyVersion: { dslJson: { enabled: true } },
+      },
+    },
+  };
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockBotIntentUpdateMany.mockResolvedValue({ count: 1 });
+    mockBotIntentUpdate.mockResolvedValue(undefined);
+    mockBotEventCreate.mockResolvedValue(undefined);
+  });
+
+  it("simulates fill in demo mode (no exchangeConnection)", async () => {
+    await executeIntent(demoIntent);
+
+    // Should claim intent atomically (PENDING → PLACED)
+    expect(mockBotIntentUpdateMany).toHaveBeenCalledWith({
+      where: { id: "intent-1", state: "PENDING" },
+      data: { state: "PLACED" },
+    });
+
+    // Should mark as FILLED with simulated meta
+    expect(mockBotIntentUpdate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { id: "intent-1" },
+        data: expect.objectContaining({
+          state: "FILLED",
+          metaJson: expect.objectContaining({ simulated: true }),
+        }),
+      }),
+    );
+
+    // Should create intent_simulated event
+    expect(mockBotEventCreate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          botRunId: "run-1",
+          type: "intent_simulated",
+        }),
+      }),
+    );
+  });
+
+  it("skips silently when another worker claimed the intent", async () => {
+    mockBotIntentUpdateMany.mockResolvedValue({ count: 0 });
+
+    await executeIntent(demoIntent);
+
+    expect(mockBotIntentUpdate).not.toHaveBeenCalled();
+    expect(mockBotEventCreate).not.toHaveBeenCalled();
+  });
+
+  it("places order on Bybit in live mode", async () => {
+    vi.mocked(getInstrument).mockResolvedValue({} as never);
+    vi.mocked(normalizeOrder).mockReturnValue({
+      valid: true,
+      order: { qty: "0.01", price: "50000", diagnostics: {} },
+    } as never);
+    vi.mocked(bybitPlaceOrder).mockResolvedValue({
+      orderId: "bybit-order-123",
+      orderLinkId: "link-1",
+    });
+
+    await executeIntent(liveIntent);
+
+    expect(vi.mocked(bybitPlaceOrder)).toHaveBeenCalledWith(
+      "test-api-key",
+      "decrypted-secret",
+      expect.objectContaining({
+        symbol: "BTCUSDT",
+        side: "Buy",
+        orderType: "Market",
+        qty: "0.01",
+      }),
+    );
+
+    // Should save orderId in intent
+    expect(mockBotIntentUpdate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { id: "intent-1" },
+        data: expect.objectContaining({
+          orderId: "bybit-order-123",
+        }),
+      }),
+    );
+
+    // Should create intent_placed event
+    expect(mockBotEventCreate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          type: "intent_placed",
+          payloadJson: expect.objectContaining({
+            orderId: "bybit-order-123",
+          }),
+        }),
+      }),
+    );
+  });
+
+  it("retries on transient error when retryCount < MAX", async () => {
+    vi.mocked(getInstrument).mockResolvedValue({} as never);
+    vi.mocked(normalizeOrder).mockReturnValue({
+      valid: true,
+      order: { qty: "0.01", diagnostics: {} },
+    } as never);
+    vi.mocked(bybitPlaceOrder).mockRejectedValue(new Error("rate limit hit"));
+    vi.mocked(classifyExecutionError).mockReturnValue({
+      retryable: true,
+      errorClass: "RATE_LIMIT",
+      reason: "rate limited",
+      category: "TRANSIENT",
+    } as never);
+
+    const retryIntent = { ...liveIntent, retryCount: 1 };
+    await executeIntent(retryIntent);
+
+    // Should put back to PENDING with incremented retryCount
+    expect(mockBotIntentUpdate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { id: "intent-1" },
+        data: expect.objectContaining({
+          state: "PENDING",
+          retryCount: 2,
+        }),
+      }),
+    );
+
+    // Should create intent_retry event
+    expect(mockBotEventCreate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          type: "intent_retry",
+          payloadJson: expect.objectContaining({
+            retryAttempt: 2,
+          }),
+        }),
+      }),
+    );
+  });
+
+  it("dead-letters when max retries exhausted", async () => {
+    vi.mocked(getInstrument).mockResolvedValue({} as never);
+    vi.mocked(normalizeOrder).mockReturnValue({
+      valid: true,
+      order: { qty: "0.01", diagnostics: {} },
+    } as never);
+    vi.mocked(bybitPlaceOrder).mockRejectedValue(new Error("timeout"));
+    vi.mocked(classifyExecutionError).mockReturnValue({
+      retryable: true,
+      errorClass: "TIMEOUT",
+      reason: "request timeout",
+      category: "TRANSIENT",
+    } as never);
+
+    // MAX_INTENT_RETRIES defaults to 3; retryCount=3 means exhausted
+    const exhaustedIntent = { ...liveIntent, retryCount: 3 };
+    await executeIntent(exhaustedIntent);
+
+    // Should set to FAILED (dead-letter)
+    expect(mockBotIntentUpdate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { id: "intent-1" },
+        data: expect.objectContaining({
+          state: "FAILED",
+          metaJson: expect.objectContaining({
+            deadLetterReason: expect.stringContaining("max retries exhausted"),
+          }),
+        }),
+      }),
+    );
+
+    // Should create intent_dead_lettered event
+    expect(mockBotEventCreate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          type: "intent_dead_lettered",
+        }),
+      }),
+    );
+  });
+
+  it("fails immediately on permanent error", async () => {
+    vi.mocked(getInstrument).mockResolvedValue({} as never);
+    vi.mocked(normalizeOrder).mockReturnValue({
+      valid: true,
+      order: { qty: "0.01", diagnostics: {} },
+    } as never);
+    vi.mocked(bybitPlaceOrder).mockRejectedValue(new Error("insufficient balance"));
+    vi.mocked(classifyExecutionError).mockReturnValue({
+      retryable: false,
+      errorClass: "INSUFFICIENT_BALANCE",
+      reason: "not enough funds",
+      category: "PERMANENT",
+    } as never);
+
+    await executeIntent(liveIntent);
+
+    // Should set to FAILED immediately
+    expect(mockBotIntentUpdate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { id: "intent-1" },
+        data: expect.objectContaining({
+          state: "FAILED",
+          metaJson: expect.objectContaining({
+            retryable: false,
+            errorClass: "INSUFFICIENT_BALANCE",
+          }),
+        }),
+      }),
+    );
+
+    // Should create intent_failed event (not dead_lettered)
+    expect(mockBotEventCreate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          type: "intent_failed",
+        }),
+      }),
+    );
+  });
+});
+
+// ---------------------------------------------------------------------------
+// processIntents tests (B3, issue #216)
+// ---------------------------------------------------------------------------
+
+describe("processIntents (real function)", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockBotIntentFindMany.mockResolvedValue([]);
+    mockBotIntentUpdateMany.mockResolvedValue({ count: 1 });
+    mockBotIntentUpdate.mockResolvedValue(undefined);
+    mockBotEventCreate.mockResolvedValue(undefined);
+  });
+
+  it("cancels intents when strategy has enabled: false", async () => {
+    mockBotIntentFindMany.mockResolvedValue([
+      {
+        id: "intent-disabled-1",
+        intentId: "uuid-dis-1",
+        orderLinkId: "link-dis-1",
+        side: "BUY",
+        qty: { toString: () => "0.01" },
+        price: { toString: () => "50000" },
+        retryCount: 0,
+        metaJson: {},
+        state: "PENDING",
+        botRun: {
+          id: "run-1",
+          state: "RUNNING",
+          bot: {
+            id: "bot-1",
+            symbol: "BTCUSDT",
+            exchangeConnectionId: null,
+            exchangeConnection: null,
+            strategyVersion: { dslJson: { enabled: false } },
+          },
+        },
+      },
+    ]);
+
+    await processIntents();
+
+    // Should cancel the intent
+    expect(mockBotIntentUpdateMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { id: "intent-disabled-1", state: "PENDING" },
+        data: expect.objectContaining({
+          state: "CANCELLED",
+          metaJson: expect.objectContaining({ reason: "strategy_disabled" }),
+        }),
+      }),
+    );
+
+    // Should create intent_cancelled event
+    expect(mockBotEventCreate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          botRunId: "run-1",
+          type: "intent_cancelled",
+          payloadJson: expect.objectContaining({
+            reason: expect.stringContaining("strategy disabled"),
+          }),
+        }),
+      }),
+    );
+  });
+
+  it("executes enabled intents (demo mode path)", async () => {
+    mockBotIntentFindMany.mockResolvedValue([
+      {
+        id: "intent-active-1",
+        intentId: "uuid-act-1",
+        orderLinkId: "link-act-1",
+        side: "SELL",
+        qty: { toString: () => "0.5" },
+        price: null,
+        retryCount: 0,
+        metaJson: {},
+        state: "PENDING",
+        botRun: {
+          id: "run-2",
+          state: "RUNNING",
+          bot: {
+            id: "bot-2",
+            symbol: "ETHUSDT",
+            exchangeConnectionId: null,
+            exchangeConnection: null,
+            strategyVersion: { dslJson: { enabled: true } },
+          },
+        },
+      },
+    ]);
+
+    await processIntents();
+
+    // Should claim intent (atomic lock from executeIntent)
+    expect(mockBotIntentUpdateMany).toHaveBeenCalledWith({
+      where: { id: "intent-active-1", state: "PENDING" },
+      data: { state: "PLACED" },
+    });
+
+    // Should mark as FILLED (demo mode simulated)
+    expect(mockBotIntentUpdate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({ state: "FILLED" }),
+      }),
+    );
+  });
+
+  it("handles empty result (no pending intents) without errors", async () => {
+    mockBotIntentFindMany.mockResolvedValue([]);
+
+    await processIntents();
+
+    expect(mockBotIntentUpdateMany).not.toHaveBeenCalled();
+    expect(mockBotIntentUpdate).not.toHaveBeenCalled();
+    expect(mockBotEventCreate).not.toHaveBeenCalled();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// reconcilePlacedIntents tests (B3, issue #216)
+// ---------------------------------------------------------------------------
+
+describe("reconcilePlacedIntents (real function)", () => {
+  const makePlacedIntent = (overrides: Record<string, unknown> = {}) => ({
+    id: "intent-placed-1",
+    intentId: "uuid-placed-1",
+    orderLinkId: "link-placed-1",
+    orderId: "bybit-order-1",
+    side: "BUY",
+    type: "ENTRY",
+    state: "PLACED",
+    qty: { toString: () => "1.0", toNumber: () => 1.0 },
+    price: { toString: () => "50000", toNumber: () => 50000 },
+    cumExecQty: null,
+    retryCount: 0,
+    metaJson: {},
+    botRun: {
+      id: "run-1",
+      state: "RUNNING",
+      bot: {
+        id: "bot-1",
+        symbol: "BTCUSDT",
+        exchangeConnectionId: "exc-1",
+        exchangeConnection: {
+          apiKey: "test-api-key",
+          encryptedSecret: "encrypted-secret",
+        },
+      },
+    },
+    ...overrides,
+  });
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockBotIntentFindMany.mockResolvedValue([]);
+    mockBotIntentUpdate.mockResolvedValue(undefined);
+    mockBotEventCreate.mockResolvedValue(undefined);
+    vi.mocked(getActivePosition).mockResolvedValue(null);
+  });
+
+  it("updates intent to FILLED on full fill", async () => {
+    mockBotIntentFindMany.mockResolvedValue([makePlacedIntent()]);
+    vi.mocked(bybitGetOrderStatus).mockResolvedValue({
+      orderId: "bybit-order-1",
+      symbol: "BTCUSDT",
+      side: "Buy",
+      orderType: "Market",
+      qty: "1.0",
+      price: "50000",
+      avgPrice: "50100",
+      cumExecQty: "1.0",
+      orderStatus: "Filled",
+      createdTime: "1700000000000",
+      updatedTime: "1700000001000",
+    });
+    vi.mocked(mapBybitStatus).mockReturnValue("FILLED");
+
+    await reconcilePlacedIntents();
+
+    expect(mockBotIntentUpdate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { id: "intent-placed-1" },
+        data: expect.objectContaining({
+          state: "FILLED",
+          cumExecQty: 1.0,
+          avgFillPrice: 50100,
+        }),
+      }),
+    );
+
+    expect(mockBotEventCreate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          type: "intent_reconciled",
+          payloadJson: expect.objectContaining({
+            newState: "FILLED",
+            fillDelta: 1.0,
+          }),
+        }),
+      }),
+    );
+  });
+
+  it("updates intent to PARTIALLY_FILLED on partial fill", async () => {
+    mockBotIntentFindMany.mockResolvedValue([makePlacedIntent()]);
+    vi.mocked(bybitGetOrderStatus).mockResolvedValue({
+      orderId: "bybit-order-1",
+      symbol: "BTCUSDT",
+      side: "Buy",
+      orderType: "Market",
+      qty: "1.0",
+      price: "50000",
+      avgPrice: "50050",
+      cumExecQty: "0.5",
+      orderStatus: "PartiallyFilled",
+      createdTime: "1700000000000",
+      updatedTime: "1700000001000",
+    });
+    vi.mocked(mapBybitStatus).mockReturnValue("PARTIALLY_FILLED");
+
+    await reconcilePlacedIntents();
+
+    expect(mockBotIntentUpdate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { id: "intent-placed-1" },
+        data: expect.objectContaining({
+          state: "PARTIALLY_FILLED",
+          cumExecQty: 0.5,
+          avgFillPrice: 50050,
+        }),
+      }),
+    );
+  });
+
+  it("cancels intent when exchange order is CANCELLED", async () => {
+    mockBotIntentFindMany.mockResolvedValue([makePlacedIntent()]);
+    vi.mocked(bybitGetOrderStatus).mockResolvedValue({
+      orderId: "bybit-order-1",
+      symbol: "BTCUSDT",
+      side: "Buy",
+      orderType: "Limit",
+      qty: "1.0",
+      price: "50000",
+      avgPrice: "0",
+      cumExecQty: "0",
+      orderStatus: "Cancelled",
+      createdTime: "1700000000000",
+      updatedTime: "1700000001000",
+    });
+    vi.mocked(mapBybitStatus).mockReturnValue("CANCELLED");
+
+    await reconcilePlacedIntents();
+
+    expect(mockBotIntentUpdate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { id: "intent-placed-1" },
+        data: expect.objectContaining({
+          state: "CANCELLED",
+        }),
+      }),
+    );
+  });
+
+  it("skips intents without exchange connection", async () => {
+    mockBotIntentFindMany.mockResolvedValue([
+      makePlacedIntent({
+        botRun: {
+          id: "run-1",
+          state: "RUNNING",
+          bot: {
+            id: "bot-1",
+            symbol: "BTCUSDT",
+            exchangeConnectionId: null,
+            exchangeConnection: null,
+          },
+        },
+      }),
+    ]);
+
+    await reconcilePlacedIntents();
+
+    expect(vi.mocked(bybitGetOrderStatus)).not.toHaveBeenCalled();
+    expect(mockBotIntentUpdate).not.toHaveBeenCalled();
+  });
+
+  it("handles exchange API errors gracefully (non-fatal)", async () => {
+    mockBotIntentFindMany.mockResolvedValue([makePlacedIntent()]);
+    vi.mocked(bybitGetOrderStatus).mockRejectedValue(new Error("network timeout"));
+
+    await reconcilePlacedIntents();
+
+    // Should not throw, should not update intent
+    expect(mockBotIntentUpdate).not.toHaveBeenCalled();
   });
 });

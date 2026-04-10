@@ -1830,6 +1830,9 @@ const GRACE_PERIOD_MS = 30_000;
 export { activateRun as _activateRun };
 export { timeoutExpiredRuns as _timeoutExpiredRuns };
 export { stopRun as _stopRun };
+export { processIntents as _processIntents };
+export { executeIntent as _executeIntent };
+export { reconcilePlacedIntents as _reconcilePlacedIntents };
 
 export function startBotWorker(): () => Promise<void> {
   workerLog.info({ workerId: WORKER_ID, interval: POLL_INTERVAL_MS }, "botWorker started");
