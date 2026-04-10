@@ -1,4 +1,5 @@
 import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
+import { randomUUID } from "node:crypto";
 import bcrypt from "bcryptjs";
 import { prisma } from "../lib/prisma.js";
 
@@ -48,6 +49,11 @@ function parseCookie(request: FastifyRequest, name: string): string | undefined 
   return match ? match.slice(name.length + 1) : undefined;
 }
 
+/** Store a refresh token record for server-side revocation. */
+async function storeRefreshToken(jti: string, userId: string, expiresAt: Date): Promise<void> {
+  await prisma.refreshToken.create({ data: { jti, userId, expiresAt } });
+}
+
 export async function authRoutes(app: FastifyInstance) {
   // ── POST /auth/register ────────────────────────────────────────────────────
   app.post<{ Body: RegisterBody }>("/auth/register", {
@@ -80,9 +86,11 @@ export async function authRoutes(app: FastifyInstance) {
       },
     });
 
+    const jti = randomUUID();
     const accessToken = await reply.jwtSign({ sub: user.id, email: user.email }, { expiresIn: ACCESS_TOKEN_EXPIRY });
-    const refreshToken = await reply.jwtSign({ sub: user.id, type: "refresh" }, { expiresIn: REFRESH_TOKEN_EXPIRY });
+    const refreshToken = await reply.jwtSign({ sub: user.id, type: "refresh", jti }, { expiresIn: REFRESH_TOKEN_EXPIRY });
     setRefreshCookie(reply, refreshToken);
+    await storeRefreshToken(jti, user.id, new Date(Date.now() + REFRESH_COOKIE_MAX_AGE * 1000));
 
     return reply.status(201).send({
       accessToken,
@@ -117,9 +125,11 @@ export async function authRoutes(app: FastifyInstance) {
       orderBy: { createdAt: "asc" },
     });
 
+    const jti = randomUUID();
     const accessToken = await reply.jwtSign({ sub: user.id, email: user.email }, { expiresIn: ACCESS_TOKEN_EXPIRY });
-    const refreshToken = await reply.jwtSign({ sub: user.id, type: "refresh" }, { expiresIn: REFRESH_TOKEN_EXPIRY });
+    const refreshToken = await reply.jwtSign({ sub: user.id, type: "refresh", jti }, { expiresIn: REFRESH_TOKEN_EXPIRY });
     setRefreshCookie(reply, refreshToken);
+    await storeRefreshToken(jti, user.id, new Date(Date.now() + REFRESH_COOKIE_MAX_AGE * 1000));
 
     return reply.send({
       accessToken,
@@ -137,9 +147,9 @@ export async function authRoutes(app: FastifyInstance) {
       return authProblem(reply, 401, "refresh token missing");
     }
 
-    let payload: { sub: string; type?: string };
+    let payload: { sub: string; type?: string; jti?: string };
     try {
-      payload = app.jwt.verify<{ sub: string; type?: string }>(token);
+      payload = app.jwt.verify<{ sub: string; type?: string; jti?: string }>(token);
     } catch {
       clearRefreshCookie(reply);
       return authProblem(reply, 401, "refresh token expired or invalid");
@@ -150,6 +160,18 @@ export async function authRoutes(app: FastifyInstance) {
       return authProblem(reply, 401, "invalid token type");
     }
 
+    // Verify jti exists and is not revoked
+    if (!payload.jti) {
+      clearRefreshCookie(reply);
+      return authProblem(reply, 401, "invalid token (missing jti)");
+    }
+
+    const storedToken = await prisma.refreshToken.findUnique({ where: { jti: payload.jti } });
+    if (!storedToken || storedToken.revoked) {
+      clearRefreshCookie(reply);
+      return authProblem(reply, 401, "refresh token revoked");
+    }
+
     // Verify user still exists
     const user = await prisma.user.findUnique({ where: { id: payload.sub } });
     if (!user) {
@@ -157,15 +179,22 @@ export async function authRoutes(app: FastifyInstance) {
       return authProblem(reply, 401, "user not found");
     }
 
+    // Revoke old token and issue new pair (rotation)
+    await prisma.refreshToken.update({
+      where: { jti: payload.jti },
+      data: { revoked: true },
+    });
+
     const membership = await prisma.workspaceMember.findFirst({
       where: { userId: user.id },
       orderBy: { createdAt: "asc" },
     });
 
-    // Rotate: issue new access + refresh tokens
+    const newJti = randomUUID();
     const newAccessToken = await reply.jwtSign({ sub: user.id, email: user.email }, { expiresIn: ACCESS_TOKEN_EXPIRY });
-    const newRefreshToken = await reply.jwtSign({ sub: user.id, type: "refresh" }, { expiresIn: REFRESH_TOKEN_EXPIRY });
+    const newRefreshToken = await reply.jwtSign({ sub: user.id, type: "refresh", jti: newJti }, { expiresIn: REFRESH_TOKEN_EXPIRY });
     setRefreshCookie(reply, newRefreshToken);
+    await storeRefreshToken(newJti, user.id, new Date(Date.now() + REFRESH_COOKIE_MAX_AGE * 1000));
 
     return reply.send({
       accessToken: newAccessToken,
@@ -175,7 +204,21 @@ export async function authRoutes(app: FastifyInstance) {
   });
 
   // ── POST /auth/logout ──────────────────────────────────────────────────────
-  app.post("/auth/logout", async (_request, reply) => {
+  app.post("/auth/logout", async (request, reply) => {
+    const token = parseCookie(request, REFRESH_COOKIE_NAME);
+    if (token) {
+      try {
+        const payload = app.jwt.verify<{ jti?: string }>(token);
+        if (payload.jti) {
+          await prisma.refreshToken.update({
+            where: { jti: payload.jti },
+            data: { revoked: true },
+          });
+        }
+      } catch {
+        // Token invalid/expired — nothing to revoke, just clear cookie
+      }
+    }
     clearRefreshCookie(reply);
     return reply.send({ ok: true });
   });
@@ -196,4 +239,17 @@ export async function authRoutes(app: FastifyInstance) {
       workspaceId: membership?.workspaceId ?? null,
     });
   });
+}
+
+/** Delete expired refresh tokens (revoked or past expiresAt). Called by cron. */
+export async function cleanupExpiredRefreshTokens(): Promise<number> {
+  const result = await prisma.refreshToken.deleteMany({
+    where: {
+      OR: [
+        { expiresAt: { lt: new Date() } },
+        { revoked: true },
+      ],
+    },
+  });
+  return result.count;
 }
