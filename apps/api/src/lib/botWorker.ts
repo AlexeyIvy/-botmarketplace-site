@@ -405,6 +405,8 @@ async function stopRun(runId: string) {
       message: "Worker completed stop",
       stoppedAt: new Date(),
     });
+    trailingStopStates.delete(runId);
+    lastTradeCloseTimes.delete(runId);
     await syncBotStatus(run.botId);
   } catch (err) {
     workerLog.error({ err, runId }, "stopRun error");
@@ -435,6 +437,8 @@ async function timeoutExpiredRuns() {
         message: `Run stuck in ${run.state} for over 5 minutes`,
         errorCode: "EPHEMERAL_STATE_TIMEOUT",
       });
+      trailingStopStates.delete(run.id);
+      lastTradeCloseTimes.delete(run.id);
       workerLog.warn({ runId: run.id, state: run.state }, "stuck ephemeral run → FAILED");
       await syncBotStatus(run.botId);
       notifyRunEvent(run.workspaceId, {
@@ -474,6 +478,8 @@ async function timeoutExpiredRuns() {
         message: `Run exceeded max duration of ${maxDurationMs / 1000}s`,
         errorCode: "MAX_DURATION_EXCEEDED",
       });
+      trailingStopStates.delete(run.id);
+      lastTradeCloseTimes.delete(run.id);
       workerLog.info({ runId: run.id, elapsed, maxDurationMs }, "run timed out");
       await syncBotStatus(run.botId);
       notifyRunEvent(run.workspaceId, {
@@ -779,6 +785,7 @@ async function enforceDailyLossLimit(): Promise<void> {
     todayStart.setHours(0, 0, 0, 0);
 
     for (const run of runningRuns) {
+      const runLog = workerLog.child({ runId: run.id, symbol: run.symbol, workspaceId: run.workspaceId });
       const config = parseDailyLossConfig(run.bot?.strategyVersion?.dslJson);
       if (config.dailyLossLimitUsd === null) continue;
 
@@ -798,8 +805,8 @@ async function enforceDailyLossLimit(): Promise<void> {
           eventType: "RUN_STOPPING",
           message: `Daily loss limit: ${result.reason}`,
         });
-        workerLog.info(
-          { runId: run.id, estimatedLoss: result.estimatedLoss, dailyLossLimitUsd: config.dailyLossLimitUsd },
+        runLog.info(
+          { estimatedLoss: result.estimatedLoss, dailyLossLimitUsd: config.dailyLossLimitUsd },
           "daily loss limit exceeded, stopping run",
         );
         notifyRunEvent(run.workspaceId, {
@@ -809,7 +816,7 @@ async function enforceDailyLossLimit(): Promise<void> {
           message: `Daily loss limit breached: ${result.reason}`,
         });
       } catch (err) {
-        workerLog.error({ err, runId: run.id }, "enforceDailyLossLimit transition error");
+        runLog.error({ err }, "enforceDailyLossLimit transition error");
       }
     }
   } catch (err) {
@@ -843,6 +850,7 @@ async function enforceErrorPause(): Promise<void> {
     });
 
     for (const run of runningRuns) {
+      const runLog = workerLog.child({ runId: run.id, symbol: run.symbol, workspaceId: run.workspaceId });
       const guards = parseGuardsConfig(run.bot?.strategyVersion?.dslJson);
       if (!guards.pauseOnError) continue;
 
@@ -875,8 +883,8 @@ async function enforceErrorPause(): Promise<void> {
           eventType: "RUN_STOPPING",
           message: `Pause on error: ${result.reason}`,
         });
-        workerLog.info(
-          { runId: run.id, consecutiveFailed, threshold: result.threshold },
+        runLog.info(
+          { consecutiveFailed, threshold: result.threshold },
           "pauseOnError triggered, stopping run",
         );
         notifyRunEvent(run.workspaceId, {
@@ -886,7 +894,7 @@ async function enforceErrorPause(): Promise<void> {
           message: `Circuit breaker: ${consecutiveFailed} consecutive failed intents`,
         });
       } catch (err) {
-        workerLog.error({ err, runId: run.id }, "enforceErrorPause transition error");
+        runLog.error({ err }, "enforceErrorPause transition error");
       }
     }
   } catch (err) {
@@ -1822,6 +1830,9 @@ const GRACE_PERIOD_MS = 30_000;
 export { activateRun as _activateRun };
 export { timeoutExpiredRuns as _timeoutExpiredRuns };
 export { stopRun as _stopRun };
+export { processIntents as _processIntents };
+export { executeIntent as _executeIntent };
+export { reconcilePlacedIntents as _reconcilePlacedIntents };
 
 export function startBotWorker(): () => Promise<void> {
   workerLog.info({ workerId: WORKER_ID, interval: POLL_INTERVAL_MS }, "botWorker started");

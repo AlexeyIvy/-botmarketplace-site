@@ -9,7 +9,7 @@
 import type { FastifyInstance } from "fastify";
 import { prisma } from "../lib/prisma.js";
 import { problem } from "../lib/problem.js";
-import { parseNotifyConfig, sendTelegramMessage } from "../lib/notify.js";
+import { parseNotifyConfig, sendTelegramMessage, invalidateNotifyCache } from "../lib/notify.js";
 
 // ---------------------------------------------------------------------------
 // Validation
@@ -38,6 +38,9 @@ function validateNotifyJson(val: unknown): string | null {
     }
     if (tg.chatId.length > 50) {
       return "notifyJson.telegram.chatId is too long";
+    }
+    if (!/^-?\d+$/.test(tg.chatId as string) && !/^@[a-zA-Z0-9_]+$/.test(tg.chatId as string)) {
+      return "notifyJson.telegram.chatId must be a numeric ID or @username";
     }
     if (tg.enabled !== undefined && typeof tg.enabled !== "boolean") {
       return "notifyJson.telegram.enabled must be a boolean";
@@ -102,6 +105,9 @@ export async function notificationRoutes(app: FastifyInstance) {
           notifyJson: body.notifyJson as object,
         },
       });
+
+      // Invalidate notification cache so changes take effect immediately
+      invalidateNotifyCache(payload.sub);
 
       // Redact botToken in response
       const config = row.notifyJson as Record<string, unknown> | null;

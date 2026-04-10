@@ -5,6 +5,7 @@ import { describe, it, expect, vi, beforeAll, afterAll, beforeEach } from "vites
 const mockUsers: Record<string, Record<string, unknown>> = {};
 const mockWorkspaces: Record<string, Record<string, unknown>> = {};
 const mockWorkspaceMembers: unknown[] = [];
+const mockRefreshTokens: Record<string, Record<string, unknown>> = {};
 let userIdCounter = 0;
 
 vi.mock("@prisma/client", () => ({
@@ -44,6 +45,25 @@ vi.mock("../../src/lib/prisma.js", () => ({
         return Promise.resolve(m ?? null);
       }),
     },
+    refreshToken: {
+      create: vi.fn().mockImplementation(({ data }: { data: { jti: string; userId: string; expiresAt: Date } }) => {
+        const id = `rt-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
+        const record = { id, ...data, revoked: false, createdAt: new Date() };
+        mockRefreshTokens[data.jti] = record;
+        return Promise.resolve(record);
+      }),
+      findUnique: vi.fn().mockImplementation(({ where }: { where: { jti: string } }) => {
+        return Promise.resolve(mockRefreshTokens[where.jti] ?? null);
+      }),
+      update: vi.fn().mockImplementation(({ where, data }: { where: { jti: string }; data: Record<string, unknown> }) => {
+        if (mockRefreshTokens[where.jti]) {
+          Object.assign(mockRefreshTokens[where.jti], data);
+          return Promise.resolve(mockRefreshTokens[where.jti]);
+        }
+        return Promise.resolve(null);
+      }),
+      deleteMany: vi.fn().mockResolvedValue({ count: 0 }),
+    },
     $queryRaw: vi.fn().mockResolvedValue([]),
     $connect: vi.fn(),
     $disconnect: vi.fn(),
@@ -70,6 +90,7 @@ beforeEach(() => {
   // Reset mock state
   Object.keys(mockUsers).forEach((k) => delete mockUsers[k]);
   Object.keys(mockWorkspaces).forEach((k) => delete mockWorkspaces[k]);
+  Object.keys(mockRefreshTokens).forEach((k) => delete mockRefreshTokens[k]);
   mockWorkspaceMembers.length = 0;
   userIdCounter = 0;
 });
@@ -323,8 +344,12 @@ describe("POST /api/v1/auth/refresh", () => {
   it("returns new accessToken and rotates refresh cookie with valid refresh token", async () => {
     const userId = await seedUser("refresh@example.com", "password123");
 
-    // Sign a valid refresh token
-    const refreshToken = app.jwt.sign({ sub: userId, type: "refresh" }, { expiresIn: "7d" });
+    // Sign a valid refresh token with jti and store in mock DB
+    const jti = "test-jti-refresh-1";
+    const refreshToken = app.jwt.sign({ sub: userId, type: "refresh", jti }, { expiresIn: "7d" });
+    mockRefreshTokens[jti] = {
+      id: "rt-1", jti, userId, expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), revoked: false, createdAt: new Date(),
+    };
 
     const res = await app.inject({
       method: "POST",
@@ -337,6 +362,9 @@ describe("POST /api/v1/auth/refresh", () => {
     expect(body).toHaveProperty("accessToken");
     expect(typeof body.accessToken).toBe("string");
     expect(body.user.email).toBe("refresh@example.com");
+
+    // Old token should be revoked
+    expect(mockRefreshTokens[jti].revoked).toBe(true);
 
     // New refresh cookie should be set (token rotation)
     const newCookie = parseSetCookie(res);
@@ -395,7 +423,11 @@ describe("POST /api/v1/auth/refresh", () => {
 
   it("returns 401 when user was deleted between token verify and DB lookup", async () => {
     // Sign a valid refresh token for a user that does NOT exist in mockUsers
-    const refreshToken = app.jwt.sign({ sub: "deleted-user-id", type: "refresh" }, { expiresIn: "7d" });
+    const jti = "test-jti-deleted-user";
+    const refreshToken = app.jwt.sign({ sub: "deleted-user-id", type: "refresh", jti }, { expiresIn: "7d" });
+    mockRefreshTokens[jti] = {
+      id: "rt-del", jti, userId: "deleted-user-id", expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), revoked: false, createdAt: new Date(),
+    };
 
     const res = await app.inject({
       method: "POST",
@@ -414,7 +446,11 @@ describe("POST /api/v1/auth/refresh", () => {
   it("returns workspaceId when user has workspace membership", async () => {
     const userId = await seedUser("wsmember@example.com", "password123");
 
-    const refreshToken = app.jwt.sign({ sub: userId, type: "refresh" }, { expiresIn: "7d" });
+    const jti = "test-jti-wsmember";
+    const refreshToken = app.jwt.sign({ sub: userId, type: "refresh", jti }, { expiresIn: "7d" });
+    mockRefreshTokens[jti] = {
+      id: "rt-ws", jti, userId, expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), revoked: false, createdAt: new Date(),
+    };
 
     const res = await app.inject({
       method: "POST",
@@ -435,6 +471,55 @@ describe("POST /api/v1/auth/refresh", () => {
 
     expect(res.statusCode).toBe(401);
     expect(res.json().detail).toContain("expired or invalid");
+  });
+
+  it("returns 401 when token has no jti (legacy token)", async () => {
+    const userId = await seedUser("nojti@example.com", "password123");
+    // Sign a token without jti — simulates a pre-revocation token
+    const refreshToken = app.jwt.sign({ sub: userId, type: "refresh" }, { expiresIn: "7d" });
+
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/auth/refresh",
+      headers: { cookie: `refreshToken=${refreshToken}` },
+    });
+
+    expect(res.statusCode).toBe(401);
+    expect(res.json().detail).toContain("missing jti");
+  });
+
+  it("returns 401 when refresh token has been revoked", async () => {
+    const userId = await seedUser("revoked@example.com", "password123");
+    const jti = "test-jti-revoked";
+    const refreshToken = app.jwt.sign({ sub: userId, type: "refresh", jti }, { expiresIn: "7d" });
+    mockRefreshTokens[jti] = {
+      id: "rt-rev", jti, userId, expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), revoked: true, createdAt: new Date(),
+    };
+
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/auth/refresh",
+      headers: { cookie: `refreshToken=${refreshToken}` },
+    });
+
+    expect(res.statusCode).toBe(401);
+    expect(res.json().detail).toContain("revoked");
+  });
+
+  it("returns 401 when jti not found in DB (token never stored)", async () => {
+    const userId = await seedUser("unknown-jti@example.com", "password123");
+    const jti = "test-jti-unknown";
+    const refreshToken = app.jwt.sign({ sub: userId, type: "refresh", jti }, { expiresIn: "7d" });
+    // Deliberately NOT storing in mockRefreshTokens
+
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/auth/refresh",
+      headers: { cookie: `refreshToken=${refreshToken}` },
+    });
+
+    expect(res.statusCode).toBe(401);
+    expect(res.json().detail).toContain("revoked");
   });
 });
 
@@ -465,6 +550,31 @@ describe("POST /api/v1/auth/logout", () => {
 
     expect(res.statusCode).toBe(200);
     expect(res.json().ok).toBe(true);
+  });
+
+  it("revokes the refresh token on logout when cookie is present", async () => {
+    const userId = await seedUser("logout-revoke@example.com", "password123");
+    const jti = "test-jti-logout";
+    const refreshToken = app.jwt.sign({ sub: userId, type: "refresh", jti }, { expiresIn: "7d" });
+    mockRefreshTokens[jti] = {
+      id: "rt-logout", jti, userId, expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), revoked: false, createdAt: new Date(),
+    };
+
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/auth/logout",
+      headers: { cookie: `refreshToken=${refreshToken}` },
+    });
+
+    expect(res.statusCode).toBe(200);
+    expect(res.json().ok).toBe(true);
+
+    // Token should be revoked in DB
+    expect(mockRefreshTokens[jti].revoked).toBe(true);
+
+    // Cookie should be cleared
+    const setCookieHeader = res.headers["set-cookie"] as string;
+    expect(setCookieHeader).toContain("Max-Age=0");
   });
 });
 

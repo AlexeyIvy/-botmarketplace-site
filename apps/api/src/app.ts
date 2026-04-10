@@ -71,7 +71,7 @@ async function registerRoutes(scope: import("fastify").FastifyInstance) {
   await scope.register(notificationRoutes);
   await scope.register(usersRoutes);
   await scope.register(demoRoutes);
-  await scope.register(withRateLimit(clientErrorRoutes, 10, "1 minute")); // 10 req/min
+  await scope.register(withRateLimit(clientErrorRoutes, 3, "1 minute")); // 3 req/min
 }
 
 export async function buildApp() {
@@ -82,15 +82,17 @@ export async function buildApp() {
           ? { target: "pino-pretty" }
           : undefined,
     },
-    trustProxy: "127.0.0.1",
+    trustProxy: process.env.TRUST_PROXY || "127.0.0.1",
     genReqId: (req) =>
       (req.headers["x-request-id"] as string) || randomUUID(),
   });
 
+  const corsOrigin = process.env.CORS_ORIGIN
+    ? process.env.CORS_ORIGIN.split(",")
+    : (process.env.NODE_ENV === "production" ? ["https://botmarketplace.store"] : true);
+
   await app.register(cors, {
-    origin: process.env.NODE_ENV === "production"
-      ? ["https://botmarketplace.store"]
-      : true,
+    origin: corsOrigin,
     credentials: true,
   });
 

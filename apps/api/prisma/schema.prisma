@@ -16,8 +16,23 @@ model User {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  memberships  WorkspaceMember[]
-  preferences  UserPreference?
+  memberships    WorkspaceMember[]
+  preferences    UserPreference?
+  refreshTokens  RefreshToken[]
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  jti       String   @unique
+  userId    String
+  expiresAt DateTime
+  revoked   Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
 }
 
 enum WorkspaceRole {
