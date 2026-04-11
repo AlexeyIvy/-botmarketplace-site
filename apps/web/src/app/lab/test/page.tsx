@@ -1113,6 +1113,10 @@ export default function LabTestPage() {
           <OptimisePanel
             datasets={datasets}
             strategyVersions={strategyVersions}
+            onSelectBacktest={(id) => {
+              setSelectedBtId(id);
+              setTopTab("backtest");
+            }}
           />
         )}
       </div>

@@ -444,7 +444,7 @@ describe("POST /api/v1/lab/backtest/sweep", () => {
     expect(res.statusCode).toBe(400);
   });
 
-  it("returns 422 when sweep exceeds 50 runs", async () => {
+  it("returns 422 when sweep exceeds 20 runs", async () => {
     const res = await app.inject({
       method: "POST",
       url: "/api/v1/lab/backtest/sweep",
