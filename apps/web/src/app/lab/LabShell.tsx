@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Group, Panel, Separator } from "react-resizable-panels";
 import { useLabGraphStore } from "./useLabGraphStore";
-import { compileGraph } from "./labApi";
+import { compileGraph, patchGraphVersion, setGraphVersionBaseline } from "./labApi";
 
 // ---------------------------------------------------------------------------
 // Tab definitions — order matches spec
@@ -108,6 +108,10 @@ function LabContextBar({ activeTab }: { activeTab: TabId }) {
   const saveGraphNow       = useLabGraphStore((s) => s.saveGraphNow);
   // B1-4: shortcut help modal state
   const [shortcutHelpOpen, setShortcutHelpOpen] = useState(false);
+  // Task 26: version label + baseline state
+  const [versionLabel, setVersionLabel] = useState("");
+  const [isBaseline, setIsBaseline] = useState(false);
+  const [labelSaving, setLabelSaving] = useState(false);
 
   // Phase 3A: show toast when save_error transitions in
   const [showSaveErrorToast, setShowSaveErrorToast] = useState(false);
@@ -154,6 +158,9 @@ function LabContextBar({ activeTab }: { activeTab: TabId }) {
       setLastCompileResult(compileRes.data);
       setServerIssues(compileRes.data.validationIssues ?? []);
       setCompileState("success");
+      // Task 26: reset label state for new version
+      setVersionLabel("");
+      setIsBaseline(false);
     } catch {
       setCompileState("error");
     }
@@ -284,26 +291,85 @@ function LabContextBar({ activeTab }: { activeTab: TabId }) {
 
       {/* Phase 4B: Compile & Save button — only meaningful on Build tab */}
       {isOnBuildTab && (
-        <button
-          onClick={handleCompile}
-          disabled={compileDisabled}
-          style={{
-            marginLeft: "auto",
-            padding: "5px 14px",
-            fontSize: 12,
-            fontWeight: 600,
-            background: compileDisabled ? "rgba(255,255,255,0.06)" : compileBtnColor,
-            border: "none",
-            borderRadius: 5,
-            color: compileDisabled ? "rgba(255,255,255,0.3)" : "#fff",
-            cursor: compileDisabled ? "not-allowed" : "pointer",
-            transition: "background 0.15s",
-            flexShrink: 0,
-            fontFamily: "inherit",
-          }}
-        >
-          {compileLabel}
-        </button>
+        <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+          {/* Task 26: version label input — shown after compile success */}
+          {lastCompileResult && compileState === "success" && (
+            <>
+              <input
+                placeholder="Version label…"
+                value={versionLabel}
+                onChange={(e) => setVersionLabel(e.target.value)}
+                onBlur={async () => {
+                  if (!lastCompileResult?.graphVersionId || !versionLabel.trim()) return;
+                  setLabelSaving(true);
+                  try { await patchGraphVersion(lastCompileResult.graphVersionId, { label: versionLabel.trim() }); } catch { /* ignore */ }
+                  setLabelSaving(false);
+                }}
+                onKeyDown={async (e) => {
+                  if (e.key !== "Enter" || !lastCompileResult?.graphVersionId || !versionLabel.trim()) return;
+                  setLabelSaving(true);
+                  try { await patchGraphVersion(lastCompileResult.graphVersionId, { label: versionLabel.trim() }); } catch { /* ignore */ }
+                  setLabelSaving(false);
+                }}
+                maxLength={100}
+                style={{
+                  width: 140,
+                  padding: "4px 8px",
+                  fontSize: 11,
+                  background: "rgba(255,255,255,0.06)",
+                  border: "1px solid rgba(255,255,255,0.12)",
+                  borderRadius: 4,
+                  color: "#e0e0e0",
+                  fontFamily: "inherit",
+                  opacity: labelSaving ? 0.5 : 1,
+                }}
+              />
+              <button
+                onClick={async () => {
+                  if (!lastCompileResult?.graphVersionId) return;
+                  try {
+                    const result = await setGraphVersionBaseline(lastCompileResult.graphVersionId);
+                    setIsBaseline(result.isBaseline);
+                  } catch { /* ignore */ }
+                }}
+                style={{
+                  padding: "4px 8px",
+                  fontSize: 11,
+                  fontWeight: 600,
+                  background: isBaseline ? "rgba(251,191,36,0.15)" : "rgba(255,255,255,0.06)",
+                  border: `1px solid ${isBaseline ? "rgba(251,191,36,0.4)" : "rgba(255,255,255,0.12)"}`,
+                  borderRadius: 4,
+                  color: isBaseline ? "#fbbf24" : "rgba(255,255,255,0.5)",
+                  cursor: "pointer",
+                  fontFamily: "inherit",
+                  whiteSpace: "nowrap",
+                }}
+                title={isBaseline ? "Remove baseline designation" : "Mark this version as baseline for comparison"}
+              >
+                {isBaseline ? "Baseline" : "Set baseline"}
+              </button>
+            </>
+          )}
+          <button
+            onClick={handleCompile}
+            disabled={compileDisabled}
+            style={{
+              padding: "5px 14px",
+              fontSize: 12,
+              fontWeight: 600,
+              background: compileDisabled ? "rgba(255,255,255,0.06)" : compileBtnColor,
+              border: "none",
+              borderRadius: 5,
+              color: compileDisabled ? "rgba(255,255,255,0.3)" : "#fff",
+              cursor: compileDisabled ? "not-allowed" : "pointer",
+              transition: "background 0.15s",
+              flexShrink: 0,
+              fontFamily: "inherit",
+            }}
+          >
+            {compileLabel}
+          </button>
+        </div>
       )}
 
       {/* B1-4: Shortcut help button */}

@@ -303,7 +303,7 @@ export async function labRoutes(app: FastifyInstance) {
       where: { strategyGraphId: graph.id },
     });
 
-    await prisma.strategyGraphVersion.create({
+    const graphVersion = await prisma.strategyGraphVersion.create({
       data: {
         strategyGraphId: graph.id,
         version: existingVersionCount + 1,
@@ -316,6 +316,7 @@ export async function labRoutes(app: FastifyInstance) {
     return reply.status(201).send({
       strategyVersionId: strategyVersion.id,
       strategyVersion: nextVersion,
+      graphVersionId: graphVersion.id,
       compiledDsl: compileResult.compiledDsl,
       validationIssues: compileResult.validationIssues,
     });
@@ -510,7 +511,175 @@ export async function labRoutes(app: FastifyInstance) {
         ? (num(reportA.sharpe)! - num(reportB.sharpe)!) : null,
     };
 
-    return reply.send({ a: runA, b: runB, delta });
+    // Task 26: enrich compare response with lineage data
+    const lineageA = runA.strategyVersionId
+      ? await prisma.strategyGraphVersion.findFirst({
+          where: { strategyVersionId: runA.strategyVersionId as string },
+          select: { id: true, version: true, label: true, isBaseline: true, strategyGraph: { select: { name: true } } },
+        })
+      : null;
+    const lineageB = runB.strategyVersionId
+      ? await prisma.strategyGraphVersion.findFirst({
+          where: { strategyVersionId: runB.strategyVersionId as string },
+          select: { id: true, version: true, label: true, isBaseline: true, strategyGraph: { select: { name: true } } },
+        })
+      : null;
+
+    return reply.send({
+      a: { ...runA, lineage: lineageA ? { graphVersionId: lineageA.id, graphVersion: lineageA.version, label: lineageA.label, isBaseline: lineageA.isBaseline, graphName: lineageA.strategyGraph.name } : null },
+      b: { ...runB, lineage: lineageB ? { graphVersionId: lineageB.id, graphVersion: lineageB.version, label: lineageB.label, isBaseline: lineageB.isBaseline, graphName: lineageB.strategyGraph.name } : null },
+      delta,
+    });
+  });
+
+  // ── PATCH /lab/graph-versions/:id ── update label (Task 26) ─────────────────
+  app.patch<{ Params: { id: string }; Body: { label?: string | null } }>("/lab/graph-versions/:id", {
+    config: { rateLimit: { max: 30, timeWindow: "1 minute" } },
+    onRequest: [app.authenticate],
+  }, async (request, reply) => {
+    const workspace = await resolveWorkspace(request, reply);
+    if (!workspace) return;
+
+    const gv = await prisma.strategyGraphVersion.findUnique({
+      where: { id: request.params.id },
+      include: { strategyGraph: { select: { workspaceId: true } } },
+    });
+    if (!gv || gv.strategyGraph.workspaceId !== workspace.id) {
+      return problem(reply, 404, "Not Found", "Graph version not found");
+    }
+
+    const { label } = request.body ?? {};
+    if (label !== undefined && label !== null && typeof label !== "string") {
+      return problem(reply, 400, "Validation Error", "label must be a string or null");
+    }
+    if (typeof label === "string" && label.length > 100) {
+      return problem(reply, 400, "Validation Error", "label must be 100 characters or fewer");
+    }
+
+    const updated = await prisma.strategyGraphVersion.update({
+      where: { id: gv.id },
+      data: { label: label ?? null },
+    });
+
+    return reply.send({
+      id: updated.id,
+      version: updated.version,
+      label: updated.label,
+      isBaseline: updated.isBaseline,
+      createdAt: updated.createdAt,
+    });
+  });
+
+  // ── POST /lab/graph-versions/:id/baseline ── set/unset baseline (Task 26) ──
+  app.post<{ Params: { id: string } }>("/lab/graph-versions/:id/baseline", {
+    config: { rateLimit: { max: 10, timeWindow: "1 minute" } },
+    onRequest: [app.authenticate],
+  }, async (request, reply) => {
+    const workspace = await resolveWorkspace(request, reply);
+    if (!workspace) return;
+
+    const gv = await prisma.strategyGraphVersion.findUnique({
+      where: { id: request.params.id },
+      include: {
+        strategyGraph: { select: { workspaceId: true } },
+        strategyVersion: { select: { strategyId: true } },
+      },
+    });
+    if (!gv || gv.strategyGraph.workspaceId !== workspace.id) {
+      return problem(reply, 404, "Not Found", "Graph version not found");
+    }
+
+    const strategyId = gv.strategyVersion.strategyId;
+
+    // Toggle: if already baseline → unset; otherwise set and clear previous
+    if (gv.isBaseline) {
+      const updated = await prisma.strategyGraphVersion.update({
+        where: { id: gv.id },
+        data: { isBaseline: false },
+      });
+      return reply.send({
+        id: updated.id,
+        version: updated.version,
+        label: updated.label,
+        isBaseline: updated.isBaseline,
+      });
+    }
+
+    // Clear any existing baseline for this strategy
+    const allVersionsForStrategy = await prisma.strategyGraphVersion.findMany({
+      where: {
+        strategyVersion: { strategyId },
+        isBaseline: true,
+      },
+      select: { id: true },
+    });
+
+    if (allVersionsForStrategy.length > 0) {
+      await Promise.all(
+        allVersionsForStrategy.map((v) =>
+          prisma.strategyGraphVersion.update({
+            where: { id: v.id },
+            data: { isBaseline: false },
+          })
+        )
+      );
+    }
+
+    const updated = await prisma.strategyGraphVersion.update({
+      where: { id: gv.id },
+      data: { isBaseline: true },
+    });
+
+    return reply.send({
+      id: updated.id,
+      version: updated.version,
+      label: updated.label,
+      isBaseline: updated.isBaseline,
+    });
+  });
+
+  // ── GET /lab/graph-versions ── list versions for a strategy (Task 26) ──────
+  app.get<{ Querystring: { strategyId?: string; graphId?: string } }>("/lab/graph-versions", {
+    onRequest: [app.authenticate],
+  }, async (request, reply) => {
+    const workspace = await resolveWorkspace(request, reply);
+    if (!workspace) return;
+
+    const { strategyId, graphId } = request.query ?? {};
+    if (!strategyId && !graphId) {
+      return problem(reply, 400, "Validation Error", "Either strategyId or graphId query param is required");
+    }
+
+    const where: Record<string, unknown> = {};
+    if (graphId) {
+      // Verify workspace ownership of graph
+      const graph = await prisma.strategyGraph.findUnique({ where: { id: graphId } });
+      if (!graph || graph.workspaceId !== workspace.id) {
+        return problem(reply, 404, "Not Found", "Graph not found");
+      }
+      where.strategyGraphId = graphId;
+    }
+    if (strategyId) {
+      where.strategyVersion = { strategyId };
+    }
+
+    const versions = await prisma.strategyGraphVersion.findMany({
+      where,
+      orderBy: { createdAt: "desc" },
+      take: 50,
+      select: {
+        id: true,
+        version: true,
+        label: true,
+        isBaseline: true,
+        blockLibraryVersion: true,
+        strategyVersionId: true,
+        strategyGraphId: true,
+        createdAt: true,
+      },
+    });
+
+    return reply.send(versions);
   });
 
   // ── POST /lab/backtest/sweep ── trigger parametric grid search (Phase C1) ──
