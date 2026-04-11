@@ -2,7 +2,7 @@
 
 > Source of truth: `apps/api/src/lib/compiler/supportMap.ts`
 > Contract tests: `apps/api/tests/compiler/blockDrift.test.ts`
-> Last updated: 2026-04-11 (Flagship strategy presets release)
+> Last updated: 2026-04-11 (Phase 6 continuation — 23b2/23b3/23b4 + trailing_stop/close)
 
 ## Overview
 
@@ -30,6 +30,8 @@ enforce that the code and this matrix stay in sync.
 |-------|:--:|:--------:|:-------:|--------|-------|
 | `candles` | ✅ | ✅ | ✅ | **supported** | Core input block, since Phase 3 |
 | `constant` | ✅ | ✅ | ✅ | **supported** | Evaluator runtime wired in dslEvaluator |
+| `orders_history` | ✅ | ✅ | ✅ | **supported** | Exchange orders history, requires ExchangeConnection (Phase 6 23b3) |
+| `executions_history` | ✅ | ✅ | ✅ | **supported** | Exchange executions history, requires ExchangeConnection (Phase 6 23b3) |
 
 ### Indicator Blocks
 
@@ -56,6 +58,7 @@ enforce that the code and this matrix stay in sync.
 | `and_gate` | ✅ | ✅ | ✅ | **supported** | Recursive evaluateSignal, conditions.every() |
 | `or_gate` | ✅ | ✅ | ✅ | **supported** | Recursive evaluateSignal, conditions.some() |
 | `proximity_filter` | ✅ | ✅ | ✅ | **supported** | Gates signals by proximity to level #135 |
+| `annotate_event` | ✅ | ✅ | ✅ | **supported** | Event annotation on equity curve (Phase 6 23b4) |
 
 ### Execution Blocks
 
@@ -64,6 +67,7 @@ enforce that the code and this matrix stay in sync.
 | `enter_long` | ✅ | ✅ | ✅ | **supported** | Since Phase 3 |
 | `enter_short` | ✅ | ✅ | ✅ | **supported** | Since Phase 4 |
 | `enter_adaptive` | ✅ | ✅ | ✅ | **supported** | DSL v2 sideCondition, #130 |
+| `close_position` | ✅ | ✅ | ✅ | **supported** | Explicit position close on signal (Phase 6) |
 
 ### Risk Blocks
 
@@ -72,6 +76,7 @@ enforce that the code and this matrix stay in sync.
 | `stop_loss` | ✅ | ✅ | ✅ | **supported** | Since Phase 3 |
 | `take_profit` | ✅ | ✅ | ✅ | **supported** | Since Phase 3 |
 | `dca_config` | ✅ | ✅ | ✅ | **supported** | DCA ladder config, #132/#133 |
+| `trailing_stop` | ✅ | ✅ | ✅ | **supported** | Trailing stop loss, exitEngine.ts runtime (Phase 6) |
 
 ### SMC Pattern Blocks
 
@@ -86,10 +91,10 @@ enforce that the code and this matrix stay in sync.
 
 | Status | Count | Blocks |
 |--------|------:|--------|
-| **supported** | 27 | All blocks fully functional across UI → Compiler → Runtime |
+| **supported** | 33 | All blocks fully functional across UI → Compiler → Runtime |
 | **compile-only** | 0 | — |
 | **unsupported** | 0 | — |
-| **Total** | 27 | |
+| **Total** | 33 | |
 
 ## How Drift Detection Works
 

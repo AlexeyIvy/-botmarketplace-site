@@ -469,6 +469,45 @@ export const BLOCK_DEFS: BlockDef[] = [
     description: "Configures DCA ladder: base order, safety orders with step/volume scaling, and TP recalculation from averaged entry.",
   },
 
+  // ── Trailing Stop (#Phase6) ────────────────────────────────────────────────
+  {
+    type: "trailing_stop",
+    label: "Trailing Stop",
+    category: "risk",
+    inputs: [
+      { id: "candles", label: "candles", dataType: "Series<OHLCV>", required: true },
+    ],
+    outputs: [
+      { id: "risk", label: "risk", dataType: "RiskParams", required: false },
+    ],
+    params: [
+      { id: "activationPct", label: "Activation %", type: "number", defaultValue: 1.0, min: 0.01, max: 50 },
+      { id: "callbackPct", label: "Callback %", type: "number", defaultValue: 0.5, min: 0.01, max: 50 },
+    ],
+    description: "Trailing stop loss — activates after price moves favourably by activation %, then trails at callback % from high-water mark.",
+  },
+
+  // ── Close Position (#Phase6) ──────────────────────────────────────────────
+  {
+    type: "close_position",
+    label: "Close Position",
+    category: "execution",
+    inputs: [
+      { id: "signal", label: "signal", dataType: "Series<boolean>", required: true },
+    ],
+    outputs: [],
+    params: [
+      {
+        id: "reason",
+        label: "Reason",
+        type: "select",
+        defaultValue: "signal",
+        options: ["signal", "time_exit", "manual"],
+      },
+    ],
+    description: "Explicitly closes any open position when the signal fires. Use for custom exit conditions beyond SL/TP.",
+  },
+
   // ── MTF Confluence Indicators (#135) ──────────────────────────────────────
   {
     type: "volume_profile",
@@ -510,6 +549,38 @@ export const BLOCK_DEFS: BlockDef[] = [
       },
     ],
     description: "Gates signals by proximity to a reference level (e.g., near POC/VAH/VAL).",
+  },
+
+  // ── Private Data Blocks (Phase 6, 23b3) ────────────────────────────────────
+  {
+    type: "orders_history",
+    label: "Orders History",
+    category: "input",
+    inputs: [],
+    outputs: [
+      { id: "buyCount", label: "buy count", dataType: "Series<number>", required: false },
+      { id: "sellCount", label: "sell count", dataType: "Series<number>", required: false },
+      { id: "totalVolume", label: "total vol", dataType: "Series<number>", required: false },
+    ],
+    params: [
+      { id: "lookbackBars", label: "Lookback (bars)", type: "number", defaultValue: 50, min: 1, max: 500 },
+    ],
+    description: "Historical order data from connected exchange. Requires an active ExchangeConnection.",
+  },
+  {
+    type: "executions_history",
+    label: "Executions History",
+    category: "input",
+    inputs: [],
+    outputs: [
+      { id: "execCount", label: "exec count", dataType: "Series<number>", required: false },
+      { id: "avgFillPrice", label: "avg fill", dataType: "Series<number>", required: false },
+      { id: "totalQty", label: "total qty", dataType: "Series<number>", required: false },
+    ],
+    params: [
+      { id: "lookbackBars", label: "Lookback (bars)", type: "number", defaultValue: 50, min: 1, max: 500 },
+    ],
+    description: "Historical execution/fill data from connected exchange. Requires an active ExchangeConnection.",
   },
 
   // ── SMC Pattern Primitives (#137) ──────────────────────────────────────────
@@ -575,6 +646,36 @@ export const BLOCK_DEFS: BlockDef[] = [
       { id: "swingLen", label: "Swing Length", type: "number", defaultValue: 3, min: 1, max: 20 },
     ],
     description: "Detects market structure shifts (BOS/CHoCH). Output: +1 bullish BOS, -1 bearish BOS, +2 bullish CHoCH, -2 bearish CHoCH, 0 none.",
+  },
+
+  // ── Annotate Event (Phase 6, 23b4) ─────────────────────────────────────────
+  {
+    type: "annotate_event",
+    label: "Annotate Event",
+    category: "logic",
+    inputs: [
+      { id: "signal", label: "signal", dataType: "Series<boolean>", required: true },
+      { id: "price", label: "price", dataType: "Series<number>", required: false },
+    ],
+    outputs: [],
+    params: [
+      { id: "label", label: "Label", type: "string", defaultValue: "Event" },
+      {
+        id: "color",
+        label: "Color",
+        type: "select",
+        defaultValue: "blue",
+        options: ["blue", "green", "red", "yellow", "purple", "white"],
+      },
+      {
+        id: "shape",
+        label: "Shape",
+        type: "select",
+        defaultValue: "circle",
+        options: ["circle", "diamond", "triangle", "square"],
+      },
+    ],
+    description: "Marks events on the backtest equity curve when the signal fires. Useful for annotating key moments (entries, regime changes, etc.).",
   },
 ];
 
