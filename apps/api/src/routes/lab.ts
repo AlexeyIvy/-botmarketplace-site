@@ -463,6 +463,56 @@ export async function labRoutes(app: FastifyInstance) {
     return reply.send(list);
   });
 
+  // ── GET /lab/backtests/compare ── side-by-side comparison of two runs (Phase 6, 23b1) ──
+  app.get<{ Querystring: { a: string; b: string } }>("/lab/backtests/compare", {
+    config: { rateLimit: { max: 20, timeWindow: "1 minute" } },
+    onRequest: [app.authenticate],
+  }, async (request, reply) => {
+    const workspace = await resolveWorkspace(request, reply);
+    if (!workspace) return;
+
+    const { a, b } = request.query ?? {};
+    if (!a || !b) {
+      return problem(reply, 400, "Validation Error", "Query params 'a' and 'b' (backtest IDs) are required");
+    }
+    if (a === b) {
+      return problem(reply, 400, "Validation Error", "Cannot compare a run with itself");
+    }
+
+    const [runA, runB] = await Promise.all([
+      prisma.backtestResult.findUnique({ where: { id: a }, select: BACKTEST_SELECT }),
+      prisma.backtestResult.findUnique({ where: { id: b }, select: BACKTEST_SELECT }),
+    ]);
+
+    if (!runA || runA.workspaceId !== workspace.id) {
+      return problem(reply, 404, "Not Found", "Run A not found");
+    }
+    if (!runB || runB.workspaceId !== workspace.id) {
+      return problem(reply, 404, "Not Found", "Run B not found");
+    }
+
+    // Compute deltas from reportJson
+    const reportA = (runA.reportJson ?? {}) as Record<string, unknown>;
+    const reportB = (runB.reportJson ?? {}) as Record<string, unknown>;
+
+    const num = (v: unknown) => (typeof v === "number" && Number.isFinite(v) ? v : null);
+
+    const delta = {
+      pnlDelta: num(reportA.totalPnlPct) !== null && num(reportB.totalPnlPct) !== null
+        ? (num(reportA.totalPnlPct)! - num(reportB.totalPnlPct)!) : null,
+      winrateDelta: num(reportA.winrate) !== null && num(reportB.winrate) !== null
+        ? (num(reportA.winrate)! - num(reportB.winrate)!) : null,
+      drawdownDelta: num(reportA.maxDrawdownPct) !== null && num(reportB.maxDrawdownPct) !== null
+        ? (num(reportA.maxDrawdownPct)! - num(reportB.maxDrawdownPct)!) : null,
+      tradeDelta: num(reportA.trades) !== null && num(reportB.trades) !== null
+        ? (num(reportA.trades)! - num(reportB.trades)!) : null,
+      sharpeDelta: num(reportA.sharpe) !== null && num(reportB.sharpe) !== null
+        ? (num(reportA.sharpe)! - num(reportB.sharpe)!) : null,
+    };
+
+    return reply.send({ a: runA, b: runB, delta });
+  });
+
   // ── POST /lab/backtest/sweep ── trigger parametric grid search (Phase C1) ──
   // Per docs/25-lab-improvements-plan.md §Phase C1
   app.post<{ Body: SweepRequestBody }>("/lab/backtest/sweep", {

@@ -537,15 +537,183 @@ function FormRow({ label, children }: { label: string; children: React.ReactNode
 }
 
 // ---------------------------------------------------------------------------
-// Result detail — tabs: Run | Metrics | Trades | Equity | Logs
+// ---------------------------------------------------------------------------
+// Phase 6 (23b1) — Compare Runs Tab
 // ---------------------------------------------------------------------------
 
-type ResultTab = "run" | "metrics" | "trades" | "equity" | "logs";
+interface CompareResult {
+  a: BacktestListItem;
+  b: BacktestListItem;
+  delta: {
+    pnlDelta: number | null;
+    winrateDelta: number | null;
+    drawdownDelta: number | null;
+    tradeDelta: number | null;
+    sharpeDelta: number | null;
+  };
+}
+
+function CompareRunsTab({ runs, currentRunId }: { runs: BacktestListItem[]; currentRunId: string | null }) {
+  const [idA, setIdA] = useState<string>(currentRunId ?? runs[0]?.id ?? "");
+  const [idB, setIdB] = useState<string>(() => {
+    const other = runs.find((r) => r.id !== (currentRunId ?? runs[0]?.id));
+    return other?.id ?? runs[1]?.id ?? "";
+  });
+  const [result, setResult] = useState<CompareResult | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchComparison = useCallback(async (a: string, b: string) => {
+    if (!a || !b || a === b) { setResult(null); return; }
+    setLoading(true);
+    setError(null);
+    const res = await apiFetch<CompareResult>(`/lab/backtests/compare?a=${a}&b=${b}`);
+    setLoading(false);
+    if (res.ok) { setResult(res.data); }
+    else { setError("Failed to load comparison"); setResult(null); }
+  }, []);
+
+  useEffect(() => { fetchComparison(idA, idB); }, [idA, idB, fetchComparison]);
+
+  const fmt = (v: number | null | undefined, suffix = "%") => {
+    if (v === null || v === undefined) return "—";
+    return `${v >= 0 ? "+" : ""}${v.toFixed(2)}${suffix}`;
+  };
+  const fmtInt = (v: number | null | undefined) => {
+    if (v === null || v === undefined) return "—";
+    return `${v >= 0 ? "+" : ""}${v}`;
+  };
+  const deltaColor = (v: number | null | undefined, invert = false) => {
+    if (v === null || v === undefined) return "rgba(255,255,255,0.4)";
+    const positive = invert ? v < 0 : v > 0;
+    return positive ? "#4ade80" : v === 0 ? "rgba(255,255,255,0.4)" : "#f87171";
+  };
+
+  const runLabel = (r: BacktestListItem) => {
+    const date = new Date(r.createdAt).toLocaleDateString("en-GB", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" });
+    return `${r.symbol} ${r.interval} — ${date}`;
+  };
+
+  const reportA = result?.a.reportJson as BacktestReport | null;
+  const reportB = result?.b.reportJson as BacktestReport | null;
+
+  const metrics: { label: string; a: string; b: string; delta: string; deltaColor: string }[] = result ? [
+    { label: "Total PnL", a: fmt(reportA?.totalPnlPct), b: fmt(reportB?.totalPnlPct), delta: fmt(result.delta.pnlDelta), deltaColor: deltaColor(result.delta.pnlDelta) },
+    { label: "Win Rate", a: fmt(reportA?.winrate), b: fmt(reportB?.winrate), delta: fmt(result.delta.winrateDelta), deltaColor: deltaColor(result.delta.winrateDelta) },
+    { label: "Max Drawdown", a: fmt(reportA?.maxDrawdownPct), b: fmt(reportB?.maxDrawdownPct), delta: fmt(result.delta.drawdownDelta), deltaColor: deltaColor(result.delta.drawdownDelta, true) },
+    { label: "Trades", a: String(reportA?.trades ?? "—"), b: String(reportB?.trades ?? "—"), delta: fmtInt(result.delta.tradeDelta), deltaColor: deltaColor(result.delta.tradeDelta) },
+    { label: "Fee (bps)", a: String(result.a.feeBps), b: String(result.b.feeBps), delta: "", deltaColor: "transparent" },
+    { label: "Engine", a: result.a.engineVersion?.slice(0, 8) ?? "—", b: result.b.engineVersion?.slice(0, 8) ?? "—", delta: "", deltaColor: "transparent" },
+  ] : [];
+
+  return (
+    <div style={{ padding: 16 }}>
+      {/* Run selectors */}
+      <div style={{ display: "flex", gap: 12, marginBottom: 16 }}>
+        <label style={compareLabelStyle}>
+          <span style={{ fontSize: 11, color: "rgba(255,255,255,0.5)", marginBottom: 4 }}>Run A</span>
+          <select value={idA} onChange={(e) => setIdA(e.target.value)} style={compareSelectStyle}>
+            {runs.map((r) => <option key={r.id} value={r.id}>{runLabel(r)}</option>)}
+          </select>
+        </label>
+        <label style={compareLabelStyle}>
+          <span style={{ fontSize: 11, color: "rgba(255,255,255,0.5)", marginBottom: 4 }}>Run B</span>
+          <select value={idB} onChange={(e) => setIdB(e.target.value)} style={compareSelectStyle}>
+            {runs.map((r) => <option key={r.id} value={r.id}>{runLabel(r)}</option>)}
+          </select>
+        </label>
+      </div>
+
+      {idA === idB && <div style={{ color: "#fbbf24", fontSize: 12, marginBottom: 12 }}>Select two different runs to compare.</div>}
+      {loading && <div style={{ color: "rgba(255,255,255,0.5)", fontSize: 12 }}>Loading comparison...</div>}
+      {error && <div style={{ color: "#f87171", fontSize: 12 }}>{error}</div>}
+
+      {/* Provenance blocks */}
+      {result && (
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 16 }}>
+          <ProvenanceBlock label="Run A" bt={result.a} />
+          <ProvenanceBlock label="Run B" bt={result.b} />
+        </div>
+      )}
+
+      {/* Metrics comparison table */}
+      {result && metrics.length > 0 && (
+        <table style={compareTableStyle}>
+          <thead>
+            <tr>
+              <th style={compareTh}>Metric</th>
+              <th style={compareTh}>Run A</th>
+              <th style={compareTh}>Run B</th>
+              <th style={compareTh}>Delta</th>
+            </tr>
+          </thead>
+          <tbody>
+            {metrics.map((m) => (
+              <tr key={m.label}>
+                <td style={compareTd}>{m.label}</td>
+                <td style={compareTdVal}>{m.a}</td>
+                <td style={compareTdVal}>{m.b}</td>
+                <td style={{ ...compareTdVal, color: m.deltaColor, fontWeight: 600 }}>{m.delta}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+    </div>
+  );
+}
+
+function ProvenanceBlock({ label, bt }: { label: string; bt: BacktestListItem }) {
+  return (
+    <div style={provenanceStyle}>
+      <div style={{ fontWeight: 700, fontSize: 11, color: "#3b82f6", marginBottom: 6 }}>{label}</div>
+      <div style={provenanceRow}><span>Symbol</span><span>{bt.symbol}</span></div>
+      <div style={provenanceRow}><span>Interval</span><span>{bt.interval}</span></div>
+      <div style={provenanceRow}><span>Dataset</span><span>{bt.datasetId?.slice(0, 12) ?? "—"}...</span></div>
+      <div style={provenanceRow}><span>Hash</span><span>{bt.datasetHash?.slice(0, 8) ?? "—"}</span></div>
+      <div style={provenanceRow}><span>Version</span><span>{bt.strategyVersionId?.slice(0, 12) ?? "—"}...</span></div>
+      <div style={provenanceRow}><span>Date</span><span>{new Date(bt.createdAt).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}</span></div>
+    </div>
+  );
+}
+
+const compareLabelStyle: React.CSSProperties = { display: "flex", flexDirection: "column", flex: 1 };
+const compareSelectStyle: React.CSSProperties = {
+  background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)",
+  borderRadius: 6, padding: "6px 8px", color: "#e0e0e0", fontSize: 12, fontFamily: "inherit",
+};
+const compareTableStyle: React.CSSProperties = {
+  width: "100%", borderCollapse: "collapse", fontSize: 12,
+};
+const compareTh: React.CSSProperties = {
+  textAlign: "left", padding: "6px 10px", borderBottom: "1px solid rgba(255,255,255,0.1)",
+  color: "rgba(255,255,255,0.45)", fontWeight: 600, fontSize: 11,
+};
+const compareTd: React.CSSProperties = {
+  padding: "8px 10px", borderBottom: "1px solid rgba(255,255,255,0.06)", color: "rgba(255,255,255,0.7)",
+};
+const compareTdVal: React.CSSProperties = {
+  ...compareTd, fontFamily: "'SF Mono', 'Fira Code', monospace", textAlign: "right",
+};
+const provenanceStyle: React.CSSProperties = {
+  background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)",
+  borderRadius: 8, padding: "10px 12px", fontSize: 11,
+};
+const provenanceRow: React.CSSProperties = {
+  display: "flex", justifyContent: "space-between", padding: "2px 0",
+  color: "rgba(255,255,255,0.5)",
+};
+
+// Result detail — tabs: Run | Metrics | Trades | Equity | Logs | Compare
+// ---------------------------------------------------------------------------
+
+type ResultTab = "run" | "metrics" | "trades" | "equity" | "logs" | "compare";
 
 function ResultDetail({
   bt,
   datasets,
   strategyVersions,
+  allBacktests,
   onStartNew,
   submitting,
   submitError,
@@ -556,6 +724,7 @@ function ResultDetail({
   bt: BacktestListItem | null;
   datasets: DatasetListItem[];
   strategyVersions: StrategyVersionItem[];
+  allBacktests: BacktestListItem[];
   onStartNew: () => void;
   submitting: boolean;
   submitError: string | null;
@@ -573,12 +742,14 @@ function ResultDetail({
   const report = bt?.reportJson as BacktestReport | null | undefined;
   const isDone = bt?.status === "DONE";
 
+  const doneRuns = allBacktests.filter((b) => b.status === "DONE");
   const tabs: { id: ResultTab; label: string; disabled?: boolean }[] = [
     { id: "run",     label: "New run" },
     { id: "metrics", label: "Metrics",      disabled: !isDone },
     { id: "trades",  label: "Trades",       disabled: !isDone },
     { id: "equity",  label: "Equity curve", disabled: !isDone },
     { id: "logs",    label: "Logs",         disabled: !isDone },
+    { id: "compare", label: "Compare",      disabled: doneRuns.length < 2 },
   ];
 
   return (
@@ -651,6 +822,10 @@ function ResultDetail({
               <LogsTab report={report} />
             )}
           </>
+        )}
+
+        {activeTab === "compare" && (
+          <CompareRunsTab runs={doneRuns} currentRunId={bt?.id ?? null} />
         )}
       </div>
     </div>
@@ -857,6 +1032,7 @@ export default function LabTestPage() {
             bt={selectedBt}
             datasets={datasets}
             strategyVersions={strategyVersions}
+            allBacktests={backtests}
             onStartNew={() => setSelectedBtId(null)}
             submitting={submitting}
             submitError={submitError}

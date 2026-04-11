@@ -426,3 +426,60 @@ describe("GET /api/v1/lab/backtest/sweeps", () => {
     expect(res.json()).toBeInstanceOf(Array);
   });
 });
+
+// ── GET /lab/backtests/compare ──────────────────────────────────────────────
+
+describe("GET /api/v1/lab/backtests/compare", () => {
+  it("returns 400 when query params missing", async () => {
+    const res = await app.inject({ method: "GET", url: "/api/v1/lab/backtests/compare", headers: authHeaders() });
+    expect(res.statusCode).toBe(400);
+  });
+
+  it("returns 400 when comparing run with itself", async () => {
+    const res = await app.inject({ method: "GET", url: "/api/v1/lab/backtests/compare?a=bt-1&b=bt-1", headers: authHeaders() });
+    expect(res.statusCode).toBe(400);
+  });
+
+  it("returns 404 when run A not found", async () => {
+    mockBacktests["bt-2"] = { id: "bt-2", workspaceId: WS_ID, status: "DONE", reportJson: { totalPnlPct: 5, winrate: 60, maxDrawdownPct: 3, trades: 10 } };
+    const res = await app.inject({ method: "GET", url: "/api/v1/lab/backtests/compare?a=missing&b=bt-2", headers: authHeaders() });
+    expect(res.statusCode).toBe(404);
+  });
+
+  it("returns 404 when run B not found", async () => {
+    mockBacktests["bt-1"] = { id: "bt-1", workspaceId: WS_ID, status: "DONE", reportJson: { totalPnlPct: 10, winrate: 55, maxDrawdownPct: 5, trades: 20 } };
+    const res = await app.inject({ method: "GET", url: "/api/v1/lab/backtests/compare?a=bt-1&b=missing", headers: authHeaders() });
+    expect(res.statusCode).toBe(404);
+  });
+
+  it("returns 404 for cross-workspace access", async () => {
+    mockBacktests["bt-1"] = { id: "bt-1", workspaceId: WS_ID, status: "DONE", reportJson: {} };
+    mockBacktests["bt-other"] = { id: "bt-other", workspaceId: "ws-other", status: "DONE", reportJson: {} };
+    const res = await app.inject({ method: "GET", url: "/api/v1/lab/backtests/compare?a=bt-1&b=bt-other", headers: authHeaders() });
+    expect(res.statusCode).toBe(404);
+  });
+
+  it("returns comparison with delta on success", async () => {
+    mockBacktests["bt-a"] = { id: "bt-a", workspaceId: WS_ID, status: "DONE", reportJson: { totalPnlPct: 15.5, winrate: 62, maxDrawdownPct: 5.2, trades: 50, sharpe: 1.24 }, feeBps: 10, slippageBps: 5, engineVersion: "abc123" };
+    mockBacktests["bt-b"] = { id: "bt-b", workspaceId: WS_ID, status: "DONE", reportJson: { totalPnlPct: 12.3, winrate: 58.5, maxDrawdownPct: 7.1, trades: 48, sharpe: 0.98 }, feeBps: 10, slippageBps: 5, engineVersion: "abc123" };
+    const res = await app.inject({ method: "GET", url: "/api/v1/lab/backtests/compare?a=bt-a&b=bt-b", headers: authHeaders() });
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    expect(body.a.id).toBe("bt-a");
+    expect(body.b.id).toBe("bt-b");
+    expect(body.delta.pnlDelta).toBeCloseTo(3.2, 1);
+    expect(body.delta.winrateDelta).toBeCloseTo(3.5, 1);
+    expect(body.delta.tradeDelta).toBe(2);
+    expect(body.delta.sharpeDelta).toBeCloseTo(0.26, 2);
+  });
+
+  it("returns null deltas when reports missing fields", async () => {
+    mockBacktests["bt-x"] = { id: "bt-x", workspaceId: WS_ID, status: "DONE", reportJson: {} };
+    mockBacktests["bt-y"] = { id: "bt-y", workspaceId: WS_ID, status: "DONE", reportJson: null };
+    const res = await app.inject({ method: "GET", url: "/api/v1/lab/backtests/compare?a=bt-x&b=bt-y", headers: authHeaders() });
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    expect(body.delta.pnlDelta).toBeNull();
+    expect(body.delta.winrateDelta).toBeNull();
+  });
+});
