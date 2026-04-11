@@ -59,6 +59,7 @@ model Workspace {
   datasets            MarketDataset[]
   strategyGraphs      StrategyGraph[]
   backtestSweeps      BacktestSweep[]
+  journalEntries      LabJournalEntry[]
 }
 
 model WorkspaceMember {
@@ -766,4 +767,36 @@ model LegExecution {
   hedge HedgePosition @relation(fields: [hedgeId], references: [id], onDelete: Cascade)
 
   @@index([hedgeId])
+}
+
+// ── Research Journal (Task 28) ──────────────────────────────────────────────
+
+enum JournalEntryStatus {
+  BASELINE
+  PROMOTE
+  DISCARD
+  KEEP_TESTING
+}
+
+/// Research journal entry linked to a graph version and optionally a backtest result.
+/// Tracks hypothesis-driven experimentation workflow.
+model LabJournalEntry {
+  id                      String             @id @default(cuid())
+  workspaceId             String
+  strategyGraphVersionId  String
+  backtestResultId        String?
+  hypothesis              String
+  whatChanged              String
+  expectedResult          String
+  actualResult            String?
+  nextStep                String?
+  status                  JournalEntryStatus @default(KEEP_TESTING)
+  createdAt               DateTime           @default(now())
+  updatedAt               DateTime           @updatedAt
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId])
+  @@index([strategyGraphVersionId])
+  @@index([workspaceId, createdAt(sort: Desc)])
 }

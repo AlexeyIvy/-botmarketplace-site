@@ -765,7 +765,199 @@ const provenanceRow: React.CSSProperties = {
 // Result detail — tabs: Run | Metrics | Trades | Equity | Logs | Compare
 // ---------------------------------------------------------------------------
 
-type ResultTab = "run" | "metrics" | "trades" | "equity" | "logs" | "compare";
+// ---------------------------------------------------------------------------
+// Task 28 — Research Journal Tab
+// ---------------------------------------------------------------------------
+
+type JournalStatus = "BASELINE" | "PROMOTE" | "DISCARD" | "KEEP_TESTING";
+
+interface JournalEntry {
+  id: string;
+  strategyGraphVersionId: string;
+  backtestResultId: string | null;
+  hypothesis: string;
+  whatChanged: string;
+  expectedResult: string;
+  actualResult: string | null;
+  nextStep: string | null;
+  status: JournalStatus;
+  createdAt: string;
+  updatedAt: string;
+}
+
+const JOURNAL_STATUSES: { value: JournalStatus; label: string; color: string }[] = [
+  { value: "KEEP_TESTING", label: "Keep Testing", color: "rgba(255,255,255,0.5)" },
+  { value: "BASELINE",     label: "Baseline",     color: "#D4A44C" },
+  { value: "PROMOTE",      label: "Promote",      color: "#3fb950" },
+  { value: "DISCARD",      label: "Discard",      color: "#f85149" },
+];
+
+function JournalTab({ backtestResultId, graphVersionId }: { backtestResultId: string; graphVersionId: string | null }) {
+  const [entries, setEntries] = useState<JournalEntry[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // Form fields
+  const [hypothesis, setHypothesis] = useState("");
+  const [whatChanged, setWhatChanged] = useState("");
+  const [expectedResult, setExpectedResult] = useState("");
+  const [actualResult, setActualResult] = useState("");
+  const [nextStep, setNextStep] = useState("");
+  const [status, setStatus] = useState<JournalStatus>("KEEP_TESTING");
+
+  const fetchEntries = useCallback(async () => {
+    if (!graphVersionId) { setLoading(false); return; }
+    const res = await apiFetch<JournalEntry[]>(`/lab/journal?graphVersionId=${graphVersionId}`);
+    if (res.ok) setEntries(res.data);
+    setLoading(false);
+  }, [graphVersionId]);
+
+  useEffect(() => { fetchEntries(); }, [fetchEntries]);
+
+  const resetForm = () => {
+    setHypothesis(""); setWhatChanged(""); setExpectedResult("");
+    setActualResult(""); setNextStep(""); setStatus("KEEP_TESTING");
+    setEditingId(null); setShowForm(false); setError(null);
+  };
+
+  const startEdit = (e: JournalEntry) => {
+    setHypothesis(e.hypothesis); setWhatChanged(e.whatChanged);
+    setExpectedResult(e.expectedResult); setActualResult(e.actualResult ?? "");
+    setNextStep(e.nextStep ?? ""); setStatus(e.status);
+    setEditingId(e.id); setShowForm(true);
+  };
+
+  const handleSave = async () => {
+    if (!graphVersionId) return;
+    setSaving(true); setError(null);
+
+    const body = {
+      strategyGraphVersionId: graphVersionId,
+      backtestResultId,
+      hypothesis, whatChanged, expectedResult,
+      actualResult: actualResult || null,
+      nextStep: nextStep || null,
+      status,
+    };
+
+    const res = editingId
+      ? await apiFetch<JournalEntry>(`/lab/journal/${editingId}`, { method: "PATCH", body: JSON.stringify(body) })
+      : await apiFetch<JournalEntry>("/lab/journal", { method: "POST", body: JSON.stringify(body) });
+
+    setSaving(false);
+    if (res.ok) { resetForm(); fetchEntries(); }
+    else setError(res.problem?.detail ?? "Failed to save");
+  };
+
+  const handleDelete = async (id: string) => {
+    await apiFetch(`/lab/journal/${id}`, { method: "DELETE" });
+    fetchEntries();
+  };
+
+  if (loading) return <div style={{ padding: 24, color: "rgba(255,255,255,0.4)" }}>Loading journal…</div>;
+  if (!graphVersionId) return <div style={{ padding: 24, color: "rgba(255,255,255,0.4)" }}>Compile a strategy first to use the research journal.</div>;
+
+  const jInputStyle: React.CSSProperties = {
+    background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.12)",
+    borderRadius: 6, padding: "7px 10px", color: "rgba(255,255,255,0.85)",
+    fontSize: 12, width: "100%", boxSizing: "border-box" as const, fontFamily: "inherit",
+  };
+  const jLabelStyle: React.CSSProperties = {
+    display: "block", fontSize: 10, fontWeight: 700, color: "rgba(255,255,255,0.35)",
+    marginBottom: 4, textTransform: "uppercase" as const, letterSpacing: "0.06em",
+  };
+
+  return (
+    <div style={{ padding: "16px 24px", maxWidth: 700 }}>
+      {/* Header */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
+        <span style={{ fontSize: 13, fontWeight: 600, color: "rgba(255,255,255,0.88)" }}>Research Journal</span>
+        {!showForm && (
+          <button onClick={() => setShowForm(true)} style={{
+            background: "#3b82f6", color: "#fff", border: "none", borderRadius: 6,
+            padding: "5px 14px", fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "inherit",
+          }}>+ New Entry</button>
+        )}
+      </div>
+
+      {/* Form */}
+      {showForm && (
+        <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 8, padding: 16, marginBottom: 16 }}>
+          <div style={{ marginBottom: 10 }}>
+            <label style={jLabelStyle}>Hypothesis</label>
+            <textarea rows={2} style={jInputStyle} value={hypothesis} onChange={(e) => setHypothesis(e.target.value)} placeholder="What do you expect to happen?" />
+          </div>
+          <div style={{ marginBottom: 10 }}>
+            <label style={jLabelStyle}>What Changed</label>
+            <textarea rows={2} style={jInputStyle} value={whatChanged} onChange={(e) => setWhatChanged(e.target.value)} placeholder="What parameters or logic did you change?" />
+          </div>
+          <div style={{ marginBottom: 10 }}>
+            <label style={jLabelStyle}>Expected Result</label>
+            <textarea rows={2} style={jInputStyle} value={expectedResult} onChange={(e) => setExpectedResult(e.target.value)} placeholder="What metrics do you expect to improve?" />
+          </div>
+          <div style={{ marginBottom: 10 }}>
+            <label style={jLabelStyle}>Actual Result</label>
+            <textarea rows={2} style={jInputStyle} value={actualResult} onChange={(e) => setActualResult(e.target.value)} placeholder="What actually happened? (fill after backtest)" />
+          </div>
+          <div style={{ marginBottom: 10 }}>
+            <label style={jLabelStyle}>Next Step</label>
+            <textarea rows={1} style={jInputStyle} value={nextStep} onChange={(e) => setNextStep(e.target.value)} placeholder="What will you try next?" />
+          </div>
+          <div style={{ marginBottom: 12 }}>
+            <label style={jLabelStyle}>Status</label>
+            <select style={jInputStyle} value={status} onChange={(e) => setStatus(e.target.value as JournalStatus)}>
+              {JOURNAL_STATUSES.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
+            </select>
+          </div>
+          {error && <div style={{ color: "#f85149", fontSize: 12, marginBottom: 8 }}>{error}</div>}
+          <div style={{ display: "flex", gap: 8 }}>
+            <button disabled={saving || !hypothesis || !whatChanged || !expectedResult} onClick={handleSave} style={{
+              background: "#3b82f6", color: "#fff", border: "none", borderRadius: 6,
+              padding: "7px 18px", fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "inherit",
+              opacity: saving || !hypothesis || !whatChanged || !expectedResult ? 0.45 : 1,
+            }}>{saving ? "Saving…" : editingId ? "Update" : "Save"}</button>
+            <button onClick={resetForm} style={{
+              background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.7)", border: "none",
+              borderRadius: 6, padding: "7px 14px", fontSize: 12, cursor: "pointer", fontFamily: "inherit",
+            }}>Cancel</button>
+          </div>
+        </div>
+      )}
+
+      {/* Entries list */}
+      {entries.length === 0 && !showForm && (
+        <div style={{ color: "rgba(255,255,255,0.3)", fontSize: 12 }}>No journal entries yet. Click "+ New Entry" to start documenting your research.</div>
+      )}
+      {entries.map((e) => {
+        const statusInfo = JOURNAL_STATUSES.find((s) => s.value === e.status) ?? JOURNAL_STATUSES[0];
+        return (
+          <div key={e.id} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 8, padding: "12px 14px", marginBottom: 10 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+              <span style={{ fontSize: 10, fontWeight: 700, color: statusInfo.color, textTransform: "uppercase", letterSpacing: "0.06em" }}>{statusInfo.label}</span>
+              <span style={{ fontSize: 10, color: "rgba(255,255,255,0.25)" }}>{new Date(e.createdAt).toLocaleDateString()}</span>
+            </div>
+            <div style={{ fontSize: 12, color: "rgba(255,255,255,0.8)", marginBottom: 4 }}><strong>Hypothesis:</strong> {e.hypothesis}</div>
+            <div style={{ fontSize: 12, color: "rgba(255,255,255,0.6)", marginBottom: 4 }}><strong>Changed:</strong> {e.whatChanged}</div>
+            <div style={{ fontSize: 12, color: "rgba(255,255,255,0.6)", marginBottom: 4 }}><strong>Expected:</strong> {e.expectedResult}</div>
+            {e.actualResult && <div style={{ fontSize: 12, color: "rgba(255,255,255,0.6)", marginBottom: 4 }}><strong>Actual:</strong> {e.actualResult}</div>}
+            {e.nextStep && <div style={{ fontSize: 12, color: "rgba(255,255,255,0.6)", marginBottom: 4 }}><strong>Next:</strong> {e.nextStep}</div>}
+            <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
+              <button onClick={() => startEdit(e)} style={{ background: "none", border: "none", color: "#3b82f6", fontSize: 11, cursor: "pointer", padding: 0, fontFamily: "inherit" }}>Edit</button>
+              <button onClick={() => handleDelete(e.id)} style={{ background: "none", border: "none", color: "#f85149", fontSize: 11, cursor: "pointer", padding: 0, fontFamily: "inherit" }}>Delete</button>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+
+type ResultTab = "run" | "metrics" | "trades" | "equity" | "logs" | "compare" | "journal";
 
 function ResultDetail({
   bt,
@@ -777,6 +969,7 @@ function ResultDetail({
   submitError,
   activeDatasetId,
   lastCompileVersionId,
+  lastCompileGraphVersionId,
   onSubmit,
 }: {
   bt: BacktestListItem | null;
@@ -788,6 +981,7 @@ function ResultDetail({
   submitError: string | null;
   activeDatasetId: string | null;
   lastCompileVersionId: string | null;
+  lastCompileGraphVersionId: string | null;
   onSubmit: (params: { strategyVersionId: string; datasetId: string; feeBps: number; slippageBps: number }) => void;
 }) {
   const [activeTab, setActiveTab] = useState<ResultTab>("run");
@@ -808,6 +1002,7 @@ function ResultDetail({
     { id: "equity",  label: "Equity curve", disabled: !isDone },
     { id: "logs",    label: "Logs",         disabled: !isDone },
     { id: "compare", label: "Compare",      disabled: doneRuns.length < 2 },
+    { id: "journal", label: "Journal",      disabled: !isDone },
   ];
 
   return (
@@ -892,6 +1087,13 @@ function ResultDetail({
 
         {activeTab === "compare" && (
           <CompareRunsTab runs={doneRuns} currentRunId={bt?.id ?? null} lastCompileVersionId={lastCompileVersionId} />
+        )}
+
+        {isDone && activeTab === "journal" && bt && (
+          <JournalTab
+            backtestResultId={bt.id}
+            graphVersionId={lastCompileGraphVersionId}
+          />
         )}
       </div>
     </div>
@@ -1105,6 +1307,7 @@ export default function LabTestPage() {
             submitError={submitError}
             activeDatasetId={activeDatasetId}
             lastCompileVersionId={lastCompileVersionId}
+            lastCompileGraphVersionId={lastCompileResult?.graphVersionId ?? null}
             onSubmit={handleSubmit}
           />
         )}

@@ -829,6 +829,131 @@ export async function labRoutes(app: FastifyInstance) {
       updatedAt: s.updatedAt.toISOString(),
     })));
   });
+
+  // -------------------------------------------------------------------------
+  // Research Journal — CRUD (Task 28)
+  // -------------------------------------------------------------------------
+
+  const VALID_JOURNAL_STATUSES = ["BASELINE", "PROMOTE", "DISCARD", "KEEP_TESTING"] as const;
+
+  // POST /lab/journal — create journal entry
+  app.post<{ Body: Record<string, unknown> }>("/lab/journal", {
+    config: { rateLimit: { max: 30, timeWindow: "1 minute" } },
+    onRequest: [app.authenticate],
+  }, async (request, reply) => {
+    const workspace = await resolveWorkspace(request, reply);
+    if (!workspace) return;
+
+    const { strategyGraphVersionId, backtestResultId, hypothesis, whatChanged, expectedResult, actualResult, nextStep, status } = request.body ?? {};
+
+    if (!strategyGraphVersionId || typeof strategyGraphVersionId !== "string") {
+      return problem(reply, 400, "Validation Error", "strategyGraphVersionId is required");
+    }
+    if (!hypothesis || typeof hypothesis !== "string") {
+      return problem(reply, 400, "Validation Error", "hypothesis is required");
+    }
+    if (!whatChanged || typeof whatChanged !== "string") {
+      return problem(reply, 400, "Validation Error", "whatChanged is required");
+    }
+    if (!expectedResult || typeof expectedResult !== "string") {
+      return problem(reply, 400, "Validation Error", "expectedResult is required");
+    }
+    if (status && !VALID_JOURNAL_STATUSES.includes(status as typeof VALID_JOURNAL_STATUSES[number])) {
+      return problem(reply, 400, "Validation Error", `status must be one of: ${VALID_JOURNAL_STATUSES.join(", ")}`);
+    }
+
+    const entry = await prisma.labJournalEntry.create({
+      data: {
+        workspaceId: workspace.id,
+        strategyGraphVersionId: strategyGraphVersionId as string,
+        backtestResultId: (backtestResultId as string) ?? null,
+        hypothesis: hypothesis as string,
+        whatChanged: whatChanged as string,
+        expectedResult: expectedResult as string,
+        actualResult: (actualResult as string) ?? null,
+        nextStep: (nextStep as string) ?? null,
+        status: (status as typeof VALID_JOURNAL_STATUSES[number]) ?? "KEEP_TESTING",
+      },
+    });
+
+    return reply.status(201).send(entry);
+  });
+
+  // GET /lab/journal?graphVersionId=X — list journal entries
+  app.get<{ Querystring: { graphVersionId?: string; status?: string } }>("/lab/journal", {
+    onRequest: [app.authenticate],
+  }, async (request, reply) => {
+    const workspace = await resolveWorkspace(request, reply);
+    if (!workspace) return;
+
+    const { graphVersionId, status } = request.query;
+
+    const where: Record<string, unknown> = { workspaceId: workspace.id };
+    if (graphVersionId) where.strategyGraphVersionId = graphVersionId;
+    if (status && VALID_JOURNAL_STATUSES.includes(status as typeof VALID_JOURNAL_STATUSES[number])) {
+      where.status = status;
+    }
+
+    const entries = await prisma.labJournalEntry.findMany({
+      where,
+      orderBy: { createdAt: "desc" },
+      take: 100,
+    });
+
+    return reply.send(entries);
+  });
+
+  // PATCH /lab/journal/:id — update journal entry
+  app.patch<{ Params: { id: string }; Body: Record<string, unknown> }>("/lab/journal/:id", {
+    config: { rateLimit: { max: 30, timeWindow: "1 minute" } },
+    onRequest: [app.authenticate],
+  }, async (request, reply) => {
+    const workspace = await resolveWorkspace(request, reply);
+    if (!workspace) return;
+
+    const existing = await prisma.labJournalEntry.findUnique({ where: { id: request.params.id } });
+    if (!existing || existing.workspaceId !== workspace.id) {
+      return problem(reply, 404, "Not Found", "Journal entry not found");
+    }
+
+    const { hypothesis, whatChanged, expectedResult, actualResult, nextStep, status, backtestResultId } = request.body ?? {};
+
+    if (status && !VALID_JOURNAL_STATUSES.includes(status as typeof VALID_JOURNAL_STATUSES[number])) {
+      return problem(reply, 400, "Validation Error", `status must be one of: ${VALID_JOURNAL_STATUSES.join(", ")}`);
+    }
+
+    const data: Record<string, unknown> = {};
+    if (typeof hypothesis === "string") data.hypothesis = hypothesis;
+    if (typeof whatChanged === "string") data.whatChanged = whatChanged;
+    if (typeof expectedResult === "string") data.expectedResult = expectedResult;
+    if (typeof actualResult === "string" || actualResult === null) data.actualResult = actualResult;
+    if (typeof nextStep === "string" || nextStep === null) data.nextStep = nextStep;
+    if (typeof backtestResultId === "string" || backtestResultId === null) data.backtestResultId = backtestResultId;
+    if (status) data.status = status;
+
+    const updated = await prisma.labJournalEntry.update({
+      where: { id: existing.id },
+      data,
+    });
+
+    return reply.send(updated);
+  });
+
+  // DELETE /lab/journal/:id — delete journal entry
+  app.delete<{ Params: { id: string } }>("/lab/journal/:id", {
+    onRequest: [app.authenticate],
+  }, async (request, reply) => {
+    const workspace = await resolveWorkspace(request, reply);
+    if (!workspace) return;
+
+    const existing = await prisma.labJournalEntry.findUnique({ where: { id: request.params.id } });
+    if (!existing || existing.workspaceId !== workspace.id) {
+      return problem(reply, 404, "Not Found", "Journal entry not found");
+    }
+
+    await prisma.labJournalEntry.delete({ where: { id: existing.id } });
+    return reply.status(204).send();
+  });
 }
 
 // ---------------------------------------------------------------------------
