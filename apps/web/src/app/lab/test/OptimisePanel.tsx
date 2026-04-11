@@ -74,7 +74,7 @@ type OptimiseMetric = "pnl" | "winRate" | "sharpe" | "maxDrawdown";
 // ---------------------------------------------------------------------------
 
 const POLL_INTERVAL_MS = 2000;
-const MAX_RUNS = 50;
+const MAX_RUNS = 20;
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -97,9 +97,11 @@ function getNumericParams(node: LabNode) {
 export default function OptimisePanel({
   datasets,
   strategyVersions,
+  onSelectBacktest,
 }: {
   datasets: DatasetListItem[];
   strategyVersions: StrategyVersionItem[];
+  onSelectBacktest?: (backtestResultId: string) => void;
 }) {
   const nodes = useLabGraphStore((s) => s.nodes);
   const activeDatasetId = useLabGraphStore((s) => s.activeDatasetId);
@@ -275,6 +277,37 @@ export default function OptimisePanel({
 
   const bestId = activeSweep?.bestRow?.backtestResultId;
 
+  // Per-metric best/worst for highlighting
+  const metricExtremes = (() => {
+    const rows = activeSweep?.results;
+    if (!rows || rows.length < 2) return null;
+    const keys: (keyof SweepRow)[] = ["pnlPct", "winRate", "maxDrawdownPct", "tradeCount", "sharpe"];
+    const best: Record<string, number> = {};
+    const worst: Record<string, number> = {};
+    for (const key of keys) {
+      const vals = rows.map((r) => r[key] as number | null).filter((v): v is number => v != null);
+      if (vals.length === 0) continue;
+      if (key === "maxDrawdownPct") {
+        // Lower drawdown is better
+        best[key] = Math.min(...vals);
+        worst[key] = Math.max(...vals);
+      } else {
+        best[key] = Math.max(...vals);
+        worst[key] = Math.min(...vals);
+      }
+    }
+    return { best, worst };
+  })();
+
+  const cellColor = (key: string, val: number | null): string | undefined => {
+    if (val == null || !metricExtremes) return undefined;
+    const { best, worst } = metricExtremes;
+    if (best[key] === worst[key]) return undefined; // all same value
+    if (val === best[key]) return "#3fb950";  // green
+    if (val === worst[key]) return "#f85149"; // red
+    return undefined;
+  };
+
   // ── Block label helper ──────────────────────────────────────────────────
   const blockLabel = (node: LabNode) => {
     const def = BLOCK_DEF_MAP[node.data.blockType];
@@ -338,7 +371,6 @@ export default function OptimisePanel({
                 <tbody>
                   {sortedResults.map((r) => {
                     const isBest = r.backtestResultId === bestId;
-                    const pnlColor = r.pnlPct >= 0 ? "#3fb950" : "#f85149";
                     return (
                       <tr
                         key={r.paramValue}
@@ -346,14 +378,17 @@ export default function OptimisePanel({
                           borderBottom: "1px solid rgba(255,255,255,0.04)",
                           background: isBest ? "rgba(212,164,76,0.08)" : "transparent",
                           borderLeft: isBest ? "3px solid #D4A44C" : "3px solid transparent",
+                          cursor: onSelectBacktest ? "pointer" : "default",
                         }}
+                        onClick={() => onSelectBacktest?.(r.backtestResultId)}
+                        title={onSelectBacktest ? "Click to view backtest detail" : undefined}
                       >
                         <td style={tdStyle}>{r.paramValue}</td>
-                        <td style={{ ...tdStyle, color: pnlColor, fontWeight: 600 }}>{fmtPnl(r.pnlPct)}</td>
-                        <td style={tdStyle}>{(r.winRate * 100).toFixed(1)}%</td>
-                        <td style={tdStyle}>{r.maxDrawdownPct.toFixed(2)}%</td>
-                        <td style={tdStyle}>{r.tradeCount}</td>
-                        <td style={tdStyle}>{r.sharpe != null ? r.sharpe.toFixed(2) : "—"}</td>
+                        <td style={{ ...tdStyle, color: cellColor("pnlPct", r.pnlPct) ?? (r.pnlPct >= 0 ? "#3fb950" : "#f85149"), fontWeight: 600 }}>{fmtPnl(r.pnlPct)}</td>
+                        <td style={{ ...tdStyle, color: cellColor("winRate", r.winRate) }}>{(r.winRate * 100).toFixed(1)}%</td>
+                        <td style={{ ...tdStyle, color: cellColor("maxDrawdownPct", r.maxDrawdownPct) }}>{r.maxDrawdownPct.toFixed(2)}%</td>
+                        <td style={{ ...tdStyle, color: cellColor("tradeCount", r.tradeCount) }}>{r.tradeCount}</td>
+                        <td style={{ ...tdStyle, color: cellColor("sharpe", r.sharpe) }}>{r.sharpe != null ? r.sharpe.toFixed(2) : "—"}</td>
                       </tr>
                     );
                   })}

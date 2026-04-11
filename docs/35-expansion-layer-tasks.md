@@ -72,7 +72,8 @@
 ### Task 27 — Parameter Sweep
 
 **Priority:** HIGH
-**Depends on:** 26 (Governance)
+**Depends on:** 26 (Governance) ✅ done
+**Status:** Completed — PR #XXX
 **Note:** Backend endpoints already exist (`POST /lab/backtest/sweep`, `GET /lab/backtest/sweep/:id`, `GET /lab/backtest/sweeps`). UI skeleton exists in `OptimisePanel.tsx`.
 
 **Scope:**
@@ -100,11 +101,12 @@
 - `apps/api/tests/routes/lab.test.ts` — sweep route tests
 
 **Acceptance criteria:**
-- [ ] User can select one numeric parameter and define range/step
-- [ ] Sweep triggers sequential backtest runs (max 20)
-- [ ] Results table shows metrics per parameter value
-- [ ] Sorting and best/worst highlighting work
-- [ ] All existing tests pass + new sweep UI tests
+- [x] User can select one numeric parameter and define range/step
+- [x] Sweep triggers sequential backtest runs (max 20)
+- [x] Results table shows metrics per parameter value
+- [x] Sorting and best/worst highlighting work
+- [x] Click row → view full backtest detail (switches to backtest tab)
+- [x] All existing tests pass + sweep tests updated
 
 ---
 

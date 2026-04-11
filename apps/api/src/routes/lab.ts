@@ -721,9 +721,9 @@ export async function labRoutes(app: FastifyInstance) {
 
     const runCount = Math.floor((to - from) / step) + 1;
 
-    // ── Guard: max 50 runs ──────────────────────────────────────────────────
-    if (runCount > 50) {
-      return problem(reply, 422, "Sweep Too Large", "Sweep exceeds maximum of 50 runs. Narrow the range or increase the step.");
+    // ── Guard: max 20 runs (docs/24 §8.3) ────────────────────────────────
+    if (runCount > 20) {
+      return problem(reply, 422, "Sweep Too Large", "Sweep exceeds maximum of 20 runs. Narrow the range or increase the step.");
     }
 
     if (!Number.isInteger(feeBps) || feeBps < 0 || feeBps > MAX_BPS) {
