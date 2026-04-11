@@ -143,6 +143,7 @@ describe("Support status snapshot", () => {
       "candles",
       "close_position",
       "compare",
+      "confirm_n_bars",
       "constant",
       "cross",
       "dca_config",
@@ -178,8 +179,8 @@ describe("Support status snapshot", () => {
   });
 
   it("block count matches expected total", () => {
-    expect(uiBlockTypes.length).toBe(33);
-    expect(compilerBlockTypes.length).toBe(33);
-    expect(supportMapTypes.length).toBe(33);
+    expect(uiBlockTypes.length).toBe(34);
+    expect(compilerBlockTypes.length).toBe(34);
+    expect(supportMapTypes.length).toBe(34);
   });
 });

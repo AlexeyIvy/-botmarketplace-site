@@ -359,6 +359,21 @@ export const BLOCK_DEFS: BlockDef[] = [
     params: [],
     description: "True when any input is true on the same bar.",
   },
+  {
+    type: "confirm_n_bars",
+    label: "Confirm N Bars",
+    category: "logic",
+    inputs: [
+      { id: "signal", label: "signal", dataType: "Series<boolean>", required: true },
+    ],
+    outputs: [
+      { id: "confirmed", label: "confirmed", dataType: "Series<boolean>", required: false },
+    ],
+    params: [
+      { id: "bars", label: "Confirm Bars", type: "number", defaultValue: 3, min: 1, max: 50 },
+    ],
+    description: "Requires signal to be true for N consecutive bars before firing.",
+  },
 
   // ── Execution ─────────────────────────────────────────────────────────────
   {

@@ -261,6 +261,21 @@ export const orGateHandler: BlockHandler = {
   },
 };
 
+export const confirmNBarsHandler: BlockHandler = {
+  blockType: "confirm_n_bars",
+  category: "logic",
+  validate() {},
+  extract(ctx) {
+    const nodes = nodesOf(ctx, "confirm_n_bars");
+    return {
+      confirmNBarsNodes: nodes.map((n) => ({
+        nodeId: n.id,
+        bars: Number(n.data.params["bars"] ?? 3),
+      })),
+    };
+  },
+};
+
 // ---------------------------------------------------------------------------
 // Execution blocks
 // ---------------------------------------------------------------------------
@@ -777,6 +792,7 @@ export function defaultHandlers(): BlockHandler[] {
     compareHandler,
     andGateHandler,
     orGateHandler,
+    confirmNBarsHandler,
     // Execution
     enterLongHandler,
     enterShortHandler,

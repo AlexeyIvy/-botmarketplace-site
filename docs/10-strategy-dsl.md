@@ -372,6 +372,7 @@ StrategyGraph (visual) → Compiler (Phase 4) → StrategyVersion.body (DSL JSON
 | `cross`       | logic     | `entry.signal` → `{ type: params.mode, fast, slow }` | `params.mode` → signal type: `"crossover"`, `"crossunder"`, or `"both"`. Inputs `a`, `b` identify fast/slow indicator refs. |
 | `and_gate`    | logic     | (graph-level combiner)                          | Boolean AND across inputs. Evaluator: `conditions.every()`, maxDepth=5. |
 | `or_gate`     | logic     | (graph-level combiner)                          | Boolean OR across inputs. Evaluator: `conditions.some()`, maxDepth=5. |
+| `confirm_n_bars` | logic  | (graph-level combiner)                          | Input signal must be true for N consecutive bars. Param: `bars` (default 3, 1–50). |
 | `proximity_filter` | logic | `proximityFilter` → `{ threshold, mode }` | Gates signals by proximity to a level. Mode: percentage or absolute. |
 | `annotate_event` | logic  | `annotations[]` → `{ label, color, shape }` | Marks events on equity curve. Signal input triggers annotation. No runtime side-effect. |
 | `enter_long`  | execution | `entry.side: "Buy"`                             | Exactly one entry node required. Conflict with `enter_short` = compile error.         |
