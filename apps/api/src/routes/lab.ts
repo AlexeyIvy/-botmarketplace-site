@@ -7,6 +7,18 @@ import { runBacktest } from "../lib/backtest.js";
 import { applyDslSweepParam } from "../lib/dslSweepParam.js";
 import { compileGraph } from "../lib/graphCompiler.js";
 import type { GraphJson } from "../lib/graphCompiler.js";
+import {
+  explainGraph,
+  explainValidation,
+  explainDelta,
+  suggestRisk,
+  ExplainInputError,
+  ProviderError,
+  type ExplainGraphInput,
+  type ExplainValidationInput,
+  type ExplainDeltaInput,
+  type ExplainRiskInput,
+} from "../lib/aiExplain.js";
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -953,6 +965,118 @@ export async function labRoutes(app: FastifyInstance) {
 
     await prisma.labJournalEntry.delete({ where: { id: existing.id } });
     return reply.status(204).send();
+  });
+
+  // ── Task 29 — AI Explainability endpoints ────────────────────────────────
+  // Per docs/35-expansion-layer-tasks.md §Task 29, docs/24 §8.5
+  // Safety: advisory only, no compiler/validation bypass, no trade execution,
+  //         no secrets. Graceful degradation when AI_API_KEY not set (503).
+  //         Rate limited: 5 req/min per endpoint.
+  // ─────────────────────────────────────────────────────────────────────────
+
+  /**
+   * Map explain-module errors to HTTP responses.
+   * Centralizes error handling for all four explain endpoints.
+   */
+  function handleExplainError(
+    err: unknown,
+    request: { id: string; log: { warn: (...a: unknown[]) => void; error: (...a: unknown[]) => void } },
+    reply: { status: (code: number) => { send: (body: unknown) => unknown } },
+    endpoint: string,
+  ): unknown {
+    if (err instanceof ExplainInputError) {
+      return problem(reply as never, 400, "Bad Request", err.message);
+    }
+    if (err instanceof ProviderError) {
+      request.log.warn({ reqId: request.id, providerStatus: err.providerStatus }, `ai.explain.${endpoint}.provider_error`);
+      if (err.providerStatus === 429) {
+        return problem(reply as never, 429, "Too Many Requests", "AI rate limit reached, try again later");
+      }
+      return problem(reply as never, 502, "Bad Gateway", "AI provider error");
+    }
+    const isTimeout = err instanceof Error &&
+      (err.name === "TimeoutError" || err.name === "AbortError" || err.message.includes("timed out"));
+    if (isTimeout) {
+      return problem(reply as never, 504, "Gateway Timeout", "AI request timed out");
+    }
+    request.log.error({ err, reqId: request.id }, `ai.explain.${endpoint}.unexpected_error`);
+    return problem(reply as never, 502, "Bad Gateway", "AI provider error");
+  }
+
+  // POST /lab/explain/graph — Explain Graph: LLM summarizes strategy
+  app.post<{ Body: ExplainGraphInput }>("/lab/explain/graph", {
+    config: { rateLimit: { max: 5, timeWindow: "1 minute" } },
+    onRequest: [app.authenticate],
+  }, async (request, reply) => {
+    if (!process.env.AI_API_KEY) {
+      return problem(reply, 503, "Service Unavailable", "AI not configured");
+    }
+    const workspace = await resolveWorkspace(request, reply);
+    if (!workspace) return;
+
+    try {
+      const result = await explainGraph(request.body);
+      return reply.send(result);
+    } catch (err) {
+      return handleExplainError(err, request, reply, "graph");
+    }
+  });
+
+  // POST /lab/explain/validation — Explain Validation Issue: error + fix
+  app.post<{ Body: ExplainValidationInput }>("/lab/explain/validation", {
+    config: { rateLimit: { max: 5, timeWindow: "1 minute" } },
+    onRequest: [app.authenticate],
+  }, async (request, reply) => {
+    if (!process.env.AI_API_KEY) {
+      return problem(reply, 503, "Service Unavailable", "AI not configured");
+    }
+    const workspace = await resolveWorkspace(request, reply);
+    if (!workspace) return;
+
+    try {
+      const result = await explainValidation(request.body);
+      return reply.send(result);
+    } catch (err) {
+      return handleExplainError(err, request, reply, "validation");
+    }
+  });
+
+  // POST /lab/explain/delta — Explain Run Delta: differences summary
+  app.post<{ Body: ExplainDeltaInput }>("/lab/explain/delta", {
+    config: { rateLimit: { max: 5, timeWindow: "1 minute" } },
+    onRequest: [app.authenticate],
+  }, async (request, reply) => {
+    if (!process.env.AI_API_KEY) {
+      return problem(reply, 503, "Service Unavailable", "AI not configured");
+    }
+    const workspace = await resolveWorkspace(request, reply);
+    if (!workspace) return;
+
+    try {
+      const result = await explainDelta(request.body);
+      return reply.send(result);
+    } catch (err) {
+      return handleExplainError(err, request, reply, "delta");
+    }
+  });
+
+  // POST /lab/explain/risk — Suggest Safer Risk Config
+  app.post<{ Body: ExplainRiskInput }>("/lab/explain/risk", {
+    config: { rateLimit: { max: 5, timeWindow: "1 minute" } },
+    onRequest: [app.authenticate],
+  }, async (request, reply) => {
+    if (!process.env.AI_API_KEY) {
+      return problem(reply, 503, "Service Unavailable", "AI not configured");
+    }
+    const workspace = await resolveWorkspace(request, reply);
+    if (!workspace) return;
+
+    try {
+      const result = await suggestRisk(request.body);
+      return reply.send(result);
+    } catch (err) {
+      return handleExplainError(err, request, reply, "risk");
+    }
   });
 }
 

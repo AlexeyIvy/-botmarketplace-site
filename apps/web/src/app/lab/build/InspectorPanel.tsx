@@ -8,7 +8,7 @@
 // Per §6.3.1: Inspector shows edge details when an edge is selected.
 // ---------------------------------------------------------------------------
 
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { LabNode, LabEdge } from "../useLabGraphStore";
 import {
   BLOCK_DEF_MAP,
@@ -17,6 +17,7 @@ import {
   type LabNodeData,
   type PortDataType,
 } from "./blockDefs";
+import { apiFetch } from "@/lib/api";
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -300,6 +301,93 @@ function NodeInspector({ node, allEdges, allNodes, onParamChange }: NodeInspecto
           })}
         </>
       )}
+
+      {/* Task 29: Risk config warning for stop_loss / take_profit blocks */}
+      {(blockDef.category === "risk") && (
+        <RiskWarningBanner params={data.params} blockType={data.blockType} />
+      )}
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Task 29 — Risk Warning Banner (AI-powered, graceful degradation)
+// ---------------------------------------------------------------------------
+
+const RISK_BLOCK_TYPES = new Set(["stop_loss", "take_profit"]);
+
+function RiskWarningBanner({ params, blockType }: { params: Record<string, unknown>; blockType: string }) {
+  const [warning, setWarning] = useState<string | null>(null);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [aiAvailable, setAiAvailable] = useState<boolean | null>(null);
+
+  // Check AI availability once
+  useEffect(() => {
+    apiFetch<{ available: boolean }>("/ai/status")
+      .then((res) => { if (res.ok) setAiAvailable(res.data.available); else setAiAvailable(false); })
+      .catch(() => setAiAvailable(false));
+  }, []);
+
+  // Fetch risk suggestion when params change (debounced)
+  useEffect(() => {
+    if (!aiAvailable || !RISK_BLOCK_TYPES.has(blockType)) return;
+
+    setLoading(true);
+    const timer = setTimeout(async () => {
+      try {
+        const res = await apiFetch<{ warning: string | null; suggestions: string[] }>("/lab/explain/risk", {
+          method: "POST",
+          body: JSON.stringify({ riskParams: { blockType, ...params } }),
+        });
+        if (res.ok) {
+          setWarning(res.data.warning);
+          setSuggestions(res.data.suggestions);
+        } else {
+          setWarning(null);
+          setSuggestions([]);
+        }
+      } catch {
+        setWarning(null);
+        setSuggestions([]);
+      } finally {
+        setLoading(false);
+      }
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, [aiAvailable, blockType, params]);
+
+  if (!aiAvailable || !RISK_BLOCK_TYPES.has(blockType)) return null;
+  if (loading) return (
+    <div style={{ marginTop: 10, fontSize: 10, color: "rgba(255,255,255,0.25)" }}>
+      Checking risk config...
+    </div>
+  );
+  if (!warning) return null;
+
+  return (
+    <div style={{
+      marginTop: 12,
+      padding: "8px 10px",
+      background: "rgba(251,191,36,0.08)",
+      border: "1px solid rgba(251,191,36,0.25)",
+      borderRadius: 6,
+      fontSize: 11,
+      lineHeight: 1.5,
+    }}>
+      <div style={{ color: "#FBBF24", fontWeight: 700, fontSize: 10, marginBottom: 4, textTransform: "uppercase", letterSpacing: "0.06em" }}>
+        AI Risk Warning
+      </div>
+      <div style={{ color: "rgba(255,255,255,0.7)" }}>{warning}</div>
+      {suggestions.length > 0 && (
+        <ul style={{ margin: "6px 0 0", paddingLeft: 16, color: "rgba(255,255,255,0.55)" }}>
+          {suggestions.map((s, i) => <li key={i}>{s}</li>)}
+        </ul>
+      )}
+      <div style={{ fontSize: 9, color: "rgba(255,255,255,0.25)", marginTop: 6 }}>
+        Advisory only — apply changes through the graph editor
+      </div>
     </div>
   );
 }
