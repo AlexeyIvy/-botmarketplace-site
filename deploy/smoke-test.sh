@@ -808,20 +808,21 @@ fi
 
 S12_BT_ID=""
 
-# 12.1 POST /lab/backtest (dataset-first) → 202 PENDING
-if [[ -n "$S12_STRAT_ID" && -n "$S12_DATASET_ID" ]]; then
+# 12.1 POST /lab/backtest (dataset-first, Phase 5) → 202 PENDING
+# Phase 5 requires strategyVersionId (not strategyId) for reproducibility.
+if [[ -n "$S12_VER_ENABLED_ID" && -n "$S12_DATASET_ID" ]]; then
   S12_BT_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/lab/backtest" \
     -H "Authorization: Bearer $TOKEN" \
     -H "Content-Type: application/json" \
     -H "X-Workspace-Id: $WS_ID" \
-    -d "{\"strategyId\":\"$S12_STRAT_ID\",\"datasetId\":\"$S12_DATASET_ID\"}")
+    -d "{\"strategyVersionId\":\"$S12_VER_ENABLED_ID\",\"datasetId\":\"$S12_DATASET_ID\"}")
   check "POST /lab/backtest (dataset-first) → 202" "202" "$S12_BT_CODE"
 
   S12_BT=$(curl -s -X POST "$BASE_URL/api/v1/lab/backtest" \
     -H "Authorization: Bearer $TOKEN" \
     -H "Content-Type: application/json" \
     -H "X-Workspace-Id: $WS_ID" \
-    -d "{\"strategyId\":\"$S12_STRAT_ID\",\"datasetId\":\"$S12_DATASET_ID\"}")
+    -d "{\"strategyVersionId\":\"$S12_VER_ENABLED_ID\",\"datasetId\":\"$S12_DATASET_ID\"}")
   S12_BT_ID=$(echo "$S12_BT" | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4) || true
   S12_BT_STATUS=$(echo "$S12_BT" | grep -o '"status":"[^"]*"' | head -1 | cut -d'"' -f4) || true
   if [[ "$S12_BT_STATUS" == "PENDING" ]] || [[ "$S12_BT_STATUS" == "RUNNING" ]]; then
@@ -832,7 +833,7 @@ if [[ -n "$S12_STRAT_ID" && -n "$S12_DATASET_ID" ]]; then
     ((++FAIL))
   fi
 else
-  red "Skipping backtest tests (no strategy or dataset created)"
+  red "Skipping backtest tests (no strategy version or dataset created)"
   ((++FAIL)); ((++FAIL))
 fi
 
@@ -1153,6 +1154,7 @@ check "POST /ai/execute missing actionId → 400" "400" "$S18_EXEC_NOACTION"
 S18_EXEC_404=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/api/v1/ai/execute" \
   -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
+  -H "X-Workspace-Id: $WS_ID" \
   -d '{"planId":"00000000-0000-0000-0000-000000000000","actionId":"x"}')
 check "POST /ai/execute non-existent planId → 404" "404" "$S18_EXEC_404"
 
