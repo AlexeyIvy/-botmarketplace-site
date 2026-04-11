@@ -145,7 +145,8 @@
 ### Task 28 — Research Journal
 
 **Priority:** MEDIUM
-**Depends on:** 26 (Governance)
+**Depends on:** 26 (Governance) ✅ done
+**Status:** Completed — PR #248
 
 **Scope:**
 
@@ -172,11 +173,11 @@
 - `apps/web/src/app/lab/test/page.tsx` — Journal tab
 
 **Acceptance criteria:**
-- [ ] CRUD for journal entries works
-- [ ] Journal entries linked to graph version and/or backtest result
-- [ ] Journal tab visible in Test results view
-- [ ] Status field filterable (baseline/promote/discard/keep_testing)
-- [ ] All existing tests pass + journal route tests added
+- [x] CRUD for journal entries works (POST/GET/PATCH/DELETE /lab/journal)
+- [x] Journal entries linked to graph version and/or backtest result
+- [x] Journal tab visible in Test results view
+- [x] Status field filterable (baseline/promote/discard/keep_testing)
+- [x] All existing tests pass + 9 journal route tests added
 
 ---
 

@@ -13,6 +13,7 @@ const mockSweeps: Record<string, unknown> = {};
 const mockStrategyVersions: Record<string, unknown> = {};
 const mockStrategies: Record<string, unknown> = {};
 const mockDatasets: Record<string, unknown> = {};
+const mockJournalEntries: Record<string, unknown> = {};
 const mockGraphVersions: Record<string, unknown> = {};
 const mockWorkspaceMemberships: unknown[] = [];
 let graphIdCounter = 0;
@@ -167,6 +168,29 @@ vi.mock("../../src/lib/prisma.js", () => ({
         return Promise.resolve({ ...m, workspace: { id: m.workspaceId, name: "Test" } });
       }),
     },
+    labJournalEntry: {
+      create: vi.fn().mockImplementation(({ data }: { data: Record<string, unknown> }) => {
+        const id = `je-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
+        const record = { id, ...data, createdAt: new Date(), updatedAt: new Date() };
+        mockJournalEntries[id] = record;
+        return Promise.resolve(record);
+      }),
+      findUnique: vi.fn().mockImplementation(({ where }: { where: { id: string } }) => {
+        return Promise.resolve(mockJournalEntries[where.id] ?? null);
+      }),
+      findMany: vi.fn().mockImplementation(() => Promise.resolve(Object.values(mockJournalEntries))),
+      update: vi.fn().mockImplementation(({ where, data }: { where: { id: string }; data: Record<string, unknown> }) => {
+        const existing = mockJournalEntries[where.id] as Record<string, unknown> | undefined;
+        if (!existing) return Promise.resolve(null);
+        const updated = { ...existing, ...data, updatedAt: new Date() };
+        mockJournalEntries[where.id] = updated;
+        return Promise.resolve(updated);
+      }),
+      delete: vi.fn().mockImplementation(({ where }: { where: { id: string } }) => {
+        delete mockJournalEntries[where.id];
+        return Promise.resolve({});
+      }),
+    },
     $queryRaw: vi.fn().mockResolvedValue([]),
     $connect: vi.fn(),
     $disconnect: vi.fn(),
@@ -212,6 +236,7 @@ beforeEach(() => {
   Object.keys(mockStrategies).forEach((k) => delete mockStrategies[k]);
   Object.keys(mockDatasets).forEach((k) => delete mockDatasets[k]);
   Object.keys(mockGraphVersions).forEach((k) => delete mockGraphVersions[k]);
+  Object.keys(mockJournalEntries).forEach((k) => delete mockJournalEntries[k]);
   mockWorkspaceMemberships.length = 0;
   mockWorkspaceMemberships.push({ workspaceId: WS_ID, userId: "test-user-id", role: "OWNER" });
   graphIdCounter = 0;
@@ -691,5 +716,87 @@ describe("GET /api/v1/lab/graph-versions", () => {
     mockGraphs["g-other3"] = { id: "g-other3", workspaceId: "ws-other", name: "Other", graphJson: {} };
     const res = await app.inject({ method: "GET", url: "/api/v1/lab/graph-versions?graphId=g-other3", headers: authHeaders() });
     expect(res.statusCode).toBe(404);
+  });
+});
+
+// ── Research Journal CRUD (Task 28) ─────────────────────────────────────────
+
+describe("POST /api/v1/lab/journal", () => {
+  it("returns 400 when missing required fields", async () => {
+    const res = await app.inject({ method: "POST", url: "/api/v1/lab/journal", headers: authHeaders(), payload: {} });
+    expect(res.statusCode).toBe(400);
+  });
+
+  it("creates entry with required fields", async () => {
+    const res = await app.inject({
+      method: "POST", url: "/api/v1/lab/journal", headers: authHeaders(),
+      payload: {
+        strategyGraphVersionId: "gv-1",
+        hypothesis: "Increasing SMA length will reduce noise",
+        whatChanged: "SMA length 14 → 20",
+        expectedResult: "Fewer false signals, higher winrate",
+      },
+    });
+    expect(res.statusCode).toBe(201);
+    const body = res.json();
+    expect(body.hypothesis).toBe("Increasing SMA length will reduce noise");
+    expect(body.status).toBe("KEEP_TESTING");
+    expect(body.id).toBeTruthy();
+  });
+
+  it("returns 400 for invalid status", async () => {
+    const res = await app.inject({
+      method: "POST", url: "/api/v1/lab/journal", headers: authHeaders(),
+      payload: {
+        strategyGraphVersionId: "gv-1",
+        hypothesis: "test", whatChanged: "test", expectedResult: "test",
+        status: "INVALID_STATUS",
+      },
+    });
+    expect(res.statusCode).toBe(400);
+  });
+});
+
+describe("GET /api/v1/lab/journal", () => {
+  it("returns empty array when no entries", async () => {
+    const res = await app.inject({ method: "GET", url: "/api/v1/lab/journal", headers: authHeaders() });
+    expect(res.statusCode).toBe(200);
+    expect(res.json()).toEqual([]);
+  });
+
+  it("returns entries filtered by graphVersionId", async () => {
+    mockJournalEntries["je-1"] = { id: "je-1", workspaceId: WS_ID, strategyGraphVersionId: "gv-1", hypothesis: "H1", whatChanged: "W1", expectedResult: "E1", status: "KEEP_TESTING", createdAt: new Date(), updatedAt: new Date() };
+    const res = await app.inject({ method: "GET", url: "/api/v1/lab/journal?graphVersionId=gv-1", headers: authHeaders() });
+    expect(res.statusCode).toBe(200);
+  });
+});
+
+describe("PATCH /api/v1/lab/journal/:id", () => {
+  it("returns 404 for non-existent entry", async () => {
+    const res = await app.inject({ method: "PATCH", url: "/api/v1/lab/journal/missing", headers: authHeaders(), payload: { hypothesis: "updated" } });
+    expect(res.statusCode).toBe(404);
+  });
+
+  it("updates existing entry", async () => {
+    mockJournalEntries["je-2"] = { id: "je-2", workspaceId: WS_ID, strategyGraphVersionId: "gv-1", hypothesis: "Old", whatChanged: "W", expectedResult: "E", status: "KEEP_TESTING", createdAt: new Date(), updatedAt: new Date() };
+    const res = await app.inject({
+      method: "PATCH", url: "/api/v1/lab/journal/je-2", headers: authHeaders(),
+      payload: { hypothesis: "Updated hypothesis", status: "PROMOTE" },
+    });
+    expect(res.statusCode).toBe(200);
+    expect(res.json().hypothesis).toBe("Updated hypothesis");
+  });
+});
+
+describe("DELETE /api/v1/lab/journal/:id", () => {
+  it("returns 404 for non-existent entry", async () => {
+    const res = await app.inject({ method: "DELETE", url: "/api/v1/lab/journal/missing", headers: authHeaders() });
+    expect(res.statusCode).toBe(404);
+  });
+
+  it("deletes existing entry", async () => {
+    mockJournalEntries["je-3"] = { id: "je-3", workspaceId: WS_ID, strategyGraphVersionId: "gv-1", hypothesis: "H", whatChanged: "W", expectedResult: "E", status: "KEEP_TESTING", createdAt: new Date(), updatedAt: new Date() };
+    const res = await app.inject({ method: "DELETE", url: "/api/v1/lab/journal/je-3", headers: authHeaders() });
+    expect(res.statusCode).toBe(204);
   });
 });
