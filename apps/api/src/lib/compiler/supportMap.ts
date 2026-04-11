@@ -64,6 +64,16 @@ export const BLOCK_SUPPORT_MAP: Record<string, BlockSupportEntry> = {
   // ── DCA ─────────────────────────────────────────────────────────────────────
   dca_config:   { status: "supported",    note: "DCA ladder config block, #133. Compiles to DSL dca section, runtime engine #132" },
 
+  // ── Trailing Stop (Phase 6) ────────────────────────────────────────────────
+  trailing_stop: { status: "supported",   note: "Trailing stop risk block. Compiles to DSL exit.trailingStop, runtime in exitEngine.ts" },
+
+  // ── Close Position (Phase 6) ───────────────────────────────────────────────
+  close_position: { status: "supported",  note: "Explicit close position block. Compiles to DSL closePosition section, runtime engine handles signal-based exit" },
+
+  // ── Private Data (Phase 6, 23b3) ────────────────────────────────────────────
+  orders_history:     { status: "supported", note: "Exchange orders history block. Requires ExchangeConnection at runtime, Phase 6 23b3" },
+  executions_history: { status: "supported", note: "Exchange executions history block. Requires ExchangeConnection at runtime, Phase 6 23b3" },
+
   // ── MTF Confluence (#135) ──────────────────────────────────────────────────
   volume_profile:    { status: "supported", note: "VolumeProfile indicator #135. Runtime: calcVolumeProfile in dslEvaluator (POC/VAH/VAL)" },
   proximity_filter:  { status: "supported", note: "ProximityFilter #135. Runtime: calcProximityFilter in dslEvaluator, gates signals by proximity to level" },
@@ -73,4 +83,7 @@ export const BLOCK_SUPPORT_MAP: Record<string, BlockSupportEntry> = {
   fair_value_gap:          { status: "supported", note: "SMC fair value gap #137/#138. Detects 3-candle imbalances, pattern engine + evaluator wired" },
   order_block:             { status: "supported", note: "SMC order block #137/#138. Detects institutional order zones, pattern engine + evaluator wired" },
   market_structure_shift:  { status: "supported", note: "SMC market structure shift #137/#138. Detects BOS/CHoCH, pattern engine + evaluator wired" },
+
+  // ── Annotate Event (Phase 6, 23b4) ─────────────────────────────────────────
+  annotate_event: { status: "supported", note: "Event annotation block. Marks events on equity curve, Phase 6 23b4" },
 };

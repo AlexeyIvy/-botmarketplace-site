@@ -493,6 +493,63 @@ export const dcaConfigHandler: BlockHandler = {
 };
 
 // ---------------------------------------------------------------------------
+// Trailing Stop (#Phase6) — maps to DSL exit.trailingStop
+// ---------------------------------------------------------------------------
+
+export const trailingStopHandler: BlockHandler = {
+  blockType: "trailing_stop",
+  category: "risk",
+  validate(ctx) {
+    const nodes = nodesOf(ctx, "trailing_stop");
+    if (nodes.length > 1) {
+      ctx.issues.push({ severity: "error", message: "Only one Trailing Stop block is allowed." });
+    }
+  },
+  extract(ctx) {
+    const node = nodesOf(ctx, "trailing_stop")[0];
+    if (!node) return {};
+    return {
+      trailingStop: {
+        type: "trailing_pct",
+        activationPct: Number(node.data.params["activationPct"] ?? 1.0),
+        callbackPct: Number(node.data.params["callbackPct"] ?? 0.5),
+      },
+    };
+  },
+};
+
+// ---------------------------------------------------------------------------
+// Close Position (#Phase6) — explicit position close on signal
+// ---------------------------------------------------------------------------
+
+export const closePositionHandler: BlockHandler = {
+  blockType: "close_position",
+  category: "execution",
+  validate(ctx) {
+    const nodes = nodesOf(ctx, "close_position");
+    if (nodes.length === 0) return;
+    const node = nodes[0];
+    const incoming = ctx.incomingEdges[node.id] ?? [];
+    if (!incoming.find((e) => e.targetHandle === "signal")) {
+      ctx.issues.push({
+        severity: "error",
+        message: "Close Position signal input is not connected.",
+        nodeId: node.id,
+      });
+    }
+  },
+  extract(ctx) {
+    const node = nodesOf(ctx, "close_position")[0];
+    if (!node) return {};
+    return {
+      closePosition: {
+        reason: String(node.data.params["reason"] ?? "signal"),
+      },
+    };
+  },
+};
+
+// ---------------------------------------------------------------------------
 // MTF Confluence indicators (#135)
 // ---------------------------------------------------------------------------
 
@@ -529,6 +586,59 @@ export const proximityFilterHandler: BlockHandler = {
       proximityFilter: {
         threshold: Number(node.data.params["threshold"] ?? 1.0),
         mode: String(node.data.params["mode"] ?? "percentage"),
+      },
+    };
+  },
+};
+
+// ---------------------------------------------------------------------------
+// Private Data Blocks (Phase 6, 23b3)
+// ---------------------------------------------------------------------------
+
+export const ordersHistoryHandler: BlockHandler = {
+  blockType: "orders_history",
+  category: "input",
+  validate(ctx) {
+    const nodes = nodesOf(ctx, "orders_history");
+    if (nodes.length === 0) return;
+    // Always warn: exchange connection is validated at runtime, not compile time
+    ctx.issues.push({
+      severity: "warning",
+      message: "Orders History block requires a connected exchange. Ensure an ExchangeConnection is active before running.",
+      nodeId: nodes[0].id,
+    });
+  },
+  extract(ctx) {
+    const node = nodesOf(ctx, "orders_history")[0];
+    if (!node) return {};
+    return {
+      privateData: {
+        type: "orders_history",
+        lookbackBars: Number(node.data.params["lookbackBars"] ?? 50),
+      },
+    };
+  },
+};
+
+export const executionsHistoryHandler: BlockHandler = {
+  blockType: "executions_history",
+  category: "input",
+  validate(ctx) {
+    const nodes = nodesOf(ctx, "executions_history");
+    if (nodes.length === 0) return;
+    ctx.issues.push({
+      severity: "warning",
+      message: "Executions History block requires a connected exchange. Ensure an ExchangeConnection is active before running.",
+      nodeId: nodes[0].id,
+    });
+  },
+  extract(ctx) {
+    const node = nodesOf(ctx, "executions_history")[0];
+    if (!node) return {};
+    return {
+      privateData: {
+        type: "executions_history",
+        lookbackBars: Number(node.data.params["lookbackBars"] ?? 50),
       },
     };
   },
@@ -610,6 +720,39 @@ export const marketStructureShiftHandler: BlockHandler = {
 };
 
 // ---------------------------------------------------------------------------
+// Annotate Event (Phase 6, 23b4)
+// ---------------------------------------------------------------------------
+
+export const annotateEventHandler: BlockHandler = {
+  blockType: "annotate_event",
+  category: "logic",
+  validate(ctx) {
+    const nodes = nodesOf(ctx, "annotate_event");
+    if (nodes.length === 0) return;
+    const node = nodes[0];
+    const incoming = ctx.incomingEdges[node.id] ?? [];
+    if (!incoming.find((e) => e.targetHandle === "signal")) {
+      ctx.issues.push({
+        severity: "error",
+        message: "Annotate Event signal input is not connected.",
+        nodeId: node.id,
+      });
+    }
+  },
+  extract(ctx) {
+    const nodes = nodesOf(ctx, "annotate_event");
+    return {
+      annotations: nodes.map((n) => ({
+        nodeId: n.id,
+        label: String(n.data.params["label"] ?? "Event"),
+        color: String(n.data.params["color"] ?? "blue"),
+        shape: String(n.data.params["shape"] ?? "circle"),
+      })),
+    };
+  },
+};
+
+// ---------------------------------------------------------------------------
 // Default handler set — all MVP block types
 // ---------------------------------------------------------------------------
 
@@ -643,13 +786,22 @@ export function defaultHandlers(): BlockHandler[] {
     takeProfitHandler,
     // DCA
     dcaConfigHandler,
+    // Trailing Stop (#Phase6)
+    trailingStopHandler,
+    // Close Position (#Phase6)
+    closePositionHandler,
     // MTF Confluence (#135)
     volumeProfileHandler,
     proximityFilterHandler,
+    // Private Data (Phase 6, 23b3)
+    ordersHistoryHandler,
+    executionsHistoryHandler,
     // SMC Pattern Primitives (#137)
     liquiditySweepHandler,
     fairValueGapHandler,
     orderBlockHandler,
     marketStructureShiftHandler,
+    // Annotate Event (Phase 6, 23b4)
+    annotateEventHandler,
   ];
 }

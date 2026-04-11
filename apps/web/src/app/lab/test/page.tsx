@@ -127,6 +127,36 @@ function StatusBadge({ status }: { status: BacktestStatus }) {
 }
 
 // ---------------------------------------------------------------------------
+// Phase 6 (23b2) — Stale-state badge
+// Shown when a backtest was run against a strategy version that is no longer
+// the latest compiled version. Logic: bt.strategyVersionId !== lastCompileResult.strategyVersionId
+// ---------------------------------------------------------------------------
+
+function StaleBadge({ bt, lastCompileVersionId }: { bt: BacktestListItem; lastCompileVersionId: string | null }) {
+  if (!lastCompileVersionId) return null;
+  if (!bt.strategyVersionId) return null;
+  if (bt.strategyVersionId === lastCompileVersionId) return null;
+  return (
+    <span
+      title="This backtest was run against an older strategy version. Re-run to get up-to-date results."
+      style={{
+        background: "rgba(251,191,36,0.15)",
+        color: "#fbbf24",
+        padding: "2px 6px",
+        borderRadius: 4,
+        fontSize: 9,
+        fontWeight: 700,
+        letterSpacing: "0.06em",
+        textTransform: "uppercase",
+        marginLeft: 4,
+      }}
+    >
+      STALE
+    </span>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // Dataset snapshot block — §6.5
 // Shown at top of Results drawer
 // ---------------------------------------------------------------------------
@@ -553,7 +583,7 @@ interface CompareResult {
   };
 }
 
-function CompareRunsTab({ runs, currentRunId }: { runs: BacktestListItem[]; currentRunId: string | null }) {
+function CompareRunsTab({ runs, currentRunId, lastCompileVersionId }: { runs: BacktestListItem[]; currentRunId: string | null; lastCompileVersionId: string | null }) {
   const [idA, setIdA] = useState<string>(currentRunId ?? runs[0]?.id ?? "");
   const [idB, setIdB] = useState<string>(() => {
     const other = runs.find((r) => r.id !== (currentRunId ?? runs[0]?.id));
@@ -631,8 +661,8 @@ function CompareRunsTab({ runs, currentRunId }: { runs: BacktestListItem[]; curr
       {/* Provenance blocks */}
       {result && (
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 16 }}>
-          <ProvenanceBlock label="Run A" bt={result.a} />
-          <ProvenanceBlock label="Run B" bt={result.b} />
+          <ProvenanceBlock label="Run A" bt={result.a} lastCompileVersionId={lastCompileVersionId} />
+          <ProvenanceBlock label="Run B" bt={result.b} lastCompileVersionId={lastCompileVersionId} />
         </div>
       )}
 
@@ -663,10 +693,18 @@ function CompareRunsTab({ runs, currentRunId }: { runs: BacktestListItem[]; curr
   );
 }
 
-function ProvenanceBlock({ label, bt }: { label: string; bt: BacktestListItem }) {
+function ProvenanceBlock({ label, bt, lastCompileVersionId }: { label: string; bt: BacktestListItem; lastCompileVersionId?: string | null }) {
+  const isStale = lastCompileVersionId && bt.strategyVersionId && bt.strategyVersionId !== lastCompileVersionId;
   return (
-    <div style={provenanceStyle}>
-      <div style={{ fontWeight: 700, fontSize: 11, color: "#3b82f6", marginBottom: 6 }}>{label}</div>
+    <div style={{ ...provenanceStyle, ...(isStale ? { borderColor: "rgba(251,191,36,0.3)" } : {}) }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
+        <span style={{ fontWeight: 700, fontSize: 11, color: "#3b82f6" }}>{label}</span>
+        {isStale && (
+          <span style={{ fontSize: 9, fontWeight: 700, color: "#fbbf24", background: "rgba(251,191,36,0.15)", padding: "1px 5px", borderRadius: 3, textTransform: "uppercase", letterSpacing: "0.06em" }}>
+            STALE
+          </span>
+        )}
+      </div>
       <div style={provenanceRow}><span>Symbol</span><span>{bt.symbol}</span></div>
       <div style={provenanceRow}><span>Interval</span><span>{bt.interval}</span></div>
       <div style={provenanceRow}><span>Dataset</span><span>{bt.datasetId?.slice(0, 12) ?? "—"}...</span></div>
@@ -825,7 +863,7 @@ function ResultDetail({
         )}
 
         {activeTab === "compare" && (
-          <CompareRunsTab runs={doneRuns} currentRunId={bt?.id ?? null} />
+          <CompareRunsTab runs={doneRuns} currentRunId={bt?.id ?? null} lastCompileVersionId={lastCompileVersionId} />
         )}
       </div>
     </div>
@@ -994,6 +1032,7 @@ export default function LabTestPage() {
                     {label}
                   </span>
                   <StatusBadge status={bt.status} />
+                  <StaleBadge bt={bt} lastCompileVersionId={lastCompileVersionId} />
                 </div>
                 <div style={{ fontSize: 10, color: "rgba(255,255,255,0.3)" }}>
                   {new Date(bt.createdAt).toLocaleDateString()}

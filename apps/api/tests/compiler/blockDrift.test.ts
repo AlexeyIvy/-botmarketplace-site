@@ -137,9 +137,11 @@ describe("Support status snapshot", () => {
       "SMA",
       "adx",
       "and_gate",
+      "annotate_event",
       "atr",
       "bollinger",
       "candles",
+      "close_position",
       "compare",
       "constant",
       "cross",
@@ -147,16 +149,19 @@ describe("Support status snapshot", () => {
       "enter_adaptive",
       "enter_long",
       "enter_short",
+      "executions_history",
       "fair_value_gap",
       "liquidity_sweep",
       "macd",
       "market_structure_shift",
       "or_gate",
       "order_block",
+      "orders_history",
       "proximity_filter",
       "stop_loss",
       "supertrend",
       "take_profit",
+      "trailing_stop",
       "volume",
       "volume_profile",
       "vwap",
@@ -173,8 +178,8 @@ describe("Support status snapshot", () => {
   });
 
   it("block count matches expected total", () => {
-    expect(uiBlockTypes.length).toBe(28);
-    expect(compilerBlockTypes.length).toBe(28);
-    expect(supportMapTypes.length).toBe(28);
+    expect(uiBlockTypes.length).toBe(33);
+    expect(compilerBlockTypes.length).toBe(33);
+    expect(supportMapTypes.length).toBe(33);
   });
 });
