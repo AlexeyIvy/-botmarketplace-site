@@ -13,8 +13,10 @@ const mockSweeps: Record<string, unknown> = {};
 const mockStrategyVersions: Record<string, unknown> = {};
 const mockStrategies: Record<string, unknown> = {};
 const mockDatasets: Record<string, unknown> = {};
+const mockGraphVersions: Record<string, unknown> = {};
 const mockWorkspaceMemberships: unknown[] = [];
 let graphIdCounter = 0;
+let gvIdCounter = 0;
 
 vi.mock("@prisma/client", () => ({
   PrismaClient: vi.fn().mockImplementation(() => ({})),
@@ -55,7 +57,61 @@ vi.mock("../../src/lib/prisma.js", () => ({
     },
     strategyGraphVersion: {
       count: vi.fn().mockResolvedValue(0),
-      create: vi.fn().mockResolvedValue({}),
+      create: vi.fn().mockImplementation(({ data }: { data: Record<string, unknown> }) => {
+        const id = `gv-${++gvIdCounter}`;
+        const record = { id, ...data, label: null, isBaseline: false, createdAt: new Date() };
+        mockGraphVersions[id] = record;
+        return Promise.resolve(record);
+      }),
+      findUnique: vi.fn().mockImplementation(({ where, include }: { where: { id: string }; include?: unknown }) => {
+        const gv = mockGraphVersions[where.id] as Record<string, unknown> | undefined;
+        if (!gv) return Promise.resolve(null);
+        const result: Record<string, unknown> = { ...gv };
+        if (include) {
+          const inc = include as Record<string, unknown>;
+          if (inc.strategyGraph) {
+            const graph = mockGraphs[gv.strategyGraphId as string] as Record<string, unknown> | undefined;
+            result.strategyGraph = graph ? { workspaceId: graph.workspaceId, name: graph.name } : null;
+          }
+          if (inc.strategyVersion) {
+            const sv = mockStrategyVersions[gv.strategyVersionId as string] as Record<string, unknown> | undefined;
+            result.strategyVersion = sv ? { strategyId: sv.strategyId } : null;
+          }
+        }
+        return Promise.resolve(result);
+      }),
+      findFirst: vi.fn().mockImplementation(({ where }: { where: Record<string, unknown> }) => {
+        const svId = where.strategyVersionId as string | undefined;
+        if (svId) {
+          const found = Object.values(mockGraphVersions).find((gv) => (gv as Record<string, unknown>).strategyVersionId === svId);
+          if (found) {
+            const gv = found as Record<string, unknown>;
+            const graph = mockGraphs[gv.strategyGraphId as string] as Record<string, unknown> | undefined;
+            return Promise.resolve({ ...gv, strategyGraph: graph ? { name: graph.name } : null });
+          }
+        }
+        return Promise.resolve(null);
+      }),
+      findMany: vi.fn().mockImplementation(({ where }: { where?: Record<string, unknown> } = {}) => {
+        let items = Object.values(mockGraphVersions) as Record<string, unknown>[];
+        if (where?.strategyGraphId) items = items.filter((v) => v.strategyGraphId === where.strategyGraphId);
+        if (where?.isBaseline) items = items.filter((v) => v.isBaseline === true);
+        if (where?.strategyVersion) {
+          const sv = where.strategyVersion as Record<string, unknown>;
+          if (sv.strategyId) {
+            items = items.filter((v) => {
+              const svRecord = mockStrategyVersions[v.strategyVersionId as string] as Record<string, unknown> | undefined;
+              return svRecord?.strategyId === sv.strategyId;
+            });
+          }
+        }
+        return Promise.resolve(items);
+      }),
+      update: vi.fn().mockImplementation(({ where, data }: { where: { id: string }; data: Record<string, unknown> }) => {
+        const existing = mockGraphVersions[where.id] as Record<string, unknown> | undefined;
+        if (existing) Object.assign(existing, data);
+        return Promise.resolve(existing);
+      }),
     },
     strategy: {
       findUnique: vi.fn().mockImplementation(({ where }: { where: { id?: string; workspaceId_name?: unknown } }) => {
@@ -155,9 +211,11 @@ beforeEach(() => {
   Object.keys(mockStrategyVersions).forEach((k) => delete mockStrategyVersions[k]);
   Object.keys(mockStrategies).forEach((k) => delete mockStrategies[k]);
   Object.keys(mockDatasets).forEach((k) => delete mockDatasets[k]);
+  Object.keys(mockGraphVersions).forEach((k) => delete mockGraphVersions[k]);
   mockWorkspaceMemberships.length = 0;
   mockWorkspaceMemberships.push({ workspaceId: WS_ID, userId: "test-user-id", role: "OWNER" });
   graphIdCounter = 0;
+  gvIdCounter = 0;
 });
 
 function authHeaders() {
@@ -481,5 +539,157 @@ describe("GET /api/v1/lab/backtests/compare", () => {
     const body = res.json();
     expect(body.delta.pnlDelta).toBeNull();
     expect(body.delta.winrateDelta).toBeNull();
+  });
+
+  it("includes lineage data in compare response", async () => {
+    mockGraphs["g-lin"] = { id: "g-lin", workspaceId: WS_ID, name: "My Strategy", graphJson: {} };
+    mockStrategyVersions["sv-lin"] = { id: "sv-lin", strategyId: "strat-lin" };
+    mockGraphVersions["gv-lin"] = { id: "gv-lin", strategyGraphId: "g-lin", strategyVersionId: "sv-lin", version: 1, label: "baseline-run", isBaseline: true };
+    mockBacktests["bt-l1"] = { id: "bt-l1", workspaceId: WS_ID, strategyVersionId: "sv-lin", status: "DONE", reportJson: { totalPnlPct: 10 } };
+    mockBacktests["bt-l2"] = { id: "bt-l2", workspaceId: WS_ID, strategyVersionId: null, status: "DONE", reportJson: { totalPnlPct: 5 } };
+    const res = await app.inject({ method: "GET", url: "/api/v1/lab/backtests/compare?a=bt-l1&b=bt-l2", headers: authHeaders() });
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    expect(body.a.lineage).toBeTruthy();
+    expect(body.a.lineage.label).toBe("baseline-run");
+    expect(body.a.lineage.isBaseline).toBe(true);
+    expect(body.a.lineage.graphName).toBe("My Strategy");
+    expect(body.b.lineage).toBeNull();
+  });
+});
+
+// ── PATCH /lab/graph-versions/:id (Task 26) ───────────────────────────────
+
+describe("PATCH /api/v1/lab/graph-versions/:id", () => {
+  function seedGraphVersion() {
+    mockGraphs["g-1"] = { id: "g-1", workspaceId: WS_ID, name: "Test Graph", graphJson: {} };
+    mockStrategyVersions["sv-1"] = { id: "sv-1", strategyId: "strat-1" };
+    mockGraphVersions["gv-1"] = { id: "gv-1", strategyGraphId: "g-1", strategyVersionId: "sv-1", version: 1, label: null, isBaseline: false, createdAt: new Date() };
+  }
+
+  it("returns 401 without auth", async () => {
+    const res = await app.inject({ method: "PATCH", url: "/api/v1/lab/graph-versions/gv-1", payload: { label: "test" } });
+    expect(res.statusCode).toBe(401);
+  });
+
+  it("returns 404 for missing graph version", async () => {
+    const res = await app.inject({ method: "PATCH", url: "/api/v1/lab/graph-versions/missing", headers: authHeaders(), payload: { label: "test" } });
+    expect(res.statusCode).toBe(404);
+  });
+
+  it("returns 404 for cross-workspace access", async () => {
+    mockGraphs["g-other"] = { id: "g-other", workspaceId: "ws-other", name: "Other", graphJson: {} };
+    mockGraphVersions["gv-other"] = { id: "gv-other", strategyGraphId: "g-other", strategyVersionId: "sv-x", version: 1, label: null, isBaseline: false, createdAt: new Date() };
+    const res = await app.inject({ method: "PATCH", url: "/api/v1/lab/graph-versions/gv-other", headers: authHeaders(), payload: { label: "test" } });
+    expect(res.statusCode).toBe(404);
+  });
+
+  it("updates label successfully", async () => {
+    seedGraphVersion();
+    const res = await app.inject({ method: "PATCH", url: "/api/v1/lab/graph-versions/gv-1", headers: authHeaders(), payload: { label: "v2-tighter-stop" } });
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    expect(body.label).toBe("v2-tighter-stop");
+    expect(body.id).toBe("gv-1");
+  });
+
+  it("clears label with null", async () => {
+    seedGraphVersion();
+    (mockGraphVersions["gv-1"] as Record<string, unknown>).label = "old-label";
+    const res = await app.inject({ method: "PATCH", url: "/api/v1/lab/graph-versions/gv-1", headers: authHeaders(), payload: { label: null } });
+    expect(res.statusCode).toBe(200);
+    expect(res.json().label).toBeNull();
+  });
+
+  it("returns 400 for label over 100 chars", async () => {
+    seedGraphVersion();
+    const res = await app.inject({ method: "PATCH", url: "/api/v1/lab/graph-versions/gv-1", headers: authHeaders(), payload: { label: "x".repeat(101) } });
+    expect(res.statusCode).toBe(400);
+  });
+});
+
+// ── POST /lab/graph-versions/:id/baseline (Task 26) ───────────────────────
+
+describe("POST /api/v1/lab/graph-versions/:id/baseline", () => {
+  function seedForBaseline() {
+    mockGraphs["g-b"] = { id: "g-b", workspaceId: WS_ID, name: "Baseline Graph", graphJson: {} };
+    mockStrategies["strat-b"] = { id: "strat-b", workspaceId: WS_ID, name: "Baseline Strategy" };
+    mockStrategyVersions["sv-b1"] = { id: "sv-b1", strategyId: "strat-b" };
+    mockStrategyVersions["sv-b2"] = { id: "sv-b2", strategyId: "strat-b" };
+    mockGraphVersions["gv-b1"] = { id: "gv-b1", strategyGraphId: "g-b", strategyVersionId: "sv-b1", version: 1, label: null, isBaseline: false, createdAt: new Date() };
+    mockGraphVersions["gv-b2"] = { id: "gv-b2", strategyGraphId: "g-b", strategyVersionId: "sv-b2", version: 2, label: null, isBaseline: false, createdAt: new Date() };
+  }
+
+  it("returns 401 without auth", async () => {
+    const res = await app.inject({ method: "POST", url: "/api/v1/lab/graph-versions/gv-b1/baseline" });
+    expect(res.statusCode).toBe(401);
+  });
+
+  it("returns 404 for missing graph version", async () => {
+    const res = await app.inject({ method: "POST", url: "/api/v1/lab/graph-versions/missing/baseline", headers: authHeaders() });
+    expect(res.statusCode).toBe(404);
+  });
+
+  it("sets baseline on first call", async () => {
+    seedForBaseline();
+    const res = await app.inject({ method: "POST", url: "/api/v1/lab/graph-versions/gv-b1/baseline", headers: authHeaders() });
+    expect(res.statusCode).toBe(200);
+    expect(res.json().isBaseline).toBe(true);
+  });
+
+  it("toggles off when already baseline", async () => {
+    seedForBaseline();
+    (mockGraphVersions["gv-b1"] as Record<string, unknown>).isBaseline = true;
+    const res = await app.inject({ method: "POST", url: "/api/v1/lab/graph-versions/gv-b1/baseline", headers: authHeaders() });
+    expect(res.statusCode).toBe(200);
+    expect(res.json().isBaseline).toBe(false);
+  });
+
+  it("clears previous baseline when setting new one", async () => {
+    seedForBaseline();
+    (mockGraphVersions["gv-b1"] as Record<string, unknown>).isBaseline = true;
+    const res = await app.inject({ method: "POST", url: "/api/v1/lab/graph-versions/gv-b2/baseline", headers: authHeaders() });
+    expect(res.statusCode).toBe(200);
+    expect(res.json().isBaseline).toBe(true);
+    // Previous baseline should be cleared
+    expect((mockGraphVersions["gv-b1"] as Record<string, unknown>).isBaseline).toBe(false);
+  });
+
+  it("returns 404 for cross-workspace access", async () => {
+    mockGraphs["g-other2"] = { id: "g-other2", workspaceId: "ws-other", name: "Other", graphJson: {} };
+    mockGraphVersions["gv-other2"] = { id: "gv-other2", strategyGraphId: "g-other2", strategyVersionId: "sv-x", version: 1, label: null, isBaseline: false, createdAt: new Date() };
+    const res = await app.inject({ method: "POST", url: "/api/v1/lab/graph-versions/gv-other2/baseline", headers: authHeaders() });
+    expect(res.statusCode).toBe(404);
+  });
+});
+
+// ── GET /lab/graph-versions (Task 26) ─────────────────────────────────────
+
+describe("GET /api/v1/lab/graph-versions", () => {
+  it("returns 401 without auth", async () => {
+    const res = await app.inject({ method: "GET", url: "/api/v1/lab/graph-versions?graphId=g-1" });
+    expect(res.statusCode).toBe(401);
+  });
+
+  it("returns 400 without strategyId or graphId", async () => {
+    const res = await app.inject({ method: "GET", url: "/api/v1/lab/graph-versions", headers: authHeaders() });
+    expect(res.statusCode).toBe(400);
+  });
+
+  it("returns versions for a graph", async () => {
+    mockGraphs["g-list"] = { id: "g-list", workspaceId: WS_ID, name: "List Graph", graphJson: {} };
+    mockGraphVersions["gv-l1"] = { id: "gv-l1", strategyGraphId: "g-list", strategyVersionId: "sv-l1", version: 1, label: "first", isBaseline: true, blockLibraryVersion: "0.3.0", createdAt: new Date() };
+    mockGraphVersions["gv-l2"] = { id: "gv-l2", strategyGraphId: "g-list", strategyVersionId: "sv-l2", version: 2, label: null, isBaseline: false, blockLibraryVersion: "0.3.0", createdAt: new Date() };
+    const res = await app.inject({ method: "GET", url: "/api/v1/lab/graph-versions?graphId=g-list", headers: authHeaders() });
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    expect(body).toBeInstanceOf(Array);
+    expect(body.length).toBe(2);
+  });
+
+  it("returns 404 for cross-workspace graph", async () => {
+    mockGraphs["g-other3"] = { id: "g-other3", workspaceId: "ws-other", name: "Other", graphJson: {} };
+    const res = await app.inject({ method: "GET", url: "/api/v1/lab/graph-versions?graphId=g-other3", headers: authHeaders() });
+    expect(res.statusCode).toBe(404);
   });
 });

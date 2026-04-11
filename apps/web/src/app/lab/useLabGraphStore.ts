@@ -41,6 +41,7 @@ export interface ServerCompileIssue {
 export interface CompileResult {
   strategyVersionId: string;
   strategyVersion: number;
+  graphVersionId: string;
   compiledDsl: Record<string, unknown>;
   validationIssues: ServerCompileIssue[];
 }

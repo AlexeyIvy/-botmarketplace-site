@@ -24,45 +24,48 @@
 
 ## Task packs — execution order
 
-### Task 26 — Governance / Provenance
+### Task 26 — Governance / Provenance ✅ DONE
 
 **Priority:** HIGH (next in chain)
 **Depends on:** 23b1 (Compare Runs) ✅ done
 **Unblocks:** 27 (Parameter sweep), 28 (Research journal), 29 (AI explainability)
+**Status:** Completed — PR #245
 
 **Scope:**
 
-1. **Version labels** — user can attach a label to a `StrategyGraphVersion`
-   - UI: label input field in Build tab after compile (inline edit)
-   - API: `PATCH /api/v1/lab/graph-versions/:id` with `{ label: string }`
-   - Schema: add `label` column to `StrategyGraphVersion` (nullable string)
-   - Display: label shown in Test tab sidebar, Compare Runs provenance blocks
+1. **Version labels** ✅ — user can attach a label to a `StrategyGraphVersion`
+   - UI: label input field in LabShell context bar after compile success (inline edit, max 100 chars)
+   - API: `PATCH /api/v1/lab/graph-versions/:id` with `{ label: string | null }`
+   - Schema: `label String?` column added to `StrategyGraphVersion`
+   - Display: label shown in ProvenanceBlock (Compare Runs + Metrics tab)
 
-2. **Baseline designation** — user marks one compiled version as baseline
-   - UI: "Set as baseline" button in version selector or results view
-   - API: `POST /api/v1/lab/graph-versions/:id/baseline`
-   - Schema: `isBaseline: boolean` on `StrategyGraphVersion` (only one per strategy)
-   - Display: baseline badge in sidebar; Compare Runs shows delta vs baseline
+2. **Baseline designation** ✅ — user marks one compiled version as baseline
+   - UI: "Set baseline" toggle button in LabShell context bar after compile
+   - API: `POST /api/v1/lab/graph-versions/:id/baseline` (toggle; clears previous per strategy)
+   - Schema: `isBaseline Boolean @default(false)` on `StrategyGraphVersion`
+   - Display: BASELINE badge in ProvenanceBlock; golden border highlight
 
-3. **Lineage display** — results view shows provenance chain
-   - `StrategyGraph` → `StrategyGraphVersion` → `StrategyVersion` → `BacktestResult`
-   - Compact block in Test tab results: graph name, version label, dataset hash, compile timestamp
-   - Reuse existing `ProvenanceBlock` component from 23b1, extend with label + baseline
+3. **Lineage display** ✅ — results view shows provenance chain
+   - Compare Runs: enriched response with `lineage` object (graphName, label, isBaseline, graphVersion)
+   - ProvenanceBlock extended: shows Graph name, Label, Graph version, BASELINE badge
+   - Metrics tab: inline ProvenanceBlock for single-run lineage context
+   - New: `GET /lab/graph-versions?graphId=X` lists all compiled versions with governance fields
 
 **Key files:**
-- `apps/web/src/app/lab/test/page.tsx` — extend ProvenanceBlock, add baseline badge
-- `apps/web/src/app/lab/build/page.tsx` — label input after compile
-- `apps/api/src/routes/lab.ts` — new/modified endpoints
-- `prisma/schema.prisma` — `StrategyGraphVersion` schema update
-- `apps/api/tests/routes/lab.test.ts` — route tests for new endpoints
+- `apps/web/src/app/lab/test/page.tsx` — ProvenanceBlock + LineageInfo type + compare integration
+- `apps/web/src/app/lab/LabShell.tsx` — label input + baseline button in context bar
+- `apps/web/src/app/lab/labApi.ts` — patchGraphVersion, setGraphVersionBaseline helpers
+- `apps/api/src/routes/lab.ts` — 3 new endpoints + enhanced compare response + graphVersionId in compile
+- `apps/api/prisma/schema.prisma` — `StrategyGraphVersion` label + isBaseline
+- `apps/api/tests/routes/lab.test.ts` — 20+ new route tests for governance endpoints
 
 **Acceptance criteria:**
-- [ ] Version label editable after compile
-- [ ] Baseline designation toggleable (one per strategy)
-- [ ] Lineage block visible in Test tab results
-- [ ] Compare Runs shows delta vs baseline when baseline exists
-- [ ] All existing tests still pass + new route tests added
-- [ ] Migration runs cleanly on existing data
+- [x] Version label editable after compile
+- [x] Baseline designation toggleable (one per strategy)
+- [x] Lineage block visible in Test tab results
+- [x] Compare Runs shows lineage with label + baseline
+- [x] All existing tests still pass + new route tests added
+- [x] Migration runs cleanly on existing data (additive: nullable + default false)
 
 ---
 

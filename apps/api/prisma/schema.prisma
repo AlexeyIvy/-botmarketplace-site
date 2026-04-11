@@ -644,8 +644,9 @@ model StrategyGraph {
   @@index([workspaceId])
 }
 
-/// Immutable snapshot of a StrategyGraph at compile time.
-/// Created by POST /lab/graphs/:id/compile. Never mutated after creation.
+/// Snapshot of a StrategyGraph at compile time.
+/// Created by POST /lab/graphs/:id/compile.
+/// Task 26: label and isBaseline are mutable governance metadata.
 model StrategyGraphVersion {
   id                  String   @id @default(uuid())
   strategyGraphId     String
@@ -656,6 +657,10 @@ model StrategyGraphVersion {
   graphSnapshotJson   Json
   /// The StrategyVersion record produced by this compile
   strategyVersionId   String
+  /// Task 26: user-assigned version label (e.g. "baseline", "v2-tighter-stop")
+  label               String?
+  /// Task 26: baseline designation — only one per strategy (enforced in app layer)
+  isBaseline          Boolean  @default(false)
   createdAt           DateTime @default(now())
 
   strategyGraph   StrategyGraph   @relation(fields: [strategyGraphId], references: [id], onDelete: Cascade)

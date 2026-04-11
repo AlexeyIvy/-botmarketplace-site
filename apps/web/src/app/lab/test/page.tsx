@@ -571,9 +571,21 @@ function FormRow({ label, children }: { label: string; children: React.ReactNode
 // Phase 6 (23b1) — Compare Runs Tab
 // ---------------------------------------------------------------------------
 
+interface LineageInfo {
+  graphVersionId: string;
+  graphVersion: number;
+  label: string | null;
+  isBaseline: boolean;
+  graphName: string;
+}
+
+interface CompareRunItem extends BacktestListItem {
+  lineage?: LineageInfo | null;
+}
+
 interface CompareResult {
-  a: BacktestListItem;
-  b: BacktestListItem;
+  a: CompareRunItem;
+  b: CompareRunItem;
   delta: {
     pnlDelta: number | null;
     winrateDelta: number | null;
@@ -661,8 +673,8 @@ function CompareRunsTab({ runs, currentRunId, lastCompileVersionId }: { runs: Ba
       {/* Provenance blocks */}
       {result && (
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 16 }}>
-          <ProvenanceBlock label="Run A" bt={result.a} lastCompileVersionId={lastCompileVersionId} />
-          <ProvenanceBlock label="Run B" bt={result.b} lastCompileVersionId={lastCompileVersionId} />
+          <ProvenanceBlock label="Run A" bt={result.a} lastCompileVersionId={lastCompileVersionId} lineage={result.a.lineage} />
+          <ProvenanceBlock label="Run B" bt={result.b} lastCompileVersionId={lastCompileVersionId} lineage={result.b.lineage} />
         </div>
       )}
 
@@ -693,10 +705,10 @@ function CompareRunsTab({ runs, currentRunId, lastCompileVersionId }: { runs: Ba
   );
 }
 
-function ProvenanceBlock({ label, bt, lastCompileVersionId }: { label: string; bt: BacktestListItem; lastCompileVersionId: string | null }) {
+function ProvenanceBlock({ label, bt, lastCompileVersionId, lineage }: { label: string; bt: BacktestListItem; lastCompileVersionId: string | null; lineage?: LineageInfo | null }) {
   const isStale = lastCompileVersionId && bt.strategyVersionId && bt.strategyVersionId !== lastCompileVersionId;
   return (
-    <div style={{ ...provenanceStyle, ...(isStale ? { borderColor: "rgba(251,191,36,0.3)" } : {}) }}>
+    <div style={{ ...provenanceStyle, ...(isStale ? { borderColor: "rgba(251,191,36,0.3)" } : {}), ...(lineage?.isBaseline ? { borderColor: "rgba(251,191,36,0.4)" } : {}) }}>
       <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
         <span style={{ fontWeight: 700, fontSize: 11, color: "#3b82f6" }}>{label}</span>
         {isStale && (
@@ -704,7 +716,15 @@ function ProvenanceBlock({ label, bt, lastCompileVersionId }: { label: string; b
             STALE
           </span>
         )}
+        {lineage?.isBaseline && (
+          <span style={{ fontSize: 9, fontWeight: 700, color: "#fbbf24", background: "rgba(251,191,36,0.15)", padding: "1px 5px", borderRadius: 3, textTransform: "uppercase", letterSpacing: "0.06em" }}>
+            BASELINE
+          </span>
+        )}
       </div>
+      {lineage?.graphName && <div style={provenanceRow}><span>Graph</span><span>{lineage.graphName}</span></div>}
+      {lineage?.label && <div style={provenanceRow}><span>Label</span><span style={{ color: "#60a5fa" }}>{lineage.label}</span></div>}
+      {lineage && <div style={provenanceRow}><span>Graph v</span><span>{lineage.graphVersion}</span></div>}
       <div style={provenanceRow}><span>Symbol</span><span>{bt.symbol}</span></div>
       <div style={provenanceRow}><span>Interval</span><span>{bt.interval}</span></div>
       <div style={provenanceRow}><span>Dataset</span><span>{bt.datasetId?.slice(0, 12) ?? "—"}...</span></div>
@@ -815,7 +835,15 @@ function ResultDetail({
       <div style={{ flex: 1, overflow: "auto", minHeight: 0 }}>
         {/* Dataset snapshot block at top — shown whenever a bt is selected and tab is not "run" */}
         {bt && activeTab !== "run" && (
-          <DatasetSnapshotBlock bt={bt} datasets={datasets} />
+          <>
+            <DatasetSnapshotBlock bt={bt} datasets={datasets} />
+            {/* Task 26: lineage provenance block in results view */}
+            {activeTab === "metrics" && (
+              <div style={{ padding: "0 24px 8px" }}>
+                <ProvenanceBlock label="Lineage" bt={bt} lastCompileVersionId={lastCompileVersionId} />
+              </div>
+            )}
+          </>
         )}
 
         {/* Tab content */}

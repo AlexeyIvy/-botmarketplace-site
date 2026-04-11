@@ -71,6 +71,7 @@ export type CompileResponse = {
   data: {
     strategyVersionId: string;
     strategyVersion: number;
+    graphVersionId: string;
     compiledDsl: Record<string, unknown>;
     validationIssues: Array<{ severity: "error" | "warning"; message: string; nodeId?: string }>;
   };
@@ -90,6 +91,7 @@ export async function compileGraph(
   const res = await apiFetch<{
     strategyVersionId: string;
     strategyVersion: number;
+    graphVersionId: string;
     compiledDsl: Record<string, unknown>;
     validationIssues: Array<{ severity: "error" | "warning"; message: string; nodeId?: string }>;
   }>(`/lab/graphs/${graphId}/compile`, {
@@ -106,4 +108,32 @@ export async function compileGraph(
     return { ok: false, status: res.problem.status };
   }
   return { ok: true, data: res.data };
+}
+
+// ---------------------------------------------------------------------------
+// Task 26: Graph version governance API
+// ---------------------------------------------------------------------------
+
+/** Update label on a compiled graph version. */
+export async function patchGraphVersion(
+  id: string,
+  payload: { label?: string | null },
+): Promise<{ id: string; version: number; label: string | null; isBaseline: boolean }> {
+  const res = await apiFetch<{ id: string; version: number; label: string | null; isBaseline: boolean }>(`/lab/graph-versions/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) throw new Error(res.problem.detail ?? "Failed to update label");
+  return res.data;
+}
+
+/** Toggle baseline on a compiled graph version. */
+export async function setGraphVersionBaseline(
+  id: string,
+): Promise<{ id: string; version: number; label: string | null; isBaseline: boolean }> {
+  const res = await apiFetch<{ id: string; version: number; label: string | null; isBaseline: boolean }>(`/lab/graph-versions/${id}/baseline`, {
+    method: "POST",
+  });
+  if (!res.ok) throw new Error(res.problem.detail ?? "Failed to set baseline");
+  return res.data;
 }
