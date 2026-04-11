@@ -65,8 +65,8 @@ export const BLOCK_SUPPORT_MAP: Record<string, BlockSupportEntry> = {
   dca_config:   { status: "supported",    note: "DCA ladder config block, #133. Compiles to DSL dca section, runtime engine #132" },
 
   // ── MTF Confluence (#135) ──────────────────────────────────────────────────
-  volume_profile:    { status: "compile-only", note: "VolumeProfile indicator #135. Compiler handler extracts params; evaluator runtime pending #134" },
-  proximity_filter:  { status: "compile-only", note: "ProximityFilter #135. Compiler handler extracts params; evaluator runtime pending #134" },
+  volume_profile:    { status: "supported", note: "VolumeProfile indicator #135. Runtime: calcVolumeProfile in dslEvaluator (POC/VAH/VAL)" },
+  proximity_filter:  { status: "supported", note: "ProximityFilter #135. Runtime: calcProximityFilter in dslEvaluator, gates signals by proximity to level" },
 
   // ── SMC Pattern Primitives (#137, #138) ────────────────────────────────────
   liquidity_sweep:         { status: "supported", note: "SMC liquidity sweep #137/#138. Detects swing sweeps, pattern engine + evaluator wired" },

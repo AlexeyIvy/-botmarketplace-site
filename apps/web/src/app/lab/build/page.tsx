@@ -31,7 +31,7 @@ import { useLabGraphStore } from "../useLabGraphStore";
 import type { LabNode, LabEdge, ValidationState, ServerCompileIssue } from "../useLabGraphStore";
 import type { ValidationIssue } from "../validationTypes";
 import { listGraphs, createGraph, fetchGraph, patchGraph, type PersistedGraph } from "../labApi";
-import { getTemplate } from "./templates";
+import { getTemplate, GRAPH_TEMPLATES } from "./templates";
 import {
   BLOCK_DEF_MAP,
   PORT_TYPE_COLOR,
@@ -920,19 +920,25 @@ function LabBuildCanvas() {
               onDragOver={onDragOver}
               onDrop={onDrop}
             >
-              {/* B1-1: Empty canvas onboarding hint */}
+              {/* B1-1: Empty canvas onboarding — strategy template gallery */}
               {nodes.length === 0 && (
                 <div style={emptyCanvasHintStyle}>
                   <p style={emptyCanvasHintTextStyle}>
-                    Drag a block from the palette — or press{" "}
-                    <kbd style={kbdStyle}>&#8984;&#8679;F</kbd> to search
+                    Drag a block from the palette — or load a strategy template:
                   </p>
-                  <button
-                    onClick={() => handleLoadTemplate("ema-crossover")}
-                    style={loadTemplateButtonStyle}
-                  >
-                    Load EMA Crossover example
-                  </button>
+                  <div style={templateGalleryStyle}>
+                    {GRAPH_TEMPLATES.map((tpl) => (
+                      <button
+                        key={tpl.id}
+                        onClick={() => handleLoadTemplate(tpl.id)}
+                        style={templateCardStyle}
+                        title={tpl.description}
+                      >
+                        <span style={templateCardLabelStyle}>{tpl.label}</span>
+                        <span style={templateCardDescStyle}>{tpl.description}</span>
+                      </button>
+                    ))}
+                  </div>
                 </div>
               )}
 
@@ -1143,14 +1149,42 @@ const kbdStyle: React.CSSProperties = {
   color: "rgba(255,255,255,0.6)",
 };
 
-const loadTemplateButtonStyle: React.CSSProperties = {
-  padding: "6px 16px",
+const templateGalleryStyle: React.CSSProperties = {
+  display: "grid",
+  gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+  gap: 10,
+  maxWidth: 760,
+  width: "100%",
+};
+
+const templateCardStyle: React.CSSProperties = {
+  padding: "12px 14px",
   fontSize: 12,
-  fontWeight: 600,
-  background: "rgba(59,130,246,0.15)",
-  border: "1px solid rgba(59,130,246,0.3)",
-  borderRadius: 5,
-  color: "#3B82F6",
+  textAlign: "left",
+  background: "rgba(59,130,246,0.08)",
+  border: "1px solid rgba(59,130,246,0.2)",
+  borderRadius: 8,
+  color: "#e0e0e0",
   cursor: "pointer",
   fontFamily: "inherit",
+  display: "flex",
+  flexDirection: "column",
+  gap: 6,
+  transition: "border-color 0.15s, background 0.15s",
+};
+
+const templateCardLabelStyle: React.CSSProperties = {
+  fontWeight: 700,
+  fontSize: 13,
+  color: "#3B82F6",
+};
+
+const templateCardDescStyle: React.CSSProperties = {
+  fontSize: 11,
+  color: "rgba(255,255,255,0.45)",
+  lineHeight: 1.4,
+  overflow: "hidden",
+  display: "-webkit-box",
+  WebkitLineClamp: 2,
+  WebkitBoxOrient: "vertical",
 };

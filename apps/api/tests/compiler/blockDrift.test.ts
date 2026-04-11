@@ -153,10 +153,12 @@ describe("Support status snapshot", () => {
       "market_structure_shift",
       "or_gate",
       "order_block",
+      "proximity_filter",
       "stop_loss",
       "supertrend",
       "take_profit",
       "volume",
+      "volume_profile",
       "vwap",
     ]);
   });
@@ -167,10 +169,7 @@ describe("Support status snapshot", () => {
       .map(([t]) => t)
       .sort();
 
-    expect(compileOnly).toEqual([
-      "proximity_filter",
-      "volume_profile",
-    ]);
+    expect(compileOnly).toEqual([]);
   });
 
   it("block count matches expected total", () => {
