@@ -109,14 +109,16 @@ export interface DslSignalRef {
 }
 
 export interface DslSignal {
-  type: string; // "crossover" | "crossunder" | "compare" | "and" | "or" | "direct" | "raw"
+  type: string; // "crossover" | "crossunder" | "compare" | "and" | "or" | "confirm_n_bars" | "direct" | "raw"
   op?: string;
   fast?: DslSignalRef | null;
   slow?: DslSignalRef | null;
   left?: DslSignalRef | null;
   right?: DslSignalRef | null;
-  /** Sub-conditions for composed signals (type "and" / "or") */
+  /** Sub-conditions for composed signals (type "and" / "or" / "confirm_n_bars") */
   conditions?: DslSignal[];
+  /** Number of consecutive bars required (type "confirm_n_bars") */
+  bars?: number;
 }
 
 export interface DslExitLevel {
@@ -604,6 +606,17 @@ export function evaluateSignal(
   if (signal.type === "or") {
     if (!signal.conditions || signal.conditions.length === 0) return false;
     return signal.conditions.some((sub) => evaluateSignal(sub, i, candles, cache, _depth + 1));
+  }
+
+  // Confirm N Bars: sub-signal must be true for N consecutive bars
+  if (signal.type === "confirm_n_bars") {
+    if (!signal.conditions || signal.conditions.length !== 1) return false;
+    const nBars = signal.bars ?? 3;
+    if (i < nBars - 1) return false;
+    for (let j = i - nBars + 1; j <= i; j++) {
+      if (!evaluateSignal(signal.conditions[0], j, candles, cache, _depth + 1)) return false;
+    }
+    return true;
   }
 
   if (signal.type === "crossover" || signal.type === "crossunder") {

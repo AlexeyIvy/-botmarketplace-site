@@ -114,6 +114,7 @@
 
 **Priority:** MEDIUM
 **Depends on:** — (independent)
+**Status:** Completed — PR #247
 **Note:** Only 1 block missing from the Tier 2 indicators/logic set.
 
 **Scope:**
@@ -133,10 +134,11 @@
 7. Update `docs/10-strategy-dsl.md` mapping table
 
 **Acceptance criteria:**
-- [ ] Block appears in BlockPalette under Logic
-- [ ] Compiles to DSL
-- [ ] Contract tests pass (34 blocks)
-- [ ] All existing tests pass
+- [x] Block appears in BlockPalette under Logic
+- [x] Compiles to DSL
+- [x] Contract tests pass (34 blocks)
+- [x] Evaluator runtime: signal confirmed after N consecutive true bars
+- [x] All existing tests pass + 6 new confirm_n_bars tests
 
 ---
 

@@ -57,6 +57,7 @@ enforce that the code and this matrix stay in sync.
 | `cross` | ✅ | ✅ | ✅ | **supported** | Since Phase 3 |
 | `and_gate` | ✅ | ✅ | ✅ | **supported** | Recursive evaluateSignal, conditions.every() |
 | `or_gate` | ✅ | ✅ | ✅ | **supported** | Recursive evaluateSignal, conditions.some() |
+| `confirm_n_bars` | ✅ | ✅ | ✅ | **supported** | Signal must be true for N consecutive bars (Task 25a) |
 | `proximity_filter` | ✅ | ✅ | ✅ | **supported** | Gates signals by proximity to level #135 |
 | `annotate_event` | ✅ | ✅ | ✅ | **supported** | Event annotation on equity curve (Phase 6 23b4) |
 

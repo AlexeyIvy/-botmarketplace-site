@@ -590,6 +590,64 @@ describe("evaluateSignal – composed and/or gates", () => {
 });
 
 // ---------------------------------------------------------------------------
+// Confirm N Bars (Task 25a)
+// ---------------------------------------------------------------------------
+
+describe("evaluateSignal – confirm_n_bars", () => {
+  const candles = makeUptrend(30, 100, 1);
+  const cache = {} as Parameters<typeof evaluateSignal>[3];
+
+  const alwaysTrue: DslSignal = {
+    type: "compare",
+    op: ">",
+    left: { blockType: "constant", value: 10 } as unknown as DslSignal["left"],
+    right: { blockType: "constant", value: 5 } as unknown as DslSignal["right"],
+  };
+
+  const alwaysFalse: DslSignal = {
+    type: "compare",
+    op: ">",
+    left: { blockType: "constant", value: 3 } as unknown as DslSignal["left"],
+    right: { blockType: "constant", value: 5 } as unknown as DslSignal["right"],
+  };
+
+  it("fires when sub-signal true for N consecutive bars", () => {
+    const signal: DslSignal = { type: "confirm_n_bars", bars: 3, conditions: [alwaysTrue] };
+    // Bar index 2 = 3rd bar (0,1,2) — enough for bars=3
+    expect(evaluateSignal(signal, 2, candles, cache)).toBe(true);
+    expect(evaluateSignal(signal, 10, candles, cache)).toBe(true);
+  });
+
+  it("does not fire when not enough bars", () => {
+    const signal: DslSignal = { type: "confirm_n_bars", bars: 3, conditions: [alwaysTrue] };
+    // Bar 1 = only 2 bars available (0,1) — not enough for bars=3
+    expect(evaluateSignal(signal, 1, candles, cache)).toBe(false);
+    expect(evaluateSignal(signal, 0, candles, cache)).toBe(false);
+  });
+
+  it("does not fire when sub-signal is false", () => {
+    const signal: DslSignal = { type: "confirm_n_bars", bars: 3, conditions: [alwaysFalse] };
+    expect(evaluateSignal(signal, 10, candles, cache)).toBe(false);
+  });
+
+  it("defaults to bars=3 when not specified", () => {
+    const signal: DslSignal = { type: "confirm_n_bars", conditions: [alwaysTrue] };
+    expect(evaluateSignal(signal, 2, candles, cache)).toBe(true);
+    expect(evaluateSignal(signal, 1, candles, cache)).toBe(false);
+  });
+
+  it("bars=1 fires immediately when sub-signal is true", () => {
+    const signal: DslSignal = { type: "confirm_n_bars", bars: 1, conditions: [alwaysTrue] };
+    expect(evaluateSignal(signal, 0, candles, cache)).toBe(true);
+  });
+
+  it("returns false with no conditions", () => {
+    expect(evaluateSignal({ type: "confirm_n_bars", bars: 3 }, 10, candles, cache)).toBe(false);
+    expect(evaluateSignal({ type: "confirm_n_bars", bars: 3, conditions: [] }, 10, candles, cache)).toBe(false);
+  });
+});
+
+// ---------------------------------------------------------------------------
 // Phase 12.2 — Unknown indicator type returns nulls
 // ---------------------------------------------------------------------------
 
