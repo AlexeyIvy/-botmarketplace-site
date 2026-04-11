@@ -350,16 +350,38 @@ StrategyGraph (visual) → Compiler (Phase 4) → StrategyVersion.body (DSL JSON
 | Block type    | Category  | DSL target                                      | Notes                                                                                  |
 |---------------|-----------|-------------------------------------------------|----------------------------------------------------------------------------------------|
 | `candles`     | input     | `market` (implicit source)                      | Confirms market data source is present. Symbol/timeframe come from compile request.   |
+| `constant`    | input     | (inline value)                                  | Emits fixed numeric value. Used as comparison target for indicators.                  |
+| `orders_history` | input  | `privateData` → `{ type:"orders_history", lookbackBars }` | Requires ExchangeConnection at runtime. Compiler emits warning. |
+| `executions_history` | input | `privateData` → `{ type:"executions_history", lookbackBars }` | Requires ExchangeConnection at runtime. Compiler emits warning. |
 | `SMA`         | indicator | `entry.indicators[]` → `{ type:"SMA", length }` | `params.length` → `length`. Connected to candles via input port.                      |
 | `EMA`         | indicator | `entry.indicators[]` → `{ type:"EMA", length }` | `params.length` → `length`. Connected to candles via input port.                      |
 | `RSI`         | indicator | `entry.indicators[]` → `{ type:"RSI", length }` | `params.length` → `length`. Connected to candles via input port.                      |
+| `macd`        | indicator | `entry.indicators[]` → `{ type:"macd", fastPeriod, slowPeriod, signalPeriod }` | Three outputs: macd, signal, histogram. |
+| `bollinger`   | indicator | `entry.indicators[]` → `{ type:"bollinger", period, stdDevMult }` | Three outputs: upper, middle, lower bands. |
+| `atr`         | indicator | `entry.indicators[]` → `{ type:"atr", period }` | Average True Range volatility indicator. |
+| `volume`      | indicator | `entry.indicators[]` → `{ type:"volume" }` | Extracts volume series from OHLCV candles. |
+| `vwap`        | indicator | `entry.indicators[]` → `{ type:"vwap" }` | Session-anchored VWAP. |
+| `adx`         | indicator | `entry.indicators[]` → `{ type:"adx", period }` | ADX + +DI/-DI outputs. |
+| `supertrend`  | indicator | `entry.indicators[]` → `{ type:"supertrend", atrPeriod, multiplier }` | SuperTrend + direction outputs. |
+| `volume_profile` | indicator | `entry.indicators[]` → `{ type:"volume_profile", period, bins }` | POC/VAH/VAL outputs. |
+| `liquidity_sweep` | indicator | `entry.indicators[]` → `{ type:"liquidity_sweep", length, period }` | SMC: +1 bullish sweep, -1 bearish, 0 none. |
+| `fair_value_gap` | indicator | `entry.indicators[]` → `{ type:"fair_value_gap", multiplier }` | SMC: +1 bullish FVG, -1 bearish, 0 none. |
+| `order_block` | indicator | `entry.indicators[]` → `{ type:"order_block", period, multiplier, length }` | SMC: institutional OB detection. |
+| `market_structure_shift` | indicator | `entry.indicators[]` → `{ type:"market_structure_shift", length }` | SMC: BOS/CHoCH detection. |
 | `compare`     | logic     | `entry.signal.conditions[]` → `{ op, left, right }` | `params.op` → `op`. Inputs `a`, `b` identify connected indicator refs.           |
 | `cross`       | logic     | `entry.signal` → `{ type: params.mode, fast, slow }` | `params.mode` → signal type: `"crossover"`, `"crossunder"`, or `"both"`. Inputs `a`, `b` identify fast/slow indicator refs. |
+| `and_gate`    | logic     | (graph-level combiner)                          | Boolean AND across inputs. Evaluator: `conditions.every()`, maxDepth=5. |
+| `or_gate`     | logic     | (graph-level combiner)                          | Boolean OR across inputs. Evaluator: `conditions.some()`, maxDepth=5. |
+| `proximity_filter` | logic | `proximityFilter` → `{ threshold, mode }` | Gates signals by proximity to a level. Mode: percentage or absolute. |
+| `annotate_event` | logic  | `annotations[]` → `{ label, color, shape }` | Marks events on equity curve. Signal input triggers annotation. No runtime side-effect. |
 | `enter_long`  | execution | `entry.side: "Buy"`                             | Exactly one entry node required. Conflict with `enter_short` = compile error.         |
 | `enter_short` | execution | `entry.side: "Sell"`                            | Exactly one entry node required. Conflict with `enter_long` = compile error.          |
+| `enter_adaptive` | execution | `entry.adaptive: true` + `entry.sideCondition` → `{ indicator, source, long, short }` | DSL v2. Side determined by connected indicator (e.g., close > EMA → long). Mutually exclusive with enter_long/enter_short. |
+| `close_position` | execution | `closePosition` → `{ reason }` | Explicit signal-based exit. Reason: signal, time_exit, manual. |
 | `stop_loss`   | risk      | v1: `entry.stopLoss`; **v2: `exit.stopLoss`** + `risk.riskPerTradePct` | `params.type` → SL type; `params.value` → SL value. v2: supports `atr_multiple`. |
 | `take_profit` | risk      | v1: `entry.takeProfit`; **v2: `exit.takeProfit`** | `params.type` → TP type; `params.value` → TP value. v2: supports `atr_multiple`. |
-| `trailing_stop` [v2] | risk | `exit.trailingStop` | `params.activationPct` → activation; `params.callbackPct` → callback. Requires `dslVersion >= 2`. |
+| `dca_config`  | risk      | `dca` → `{ baseOrderSizeUsd, maxSafetyOrders, priceStepPct, stepScale, volumeScale, takeProfitPct }` | DCA ladder configuration. Optional block (max 1). |
+| `trailing_stop` [v2] | risk | `exit.trailingStop` → `{ type:"trailing_pct", activationPct, callbackPct }` | Runtime in exitEngine.ts. Requires `dslVersion >= 2`. |
 | `indicator_exit` [v2] | risk | `exit.indicatorExit` | `params.indicator` → indicator config; `params.condition` → exit condition; `params.appliesTo` → side filter. |
 | `time_exit` [v2] | risk | `exit.timeExit` | `params.maxBarsInPosition` → bar limit. |
 | `side_condition` [v2] | logic | `entry.sideCondition` | `params.indicator` → regime indicator; `params.longOp`/`params.shortOp` → comparison operators. Replaces `enter_long`/`enter_short`. |

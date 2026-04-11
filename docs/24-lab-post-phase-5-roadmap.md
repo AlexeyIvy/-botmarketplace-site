@@ -2,7 +2,7 @@
 
 **Project:** BotMarketplace
 **Repository:** `AlexeyIvy/-botmarketplace-site`
-**Status:** Planning — verified against existing code and docs (March 2026)
+**Status:** Living document — last updated April 2026 (post Phase 6 completion layer)
 **Author role:** Senior Software Engineer / Product Architect
 **Scope:** Forward planning for `/lab` after Phase 5 (backtest runner) is complete. Identifies the primary architectural blocker before Phase 6, defines the graph lifecycle model required for Phase 3A completion, and provides a sliced task-pack roadmap for both the completion layer and the expansion layer.
 **Change type:** Docs-only planning document. No code changes, no migrations, no API changes.
@@ -63,14 +63,14 @@ This document defines what comes next for `/lab` after Phase 5 completion. It do
 | Phase 1A | LabShell layout, resizable panels, tab bar (`Data / Build / Test / Classic`) | ✅ Complete | No | `apps/web/src/app/lab/LabShell.tsx` |
 | Phase 1B | Context bar, `useLabGraphStore` (Zustand), compile/run state wiring | ✅ Complete | No | `apps/web/src/app/lab/useLabGraphStore.ts` |
 | Phase 2 | Data tab, `MarketDataset.name` column, `DatasetPreview` component | ⚠️ Partial | **No** — see note | `apps/web/src/app/lab/data/page.tsx` implements §6.2 controls; chart view (Phase 2B2) not verified complete |
-| Phase 3A | Graph load-on-mount + auto-save cycle against DB | ❌ Incomplete | **Yes** — see §3 | No mount-time graph load; no auto-save path; compile is current sole persistence trigger |
+| Phase 3A | Graph load-on-mount + auto-save cycle against DB | ✅ Complete | No | Mount load, auto-save (1500ms debounce), graph selector, empty-state creation all implemented in `build/page.tsx` + `useLabGraphStore.ts`. PR history: multiple PRs merged to main. |
 | Phase 3B | `BlockPalette`, `StrategyNode`, `StrategyEdge`, `InspectorPanel`, `ConnectionContext` | ✅ Complete | No | `apps/web/src/app/lab/build/` directory |
 | Phase 3C | Client-side validation rules, error badges on nodes, `ValidationDrawer` | ✅ Complete | No | `apps/web/src/app/lab/build/page.tsx`, `StrategyNode.tsx`, `useLabGraphStore.ts` |
 | Phase 4A | `graphCompiler.ts` — block-to-DSL compiler, server-side validation | ✅ Complete | No | `apps/api/src/lib/graphCompiler.ts` |
 | Phase 4B | Compile UI, DSL preview tab, server error mapping to nodes | ✅ Complete | No | `apps/web/src/app/lab/LabShell.tsx` compile flow |
 | Phase 5A | `POST /api/v1/lab/backtest`, `BacktestResult` reproducibility binding | ✅ Complete | No | `apps/api/src/routes/lab.ts` |
 | Phase 5B | Backtest results UI: metrics, trades, equity, logs, warnings | ✅ Complete | No | `apps/web/src/app/lab/test/page.tsx` |
-| Phase 6 | Private data blocks, stale-state detection, compare runs, annotate_event | ❌ Not started | N/A (starting point) | Spec in `docs/23 §Phase 6` |
+| Phase 6 | Private data blocks, stale-state detection, compare runs, annotate_event | ✅ Complete | No | 23b1 Compare Runs (PR #241), 23b2 Stale badges + 23b3 Private data blocks + 23b4 annotate_event (PR #242). All 4 sub-packs merged to main. |
 
 **Note on Phase 2 Partial:**
 `apps/web/src/app/lab/data/page.tsx` (line 6 header) explicitly implements the §6.2 mandatory controls: exchange, symbol, interval, date range, client-side validation. `DatasetPreview` implements the paginated table view (Phase 2B1). The OHLCV chart via `lightweight-charts` (Phase 2B2) is not verified complete.
@@ -85,21 +85,27 @@ Neither dependency requires Phase 2B2 completion. Phase 2B2 is recommended befor
 
 ### 2.2 Block library — current vs spec'd
 
-The compiler currently handles 9 blocks. `docs/23 §6.3` defines the full intended library.
+The compiler handles **33 blocks** (as of April 2026). `docs/23 §6.3` defines the full intended library; the authoritative runtime status is in `apps/api/src/lib/compiler/supportMap.ts` and `docs/strategies/08-strategy-capability-matrix.md`.
 
-| Block | Implemented | Notes |
+| Category | Implemented | Count | Blocks |
+|---|---|---|---|
+| Input | ✅ | 4 | candles, constant, orders_history, executions_history |
+| Indicators | ✅ | 11 | SMA, EMA, RSI, macd, bollinger, atr, volume, vwap, adx, supertrend, volume_profile |
+| SMC Patterns | ✅ | 4 | liquidity_sweep, fair_value_gap, order_block, market_structure_shift |
+| Logic | ✅ | 6 | compare, cross, and_gate, or_gate, proximity_filter, annotate_event |
+| Execution | ✅ | 4 | enter_long, enter_short, enter_adaptive, close_position |
+| Risk | ✅ | 4 | stop_loss, take_profit, dca_config, trailing_stop |
+| **Total** | | **33** | All "supported" status — UI → Compiler → Runtime |
+
+**Still spec'd but not yet implemented** (future expansion):
+
+| Block category | Examples | Task pack |
 |---|---|---|
-| candles | ✅ | Input block |
-| SMA, EMA, RSI | ✅ | Indicator blocks |
-| compare, cross | ✅ | Logic blocks |
-| enter_long, enter_short | ✅ | Execution blocks |
-| stop_loss, take_profit | ✅ | Risk blocks |
-| ATR | ❌ | Referenced in stop_loss (type: "atr") but no standalone ATR indicator block |
-| MACD, VWAP, volatility, volume metrics | ❌ | Spec'd in docs/23 §6.3; not in `blockDefs.ts` |
-| Transform blocks (merge, resample, filter, etc.) | ❌ | Spec'd in docs/23 §6.3 |
-| Logic blocks (AND/OR/NOT, confirm N bars, debounce) | ❌ | Spec'd in docs/23 §6.3 |
-| Risk blocks (trailing stop, max drawdown, daily loss stop, etc.) | ❌ | Spec'd in docs/23 §6.3 |
-| Debug/observability blocks | ❌ | Spec'd in docs/23 §6.3 (log value, annotate event, inspect series) |
+| Transform blocks | merge, resample, filter, rolling window, normalize, shift/lag | Later expansion |
+| Advanced logic | confirm N bars, debounce/cooldown, if/else, threshold | 25a (partial) |
+| Advanced risk | max drawdown stop, daily loss stop, max concurrent positions, cooldown after loss | Later expansion |
+| Advanced execution | reduce, reverse, order model, slippage model, fee model | Later expansion |
+| Debug/observability | log value, inspect series, explain branch, simulation marker | Later expansion |
 
 ---
 
@@ -428,21 +434,21 @@ Priority order within the expansion layer:
 
 > **This section defines the intended slicing of work for Claude Code execution. Each task pack must be completable in a single focused context window. If a task grows beyond this boundary, it must be split before execution begins.**
 
-| Task pack | Scope | Layer | Depends on |
-|---|---|---|---|
-| `23a` | Graph persistence completion (mount, auto-save, empty-state, graph selector) | Completion | — |
-| `23b1` | Compare runs UI + provenance block in results view | Completion | 23a |
-| `23b2` | Stale-state detection (badges, dirty indicators) | Completion | 23b1 |
-| `23b3` | Private data blocks + permission UX | Completion | 23b2 |
-| `23b4` | `annotate_event` block + diagnostics polish | Completion | 23b3 |
-| `25a` | Tier 2 blocks: indicators (ATR, MACD) + logic (AND/OR/NOT, confirm N bars) | Expansion | 23b4 |
-| `25b` | Tier 2 blocks: risk (trailing_stop) + execution (close) | Expansion | 25a |
-| `26` | Governance / provenance: version labels, baseline, lineage display, provenance block | Expansion | 23b1 |
-| `27` | Parameter sweep: sweep UI + sequential execution + results table (split to 27a/27b if scope grows) | Expansion | 23b1, 26 |
-| `28` | Research journal: hypothesis fields, status, display in results view | Expansion | 26 |
-| `29` | AI explainability: explain graph, validate, run delta, risk config suggestion | Expansion | 26, 28 |
-| DSL↔graph | Spike only — no task pack until feasibility note written | — | 23a, Phase 6 |
-| Multi-dataset | Task pack creation blocked on governance stable + schema decision | Later expansion | 26 |
+| Task pack | Scope | Layer | Depends on | Status |
+|---|---|---|---|---|
+| `23a` | Graph persistence completion (mount, auto-save, empty-state, graph selector) | Completion | — | ✅ Done |
+| `23b1` | Compare runs UI + provenance block in results view | Completion | 23a | ✅ Done (PR #241) |
+| `23b2` | Stale-state detection (badges, dirty indicators) | Completion | 23b1 | ✅ Done (PR #242) |
+| `23b3` | Private data blocks + permission UX | Completion | 23b2 | ✅ Done (PR #242) |
+| `23b4` | `annotate_event` block + diagnostics polish | Completion | 23b3 | ✅ Done (PR #242) |
+| `25a` | Tier 2 blocks: indicators (ATR, MACD) + logic (AND/OR/NOT, confirm N bars) | Expansion | 23b4 | ⚠️ Mostly done (confirm N bars missing) |
+| `25b` | Tier 2 blocks: risk (trailing_stop) + execution (close) | Expansion | 25a | ✅ Done (PR #242) |
+| `26` | Governance / provenance: version labels, baseline, lineage display, provenance block | Expansion | 23b1 | **Next** |
+| `27` | Parameter sweep: sweep UI + sequential execution + results table (split to 27a/27b if scope grows) | Expansion | 23b1, 26 | Not started |
+| `28` | Research journal: hypothesis fields, status, display in results view | Expansion | 26 | Not started |
+| `29` | AI explainability: explain graph, validate, run delta, risk config suggestion | Expansion | 26, 28 | Not started |
+| DSL↔graph | Spike only — no task pack until feasibility note written | — | 23a, Phase 6 | Not started |
+| Multi-dataset | Task pack creation blocked on governance stable + schema decision | Later expansion | 26 | Not started |
 
 **Granularity principle:** Each task pack above targets one focused concern. The 23b split ensures Phase 6 is never attempted as a single monolithic PR. The 25a/25b split separates compiler concerns (indicators + logic) from risk model concerns. Do not merge adjacent task packs to "save time" — this defeats the purpose of the slicing.
 
@@ -480,11 +486,11 @@ The Expansion layer (§8) must not start until all five are closed.
 
 | Topic | Already in docs/23 | Already in docs/22 | In code | Task pack | Notes |
 |---|---|---|---|---|---|
-| Phase 6 private data blocks | ✅ §Phase 6 | — | ❌ | 23b3 | Fully spec'd |
-| Phase 6 stale-state detection | ✅ §Phase 6 | — | ❌ | 23b2 | Fully spec'd |
-| Phase 6 compare runs | ✅ §Phase 6, §14 | — | ❌ | 23b1 | Endpoint spec'd; UI not built |
-| Graph persistence (Phase 3A) | ✅ §Phase 3 | — | ❌ | 23a | Gating blocker |
-| Block library expansion | ✅ §6.3 (full list) | — | ❌ (partial) | 25a, 25b | Compiler infra ready |
+| Phase 6 private data blocks | ✅ §Phase 6 | — | ✅ | 23b3 ✅ | PR #242. orders_history + executions_history blocks |
+| Phase 6 stale-state detection | ✅ §Phase 6 | — | ✅ | 23b2 ✅ | PR #242. StaleBadge in Test tab sidebar + compare view |
+| Phase 6 compare runs | ✅ §Phase 6, §14 | — | ✅ | 23b1 ✅ | PR #241. CompareRunsTab + /lab/backtests/compare endpoint |
+| Graph persistence (Phase 3A) | ✅ §Phase 3 | — | ✅ | 23a ✅ | Mount load, auto-save, graph selector all implemented |
+| Block library expansion | ✅ §6.3 (full list) | — | ✅ (33/~50) | 25a, 25b | 25b done (trailing_stop, close_position). 25a mostly done. |
 | Governance / provenance | — | — | ❌ | 26 | New proposal; §8.2 |
 | Parameter sweep | — | ✅ §6 (deferred) | ❌ | 27 | Bounded; §8.3 |
 | Research journal | — | — | ❌ | 28 | New proposal; §8.4 |
@@ -503,12 +509,20 @@ The Expansion layer (§8) must not start until all five are closed.
 
 **This section is the authoritative statement of what happens next. It overrides any ordering inference from other sections.**
 
-- **Next task pack to create:** `docs/steps/23a-lab-phase3a-graph-persistence.md`
-- **No other proposal in this document should start before `docs/steps/23a` is accepted.**
-- After `docs/steps/23a` is accepted: create `docs/steps/23b-lab-phase6.md`, structured around the 23b1–23b4 split.
-- After 23b4 is accepted: expansion layer begins. For a single executor, start with 25a (block library), then 26 (governance/provenance) sequentially. Parallelization of 25a and 26 is permitted only under multi-person team execution — see execution rules in §9.
-- Task packs 27, 28, 29 follow in order per §9.
-- Multi-dataset binding (§8.6) and DSL↔graph (§8.7) are blocked on their respective gate conditions.
+**Completion layer status (April 2026):** All 5 completion task packs are accepted and merged to main:
+- ✅ 23a — Graph persistence (mount, auto-save, graph selector)
+- ✅ 23b1 — Compare Runs UI (PR #241)
+- ✅ 23b2 — Stale-state detection badges (PR #242)
+- ✅ 23b3 — Private data blocks (PR #242)
+- ✅ 23b4 — annotate_event block (PR #242)
+
+**Expansion layer status:**
+- ✅ 25b — trailing_stop + close_position (PR #242)
+- ⚠️ 25a — Mostly done (ATR, MACD, AND/OR present; confirm N bars still missing)
+
+**Next task pack:** `26` — Governance / provenance (version labels, baseline, lineage display). See §8.2.
+- After 26: task pack 27 (parameter sweep), then 28 (research journal), then 29 (AI explainability).
+- Multi-dataset binding (§8.6) and DSL↔graph (§8.7) remain blocked on their gate conditions.
 
 ---
 

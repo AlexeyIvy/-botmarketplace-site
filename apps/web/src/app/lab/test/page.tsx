@@ -693,7 +693,7 @@ function CompareRunsTab({ runs, currentRunId, lastCompileVersionId }: { runs: Ba
   );
 }
 
-function ProvenanceBlock({ label, bt, lastCompileVersionId }: { label: string; bt: BacktestListItem; lastCompileVersionId?: string | null }) {
+function ProvenanceBlock({ label, bt, lastCompileVersionId }: { label: string; bt: BacktestListItem; lastCompileVersionId: string | null }) {
   const isStale = lastCompileVersionId && bt.strategyVersionId && bt.strategyVersionId !== lastCompileVersionId;
   return (
     <div style={{ ...provenanceStyle, ...(isStale ? { borderColor: "rgba(251,191,36,0.3)" } : {}) }}>
