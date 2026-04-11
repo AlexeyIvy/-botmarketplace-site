@@ -2,7 +2,7 @@
 
 > Source of truth: `apps/api/src/lib/compiler/supportMap.ts`
 > Contract tests: `apps/api/tests/compiler/blockDrift.test.ts`
-> Last updated: 2026-03-20 (Issue #123)
+> Last updated: 2026-04-11 (Flagship strategy presets release)
 
 ## Overview
 
@@ -29,7 +29,7 @@ enforce that the code and this matrix stay in sync.
 | Block | UI | Compiler | Runtime | Status | Notes |
 |-------|:--:|:--------:|:-------:|--------|-------|
 | `candles` | ✅ | ✅ | ✅ | **supported** | Core input block, since Phase 3 |
-| `constant` | ✅ | ✅ | ❌ | compile-only | Compiler extracts value; runtime pending (#124) |
+| `constant` | ✅ | ✅ | ✅ | **supported** | Evaluator runtime wired in dslEvaluator |
 
 ### Indicator Blocks
 
@@ -38,10 +38,14 @@ enforce that the code and this matrix stay in sync.
 | `SMA` | ✅ | ✅ | ✅ | **supported** | Since Phase 3 |
 | `EMA` | ✅ | ✅ | ✅ | **supported** | Since Phase 3 |
 | `RSI` | ✅ | ✅ | ✅ | **supported** | Since Phase 3 |
-| `macd` | ✅ | ✅ | ❌ | compile-only | Handler added #122; runtime pending (#125) |
-| `bollinger` | ✅ | ✅ | ❌ | compile-only | Handler added #122; runtime pending (#125) |
-| `atr` | ✅ | ✅ | ❌ | compile-only | Handler added #122; runtime pending (#125) |
-| `volume` | ✅ | ✅ | ❌ | compile-only | Handler added #122; runtime pending (#125) |
+| `macd` | ✅ | ✅ | ✅ | **supported** | MACD histogram in evaluator, calcMACD |
+| `bollinger` | ✅ | ✅ | ✅ | **supported** | BB lower/upper/middle in evaluator |
+| `atr` | ✅ | ✅ | ✅ | **supported** | ATR in evaluator runtime |
+| `volume` | ✅ | ✅ | ✅ | **supported** | Volume series from candles |
+| `vwap` | ✅ | ✅ | ✅ | **supported** | Session-anchored VWAP #125/#126 |
+| `adx` | ✅ | ✅ | ✅ | **supported** | ADX + +DI/-DI #125/#126 |
+| `supertrend` | ✅ | ✅ | ✅ | **supported** | ATR-based trend indicator #125/#126 |
+| `volume_profile` | ✅ | ✅ | ✅ | **supported** | POC/VAH/VAL in evaluator #135 |
 
 ### Logic Blocks
 
@@ -49,8 +53,9 @@ enforce that the code and this matrix stay in sync.
 |-------|:--:|:--------:|:-------:|--------|-------|
 | `compare` | ✅ | ✅ | ✅ | **supported** | Since Phase 4 |
 | `cross` | ✅ | ✅ | ✅ | **supported** | Since Phase 3 |
-| `and_gate` | ✅ | ✅ | ❌ | compile-only | Handler added #122; runtime pending (#124) |
-| `or_gate` | ✅ | ✅ | ❌ | compile-only | Handler added #122; runtime pending (#124) |
+| `and_gate` | ✅ | ✅ | ✅ | **supported** | Recursive evaluateSignal, conditions.every() |
+| `or_gate` | ✅ | ✅ | ✅ | **supported** | Recursive evaluateSignal, conditions.some() |
+| `proximity_filter` | ✅ | ✅ | ✅ | **supported** | Gates signals by proximity to level #135 |
 
 ### Execution Blocks
 
@@ -58,6 +63,7 @@ enforce that the code and this matrix stay in sync.
 |-------|:--:|:--------:|:-------:|--------|-------|
 | `enter_long` | ✅ | ✅ | ✅ | **supported** | Since Phase 3 |
 | `enter_short` | ✅ | ✅ | ✅ | **supported** | Since Phase 4 |
+| `enter_adaptive` | ✅ | ✅ | ✅ | **supported** | DSL v2 sideCondition, #130 |
 
 ### Risk Blocks
 
@@ -65,15 +71,25 @@ enforce that the code and this matrix stay in sync.
 |-------|:--:|:--------:|:-------:|--------|-------|
 | `stop_loss` | ✅ | ✅ | ✅ | **supported** | Since Phase 3 |
 | `take_profit` | ✅ | ✅ | ✅ | **supported** | Since Phase 3 |
+| `dca_config` | ✅ | ✅ | ✅ | **supported** | DCA ladder config, #132/#133 |
+
+### SMC Pattern Blocks
+
+| Block | UI | Compiler | Runtime | Status | Notes |
+|-------|:--:|:--------:|:-------:|--------|-------|
+| `liquidity_sweep` | ✅ | ✅ | ✅ | **supported** | Swing sweep detection, pattern engine #137/#138 |
+| `fair_value_gap` | ✅ | ✅ | ✅ | **supported** | 3-candle imbalance detection #137/#138 |
+| `order_block` | ✅ | ✅ | ✅ | **supported** | Institutional OB detection #137/#138 |
+| `market_structure_shift` | ✅ | ✅ | ✅ | **supported** | BOS/CHoCH detection #137/#138 |
 
 ## Summary
 
 | Status | Count | Blocks |
 |--------|------:|--------|
-| **supported** | 10 | candles, SMA, EMA, RSI, compare, cross, enter_long, enter_short, stop_loss, take_profit |
-| **compile-only** | 7 | constant, macd, bollinger, atr, volume, and_gate, or_gate |
+| **supported** | 27 | All blocks fully functional across UI → Compiler → Runtime |
+| **compile-only** | 0 | — |
 | **unsupported** | 0 | — |
-| **Total** | 17 | |
+| **Total** | 27 | |
 
 ## How Drift Detection Works
 
