@@ -16,6 +16,14 @@ vi.mock("../../src/lib/prisma.js", () => ({
   },
 }));
 
+vi.mock("../../src/lib/crypto.js", () => ({
+  getEncryptionKeyRaw: vi.fn().mockReturnValue(Buffer.alloc(32, 0xab)),
+  decrypt: vi.fn().mockImplementation((payload: string) => {
+    if (payload.startsWith("enc:")) return payload.slice(4);
+    return payload;
+  }),
+}));
+
 import {
   sendTelegramMessage,
   notify,
@@ -76,6 +84,13 @@ describe("parseNotifyConfig", () => {
       telegram: { botToken: "123:ABC", chatId: "456", enabled: false },
     });
     expect(result?.telegram?.enabled).toBe(false);
+  });
+
+  it("decrypts botToken when _tokenEncrypted flag is set", () => {
+    const result = parseNotifyConfig({
+      telegram: { botToken: "enc:123:SECRET", chatId: "456", enabled: true, _tokenEncrypted: true },
+    });
+    expect(result?.telegram?.botToken).toBe("123:SECRET");
   });
 });
 

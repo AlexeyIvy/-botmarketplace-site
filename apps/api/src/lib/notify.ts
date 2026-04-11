@@ -14,6 +14,7 @@
 
 import { logger } from "./logger.js";
 import { prisma } from "./prisma.js";
+import { getEncryptionKeyRaw, decrypt } from "./crypto.js";
 
 const notifyLog = logger.child({ module: "notify" });
 
@@ -156,9 +157,22 @@ export function parseNotifyConfig(raw: unknown): NotifyConfig | null {
     return null;
   }
 
+  let botToken = tg.botToken;
+
+  // Decrypt botToken if it was stored encrypted
+  if (tg._tokenEncrypted) {
+    try {
+      const key = getEncryptionKeyRaw();
+      botToken = decrypt(botToken, key);
+    } catch (err) {
+      notifyLog.warn({ err }, "failed to decrypt Telegram botToken");
+      return null;
+    }
+  }
+
   return {
     telegram: {
-      botToken: tg.botToken,
+      botToken,
       chatId: tg.chatId,
       enabled: tg.enabled !== false,
     },

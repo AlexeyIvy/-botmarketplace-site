@@ -19,6 +19,7 @@ import {
 import { runBacktestAction } from "../lib/actions/lab.js";
 import { createBot } from "../lib/actions/bots.js";
 import { startRun, stopRun } from "../lib/actions/runs.js";
+import { sanitizePrompt, sanitizeMessages } from "../lib/aiSanitizer.js";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -135,6 +136,17 @@ export async function aiRoutes(app: FastifyInstance) {
         return problem(reply, 400, "Bad Request", "Last message must be from user");
       }
 
+      // Sanitize user messages — detect prompt injection
+      const sanitized = sanitizeMessages(recentMessages);
+      if (sanitized.rejection) {
+        request.log.warn(
+          { reqId: request.id, reason: sanitized.rejection },
+          "ai.chat.prompt_injection_detected",
+        );
+        return problem(reply, 400, "Bad Request", "Message contains disallowed content");
+      }
+      const cleanMessages = sanitized.messages as ChatMessage[];
+
       const userId = (request.user as { sub?: string })?.sub ?? "unknown";
 
       // Build context (fail-open on timeout)
@@ -152,7 +164,7 @@ export async function aiRoutes(app: FastifyInstance) {
       let reply_text: string;
 
       try {
-        reply_text = await provider.chat(recentMessages, systemPrompt, { maxTokens: MAX_TOKENS });
+        reply_text = await provider.chat(cleanMessages, systemPrompt, { maxTokens: MAX_TOKENS });
       } catch (err) {
         const latencyMs = Date.now() - startTime;
 
@@ -196,8 +208,8 @@ export async function aiRoutes(app: FastifyInstance) {
           latencyMs,
           contextMode,
           contextIncluded,
-          messageCount: recentMessages.length,
-          lastUserMessageLength: recentMessages.at(-1)?.content?.length ?? 0,
+          messageCount: cleanMessages.length,
+          lastUserMessageLength: cleanMessages.at(-1)?.content?.length ?? 0,
         },
         "ai.chat.complete",
       );
@@ -234,6 +246,17 @@ export async function aiRoutes(app: FastifyInstance) {
         return problem(reply, 400, "Bad Request", "message exceeds 2000 character limit");
       }
 
+      // Sanitize user message — detect prompt injection
+      const planSanitized = sanitizePrompt(message);
+      if (!planSanitized.safe) {
+        request.log.warn(
+          { reqId: request.id, reason: planSanitized.reason },
+          "ai.plan.prompt_injection_detected",
+        );
+        return problem(reply, 400, "Bad Request", "Message contains disallowed content");
+      }
+      const cleanMessage = planSanitized.cleaned;
+
       const userId = (request.user as { sub?: string })?.sub ?? "unknown";
 
       // Build plan-mode context (includes resource IDs)
@@ -247,7 +270,7 @@ export async function aiRoutes(app: FastifyInstance) {
 
       try {
         rawPlan = await provider.chat(
-          [{ role: "user", content: message }],
+          [{ role: "user", content: cleanMessage }],
           systemPrompt,
           { maxTokens: 2048, jsonMode: true },
         );
