@@ -184,7 +184,8 @@
 ### Task 29 — AI Explainability
 
 **Priority:** LOW
-**Depends on:** 26 (Governance), 28 (Research journal)
+**Depends on:** 26 (Governance) ✅ done, 28 (Research journal) ✅ done
+**Status:** Completed — PR #249
 
 **Scope:**
 
@@ -221,10 +222,11 @@
 - `apps/web/src/app/lab/test/page.tsx` — Run delta panel
 
 **Acceptance criteria:**
-- [ ] All 4 explain features produce useful output
-- [ ] Safety boundaries enforced (no trade execution, no secrets, no validation bypass)
-- [ ] Graceful degradation when LLM unavailable
-- [ ] All existing tests pass
+- [x] All 4 explain features produce useful output
+- [x] Safety boundaries enforced (no trade execution, no secrets, no validation bypass)
+- [x] Graceful degradation when LLM unavailable (AI_API_KEY not set → 503, UI hides buttons)
+- [x] Rate limiting on all /lab/explain/* endpoints (5 req/min)
+- [x] All existing tests pass + 16 explain endpoint tests added
 
 ---
 

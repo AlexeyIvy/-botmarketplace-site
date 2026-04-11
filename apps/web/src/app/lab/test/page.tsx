@@ -15,6 +15,20 @@ import { useLabGraphStore } from "../useLabGraphStore";
 import type { IChartApi, LineData, Time } from "lightweight-charts";
 import OptimisePanel from "./OptimisePanel";
 
+// ---------------------------------------------------------------------------
+// Task 29 — AI Explainability helpers
+// ---------------------------------------------------------------------------
+
+function useAiAvailable(): boolean {
+  const [available, setAvailable] = useState(false);
+  useEffect(() => {
+    apiFetch<{ available: boolean }>("/ai/status")
+      .then((res) => { if (res.ok) setAvailable(res.data.available); })
+      .catch(() => {});
+  }, []);
+  return available;
+}
+
 type TopTab = "backtest" | "optimise";
 
 // ---------------------------------------------------------------------------
@@ -605,6 +619,36 @@ function CompareRunsTab({ runs, currentRunId, lastCompileVersionId }: { runs: Ba
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Task 29: Explain Run Delta
+  const aiAvailable = useAiAvailable();
+  const [deltaExplainLoading, setDeltaExplainLoading] = useState(false);
+  const [deltaExplainText, setDeltaExplainText] = useState<string | null>(null);
+
+  const handleExplainDelta = useCallback(async () => {
+    if (!result) return;
+    setDeltaExplainLoading(true);
+    setDeltaExplainText(null);
+    try {
+      const res = await apiFetch<{ explanation: string }>("/lab/explain/delta", {
+        method: "POST",
+        body: JSON.stringify({
+          runA: { id: result.a.id, symbol: result.a.symbol, interval: result.a.interval, feeBps: result.a.feeBps, slippageBps: result.a.slippageBps, report: result.a.reportJson },
+          runB: { id: result.b.id, symbol: result.b.symbol, interval: result.b.interval, feeBps: result.b.feeBps, slippageBps: result.b.slippageBps, report: result.b.reportJson },
+          metricsDiff: result.delta,
+        }),
+      });
+      if (res.ok) setDeltaExplainText(res.data.explanation);
+      else setDeltaExplainText(`Error: ${res.problem.detail ?? "Failed"}`);
+    } catch {
+      setDeltaExplainText("Error: could not reach AI service");
+    } finally {
+      setDeltaExplainLoading(false);
+    }
+  }, [result]);
+
+  // Reset explain when comparison changes
+  useEffect(() => { setDeltaExplainText(null); }, [idA, idB]);
+
   const fetchComparison = useCallback(async (a: string, b: string) => {
     if (!a || !b || a === b) { setResult(null); return; }
     setLoading(true);
@@ -700,6 +744,52 @@ function CompareRunsTab({ runs, currentRunId, lastCompileVersionId }: { runs: Ba
             ))}
           </tbody>
         </table>
+      )}
+
+      {/* Task 29: Explain Run Delta — AI-powered comparison summary */}
+      {result && aiAvailable && (
+        <div style={{ marginTop: 14 }}>
+          <button
+            onClick={handleExplainDelta}
+            disabled={deltaExplainLoading}
+            style={{
+              background: "rgba(99,102,241,0.12)",
+              border: "1px solid rgba(99,102,241,0.3)",
+              borderRadius: 6,
+              padding: "5px 14px",
+              fontSize: 11,
+              fontWeight: 600,
+              color: deltaExplainLoading ? "rgba(255,255,255,0.3)" : "#818cf8",
+              cursor: deltaExplainLoading ? "wait" : "pointer",
+              fontFamily: "inherit",
+            }}
+          >
+            {deltaExplainLoading ? "Analyzing..." : "Explain Differences"}
+          </button>
+          {deltaExplainText && (
+            <div style={{
+              marginTop: 10,
+              padding: "10px 14px",
+              background: "rgba(99,102,241,0.06)",
+              border: "1px solid rgba(99,102,241,0.15)",
+              borderRadius: 8,
+              fontSize: 12,
+              color: "rgba(255,255,255,0.75)",
+              lineHeight: 1.6,
+            }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
+                <span style={{ color: "#818cf8", fontWeight: 700, fontSize: 11 }}>AI Analysis</span>
+                <button
+                  onClick={() => setDeltaExplainText(null)}
+                  style={{ background: "none", border: "none", color: "rgba(255,255,255,0.3)", cursor: "pointer", fontSize: 14, lineHeight: 1, padding: 0, marginLeft: "auto" }}
+                >
+                  ✕
+                </button>
+              </div>
+              {deltaExplainText}
+            </div>
+          )}
+        </div>
       )}
     </div>
   );

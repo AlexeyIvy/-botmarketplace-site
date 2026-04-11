@@ -31,6 +31,7 @@ import { useLabGraphStore } from "../useLabGraphStore";
 import type { LabNode, LabEdge, ValidationState, ServerCompileIssue } from "../useLabGraphStore";
 import type { ValidationIssue } from "../validationTypes";
 import { listGraphs, createGraph, fetchGraph, patchGraph, type PersistedGraph } from "../labApi";
+import { apiFetch } from "@/lib/api";
 import { getTemplate, GRAPH_TEMPLATES } from "./templates";
 import {
   BLOCK_DEF_MAP,
@@ -46,6 +47,21 @@ import StrategyEdge from "./edges/StrategyEdge";
 import BlockPalette from "./BlockPalette";
 import InspectorPanel from "./InspectorPanel";
 import JsonHighlight from "./JsonHighlight";
+
+// ---------------------------------------------------------------------------
+// Task 29 — AI Explainability helpers
+// ---------------------------------------------------------------------------
+
+/** Check if AI explain features are available (AI_API_KEY configured). */
+function useAiAvailable(): boolean {
+  const [available, setAvailable] = useState(false);
+  useEffect(() => {
+    apiFetch<{ available: boolean }>("/ai/status")
+      .then((res) => { if (res.ok) setAvailable(res.data.available); })
+      .catch(() => {});
+  }, []);
+  return available;
+}
 
 // ---------------------------------------------------------------------------
 // React Flow node/edge type registrations
@@ -151,9 +167,38 @@ interface ValidationDrawerProps {
   validationState: ValidationState;
   /** Phase 4B: server-side compile issues to show alongside client-side issues */
   serverIssues?: ServerCompileIssue[];
+  /** Task 29: whether AI explain is available */
+  aiAvailable?: boolean;
 }
 
-function ValidationDrawer({ issues, validationState, serverIssues = [] }: ValidationDrawerProps) {
+function ValidationDrawer({ issues, validationState, serverIssues = [], aiAvailable = false }: ValidationDrawerProps) {
+  // Task 29: explain validation issue state
+  const [explainIssueIdx, setExplainIssueIdx] = useState<string | null>(null);
+  const [explainIssueText, setExplainIssueText] = useState<string | null>(null);
+  const [explainIssueLoading, setExplainIssueLoading] = useState(false);
+
+  const handleExplainIssue = useCallback(async (issue: { severity: string; message: string; nodeId?: string }, issueKey: string) => {
+    if (explainIssueIdx === issueKey && explainIssueText) {
+      setExplainIssueIdx(null);
+      setExplainIssueText(null);
+      return;
+    }
+    setExplainIssueIdx(issueKey);
+    setExplainIssueLoading(true);
+    setExplainIssueText(null);
+    try {
+      const res = await apiFetch<{ explanation: string }>("/lab/explain/validation", {
+        method: "POST",
+        body: JSON.stringify({ issue, nodeContext: { nodeId: issue.nodeId } }),
+      });
+      if (res.ok) setExplainIssueText(res.data.explanation);
+      else setExplainIssueText(`Error: ${res.problem.detail ?? "Failed"}`);
+    } catch {
+      setExplainIssueText("Error: AI unavailable");
+    } finally {
+      setExplainIssueLoading(false);
+    }
+  }, [explainIssueIdx, explainIssueText]);
   const [open, setOpen] = useState(true);
   const nodes = useLabGraphStore((s) => s.nodes);
   const setNodes = useLabGraphStore((s) => s.setNodes);
@@ -358,6 +403,25 @@ function ValidationDrawer({ issues, validationState, serverIssues = [] }: Valida
                     ↗ focus
                   </span>
                 )}
+                {aiAvailable && (
+                  <span
+                    onClick={(e) => { e.stopPropagation(); handleExplainIssue(issue, issue.id); }}
+                    style={{
+                      marginLeft: 6,
+                      fontSize: 10,
+                      color: "#818cf8",
+                      cursor: "pointer",
+                    }}
+                  >
+                    {explainIssueLoading && explainIssueIdx === issue.id ? "..." : "explain"}
+                  </span>
+                )}
+                {explainIssueIdx === issue.id && explainIssueText && (
+                  <div style={{ marginTop: 4, fontSize: 11, color: "rgba(255,255,255,0.6)", lineHeight: 1.5, padding: "4px 0", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+                    <span style={{ color: "#818cf8", fontWeight: 600, fontSize: 10 }}>AI: </span>
+                    {explainIssueText}
+                  </div>
+                )}
               </span>
             </div>
           ))
@@ -389,6 +453,10 @@ function LabBuildCanvas() {
   const lastCompileResult = useLabGraphStore((s) => s.lastCompileResult);
   const serverIssues = useLabGraphStore((s) => s.serverIssues);
   const [buildView, setBuildView] = useState<"canvas" | "dsl">("canvas");
+  // Task 29: AI Explainability
+  const aiAvailable = useAiAvailable();
+  const [explainLoading, setExplainLoading] = useState(false);
+  const [explainResult, setExplainResult] = useState<string | null>(null);
   // Phase 3A: graph hydration + selector
   const activeGraphId = useLabGraphStore((s) => s.activeGraphId);
   const hydrateGraph = useLabGraphStore((s) => s.hydrateGraph);
@@ -497,6 +565,28 @@ function LabBuildCanvas() {
     store.setNodes(tpl.nodes);
     store.setEdges(tpl.edges);
   }, []);
+
+  // Task 29: Explain Graph — call LLM to summarize compiled strategy
+  const handleExplainGraph = useCallback(async () => {
+    if (!lastCompileResult) return;
+    setExplainLoading(true);
+    setExplainResult(null);
+    try {
+      const res = await apiFetch<{ explanation: string }>("/lab/explain/graph", {
+        method: "POST",
+        body: JSON.stringify({
+          compiledDsl: lastCompileResult.compiledDsl,
+          graphJson: { nodes, edges },
+        }),
+      });
+      if (res.ok) { setExplainResult(res.data.explanation); }
+      else { setExplainResult(`Error: ${res.problem.detail ?? "Failed to explain"}`); }
+    } catch {
+      setExplainResult("Error: could not reach AI service");
+    } finally {
+      setExplainLoading(false);
+    }
+  }, [lastCompileResult, nodes, edges]);
 
   // B1-2: commit inline rename via PATCH
   const commitRename = useCallback(async () => {
@@ -882,7 +972,48 @@ function LabBuildCanvas() {
         >
           DSL Preview {lastCompileResult ? `(v${lastCompileResult.strategyVersion})` : ""}
         </button>
+        {/* Task 29: Explain Graph button — visible only when AI configured + graph compiled */}
+        {aiAvailable && lastCompileResult && (
+          <button
+            onClick={handleExplainGraph}
+            disabled={explainLoading}
+            style={{
+              ...buildViewTabStyle,
+              marginLeft: "auto",
+              color: explainLoading ? "rgba(255,255,255,0.3)" : "#818cf8",
+              cursor: explainLoading ? "wait" : "pointer",
+            }}
+            title="Ask AI to explain this strategy in plain language"
+          >
+            {explainLoading ? "Explaining..." : "Explain"}
+          </button>
+        )}
       </div>
+
+      {/* Task 29: Explain Graph result panel */}
+      {explainResult && (
+        <div style={{
+          padding: "8px 14px",
+          background: "rgba(99,102,241,0.08)",
+          borderBottom: "1px solid rgba(99,102,241,0.2)",
+          fontSize: 12,
+          color: "rgba(255,255,255,0.8)",
+          lineHeight: 1.6,
+          display: "flex",
+          alignItems: "flex-start",
+          gap: 8,
+          flexShrink: 0,
+        }}>
+          <span style={{ color: "#818cf8", flexShrink: 0, fontWeight: 600, fontSize: 11, marginTop: 1 }}>AI</span>
+          <span style={{ flex: 1 }}>{explainResult}</span>
+          <button
+            onClick={() => setExplainResult(null)}
+            style={{ background: "none", border: "none", color: "rgba(255,255,255,0.3)", cursor: "pointer", fontSize: 14, lineHeight: 1, padding: 0, flexShrink: 0 }}
+          >
+            ✕
+          </button>
+        </div>
+      )}
 
       {/* Main content area */}
       {buildView === "dsl" && lastCompileResult ? (
@@ -1003,6 +1134,7 @@ function LabBuildCanvas() {
               issues={validationIssues}
               validationState={validationState}
               serverIssues={serverIssues}
+              aiAvailable={aiAvailable}
             />
           </div>
 
