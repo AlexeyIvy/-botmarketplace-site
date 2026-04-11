@@ -29,6 +29,13 @@ function safeView(conn: {
 }
 
 // ---------------------------------------------------------------------------
+// Validation constants
+// ---------------------------------------------------------------------------
+
+const API_KEY_MAX_LENGTH = 256;
+const API_KEY_PATTERN = /^[a-zA-Z0-9\-_]+$/;
+
+// ---------------------------------------------------------------------------
 // Body shapes
 // ---------------------------------------------------------------------------
 
@@ -63,7 +70,13 @@ export async function exchangeRoutes(app: FastifyInstance) {
     const errors: Array<{ field: string; message: string }> = [];
     if (!exchange || typeof exchange !== "string") errors.push({ field: "exchange", message: "exchange is required" });
     if (!name || typeof name !== "string") errors.push({ field: "name", message: "name is required" });
-    if (!apiKey || typeof apiKey !== "string") errors.push({ field: "apiKey", message: "apiKey is required" });
+    if (!apiKey || typeof apiKey !== "string") {
+      errors.push({ field: "apiKey", message: "apiKey is required" });
+    } else if (apiKey.length > API_KEY_MAX_LENGTH) {
+      errors.push({ field: "apiKey", message: `apiKey must not exceed ${API_KEY_MAX_LENGTH} characters` });
+    } else if (!API_KEY_PATTERN.test(apiKey)) {
+      errors.push({ field: "apiKey", message: "apiKey contains invalid characters (only alphanumeric, dash, underscore allowed)" });
+    }
     if (!secret || typeof secret !== "string") errors.push({ field: "secret", message: "secret is required" });
     if (errors.length > 0) {
       return problem(reply, 400, "Validation Error", "Invalid exchange connection payload", { errors });
@@ -139,6 +152,12 @@ export async function exchangeRoutes(app: FastifyInstance) {
     if (apiKey !== undefined) {
       if (typeof apiKey !== "string" || !apiKey.trim()) {
         return problem(reply, 400, "Validation Error", "apiKey must be a non-empty string");
+      }
+      if (apiKey.length > API_KEY_MAX_LENGTH) {
+        return problem(reply, 400, "Validation Error", `apiKey must not exceed ${API_KEY_MAX_LENGTH} characters`);
+      }
+      if (!API_KEY_PATTERN.test(apiKey)) {
+        return problem(reply, 400, "Validation Error", "apiKey contains invalid characters (only alphanumeric, dash, underscore allowed)");
       }
     }
 

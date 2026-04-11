@@ -131,9 +131,16 @@ export async function buildApp() {
     }
   });
 
-  // Echo X-Request-Id back to caller
+  // Security headers (CSP enforcement + hardening)
   app.addHook("onSend", async (request, reply) => {
     reply.header("X-Request-Id", request.id);
+    reply.header("X-Content-Type-Options", "nosniff");
+    reply.header("X-Frame-Options", "DENY");
+    reply.header("Referrer-Policy", "strict-origin-when-cross-origin");
+    reply.header(
+      "Content-Security-Policy",
+      "default-src 'none'; frame-ancestors 'none'",
+    );
   });
 
   // Global catch-all for unhandled errors

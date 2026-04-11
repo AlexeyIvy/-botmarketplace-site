@@ -82,6 +82,16 @@ import {
   DEFAULT_ERROR_PAUSE_THRESHOLD,
 } from "./safetyGuards.js";
 import { notifyRunEvent } from "./notify.js";
+import {
+  executeIntent as executeIntentExtracted,
+  MAX_INTENT_RETRIES as _MAX_INTENT_RETRIES_EXT,
+  type IntentRecord,
+} from "./worker/intentExecutor.js";
+import {
+  enforceDailyLossLimit as enforceDailyLossLimitExtracted,
+  enforceErrorPause as enforceErrorPauseExtracted,
+  processIntents as processIntentsExtracted,
+} from "./worker/tickProcessor.js";
 
 const workerLog = logger.child({ module: "botWorker" });
 
@@ -504,18 +514,42 @@ async function renewLeases() {
 }
 
 // ---------------------------------------------------------------------------
-// Intent execution (Stage 11)
+// Intent execution (Stage 11) — delegated to worker/intentExecutor.ts (#230)
 // ---------------------------------------------------------------------------
 
 /**
- * Process a single BotIntent:
- * - Demo mode (no exchangeConnection): simulate immediately → FILLED
- * - Live mode (has exchangeConnection): call Bybit → PLACED (or FAILED on error)
- *
- * Uses optimistic locking: atomically claims PENDING → PLACED before acting.
- * If another worker already claimed it (count=0), skips silently.
+ * Thin wrapper that delegates to the extracted intentExecutor module.
+ * Preserves the original signature (no logger param) for backwards compatibility.
  */
 async function executeIntent(intent: {
+  id: string;
+  intentId: string;
+  orderLinkId: string;
+  side: string;
+  qty: { toString: () => string };
+  price: { toString: () => string } | null;
+  retryCount: number;
+  metaJson: Prisma.JsonValue;
+  botRun: {
+    id: string;
+    bot: {
+      id: string;
+      symbol: string;
+      exchangeConnectionId: string | null;
+      exchangeConnection: { apiKey: string; encryptedSecret: string } | null;
+      strategyVersion: { dslJson: Prisma.JsonValue } | null;
+    };
+  };
+}) {
+  return executeIntentExtracted(intent as IntentRecord, workerLog);
+}
+
+/**
+ * Original executeIntent implementation — kept as _executeIntentInline for reference.
+ * The actual logic has been extracted to worker/intentExecutor.ts.
+ * TODO: Remove after confirming all tests pass with extracted version.
+ */
+async function _executeIntentLegacy(intent: {
   id: string;
   intentId: string;
   orderLinkId: string;
@@ -756,15 +790,13 @@ async function executeIntent(intent: {
 // Stage 12: DSL enforcement helpers
 // ---------------------------------------------------------------------------
 
-/**
- * Enforce risk.dailyLossLimitUsd for all RUNNING bot runs.
- *
- * Uses pure decision function from safetyGuards.ts:
- *   failed_intents_today × estimated_loss_per_intent ≥ dailyLossLimitUsd
- *
- * When the limit is exceeded the run is transitioned to STOPPING.
- */
+/** Thin wrapper — delegates to worker/tickProcessor.ts (#230) */
 async function enforceDailyLossLimit(): Promise<void> {
+  return enforceDailyLossLimitExtracted(workerLog);
+}
+
+/** @deprecated Original implementation kept for reference. */
+async function _enforceDailyLossLimitLegacy(): Promise<void> {
   try {
     const runningRuns = await prisma.botRun.findMany({
       where: { state: "RUNNING" },
@@ -824,15 +856,13 @@ async function enforceDailyLossLimit(): Promise<void> {
   }
 }
 
-/**
- * Enforce guards.pauseOnError for all RUNNING bot runs (#141).
- *
- * When pauseOnError is true (default) and the most recent N intents
- * on a run are all FAILED, the run is transitioned to STOPPING.
- *
- * Uses pure decision function from safetyGuards.ts.
- */
+/** Thin wrapper — delegates to worker/tickProcessor.ts (#230) */
 async function enforceErrorPause(): Promise<void> {
+  return enforceErrorPauseExtracted(workerLog);
+}
+
+/** @deprecated Original implementation kept for reference. */
+async function _enforceErrorPauseLegacy(): Promise<void> {
   try {
     const runningRuns = await prisma.botRun.findMany({
       where: { state: "RUNNING" },
@@ -902,11 +932,13 @@ async function enforceErrorPause(): Promise<void> {
   }
 }
 
-/**
- * Process all PENDING intents on RUNNING runs.
- * Picks up to 20 at a time ordered by creation time.
- */
+/** Thin wrapper — delegates to worker/tickProcessor.ts (#230) */
 async function processIntents() {
+  return processIntentsExtracted(workerLog);
+}
+
+/** @deprecated Original implementation kept for reference. */
+async function _processIntentsLegacy() {
   try {
     const pendingIntents = await prisma.botIntent.findMany({
       where: {

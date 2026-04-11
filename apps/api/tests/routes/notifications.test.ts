@@ -3,6 +3,7 @@ import { describe, it, expect, vi, beforeAll, afterAll, beforeEach } from "vites
 // ── Mock Prisma ───────────────────────────────────────────────────────────────
 
 let mockUserPreference: Record<string, unknown> | null = null;
+let lastStoredNotifyJson: Record<string, unknown> | null = null;
 const mockWorkspaceMemberships: unknown[] = [];
 
 vi.mock("@prisma/client", () => ({
@@ -19,6 +20,8 @@ vi.mock("../../src/lib/prisma.js", () => ({
           ? { ...mockUserPreference, ...update }
           : { id: "pref-1", ...create };
         mockUserPreference = data;
+        // Capture the notifyJson before response redaction mutates it
+        lastStoredNotifyJson = structuredClone(data.notifyJson as Record<string, unknown>);
         return Promise.resolve(data);
       }),
     },
@@ -36,6 +39,17 @@ vi.mock("../../src/lib/prisma.js", () => ({
     $connect: vi.fn(),
     $disconnect: vi.fn(),
   },
+}));
+
+// Mock crypto module for encryption/decryption
+vi.mock("../../src/lib/crypto.js", () => ({
+  getEncryptionKey: vi.fn().mockReturnValue(Buffer.alloc(32, 0xab)),
+  getEncryptionKeyRaw: vi.fn().mockReturnValue(Buffer.alloc(32, 0xab)),
+  encrypt: vi.fn().mockImplementation((plaintext: string) => `enc:${plaintext}`),
+  decrypt: vi.fn().mockImplementation((payload: string) => {
+    if (payload.startsWith("enc:")) return payload.slice(4);
+    return payload;
+  }),
 }));
 
 // Mock the notify module to avoid real Telegram calls
@@ -66,6 +80,7 @@ afterAll(async () => {
 
 beforeEach(() => {
   mockUserPreference = null;
+  lastStoredNotifyJson = null;
   mockWorkspaceMemberships.length = 0;
 });
 
@@ -90,7 +105,30 @@ describe("GET /api/v1/user/notifications", () => {
     expect(res.json().notifyJson).toBeNull();
   });
 
-  it("returns config with redacted token when exists", async () => {
+  it("returns config with redacted token when exists (encrypted)", async () => {
+    mockUserPreference = {
+      id: "pref-1",
+      userId: "test-user-id",
+      notifyJson: {
+        telegram: { botToken: "enc:123456:ABCDEFGHIJKLMNOP", chatId: "999", enabled: true, _tokenEncrypted: true },
+      },
+    };
+
+    const res = await app.inject({
+      method: "GET",
+      url: "/api/v1/user/notifications",
+      headers: { authorization: `Bearer ${token}` },
+    });
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    expect(body.notifyJson.telegram.botToken).toBe("****MNOP");
+    expect(body.notifyJson.telegram.chatId).toBe("999");
+    expect(body.notifyJson.telegram.enabled).toBe(true);
+    // _tokenEncrypted should not leak to client
+    expect(body.notifyJson.telegram._tokenEncrypted).toBeUndefined();
+  });
+
+  it("returns config with redacted token for legacy plaintext storage", async () => {
     mockUserPreference = {
       id: "pref-1",
       userId: "test-user-id",
@@ -106,9 +144,8 @@ describe("GET /api/v1/user/notifications", () => {
     });
     expect(res.statusCode).toBe(200);
     const body = res.json();
+    // Legacy plaintext: redacts last 4 of the raw string
     expect(body.notifyJson.telegram.botToken).toBe("****MNOP");
-    expect(body.notifyJson.telegram.chatId).toBe("999");
-    expect(body.notifyJson.telegram.enabled).toBe(true);
   });
 });
 
@@ -146,7 +183,7 @@ describe("PUT /api/v1/user/notifications", () => {
     expect(res.statusCode).toBe(400);
   });
 
-  it("saves valid config", async () => {
+  it("saves valid config with encrypted botToken", async () => {
     const res = await app.inject({
       method: "PUT",
       url: "/api/v1/user/notifications",
@@ -160,6 +197,11 @@ describe("PUT /api/v1/user/notifications", () => {
     expect(res.statusCode).toBe(200);
     const body = res.json();
     expect(body.notifyJson.telegram).toBeDefined();
+    // The stored data should contain encrypted token (captured before response redaction)
+    expect(lastStoredNotifyJson).toBeTruthy();
+    const tg = (lastStoredNotifyJson as Record<string, unknown>).telegram as Record<string, unknown>;
+    expect(tg.botToken).toBe("enc:123:ABCDEF");
+    expect(tg._tokenEncrypted).toBe(true);
   });
 });
 

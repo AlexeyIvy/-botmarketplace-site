@@ -10,6 +10,7 @@ import type { FastifyInstance } from "fastify";
 import { prisma } from "../lib/prisma.js";
 import { problem } from "../lib/problem.js";
 import { parseNotifyConfig, sendTelegramMessage, invalidateNotifyCache } from "../lib/notify.js";
+import { getEncryptionKey, encrypt, decrypt } from "../lib/crypto.js";
 
 // ---------------------------------------------------------------------------
 // Validation
@@ -67,11 +68,22 @@ export async function notificationRoutes(app: FastifyInstance) {
       return reply.send({ notifyJson: null });
     }
 
-    // Redact botToken for security (only show last 4 chars)
-    const config = row.notifyJson as Record<string, unknown>;
+    // Decrypt botToken, then redact for response (only show last 4 chars)
+    const config = structuredClone(row.notifyJson) as Record<string, unknown>;
     const tg = config.telegram as Record<string, unknown> | undefined;
     if (tg?.botToken && typeof tg.botToken === "string") {
-      tg.botToken = "****" + tg.botToken.slice(-4);
+      let plainToken = tg.botToken;
+      if (tg._tokenEncrypted) {
+        try {
+          const encKey = getEncryptionKey(reply);
+          if (!encKey) return;
+          plainToken = decrypt(tg.botToken, encKey);
+        } catch {
+          plainToken = tg.botToken;
+        }
+      }
+      tg.botToken = "****" + plainToken.slice(-4);
+      delete tg._tokenEncrypted;
     }
 
     return reply.send({ notifyJson: config });
@@ -94,15 +106,25 @@ export async function notificationRoutes(app: FastifyInstance) {
         return problem(reply, 400, "Bad Request", err);
       }
 
+      // Encrypt botToken before storing
+      const dataToStore = structuredClone(body.notifyJson) as Record<string, unknown>;
+      const tgInput = dataToStore.telegram as Record<string, unknown> | undefined;
+      if (tgInput?.botToken && typeof tgInput.botToken === "string") {
+        const encKey = getEncryptionKey(reply);
+        if (!encKey) return;
+        tgInput.botToken = encrypt(tgInput.botToken, encKey);
+        tgInput._tokenEncrypted = true;
+      }
+
       const row = await prisma.userPreference.upsert({
         where: { userId: payload.sub },
         create: {
           userId: payload.sub,
           terminalJson: { version: 1, terminal: {} },
-          notifyJson: body.notifyJson as object,
+          notifyJson: dataToStore as object,
         },
         update: {
-          notifyJson: body.notifyJson as object,
+          notifyJson: dataToStore as object,
         },
       });
 

@@ -131,6 +131,56 @@ describe("PATCH /exchanges/:id — apiKey validation", () => {
     await app.close();
   });
 
+  it("rejects apiKey exceeding max length", async () => {
+    const { app, token } = await getApp();
+    mockFindUnique.mockResolvedValue(EXISTING_CONN);
+
+    const res = await app.inject({
+      method: "PATCH",
+      url: `/api/v1/exchanges/${CONN_ID}`,
+      headers: { authorization: `Bearer ${token}` },
+      payload: { apiKey: "a".repeat(257) },
+    });
+
+    expect(res.statusCode).toBe(400);
+    const body = JSON.parse(res.payload);
+    expect(body.detail).toContain("256");
+    await app.close();
+  });
+
+  it("rejects apiKey with invalid characters", async () => {
+    const { app, token } = await getApp();
+    mockFindUnique.mockResolvedValue(EXISTING_CONN);
+
+    const res = await app.inject({
+      method: "PATCH",
+      url: `/api/v1/exchanges/${CONN_ID}`,
+      headers: { authorization: `Bearer ${token}` },
+      payload: { apiKey: "key with spaces!" },
+    });
+
+    expect(res.statusCode).toBe(400);
+    const body = JSON.parse(res.payload);
+    expect(body.detail).toContain("invalid characters");
+    await app.close();
+  });
+
+  it("accepts apiKey with alphanumeric, dash, underscore", async () => {
+    const { app, token } = await getApp();
+    mockFindUnique.mockResolvedValue(EXISTING_CONN);
+    mockUpdate.mockResolvedValue({ ...EXISTING_CONN, apiKey: "My-Key_123", status: "UNKNOWN" });
+
+    const res = await app.inject({
+      method: "PATCH",
+      url: `/api/v1/exchanges/${CONN_ID}`,
+      headers: { authorization: `Bearer ${token}` },
+      payload: { apiKey: "My-Key_123" },
+    });
+
+    expect(res.statusCode).toBe(200);
+    await app.close();
+  });
+
   it("returns 401 without auth token", async () => {
     const { app } = await getApp();
 
