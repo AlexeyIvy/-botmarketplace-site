@@ -73,7 +73,7 @@
 
 **Priority:** HIGH
 **Depends on:** 26 (Governance) ✅ done
-**Status:** Completed — PR #XXX
+**Status:** Completed — PR #246
 **Note:** Backend endpoints already exist (`POST /lab/backtest/sweep`, `GET /lab/backtest/sweep/:id`, `GET /lab/backtest/sweeps`). UI skeleton exists in `OptimisePanel.tsx`.
 
 **Scope:**
