@@ -1,4 +1,32 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
+
+// ── Mock Prisma client to avoid loading the generated client at import time ──
+// positionManager.ts imports { Prisma } and Decimal from @prisma/client at
+// module level. Those imports transitively require .prisma/client/default
+// which only exists after `prisma generate` has been run. In unit-test
+// runs this isn't always available, so we stub the entire client. The
+// functions under test (calcUnrealisedPnl) are pure and never touch these
+// imports at runtime.
+vi.mock("@prisma/client", () => ({
+  Prisma: {
+    InputJsonValue: {},
+    TransactionClient: class {},
+  },
+  PrismaClient: vi.fn().mockImplementation(() => ({})),
+}));
+
+vi.mock("@prisma/client/runtime/library", () => ({
+  Decimal: class DecimalMock {
+    private value: number;
+    constructor(v: number | string) { this.value = typeof v === "string" ? parseFloat(v) : v; }
+    toNumber(): number { return this.value; }
+  },
+}));
+
+vi.mock("../../src/lib/prisma.js", () => ({
+  prisma: {},
+}));
+
 import { calcUnrealisedPnl, type PositionSnapshot } from "../../src/lib/positionManager.js";
 
 // ---------------------------------------------------------------------------
