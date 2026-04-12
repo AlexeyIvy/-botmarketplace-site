@@ -11,6 +11,7 @@
 # Usage:
 #   scripts/clean-stray-ts-artifacts.sh                 # dry-run (default, safe)
 #   scripts/clean-stray-ts-artifacts.sh --apply         # actually delete
+#   scripts/clean-stray-ts-artifacts.sh --check         # exit 1 if any found (CI)
 #   scripts/clean-stray-ts-artifacts.sh --aggressive    # also match *.d.ts (+ dry-run)
 #   scripts/clean-stray-ts-artifacts.sh --aggressive --apply
 #
@@ -28,14 +29,21 @@ REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$REPO_ROOT"
 
 APPLY=0
+CHECK=0
 AGGRESSIVE=0
 for arg in "$@"; do
   case "$arg" in
     --apply) APPLY=1 ;;
+    --check) CHECK=1 ;;
     --aggressive) AGGRESSIVE=1 ;;
     *) echo "Unknown arg: $arg" >&2; exit 2 ;;
   esac
 done
+
+if [[ $APPLY -eq 1 && $CHECK -eq 1 ]]; then
+  echo "--apply and --check are mutually exclusive" >&2
+  exit 2
+fi
 
 TARGETS=(
   "apps/*/src"
@@ -67,6 +75,13 @@ fi
 
 echo "Found ${#FILES[@]} stray artefact(s):"
 printf '  %s\n' "${FILES[@]}"
+
+if [[ $CHECK -eq 1 ]]; then
+  echo ""
+  echo "ERROR: stray TypeScript emission detected under source/test trees."
+  echo "Run 'scripts/clean-stray-ts-artifacts.sh --apply' to remove."
+  exit 1
+fi
 
 if [[ $APPLY -eq 0 ]]; then
   echo ""

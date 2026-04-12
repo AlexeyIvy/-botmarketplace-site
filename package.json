@@ -11,7 +11,8 @@
     "db:generate": "pnpm --filter @botmarketplace/api db:generate",
     "docker:up": "docker compose up -d",
     "docker:down": "docker compose down",
-    "test:api": "pnpm --filter @botmarketplace/api test"
+    "test:api": "pnpm --filter @botmarketplace/api test",
+    "check:stray": "bash scripts/clean-stray-ts-artifacts.sh --check"
   },
   "packageManager": "pnpm@10.29.3",
   "engines": {
