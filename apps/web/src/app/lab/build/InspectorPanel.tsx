@@ -329,16 +329,23 @@ function RiskWarningBanner({ params, blockType }: { params: Record<string, unkno
       .catch(() => setAiAvailable(false));
   }, []);
 
+  // Serialize params to a stable string key — React would treat `params` as a
+  // new object reference on every parent re-render, triggering the effect in a
+  // loop and exhausting the 5 req/min rate limit. Using the serialized form
+  // ensures we only refetch when values actually change.
+  const paramsKey = JSON.stringify(params);
+
   // Fetch risk suggestion when params change (debounced)
   useEffect(() => {
     if (!aiAvailable || !RISK_BLOCK_TYPES.has(blockType)) return;
 
+    const parsedParams = JSON.parse(paramsKey) as Record<string, unknown>;
     setLoading(true);
     const timer = setTimeout(async () => {
       try {
         const res = await apiFetch<{ warning: string | null; suggestions: string[] }>("/lab/explain/risk", {
           method: "POST",
-          body: JSON.stringify({ riskParams: { blockType, ...params } }),
+          body: JSON.stringify({ riskParams: { blockType, ...parsedParams } }),
         });
         if (res.ok) {
           setWarning(res.data.warning);
@@ -356,7 +363,7 @@ function RiskWarningBanner({ params, blockType }: { params: Record<string, unkno
     }, 1500);
 
     return () => clearTimeout(timer);
-  }, [aiAvailable, blockType, params]);
+  }, [aiAvailable, blockType, paramsKey]);
 
   if (!aiAvailable || !RISK_BLOCK_TYPES.has(blockType)) return null;
   if (loading) return (

@@ -15,6 +15,7 @@
  */
 
 import { createProvider, ProviderError } from "./ai/provider.js";
+import { sanitizePrompt } from "./aiSanitizer.js";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -127,6 +128,39 @@ ${paramsJson}`;
 }
 
 // ---------------------------------------------------------------------------
+// Input sanitization — scan any string values inside the JSON payload
+// for prompt-injection patterns, mirroring what /ai/chat does.
+// ---------------------------------------------------------------------------
+
+/**
+ * Recursively walk the payload and run sanitizePrompt on every string value.
+ * Returns the first detected rejection reason, or null if the input is safe.
+ *
+ * Max depth guard prevents stack overflow from hostile deeply-nested input.
+ */
+function scanForInjection(value: unknown, depth = 0): string | null {
+  if (depth > 16) return null; // depth cap — payloads never need this deep
+  if (typeof value === "string") {
+    const result = sanitizePrompt(value);
+    return result.safe ? null : (result.reason ?? "unknown");
+  }
+  if (Array.isArray(value)) {
+    for (const item of value) {
+      const r = scanForInjection(item, depth + 1);
+      if (r) return r;
+    }
+    return null;
+  }
+  if (value && typeof value === "object") {
+    for (const v of Object.values(value as Record<string, unknown>)) {
+      const r = scanForInjection(v, depth + 1);
+      if (r) return r;
+    }
+  }
+  return null;
+}
+
+// ---------------------------------------------------------------------------
 // LLM call wrapper — reuses existing provider infrastructure
 // ---------------------------------------------------------------------------
 
@@ -152,6 +186,8 @@ export async function explainGraph(input: ExplainGraphInput): Promise<ExplainRes
   if (!input.graphJson || typeof input.graphJson !== "object") {
     throw new ExplainInputError("graphJson is required and must be an object");
   }
+  const injection = scanForInjection(input);
+  if (injection) throw new PromptInjectionError(injection);
 
   const prompt = buildExplainGraphPrompt(input);
   const explanation = await callExplain(prompt);
@@ -165,6 +201,8 @@ export async function explainValidation(input: ExplainValidationInput): Promise<
   if (!input.issue.message || typeof input.issue.message !== "string") {
     throw new ExplainInputError("issue.message is required");
   }
+  const injection = scanForInjection(input);
+  if (injection) throw new PromptInjectionError(injection);
 
   const prompt = buildExplainValidationPrompt(input);
   const explanation = await callExplain(prompt);
@@ -181,6 +219,8 @@ export async function explainDelta(input: ExplainDeltaInput): Promise<ExplainRes
   if (!input.metricsDiff || typeof input.metricsDiff !== "object") {
     throw new ExplainInputError("metricsDiff is required and must be an object");
   }
+  const injection = scanForInjection(input);
+  if (injection) throw new PromptInjectionError(injection);
 
   const prompt = buildExplainDeltaPrompt(input);
   const explanation = await callExplain(prompt);
@@ -191,6 +231,8 @@ export async function suggestRisk(input: ExplainRiskInput): Promise<RiskResult> 
   if (!input.riskParams || typeof input.riskParams !== "object") {
     throw new ExplainInputError("riskParams is required and must be an object");
   }
+  const injection = scanForInjection(input);
+  if (injection) throw new PromptInjectionError(injection);
 
   const prompt = buildRiskPrompt(input);
   const raw = await callExplain(prompt, true);
@@ -215,6 +257,14 @@ export class ExplainInputError extends Error {
   constructor(message: string) {
     super(message);
     this.name = "ExplainInputError";
+  }
+}
+
+/** Thrown when input contains prompt-injection patterns detected by aiSanitizer. */
+export class PromptInjectionError extends Error {
+  constructor(public readonly reason: string) {
+    super(`Input contains disallowed content: ${reason}`);
+    this.name = "PromptInjectionError";
   }
 }
 
