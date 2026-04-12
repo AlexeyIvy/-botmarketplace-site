@@ -20,5 +20,26 @@ apps/api/prisma/migrations/**/migration_lock.toml
 *.tsbuildinfo
 next-env.d.ts
 
+# Stray TS emission inside source/test trees (dist/ is the only legitimate output).
+# Guards against `tsc` runs without --noEmit or with widened `include` leaking
+# .js/.js.map/.d.ts.map alongside .ts sources (see: apps/api graphCompiler
+# test incident — stale tests/fixtures/graphs.js shadowed graphs.ts under
+# ESM NodeNext resolution, silently dropping the MTF fixture export).
+#
+# Note: *.d.ts intentionally NOT listed — ambient types like
+# apps/api/src/types.d.ts are legitimate hand-written source.
+apps/*/src/**/*.js
+apps/*/src/**/*.js.map
+apps/*/src/**/*.d.ts.map
+apps/*/tests/**/*.js
+apps/*/tests/**/*.js.map
+apps/*/tests/**/*.d.ts.map
+packages/*/src/**/*.js
+packages/*/src/**/*.js.map
+packages/*/src/**/*.d.ts.map
+packages/*/tests/**/*.js
+packages/*/tests/**/*.js.map
+packages/*/tests/**/*.d.ts.map
+
 # Claude Code secrets (never commit tokens)
 .claude/secrets
