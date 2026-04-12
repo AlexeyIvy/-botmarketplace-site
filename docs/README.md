@@ -49,6 +49,9 @@
 - [Flagship overview](strategies/01-flagship-overview.md)
 - [Flagship implementation roadmap](strategies/07-flagship-implementation-roadmap.md)
 
+### Spikes / research notes
+- [DSL ↔ Graph bidirectional — feasibility spike](36-dsl-graph-bidirectional-spike.md)
+
 ### Foundation (execution framework)
 - [Foundation v1 plan](18-foundation-v1-plan.md)
 - [CloudCode control loop](19-cloudcode-control-loop.md)
