@@ -62,7 +62,7 @@ This document defines what comes next for `/lab` after Phase 5 completion. It do
 | Phase 0 | Docs freeze, glossary updates, doc cross-references | ✅ Complete | No | `docs/23 §22` — all doc updates marked Done |
 | Phase 1A | LabShell layout, resizable panels, tab bar (`Data / Build / Test / Classic`) | ✅ Complete | No | `apps/web/src/app/lab/LabShell.tsx` |
 | Phase 1B | Context bar, `useLabGraphStore` (Zustand), compile/run state wiring | ✅ Complete | No | `apps/web/src/app/lab/useLabGraphStore.ts` |
-| Phase 2 | Data tab, `MarketDataset.name` column, `DatasetPreview` component | ⚠️ Partial | **No** — see note | `apps/web/src/app/lab/data/page.tsx` implements §6.2 controls; chart view (Phase 2B2) not verified complete |
+| Phase 2 | Data tab, `MarketDataset.name` column, `DatasetPreview` component | ✅ Complete | No | `apps/web/src/app/lab/data/page.tsx` (§6.2 controls) + `apps/web/src/app/lab/DatasetPreview.tsx` (table + chart views) |
 | Phase 3A | Graph load-on-mount + auto-save cycle against DB | ✅ Complete | No | Mount load, auto-save (1500ms debounce), graph selector, empty-state creation all implemented in `build/page.tsx` + `useLabGraphStore.ts`. PR history: multiple PRs merged to main. |
 | Phase 3B | `BlockPalette`, `StrategyNode`, `StrategyEdge`, `InspectorPanel`, `ConnectionContext` | ✅ Complete | No | `apps/web/src/app/lab/build/` directory |
 | Phase 3C | Client-side validation rules, error badges on nodes, `ValidationDrawer` | ✅ Complete | No | `apps/web/src/app/lab/build/page.tsx`, `StrategyNode.tsx`, `useLabGraphStore.ts` |
@@ -72,16 +72,14 @@ This document defines what comes next for `/lab` after Phase 5 completion. It do
 | Phase 5B | Backtest results UI: metrics, trades, equity, logs, warnings | ✅ Complete | No | `apps/web/src/app/lab/test/page.tsx` |
 | Phase 6 | Private data blocks, stale-state detection, compare runs, annotate_event | ✅ Complete | No | 23b1 Compare Runs (PR #241), 23b2 Stale badges + 23b3 Private data blocks + 23b4 annotate_event (PR #242). All 4 sub-packs merged to main. |
 
-**Note on Phase 2 Partial:**
-`apps/web/src/app/lab/data/page.tsx` (line 6 header) explicitly implements the §6.2 mandatory controls: exchange, symbol, interval, date range, client-side validation. `DatasetPreview` implements the paginated table view (Phase 2B1). The OHLCV chart via `lightweight-charts` (Phase 2B2) is not verified complete.
+**Note on Phase 2 completion:**
+`apps/web/src/app/lab/data/page.tsx` (line 6 header) implements the §6.2 mandatory controls: exchange, symbol, interval, date range, client-side validation. `DatasetPreview` implements both the paginated virtualized table view (Phase 2B1, `DatasetPreview.tsx:181-269`) and the OHLCV candlestick chart via `lightweight-charts` v5 (Phase 2B2, `DatasetPreview.tsx:272-351`). Chart integration confirmed at both call sites (`data/page.tsx:614` after dataset creation, `:705` for the active dataset view).
 
-This gap does **not** block Phase 6. Phase 6 depends on:
+Phase 6 gating reminder (left for historical context):
 - A stable, persisted `StrategyGraph` identity → gated by Phase 3A
 - `ExchangeConnection` state for private data blocks → already implemented (Stage 8)
 
-Neither dependency requires Phase 2B2 completion. Phase 2B2 is recommended before Phase 6 work begins, but it is not a hard gate. It should be tracked as a standalone cleanup item, not treated as a Phase 6 prerequisite.
-
-**Phase 2B2 cleanup status:** Phase 2B2 (OHLCV chart via `lightweight-charts`) remains a non-blocking verification item. It is not part of the Completion layer, not part of the Expansion layer, and not a dependency for any task pack in §9. It may be executed as a standalone cleanup only if it becomes a practical UX blocker (e.g., users cannot evaluate dataset quality without the chart). If executed, no roadmap revision is required — apply the standard acceptance checklist from `docs/22 §7`.
+**Phase 2B2 status (April 2026):** Closed. OHLCV candlestick chart via `lightweight-charts` v5 is implemented in `DatasetPreview.tsx` (`PreviewChart`, lines 272-351) with Table / Chart toggle, dynamic SSR-safe import, proper cleanup, and ms→seconds timestamp conversion. Integrated into Data tab at both entry points. Phase 2 is now fully complete — no outstanding items.
 
 ### 2.2 Block library — current vs spec'd
 
@@ -424,9 +422,11 @@ Priority order within the expansion layer:
 **Hard constraint:** A technical spike is required before any implementation commitment. Reverse compile is significantly harder than forward compile — the DSL is lossy relative to graph layout. The spike must answer: which DSL constructs are reversible and which are not. A failed or scoped-down spike is a valid outcome.
 
 **Do not create a task pack for this until all three conditions are met:**
-1. Phase 3A is accepted
-2. Phase 6 is accepted
-3. The spike produces a written feasibility note
+1. Phase 3A is accepted ✅
+2. Phase 6 is accepted ✅
+3. The spike produces a written feasibility note ✅ — see `docs/36-dsl-graph-bidirectional-spike.md`
+
+**Spike outcome (2026-04-12):** Feasibility ranked (c) hard — 5-10 sessions plus permanent maintenance burden. Default recommendation: **Option D (do not create task pack)** unless a concrete user-facing driver surfaces. See `docs/36 §7` for full rationale and the three alternative options (A full, B scoped, C graph-snapshot retrieval) with trade-offs. Re-evaluate only if ≥3 user requests for DSL import surface or a downstream product feature requires out-of-canvas DSL authoring.
 
 ---
 
@@ -447,7 +447,7 @@ Priority order within the expansion layer:
 | `27` | Parameter sweep: sweep UI + sequential execution + results table (split to 27a/27b if scope grows) | Expansion | 23b1, 26 | Not started |
 | `28` | Research journal: hypothesis fields, status, display in results view | Expansion | 26 | Not started |
 | `29` | AI explainability: explain graph, validate, run delta, risk config suggestion | Expansion | 26, 28 | Not started |
-| DSL↔graph | Spike only — no task pack until feasibility note written | — | 23a, Phase 6 | Not started |
+| DSL↔graph | Spike only — no task pack until feasibility note written | — | 23a, Phase 6 | ✅ Spike complete (`docs/36`). Recommendation: do not create task pack (Option D) absent a concrete user driver. |
 | Multi-dataset | Task pack creation blocked on governance stable + schema decision | Later expansion | 26 | Not started |
 
 **Granularity principle:** Each task pack above targets one focused concern. The 23b split ensures Phase 6 is never attempted as a single monolithic PR. The 25a/25b split separates compiler concerns (indicators + logic) from risk model concerns. Do not merge adjacent task packs to "save time" — this defeats the purpose of the slicing.
@@ -520,9 +520,21 @@ The Expansion layer (§8) must not start until all five are closed.
 - ✅ 25b — trailing_stop + close_position (PR #242)
 - ⚠️ 25a — Mostly done (ATR, MACD, AND/OR present; confirm N bars still missing)
 
-**Next task pack:** `26` — Governance / provenance (version labels, baseline, lineage display). See §8.2.
-- After 26: task pack 27 (parameter sweep), then 28 (research journal), then 29 (AI explainability).
-- Multi-dataset binding (§8.6) and DSL↔graph (§8.7) remain blocked on their gate conditions.
+**Expansion layer status (2026-04-12):** All five proposed task packs merged:
+- ✅ 26 — Governance / provenance (PR #245)
+- ✅ 27 — Parameter sweep (PR #246)
+- ✅ 25a — confirm_n_bars (PR #247)
+- ✅ 28 — Research journal (PR #248)
+- ✅ 29 — AI explainability (PR #249)
+
+**Phase 2B2 cleanup:** Closed (see §2.1 above). Phase 2 is now fully complete.
+
+**Remaining roadmap items:**
+- DSL↔graph bidirectional (§8.7) — spike complete (`docs/36`), recommendation is Option D (no task pack). Requires explicit owner decision to reverse.
+- Multi-dataset binding (§8.6) — still gated on schema decision in `docs/07`. No spike written yet. Not started.
+- 26 unassigned blocks from `docs/23 §6.3` — incremental, no task pack; add on user demand per the "Adding a New Block" workflow in `docs/strategies/08-strategy-capability-matrix.md`.
+
+**Next authoritative action:** open — awaiting owner direction. Candidate paths: (a) accept spike Option D and close §8.7 formally; (b) write Multi-dataset binding schema spike to unblock §8.6; (c) pick a new roadmap direction outside the Lab v2 scope of this document.
 
 ---
 
