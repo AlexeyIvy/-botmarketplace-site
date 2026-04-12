@@ -41,7 +41,7 @@ else
 fi
 
 # 1. Pull latest code
-echo "[1/5] Git fetch + checkout..."
+echo "[1/7] Git fetch + checkout..."
 git fetch origin --tags
 if [[ -n "$REF" ]]; then
   # Detached HEAD at tag/SHA — reproducible, pinned deploy
@@ -52,22 +52,22 @@ else
 fi
 
 # 2. Install dependencies
-echo "[2/5] Installing dependencies..."
+echo "[2/7] Installing dependencies..."
 pnpm install --frozen-lockfile
 
 # 3. Run DB migrations + regenerate Prisma client
-echo "[3/5] Running DB migrations..."
+echo "[3/7] Running DB migrations..."
 pnpm run db:migrate
-echo "[3/5] Regenerating Prisma client..."
+echo "[3/7] Regenerating Prisma client..."
 pnpm --filter @botmarketplace/api exec prisma generate
 
 # 4. Build
-echo "[4/5] Building API and Web..."
+echo "[4/7] Building API and Web..."
 pnpm run build:api
 pnpm run build:web
 
 # 5. Check critical env vars
-echo "[5/5] Checking env..."
+echo "[5/7] Checking env..."
 ENV_FILE="$APP_DIR/.env"
 if [[ -f "$ENV_FILE" ]]; then
   if ! grep -q "^BOT_WORKER_SECRET=" "$ENV_FILE" || grep -q '^BOT_WORKER_SECRET="change-me-in-production"' "$ENV_FILE"; then
@@ -77,8 +77,25 @@ if [[ -f "$ENV_FILE" ]]; then
   fi
 fi
 
-# 6. Restart services
-echo "[6/6] Restarting services..."
+# 6. Sync systemd units (reinstall if deploy/*.service changed in the repo)
+echo "[6/7] Syncing systemd units..."
+UNITS_CHANGED=0
+for svc in botmarket-api botmarket-web; do
+  src="$APP_DIR/deploy/$svc.service"
+  dst="/etc/systemd/system/$svc.service"
+  if [[ -f "$src" ]] && ! cmp -s "$src" "$dst" 2>/dev/null; then
+    cp "$src" "$dst"
+    echo "      updated $dst"
+    UNITS_CHANGED=1
+  fi
+done
+if [[ $UNITS_CHANGED -eq 1 ]]; then
+  systemctl daemon-reload
+  echo "      systemd daemon reloaded"
+fi
+
+# 7. Restart services
+echo "[7/7] Restarting services..."
 systemctl restart botmarket-api
 systemctl restart botmarket-web
 

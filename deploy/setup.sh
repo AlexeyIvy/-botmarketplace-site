@@ -25,6 +25,14 @@ if [[ ! -f "$APP_DIR/.env" ]]; then
 fi
 echo "[✓] .env found"
 
+# 1a. Verify fuser is available (used by systemd ExecStartPre to kill
+# orphan processes on ports 3000/4000 before service start).
+if ! command -v fuser >/dev/null 2>&1; then
+  echo "[!] fuser not found — installing psmisc..."
+  apt-get update -qq && apt-get install -y psmisc
+fi
+echo "[✓] fuser available"
+
 # 2. Install systemd services
 echo "[1/4] Installing systemd services..."
 cp "$APP_DIR/deploy/botmarket-api.service" /etc/systemd/system/botmarket-api.service
