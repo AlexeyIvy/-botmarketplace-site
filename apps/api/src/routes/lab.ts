@@ -13,6 +13,7 @@ import {
   explainDelta,
   suggestRisk,
   ExplainInputError,
+  PromptInjectionError,
   ProviderError,
   type ExplainGraphInput,
   type ExplainValidationInput,
@@ -986,6 +987,10 @@ export async function labRoutes(app: FastifyInstance) {
   ): unknown {
     if (err instanceof ExplainInputError) {
       return problem(reply as never, 400, "Bad Request", err.message);
+    }
+    if (err instanceof PromptInjectionError) {
+      request.log.warn({ reqId: request.id, reason: err.reason }, `ai.explain.${endpoint}.prompt_injection_detected`);
+      return problem(reply as never, 400, "Bad Request", "Input contains disallowed content");
     }
     if (err instanceof ProviderError) {
       request.log.warn({ reqId: request.id, providerStatus: err.providerStatus }, `ai.explain.${endpoint}.provider_error`);
