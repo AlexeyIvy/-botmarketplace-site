@@ -20,6 +20,14 @@ User=botmarket
 WorkingDirectory=/opt/-botmarketplace-site/apps/api
 EnvironmentFile=/opt/-botmarketplace-site/.env
 ExecStart=/usr/bin/node dist/worker.js
+
+# Graceful shutdown: worker.ts installs SIGTERM handler.
+# KillMode=mixed + SendSIGKILL guarantees child cleanup on timeout.
+KillMode=mixed
+KillSignal=SIGTERM
+TimeoutStopSec=35s
+SendSIGKILL=yes
+
 Restart=on-failure
 RestartSec=5s
 StandardOutput=journal

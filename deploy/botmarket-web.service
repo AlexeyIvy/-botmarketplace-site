@@ -14,7 +14,22 @@ Type=simple
 User=botmarket
 WorkingDirectory=/opt/-botmarketplace-site/apps/web
 EnvironmentFile=/opt/-botmarketplace-site/.env
+
+# Safety net: kill any orphan process holding port 3000 before starting.
+# Leading "-" means failure (no process on port) is ignored.
+# Next.js forks worker processes that occasionally survive systemctl restart
+# as PPID=1 orphans, blocking port 3000. fuser -k cleans them up.
+ExecStartPre=-/usr/bin/fuser -k 3000/tcp
+
 ExecStart=/usr/bin/node node_modules/next/dist/bin/next start --port 3000
+
+# Graceful shutdown: SIGTERM to main, then SIGKILL to the entire cgroup
+# including Next.js worker processes after TimeoutStopSec.
+KillMode=mixed
+KillSignal=SIGTERM
+TimeoutStopSec=20s
+SendSIGKILL=yes
+
 Restart=on-failure
 RestartSec=5s
 StandardOutput=journal

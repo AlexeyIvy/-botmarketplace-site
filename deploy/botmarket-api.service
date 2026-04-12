@@ -14,7 +14,23 @@ Type=simple
 User=botmarket
 WorkingDirectory=/opt/-botmarketplace-site/apps/api
 EnvironmentFile=/opt/-botmarketplace-site/.env
+
+# Safety net: kill any orphan process holding port 4000 before starting.
+# Leading "-" means failure (e.g. no process on the port) is ignored.
+# Addresses recurring orphan-process issue where previous node/next workers
+# survive `systemctl restart` with PPID=1 and block port binding.
+ExecStartPre=-/usr/bin/fuser -k 4000/tcp
+
 ExecStart=/usr/bin/node dist/server.js
+
+# Graceful shutdown: SIGTERM to main process, SIGKILL to any lingering
+# children after TimeoutStopSec. server.ts installs SIGTERM handler that
+# closes Fastify + Prisma within 30s. SendSIGKILL guarantees cleanup.
+KillMode=mixed
+KillSignal=SIGTERM
+TimeoutStopSec=35s
+SendSIGKILL=yes
+
 Restart=on-failure
 RestartSec=5s
 StandardOutput=journal
