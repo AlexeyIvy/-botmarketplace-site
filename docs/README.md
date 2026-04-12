@@ -51,6 +51,7 @@
 
 ### Spikes / research notes
 - [DSL ↔ Graph bidirectional — feasibility spike](36-dsl-graph-bidirectional-spike.md)
+- [Production readiness audit](37-production-readiness-audit.md)
 
 ### Foundation (execution framework)
 - [Foundation v1 plan](18-foundation-v1-plan.md)
