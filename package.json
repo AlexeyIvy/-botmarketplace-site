@@ -17,5 +17,11 @@
   "packageManager": "pnpm@10.29.3",
   "engines": {
     "node": ">=20"
+  },
+  "pnpm": {
+    "overrides": {
+      "fast-jwt": ">=6.2.1",
+      "defu": ">=6.1.5"
+    }
   }
 }
