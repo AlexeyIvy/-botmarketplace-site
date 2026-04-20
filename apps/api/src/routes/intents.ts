@@ -16,6 +16,7 @@ import type { IntentState, IntentType, OrderSide } from "@prisma/client";
 import { prisma } from "../lib/prisma.js";
 import { problem } from "../lib/problem.js";
 import { resolveWorkspace } from "../lib/workspace.js";
+import { intentCreatedTotal } from "../lib/metrics.js";
 
 // ---------------------------------------------------------------------------
 // Route plugin
@@ -72,6 +73,7 @@ export async function intentRoutes(app: FastifyInstance) {
         },
       });
 
+      intentCreatedTotal.inc();
       return reply.status(201).send(intent);
     } catch (err) {
       // P2002 = unique constraint violation → race on intentId creation

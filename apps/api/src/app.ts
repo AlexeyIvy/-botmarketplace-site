@@ -5,6 +5,8 @@ import jwt from "@fastify/jwt";
 import rateLimit from "@fastify/rate-limit";
 import { healthzRoutes } from "./routes/healthz.js";
 import { readyzRoutes } from "./routes/readyz.js";
+import { metricsRoutes } from "./routes/metrics.js";
+import { httpRequestDurationSeconds } from "./lib/metrics.js";
 import { authRoutes } from "./routes/auth.js";
 import { strategyRoutes } from "./routes/strategies.js";
 import { botRoutes } from "./routes/bots.js";
@@ -164,12 +166,23 @@ export async function buildApp() {
   });
 
   // Top-level /health for nginx/monitoring (no auth, no prefix)
-  app.get("/health", async (_request, reply) => {
+  app.get("/health", { config: { rateLimit: false } }, async (_request, reply) => {
     return reply.send({
       status: "ok",
       uptime: process.uptime(),
       timestamp: new Date().toISOString(),
     });
+  });
+
+  // Prometheus scrape endpoint (no auth, no prefix) — scraped from loopback only
+  await app.register(metricsRoutes);
+
+  // HTTP request duration histogram — observe every response
+  app.addHook("onResponse", async (request, reply) => {
+    const route = request.routeOptions?.url ?? request.url;
+    httpRequestDurationSeconds
+      .labels(request.method, route, String(reply.statusCode))
+      .observe(reply.elapsedTime / 1000);
   });
 
   // Primary versioned routes: /api/v1/*
