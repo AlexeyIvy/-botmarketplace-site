@@ -209,6 +209,10 @@ vi.mock("../../src/lib/backtest.js", () => ({
   runBacktest: vi.fn().mockReturnValue({ trades: 0, totalPnlPct: 0 }),
 }));
 
+vi.mock("../../src/lib/dslValidator.js", () => ({
+  validateDsl: vi.fn().mockReturnValue(null),
+}));
+
 import { buildApp } from "../../src/app.js";
 import type { FastifyInstance } from "fastify";
 
@@ -798,5 +802,137 @@ describe("DELETE /api/v1/lab/journal/:id", () => {
     mockJournalEntries["je-3"] = { id: "je-3", workspaceId: WS_ID, strategyGraphVersionId: "gv-1", hypothesis: "H", whatChanged: "W", expectedResult: "E", status: "KEEP_TESTING", createdAt: new Date(), updatedAt: new Date() };
     const res = await app.inject({ method: "DELETE", url: "/api/v1/lab/journal/je-3", headers: authHeaders() });
     expect(res.statusCode).toBe(204);
+  });
+});
+
+// ── POST /lab/preview ── DSL dry-run preview ─────────────────────────────────
+
+import { prisma as previewPrisma } from "../../src/lib/prisma.js";
+import { runBacktest as previewRunBacktest } from "../../src/lib/backtest.js";
+import { validateDsl as previewValidateDsl } from "../../src/lib/dslValidator.js";
+
+describe("POST /api/v1/lab/preview", () => {
+  const prismaMock = previewPrisma as unknown as {
+    marketCandle: { findMany: ReturnType<typeof vi.fn> };
+  };
+  const backtestMock = previewRunBacktest as unknown as ReturnType<typeof vi.fn>;
+  const validatorMock = previewValidateDsl as unknown as ReturnType<typeof vi.fn>;
+
+  const dummyDsl = { market: { exchange: "bybit", symbol: "BTCUSDT" } };
+  let ipCounter = 0;
+
+  function makeCandles(n: number) {
+    const nowMs = Date.now();
+    return Array.from({ length: n }, (_, i) => ({
+      openTimeMs: BigInt(nowMs - (n - i) * 15 * 60_000),
+      open: 100, high: 101, low: 99, close: 100.5, volume: 10,
+    }));
+  }
+
+  // Each test gets a unique client IP so the per-route rate-limit bucket is fresh
+  // (app.ts sets trustProxy="127.0.0.1" → X-Forwarded-For is honored in tests).
+  function previewHeaders() {
+    ipCounter += 1;
+    const oct = 10 + (ipCounter % 240);
+    return { ...authHeaders(), "x-forwarded-for": `10.0.0.${oct}` };
+  }
+
+  beforeEach(() => {
+    validatorMock.mockReset().mockReturnValue(null);
+    backtestMock.mockReset().mockReturnValue({
+      trades: 3, wins: 2, winrate: 0.667,
+      totalPnlPct: 1.23, maxDrawdownPct: 0.5, candles: 96, tradeLog: [],
+    });
+    prismaMock.marketCandle.findMany.mockReset().mockResolvedValue(makeCandles(96));
+  });
+
+  it("returns 401 without auth", async () => {
+    const res = await app.inject({
+      method: "POST", url: "/api/v1/lab/preview",
+      headers: { "x-forwarded-for": "10.0.1.1" },
+      payload: { dslJson: dummyDsl, symbol: "BTCUSDT" },
+    });
+    expect(res.statusCode).toBe(401);
+  });
+
+  it("returns 200 with report + meta for valid DSL and sufficient candles", async () => {
+    const res = await app.inject({
+      method: "POST", url: "/api/v1/lab/preview",
+      headers: previewHeaders(),
+      payload: { dslJson: dummyDsl, symbol: "BTCUSDT", hours: 24 },
+    });
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    expect(body.report).toMatchObject({ trades: 3, winrate: 0.667, totalPnlPct: 1.23 });
+    expect(body.meta).toMatchObject({ symbol: "BTCUSDT", exchange: "bybit", interval: "M15", hours: 24, candleCount: 96 });
+    expect(typeof body.meta.dataAgeMs).toBe("number");
+  });
+
+  it("returns 400 when DSL validation fails", async () => {
+    validatorMock.mockReturnValueOnce([{ field: "entry", message: "missing" }]);
+    const res = await app.inject({
+      method: "POST", url: "/api/v1/lab/preview",
+      headers: previewHeaders(),
+      payload: { dslJson: {}, symbol: "BTCUSDT" },
+    });
+    expect(res.statusCode).toBe(400);
+    expect(res.json().errors).toEqual([{ field: "entry", message: "missing" }]);
+  });
+
+  it("returns 400 when symbol is missing", async () => {
+    const res = await app.inject({
+      method: "POST", url: "/api/v1/lab/preview",
+      headers: previewHeaders(),
+      payload: { dslJson: dummyDsl },
+    });
+    expect(res.statusCode).toBe(400);
+    expect(res.json().errors[0].field).toBe("symbol");
+  });
+
+  it("returns 400 when hours exceeds the cap", async () => {
+    const res = await app.inject({
+      method: "POST", url: "/api/v1/lab/preview",
+      headers: previewHeaders(),
+      payload: { dslJson: dummyDsl, symbol: "BTCUSDT", hours: 9999 },
+    });
+    expect(res.statusCode).toBe(400);
+    expect(res.json().errors[0].field).toBe("hours");
+  });
+
+  it("returns 409 when candles < 2", async () => {
+    prismaMock.marketCandle.findMany.mockResolvedValueOnce([]);
+    const res = await app.inject({
+      method: "POST", url: "/api/v1/lab/preview",
+      headers: previewHeaders(),
+      payload: { dslJson: dummyDsl, symbol: "BTCUSDT" },
+    });
+    expect(res.statusCode).toBe(409);
+    expect(res.json().title).toBe("Insufficient Data");
+  });
+
+  it("returns 422 when backtest engine throws", async () => {
+    backtestMock.mockImplementationOnce(() => { throw new Error("bad indicator"); });
+    const res = await app.inject({
+      method: "POST", url: "/api/v1/lab/preview",
+      headers: previewHeaders(),
+      payload: { dslJson: dummyDsl, symbol: "BTCUSDT" },
+    });
+    expect(res.statusCode).toBe(422);
+    expect(res.json().detail).toContain("bad indicator");
+  });
+
+  it("applies rate limit after 5 requests/minute from the same IP", async () => {
+    const headers = { ...authHeaders(), "x-forwarded-for": "10.9.9.9" };
+    const payload = { dslJson: dummyDsl, symbol: "BTCUSDT" };
+    const results: number[] = [];
+    for (let i = 0; i < 6; i++) {
+      const res = await app.inject({
+        method: "POST", url: "/api/v1/lab/preview",
+        headers, payload,
+      });
+      results.push(res.statusCode);
+    }
+    expect(results.filter((s) => s === 200).length).toBeLessThanOrEqual(5);
+    expect(results).toContain(429);
   });
 });

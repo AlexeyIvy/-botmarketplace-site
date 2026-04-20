@@ -12,6 +12,12 @@ Entries get promoted to a versioned section on release (see
 
 ### Added
 
+- `POST /api/v1/lab/preview` — synchronous DSL dry-run against the last
+  N hours (≤168) of `MarketCandle` data. Reuses the pure `runBacktest()`
+  engine; no DB writes, no exchange call. Returns the same report shape
+  as `/lab/backtest` plus a `meta` block with `candleCount`, `fromTsMs`,
+  `toTsMs`, and `dataAgeMs` so callers can surface data-freshness lag.
+  Rate-limited to 5 req/min per IP. (§5.12)
 - `deploy/rollback.sh` with auto-detected previous tag, `--dry-run`,
   `--to`, `--yes`; warns on forward-only DB migrations. RUNBOOK §3.5.
   (§5.1, #277)
