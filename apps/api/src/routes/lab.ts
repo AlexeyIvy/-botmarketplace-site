@@ -58,10 +58,15 @@ interface StartBacktestBody {
  * Preview request — synchronous DSL dry-run against the last N hours of
  * MarketCandle data (no DB writes, no exchange call). Used by the graph
  * builder to sanity-check a strategy before flipping it live.
+ *
+ * Exactly one of `dslJson` or `strategyVersionId` must be provided.
+ * When `strategyVersionId` is used, the DSL is resolved from the DB
+ * (workspace-scoped) and `symbol` defaults to the strategy's own symbol.
  */
 interface PreviewBody {
-  dslJson: unknown;
-  symbol: string;
+  dslJson?: unknown;
+  strategyVersionId?: string;
+  symbol?: string;
   hours?: number;
 }
 
@@ -467,6 +472,9 @@ export async function labRoutes(app: FastifyInstance) {
   // Stateless: no BotRun, no exchange call, no DB writes. Reuses the pure
   // runBacktest() engine against the global MarketCandle table so users can
   // sanity-check a strategy before enabling it (§5.12 product gap).
+  //
+  // Accepts either a raw `dslJson` (Build tab, pre-persist) or a
+  // `strategyVersionId` (Test tab, for comparing saved versions).
   app.post<{ Body: PreviewBody }>("/lab/preview", {
     config: { rateLimit: { max: 5, timeWindow: "1 minute" } },
     onRequest: [app.authenticate],
@@ -474,13 +482,41 @@ export async function labRoutes(app: FastifyInstance) {
     const workspace = await resolveWorkspace(request, reply);
     if (!workspace) return;
 
-    const { dslJson, symbol, hours = 24 } = request.body ?? {};
+    const { dslJson: bodyDsl, strategyVersionId, symbol: bodySymbol, hours = 24 } = request.body ?? {};
+
+    if (!bodyDsl && !strategyVersionId) {
+      return problem(reply, 400, "Validation Error", "dslJson or strategyVersionId is required", {
+        errors: [{ field: "body", message: "provide either dslJson or strategyVersionId" }],
+      });
+    }
+    if (bodyDsl && strategyVersionId) {
+      return problem(reply, 400, "Validation Error", "provide only one of dslJson or strategyVersionId", {
+        errors: [{ field: "body", message: "dslJson and strategyVersionId are mutually exclusive" }],
+      });
+    }
+
+    // Resolve DSL + default symbol from the StrategyVersion when referenced by id.
+    let dslJson: unknown = bodyDsl;
+    let defaultSymbol: string | undefined;
+    if (strategyVersionId) {
+      const sv = await prisma.strategyVersion.findUnique({
+        where: { id: strategyVersionId },
+        include: { strategy: true },
+      });
+      if (!sv || sv.strategy.workspaceId !== workspace.id) {
+        return problem(reply, 404, "Not Found", "StrategyVersion not found");
+      }
+      dslJson = sv.dslJson;
+      defaultSymbol = sv.strategy.symbol;
+    }
 
     const dslErrors = validateDsl(dslJson);
     if (dslErrors) {
       return problem(reply, 400, "Validation Error", "DSL validation failed", { errors: dslErrors });
     }
-    if (typeof symbol !== "string" || symbol.trim().length === 0) {
+
+    const symbol = (bodySymbol ?? defaultSymbol ?? "").trim();
+    if (symbol.length === 0) {
       return problem(reply, 400, "Validation Error", "symbol is required", {
         errors: [{ field: "symbol", message: "symbol must be a non-empty string" }],
       });

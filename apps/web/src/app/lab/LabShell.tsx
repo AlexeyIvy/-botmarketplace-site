@@ -371,9 +371,10 @@ function LabContextBar({ activeTab }: { activeTab: TabId }) {
             {compileLabel}
           </button>
           <PreviewPanel
-            dslJson={(lastCompileResult?.compiledDsl as Record<string, unknown> | undefined) ?? null}
+            source={{ dslJson: (lastCompileResult?.compiledDsl as Record<string, unknown> | undefined) ?? null }}
             symbol="BTCUSDT"
             disabled={compileState !== "success" || !lastCompileResult}
+            hint={compileState !== "success" || !lastCompileResult ? "Compile the graph first" : undefined}
           />
         </div>
       )}

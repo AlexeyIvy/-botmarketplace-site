@@ -59,30 +59,54 @@ type RunState =
 
 // ---------------------------------------------------------------------------
 // Component
+//
+// Accepts either a raw `dslJson` (Build tab, freshly compiled) or a
+// `strategyVersionId` (Test tab, persisted version). Exactly one must be
+// set; the server validates the body.
 // ---------------------------------------------------------------------------
 
+export type PreviewSource =
+  | { dslJson: Record<string, unknown> | null; strategyVersionId?: undefined }
+  | { strategyVersionId: string | null; dslJson?: undefined };
+
 export function PreviewPanel({
-  dslJson,
+  source,
   symbol,
   disabled,
+  align = "right",
+  label = "Preview 24h",
+  hint,
 }: {
-  dslJson: Record<string, unknown> | null;
-  symbol: string;
+  source: PreviewSource;
+  symbol?: string;
   disabled: boolean;
+  align?: "left" | "right";
+  label?: string;
+  hint?: string;
 }) {
   const [state, setState] = useState<RunState>({ kind: "idle" });
   const [open, setOpen] = useState(false);
   const popoverRef = useRef<HTMLDivElement>(null);
 
-  const btnDisabled = disabled || !dslJson || state.kind === "loading";
+  const hasSource =
+    ("dslJson" in source && source.dslJson !== null && source.dslJson !== undefined) ||
+    ("strategyVersionId" in source && !!source.strategyVersionId);
+  const btnDisabled = disabled || !hasSource || state.kind === "loading";
 
   const runPreview = useCallback(async () => {
-    if (!dslJson) return;
+    if (!hasSource) return;
     setState({ kind: "loading" });
     setOpen(true);
+    const body: Record<string, unknown> = { hours: 24 };
+    if ("dslJson" in source && source.dslJson) body.dslJson = source.dslJson;
+    if ("strategyVersionId" in source && source.strategyVersionId) {
+      body.strategyVersionId = source.strategyVersionId;
+    }
+    if (symbol) body.symbol = symbol;
+
     const res = await apiFetch<PreviewResponse>("/lab/preview", {
       method: "POST",
-      body: JSON.stringify({ dslJson, symbol, hours: 24 }),
+      body: JSON.stringify(body),
     });
     if (res.ok) {
       setState({ kind: "done", data: res.data });
@@ -94,7 +118,7 @@ export function PreviewPanel({
         errors: res.problem.errors,
       });
     }
-  }, [dslJson, symbol]);
+  }, [source, symbol, hasSource]);
 
   // Close popover on click-outside / Escape
   useEffect(() => {
@@ -115,16 +139,21 @@ export function PreviewPanel({
     };
   }, [open]);
 
+  const buttonTitle =
+    hint ??
+    (!hasSource
+      ? "No strategy to preview"
+      : "Run a dry-run preview against the last 24h of market data");
+
+  const popoverPositionStyle: React.CSSProperties =
+    align === "left" ? { ...popoverStyle, right: "auto", left: 0 } : popoverStyle;
+
   return (
     <div style={{ position: "relative", flexShrink: 0 }} ref={popoverRef}>
       <button
         onClick={runPreview}
         disabled={btnDisabled}
-        title={
-          !dslJson
-            ? "Compile the graph first"
-            : "Run a dry-run preview against the last 24h of market data"
-        }
+        title={buttonTitle}
         style={{
           padding: "5px 14px",
           fontSize: 12,
@@ -138,11 +167,11 @@ export function PreviewPanel({
           fontFamily: "inherit",
         }}
       >
-        {state.kind === "loading" ? "Previewing…" : "Preview 24h"}
+        {state.kind === "loading" ? "Previewing…" : label}
       </button>
 
       {open && (
-        <div style={popoverStyle}>
+        <div style={popoverPositionStyle}>
           <PreviewBody state={state} onClose={() => setOpen(false)} onRetry={runPreview} />
         </div>
       )}

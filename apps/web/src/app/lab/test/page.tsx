@@ -14,6 +14,7 @@ import { apiFetch, getWorkspaceId } from "../../../lib/api";
 import { useLabGraphStore } from "../useLabGraphStore";
 import type { IChartApi, LineData, Time } from "lightweight-charts";
 import OptimisePanel from "./OptimisePanel";
+import { PreviewPanel } from "../PreviewPanel";
 
 // ---------------------------------------------------------------------------
 // Task 29 — AI Explainability helpers
@@ -552,17 +553,30 @@ function BacktestForm({
 
       {error && <div style={errorBoxStyle}>{error}</div>}
 
-      <button
-        style={{
-          ...runBtnStyle,
-          opacity: canSubmit ? 1 : 0.45,
-          cursor: canSubmit ? "pointer" : "not-allowed",
-        }}
-        disabled={!canSubmit}
-        onClick={() => onSubmit({ strategyVersionId: versionId, datasetId, feeBps, slippageBps })}
-      >
-        {submitting ? "Starting…" : "Run Backtest"}
-      </button>
+      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+        <button
+          style={{
+            ...runBtnStyle,
+            opacity: canSubmit ? 1 : 0.45,
+            cursor: canSubmit ? "pointer" : "not-allowed",
+          }}
+          disabled={!canSubmit}
+          onClick={() => onSubmit({ strategyVersionId: versionId, datasetId, feeBps, slippageBps })}
+        >
+          {submitting ? "Starting…" : "Run Backtest"}
+        </button>
+        <PreviewPanel
+          source={{ strategyVersionId: versionId || null }}
+          symbol={selectedVersion?.strategy.symbol}
+          disabled={!versionId || submitting}
+          align="left"
+          hint={
+            !versionId
+              ? "Select a compiled version first"
+              : "Sanity-check this version against the last 24h before committing to a full backtest"
+          }
+        />
+      </div>
 
       <div style={{ fontSize: 11, color: "rgba(255,255,255,0.25)", marginTop: 8 }}>
         Fill price: CLOSE (fixed per spec). Same inputs produce identical results.
