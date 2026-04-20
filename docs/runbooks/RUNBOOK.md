@@ -298,12 +298,81 @@ bash deploy/smoke-test.sh
 | `botmarket-api` | Fastify API + в-процессе bot worker | 3001 |
 | `botmarket-web` | Next.js UI | 3000 |
 | `botmarket-backup.timer` | Автоматический backup по расписанию | — |
+| `botmarket-healthcheck.timer` | Проверка `/readyz` каждые 30 сек + alert | — |
 
 Nginx слушает 80/443 и проксирует на 3001 (API: `/api/`) и 3000 (Web).
 
 ---
 
-## 10. Полезные команды
+## 10. Мониторинг и алерты
+
+### 10.1 Prometheus scrape
+
+API экспортирует метрики на `/metrics` (без auth, стандарт Prometheus). nginx
+разрешает доступ только с loopback — снаружи endpoint недоступен. Метрики:
+
+- `botmarket_intent_created_total` / `_filled_total` / `_failed_total` — counters
+- `botmarket_http_request_duration_seconds` — histogram (method/route/status)
+- `process_*`, `nodejs_*` — defaults от `prom-client`
+
+Пример scrape-конфига (`prometheus.yml`):
+
+```yaml
+scrape_configs:
+  - job_name: botmarket-api
+    static_configs:
+      - targets: ["127.0.0.1:4000"]
+```
+
+### 10.2 Sentry (ошибки)
+
+Опциональная интеграция. Включается установкой `SENTRY_DSN` в `.env`. Если DSN
+не задан — init пропускается (no-op). Все 5xx из Fastify error handler'а
+отправляются как `captureException` с тегом `reqId` и контекстом `request`.
+
+Дополнительно:
+
+- `SENTRY_RELEASE` — тег release (рекомендуется: git sha из `deploy.sh`)
+- `SENTRY_TRACES_SAMPLE_RATE` — доля traces (по умолчанию 0 — без traces)
+
+### 10.3 Алерты по `/readyz`
+
+Скрипт `deploy/healthcheck.sh` + systemd timer дёргают `/readyz` каждые 30 сек.
+При **2 подряд** non-200 ответах шлётся webhook (Telegram / Slack).
+Состояние счётчика хранится в `/var/lib/botmarket/healthcheck.state`.
+
+**Установка:**
+
+```bash
+cp deploy/botmarket-healthcheck.{service,timer} /etc/systemd/system/
+systemctl daemon-reload
+
+# Прописать credentials в drop-in:
+systemctl edit botmarket-healthcheck.service
+# В редакторе:
+#   [Service]
+#   Environment="ALERT_WEBHOOK_URL=https://api.telegram.org/bot<TOKEN>/sendMessage"
+#   Environment="ALERT_CHAT_ID=-1001234567890"
+#   # Для Slack:
+#   # Environment="ALERT_WEBHOOK_KIND=slack"
+#   # Environment="ALERT_WEBHOOK_URL=https://hooks.slack.com/services/..."
+
+systemctl enable --now botmarket-healthcheck.timer
+```
+
+**Проверка:**
+
+```bash
+systemctl list-timers | grep healthcheck     # ближайшее срабатывание
+journalctl -u botmarket-healthcheck -n 50    # последние запуски
+```
+
+**Кастомизация:** переменные в drop-in — `READYZ_URL`, `FAIL_THRESHOLD`,
+`STATE_FILE` (см. комментарии в `deploy/healthcheck.sh`).
+
+---
+
+## 11. Полезные команды
 
 ```bash
 # Версия приложения (из package.json)
