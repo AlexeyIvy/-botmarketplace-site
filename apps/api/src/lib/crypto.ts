@@ -53,6 +53,53 @@ export function getEncryptionKeyRaw(): Buffer {
 }
 
 /**
+ * Get all encryption keys in priority order for decryption fallback (§5.7).
+ *
+ * Returns `[current, ...old]` where `old` is an array of previous keys
+ * supplied via `SECRET_ENCRYPTION_KEY_OLD` (comma-separated list of hex).
+ *
+ * Intended usage: during key rotation, decrypt tries the current key first
+ * and falls back to the old one(s) for records not yet re-encrypted. A
+ * one-shot migration re-encrypts everything with the new key, after which
+ * `SECRET_ENCRYPTION_KEY_OLD` can be removed.
+ */
+export function getEncryptionKeysRaw(): Buffer[] {
+  const keys: Buffer[] = [getEncryptionKeyRaw()];
+  const oldRaw = process.env.SECRET_ENCRYPTION_KEY_OLD;
+  if (!oldRaw) return keys;
+
+  for (const candidate of oldRaw.split(",").map((s) => s.trim()).filter(Boolean)) {
+    if (candidate.length !== KEY_HEX_LENGTH) {
+      throw new Error(
+        `SECRET_ENCRYPTION_KEY_OLD entry has wrong length: expected ${KEY_HEX_LENGTH} hex chars, got ${candidate.length}`,
+      );
+    }
+    keys.push(Buffer.from(candidate, "hex"));
+  }
+  return keys;
+}
+
+/**
+ * Decrypt using whichever configured key works (§5.7 rotation helper).
+ *
+ * Tries the current key first, then any in `SECRET_ENCRYPTION_KEY_OLD`.
+ * Throws if none succeed — same failure shape as `decrypt` when the
+ * single-key call fails.
+ */
+export function decryptWithFallback(payload: string): string {
+  const keys = getEncryptionKeysRaw();
+  let lastErr: unknown;
+  for (const key of keys) {
+    try {
+      return decrypt(payload, key);
+    } catch (err) {
+      lastErr = err;
+    }
+  }
+  throw lastErr instanceof Error ? lastErr : new Error("decryptWithFallback: all keys failed");
+}
+
+/**
  * Decrypt a payload produced by encrypt().
  * Throws on any tampering / wrong key.
  */

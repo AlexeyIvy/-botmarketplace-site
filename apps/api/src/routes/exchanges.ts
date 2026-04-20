@@ -2,7 +2,7 @@ import type { FastifyInstance } from "fastify";
 import { prisma } from "../lib/prisma.js";
 import { problem } from "../lib/problem.js";
 import { resolveWorkspace } from "../lib/workspace.js";
-import { getEncryptionKey, encrypt, decrypt } from "../lib/crypto.js";
+import { getEncryptionKey, encrypt, decryptWithFallback } from "../lib/crypto.js";
 
 // ---------------------------------------------------------------------------
 // Safe projection — never return encryptedSecret or apiKey in responses
@@ -215,12 +215,9 @@ export async function exchangeRoutes(app: FastifyInstance) {
       return problem(reply, 404, "Not Found", "Exchange connection not found");
     }
 
-    const key = getEncryptionKey(reply);
-    if (!key) return;
-
     let decryptedSecret: string;
     try {
-      decryptedSecret = decrypt(conn.encryptedSecret, key);
+      decryptedSecret = decryptWithFallback(conn.encryptedSecret);
     } catch (err) {
       request.log.error({ connectionId: conn.id, err }, "Failed to decrypt exchange secret");
       return problem(reply, 500, "Internal Server Error", "Failed to decrypt exchange credentials");

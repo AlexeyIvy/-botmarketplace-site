@@ -22,6 +22,10 @@ vi.mock("../../src/lib/crypto.js", () => ({
     if (payload.startsWith("enc:")) return payload.slice(4);
     return payload;
   }),
+  decryptWithFallback: vi.fn().mockImplementation((payload: string) => {
+    if (payload.startsWith("enc:")) return payload.slice(4);
+    return payload;
+  }),
 }));
 
 import {

@@ -10,7 +10,7 @@ import type { FastifyInstance } from "fastify";
 import { prisma } from "../lib/prisma.js";
 import { problem } from "../lib/problem.js";
 import { parseNotifyConfig, sendTelegramMessage, invalidateNotifyCache } from "../lib/notify.js";
-import { getEncryptionKey, encrypt, decrypt } from "../lib/crypto.js";
+import { getEncryptionKey, encrypt, decryptWithFallback } from "../lib/crypto.js";
 
 // ---------------------------------------------------------------------------
 // Validation
@@ -75,9 +75,7 @@ export async function notificationRoutes(app: FastifyInstance) {
       let plainToken = tg.botToken;
       if (tg._tokenEncrypted) {
         try {
-          const encKey = getEncryptionKey(reply);
-          if (!encKey) return;
-          plainToken = decrypt(tg.botToken, encKey);
+          plainToken = decryptWithFallback(tg.botToken);
         } catch {
           plainToken = tg.botToken;
         }

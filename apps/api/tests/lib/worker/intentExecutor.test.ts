@@ -41,6 +41,7 @@ vi.mock("../../../src/lib/prisma.js", () => ({
 
 vi.mock("../../../src/lib/crypto.js", () => ({
   decrypt: (...args: unknown[]) => mockDecrypt(...args),
+  decryptWithFallback: (payload: string) => mockDecrypt(payload, Buffer.alloc(32)),
   getEncryptionKeyRaw: (...args: unknown[]) => mockGetEncryptionKeyRaw(...args),
 }));
 

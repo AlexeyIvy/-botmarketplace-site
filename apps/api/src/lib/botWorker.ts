@@ -36,7 +36,7 @@ import {
   getBybitBaseUrl,
   isBybitLive,
 } from "./bybitOrder.js";
-import { decrypt, getEncryptionKeyRaw } from "./crypto.js";
+import { decryptWithFallback } from "./crypto.js";
 import {
   getActivePosition,
   openPosition,
@@ -625,8 +625,7 @@ async function _executeIntentLegacy(intent: {
       intentLog.info("intent simulated (demo mode)");
     } else {
       // ── Live mode: place order on Bybit ──────────────────────────────────
-      const encKey = getEncryptionKeyRaw();
-      const plainSecret = decrypt(bot.exchangeConnection.encryptedSecret, encKey);
+      const plainSecret = decryptWithFallback(bot.exchangeConnection.encryptedSecret);
 
       // Determine orderType from strategy DSL or default to Market
       const dsl = bot.strategyVersion?.dslJson as { execution?: { orderType?: string } } | null;
@@ -1067,15 +1066,13 @@ async function reconcilePlacedIntents(): Promise<void> {
 
     if (intents.length === 0) return;
 
-    const encKey = getEncryptionKeyRaw();
-
     for (const intent of intents) {
       const { bot } = intent.botRun;
       if (!bot.exchangeConnection || !intent.orderId) continue;
       const reconLog = workerLog.child({ runId: intent.botRun.id, intentId: intent.intentId, symbol: bot.symbol });
 
       try {
-        const secret = decrypt(bot.exchangeConnection.encryptedSecret, encKey);
+        const secret = decryptWithFallback(bot.exchangeConnection.encryptedSecret);
         const liveStatus = await bybitGetOrderStatus(
           bot.exchangeConnection.apiKey,
           secret,
