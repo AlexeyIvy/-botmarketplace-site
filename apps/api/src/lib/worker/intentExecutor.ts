@@ -10,7 +10,7 @@
 
 import { Prisma } from "@prisma/client";
 import { prisma } from "../prisma.js";
-import { decrypt, getEncryptionKeyRaw } from "../crypto.js";
+import { decryptWithFallback } from "../crypto.js";
 import {
   bybitPlaceOrder,
   getBybitBaseUrl,
@@ -96,8 +96,7 @@ export async function executeIntent(intent: IntentRecord, parentLog: Logger): Pr
       intentLog.info("intent simulated (demo mode)");
     } else {
       // ── Live mode: place order on Bybit ──────────────────────────────────
-      const encKey = getEncryptionKeyRaw();
-      const plainSecret = decrypt(bot.exchangeConnection.encryptedSecret, encKey);
+      const plainSecret = decryptWithFallback(bot.exchangeConnection.encryptedSecret);
 
       const dsl = bot.strategyVersion?.dslJson as { execution?: { orderType?: string } } | null;
       const orderType =

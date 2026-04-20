@@ -56,6 +56,7 @@ vi.mock("../../src/lib/crypto.js", () => ({
   getEncryptionKey: vi.fn().mockReturnValue(Buffer.alloc(32)),
   encrypt: vi.fn().mockReturnValue("iv:tag:cipher"),
   decrypt: vi.fn().mockReturnValue("decrypted-secret"),
+  decryptWithFallback: vi.fn().mockReturnValue("decrypted-secret"),
 }));
 
 const mockBybitPlaceOrder = vi.fn();

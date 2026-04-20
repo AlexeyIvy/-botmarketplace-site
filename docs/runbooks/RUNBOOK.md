@@ -417,7 +417,83 @@ journalctl -u botmarket-healthcheck -n 50    # последние запуски
 
 ---
 
-## 11. Полезные команды
+## 11. Ротация секретов
+
+### 11.1 `SECRET_ENCRYPTION_KEY` (dual-key rotation)
+
+`SECRET_ENCRYPTION_KEY` шифрует `ExchangeConnection.encryptedSecret` и
+Telegram bot token в `WorkspaceNotification.notifyJson`. Без процедуры
+ниже ротация сломает все сохранённые секреты — пользователи не смогут
+использовать bots без переподключения биржи.
+
+**Процедура (zero-downtime):**
+
+1. **Backup БД** перед началом (см. §7). Обязательно.
+2. Сгенерировать новый ключ:
+   ```bash
+   NEW_KEY=$(openssl rand -hex 32)
+   echo "$NEW_KEY"
+   ```
+3. Обновить `.env` — сохранить текущий ключ как `OLD`, поставить новый:
+   ```
+   SECRET_ENCRYPTION_KEY=<NEW_KEY>
+   SECRET_ENCRYPTION_KEY_OLD=<prev key, тот что был в SECRET_ENCRYPTION_KEY>
+   ```
+4. Рестартовать сервисы:
+   ```bash
+   systemctl restart botmarket-api botmarket-worker
+   ```
+   API сейчас шифрует новые записи новым ключом, расшифровывает старые —
+   старым (fallback через `decryptWithFallback`). Smoke-тест через UI:
+   открыть список ботов, проверить что "Exchange" отображается (значит
+   старые ключи читаются).
+5. Прогнать миграцию — перешифровать всё новым ключом:
+   ```bash
+   # Dry-run (без изменений БД):
+   pnpm --filter @botmarketplace/api exec tsx scripts/rotateEncryptionKey.ts --dry-run
+
+   # Реальная миграция:
+   pnpm --filter @botmarketplace/api exec tsx scripts/rotateEncryptionKey.ts
+   ```
+   Скрипт выведет счётчики `rotated=N failed=M`. Если `failed > 0` —
+   **НЕ** удалять `SECRET_ENCRYPTION_KEY_OLD`, разбираться в логах
+   прежде чем двигаться дальше.
+6. Убрать старый ключ из `.env`:
+   ```
+   # удалить строку SECRET_ENCRYPTION_KEY_OLD=…
+   ```
+7. Рестарт ещё раз — убедиться, что всё читается только новым ключом:
+   ```bash
+   systemctl restart botmarket-api botmarket-worker
+   systemctl is-active botmarket-api botmarket-worker
+   ```
+8. Записать событие в CHANGELOG.md (`[Unreleased] ### Security —
+   encryption key rotated on <date>`).
+
+**Если что-то пошло не так.** До шага 6 ротация полностью обратима —
+просто вернуть `SECRET_ENCRYPTION_KEY` на старое значение и убрать
+`_OLD`. После шага 6 (удаления OLD) откат требует restore из backup БД.
+
+### 11.2 `JWT_SECRET` (инвалидация токенов)
+
+Изменение `JWT_SECRET` делает все выданные access/refresh токены
+невалидными (все пользователи разлогинятся). Процедура:
+
+1. Сгенерировать новый секрет: `openssl rand -hex 32`.
+2. Обновить `.env` и рестартовать API.
+3. Уведомить пользователей (необязательно — они увидят форму логина при
+   первом же запросе).
+
+### 11.3 `BOT_WORKER_SECRET` (worker ↔ API канал)
+
+Используется worker-to-API endpoints (`PATCH /state`, `POST /heartbeat`,
+`POST /reconcile`). Если worker и API — в одном процессе (embedded),
+просто обновить `.env` и рестартовать. Если worker standalone — сначала
+обновить API (`.env` + restart), затем worker.
+
+---
+
+## 12. Полезные команды
 
 ```bash
 # Версия приложения (из package.json)

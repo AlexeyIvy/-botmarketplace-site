@@ -14,7 +14,7 @@
 
 import { logger } from "./logger.js";
 import { prisma } from "./prisma.js";
-import { getEncryptionKeyRaw, decrypt } from "./crypto.js";
+import { decryptWithFallback } from "./crypto.js";
 
 const notifyLog = logger.child({ module: "notify" });
 
@@ -162,8 +162,7 @@ export function parseNotifyConfig(raw: unknown): NotifyConfig | null {
   // Decrypt botToken if it was stored encrypted
   if (tg._tokenEncrypted) {
     try {
-      const key = getEncryptionKeyRaw();
-      botToken = decrypt(botToken, key);
+      botToken = decryptWithFallback(botToken);
     } catch (err) {
       notifyLog.warn({ err }, "failed to decrypt Telegram botToken");
       return null;

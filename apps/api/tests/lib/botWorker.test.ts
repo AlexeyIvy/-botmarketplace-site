@@ -93,6 +93,7 @@ vi.mock("../../src/lib/bybitOrder.js", () => ({
 
 vi.mock("../../src/lib/crypto.js", () => ({
   decrypt: vi.fn().mockReturnValue("decrypted-secret"),
+  decryptWithFallback: vi.fn().mockReturnValue("decrypted-secret"),
   getEncryptionKeyRaw: vi.fn().mockReturnValue(Buffer.alloc(32)),
 }));
 
