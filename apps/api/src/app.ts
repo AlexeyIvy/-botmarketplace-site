@@ -134,7 +134,13 @@ export async function buildApp() {
     }
   });
 
-  // Security headers (CSP enforcement + hardening)
+  // Security headers (CSP enforcement + hardening).
+  //
+  // CSP scope (docs/37 §5.8): this strict policy is authoritative for
+  // /api/* responses (JSON, no embedded resources needed). The looser
+  // CSP for rendered Next.js pages is configured in deploy/nginx.conf
+  // under `location /` and must stay in sync there; it is deliberately
+  // NOT added on /api/ in nginx to keep this single source of truth.
   app.addHook("onSend", async (request, reply) => {
     reply.header("X-Request-Id", request.id);
     reply.header("X-Content-Type-Options", "nosniff");
