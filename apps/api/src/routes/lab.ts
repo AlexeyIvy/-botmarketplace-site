@@ -4,6 +4,7 @@ import { problem } from "../lib/problem.js";
 import { logger } from "../lib/logger.js";
 import { resolveWorkspace } from "../lib/workspace.js";
 import { runBacktest } from "../lib/backtest.js";
+import { validateDsl } from "../lib/dslValidator.js";
 import { applyDslSweepParam } from "../lib/dslSweepParam.js";
 import { compileGraph } from "../lib/graphCompiler.js";
 import type { GraphJson } from "../lib/graphCompiler.js";
@@ -32,6 +33,9 @@ type FillAt = typeof ALLOWED_FILL_AT[number];
 /** Reasonable upper bound for fee/slippage to prevent nonsensical inputs */
 const MAX_BPS = 1000; // 10%
 
+/** Upper bound for preview lookback window (1 week @ M15 ≈ 672 candles) */
+const PREVIEW_MAX_HOURS = 168;
+
 // ---------------------------------------------------------------------------
 // Routes
 // ---------------------------------------------------------------------------
@@ -48,6 +52,17 @@ interface StartBacktestBody {
   feeBps?: number;
   slippageBps?: number;
   fillAt?: FillAt;
+}
+
+/**
+ * Preview request — synchronous DSL dry-run against the last N hours of
+ * MarketCandle data (no DB writes, no exchange call). Used by the graph
+ * builder to sanity-check a strategy before flipping it live.
+ */
+interface PreviewBody {
+  dslJson: unknown;
+  symbol: string;
+  hours?: number;
 }
 
 /** Fields returned in list/detail views (includes Stage 19b + Phase 5 additions) */
@@ -446,6 +461,93 @@ export async function labRoutes(app: FastifyInstance) {
     });
 
     return reply.status(202).send(bt);
+  });
+
+  // ── POST /lab/preview ── synchronous DSL dry-run against the last N hours ──
+  // Stateless: no BotRun, no exchange call, no DB writes. Reuses the pure
+  // runBacktest() engine against the global MarketCandle table so users can
+  // sanity-check a strategy before enabling it (§5.12 product gap).
+  app.post<{ Body: PreviewBody }>("/lab/preview", {
+    config: { rateLimit: { max: 5, timeWindow: "1 minute" } },
+    onRequest: [app.authenticate],
+  }, async (request, reply) => {
+    const workspace = await resolveWorkspace(request, reply);
+    if (!workspace) return;
+
+    const { dslJson, symbol, hours = 24 } = request.body ?? {};
+
+    const dslErrors = validateDsl(dslJson);
+    if (dslErrors) {
+      return problem(reply, 400, "Validation Error", "DSL validation failed", { errors: dslErrors });
+    }
+    if (typeof symbol !== "string" || symbol.trim().length === 0) {
+      return problem(reply, 400, "Validation Error", "symbol is required", {
+        errors: [{ field: "symbol", message: "symbol must be a non-empty string" }],
+      });
+    }
+    if (!Number.isFinite(hours) || hours <= 0 || hours > PREVIEW_MAX_HOURS) {
+      return problem(reply, 400, "Validation Error", "hours out of range", {
+        errors: [{ field: "hours", message: `hours must be > 0 and ≤ ${PREVIEW_MAX_HOURS}` }],
+      });
+    }
+
+    const market = (dslJson as Record<string, unknown>).market as Record<string, unknown>;
+    const exchange = String(market.exchange);
+    const interval: import("@prisma/client").CandleInterval = "M15";
+
+    const nowMs = Date.now();
+    const fromTsMs = BigInt(nowMs - Math.ceil(hours * 3600 * 1000));
+    const toTsMs = BigInt(nowMs);
+
+    const dbCandles = await prisma.marketCandle.findMany({
+      where: {
+        exchange,
+        symbol,
+        interval,
+        openTimeMs: { gte: fromTsMs, lte: toTsMs },
+      },
+      orderBy: { openTimeMs: "asc" },
+    });
+
+    if (dbCandles.length < 2) {
+      return problem(reply, 409, "Insufficient Data",
+        `Only ${dbCandles.length} candle(s) available for ${symbol} ${interval} in the last ${hours}h. Wait for ingestion to catch up.`);
+    }
+
+    const candles = dbCandles.map((c) => ({
+      openTime: Number(c.openTimeMs),
+      open: Number(c.open),
+      high: Number(c.high),
+      low: Number(c.low),
+      close: Number(c.close),
+      volume: Number(c.volume),
+    }));
+
+    let report;
+    try {
+      report = runBacktest(candles, dslJson, { feeBps: 0, slippageBps: 0, fillAt: "CLOSE" });
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      return problem(reply, 422, "Evaluation Error", `DSL evaluation failed: ${msg}`);
+    }
+
+    const firstCandleMs = candles[0].openTime;
+    const lastCandleMs = candles[candles.length - 1].openTime;
+
+    return reply.send({
+      report,
+      meta: {
+        symbol,
+        exchange,
+        interval,
+        hours,
+        candleCount: candles.length,
+        fromTsMs: firstCandleMs,
+        toTsMs: lastCandleMs,
+        dataAgeMs: nowMs - lastCandleMs,
+        engineVersion: process.env.COMMIT_SHA ?? "unknown",
+      },
+    });
   });
 
   // ── GET /lab/backtest/:id ── get result ─────────────────────────────────────
