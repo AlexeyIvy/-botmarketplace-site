@@ -514,6 +514,21 @@ async function renewLeases() {
   });
 }
 
+/**
+ * Release leases owned by this worker on shutdown (§4.5.1 / docs/37).
+ *
+ * Sets `leaseUntil` to now on all RUNNING runs that this worker holds so
+ * that a restarted worker can claim them immediately, instead of waiting
+ * the full 30s natural expiration window. Exported for direct testing.
+ */
+export async function releaseOwnedLeases(): Promise<number> {
+  const result = await prisma.botRun.updateMany({
+    where: { leaseOwner: WORKER_ID, state: "RUNNING" },
+    data: { leaseUntil: new Date() },
+  });
+  return result.count;
+}
+
 // ---------------------------------------------------------------------------
 // Intent execution (Stage 11) — delegated to worker/intentExecutor.ts (#230)
 // ---------------------------------------------------------------------------
@@ -1895,6 +1910,13 @@ export function startBotWorker(): () => Promise<void> {
     if (pollInFlight) {
       const timeout = new Promise<void>((resolve) => setTimeout(resolve, GRACE_PERIOD_MS));
       await Promise.race([pollInFlight, timeout]);
+    }
+
+    try {
+      const released = await releaseOwnedLeases();
+      workerLog.info({ released, workerId: WORKER_ID }, "leases released");
+    } catch (err) {
+      workerLog.error({ err, workerId: WORKER_ID }, "failed to release leases");
     }
 
     workerLog.info("botWorker stopped");
