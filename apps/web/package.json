@@ -8,16 +8,16 @@
     "start": "next start"
   },
   "dependencies": {
-    "@tanstack/react-virtual": "^3.13.21",
-    "@xyflow/react": "^12.10.1",
-    "dompurify": "^3.3.3",
+    "@tanstack/react-virtual": "^3.13.24",
+    "@xyflow/react": "^12.10.2",
+    "dompurify": "^3.4.0",
     "lightweight-charts": "^5.1.0",
     "next": "^15.5.15",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
-    "react-resizable-panels": "^4.7.1",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
+    "react-resizable-panels": "^4.10.0",
     "zundo": "^2.3.0",
-    "zustand": "^5.0.11"
+    "zustand": "^5.0.12"
   },
   "devDependencies": {
     "@types/dompurify": "^3.2.0",
