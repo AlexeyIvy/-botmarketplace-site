@@ -6,6 +6,7 @@ import { startBotWorker } from "./lib/botWorker.js";
 import cron from "node-cron";
 import { runIngestion } from "./lib/funding/ingestJob.js";
 import { prisma, startPoolMetricsLogging, stopPoolMetricsLogging } from "./lib/prisma.js";
+import { startPeriodicReconciler } from "./lib/periodicReconciler.js";
 import { logger } from "./lib/logger.js";
 import { cleanupExpiredRefreshTokens } from "./routes/auth.js";
 
@@ -42,6 +43,9 @@ async function main() {
 
     // Start pool metrics logging (Rec C)
     startPoolMetricsLogging();
+
+    // Periodic reconciler — safety net if the worker tick gets wedged (§4.5.2)
+    const stopReconciler = embeddedWorker ? startPeriodicReconciler() : null;
 
     // Funding ingestion cron — every 8 hours (matches Bybit settlement schedule)
     const fundingCron = cron.schedule("0 */8 * * *", () => {
@@ -81,6 +85,7 @@ async function main() {
         fundingCron.stop();
         tokenCleanupCron.stop();
         stopPoolMetricsLogging();
+        if (stopReconciler) stopReconciler();
         if (stopWorker) await stopWorker();
         await app.close();
         await prisma.$disconnect();
