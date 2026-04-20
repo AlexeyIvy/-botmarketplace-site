@@ -87,6 +87,30 @@ git fetch --tags
 git checkout v0.1.0-rc1
 ```
 
+### 3.5 Rollback на предыдущий релиз
+
+```bash
+# Посмотреть план без выполнения (покажет текущий / целевой teg + коммиты)
+bash deploy/rollback.sh --dry-run
+
+# Откатиться на автоматически-определённый предыдущий тег
+bash deploy/rollback.sh
+
+# Откатиться на конкретный тег
+bash deploy/rollback.sh --to v0.1.0-rc1
+
+# Non-interactive (для автоматики)
+bash deploy/rollback.sh --to v0.1.0-rc1 --yes
+```
+
+Под капотом: `rollback.sh` находит предыдущий тег (`git tag --sort=-version:refname | sed -n '2p'`), показывает список коммитов, которые будут откачены, и делегирует `deploy/deploy.sh --ref <tag>`.
+
+**Важно про DB миграции.** Prisma миграции forward-only — если целевой тег предшествует breaking schema change (drop column, type change), rollback оставит БД в текущем (новом) состоянии, а код из старого тега может упасть. Процедура в этом случае:
+1. Восстановить dump из backup: `bash deploy/backup.sh --restore <dump>` (см. §7).
+2. Только потом запускать rollback.
+
+Скрипт показывает предупреждение перед выполнением. Если меняли схему в диапазоне — **проверяй backup сначала**.
+
 ---
 
 ## 4. Миграции базы данных
