@@ -33,12 +33,33 @@ bash deploy/smoke-test.sh
 | `BOT_WORKER_SECRET` | Production | Произвольная строка 32+ символов | `openssl rand -hex 32` |
 | `NODE_ENV` | Нет | `production` | Установить `production` на VPS |
 | `PORT` | Нет | Число (default: 3001) | — |
+| `POOL_WAIT_THRESHOLD` | Нет | Число (default: 5) | Порог `waiting` в `/readyz` connection pool check |
+| `BYBIT_ALLOW_LIVE` | Live-прод | `true` | Обязателен при `NODE_ENV=production` + `BYBIT_ENV=live` (§5.10 guard) |
 
 ### Критические замечания
 
 - **`SECRET_ENCRYPTION_KEY`** — если изменить после создания exchange connections, все существующие зашифрованные секреты станут нечитаемы. Храни в безопасном месте, делай backup.
 - **`BOT_WORKER_SECRET`** — без него в production worker endpoints (`PATCH /state`, `POST /heartbeat`, `POST /reconcile`) доступны без аутентификации. **Обязательно установить перед production-деплоем.**
 - **`JWT_SECRET`** — изменение инвалидирует все выданные токены (все пользователи разлогинятся).
+
+### Prisma connection pool (`DATABASE_URL`)
+
+В production задавай пул явно через query-параметры:
+
+```
+postgresql://user:pass@host:5432/botmarket?schema=public&connection_limit=10&pool_timeout=10
+```
+
+- `connection_limit` — сколько коннектов откроет каждый процесс (API и worker — независимо).
+  Итоговое потребление: `connection_limit × N_процессов`. Postgres по умолчанию держит
+  `max_connections=100`; оставляй ≥10% admin-slots запаса.
+- `pool_timeout` (сек) — сколько Prisma ждёт свободный коннект перед ошибкой. Слишком
+  маленькое → «pool wait count > threshold» в `/readyz` → `degraded`. Слишком большое →
+  HTTP request'ы ждут и упираются в таймауты клиента.
+
+Живые метрики пула: `botmarket_*` на `/metrics` + `/readyz.checks.connectionPool` +
+пинованые метрики в логах (`module=prisma` каждые 60 сек). Если `waiting > 0` стабильно —
+либо поднимать `connection_limit`, либо поднимать Postgres `max_connections`.
 
 ---
 
