@@ -1,0 +1,20 @@
+# systemd timer — probe /readyz every 30 seconds
+# Install:
+#   cp deploy/botmarket-healthcheck.timer /etc/systemd/system/
+#   cp deploy/botmarket-healthcheck.service /etc/systemd/system/
+#   systemctl daemon-reload
+#   systemctl enable --now botmarket-healthcheck.timer
+# Status: systemctl list-timers | grep healthcheck
+# Recent runs: journalctl -u botmarket-healthcheck -n 50
+
+[Unit]
+Description=BotMarketplace /readyz Health Probe Timer
+
+[Timer]
+OnBootSec=1min
+OnUnitActiveSec=30s
+AccuracySec=5s
+Unit=botmarket-healthcheck.service
+
+[Install]
+WantedBy=timers.target

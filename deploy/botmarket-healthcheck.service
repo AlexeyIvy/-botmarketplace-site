@@ -1,0 +1,22 @@
+# systemd one-shot service for API /readyz health probe
+# Triggered by: botmarket-healthcheck.timer (every 30s)
+# Install: cp deploy/botmarket-healthcheck.service /etc/systemd/system/
+#
+# Configure credentials via drop-in:
+#   systemctl edit botmarket-healthcheck.service
+# and set (example):
+#   [Service]
+#   Environment="ALERT_WEBHOOK_URL=https://api.telegram.org/bot<token>/sendMessage"
+#   Environment="ALERT_CHAT_ID=-100..."
+
+[Unit]
+Description=BotMarketplace /readyz Health Probe
+After=network-online.target botmarket-api.service
+
+[Service]
+Type=oneshot
+User=root
+ExecStart=/bin/bash /opt/-botmarketplace-site/deploy/healthcheck.sh
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=botmarket-healthcheck
