@@ -14,6 +14,7 @@
 import { startBotWorker } from "./lib/botWorker.js";
 import { prisma } from "./lib/prisma.js";
 import { logger } from "./lib/logger.js";
+import { startPeriodicReconciler } from "./lib/periodicReconciler.js";
 
 const workerLog = logger.child({ module: "worker-main" });
 
@@ -35,11 +36,13 @@ async function main() {
   workerLog.info("Starting standalone bot worker process");
 
   const stopWorker = startBotWorker();
+  const stopReconciler = startPeriodicReconciler();
 
   // Graceful shutdown
   for (const signal of ["SIGINT", "SIGTERM"] as const) {
     process.once(signal, async () => {
       workerLog.info({ signal }, "Received shutdown signal");
+      stopReconciler();
       await stopWorker();
       await prisma.$disconnect();
       workerLog.info("Standalone worker stopped");

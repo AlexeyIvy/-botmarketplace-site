@@ -22,6 +22,12 @@ export const intentFailedTotal = new Counter({
   registers: [register],
 });
 
+export const stalePendingCancelledTotal = new Counter({
+  name: "botmarket_stale_pending_cancelled_total",
+  help: "PENDING intents cancelled by the periodic reconciliation sweep.",
+  registers: [register],
+});
+
 export const httpRequestDurationSeconds = new Histogram({
   name: "botmarket_http_request_duration_seconds",
   help: "HTTP request duration in seconds.",
