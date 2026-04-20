@@ -422,36 +422,85 @@ curl -s https://api.bybit.com/v5/market/time | jq .
 
 ## 7. Backup и восстановление
 
-### Создать backup вручную
+### 7.1 Создать backup вручную
 
 ```bash
 bash deploy/backup.sh
-# Дамп сохраняется в /opt/-botmarketplace-site/backups/
+# Локально → /var/backups/botmarketplace/botmarket_YYYYMMDD_HHMMSS.sql.gz
+# + offsite upload (S3 и/или rclone), если сконфигурировано — см. §7.4
 ```
 
-### Автоматический backup
+### 7.2 Автоматический backup
+
+Таймер настроен через systemd (ежедневно 03:00, retention 7 дней локально):
 
 ```bash
-# Таймер настроен через systemd:
 systemctl status botmarket-backup.timer
 systemctl list-timers botmarket-backup.timer
+journalctl -u botmarket-backup -n 50
 ```
 
-### Восстановление из backup
+### 7.3 Восстановление из backup
 
 ```bash
-# 1. Остановить сервисы
-systemctl stop botmarket-api botmarket-web
-
-# 2. Восстановить БД
-psql "$DATABASE_URL" < /opt/-botmarketplace-site/backups/botmarket-YYYYMMDD.sql
-
-# 3. Запустить сервисы
-systemctl start botmarket-api botmarket-web
-
-# 4. Проверить
+# Интерактивный вариант (скрипт сам остановит, спросит подтверждение):
+bash deploy/backup.sh --restore /var/backups/botmarketplace/botmarket_YYYYMMDD_HHMMSS.sql.gz
+systemctl restart botmarket-api botmarket-web
 bash deploy/smoke-test.sh
+
+# Если нужен dump из offsite (S3 / rclone):
+bash deploy/backup.sh --pull botmarket_YYYYMMDD_HHMMSS.sql.gz
+# → скачает в $BACKUP_DIR, дальше --restore как выше
+
+# Посмотреть что есть в локальном и offsite сторах:
+bash deploy/backup.sh --list
 ```
+
+### 7.4 Offsite upload (§4.4 — disaster recovery)
+
+Локальные backup'ы лежат на той же VPS, что и БД — single point of failure.
+`backup.sh` поддерживает опциональный upload в объектное хранилище сразу после
+локального дампа. Без этих переменных поведение прежнее (только локально),
+поэтому существующие деплои работают без изменений.
+
+**Вариант A — AWS S3 / S3-совместимое (DO Spaces, Wasabi, Backblaze B2 S3 API):**
+
+```bash
+# .env на VPS:
+BACKUP_S3_BUCKET="my-botmarket-backups"
+BACKUP_S3_PREFIX="prod"           # опционально, default: "botmarket"
+
+# Credentials — стандартные AWS_* переменные или ~/.aws/credentials:
+AWS_ACCESS_KEY_ID="..."
+AWS_SECRET_ACCESS_KEY="..."
+AWS_DEFAULT_REGION="us-east-1"    # или region твоего bucket'а
+# AWS_ENDPOINT_URL_S3="..."       # для не-AWS S3 API (Backblaze B2 etc.)
+```
+
+Требует `apt install awscli` (или pip). При первом запуске убедись, что у
+IAM-ключа есть права `s3:PutObject` + `s3:GetObject` + `s3:ListBucket`.
+
+**Вариант B — rclone (наиболее гибкий; B2, GCS, Azure, SFTP, WebDAV, …):**
+
+```bash
+# Настроить remote интерактивно:
+rclone config
+# → пример результата: `[b2-prod]` с credentials
+
+# .env:
+BACKUP_RCLONE_REMOTE="b2-prod:botmarket-backups"
+```
+
+**Retention.** Локальные файлы удаляются через `KEEP_DAYS` (default 7).
+Offsite retention управляй lifecycle-политикой на стороне bucket'а
+(S3 Lifecycle / B2 Lifecycle Rules) — рекомендовано 30 дней hot + 90 дней
+cold (Glacier / B2 Archive).
+
+**Бюджет.** DB-дамп ~50–500 MB gzipped при малой базе; 30-дневный retention
+= <$1/мес на любом провайдере (S3 Standard IA, B2 — ~$0.01/GB/мес).
+
+**DR drill.** Минимум раз в квартал — полный прогон restore из offsite. См.
+§6.10.
 
 ---
 
