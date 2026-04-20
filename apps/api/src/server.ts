@@ -7,6 +7,7 @@ import cron from "node-cron";
 import { runIngestion } from "./lib/funding/ingestJob.js";
 import { prisma, startPoolMetricsLogging, stopPoolMetricsLogging } from "./lib/prisma.js";
 import { startPeriodicReconciler } from "./lib/periodicReconciler.js";
+import { validateBybitEnv } from "./lib/bybitEnv.js";
 import { logger } from "./lib/logger.js";
 import { cleanupExpiredRefreshTokens } from "./routes/auth.js";
 
@@ -28,6 +29,7 @@ function validateEnv() {
 
 async function main() {
   validateEnv();
+  validateBybitEnv();
   const app = await buildApp();
 
   try {

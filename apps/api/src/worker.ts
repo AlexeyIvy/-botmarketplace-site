@@ -15,6 +15,7 @@ import { startBotWorker } from "./lib/botWorker.js";
 import { prisma } from "./lib/prisma.js";
 import { logger } from "./lib/logger.js";
 import { startPeriodicReconciler } from "./lib/periodicReconciler.js";
+import { validateBybitEnv } from "./lib/bybitEnv.js";
 
 const workerLog = logger.child({ module: "worker-main" });
 
@@ -33,6 +34,7 @@ function validateEnv() {
 
 async function main() {
   validateEnv();
+  validateBybitEnv();
   workerLog.info("Starting standalone bot worker process");
 
   const stopWorker = startBotWorker();
