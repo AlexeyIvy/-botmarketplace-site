@@ -12,6 +12,11 @@ Entries get promoted to a versioned section on release (see
 
 ### Added
 
+- Lab: "Preview 24h" button in the Build context bar. Opens a popover with
+  trades / win rate / max drawdown / net PnL + an inline SVG equity
+  sparkline for the most recently compiled DSL. Enabled after a
+  successful compile; surfaces RFC 9457 validation errors inline and
+  reports data-freshness lag via the response's `dataAgeMs`. (§5.12)
 - `deploy/rollback.sh` with auto-detected previous tag, `--dry-run`,
   `--to`, `--yes`; warns on forward-only DB migrations. RUNBOOK §3.5.
   (§5.1, #277)

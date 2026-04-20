@@ -6,6 +6,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Group, Panel, Separator } from "react-resizable-panels";
 import { useLabGraphStore } from "./useLabGraphStore";
 import { compileGraph, patchGraphVersion, setGraphVersionBaseline } from "./labApi";
+import { PreviewPanel } from "./PreviewPanel";
 
 // ---------------------------------------------------------------------------
 // Tab definitions — order matches spec
@@ -369,6 +370,11 @@ function LabContextBar({ activeTab }: { activeTab: TabId }) {
           >
             {compileLabel}
           </button>
+          <PreviewPanel
+            dslJson={(lastCompileResult?.compiledDsl as Record<string, unknown> | undefined) ?? null}
+            symbol="BTCUSDT"
+            disabled={compileState !== "success" || !lastCompileResult}
+          />
         </div>
       )}
 
