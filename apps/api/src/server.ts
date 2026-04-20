@@ -1,3 +1,6 @@
+import { initSentry } from "./lib/sentry.js";
+initSentry(); // Must run before any other imports that emit errors
+
 import { buildApp } from "./app.js";
 import { startBotWorker } from "./lib/botWorker.js";
 import cron from "node-cron";

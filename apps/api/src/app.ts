@@ -7,6 +7,7 @@ import { healthzRoutes } from "./routes/healthz.js";
 import { readyzRoutes } from "./routes/readyz.js";
 import { metricsRoutes } from "./routes/metrics.js";
 import { httpRequestDurationSeconds } from "./lib/metrics.js";
+import { Sentry, isSentryEnabled } from "./lib/sentry.js";
 import { authRoutes } from "./routes/auth.js";
 import { strategyRoutes } from "./routes/strategies.js";
 import { botRoutes } from "./routes/bots.js";
@@ -154,6 +155,13 @@ export async function buildApp() {
       return;
     }
     request.log.error({ err: error, reqId: request.id }, "Unhandled error");
+    if (isSentryEnabled()) {
+      Sentry.withScope((scope) => {
+        scope.setTag("reqId", request.id);
+        scope.setContext("request", { method: request.method, url: request.url });
+        Sentry.captureException(error);
+      });
+    }
     void reply.status(500).send({
       type: "about:blank",
       title: "Internal Server Error",
