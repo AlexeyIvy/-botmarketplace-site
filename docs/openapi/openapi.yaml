@@ -1118,6 +1118,74 @@ paths:
         "404":
           $ref: "#/components/responses/Problem"
 
+  /lab/preview:
+    post:
+      operationId: labPreviewCreate
+      summary: Synchronous DSL dry-run against the last N hours of candles
+      description: >
+        Stateless preview that runs a compiled Strategy DSL against the most
+        recent MarketCandle data (last N hours, default 24, max 168).
+        Reuses the pure backtest engine; no BotRun, no exchange call, no DB
+        writes.
+
+
+        Body must supply exactly one of `dslJson` (Build-tab flow, pre-persist)
+        or `strategyVersionId` (Test-tab flow, workspace-scoped). When
+        `strategyVersionId` is used, `symbol` defaults to the strategy's own
+        symbol unless overridden.
+
+
+        Rate limited to 5 req/min per IP. Introduced in §5.12.
+      parameters:
+        - $ref: "#/components/parameters/XWorkspaceId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PreviewRequest"
+      responses:
+        "200":
+          description: Report + meta (data freshness, candle count, range)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PreviewResponse"
+        "400":
+          description: DSL validation error / both-or-neither / hours out of range / symbol missing
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "401":
+          $ref: "#/components/responses/Problem"
+        "403":
+          $ref: "#/components/responses/Problem"
+        "404":
+          description: strategyVersionId not found or belongs to another workspace
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "409":
+          description: Insufficient candles for the requested window (< 2)
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "422":
+          description: DSL evaluation failed (bad indicator ref, etc.)
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "429":
+          description: Rate limit exceeded (5 req/min per IP)
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+
   /signals/webhook/{strategyId}:
     post:
       operationId: signalWebhook
@@ -1771,3 +1839,89 @@ components:
           type: string
           default: "unknown"
           description: COMMIT_SHA of the API server at the time the backtest ran.
+
+    PreviewRequest:
+      type: object
+      additionalProperties: false
+      description: >
+        Preview payload. Exactly one of `dslJson` or `strategyVersionId` must
+        be provided. See POST /lab/preview.
+      properties:
+        dslJson:
+          type: object
+          description: >
+            Raw compiled Strategy DSL (Build-tab flow, pre-persist). Validated
+            server-side via the same validator used by /strategies/validate.
+          additionalProperties: true
+        strategyVersionId:
+          type: string
+          description: >
+            ID of a persisted StrategyVersion (workspace-scoped). Server
+            resolves the DSL from the DB; 404 for cross-tenant ids.
+        symbol:
+          type: string
+          minLength: 1
+          description: >
+            Market symbol (e.g. "BTCUSDT"). Required with `dslJson`; optional
+            with `strategyVersionId` (defaults to the strategy's own symbol).
+        hours:
+          type: number
+          minimum: 0
+          exclusiveMinimum: true
+          maximum: 168
+          default: 24
+          description: Lookback window in hours. Capped at 168 (1 week).
+
+    PreviewResponse:
+      type: object
+      additionalProperties: false
+      required: [report, meta]
+      properties:
+        report:
+          type: object
+          required: [trades, wins, winrate, totalPnlPct, maxDrawdownPct, candles, tradeLog]
+          description: >
+            Same shape as BacktestView.reportJson. feeBps/slippageBps are
+            fixed at 0 for preview; fillAt is CLOSE.
+          properties:
+            trades: { type: integer, minimum: 0 }
+            wins: { type: integer, minimum: 0 }
+            winrate: { type: number, minimum: 0, maximum: 1 }
+            totalPnlPct: { type: number }
+            maxDrawdownPct: { type: number, minimum: 0 }
+            candles: { type: integer, minimum: 0 }
+            tradeLog:
+              type: array
+              items:
+                type: object
+                additionalProperties: true
+          additionalProperties: true
+        meta:
+          type: object
+          required: [symbol, exchange, interval, hours, candleCount, fromTsMs, toTsMs, dataAgeMs, engineVersion]
+          properties:
+            symbol: { type: string }
+            exchange: { type: string }
+            interval:
+              type: string
+              enum: [M1, M5, M15, M30, H1, H4, D1]
+              description: Preview uses M15 by default (matches the default compile timeframe).
+            hours: { type: number }
+            candleCount: { type: integer, minimum: 2 }
+            fromTsMs:
+              type: integer
+              format: int64
+              description: openTime of the earliest candle in the window (ms since epoch).
+            toTsMs:
+              type: integer
+              format: int64
+              description: openTime of the latest candle in the window (ms since epoch).
+            dataAgeMs:
+              type: integer
+              minimum: 0
+              description: >
+                now − toTsMs. Surfaces ingestion lag to the caller so the UI
+                can display "data up to <timestamp>".
+            engineVersion:
+              type: string
+              description: COMMIT_SHA of the API server that ran the preview.
