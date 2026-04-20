@@ -17,7 +17,12 @@
 import { Prisma } from "@prisma/client";
 import { prisma } from "./prisma.js";
 import { logger } from "./logger.js";
-import { stalePendingCancelledTotal } from "./metrics.js";
+import { stalePendingCancelledTotal, orphanLeasesReclaimedTotal } from "./metrics.js";
+
+const WORKER_ID = `worker-${process.pid}`;
+
+/** A lease is considered orphaned this long after expiration. */
+export const ORPHAN_GRACE_MS = parseInt(process.env.ORPHAN_GRACE_MS ?? "", 10) || 60_000;
 
 const reconcilerLog = logger.child({ module: "periodicReconciler" });
 
@@ -101,13 +106,50 @@ export async function sweepStalePendingIntents(): Promise<number> {
 }
 
 /**
+ * Reclaim orphaned leases (§4.5.3 / docs/37).
+ *
+ * A lease is orphaned when its owning worker died without releasing it:
+ * `leaseUntil` is in the past by more than ORPHAN_GRACE_MS. This function
+ * atomically transfers such leases to the current worker so it can take
+ * over polling, instead of leaving the run stuck pointing at a dead PID.
+ *
+ * Uses a single conditional updateMany so concurrent workers can't both
+ * claim the same run — the first one wins, the rest see count=0.
+ */
+export async function reclaimOrphanedLeases(): Promise<number> {
+  const cutoff = new Date(Date.now() - ORPHAN_GRACE_MS);
+  const newLeaseUntil = new Date(Date.now() + 30_000);
+
+  const result = await prisma.botRun.updateMany({
+    where: {
+      state: "RUNNING",
+      leaseUntil: { lt: cutoff },
+      NOT: { leaseOwner: WORKER_ID },
+    },
+    data: { leaseOwner: WORKER_ID, leaseUntil: newLeaseUntil },
+  });
+
+  if (result.count > 0) {
+    orphanLeasesReclaimedTotal.inc(result.count);
+    reconcilerLog.warn(
+      { reclaimed: result.count, workerId: WORKER_ID, graceMs: ORPHAN_GRACE_MS },
+      "reclaimed orphaned leases from dead workers",
+    );
+  }
+  return result.count;
+}
+
+/**
  * Start the periodic reconciliation sweep. Returns a stop function.
  * Safe to call from any process that has DB access (server / worker).
  */
 export function startPeriodicReconciler(): () => void {
   const run = () => {
     sweepStalePendingIntents().catch((err) => {
-      reconcilerLog.error({ err }, "periodic reconciler error (non-fatal)");
+      reconcilerLog.error({ err }, "stale-pending sweep error (non-fatal)");
+    });
+    reclaimOrphanedLeases().catch((err) => {
+      reconcilerLog.error({ err }, "orphan-lease reclaim error (non-fatal)");
     });
   };
   const timer = setInterval(run, STALE_PENDING_INTERVAL_MS);

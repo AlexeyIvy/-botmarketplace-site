@@ -28,6 +28,12 @@ export const stalePendingCancelledTotal = new Counter({
   registers: [register],
 });
 
+export const orphanLeasesReclaimedTotal = new Counter({
+  name: "botmarket_orphan_leases_reclaimed_total",
+  help: "BotRun leases reclaimed from dead workers by the periodic reconciler.",
+  registers: [register],
+});
+
 export const httpRequestDurationSeconds = new Histogram({
   name: "botmarket_http_request_duration_seconds",
   help: "HTTP request duration in seconds.",
