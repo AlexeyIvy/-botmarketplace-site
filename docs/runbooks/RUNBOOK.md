@@ -263,8 +263,8 @@ curl -v https://botmarketplace.store/api/v1/auth/login \
 # Проверить текущий ключ в .env
 grep SECRET_ENCRYPTION_KEY /opt/-botmarketplace-site/.env
 
-# Решение: пересоздать exchange connections с текущим ключом
-# (Через UI: удалить и создать заново)
+# Правильный путь ротации ключа — см. §11.1 (dual-key rotation).
+# Если ключ уже перепутан и backup свежее — restore + ротация.
 ```
 
 ### 6.7 Smoke tests падают на worker-related проверках
@@ -277,6 +277,146 @@ BOT_WORKER_SECRET="$BOT_WORKER_SECRET" bash deploy/smoke-test.sh
 # Или запустить без проверки worker secret (dev mode):
 # Убрать BOT_WORKER_SECRET из окружения — тест переключится в dev-режим
 ```
+
+### 6.8 Бот "завис" в RUNNING без прогресса
+
+**Симптом.** `BotRun.state=RUNNING`, последний `BotEvent` старше 10–15 минут, но стратегия должна была генерировать сигналы. Потенциальные причины (по частоте): stuck PENDING intents, worker wedged (не вызывает poll), lease сожжён мёртвым воркером, DSL `enabled: false` выставлен случайно, все сигналы отфильтрованы safety guards.
+
+**Диагностика:**
+
+```bash
+# 1. Проверить метрики
+curl -s http://127.0.0.1:4000/metrics | grep -E 'botmarket_intent|stale_pending|orphan_leases'
+
+# 2. Найти run
+RUN_ID=<uuid>
+
+# 3. События последних 30 мин
+psql "$DATABASE_URL" -c "
+  SELECT \"type\", \"payloadJson\", ts
+  FROM \"BotEvent\"
+  WHERE \"botRunId\" = '$RUN_ID'
+  ORDER BY ts DESC LIMIT 20;
+"
+
+# 4. PENDING intents (если периодический reconciler ещё не успел сработать)
+psql "$DATABASE_URL" -c "
+  SELECT id, type, side, state, \"createdAt\"
+  FROM \"BotIntent\"
+  WHERE \"botRunId\" = '$RUN_ID' AND state = 'PENDING'
+  ORDER BY \"createdAt\" DESC LIMIT 10;
+"
+
+# 5. Lease — старше 60 сек = orphan (см. §4.5.3)
+psql "$DATABASE_URL" -c "
+  SELECT id, state, \"leaseOwner\", \"leaseUntil\",
+         EXTRACT(EPOCH FROM (NOW() - \"leaseUntil\")) AS lease_age_s
+  FROM \"BotRun\" WHERE id = '$RUN_ID';
+"
+
+# 6. Worker poll жив? (последний poll должен быть < 8 сек назад)
+journalctl -u botmarket-api --since "5 minutes ago" | grep "botWorker" | tail -5
+journalctl -u botmarket-worker --since "5 minutes ago" | tail -5
+```
+
+**Действия:**
+
+1. Если `stale_pending_cancelled_total` растёт — периодический reconciler уже работает, подожди 5 мин до следующего sweep, либо запусти вручную рестартом API.
+2. Если `leaseUntil` старый и `leaseOwner` не текущий PID воркера — orphan; periodicReconciler переклеит на следующем тике (≤5 мин).
+3. Если poll loop не виден в логах > 1 мин — воркер wedged. Рестарт: `systemctl restart botmarket-worker` (или `botmarket-api` для embedded). `stopWorker()` сам освободит lease (§4.5.1), новый воркер подхватит.
+4. Безопасно остановить конкретный run (через UI или API):
+   ```bash
+   curl -X POST "http://localhost:4000/api/v1/runs/$RUN_ID/stop" \
+     -H "Authorization: Bearer $TOKEN" \
+     -H "X-Workspace-Id: $WS_ID"
+   ```
+
+### 6.9 Exchange API вернул 5xx / недоступен
+
+**Симптом.** Счётчик `botmarket_intent_failed_total` резко растёт; в логах — `errorClass=transient` или `classification.retryable=true`; `/readyz` остаётся `ok` (проблема снаружи, не у нас).
+
+**Что ожидать:**
+
+- **Demo**: ничего — все intents симулируются без обращения к бирже.
+- **Live**: intent executor делает до `MAX_INTENT_RETRIES` (default 3) повторов с backoff. После — intent переходит в `FAILED` с `errorClass=transient`, `deadLetterReason` в `metaJson`.
+- Safety guard `pauseOnError` (§4.1 DSL, по умолчанию threshold 3 подряд FAILED) автоматически переведёт run в `STOPPING`, чтобы не спамить биржу.
+
+**Когда вмешиваться:**
+
+- Exchange down > 10 минут и счётчик `botmarket_intent_failed_total` растёт на десятки — мониторить, ничего не делать: safety guards сработают.
+- Exchange down > 1 часа — остановить live runs через UI, ждать восстановления, затем перезапустить вручную.
+- Exchange сам вернул "Invalid API key" на ранее рабочих ключах — это не outage, это revoke/истекший ключ. Пользователь обновляет в UI.
+
+**Диагностика:**
+
+```bash
+# Сколько FAILED за последний час
+psql "$DATABASE_URL" -c "
+  SELECT DATE_TRUNC('minute', \"updatedAt\") AS t,
+         COUNT(*) FILTER (WHERE state='FAILED') AS failed,
+         COUNT(*) FILTER (WHERE state='PLACED') AS placed
+  FROM \"BotIntent\"
+  WHERE \"updatedAt\" > NOW() - INTERVAL '1 hour'
+  GROUP BY 1 ORDER BY 1 DESC;
+"
+
+# Классификация ошибок (смотри metaJson.errorClass)
+psql "$DATABASE_URL" -c "
+  SELECT \"metaJson\"->>'errorClass' AS class, COUNT(*)
+  FROM \"BotIntent\"
+  WHERE state='FAILED' AND \"updatedAt\" > NOW() - INTERVAL '1 hour'
+  GROUP BY 1;
+"
+
+# Статус биржи напрямую (bybit)
+curl -s https://api.bybit.com/v5/market/time | jq .
+```
+
+Долгоиграющие live runs можно временно перевести в `demo` (через UI: Exchange Connection выбрать demo) — сигналы продолжат генерироваться, но без реальных ордеров.
+
+### 6.10 DR drill (disaster recovery дрилл)
+
+**Зачем.** §4.4 аудита: restore-процедура из backup должна быть проверена end-to-end, не только документирована. Раз в квартал.
+
+**Процедура (в staging, не в prod!):**
+
+1. **Поднять staging Postgres** отдельный от prod (docker compose или отдельный VPS):
+   ```bash
+   docker run -d --name botmarket-dr -p 5433:5432 \
+     -e POSTGRES_USER=botmarket -e POSTGRES_PASSWORD=drill \
+     -e POSTGRES_DB=botmarket postgres:15
+   ```
+2. **Взять свежий prod-dump** (не дольше 24ч):
+   ```bash
+   LATEST=$(ls -t /var/backups/botmarketplace/*.sql.gz | head -1)
+   echo "restoring: $LATEST"
+   ```
+3. **Restore:**
+   ```bash
+   gunzip -c "$LATEST" | PGPASSWORD=drill psql -h localhost -p 5433 -U botmarket -d botmarket
+   ```
+4. **Быстрая валидация** схемы и данных:
+   ```bash
+   PGPASSWORD=drill psql -h localhost -p 5433 -U botmarket -d botmarket -c "
+     SELECT COUNT(*) AS users FROM \"User\";
+     SELECT COUNT(*) AS bots FROM \"Bot\";
+     SELECT COUNT(*) AS runs FROM \"BotRun\";
+     SELECT MAX(\"createdAt\") AS latest_bot FROM \"Bot\";
+   "
+   ```
+   Счётчики должны быть близкими к prod; `latest_bot` — не старше prod последних креатов.
+5. **Опционально:** поднять API/worker против этой БД и прогнать `deploy/smoke-test.sh`:
+   ```bash
+   DATABASE_URL="postgresql://botmarket:drill@localhost:5433/botmarket" \
+     BASE_URL="http://localhost:4000" bash deploy/smoke-test.sh
+   ```
+6. **Teardown:**
+   ```bash
+   docker rm -f botmarket-dr
+   ```
+7. **Записать результат** в `CHANGELOG.md` (`[Unreleased] ### Docs — DR drill executed YYYY-MM-DD, result: ok / issues`).
+
+**Красные флаги.** Если (1) backup файл повреждён, (2) restore падает с ошибками, (3) счётчики после restore отличаются от prod на > 10% — это блокер, разбираться до следующего prod-деплоя. Если backup старше 48ч — перенастроить cron (должен быть ежедневно, см. `botmarket-backup.timer`).
 
 ---
 
