@@ -935,4 +935,76 @@ describe("POST /api/v1/lab/preview", () => {
     expect(results.filter((s) => s === 200).length).toBeLessThanOrEqual(5);
     expect(results).toContain(429);
   });
+
+  // ── strategyVersionId path (Test-tab flow) ────────────────────────────────
+
+  it("resolves DSL from strategyVersionId and uses strategy.symbol by default", async () => {
+    mockStrategyVersions["sv-preview-1"] = {
+      id: "sv-preview-1",
+      strategyId: "strat-preview-1",
+      dslJson: dummyDsl,
+      strategy: { workspaceId: WS_ID, symbol: "ETHUSDT" },
+    };
+
+    const res = await app.inject({
+      method: "POST", url: "/api/v1/lab/preview",
+      headers: previewHeaders(),
+      payload: { strategyVersionId: "sv-preview-1" },
+    });
+    expect(res.statusCode).toBe(200);
+    expect(res.json().meta.symbol).toBe("ETHUSDT");
+  });
+
+  it("allows overriding the strategy's symbol via body", async () => {
+    mockStrategyVersions["sv-preview-2"] = {
+      id: "sv-preview-2",
+      strategyId: "strat-preview-2",
+      dslJson: dummyDsl,
+      strategy: { workspaceId: WS_ID, symbol: "ETHUSDT" },
+    };
+
+    const res = await app.inject({
+      method: "POST", url: "/api/v1/lab/preview",
+      headers: previewHeaders(),
+      payload: { strategyVersionId: "sv-preview-2", symbol: "SOLUSDT" },
+    });
+    expect(res.statusCode).toBe(200);
+    expect(res.json().meta.symbol).toBe("SOLUSDT");
+  });
+
+  it("returns 404 when strategyVersion belongs to another workspace", async () => {
+    mockStrategyVersions["sv-other"] = {
+      id: "sv-other",
+      strategyId: "strat-other",
+      dslJson: dummyDsl,
+      strategy: { workspaceId: "ws-different", symbol: "BTCUSDT" },
+    };
+
+    const res = await app.inject({
+      method: "POST", url: "/api/v1/lab/preview",
+      headers: previewHeaders(),
+      payload: { strategyVersionId: "sv-other" },
+    });
+    expect(res.statusCode).toBe(404);
+  });
+
+  it("returns 400 when neither dslJson nor strategyVersionId provided", async () => {
+    const res = await app.inject({
+      method: "POST", url: "/api/v1/lab/preview",
+      headers: previewHeaders(),
+      payload: { symbol: "BTCUSDT" },
+    });
+    expect(res.statusCode).toBe(400);
+    expect(res.json().detail).toContain("dslJson or strategyVersionId");
+  });
+
+  it("returns 400 when both dslJson and strategyVersionId provided", async () => {
+    const res = await app.inject({
+      method: "POST", url: "/api/v1/lab/preview",
+      headers: previewHeaders(),
+      payload: { dslJson: dummyDsl, strategyVersionId: "sv-xyz", symbol: "BTCUSDT" },
+    });
+    expect(res.statusCode).toBe(400);
+    expect(res.json().errors[0].message).toContain("mutually exclusive");
+  });
 });

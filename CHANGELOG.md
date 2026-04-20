@@ -23,6 +23,13 @@ Entries get promoted to a versioned section on release (see
   sparkline for the most recently compiled DSL. Enabled after a
   successful compile; surfaces RFC 9457 validation errors inline and
   reports data-freshness lag via the response's `dataAgeMs`. (§5.12)
+- Lab: "Preview 24h" button next to "Run Backtest" in the Test tab,
+  letting researchers sanity-check a saved `StrategyVersion` against
+  the last 24h before committing to a full dataset backtest — useful
+  for A/B comparisons of variants. `/lab/preview` now also accepts
+  `strategyVersionId` (workspace-scoped) as an alternative to an
+  inline `dslJson`; `symbol` defaults to the strategy's own symbol
+  when not overridden. (§5.12)
 - `deploy/rollback.sh` with auto-detected previous tag, `--dry-run`,
   `--to`, `--yes`; warns on forward-only DB migrations. RUNBOOK §3.5.
   (§5.1, #277)
