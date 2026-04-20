@@ -410,6 +410,21 @@ export default function SettingsPage() {
           </div>
         </div>
       </section>
+
+      {/* Operator tools */}
+      <section style={card}>
+        <h2 style={sectionTitle}>Operator tools</h2>
+        <div style={field}>
+          <span style={fieldValue}>Dead-letter queue</span>
+          <a href="/operator/dlq" style={{ ...hint, marginLeft: "auto", textDecoration: "underline" }}>
+            /operator/dlq →
+          </a>
+        </div>
+        <div style={{ ...hint, marginTop: 6 }}>
+          Inspect FAILED bot intents across the workspace and retry them manually
+          (see RUNBOOK §6.8).
+        </div>
+      </section>
     </div>
   );
 }
