@@ -153,4 +153,111 @@ export async function intentRoutes(app: FastifyInstance) {
 
     return reply.send(updated);
   });
+
+  // ── GET /intents ── workspace-scoped list (DLQ / operator UI, §5.6) ──────
+  app.get<{
+    Querystring: { state?: IntentState; limit?: string; offset?: string };
+  }>("/intents", { onRequest: [app.authenticate] }, async (request, reply) => {
+    const workspace = await resolveWorkspace(request, reply);
+    if (!workspace) return;
+
+    const limit = Math.min(parseInt(request.query?.limit ?? "50", 10) || 50, 200);
+    const offset = Math.max(parseInt(request.query?.offset ?? "0", 10) || 0, 0);
+    const state = request.query?.state;
+
+    const where: Prisma.BotIntentWhereInput = {
+      botRun: { workspaceId: workspace.id },
+      ...(state ? { state } : {}),
+    };
+
+    const [items, total] = await Promise.all([
+      prisma.botIntent.findMany({
+        where,
+        orderBy: { createdAt: "desc" },
+        take: limit,
+        skip: offset,
+        include: {
+          botRun: {
+            select: {
+              id: true,
+              symbol: true,
+              state: true,
+              bot: { select: { id: true, name: true, symbol: true } },
+            },
+          },
+        },
+      }),
+      prisma.botIntent.count({ where }),
+    ]);
+
+    return reply.send({ items, total, limit, offset });
+  });
+
+  // ── POST /intents/:id/retry ── manual retry of a FAILED intent (§5.6) ────
+  app.post<{ Params: { id: string } }>(
+    "/intents/:id/retry",
+    { onRequest: [app.authenticate] },
+    async (request, reply) => {
+      const workspace = await resolveWorkspace(request, reply);
+      if (!workspace) return;
+
+      const intent = await prisma.botIntent.findUnique({
+        where: { id: request.params.id },
+        include: { botRun: { select: { id: true, workspaceId: true } } },
+      });
+
+      if (!intent || intent.botRun.workspaceId !== workspace.id) {
+        return problem(reply, 404, "Not Found", "Intent not found");
+      }
+      if (intent.state !== "FAILED") {
+        return problem(
+          reply,
+          409,
+          "Conflict",
+          `Only FAILED intents can be retried (current state: ${intent.state})`,
+        );
+      }
+
+      const prevMeta =
+        intent.metaJson && typeof intent.metaJson === "object"
+          ? (intent.metaJson as Record<string, unknown>)
+          : {};
+      const updated = await prisma.botIntent.update({
+        where: { id: intent.id },
+        data: {
+          state: "PENDING",
+          metaJson: {
+            ...prevMeta,
+            manualRetryAt: new Date().toISOString(),
+            previousState: "FAILED",
+          } as Prisma.InputJsonValue,
+        },
+        include: {
+          botRun: {
+            select: {
+              id: true,
+              symbol: true,
+              state: true,
+              bot: { select: { id: true, name: true, symbol: true } },
+            },
+          },
+        },
+      });
+
+      await prisma.botEvent.create({
+        data: {
+          botRunId: intent.botRun.id,
+          type: "intent_manually_retried",
+          payloadJson: {
+            intentId: intent.intentId,
+            orderLinkId: intent.orderLinkId,
+            retryCount: intent.retryCount,
+            at: new Date().toISOString(),
+          } as Prisma.InputJsonValue,
+        },
+      });
+
+      return reply.send(updated);
+    },
+  );
 }

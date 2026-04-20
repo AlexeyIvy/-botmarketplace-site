@@ -331,6 +331,22 @@ journalctl -u botmarket-worker --since "5 minutes ago" | tail -5
      -H "X-Workspace-Id: $WS_ID"
    ```
 
+**DLQ UI (§5.6).** Для ручного разбора FAILED intents — страница `/operator/dlq`
+в web-UI (ссылка также доступна из Settings → Operator tools). Показывает
+список с фильтром по state, деталями `metaJson` (включая `error`, `errorClass`,
+`deadLetterReason`), pagination; кнопка **Retry** переводит FAILED → PENDING,
+воркер подхватит на следующем тике. Эквиваленты через API:
+
+```bash
+# Список FAILED в воркспейсе
+curl -s -H "Authorization: Bearer $TOKEN" -H "X-Workspace-Id: $WS_ID" \
+  "http://localhost:4000/api/v1/intents?state=FAILED&limit=50"
+
+# Manual retry
+curl -s -X POST -H "Authorization: Bearer $TOKEN" -H "X-Workspace-Id: $WS_ID" \
+  "http://localhost:4000/api/v1/intents/$INTENT_ID/retry"
+```
+
 ### 6.9 Exchange API вернул 5xx / недоступен
 
 **Симптом.** Счётчик `botmarket_intent_failed_total` резко растёт; в логах — `errorClass=transient` или `classification.retryable=true`; `/readyz` остаётся `ok` (проблема снаружи, не у нас).
