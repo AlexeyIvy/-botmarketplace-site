@@ -92,6 +92,7 @@ import {
   enforceErrorPause as enforceErrorPauseExtracted,
   processIntents as processIntentsExtracted,
 } from "./worker/tickProcessor.js";
+import { intentFilledTotal, intentFailedTotal } from "./metrics.js";
 
 const workerLog = logger.child({ module: "botWorker" });
 
@@ -1129,6 +1130,11 @@ async function reconcilePlacedIntents(): Promise<void> {
             metaJson: updateMeta as Prisma.InputJsonValue,
           },
         });
+
+        if (newState !== intent.state) {
+          if (newState === "FILLED") intentFilledTotal.inc();
+          else if (newState === "FAILED") intentFailedTotal.inc();
+        }
 
         if (fillDelta > 0 || newState !== intent.state) {
           await prisma.botEvent.create({

@@ -19,6 +19,7 @@ import {
 import { getInstrument } from "../exchange/instrumentCache.js";
 import { normalizeOrder } from "../exchange/normalizer.js";
 import { classifyExecutionError } from "../errorClassifier.js";
+import { intentFilledTotal, intentFailedTotal } from "../metrics.js";
 import type { Logger } from "pino";
 
 /** Max retries for transient intent failures before dead-lettering (Task #22). */
@@ -77,6 +78,7 @@ export async function executeIntent(intent: IntentRecord, parentLog: Logger): Pr
         where: { id: intent.id },
         data: { state: "FILLED", metaJson: meta as Prisma.InputJsonValue },
       });
+      intentFilledTotal.inc();
       await prisma.botEvent.create({
         data: {
           botRunId: botRun.id,
@@ -250,6 +252,7 @@ async function handleIntentError(
       where: { id: intent.id },
       data: { state: "FAILED", metaJson: meta as Prisma.InputJsonValue },
     });
+    intentFailedTotal.inc();
     await prisma.botEvent.create({
       data: {
         botRunId: botRun.id,
