@@ -82,13 +82,14 @@ type FoldConfig = {
    ```
 2. Реализовать `split(candles: Candle[], cfg: FoldConfig): Fold[]`:
    - Валидация: `isBars > 0`, `oosBars > 0`, `step > 0`, `candles.length ≥ isBars + oosBars`. Иначе бросать `Error` с понятным сообщением.
+   - **Не валидировать** `step >= oosBars` (overlapping OOS). Перекрытие — методологически неоптимально (одна сделка может попасть в OOS двух соседних fold-ов и исказить aggregate), но в некоторых research-сценариях допустимо. Решение: разрешить любые `step > 0`, при `step < oosBars` возвращать дополнительное warning из endpoint-а 48-T5 (поле `warnings: string[]` в response), сам `split` остаётся pure и не имеет понятия о "warning-канале". Фиксировать соглашение в JSDoc функции.
    - Для `i = 0, 1, 2, ...`:
      - `oosStart = isBars + i * step` (для anchored) ИЛИ `oosStart = isBars + i * step` с `isStart = i * step` (для rolling).
      - `isStart = anchored ? 0 : i * step`.
      - `oosEnd = oosStart + oosBars`.
      - Если `oosEnd > candles.length` → break.
      - Создать срезы (использовать `Array.prototype.slice`, не мутировать исходный массив).
-     - Заполнить `isRange.fromTsMs/toTsMs` из `candles[isStart].openTimeMs` и `candles[oosEnd-1].openTimeMs` (то же для OOS).
+     - Заполнить `isRange.fromTsMs/toTsMs` из `candles[isStart].openTime` и `candles[oosEnd-1].openTime` (то же для OOS). Поле на TS-интерфейсе `Candle` (`apps/api/src/lib/bybitCandles.ts:85-86`) называется `openTime: number; // ms` — значение уже в миллисекундах, так что отдельной конверсии не нужно. **Не путать с Prisma-полем** `MarketCandle.openTimeMs` — это другой слой; конверсия `openTimeMs → openTime` уже сделана в `apps/api/src/routes/lab.ts:1291-1292`.
 3. Обеспечить, что для anchored все fold-ы имеют общий начальный индекс 0; для rolling — одинаковую длину IS.
 4. Документировать в JSDoc формулу для каждого режима — это критично для воспроизводимости.
 
@@ -135,6 +136,7 @@ type FoldConfig = {
    - Получить `folds = split(candles, foldCfg)` (через 48-T1).
    - Для каждого fold-а: `isReport = runBacktest(fold.isSlice, dslJson, opts, undefined)`, затем `oosReport = runBacktest(fold.oosSlice, dslJson, opts, undefined)` — два независимых вызова.
    - `mtfContext` оставляем `undefined` в первой версии. Поддержка MTF в walk-forward — отдельная follow-up задача (требует нарезки MTF-контекста синхронно с базовыми свечами).
+   - **Pre-flight rejection MTF-стратегий**: до запуска `split` валидировать `dslJson` — если найден хотя бы один индикатор с непустым `sourceTimeframe` (`apps/api/src/lib/dslEvaluator.ts:101`), возвращать 400 на эндпоинте 48-T5 с сообщением `"Walk-forward для MTF-стратегий не реализован: индикатор '<type>' использует sourceTimeframe='<tf>'. См. follow-up к docs/48."`. Это явный safety-gate против silent degraded-результата (без MTF-контекста индикатор фоллбэчится на primary TF и даёт другие сигналы).
    - После каждого fold-а вызывать `onProgress?.(foldIndex + 1, folds.length)` для прогресса в БД-обёртке (48-T5).
 3. `opts.fillAt` пробрасывается как есть; до закрытия `docs/46-T1` поле может отсутствовать в типе и не передаваться.
 4. Обеспечить детерминизм: порядок fold-ов фиксирован (48-T1), `runBacktest` сам по себе детерминирован (по `docs/44`).
@@ -239,7 +241,10 @@ type FoldConfig = {
      @@index([strategyVersionId])
    }
    ```
-3. Связи (`workspace`, `strategyVersion`, `dataset`) — определить так же, как в `BacktestSweep`. Если у этих моделей есть `relation`-поля на родительские стороны — добавить аналогичные (например, `WorkspaceRelation` `walkForwardRuns WalkForwardRun[]`).
+3. Связи — **зеркалить точный паттерн `BacktestSweep`** (`apps/api/prisma/schema.prisma:686–708`):
+   - `workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)` в самой `WalkForwardRun`.
+   - `walkForwardRuns WalkForwardRun[]` добавить в model `Workspace` (line 44, рядом с `backtestSweeps BacktestSweep[]` line 61).
+   - `strategyVersionId` и `datasetId` — простые foreign-key поля **без `@relation`**. Это сознательный выбор `BacktestSweep` (там у них тоже нет inverse relation на `StrategyVersion` / `MarketDataset`); удаление родительских записей не каскадится в research-логи.
 4. Размер `foldsJson`: per-fold отчёт включает `tradeLog`. Для 20 fold-ов с сотнями сделок JSON-объект может стать большим. **Решение для первой версии:** хранить в `foldsJson` усечённую форму — без `tradeLog` каждого fold-а, только метрики (`pnlPct`, `winRate`, `maxDrawdownPct`, `tradeCount`, `sharpe`, ranges, foldIndex). Полный `tradeLog` доступен только в момент исполнения и не сохраняется. Если в будущем понадобится — отдельная задача.
 5. Сгенерировать миграцию (`prisma migrate dev --name add_walk_forward_run`), убедиться, что она additive: только `CREATE TABLE` и `CREATE INDEX`, никаких изменений существующих таблиц.
 
@@ -276,7 +281,7 @@ type FoldConfig = {
    };
    ```
 2. `POST /lab/backtest/walk-forward`:
-   - Те же rate limits и concurrency, что у sweep (5/min, max 2 concurrent per workspace) — переиспользовать тот же middleware/счётчик.
+   - Rate limit: `5/min per workspace` — отдельный счётчик от sweep (свой Fastify rate-limit instance). Concurrency: **shared с sweep** — общая capacity `2 одновременно (sweep + walk-forward) per workspace`. Это намеренно: и sweep, и walk-forward — heavy in-process backtest jobs, без общего лимита один пользователь сможет загрузить event loop четырьмя параллельными запусками. Реализация: вынести существующий sweep-counter (`apps/api/src/routes/lab.ts` рядом со sweep handler-ом, `строка 902`) в shared workspace-level Map<string, number> и инкрементировать/декрементировать обоими handler-ами. Превышение → 429 с сообщением `"max 2 concurrent backtest jobs (sweep+walk-forward) per workspace"`.
    - Валидировать `fold`: позитивные числа, `isBars + oosBars ≤ candles.length` (после загрузки candles).
    - **Pre-flight foldCount check:** загрузить candles один раз (то же `findMany` что и у sweep, `apps/api/src/routes/lab.ts:1281–1298`), вызвать `split(candles, fold)`, проверить `folds.length ≤ 20`. Если больше или меньше 1 — 400 с понятным сообщением.
    - Создать `WalkForwardRun` со `status: PENDING`, `foldCount = folds.length`, `foldConfigJson = fold`, `progress = 0`. Вернуть `{ id }`.

@@ -65,7 +65,13 @@
 2. В обработчике `POST /lab/backtest/sweep` после парсинга body нормализовать вход: если `sweepParams` отсутствует, но есть `sweepParam` → `sweepParams = [sweepParam]`; если есть оба — использовать `sweepParams`, `sweepParam` игнорируется (логировать warning).
 3. Валидация: `1 ≤ sweepParams.length ≤ 3`; для каждого элемента — `from < to`, `step > 0`, `(to - from) / step + 1 ≥ 2`. Декартов размер `Π (runs_i)` — проверять отдельно в 47-T3.
 4. Сохранять весь массив в `BacktestSweep.sweepParamJson` как массив объектов (поле уже `Json`, миграция не требуется). Для 1-параметрического случая — массив длины 1, формат сохраняется как объект-в-массиве.
-5. Обновить response типов `GET /lab/backtest/sweep/:id` — добавить `sweepParams: SweepParam[]` (читать из JSON), при этом для backward compat сохранить `sweepParam: SweepParam` как первый элемент массива.
+5. **Backward-compat при чтении** `sweepParamJson`: существующие записи в БД до 47-T1 содержат единичный объект `{ blockId, paramName, from, to, step }`, новые — массив `[{...}]`. Везде, где читается это поле (`runSweepAsync`, `GET /lab/backtest/sweep/:id`, `GET /lab/backtest/sweeps`), нормализовать через единый helper:
+   ```ts
+   const normalizeSweepParams = (json: unknown): SweepParam[] =>
+     Array.isArray(json) ? json as SweepParam[] : [json as SweepParam];
+   ```
+   Helper применять перед любой работой со значением. Никаких backfill-миграций — старые записи остаются в исходном формате.
+6. Обновить response типов `GET /lab/backtest/sweep/:id` — добавить `sweepParams: SweepParam[]` (через `normalizeSweepParams`), при этом для backward compat сохранить `sweepParam: SweepParam` как первый элемент массива.
 
 **Тест-план:**
 - Отправка только `sweepParam` → принимается, нормализуется в `sweepParams: [...]`.
@@ -128,7 +134,7 @@
 2. В `runSweepAsync` сгенерировать массив комбинаций. Реализация: чистый детерминированный декартов перебор (например, n-вложенный `for` через рекурсию или iterative с массивом индексов). Порядок комбинаций — лексикографический по индексам параметров `[0..0..0], [0..0..1], ...` — фиксируется в комментарии для воспроизводимости.
 3. Для каждой комбинации: построить `params: Array<{ blockId, paramName, value }>`, вызвать `applyDslSweepParams(dsl, params)` (из 47-T2), затем `runBacktest(candles, mutatedDsl, { feeBps, slippageBps, fillAt: "CLOSE" })`. Параметр `fillAt` остаётся `"CLOSE"` пока `docs/46` не закрыт; после `docs/46-T1` сюда передаётся пользовательский `fillAt`.
 4. В `SweepRow` добавить новое поле `paramValues: Record<string, number>` где ключ = `${blockId}.${paramName}`. Поле `paramValue: number` сохраняется и для случая `sweepParams.length === 1` равно единственному значению из `paramValues` (для backward compat). Для `sweepParams.length > 1` — `paramValue` равно значению **первого** параметра из массива (документировать в комментарии; клиенты, которые поддерживают multi-param, должны читать `paramValues`).
-5. Хранение в БД: расширить структуру `SweepRow`-аналога в JSON (если она хранится в JSON) либо обновить колонки таблицы `BacktestSweepRow` (если такая есть). Уточнение по схеме: посмотреть `prisma/schema.prisma` для модели рядом с `BacktestSweep` — добавить `paramValuesJson Json` additive колонкой; миграция additive, безопасна.
+5. Хранение в БД: **отдельной таблицы `BacktestSweepRow` НЕТ**. `SweepRow[]` сериализуется внутри `BacktestSweep.resultsJson Json?` (`apps/api/prisma/schema.prisma:699`). Соответственно — **никакой Prisma-миграции не требуется**: новое поле `paramValues` добавляется внутрь существующего JSON-массива. Шаги: (а) обновить TS-тип `SweepRow`, (б) при записи в `resultsJson` сериализовать новое поле, (в) при чтении из `resultsJson` принимать оба формата (старые записи без `paramValues` корректно обрабатываются как `paramValues = { [`${blockId}.${paramName}`]: paramValue }` через fallback-helper).
 6. Прогресс: текущий `progress: number` в `BacktestSweep` сохраняется как `iterationsDone / totalIterations` — формула не меняется, корректно работает для N-D.
 
 **Тест-план:**
@@ -150,22 +156,25 @@
 
 ### 47-T4: Серверный `rankBy` для выбора best row
 
-**Цель:** ввести параметр `rankBy: "pnlPct" | "sharpe" | "profitFactor" | "expectancy"` в `SweepRequestBody`; жёсткий выбор по `pnlPct` заменить на выбор по указанной метрике; сохранить полную backward compatibility.
+**Цель:** ввести параметр `rankBy: "pnlPct" | "winRate" | "sharpe" | "profitFactor" | "expectancy"` в `SweepRequestBody`; жёсткий выбор по `pnlPct` заменить на выбор по указанной метрике; сохранить полную backward compatibility.
 
 **Файлы для изменения:**
 - `apps/api/src/routes/lab.ts` — `SweepRequestBody` (`строка 1230`), best-row selection (`строка 1398`).
 - `apps/api/tests/routes/lab.test.ts` — добавить тест-кейсы.
 
 **Шаги реализации:**
-1. В `SweepRequestBody` добавить optional `rankBy?: "pnlPct" | "sharpe" | "profitFactor" | "expectancy"`. Default: `"pnlPct"` (сохраняет текущее поведение).
-2. Поля `sharpe`, `profitFactor`, `expectancy` приходят из `DslBacktestReport` после `docs/49-T2`. До тех пор реализуется только `pnlPct`-ветка; для остальных значений до завершения `docs/49-T2` бросать 400 с пояснением "rankBy=<x> requires docs/49-T2 metrics; only 'pnlPct' is available". Это явная gating-зависимость, документировать в PR-описании.
+1. В `SweepRequestBody` добавить optional `rankBy?: "pnlPct" | "winRate" | "sharpe" | "profitFactor" | "expectancy"`. Default: `"pnlPct"` (сохраняет текущее поведение). `winRate` включён несмотря на свою методологическую слабость (легко обманывается мелкими wins при крупных losses): пользователь имеет на это право, и оставить его UI-only при наличии серверных `sharpe/PF/expectancy` было бы непоследовательно.
+2. Поля `sharpe`, `profitFactor`, `expectancy` приходят из `DslBacktestReport` после `docs/49-T2`. До тех пор реализуются только ветки `pnlPct` и `winRate` (оба доступны из текущего `report` без зависимостей); для `sharpe`/`profitFactor`/`expectancy` до завершения `docs/49-T2` бросать 400 с пояснением "rankBy=<x> requires docs/49-T2 metrics; available now: 'pnlPct', 'winRate'". Это явная gating-зависимость, документировать в PR-описании.
 3. В `runSweepAsync` после сбора всех `results` заменить жёсткий `r.pnlPct > best.pnlPct` на `compareByMetric(r, best, rankBy) > 0`. Реализация `compareByMetric`:
    - `pnlPct`: больше = лучше.
+   - `winRate`: больше = лучше.
    - `sharpe`: больше = лучше; `null` трактуется как `-Infinity`.
    - `profitFactor`: больше = лучше; `Infinity` (нет убытков) сортируется выше любого конечного.
    - `expectancy`: больше = лучше.
 4. Tie-breaking (per `docs/44 §Детерминизм`): при равенстве метрики использовать индекс комбинации (меньший индекс = победитель). Это даёт детерминированный результат для одинаковых сценариев.
-5. Сохранить `bestParamValue Float?` в `BacktestSweep` для 1-параметрического случая (значение первого параметра комбинации-победителя). Добавить `bestParamValuesJson Json?` для multi-param. Оба поля additive.
+5. Сохранить `bestParamValue Float?` в `BacktestSweep` для 1-параметрического случая (значение первого параметра комбинации-победителя). Добавить `bestParamValuesJson Json?` для multi-param.
+   - **Prisma migration**: `ALTER TABLE "BacktestSweep" ADD COLUMN "bestParamValuesJson" JSONB` (additive, nullable). В `schema.prisma` рядом с `bestParamValue Float?` (line 700): `bestParamValuesJson Json?`.
+   - Также additive колонка `rankBy String @default("pnlPct")` в той же миграции — для эхо-ответа и аудита (без неё `GET /lab/backtest/sweep/:id` не сможет восстановить, по какой метрике выбран best).
 6. В response `GET /lab/backtest/sweep/:id` вернуть оба поля, плюс `rankBy` (эхо запроса).
 
 **Тест-план:**
@@ -195,6 +204,13 @@
 2. Перед отправкой POST: считать суммарный размер grid-а `Π runs_p` локально и блокировать кнопку запуска (с подсказкой "макс 20 итераций"), если превышено. Та же валидация остаётся на сервере (47-T3).
 3. Существующий локальный `OptimiseMetric` (`строка 70`) — перевести в передаваемый на сервер `rankBy` параметр запроса. Маппинг: `"pnl"→"pnlPct"`, `"winRate"→` (НЕ передавать, т.к. в server-side enum его нет — оставить как UI-only sort), `"sharpe"→"sharpe"`, `"maxDrawdown"→` (UI-only sort). То есть `rankBy` присылается только для `pnl`/`sharpe`/(после `docs/49-T2`) `profitFactor`/`expectancy`. Для `winRate`/`maxDrawdown` — `rankBy` не присылается, делается клиентский sort (как сейчас).
 4. Таблица результатов: вместо одной колонки `paramValue` — серия колонок по `sweepParams`, читать из `paramValues`. Для backward-compat: если ответ содержит только `paramValue` (старый сервер), отрисовать одну колонку.
+4.1. **Расширение `SortKey`** (`apps/web/src/app/lab/test/OptimisePanel.tsx:67`). Текущий enum жёстко содержит литерал `"paramValue"`. После multi-param param-колонки динамические — каждая идентифицируется ключом `${blockId}.${paramName}`. Решение: расширить `SortKey` через type-union:
+   ```ts
+   type FixedSortKey = "pnlPct" | "winRate" | "maxDrawdownPct" | "tradeCount" | "sharpe";
+   type ParamSortKey = `param:${string}`;       // например, "param:block_42.length"
+   type SortKey = FixedSortKey | ParamSortKey | "paramValue"; // "paramValue" — legacy 1-param fallback
+   ```
+   В `handleSort` для `ParamSortKey` распаковывать ключ → получать `(blockId, paramName)` → сортировать `rows` по `row.paramValues[`${blockId}.${paramName}`]`. Для `"paramValue"` — старая ветка (если сервер прислал только legacy-поле).
 5. `MAX_RUNS = 20` остаётся; обновить подсказку рядом с кнопкой запуска: "Макс 20 итераций (произведение run-counts всех параметров)".
 6. Не вводить новые публичные компоненты: всё inline в `OptimisePanel.tsx`.
 

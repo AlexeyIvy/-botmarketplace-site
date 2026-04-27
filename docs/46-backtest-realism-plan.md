@@ -216,10 +216,17 @@
 1. Routes: `ALLOWED_FILL_AT = ["OPEN", "CLOSE", "NEXT_OPEN"] as const`. Тип `FillAt` обновится автоматически. Сообщение валидации `"fillAt must be one of: ${ALLOWED_FILL_AT.join(", ")}"` — без правок (формулировка корректна).
 2. `StartBacktestBody` — добавить optional `takerFeeBps?: number` и `makerFeeBps?: number`. Сохранить `feeBps?: number` как backward-compat alias (та же стратегия, что в 46-T3). Серверная нормализация: если пришёл `feeBps` без `takerFeeBps` → `takerFeeBps = feeBps`. Записывать в `BacktestResult` поля `feeBps` (для обратной совместимости с существующей колонкой) и при наличии новых — записывать `takerFeeBps`/`makerFeeBps` в `reportJson`-блоке (additive, без миграции).
 3. **Решение по схеме Prisma:** новые колонки `takerFeeBps`/`makerFeeBps` **не добавляются** в модель `BacktestResult` в этом этапе. Причина: текущая колонка `feeBps Int @default(0)` адекватна для taker-only режима, новые поля живут в `reportJson` до момента, когда maker-fees станут реально использоваться формулами (то есть до limit-order backtest, который вне scope этого документа). Это явное scope-discipline решение из `docs/44 §Scope discipline`. Документировать в PR-описании.
+3.1. **Prisma migration для `BacktestSweep.fillAt`** — необходима. `runSweepAsync(sweepId)` принимает только `sweepId` (`apps/api/src/routes/lab.ts:1258`) и читает все опции из БД (`sweep.feeBps`, `sweep.slippageBps`). Текущая модель `BacktestSweep` (`apps/api/prisma/schema.prisma:686-708`) **не имеет колонки `fillAt`** (она есть только у `BacktestResult`, line 601). Без миграции sweep не сможет персистировать пользовательский `fillAt` для replay/inspection.
+   - Migration: `ALTER TABLE "BacktestSweep" ADD COLUMN "fillAt" TEXT NOT NULL DEFAULT 'CLOSE'` (additive, безопасна — старые записи получают дефолт `"CLOSE"`, что соответствует их фактическому поведению до 46-T1).
+   - В Prisma: `fillAt String @default("CLOSE")` рядом с `feeBps`/`slippageBps` (`schema.prisma:693-694`).
+   - В `POST /lab/backtest/sweep` сохранять `body.fillAt ?? "CLOSE"` в новую колонку.
+   - В `runSweepAsync` читать `sweep.fillAt` и пробрасывать в `runBacktest` + в `BacktestResult.create({ fillAt: sweep.fillAt })`.
+3.2. **Обновить docstring `BacktestResult.fillAt`** в `apps/api/prisma/schema.prisma:600`. Текущий комментарий `/// Fill price reference; Stage 19 v2.2 fixes to "CLOSE"` после 46-T1 неактуален. Заменить на `/// Fill price reference; supports OPEN | CLOSE | NEXT_OPEN per docs/46`.
 4. Заменить хардкоды:
    - `apps/api/src/routes/lab.ts:564` (preview) — оставить `fillAt: "CLOSE"` (preview = sanity-check, неизменно). Документировать.
-   - `apps/api/src/routes/lab.ts:1339, 1349` (sweep) — пробрасывать `body.fillAt ?? "CLOSE"`.
-   - `apps/api/src/routes/lab.ts:1485` (одиночный backtest fire-and-forget) — пробрасывать `body.fillAt ?? "CLOSE"`.
+   - `apps/api/src/routes/lab.ts:1339` (BacktestResult.create внутри sweep loop) — `fillAt: sweep.fillAt` (после миграции 3.1).
+   - `apps/api/src/routes/lab.ts:1349` (`runBacktest` вызов внутри sweep loop) — `fillAt: sweep.fillAt`.
+   - `apps/api/src/routes/lab.ts:1485` (одиночный backtest fire-and-forget) — пробрасывать `btRecord?.fillAt ?? "CLOSE"`.
 5. UI:
    - `ClassicMode.tsx:80` — тип `fillAt: "OPEN" | "CLOSE" | "NEXT_OPEN"`.
    - `ClassicMode.tsx:541` — заменить хардкод `fillAt: "CLOSE"` на значение из state (новый `<select>` рядом с fee/slippage инпутами); default state value = `"CLOSE"`.
