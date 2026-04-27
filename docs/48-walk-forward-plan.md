@@ -18,7 +18,7 @@
 - Шаблон fire-and-forget run-эндпоинта со статусной БД-моделью: sweep — `runSweepAsync` (`apps/api/src/routes/lab.ts:1258`), статусы `PENDING|RUNNING|DONE|FAILED` (`apps/api/prisma/schema.prisma:677`). Walk-forward повторяет этот паттерн.
 - Структурный шаблон Prisma модели: `BacktestSweep` (`apps/api/prisma/schema.prisma:686–708`) — поля `id`, `workspaceId`, `strategyVersionId`, `datasetId`, `status`, `progress`, `*Json`. Walk-forward Prisma модель повторяет ту же структуру.
 - Хранилище per-fold отчётов: можно использовать существующую `BacktestResult` (`apps/api/prisma/schema.prisma:578–619`) как референс структуры; в первом этапе храним fold-отчёты как JSON внутри родительской записи, без отдельной таблицы.
-- Метрики: `apps/api/src/lib/metrics.ts` сейчас содержит только Prometheus (`Registry`, `collectDefaultMetrics`, `Counter`, `Histogram`). Папка `apps/api/src/lib/metrics/` ещё **не создана** — она появится в `docs/49-T1` и принесёт `sharpe`, `profitFactor`, `expectancy`, `maxDrawdownPct` и т.п. Walk-forward aggregate использует именно эти функции после `docs/49`.
+- Метрики: `apps/api/src/lib/metrics.ts` сейчас содержит только Prometheus (`Registry`, `collectDefaultMetrics`, `Counter`, `Histogram`) и не относится к backtest-метрикам. Папка `apps/api/src/lib/backtestMetrics/` ещё **не создана** — она появится в `docs/49-T1` и принесёт pure-функции `sharpeRatio`, `profitFactor`, `expectancy`. `maxDrawdownPct` остаётся в `dslEvaluator.ts` (уже вычисляется там через `cumulativePnl/peakPnl`). Walk-forward aggregate использует утилиты из `backtestMetrics/` и поля `report.sharpe` / `report.profitFactor` / `report.expectancy` (появляются в `DslBacktestReport` после `docs/49-T2`).
 - В `apps/web/src/app/lab/` walk-forward UI отсутствует.
 
 ## Цель
@@ -272,7 +272,7 @@ type FoldConfig = {
      fold: { isBars: number; oosBars: number; step: number; anchored: boolean };
      feeBps?: number;
      slippageBps?: number;
-     fillAt?: "OPEN" | "CLOSE";   // только если docs/46-T1 закрыт
+     fillAt?: "OPEN" | "CLOSE" | "NEXT_OPEN";   // только если docs/46-T1 закрыт
    };
    ```
 2. `POST /lab/backtest/walk-forward`:
