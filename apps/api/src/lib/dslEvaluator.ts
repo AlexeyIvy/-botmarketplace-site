@@ -24,6 +24,7 @@
 import type { Candle } from "./bybitCandles.js";
 import { calcSMA } from "./indicators/sma.js";
 import { calcEMA } from "./indicators/ema.js";
+import { calcRSI } from "./indicators/rsi.js";
 import { calcATR } from "./indicators/atr.js";
 import { calcADX } from "./indicators/adx.js";
 import { calcSuperTrend } from "./indicators/supertrend.js";
@@ -236,40 +237,6 @@ export function createIndicatorCache(): IndicatorCache {
     smcPatterns: new Map(),
     volumeProfile: new Map(),
   };
-}
-
-// ---------------------------------------------------------------------------
-// Simple indicator computations (RSI)
-// These are pure, deterministic functions matching the block types.
-// SMA and EMA live in indicators/sma.ts and indicators/ema.ts.
-// ---------------------------------------------------------------------------
-
-function calcRSI(candles: Candle[], length: number): (number | null)[] {
-  const n = candles.length;
-  const result: (number | null)[] = new Array(n).fill(null);
-  if (n < length + 1) return result;
-
-  let gainSum = 0;
-  let lossSum = 0;
-  for (let i = 1; i <= length; i++) {
-    const change = candles[i].close - candles[i - 1].close;
-    if (change > 0) gainSum += change;
-    else lossSum += Math.abs(change);
-  }
-
-  let avgGain = gainSum / length;
-  let avgLoss = lossSum / length;
-  result[length] = avgLoss === 0 ? 100 : 100 - 100 / (1 + avgGain / avgLoss);
-
-  for (let i = length + 1; i < n; i++) {
-    const change = candles[i].close - candles[i - 1].close;
-    const gain = change > 0 ? change : 0;
-    const loss = change < 0 ? Math.abs(change) : 0;
-    avgGain = (avgGain * (length - 1) + gain) / length;
-    avgLoss = (avgLoss * (length - 1) + loss) / length;
-    result[i] = avgLoss === 0 ? 100 : 100 - 100 / (1 + avgGain / avgLoss);
-  }
-  return result;
 }
 
 // ---------------------------------------------------------------------------

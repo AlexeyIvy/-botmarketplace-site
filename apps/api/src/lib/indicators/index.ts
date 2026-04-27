@@ -8,6 +8,7 @@
 export type { Candle } from "./types.js";
 export { calcSMA } from "./sma.js";
 export { calcEMA } from "./ema.js";
+export { calcRSI } from "./rsi.js";
 export { calcATR, trueRange } from "./atr.js";
 export { calcVWAP } from "./vwap.js";
 export { calcADX } from "./adx.js";
