@@ -22,6 +22,8 @@
  */
 
 import type { Candle } from "./bybitCandles.js";
+import { calcSMA } from "./indicators/sma.js";
+import { calcEMA } from "./indicators/ema.js";
 import { calcATR } from "./indicators/atr.js";
 import { calcADX } from "./indicators/adx.js";
 import { calcSuperTrend } from "./indicators/supertrend.js";
@@ -237,44 +239,10 @@ export function createIndicatorCache(): IndicatorCache {
 }
 
 // ---------------------------------------------------------------------------
-// Simple indicator computations (SMA, EMA, RSI)
+// Simple indicator computations (RSI)
 // These are pure, deterministic functions matching the block types.
+// SMA and EMA live in indicators/sma.ts and indicators/ema.ts.
 // ---------------------------------------------------------------------------
-
-function calcSMA(candles: Candle[], length: number): (number | null)[] {
-  const n = candles.length;
-  const result: (number | null)[] = new Array(n).fill(null);
-  if (n < length) return result;
-
-  let sum = 0;
-  for (let i = 0; i < length; i++) sum += candles[i].close;
-  result[length - 1] = sum / length;
-
-  for (let i = length; i < n; i++) {
-    sum += candles[i].close - candles[i - length].close;
-    result[i] = sum / length;
-  }
-  return result;
-}
-
-function calcEMA(candles: Candle[], length: number): (number | null)[] {
-  const n = candles.length;
-  const result: (number | null)[] = new Array(n).fill(null);
-  if (n < length) return result;
-
-  // Seed with SMA
-  let sum = 0;
-  for (let i = 0; i < length; i++) sum += candles[i].close;
-  let ema = sum / length;
-  result[length - 1] = ema;
-
-  const k = 2 / (length + 1);
-  for (let i = length; i < n; i++) {
-    ema = candles[i].close * k + ema * (1 - k);
-    result[i] = ema;
-  }
-  return result;
-}
 
 function calcRSI(candles: Candle[], length: number): (number | null)[] {
   const n = candles.length;
