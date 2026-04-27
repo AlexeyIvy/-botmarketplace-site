@@ -25,6 +25,10 @@ import type { Candle } from "./bybitCandles.js";
 import { calcSMA } from "./indicators/sma.js";
 import { calcEMA } from "./indicators/ema.js";
 import { calcRSI } from "./indicators/rsi.js";
+import {
+  calcBollingerBands,
+  type BollingerBandsResult,
+} from "./indicators/bollingerBands.js";
 import { calcATR } from "./indicators/atr.js";
 import { calcADX } from "./indicators/adx.js";
 import { calcSuperTrend } from "./indicators/supertrend.js";
@@ -199,12 +203,6 @@ export interface ParsedDsl {
 // Indicator computation cache
 // ---------------------------------------------------------------------------
 
-export interface BollingerBandsResult {
-  upper: (number | null)[];
-  middle: (number | null)[];
-  lower: (number | null)[];
-}
-
 export interface IndicatorCache {
   sma: Map<number, (number | null)[]>;
   ema: Map<number, (number | null)[]>;
@@ -240,39 +238,8 @@ export function createIndicatorCache(): IndicatorCache {
 }
 
 // ---------------------------------------------------------------------------
-// Bollinger Bands computation
+// Bollinger Bands cache wrapper
 // ---------------------------------------------------------------------------
-
-function calcBollingerBands(
-  candles: Candle[],
-  period: number,
-  stdDevMult: number,
-): BollingerBandsResult {
-  const n = candles.length;
-  const upper: (number | null)[] = new Array(n).fill(null);
-  const middle: (number | null)[] = new Array(n).fill(null);
-  const lower: (number | null)[] = new Array(n).fill(null);
-  if (n < period) return { upper, middle, lower };
-
-  for (let i = period - 1; i < n; i++) {
-    let sum = 0;
-    for (let j = i - period + 1; j <= i; j++) sum += candles[j].close;
-    const mean = sum / period;
-
-    let sqSum = 0;
-    for (let j = i - period + 1; j <= i; j++) {
-      const diff = candles[j].close - mean;
-      sqSum += diff * diff;
-    }
-    const stdDev = Math.sqrt(sqSum / period);
-
-    middle[i] = mean;
-    upper[i] = mean + stdDevMult * stdDev;
-    lower[i] = mean - stdDevMult * stdDev;
-  }
-
-  return { upper, middle, lower };
-}
 
 function getBollingerBands(
   params: { period?: number; length?: number; stdDevMult?: number; multiplier?: number },
