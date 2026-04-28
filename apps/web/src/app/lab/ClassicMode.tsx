@@ -77,9 +77,18 @@ interface BacktestItem {
   datasetHash: string | null;
   feeBps: number;
   slippageBps: number;
-  fillAt: string;
+  fillAt: FillAt;
   engineVersion: string;
 }
+
+/** Fill price reference (docs/46): three modes are supported. */
+type FillAt = "OPEN" | "CLOSE" | "NEXT_OPEN";
+
+const FILL_AT_LABELS: Record<FillAt, string> = {
+  CLOSE: "On candle close (default)",
+  OPEN: "On candle open",
+  NEXT_OPEN: "Next candle open (lookahead-free)",
+};
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -468,6 +477,7 @@ export function AuthLabClassicMode() {
   const [datasets, setDatasets] = useState<DatasetItem[]>([]);
   const [strategyId, setStrategyId] = useState("");
   const [datasetId, setDatasetId] = useState("");
+  const [fillAt, setFillAt] = useState<FillAt>("CLOSE");
 
   const [running, setRunning] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -538,7 +548,7 @@ export function AuthLabClassicMode() {
         datasetId: datasetId.trim(),
         feeBps: 0,
         slippageBps: 0,
-        fillAt: "CLOSE",
+        fillAt,
       }),
     });
 
@@ -626,6 +636,19 @@ export function AuthLabClassicMode() {
               {selectedDataset.candleCount} candles · hash: <code>{shortHash(selectedDataset.datasetHash)}</code> · {selectedDataset.status}
             </div>
           )}
+
+          <label style={{ ...labelStyle, gridColumn: "1 / -1" }}>
+            Fill price (execution model)
+            <select
+              style={inputStyle}
+              value={fillAt}
+              onChange={(e) => setFillAt(e.target.value as FillAt)}
+            >
+              {(Object.keys(FILL_AT_LABELS) as FillAt[]).map((k) => (
+                <option key={k} value={k}>{FILL_AT_LABELS[k]}</option>
+              ))}
+            </select>
+          </label>
         </div>
 
         {error && (

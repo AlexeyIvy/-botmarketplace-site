@@ -410,6 +410,80 @@ describe("POST /api/v1/lab/backtest", () => {
     });
     expect(res.statusCode).toBe(404);
   });
+
+  // 46-T4: fillAt now accepts OPEN | CLOSE | NEXT_OPEN. Each test uses a
+  // distinct X-Forwarded-For so the per-route rate-limit (5 req/min/ip) is
+  // not exhausted by the existing six tests above.
+  const fillAtHeaders = (ip: string) => ({ ...authHeaders(), "x-forwarded-for": ip });
+
+  it("46-T4: accepts fillAt=OPEN and persists it", async () => {
+    mockStrategyVersions["sv-1"] = { id: "sv-1", strategyId: "strat-1", strategy: { workspaceId: WS_ID }, dslJson: {} };
+    mockDatasets["ds-1"] = { id: "ds-1", workspaceId: WS_ID, exchange: "bybit", symbol: "BTCUSDT", interval: "M15", fromTsMs: BigInt(1704067200000), toTsMs: BigInt(1706745600000), datasetHash: "abc" };
+
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/lab/backtest",
+      headers: fillAtHeaders("10.46.4.1"),
+      payload: { strategyVersionId: "sv-1", datasetId: "ds-1", fillAt: "OPEN" },
+    });
+    expect(res.statusCode).toBe(202);
+    expect(res.json().fillAt).toBe("OPEN");
+  });
+
+  it("46-T4: accepts fillAt=NEXT_OPEN and persists it", async () => {
+    mockStrategyVersions["sv-1"] = { id: "sv-1", strategyId: "strat-1", strategy: { workspaceId: WS_ID }, dslJson: {} };
+    mockDatasets["ds-1"] = { id: "ds-1", workspaceId: WS_ID, exchange: "bybit", symbol: "BTCUSDT", interval: "M15", fromTsMs: BigInt(1704067200000), toTsMs: BigInt(1706745600000), datasetHash: "abc" };
+
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/lab/backtest",
+      headers: fillAtHeaders("10.46.4.2"),
+      payload: { strategyVersionId: "sv-1", datasetId: "ds-1", fillAt: "NEXT_OPEN" },
+    });
+    expect(res.statusCode).toBe(202);
+    expect(res.json().fillAt).toBe("NEXT_OPEN");
+  });
+
+  it("46-T4: rejects unknown fillAt with 400", async () => {
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/lab/backtest",
+      headers: fillAtHeaders("10.46.4.3"),
+      payload: { strategyVersionId: "sv-1", datasetId: "ds-1", fillAt: "BOGUS" },
+    });
+    expect(res.statusCode).toBe(400);
+    const body = res.json();
+    expect(JSON.stringify(body)).toContain("fillAt");
+  });
+
+  it("46-T4: defaults fillAt to CLOSE when omitted", async () => {
+    mockStrategyVersions["sv-1"] = { id: "sv-1", strategyId: "strat-1", strategy: { workspaceId: WS_ID }, dslJson: {} };
+    mockDatasets["ds-1"] = { id: "ds-1", workspaceId: WS_ID, exchange: "bybit", symbol: "BTCUSDT", interval: "M15", fromTsMs: BigInt(1704067200000), toTsMs: BigInt(1706745600000), datasetHash: "abc" };
+
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/lab/backtest",
+      headers: fillAtHeaders("10.46.4.4"),
+      payload: { strategyVersionId: "sv-1", datasetId: "ds-1" },
+    });
+    expect(res.statusCode).toBe(202);
+    expect(res.json().fillAt).toBe("CLOSE");
+  });
+
+  it("46-T4: takerFeeBps overrides legacy feeBps in persisted feeBps column", async () => {
+    mockStrategyVersions["sv-1"] = { id: "sv-1", strategyId: "strat-1", strategy: { workspaceId: WS_ID }, dslJson: {} };
+    mockDatasets["ds-1"] = { id: "ds-1", workspaceId: WS_ID, exchange: "bybit", symbol: "BTCUSDT", interval: "M15", fromTsMs: BigInt(1704067200000), toTsMs: BigInt(1706745600000), datasetHash: "abc" };
+
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/lab/backtest",
+      headers: fillAtHeaders("10.46.4.5"),
+      payload: { strategyVersionId: "sv-1", datasetId: "ds-1", feeBps: 10, takerFeeBps: 30 },
+    });
+    expect(res.statusCode).toBe(202);
+    // The canonical taker fee wins over the deprecated alias.
+    expect(res.json().feeBps).toBe(30);
+  });
 });
 
 // ── GET /lab/backtest/:id ───────────────────────────────────────────────────
@@ -485,6 +559,22 @@ describe("POST /api/v1/lab/backtest/sweep", () => {
       },
     });
     expect(res.statusCode).toBe(422);
+  });
+
+  // 46-T4: sweep accepts and persists fillAt.
+  it("46-T4: rejects unknown fillAt with 400", async () => {
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/lab/backtest/sweep",
+      headers: authHeaders(),
+      payload: {
+        datasetId: "ds-1",
+        strategyVersionId: "sv-1",
+        sweepParam: { blockId: "b1", paramName: "p1", from: 1, to: 5, step: 1 },
+        fillAt: "BOGUS",
+      },
+    });
+    expect(res.statusCode).toBe(400);
   });
 });
 
