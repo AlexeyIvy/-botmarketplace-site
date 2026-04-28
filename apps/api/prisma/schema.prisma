@@ -597,7 +597,7 @@ model BacktestResult {
   datasetHash   String?
   feeBps        Int            @default(0)
   slippageBps   Int            @default(0)
-  /// Fill price reference; Stage 19 v2.2 fixes to "CLOSE"
+  /// Fill price reference; supports OPEN | CLOSE | NEXT_OPEN per docs/46
   fillAt        String         @default("CLOSE")
   engineVersion String         @default("unknown")
   /// Phase 5 — explicit StrategyVersion binding for reproducible backtests
@@ -692,6 +692,9 @@ model BacktestSweep {
   sweepParamJson    Json
   feeBps            Int
   slippageBps       Int
+  /// Fill price reference; persisted per sweep so each run replays with the
+  /// same execution model (docs/46-T4). Existing rows default to "CLOSE".
+  fillAt            String      @default("CLOSE")
   status            SweepStatus @default(PENDING)
   progress          Int         @default(0)
   runCount          Int

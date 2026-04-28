@@ -38,6 +38,15 @@ type TopTab = "backtest" | "optimise";
 
 type BacktestStatus = "PENDING" | "RUNNING" | "DONE" | "FAILED";
 
+/** Fill price reference (docs/46): three modes are supported. */
+type FillAt = "OPEN" | "CLOSE" | "NEXT_OPEN";
+
+const FILL_AT_LABELS: Record<FillAt, string> = {
+  CLOSE: "On candle close (default)",
+  OPEN: "On candle open",
+  NEXT_OPEN: "Next candle open (lookahead-free)",
+};
+
 interface BacktestListItem {
   id: string;
   strategyId: string;
@@ -51,7 +60,7 @@ interface BacktestListItem {
   status: BacktestStatus;
   feeBps: number;
   slippageBps: number;
-  fillAt: string;
+  fillAt: FillAt;
   engineVersion: string;
   reportJson: BacktestReport | null;
   errorMessage: string | null;
@@ -442,7 +451,7 @@ function BacktestForm({
 }: {
   datasets: DatasetListItem[];
   strategyVersions: StrategyVersionItem[];
-  onSubmit: (params: { strategyVersionId: string; datasetId: string; feeBps: number; slippageBps: number }) => void;
+  onSubmit: (params: { strategyVersionId: string; datasetId: string; feeBps: number; slippageBps: number; fillAt: FillAt }) => void;
   submitting: boolean;
   error: string | null;
   activeDatasetId: string | null;
@@ -454,6 +463,7 @@ function BacktestForm({
   const [versionId, setVersionId] = useState(lastCompileVersionId ?? strategyVersions[0]?.id ?? "");
   const [feeBps, setFeeBps] = useState(10);
   const [slippageBps, setSlippageBps] = useState(5);
+  const [fillAt, setFillAt] = useState<FillAt>("CLOSE");
 
   // Sync default dataset when props change
   useEffect(() => {
@@ -551,6 +561,20 @@ function BacktestForm({
         </FormRow>
       </div>
 
+      {/* Fill price reference (execution model) */}
+      <FormRow label="Fill price (execution model)">
+        <select
+          style={selectStyle}
+          value={fillAt}
+          onChange={(e) => setFillAt(e.target.value as FillAt)}
+          disabled={submitting}
+        >
+          {(Object.keys(FILL_AT_LABELS) as FillAt[]).map((k) => (
+            <option key={k} value={k}>{FILL_AT_LABELS[k]}</option>
+          ))}
+        </select>
+      </FormRow>
+
       {error && <div style={errorBoxStyle}>{error}</div>}
 
       <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -561,7 +585,7 @@ function BacktestForm({
             cursor: canSubmit ? "pointer" : "not-allowed",
           }}
           disabled={!canSubmit}
-          onClick={() => onSubmit({ strategyVersionId: versionId, datasetId, feeBps, slippageBps })}
+          onClick={() => onSubmit({ strategyVersionId: versionId, datasetId, feeBps, slippageBps, fillAt })}
         >
           {submitting ? "Starting…" : "Run Backtest"}
         </button>
@@ -1086,7 +1110,7 @@ function ResultDetail({
   activeDatasetId: string | null;
   lastCompileVersionId: string | null;
   lastCompileGraphVersionId: string | null;
-  onSubmit: (params: { strategyVersionId: string; datasetId: string; feeBps: number; slippageBps: number }) => void;
+  onSubmit: (params: { strategyVersionId: string; datasetId: string; feeBps: number; slippageBps: number; fillAt: FillAt }) => void;
 }) {
   const [activeTab, setActiveTab] = useState<ResultTab>("run");
 
@@ -1298,6 +1322,7 @@ export default function LabTestPage() {
     datasetId: string;
     feeBps: number;
     slippageBps: number;
+    fillAt: FillAt;
   }) => {
     if (!getWorkspaceId()) return;
     setSubmitting(true);
@@ -1305,7 +1330,7 @@ export default function LabTestPage() {
 
     const res = await apiFetch<BacktestListItem>("/lab/backtest", {
       method: "POST",
-      body: JSON.stringify({ ...params, fillAt: "CLOSE" }),
+      body: JSON.stringify(params),
     });
 
     setSubmitting(false);

@@ -26,8 +26,16 @@ import {
 // Constants
 // ---------------------------------------------------------------------------
 
-/** Stage 19 v2.2: fill price reference is fixed to CLOSE */
-const ALLOWED_FILL_AT = ["CLOSE"] as const;
+/**
+ * Fill price reference (docs/46): three modes are supported.
+ *   "CLOSE"     — fill at the signal candle's close (legacy default).
+ *   "OPEN"      — fill at the signal candle's open.
+ *   "NEXT_OPEN" — fill at the next candle's open (lookahead-free for
+ *                 indicator signals computed on closed bars).
+ * The preview endpoint pins "CLOSE" intentionally — preview is a sanity
+ * check, not a full execution-realism rehearsal.
+ */
+const ALLOWED_FILL_AT = ["OPEN", "CLOSE", "NEXT_OPEN"] as const;
 type FillAt = typeof ALLOWED_FILL_AT[number];
 
 /** Reasonable upper bound for fee/slippage to prevent nonsensical inputs */
@@ -49,7 +57,12 @@ const PREVIEW_MAX_HOURS = 168;
 interface StartBacktestBody {
   strategyVersionId: string;
   datasetId: string;
+  /** @deprecated use takerFeeBps; retained as a backward-compat alias (docs/46-T3). */
   feeBps?: number;
+  /** Taker (market-order) fee in basis points (docs/46-T3). */
+  takerFeeBps?: number;
+  /** Maker (limit-order) fee in basis points; reserved, not yet used in formulas (docs/46-T3). */
+  makerFeeBps?: number;
   slippageBps?: number;
   fillAt?: FillAt;
 }
@@ -390,10 +403,16 @@ export async function labRoutes(app: FastifyInstance) {
     const {
       strategyVersionId,
       datasetId,
-      feeBps = 0,
+      feeBps,
+      takerFeeBps,
+      makerFeeBps,
       slippageBps = 0,
       fillAt = "CLOSE",
     } = request.body ?? {};
+
+    // 46-T3 fee normalization: takerFeeBps wins over the deprecated feeBps
+    // alias. The canonical taker value is what we persist + use downstream.
+    const effectiveTakerFeeBps = takerFeeBps ?? feeBps ?? 0;
 
     // ── Validation ──────────────────────────────────────────────────────────
     const errors: Array<{ field: string; message: string }> = [];
@@ -401,8 +420,18 @@ export async function labRoutes(app: FastifyInstance) {
     if (!strategyVersionId) errors.push({ field: "strategyVersionId", message: "strategyVersionId is required (Phase 5 explicit version binding)" });
     if (!datasetId)         errors.push({ field: "datasetId",         message: "datasetId is required (dataset-first contract)" });
 
-    if (!Number.isInteger(feeBps) || feeBps < 0 || feeBps > MAX_BPS) {
-      errors.push({ field: "feeBps", message: `feeBps must be integer 0–${MAX_BPS}` });
+    if (
+      !Number.isInteger(effectiveTakerFeeBps)
+      || effectiveTakerFeeBps < 0
+      || effectiveTakerFeeBps > MAX_BPS
+    ) {
+      errors.push({ field: "takerFeeBps", message: `takerFeeBps (or legacy feeBps) must be integer 0–${MAX_BPS}` });
+    }
+    if (
+      makerFeeBps !== undefined
+      && (!Number.isInteger(makerFeeBps) || makerFeeBps < 0 || makerFeeBps > MAX_BPS)
+    ) {
+      errors.push({ field: "makerFeeBps", message: `makerFeeBps must be integer 0–${MAX_BPS}` });
     }
     if (!Number.isInteger(slippageBps) || slippageBps < 0 || slippageBps > MAX_BPS) {
       errors.push({ field: "slippageBps", message: `slippageBps must be integer 0–${MAX_BPS}` });
@@ -449,10 +478,13 @@ export async function labRoutes(app: FastifyInstance) {
         fromTs,
         toTs,
         status:            "PENDING",
-        // Reproducibility snapshot
+        // Reproducibility snapshot. The existing `feeBps` column persists
+        // the canonical taker fee — the wider takerFeeBps/makerFeeBps split
+        // (docs/46-T3) lives in the API surface only until limit-order mode
+        // ships and a column for makerFeeBps is needed.
         datasetId:         dataset.id,
         datasetHash:       dataset.datasetHash,
-        feeBps,
+        feeBps:            effectiveTakerFeeBps,
         slippageBps,
         fillAt,
         engineVersion,
@@ -561,6 +593,9 @@ export async function labRoutes(app: FastifyInstance) {
 
     let report;
     try {
+      // Preview is a synchronous sanity-check — fillAt is intentionally
+      // pinned to "CLOSE" regardless of what the strategy will use in a
+      // full backtest (docs/46-T4).
       report = runBacktest(candles, dslJson, { feeBps: 0, slippageBps: 0, fillAt: "CLOSE" });
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
@@ -848,11 +883,15 @@ export async function labRoutes(app: FastifyInstance) {
       sweepParam,
       feeBps = 0,
       slippageBps = 0,
+      fillAt = "CLOSE",
     } = request.body ?? {};
 
     // ── Validation ──────────────────────────────────────────────────────────
     if (!datasetId || !strategyVersionId || !sweepParam) {
       return problem(reply, 400, "Validation Error", "datasetId, strategyVersionId, and sweepParam are required");
+    }
+    if (!ALLOWED_FILL_AT.includes(fillAt as FillAt)) {
+      return problem(reply, 400, "Validation Error", `fillAt must be one of: ${ALLOWED_FILL_AT.join(", ")}`);
     }
 
     if (!sweepParam.blockId || !sweepParam.paramName) {
@@ -916,6 +955,7 @@ export async function labRoutes(app: FastifyInstance) {
         sweepParamJson: sweepParam as object,
         feeBps,
         slippageBps,
+        fillAt,
         runCount,
         status: "PENDING",
       },
@@ -1239,6 +1279,7 @@ interface SweepRequestBody {
   };
   feeBps?: number;
   slippageBps?: number;
+  fillAt?: FillAt;
 }
 
 interface SweepRow {
@@ -1336,7 +1377,7 @@ async function runSweepAsync(sweepId: string): Promise<void> {
           datasetHash: dataset.datasetHash,
           feeBps: sweep.feeBps,
           slippageBps: sweep.slippageBps,
-          fillAt: "CLOSE",
+          fillAt: sweep.fillAt,
           engineVersion,
         },
       });
@@ -1346,7 +1387,7 @@ async function runSweepAsync(sweepId: string): Promise<void> {
         const report = runBacktest(candles, mutatedDsl, {
           feeBps: sweep.feeBps,
           slippageBps: sweep.slippageBps,
-          fillAt: "CLOSE",
+          fillAt: sweep.fillAt as FillAt,
         });
 
         await prisma.backtestResult.update({
@@ -1478,11 +1519,13 @@ async function runBacktestAsync(
     // Fetch fee/slippage from the BacktestResult record
     const btRecord = await prisma.backtestResult.findUnique({ where: { id: btId } });
 
-    // DSL-driven backtest — behavior determined entirely by compiled DSL
+    // DSL-driven backtest — behavior determined entirely by compiled DSL.
+    // The persisted fillAt is replayed so re-execution matches the original
+    // request (docs/46-T4).
     const report = runBacktest(candles, dslJson, {
       feeBps:      btRecord?.feeBps      ?? 0,
       slippageBps: btRecord?.slippageBps ?? 0,
-      fillAt:      "CLOSE",
+      fillAt:      (btRecord?.fillAt as FillAt | undefined) ?? "CLOSE",
     });
 
     await prisma.backtestResult.update({
