@@ -741,6 +741,83 @@ describe("POST /api/v1/lab/backtest/sweep", () => {
     expect(res.statusCode).toBe(422);
   });
 
+  // 47-T4: rankBy validation + persistence.
+  it("47-T4: rejects unknown rankBy", async () => {
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/lab/backtest/sweep",
+      headers: t1Headers("10.47.4.1"),
+      payload: {
+        datasetId: "ds-1",
+        strategyVersionId: "sv-1",
+        sweepParam: { blockId: "b1", paramName: "p1", from: 1, to: 5, step: 1 },
+        rankBy: "BOGUS",
+      },
+    });
+    expect(res.statusCode).toBe(400);
+    expect(res.json().detail).toContain("rankBy");
+  });
+
+  it("47-T4: accepts rankBy=sharpe (and persists it)", async () => {
+    mockStrategyVersions["sv-47-4-sharpe"] = {
+      id: "sv-47-4-sharpe", strategyId: "strat-47-4", strategy: { workspaceId: WS_ID }, dslJson: {},
+    };
+    mockDatasets["ds-47-4-sharpe"] = {
+      id: "ds-47-4-sharpe", workspaceId: WS_ID, exchange: "bybit", symbol: "BTCUSDT",
+      interval: "M15", fromTsMs: BigInt(0), toTsMs: BigInt(1), datasetHash: "h",
+    };
+    const post = await app.inject({
+      method: "POST",
+      url: "/api/v1/lab/backtest/sweep",
+      headers: t1Headers("10.47.4.2"),
+      payload: {
+        datasetId: "ds-47-4-sharpe",
+        strategyVersionId: "sv-47-4-sharpe",
+        sweepParam: { blockId: "b1", paramName: "p1", from: 1, to: 3, step: 1 },
+        rankBy: "sharpe",
+      },
+    });
+    expect(post.statusCode).toBe(202);
+    const { sweepId } = post.json();
+    // Wait for async runner to settle.
+    for (let i = 0; i < 30; i++) {
+      const cur = mockSweeps[sweepId] as Record<string, unknown> | undefined;
+      if (cur && (cur.status === "DONE" || cur.status === "FAILED")) break;
+      await new Promise((r) => setTimeout(r, 10));
+    }
+    const final = mockSweeps[sweepId] as Record<string, unknown>;
+    expect(final.rankBy).toBe("sharpe");
+  });
+
+  it("47-T4: defaults rankBy to pnlPct when omitted", async () => {
+    mockStrategyVersions["sv-47-4-default"] = {
+      id: "sv-47-4-default", strategyId: "strat-47-4", strategy: { workspaceId: WS_ID }, dslJson: {},
+    };
+    mockDatasets["ds-47-4-default"] = {
+      id: "ds-47-4-default", workspaceId: WS_ID, exchange: "bybit", symbol: "BTCUSDT",
+      interval: "M15", fromTsMs: BigInt(0), toTsMs: BigInt(1), datasetHash: "h",
+    };
+    const post = await app.inject({
+      method: "POST",
+      url: "/api/v1/lab/backtest/sweep",
+      headers: t1Headers("10.47.4.3"),
+      payload: {
+        datasetId: "ds-47-4-default",
+        strategyVersionId: "sv-47-4-default",
+        sweepParam: { blockId: "b1", paramName: "p1", from: 1, to: 3, step: 1 },
+      },
+    });
+    expect(post.statusCode).toBe(202);
+    const { sweepId } = post.json();
+    for (let i = 0; i < 30; i++) {
+      const cur = mockSweeps[sweepId] as Record<string, unknown> | undefined;
+      if (cur && (cur.status === "DONE" || cur.status === "FAILED")) break;
+      await new Promise((r) => setTimeout(r, 10));
+    }
+    const final = mockSweeps[sweepId] as Record<string, unknown>;
+    expect(final.rankBy).toBe("pnlPct");
+  });
+
   // 47-T3: 2-param sweep happy path — 3×3 = 9 combinations, returned with
   // both `paramValue` (legacy) and `paramValues` (multi-param). The test
   // hits the live runSweepAsync with mocked Prisma + a small candle set.
@@ -817,6 +894,62 @@ describe("GET /api/v1/lab/backtest/sweep/:id", () => {
     const res = await app.inject({ method: "GET", url: "/api/v1/lab/backtest/sweep/sw-1", headers: authHeaders() });
     expect(res.statusCode).toBe(200);
     expect(res.json().status).toBe("done");
+  });
+
+  it("47-T4: GET returns rankBy + bestParamValuesJson echo", async () => {
+    mockSweeps["sw-47-4"] = {
+      id: "sw-47-4",
+      workspaceId: WS_ID,
+      status: "DONE",
+      progress: 3,
+      runCount: 3,
+      sweepParamJson: [{ blockId: "b1", paramName: "p1", from: 1, to: 3, step: 1 }],
+      rankBy: "sharpe",
+      bestParamValue: 2,
+      bestParamValuesJson: { "b1.p1": 2 },
+      resultsJson: [
+        { paramValue: 1, paramValues: { "b1.p1": 1 }, backtestResultId: "bt-a", pnlPct: 5,  winRate: 0.5, maxDrawdownPct: 1, tradeCount: 4, sharpe: 0.5, profitFactor: 1.2, expectancy: 0.1 },
+        { paramValue: 2, paramValues: { "b1.p1": 2 }, backtestResultId: "bt-b", pnlPct: 3,  winRate: 0.6, maxDrawdownPct: 1, tradeCount: 4, sharpe: 1.5, profitFactor: 1.0, expectancy: 0.2 },
+        { paramValue: 3, paramValues: { "b1.p1": 3 }, backtestResultId: "bt-c", pnlPct: 8,  winRate: 0.4, maxDrawdownPct: 1, tradeCount: 4, sharpe: 0.9, profitFactor: 1.5, expectancy: 0.3 },
+      ],
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    const res = await app.inject({ method: "GET", url: "/api/v1/lab/backtest/sweep/sw-47-4", headers: authHeaders() });
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    expect(body.rankBy).toBe("sharpe");
+    expect(body.bestParamValue).toBe(2);
+    expect(body.bestParamValuesJson).toMatchObject({ "b1.p1": 2 });
+    // The bestRow recomputed in-memory by sharpe descends to row 2 (sharpe 1.5),
+    // not row 3 (highest pnlPct).
+    expect(body.bestRow.sharpe).toBe(1.5);
+    expect(body.bestRow.paramValues["b1.p1"]).toBe(2);
+  });
+
+  it("47-T4: legacy sweep with no rankBy column → bestRow falls back to pnlPct", async () => {
+    mockSweeps["sw-47-4-legacy"] = {
+      id: "sw-47-4-legacy",
+      workspaceId: WS_ID,
+      status: "DONE",
+      progress: 3,
+      runCount: 3,
+      sweepParamJson: { blockId: "b1", paramName: "p1", from: 1, to: 3, step: 1 },
+      // rankBy column absent — pre-47-T4 row.
+      resultsJson: [
+        { paramValue: 1, backtestResultId: "bt-a", pnlPct: 5,  winRate: 0.5, maxDrawdownPct: 1, tradeCount: 4, sharpe: 0.5, profitFactor: 1.2, expectancy: 0.1 },
+        { paramValue: 2, backtestResultId: "bt-b", pnlPct: 3,  winRate: 0.6, maxDrawdownPct: 1, tradeCount: 4, sharpe: 1.5, profitFactor: 1.0, expectancy: 0.2 },
+        { paramValue: 3, backtestResultId: "bt-c", pnlPct: 8,  winRate: 0.4, maxDrawdownPct: 1, tradeCount: 4, sharpe: 0.9, profitFactor: 1.5, expectancy: 0.3 },
+      ],
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    const res = await app.inject({ method: "GET", url: "/api/v1/lab/backtest/sweep/sw-47-4-legacy", headers: authHeaders() });
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    expect(body.rankBy).toBe("pnlPct");
+    // BestRow by pnlPct → row 3.
+    expect(body.bestRow.pnlPct).toBe(8);
   });
 
   it("47-T1: surfaces both sweepParam and sweepParams for a legacy single-object row", async () => {

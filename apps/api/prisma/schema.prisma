@@ -696,12 +696,21 @@ model BacktestSweep {
   /// Fill price reference; persisted per sweep so each run replays with the
   /// same execution model (docs/46-T4). Existing rows default to "CLOSE".
   fillAt            String      @default("CLOSE")
+  /// Metric used to choose the best row (47-T4). One of pnlPct, winRate,
+  /// sharpe, profitFactor, expectancy. Existing rows default to "pnlPct".
+  rankBy            String      @default("pnlPct")
   status            SweepStatus @default(PENDING)
   progress          Int         @default(0)
   runCount          Int
   /// SweepRow[] — filled progressively as runs complete
   resultsJson       Json?
+  /// Legacy single-param best-row value (the FIRST param's value for
+  /// multi-param sweeps; multi-param-aware clients should read
+  /// bestParamValuesJson instead).
   bestParamValue    Float?
+  /// Multi-param best-row values (47-T4). Record<string, number> with key
+  /// = `${blockId}.${paramName}`. Null until the run completes.
+  bestParamValuesJson Json?
   createdAt         DateTime    @default(now())
   updatedAt         DateTime    @updatedAt
 

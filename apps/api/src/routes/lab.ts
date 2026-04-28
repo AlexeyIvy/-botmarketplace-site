@@ -896,6 +896,7 @@ export async function labRoutes(app: FastifyInstance) {
       feeBps = 0,
       slippageBps = 0,
       fillAt = "CLOSE",
+      rankBy = "pnlPct",
     } = request.body ?? {};
 
     // ── 47-T1 normalization ────────────────────────────────────────────
@@ -921,6 +922,9 @@ export async function labRoutes(app: FastifyInstance) {
     }
     if (!ALLOWED_FILL_AT.includes(fillAt as FillAt)) {
       return problem(reply, 400, "Validation Error", `fillAt must be one of: ${ALLOWED_FILL_AT.join(", ")}`);
+    }
+    if (!ALLOWED_RANK_BY.includes(rankBy as RankBy)) {
+      return problem(reply, 400, "Validation Error", `rankBy must be one of: ${ALLOWED_RANK_BY.join(", ")}`);
     }
     if (sweepParams.length < 1 || sweepParams.length > 3) {
       return problem(reply, 400, "Validation Error", "sweepParams must contain 1 to 3 entries");
@@ -1007,6 +1011,7 @@ export async function labRoutes(app: FastifyInstance) {
         feeBps,
         slippageBps,
         fillAt,
+        rankBy,
         runCount,
         status: "PENDING",
       },
@@ -1033,8 +1038,12 @@ export async function labRoutes(app: FastifyInstance) {
     }
 
     const results = (sweep.resultsJson as SweepRow[] | null) ?? [];
+    const rankBy = (sweep.rankBy ?? "pnlPct") as RankBy;
     const bestRow = results.length > 0
-      ? results.reduce((best, r) => r.pnlPct > best.pnlPct ? r : best, results[0])
+      ? results.reduce(
+          (best, r) => (compareByMetric(r, best, rankBy) > 0 ? r : best),
+          results[0],
+        )
       : undefined;
 
     // 47-T1: surface both shapes. Old clients keep reading `sweepParam`;
@@ -1048,6 +1057,9 @@ export async function labRoutes(app: FastifyInstance) {
       runCount: sweep.runCount,
       sweepParam: sweepParamsArr[0],
       sweepParams: sweepParamsArr,
+      rankBy,
+      bestParamValue: sweep.bestParamValue,
+      bestParamValuesJson: sweep.bestParamValuesJson,
       results,
       bestRow,
       createdAt: sweep.createdAt.toISOString(),
@@ -1502,6 +1514,10 @@ interface SweepParam {
   step: number;
 }
 
+/** Metrics by which the sweep best-row can be selected (47-T4). */
+const ALLOWED_RANK_BY = ["pnlPct", "winRate", "sharpe", "profitFactor", "expectancy"] as const;
+type RankBy = typeof ALLOWED_RANK_BY[number];
+
 interface SweepRequestBody {
   datasetId: string;
   strategyVersionId: string;
@@ -1515,6 +1531,8 @@ interface SweepRequestBody {
   feeBps?: number;
   slippageBps?: number;
   fillAt?: FillAt;
+  /** Metric by which the best row is chosen (47-T4). Default "pnlPct". */
+  rankBy?: RankBy;
 }
 
 /**
@@ -1525,6 +1543,41 @@ interface SweepRequestBody {
 function normalizeSweepParams(json: unknown): SweepParam[] {
   if (Array.isArray(json)) return json as SweepParam[];
   return [json as SweepParam];
+}
+
+/**
+ * Compare two SweepRow values by the configured rankBy metric (47-T4).
+ * Returns positive when `a` is strictly better than `b`, negative when
+ * worse, 0 on a true tie.
+ *
+ *   pnlPct, winRate, sharpe, expectancy: bigger is better; null is the
+ *     worst possible value (treated as -Infinity).
+ *   profitFactor: bigger is better; +Infinity (no losses) sorts above any
+ *     finite value; -Infinity (impossible) below.
+ *
+ * Callers use a strict `>` left-fold so the FIRST row in lexicographic
+ * order wins on a tie — deterministic per docs/44 §Детерминизм.
+ */
+function metricValue(row: { pnlPct: number; winRate: number; sharpe: number | null; profitFactor: number | null; expectancy: number | null }, metric: RankBy): number {
+  switch (metric) {
+    case "pnlPct":     return row.pnlPct;
+    case "winRate":    return row.winRate;
+    case "sharpe":     return row.sharpe ?? Number.NEGATIVE_INFINITY;
+    case "profitFactor": return row.profitFactor ?? Number.NEGATIVE_INFINITY;
+    case "expectancy": return row.expectancy ?? Number.NEGATIVE_INFINITY;
+  }
+}
+
+function compareByMetric(
+  a: { pnlPct: number; winRate: number; sharpe: number | null; profitFactor: number | null; expectancy: number | null },
+  b: { pnlPct: number; winRate: number; sharpe: number | null; profitFactor: number | null; expectancy: number | null },
+  metric: RankBy,
+): number {
+  const av = metricValue(a, metric);
+  const bv = metricValue(b, metric);
+  if (av > bv) return 1;
+  if (av < bv) return -1;
+  return 0;
 }
 
 interface SweepRow {
@@ -1713,8 +1766,16 @@ async function runSweepAsync(sweepId: string): Promise<void> {
       });
     }
 
-    // Find best param value by PnL
-    const bestRow = results.reduce((best, r) => r.pnlPct > best.pnlPct ? r : best, results[0]);
+    // 47-T4: pick best row by the chosen metric. Tie-break: smaller index
+    // wins. results[] is already in lex order (47-T3), so a left-fold with
+    // strict `>` naturally preserves "first wins on a tie" semantics.
+    const rankByValue = (sweep.rankBy ?? "pnlPct") as RankBy;
+    const bestRow = results.length > 0
+      ? results.reduce(
+          (best, r) => (compareByMetric(r, best, rankByValue) > 0 ? r : best),
+          results[0],
+        )
+      : undefined;
 
     await prisma.backtestSweep.update({
       where: { id: sweepId },
@@ -1723,6 +1784,7 @@ async function runSweepAsync(sweepId: string): Promise<void> {
         progress: results.length,
         resultsJson: results as unknown as object[],
         bestParamValue: bestRow?.paramValue ?? null,
+        bestParamValuesJson: (bestRow?.paramValues ?? null) as unknown as object,
       },
     });
   } catch (err: unknown) {
