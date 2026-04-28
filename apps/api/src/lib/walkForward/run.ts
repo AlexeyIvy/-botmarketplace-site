@@ -23,6 +23,7 @@ import type { Candle } from "../bybitCandles.js";
 import type { DslExecOpts } from "../dslEvaluator.js";
 import { runBacktest } from "../backtest.js";
 import { split } from "./split.js";
+import { aggregate } from "./aggregate.js";
 import type {
   FoldConfig,
   FoldReport,
@@ -109,5 +110,5 @@ export function runWalkForward(
     };
   });
 
-  return { folds: folded };
+  return { folds: folded, aggregate: aggregate(folded) };
 }
