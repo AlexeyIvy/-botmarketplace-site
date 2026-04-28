@@ -82,9 +82,12 @@ export interface DslBacktestReport {
   tradeLog: DslTradeRecord[];
 }
 
+export type DslFillAt = "OPEN" | "CLOSE" | "NEXT_OPEN";
+
 export interface DslExecOpts {
   feeBps: number;
   slippageBps: number;
+  fillAt: DslFillAt;
 }
 
 // ---------------------------------------------------------------------------
@@ -727,7 +730,7 @@ export function runDslBacktest(
   opts: Partial<DslExecOpts> = {},
   mtfContext?: MtfBacktestContext,
 ): DslBacktestReport {
-  const { feeBps = 0, slippageBps = 0 } = opts;
+  const { feeBps = 0, slippageBps = 0, fillAt = "CLOSE" } = opts;
 
   // MTF-aware indicator resolution helper (#134-slice4):
   // When mtfContext is provided, indicator refs with sourceTimeframe resolve
@@ -909,6 +912,12 @@ export function runDslBacktest(
       }
 
       // --- Exit checks (priority: SL → trailing → indicator → TP → time) ---
+      //
+      // SL / TP / trailing trigger on intra-bar high/low and execute at their
+      // respective trigger prices — fillAt does NOT apply to them.
+      // fillAt applies only to entry and indicator_exit fills. time_exit and
+      // end_of_data are synthetic forced exits at the bar's close regardless
+      // of fillAt.
 
       // 1. Stop loss
       if (positionSide === "long") {
@@ -963,12 +972,28 @@ export function runDslBacktest(
           const indVals = resolveIndicator(ie.indicator, candles, cache);
           const val = indVals[i];
           if (val !== null && evalOp(ie.condition.op, val, ie.condition.value)) {
-            const exitPrice = c.close;
+            // Resolve exit fill based on fillAt mode (mirror of entry).
+            // For NEXT_OPEN on the last candle there is no next bar — fall
+            // back to current close so the position closes on the bar that
+            // produced the signal rather than rolling beyond the dataset.
+            let exitPrice: number;
+            let exitTime: number;
+            if (fillAt === "OPEN") {
+              exitPrice = c.open;
+              exitTime = c.openTime;
+            } else if (fillAt === "NEXT_OPEN" && i + 1 < candles.length) {
+              const next = candles[i + 1];
+              exitPrice = next.open;
+              exitTime = next.openTime;
+            } else {
+              exitPrice = c.close;
+              exitTime = c.openTime;
+            }
             const pnlDirection = positionSide === "long"
               ? exitPrice * exitMult - effectiveEntry
               : effectiveEntry - exitPrice * exitMult;
             const outcome = pnlDirection > 0 ? "WIN" : pnlDirection < 0 ? "LOSS" : "NEUTRAL";
-            recordTrade(c.openTime, exitPrice, outcome, "indicator_exit", barsHeld);
+            recordTrade(exitTime, exitPrice, outcome, "indicator_exit", barsHeld);
             continue;
           }
         }
@@ -1030,12 +1055,38 @@ export function runDslBacktest(
       // Proximity filter gate
       if (!evaluateProximityFilter(entry.proximityFilter, i, candles, cache)) continue;
 
+      // Resolve fill price based on fillAt mode.
+      //   "CLOSE"     → fill at this bar's close (legacy behavior).
+      //   "OPEN"      → fill at this bar's open.
+      //   "NEXT_OPEN" → fill at the next bar's open (lookahead-free for
+      //                 indicator signals computed on closed bars). If the
+      //                 signal fires on the last candle there is no next bar
+      //                 to execute against — entry is skipped.
+      let entryFillPrice: number;
+      let entryFillTime: number;
+      let entryFillBarIndex: number;
+      if (fillAt === "OPEN") {
+        entryFillPrice = c.open;
+        entryFillTime = c.openTime;
+        entryFillBarIndex = i;
+      } else if (fillAt === "NEXT_OPEN") {
+        if (i + 1 >= candles.length) continue;
+        const next = candles[i + 1];
+        entryFillPrice = next.open;
+        entryFillTime = next.openTime;
+        entryFillBarIndex = i + 1;
+      } else {
+        entryFillPrice = c.close;
+        entryFillTime = c.openTime;
+        entryFillBarIndex = i;
+      }
+
       // Enter position
       inPosition = true;
       positionSide = side;
-      effectiveEntry = c.close * entryMult;
-      entryTime = c.openTime;
-      entryBarIndex = i;
+      effectiveEntry = entryFillPrice * entryMult;
+      entryTime = entryFillTime;
+      entryBarIndex = entryFillBarIndex;
 
       // Compute SL/TP levels
       const levels = computeExitLevels(slDef, tpDef, effectiveEntry, side, i, candles, cache);

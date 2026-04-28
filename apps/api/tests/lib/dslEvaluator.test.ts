@@ -816,3 +816,156 @@ describe("evaluateProximityFilter", () => {
     expect(evaluateProximityFilter(pfFail, 29, trendCandles, cache)).toBe(false);
   });
 });
+
+// ---------------------------------------------------------------------------
+// 46-T1: fillAt modes — OPEN, CLOSE, NEXT_OPEN
+// ---------------------------------------------------------------------------
+
+describe("dslEvaluator – fillAt modes (46-T1)", () => {
+  it("default fillAt='CLOSE' fills entry at the signal bar's close", () => {
+    const candles = makeFlatThenUp(80, 25, 100, 2);
+    const report = runDslBacktest(candles, makeSmaLongDsl(5, 20, 2, 4));
+    expect(report.trades).toBeGreaterThanOrEqual(1);
+
+    const first = report.tradeLog[0];
+    const entryBar = candles.find((c) => c.openTime === first.entryTime)!;
+    // No fee/slippage by default → entryPrice exactly equals close.
+    expect(first.entryPrice).toBeCloseTo(entryBar.close, 10);
+  });
+
+  it("fillAt='OPEN' fills entry at the signal bar's open", () => {
+    const candles = makeFlatThenUp(80, 25, 100, 2);
+    const report = runDslBacktest(candles, makeSmaLongDsl(5, 20, 2, 4), {
+      fillAt: "OPEN",
+    });
+    expect(report.trades).toBeGreaterThanOrEqual(1);
+
+    const first = report.tradeLog[0];
+    const entryBar = candles.find((c) => c.openTime === first.entryTime)!;
+    expect(first.entryPrice).toBeCloseTo(entryBar.open, 10);
+    // Sanity: makeFlatThenUp seeds open = close - step*0.3 in the trend phase,
+    // so OPEN < CLOSE on the entry bar.
+    expect(first.entryPrice).toBeLessThan(entryBar.close);
+  });
+
+  it("fillAt='NEXT_OPEN' fills entry at the next bar's open and shifts entryTime", () => {
+    const candles = makeFlatThenUp(80, 25, 100, 2);
+    // Reference run with CLOSE to locate the signal bar.
+    const refReport = runDslBacktest(candles, makeSmaLongDsl(5, 20, 2, 4));
+    const refSignalTime = refReport.tradeLog[0].entryTime;
+    const refSignalIdx = candles.findIndex((c) => c.openTime === refSignalTime);
+    expect(refSignalIdx).toBeGreaterThanOrEqual(0);
+    expect(refSignalIdx + 1).toBeLessThan(candles.length);
+
+    const report = runDslBacktest(candles, makeSmaLongDsl(5, 20, 2, 4), {
+      fillAt: "NEXT_OPEN",
+    });
+    expect(report.trades).toBeGreaterThanOrEqual(1);
+
+    const first = report.tradeLog[0];
+    const expectedBar = candles[refSignalIdx + 1];
+    expect(first.entryTime).toBe(expectedBar.openTime);
+    expect(first.entryPrice).toBeCloseTo(expectedBar.open, 10);
+  });
+
+  it("fillAt='NEXT_OPEN' skips entry when the signal fires on the last candle", () => {
+    // Construct a fixture where the SMA crossover fires only on the very last
+    // bar: 25 flat bars then a single sharp upward jump. With SMA(2)/SMA(3)
+    // and a one-bar spike at the end, the crossover lands on the last bar.
+    const candles = [];
+    for (let i = 0; i < 4; i++) {
+      candles.push({
+        openTime: 1_700_000_000_000 + i * 60_000,
+        open: 100, high: 100, low: 100, close: 100, volume: 1000,
+      });
+    }
+    candles.push({
+      openTime: 1_700_000_000_000 + 4 * 60_000,
+      open: 100, high: 200, low: 100, close: 200, volume: 1000,
+    });
+
+    const dsl = makeSmaLongDsl(2, 3, 2, 4);
+    const closeReport = runDslBacktest(candles, dsl, { fillAt: "CLOSE" });
+    const nextOpenReport = runDslBacktest(candles, dsl, { fillAt: "NEXT_OPEN" });
+
+    // Signal fires on the last bar (index 4) under CLOSE → 1 trade closed via end_of_data.
+    expect(closeReport.trades).toBe(1);
+    // NEXT_OPEN has no next candle → entry skipped, no trade recorded.
+    expect(nextOpenReport.trades).toBe(0);
+  });
+
+  it("fillAt='NEXT_OPEN' indicator_exit on the last candle falls back to current close", () => {
+    // Fixture: SMA(2) crosses above SMA(3) on bar 3, then RSI(2) > 70 on
+    // bar 4 forces an indicator_exit on the last candle. With NEXT_OPEN the
+    // exit must fall back to bar 4's close (no next bar exists).
+    const candles = [
+      { openTime: 0,       open: 100, high: 100, low: 100, close: 100, volume: 1000 },
+      { openTime: 60_000,  open: 100, high: 100, low: 100, close: 100, volume: 1000 },
+      { openTime: 120_000, open: 100, high: 100, low: 100, close: 100, volume: 1000 },
+      { openTime: 180_000, open: 150, high: 200, low: 150, close: 200, volume: 1000 },
+      { openTime: 240_000, open: 250, high: 300, low: 250, close: 300, volume: 1000 },
+    ];
+
+    const dsl = {
+      id: "rsi-exit-last",
+      name: "RSI exit on last bar",
+      dslVersion: 2,
+      enabled: true,
+      market: { exchange: "bybit", env: "demo", category: "linear", symbol: "BTCUSDT" },
+      entry: {
+        side: "Buy",
+        signal: {
+          type: "crossover",
+          fast: { blockType: "SMA", length: 2 },
+          slow: { blockType: "SMA", length: 3 },
+        },
+      },
+      exit: {
+        // SL/TP set wide so they don't fire on this fixture.
+        stopLoss: { type: "fixed_pct", value: 99 },
+        takeProfit: { type: "fixed_pct", value: 99 },
+        indicatorExit: {
+          indicator: { type: "RSI", length: 2 },
+          condition: { op: "gt", value: 70 },
+          appliesTo: "long",
+        },
+      },
+      risk: { maxPositionSizeUsd: 100, riskPerTradePct: 99, cooldownSeconds: 0 },
+      execution: { orderType: "Market", clientOrderIdPrefix: "test_" },
+      guards: { maxOpenPositions: 1, maxOrdersPerMinute: 10, pauseOnError: true },
+    };
+
+    const report = runDslBacktest(candles, dsl, { fillAt: "NEXT_OPEN" });
+    const indExits = report.tradeLog.filter((t) => t.exitReason === "indicator_exit");
+    expect(indExits.length).toBe(1);
+
+    const exit = indExits[0];
+    const lastBar = candles[candles.length - 1];
+    expect(exit.exitTime).toBe(lastBar.openTime);
+    // Fallback path: no next candle → exit fills at the current bar's close.
+    expect(exit.exitPrice).toBeCloseTo(lastBar.close, 10);
+  });
+
+  it("fillAt='OPEN' indicator_exit fills at the signal bar's open", () => {
+    const candles = makeFlatThenUp(80, 25, 100, 2);
+    const dsl = {
+      ...makeSmaLongDsl(5, 20, 50, 50),
+      exit: {
+        stopLoss: { type: "fixed_pct", value: 50 },
+        takeProfit: { type: "fixed_pct", value: 50 },
+        indicatorExit: {
+          indicator: { type: "RSI", length: 14 },
+          condition: { op: "gt", value: 70 },
+          appliesTo: "both",
+        },
+      },
+    };
+    const report = runDslBacktest(candles, dsl, { fillAt: "OPEN" });
+    const indExits = report.tradeLog.filter((t) => t.exitReason === "indicator_exit");
+    expect(indExits.length).toBeGreaterThanOrEqual(1);
+
+    const exit = indExits[0];
+    const exitBar = candles.find((c) => c.openTime === exit.exitTime)!;
+    expect(exit.exitPrice).toBeCloseTo(exitBar.open, 10);
+  });
+});
