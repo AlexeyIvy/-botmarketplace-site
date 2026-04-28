@@ -891,40 +891,77 @@ export async function labRoutes(app: FastifyInstance) {
       datasetId,
       strategyVersionId,
       sweepParam,
+      sweepParams: sweepParamsBody,
       feeBps = 0,
       slippageBps = 0,
       fillAt = "CLOSE",
     } = request.body ?? {};
 
+    // ── 47-T1 normalization ────────────────────────────────────────────
+    // Accept either `sweepParams: SweepParam[]` (new) or `sweepParam: {...}`
+    // (legacy alias). When both are present, the array wins; the singular
+    // form is logged as ignored for visibility.
+    let sweepParams: SweepParam[] | undefined;
+    if (sweepParamsBody && Array.isArray(sweepParamsBody)) {
+      sweepParams = sweepParamsBody;
+      if (sweepParam) {
+        logger.warn(
+          { workspaceId: workspace.id },
+          "POST /lab/backtest/sweep: both sweepParams and sweepParam given; using sweepParams",
+        );
+      }
+    } else if (sweepParam) {
+      sweepParams = [sweepParam];
+    }
+
     // ── Validation ──────────────────────────────────────────────────────────
-    if (!datasetId || !strategyVersionId || !sweepParam) {
-      return problem(reply, 400, "Validation Error", "datasetId, strategyVersionId, and sweepParam are required");
+    if (!datasetId || !strategyVersionId || !sweepParams) {
+      return problem(reply, 400, "Validation Error", "datasetId, strategyVersionId, and (sweepParam OR sweepParams) are required");
     }
     if (!ALLOWED_FILL_AT.includes(fillAt as FillAt)) {
       return problem(reply, 400, "Validation Error", `fillAt must be one of: ${ALLOWED_FILL_AT.join(", ")}`);
     }
-
-    if (!sweepParam.blockId || !sweepParam.paramName) {
-      return problem(reply, 400, "Validation Error", "sweepParam.blockId and sweepParam.paramName are required");
+    if (sweepParams.length < 1 || sweepParams.length > 3) {
+      return problem(reply, 400, "Validation Error", "sweepParams must contain 1 to 3 entries");
+    }
+    // Reject duplicate (blockId, paramName) tuples — mutating the same
+    // parameter twice with different values inside one combination is
+    // ambiguous and rejected up front.
+    const seenKeys = new Set<string>();
+    for (const p of sweepParams) {
+      const key = `${p.blockId}.${p.paramName}`;
+      if (seenKeys.has(key)) {
+        return problem(reply, 400, "Validation Error", `sweepParams contains duplicate (blockId, paramName): ${key}`);
+      }
+      seenKeys.add(key);
     }
 
-    const { from, to, step } = sweepParam;
-    if (typeof from !== "number" || typeof to !== "number" || typeof step !== "number") {
-      return problem(reply, 400, "Validation Error", "sweepParam.from, .to, .step must be numbers");
+    let totalRunCount = 1;
+    for (const p of sweepParams) {
+      if (!p.blockId || !p.paramName) {
+        return problem(reply, 400, "Validation Error", "each sweepParams entry needs blockId and paramName");
+      }
+      if (typeof p.from !== "number" || typeof p.to !== "number" || typeof p.step !== "number") {
+        return problem(reply, 400, "Validation Error", "each sweepParams entry needs numeric from/to/step");
+      }
+      if (p.from >= p.to) {
+        return problem(reply, 400, "Validation Error", "sweepParams.from must be less than sweepParams.to");
+      }
+      if (p.step <= 0) {
+        return problem(reply, 400, "Validation Error", "sweepParams.step must be greater than 0");
+      }
+      const runs = Math.floor((p.to - p.from) / p.step) + 1;
+      if (runs < 2) {
+        return problem(reply, 400, "Validation Error", "each sweepParams entry must yield at least 2 runs");
+      }
+      totalRunCount *= runs;
     }
-    if (from >= to) {
-      return problem(reply, 400, "Validation Error", "sweepParam.from must be less than sweepParam.to");
-    }
-    if (step <= 0) {
-      return problem(reply, 400, "Validation Error", "sweepParam.step must be greater than 0");
-    }
-
-    const runCount = Math.floor((to - from) / step) + 1;
 
     // ── Guard: max 20 runs (docs/24 §8.3) ────────────────────────────────
-    if (runCount > 20) {
-      return problem(reply, 422, "Sweep Too Large", "Sweep exceeds maximum of 20 runs. Narrow the range or increase the step.");
+    if (totalRunCount > 20) {
+      return problem(reply, 422, "Sweep Too Large", "Sweep exceeds maximum of 20 runs. Narrow the ranges or increase the step.");
     }
+    const runCount = totalRunCount;
 
     if (!Number.isInteger(feeBps) || feeBps < 0 || feeBps > MAX_BPS) {
       return problem(reply, 400, "Validation Error", `feeBps must be integer 0–${MAX_BPS}`);
@@ -962,7 +999,10 @@ export async function labRoutes(app: FastifyInstance) {
         workspaceId: workspace.id,
         strategyVersionId,
         datasetId,
-        sweepParamJson: sweepParam as object,
+        // 47-T1: persist as array. Single-param requests still produce a
+        // length-1 array; legacy rows that pre-date 47-T1 carry a single
+        // object — `normalizeSweepParams` reads both shapes uniformly.
+        sweepParamJson: sweepParams as unknown as object,
         feeBps,
         slippageBps,
         fillAt,
@@ -996,11 +1036,17 @@ export async function labRoutes(app: FastifyInstance) {
       ? results.reduce((best, r) => r.pnlPct > best.pnlPct ? r : best, results[0])
       : undefined;
 
+    // 47-T1: surface both shapes. Old clients keep reading `sweepParam`;
+    // new clients (47-T5) read `sweepParams` and ignore the singular alias.
+    const sweepParamsArr = normalizeSweepParams(sweep.sweepParamJson);
+
     return reply.send({
       id: sweep.id,
       status: sweep.status.toLowerCase(),
       progress: sweep.progress,
       runCount: sweep.runCount,
+      sweepParam: sweepParamsArr[0],
+      sweepParams: sweepParamsArr,
       results,
       bestRow,
       createdAt: sweep.createdAt.toISOString(),
@@ -1018,17 +1064,24 @@ export async function labRoutes(app: FastifyInstance) {
       orderBy: { createdAt: "desc" },
       take: 50,
     });
-    return reply.send(list.map((s) => ({
-      id: s.id,
-      status: s.status.toLowerCase(),
-      progress: s.progress,
-      runCount: s.runCount,
-      sweepParamJson: s.sweepParamJson,
-      resultsJson: s.resultsJson,
-      bestParamValue: s.bestParamValue,
-      createdAt: s.createdAt.toISOString(),
-      updatedAt: s.updatedAt.toISOString(),
-    })));
+    return reply.send(list.map((s) => {
+      const sweepParamsArr = normalizeSweepParams(s.sweepParamJson);
+      return {
+        id: s.id,
+        status: s.status.toLowerCase(),
+        progress: s.progress,
+        runCount: s.runCount,
+        // 47-T1: keep the legacy `sweepParamJson` for callers that already
+        // know how to handle either shape, plus expose normalized arrays.
+        sweepParamJson: s.sweepParamJson,
+        sweepParam: sweepParamsArr[0],
+        sweepParams: sweepParamsArr,
+        resultsJson: s.resultsJson,
+        bestParamValue: s.bestParamValue,
+        createdAt: s.createdAt.toISOString(),
+        updatedAt: s.updatedAt.toISOString(),
+      };
+    }));
   });
 
   // -------------------------------------------------------------------------
@@ -1440,19 +1493,37 @@ interface WalkForwardRequestBody {
   fillAt?: FillAt;
 }
 
+interface SweepParam {
+  blockId: string;
+  paramName: string;
+  from: number;
+  to: number;
+  step: number;
+}
+
 interface SweepRequestBody {
   datasetId: string;
   strategyVersionId: string;
-  sweepParam: {
-    blockId: string;
-    paramName: string;
-    from: number;
-    to: number;
-    step: number;
-  };
+  /** @deprecated Use {@link sweepParams}. Retained as a backward-compat
+   *  alias: when `sweepParams` is omitted, the singular form is wrapped
+   *  in a length-1 array. If both are present, `sweepParams` wins. */
+  sweepParam?: SweepParam;
+  /** Multi-parameter grid (1..3 elements). Cartesian product enforced
+   *  separately in 47-T3 against the runCount limit. */
+  sweepParams?: SweepParam[];
   feeBps?: number;
   slippageBps?: number;
   fillAt?: FillAt;
+}
+
+/**
+ * Normalize the persisted `BacktestSweep.sweepParamJson` value, which is
+ * `Json` and may carry either the legacy single-object shape or the new
+ * array shape introduced in 47-T1. Old rows are not backfilled.
+ */
+function normalizeSweepParams(json: unknown): SweepParam[] {
+  if (Array.isArray(json)) return json as SweepParam[];
+  return [json as SweepParam];
 }
 
 interface SweepRow {
@@ -1482,7 +1553,11 @@ async function runSweepAsync(sweepId: string): Promise<void> {
       data: { status: "RUNNING" },
     });
 
-    const sweepParam = sweep.sweepParamJson as { blockId: string; paramName: string; from: number; to: number; step: number };
+    // 47-T1: persisted shape is an array of params. Multi-param iteration
+    // arrives in 47-T3; until then the linear loop still walks the first
+    // entry, which keeps single-param sweeps bit-for-bit identical.
+    const sweepParamsAll = normalizeSweepParams(sweep.sweepParamJson);
+    const sweepParam = sweepParamsAll[0];
 
     // Resolve strategy version and dataset
     const strategyVersion = await prisma.strategyVersion.findUnique({

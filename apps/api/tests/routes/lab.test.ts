@@ -605,6 +605,136 @@ describe("POST /api/v1/lab/backtest/sweep", () => {
     });
     expect(res.statusCode).toBe(400);
   });
+
+  // 47-T1: SweepRequestBody accepts sweepParams (1..3) with backward-compat
+  // alias on the singular sweepParam. Each test uses a distinct
+  // X-Forwarded-For so the per-route 5/min rate-limit bucket stays fresh.
+  const t1Headers = (ip: string) => ({ ...authHeaders(), "x-forwarded-for": ip });
+
+  it("47-T1: accepts sweepParams (length 1) and persists as array", async () => {
+    mockStrategyVersions["sv-47-1"] = { id: "sv-47-1", strategyId: "strat-47", strategy: { workspaceId: WS_ID }, dslJson: {} };
+    mockDatasets["ds-47-1"] = { id: "ds-47-1", workspaceId: WS_ID, exchange: "bybit", symbol: "BTCUSDT", interval: "M15", fromTsMs: BigInt(0), toTsMs: BigInt(1), datasetHash: "h" };
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/lab/backtest/sweep",
+      headers: t1Headers("10.47.1.1"),
+      payload: {
+        datasetId: "ds-47-1",
+        strategyVersionId: "sv-47-1",
+        sweepParams: [{ blockId: "b1", paramName: "p1", from: 1, to: 5, step: 1 }],
+      },
+    });
+    expect(res.statusCode).toBe(202);
+    expect(res.json().runCount).toBe(5);
+  });
+
+  it("47-T1: accepts 2-param sweepParams within the 20-run limit (3×3 = 9)", async () => {
+    mockStrategyVersions["sv-47-2"] = { id: "sv-47-2", strategyId: "strat-47", strategy: { workspaceId: WS_ID }, dslJson: {} };
+    mockDatasets["ds-47-2"] = { id: "ds-47-2", workspaceId: WS_ID, exchange: "bybit", symbol: "BTCUSDT", interval: "M15", fromTsMs: BigInt(0), toTsMs: BigInt(1), datasetHash: "h" };
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/lab/backtest/sweep",
+      headers: t1Headers("10.47.1.2"),
+      payload: {
+        datasetId: "ds-47-2",
+        strategyVersionId: "sv-47-2",
+        sweepParams: [
+          { blockId: "b1", paramName: "p1", from: 1, to: 3, step: 1 },
+          { blockId: "b2", paramName: "p2", from: 10, to: 30, step: 10 },
+        ],
+      },
+    });
+    expect(res.statusCode).toBe(202);
+    expect(res.json().runCount).toBe(9);
+  });
+
+  it("47-T1: rejects sweepParams with 4 entries (length > 3)", async () => {
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/lab/backtest/sweep",
+      headers: t1Headers("10.47.1.3"),
+      payload: {
+        datasetId: "ds-1",
+        strategyVersionId: "sv-1",
+        sweepParams: [
+          { blockId: "b1", paramName: "p1", from: 1, to: 2, step: 1 },
+          { blockId: "b2", paramName: "p2", from: 1, to: 2, step: 1 },
+          { blockId: "b3", paramName: "p3", from: 1, to: 2, step: 1 },
+          { blockId: "b4", paramName: "p4", from: 1, to: 2, step: 1 },
+        ],
+      },
+    });
+    expect(res.statusCode).toBe(400);
+    expect(res.json().detail).toContain("1 to 3 entries");
+  });
+
+  it("47-T1: rejects empty sweepParams array", async () => {
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/lab/backtest/sweep",
+      headers: t1Headers("10.47.1.4"),
+      payload: { datasetId: "ds-1", strategyVersionId: "sv-1", sweepParams: [] },
+    });
+    expect(res.statusCode).toBe(400);
+  });
+
+  it("47-T1: sweepParams wins when both forms are provided", async () => {
+    mockStrategyVersions["sv-47-3"] = { id: "sv-47-3", strategyId: "strat-47", strategy: { workspaceId: WS_ID }, dslJson: {} };
+    mockDatasets["ds-47-3"] = { id: "ds-47-3", workspaceId: WS_ID, exchange: "bybit", symbol: "BTCUSDT", interval: "M15", fromTsMs: BigInt(0), toTsMs: BigInt(1), datasetHash: "h" };
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/lab/backtest/sweep",
+      headers: t1Headers("10.47.1.5"),
+      payload: {
+        datasetId: "ds-47-3",
+        strategyVersionId: "sv-47-3",
+        // The singular form would be 5 runs; sweepParams is the 9-run grid.
+        sweepParam: { blockId: "ignored", paramName: "x", from: 1, to: 5, step: 1 },
+        sweepParams: [
+          { blockId: "b1", paramName: "p1", from: 1, to: 3, step: 1 },
+          { blockId: "b2", paramName: "p2", from: 10, to: 30, step: 10 },
+        ],
+      },
+    });
+    expect(res.statusCode).toBe(202);
+    expect(res.json().runCount).toBe(9);
+  });
+
+  it("47-T1: rejects duplicate (blockId, paramName) inside sweepParams", async () => {
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/lab/backtest/sweep",
+      headers: t1Headers("10.47.1.6"),
+      payload: {
+        datasetId: "ds-1",
+        strategyVersionId: "sv-1",
+        sweepParams: [
+          { blockId: "b1", paramName: "p1", from: 1, to: 3, step: 1 },
+          { blockId: "b1", paramName: "p1", from: 5, to: 7, step: 1 },
+        ],
+      },
+    });
+    expect(res.statusCode).toBe(400);
+    expect(res.json().detail).toContain("duplicate");
+  });
+
+  it("47-T1: rejects cartesian product > 20", async () => {
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/lab/backtest/sweep",
+      headers: t1Headers("10.47.1.7"),
+      payload: {
+        datasetId: "ds-1",
+        strategyVersionId: "sv-1",
+        // 5 × 5 = 25 → over the 20-run cap
+        sweepParams: [
+          { blockId: "b1", paramName: "p1", from: 1, to: 5, step: 1 },
+          { blockId: "b2", paramName: "p2", from: 1, to: 5, step: 1 },
+        ],
+      },
+    });
+    expect(res.statusCode).toBe(422);
+  });
 });
 
 // ── GET /lab/backtest/sweep/:id ─────────────────────────────────────────────
@@ -620,6 +750,50 @@ describe("GET /api/v1/lab/backtest/sweep/:id", () => {
     const res = await app.inject({ method: "GET", url: "/api/v1/lab/backtest/sweep/sw-1", headers: authHeaders() });
     expect(res.statusCode).toBe(200);
     expect(res.json().status).toBe("done");
+  });
+
+  it("47-T1: surfaces both sweepParam and sweepParams for a legacy single-object row", async () => {
+    mockSweeps["sw-legacy"] = {
+      id: "sw-legacy",
+      workspaceId: WS_ID,
+      status: "DONE",
+      progress: 5,
+      runCount: 5,
+      // Pre-47-T1 shape: a single object, not an array.
+      sweepParamJson: { blockId: "b1", paramName: "p1", from: 1, to: 5, step: 1 },
+      resultsJson: [],
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    const res = await app.inject({ method: "GET", url: "/api/v1/lab/backtest/sweep/sw-legacy", headers: authHeaders() });
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    expect(body.sweepParam).toMatchObject({ blockId: "b1", paramName: "p1" });
+    expect(body.sweepParams).toHaveLength(1);
+    expect(body.sweepParams[0]).toMatchObject({ blockId: "b1", paramName: "p1" });
+  });
+
+  it("47-T1: surfaces both sweepParam and sweepParams for a new array-shaped row", async () => {
+    mockSweeps["sw-array"] = {
+      id: "sw-array",
+      workspaceId: WS_ID,
+      status: "DONE",
+      progress: 6,
+      runCount: 6,
+      // 47-T1 shape: persisted array.
+      sweepParamJson: [
+        { blockId: "b1", paramName: "p1", from: 1, to: 3, step: 1 },
+        { blockId: "b2", paramName: "p2", from: 10, to: 20, step: 10 },
+      ],
+      resultsJson: [],
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    const res = await app.inject({ method: "GET", url: "/api/v1/lab/backtest/sweep/sw-array", headers: authHeaders() });
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    expect(body.sweepParams).toHaveLength(2);
+    expect(body.sweepParam).toMatchObject({ blockId: "b1" });
   });
 });
 
