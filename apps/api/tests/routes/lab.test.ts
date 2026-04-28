@@ -152,7 +152,12 @@ vi.mock("../../src/lib/prisma.js", () => ({
       }),
       findMany: vi.fn().mockImplementation(() => Promise.resolve(Object.values(mockSweeps))),
       count: vi.fn().mockResolvedValue(0),
-      update: vi.fn().mockResolvedValue({}),
+      update: vi.fn().mockImplementation(({ where, data }: { where: { id: string }; data: Record<string, unknown> }) => {
+        const cur = mockSweeps[where.id] as Record<string, unknown> | undefined;
+        if (!cur) return Promise.resolve(null);
+        Object.assign(cur, data, { updatedAt: new Date() });
+        return Promise.resolve(cur);
+      }),
     },
     walkForwardRun: {
       create: vi.fn().mockImplementation(({ data }: { data: Record<string, unknown> }) => {
@@ -734,6 +739,68 @@ describe("POST /api/v1/lab/backtest/sweep", () => {
       },
     });
     expect(res.statusCode).toBe(422);
+  });
+
+  // 47-T3: 2-param sweep happy path — 3×3 = 9 combinations, returned with
+  // both `paramValue` (legacy) and `paramValues` (multi-param). The test
+  // hits the live runSweepAsync with mocked Prisma + a small candle set.
+  it("47-T3: 2-param 3×3 sweep persists paramValues on every row", async () => {
+    mockStrategyVersions["sv-47-3-grid"] = {
+      id: "sv-47-3-grid",
+      strategyId: "strat-47-3",
+      strategy: { workspaceId: WS_ID },
+      dslJson: {},
+    };
+    mockDatasets["ds-47-3-grid"] = {
+      id: "ds-47-3-grid",
+      workspaceId: WS_ID,
+      exchange: "bybit",
+      symbol: "BTCUSDT",
+      interval: "M15",
+      fromTsMs: BigInt(0),
+      toTsMs: BigInt(1),
+      datasetHash: "h",
+    };
+
+    const post = await app.inject({
+      method: "POST",
+      url: "/api/v1/lab/backtest/sweep",
+      headers: t1Headers("10.47.3.1"),
+      payload: {
+        datasetId: "ds-47-3-grid",
+        strategyVersionId: "sv-47-3-grid",
+        sweepParams: [
+          { blockId: "b1", paramName: "p1", from: 1, to: 3, step: 1 },
+          { blockId: "b2", paramName: "p2", from: 10, to: 30, step: 10 },
+        ],
+      },
+    });
+    expect(post.statusCode).toBe(202);
+    const { sweepId } = post.json();
+
+    // runSweepAsync is fire-and-forget; give it a few microtask ticks to
+    // walk through the in-memory mocks.
+    for (let i = 0; i < 30; i++) {
+      const cur = mockSweeps[sweepId] as Record<string, unknown> | undefined;
+      if (cur && (cur.status === "DONE" || cur.status === "FAILED")) break;
+      await new Promise((r) => setTimeout(r, 10));
+    }
+    const finalRow = mockSweeps[sweepId] as Record<string, unknown> | undefined;
+    expect(finalRow).toBeTruthy();
+    const results = finalRow!.resultsJson as Array<Record<string, unknown>>;
+    expect(results).toHaveLength(9);
+    // Each row carries both legacy and multi-param fields.
+    for (const r of results) {
+      const pv = r.paramValues as Record<string, number>;
+      expect(typeof r.paramValue).toBe("number");
+      expect(pv["b1.p1"]).toBeGreaterThanOrEqual(1);
+      expect(pv["b1.p1"]).toBeLessThanOrEqual(3);
+      expect([10, 20, 30]).toContain(pv["b2.p2"]);
+    }
+    // Lex order: last param iterates fastest → first row is (1, 10).
+    const first = results[0];
+    expect((first.paramValues as Record<string, number>)["b1.p1"]).toBe(1);
+    expect((first.paramValues as Record<string, number>)["b2.p2"]).toBe(10);
   });
 });
 

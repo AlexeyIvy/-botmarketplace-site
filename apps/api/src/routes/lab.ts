@@ -11,7 +11,8 @@ import {
 import { split as splitFolds } from "../lib/walkForward/split.js";
 import type { FoldConfig } from "../lib/walkForward/types.js";
 import { validateDsl } from "../lib/dslValidator.js";
-import { applyDslSweepParam } from "../lib/dslSweepParam.js";
+import { applyDslSweepParams } from "../lib/dslSweepParam.js";
+import { enumerateGrid } from "../lib/sweepGrid.js";
 import { compileGraph } from "../lib/graphCompiler.js";
 import type { GraphJson } from "../lib/graphCompiler.js";
 import {
@@ -1527,7 +1528,18 @@ function normalizeSweepParams(json: unknown): SweepParam[] {
 }
 
 interface SweepRow {
+  /**
+   * Backward-compat alias for clients that still read a single value.
+   * For multi-param sweeps this carries the value of the FIRST param in
+   * the combination — multi-param-aware clients should read `paramValues`.
+   */
   paramValue: number;
+  /**
+   * Multi-param values (47-T3). Key = `${blockId}.${paramName}`. For a
+   * single-param sweep this map has exactly one entry, equal to the
+   * legacy `paramValue` field.
+   */
+  paramValues: Record<string, number>;
   backtestResultId: string;
   pnlPct: number;
   winRate: number;
@@ -1600,17 +1612,25 @@ async function runSweepAsync(sweepId: string): Promise<void> {
 
     const results: SweepRow[] = [];
 
-    // Sequential sweep — mutate DSL per iteration
-    for (let paramValue = sweepParam.from; paramValue <= sweepParam.to; paramValue += sweepParam.step) {
-      // Round to avoid floating point drift
-      const roundedParam = Math.round(paramValue * 1e8) / 1e8;
+    // 47-T3: cartesian iteration over `sweepParamsAll`. enumerateGrid
+    // returns combinations in lexicographic order — the LAST param
+    // iterates fastest. For a single-param sweep this collapses to the
+    // legacy linear loop and produces identical SweepRow values.
+    const combinations = enumerateGrid(sweepParamsAll);
 
-      // Clone DSL and inject the sweep parameter value into the target block
-      const mutatedDsl = applyDslSweepParam(
+    // Sequential sweep — mutate DSL per iteration
+    for (const combination of combinations) {
+      // For backward compat keep the singular paramValue (= first param).
+      const paramValue = combination[0]?.value ?? 0;
+      const paramValues: Record<string, number> = {};
+      for (const c of combination) {
+        paramValues[`${c.blockId}.${c.paramName}`] = c.value;
+      }
+
+      // Clone DSL and inject the entire combination in one walk (47-T2).
+      const mutatedDsl = applyDslSweepParams(
         dslJson as Record<string, unknown>,
-        sweepParam.blockId,
-        sweepParam.paramName,
-        roundedParam,
+        combination,
       );
 
       // Create a BacktestResult record for this run
@@ -1651,7 +1671,8 @@ async function runSweepAsync(sweepId: string): Promise<void> {
         // apps/api/src/lib/backtestMetrics is bit-for-bit identical (locked
         // by the 49-T1 regression test), so SweepRow.sharpe is unchanged.
         results.push({
-          paramValue: roundedParam,
+          paramValue,
+          paramValues,
           backtestResultId: bt.id,
           pnlPct: report.totalPnlPct,
           winRate: report.winrate,
@@ -1669,7 +1690,8 @@ async function runSweepAsync(sweepId: string): Promise<void> {
         }).catch(() => undefined);
 
         results.push({
-          paramValue: roundedParam,
+          paramValue,
+          paramValues,
           backtestResultId: bt.id,
           pnlPct: 0,
           winRate: 0,
