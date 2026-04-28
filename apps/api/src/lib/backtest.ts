@@ -14,7 +14,11 @@
  *     "NEXT_OPEN" — fill at the next candle's open (lookahead-free for
  *                   indicator signals computed on closed bars)
  *   effectiveEntry = fillPrice * (1 + (feeBps + slippageBps) / 10_000)
- *   effectiveExit  = rawExit  * (1 - feeBps / 10_000)
+ *   effectiveExit  = rawExit  * (1 - (feeBps + slippageBps) / 10_000)
+ *   Slippage is symmetric: applied at both entry (cost up) and exit
+ *   (proceeds down) — round-trip cost reflects realistic market conditions.
+ *   At slippageBps = 0 the formulas reduce to fee-only behavior; existing
+ *   results with default slippage stay bit-for-bit unchanged.
  *   SL/TP/trailing trigger on intra-bar high/low and execute at their own
  *   trigger prices — fillAt does not apply to them. fillAt applies only to
  *   entry and indicator_exit fills.

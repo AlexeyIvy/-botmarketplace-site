@@ -795,8 +795,12 @@ export function runDslBacktest(
   // Pre-compute indicator cache
   const cache = createIndicatorCache();
 
+  // Symmetric round-trip cost: slippage applied at BOTH entry (cost up) and
+  // exit (proceeds down). When slippageBps = 0 these formulas reduce to the
+  // pre-46 behavior (only feeBps shaves both sides), so existing tests with
+  // default slippage stay bit-for-bit identical.
   const entryMult = 1 + (feeBps + slippageBps) / 10_000;
-  const exitMult = 1 - feeBps / 10_000;
+  const exitMult = 1 - (feeBps + slippageBps) / 10_000;
 
   const tradeLog: DslTradeRecord[] = [];
 
