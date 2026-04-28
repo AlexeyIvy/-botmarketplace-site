@@ -52,9 +52,31 @@ export type FoldReport = {
 };
 
 /**
- * Walk-forward run output. `aggregate` is added in 48-T3; until then the
- * field is intentionally absent.
+ * Aggregate metrics across all folds in a walk-forward run.
+ *
+ *   foldCount         — number of folds (FoldReport[] length).
+ *   avgIsPnlPct       — mean of isReport.totalPnlPct across folds.
+ *   avgOosPnlPct      — mean of oosReport.totalPnlPct across folds.
+ *   totalOosPnlPct    — naive sum of oosReport.totalPnlPct (no compounding;
+ *                       first-version limitation, documented in aggregate.ts).
+ *   avgIsSharpe       — mean of non-null isReport.sharpe; null if all null.
+ *   avgOosSharpe      — mean of non-null oosReport.sharpe; null if all null.
+ *   isOosPnlRatio     — avgOosPnlPct / avgIsPnlPct; null when avgIsPnlPct = 0.
+ *   oosWinFoldShare   — fraction of folds with oosReport.totalPnlPct > 0.
  */
+export type WalkForwardAggregate = {
+  foldCount: number;
+  avgIsPnlPct: number;
+  avgOosPnlPct: number;
+  totalOosPnlPct: number;
+  avgIsSharpe: number | null;
+  avgOosSharpe: number | null;
+  isOosPnlRatio: number | null;
+  oosWinFoldShare: number;
+};
+
+/** Walk-forward run output: per-fold reports plus an aggregate summary. */
 export type WalkForwardReport = {
   folds: FoldReport[];
+  aggregate: WalkForwardAggregate;
 };
