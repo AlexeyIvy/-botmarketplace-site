@@ -879,6 +879,120 @@ describe("POST /api/v1/lab/backtest/sweep", () => {
     expect((first.paramValues as Record<string, number>)["b1.p1"]).toBe(1);
     expect((first.paramValues as Record<string, number>)["b2.p2"]).toBe(10);
   });
+
+  // 47-T6: assert that runSweepAsync persists the best-row aggregates
+  // (`bestParamValue` + `bestParamValuesJson`) at completion time, not just
+  // recomputes them in the GET handler. With the mocked `runBacktest`
+  // returning identical metrics on every iteration, the strict `>` left-fold
+  // selects the FIRST combination in lex order — `(1, 10)` for a 2×2 grid.
+  it("47-T6: 2-param sweep persists bestParamValue + bestParamValuesJson on completion", async () => {
+    mockStrategyVersions["sv-47-6-best"] = {
+      id: "sv-47-6-best",
+      strategyId: "strat-47-6",
+      strategy: { workspaceId: WS_ID },
+      dslJson: {},
+    };
+    mockDatasets["ds-47-6-best"] = {
+      id: "ds-47-6-best",
+      workspaceId: WS_ID,
+      exchange: "bybit",
+      symbol: "BTCUSDT",
+      interval: "M15",
+      fromTsMs: BigInt(0),
+      toTsMs: BigInt(1),
+      datasetHash: "h",
+    };
+
+    const post = await app.inject({
+      method: "POST",
+      url: "/api/v1/lab/backtest/sweep",
+      headers: t1Headers("10.47.6.1"),
+      payload: {
+        datasetId: "ds-47-6-best",
+        strategyVersionId: "sv-47-6-best",
+        sweepParams: [
+          { blockId: "b1", paramName: "p1", from: 1, to: 2, step: 1 },
+          { blockId: "b2", paramName: "p2", from: 10, to: 20, step: 10 },
+        ],
+      },
+    });
+    expect(post.statusCode).toBe(202);
+    const { sweepId } = post.json();
+
+    for (let i = 0; i < 30; i++) {
+      const cur = mockSweeps[sweepId] as Record<string, unknown> | undefined;
+      if (cur && (cur.status === "DONE" || cur.status === "FAILED")) break;
+      await new Promise((r) => setTimeout(r, 10));
+    }
+    const finalRow = mockSweeps[sweepId] as Record<string, unknown> | undefined;
+    expect(finalRow).toBeTruthy();
+    expect(finalRow!.status).toBe("DONE");
+
+    const results = finalRow!.resultsJson as unknown[];
+    expect(results).toHaveLength(4);
+
+    expect(finalRow!.bestParamValue).toBe(1);
+    expect(finalRow!.bestParamValuesJson).toMatchObject({
+      "b1.p1": 1,
+      "b2.p2": 10,
+    });
+  });
+
+  // 47-T6: a legacy request that uses the singular `sweepParam` field still
+  // produces multi-param-aware rows: every row carries a `paramValues` map
+  // with a single entry, equal to the legacy `paramValue`. The persisted
+  // best-row aggregates also populate the new JSON field for older clients.
+  it("47-T6: legacy singular sweepParam runs through and populates paramValues map", async () => {
+    mockStrategyVersions["sv-47-6-legacy"] = {
+      id: "sv-47-6-legacy",
+      strategyId: "strat-47-6-legacy",
+      strategy: { workspaceId: WS_ID },
+      dslJson: {},
+    };
+    mockDatasets["ds-47-6-legacy"] = {
+      id: "ds-47-6-legacy",
+      workspaceId: WS_ID,
+      exchange: "bybit",
+      symbol: "BTCUSDT",
+      interval: "M15",
+      fromTsMs: BigInt(0),
+      toTsMs: BigInt(1),
+      datasetHash: "h",
+    };
+
+    const post = await app.inject({
+      method: "POST",
+      url: "/api/v1/lab/backtest/sweep",
+      headers: t1Headers("10.47.6.2"),
+      payload: {
+        datasetId: "ds-47-6-legacy",
+        strategyVersionId: "sv-47-6-legacy",
+        // Singular alias — server must accept it and run through.
+        sweepParam: { blockId: "bL", paramName: "pL", from: 5, to: 7, step: 1 },
+      },
+    });
+    expect(post.statusCode).toBe(202);
+    const { sweepId } = post.json();
+
+    for (let i = 0; i < 30; i++) {
+      const cur = mockSweeps[sweepId] as Record<string, unknown> | undefined;
+      if (cur && (cur.status === "DONE" || cur.status === "FAILED")) break;
+      await new Promise((r) => setTimeout(r, 10));
+    }
+    const finalRow = mockSweeps[sweepId] as Record<string, unknown> | undefined;
+    expect(finalRow!.status).toBe("DONE");
+
+    const results = finalRow!.resultsJson as Array<Record<string, unknown>>;
+    expect(results).toHaveLength(3);
+    for (const r of results) {
+      const pv = r.paramValues as Record<string, number>;
+      expect(Object.keys(pv)).toEqual(["bL.pL"]);
+      expect(pv["bL.pL"]).toBe(r.paramValue);
+    }
+    // Best-row aggregates: first lex combination (paramValue=5).
+    expect(finalRow!.bestParamValue).toBe(5);
+    expect(finalRow!.bestParamValuesJson).toMatchObject({ "bL.pL": 5 });
+  });
 });
 
 // ── GET /lab/backtest/sweep/:id ─────────────────────────────────────────────
