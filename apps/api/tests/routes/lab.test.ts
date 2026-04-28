@@ -10,6 +10,7 @@ import { describe, it, expect, vi, beforeAll, afterAll, beforeEach } from "vites
 const mockGraphs: Record<string, unknown> = {};
 const mockBacktests: Record<string, unknown> = {};
 const mockSweeps: Record<string, unknown> = {};
+const mockWalkForwardRuns: Record<string, Record<string, unknown>> = {};
 const mockStrategyVersions: Record<string, unknown> = {};
 const mockStrategies: Record<string, unknown> = {};
 const mockDatasets: Record<string, unknown> = {};
@@ -153,6 +154,33 @@ vi.mock("../../src/lib/prisma.js", () => ({
       count: vi.fn().mockResolvedValue(0),
       update: vi.fn().mockResolvedValue({}),
     },
+    walkForwardRun: {
+      create: vi.fn().mockImplementation(({ data }: { data: Record<string, unknown> }) => {
+        const id = `wf-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
+        const record: Record<string, unknown> = {
+          id,
+          ...data,
+          progress: 0,
+          foldsJson: null,
+          aggregateJson: null,
+          error: null,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        };
+        mockWalkForwardRuns[id] = record;
+        return Promise.resolve(record);
+      }),
+      findUnique: vi.fn().mockImplementation(({ where }: { where: { id: string } }) => {
+        return Promise.resolve(mockWalkForwardRuns[where.id] ?? null);
+      }),
+      count: vi.fn().mockResolvedValue(0),
+      update: vi.fn().mockImplementation(({ where, data }: { where: { id: string }; data: Record<string, unknown> }) => {
+        const cur = mockWalkForwardRuns[where.id];
+        if (!cur) return Promise.resolve(null);
+        Object.assign(cur, data, { updatedAt: new Date() });
+        return Promise.resolve(cur);
+      }),
+    },
     marketDataset: {
       findUnique: vi.fn().mockImplementation(({ where }: { where: { id: string } }) => {
         return Promise.resolve(mockDatasets[where.id] ?? null);
@@ -236,6 +264,7 @@ beforeEach(() => {
   Object.keys(mockGraphs).forEach((k) => delete mockGraphs[k]);
   Object.keys(mockBacktests).forEach((k) => delete mockBacktests[k]);
   Object.keys(mockSweeps).forEach((k) => delete mockSweeps[k]);
+  Object.keys(mockWalkForwardRuns).forEach((k) => delete mockWalkForwardRuns[k]);
   Object.keys(mockStrategyVersions).forEach((k) => delete mockStrategyVersions[k]);
   Object.keys(mockStrategies).forEach((k) => delete mockStrategies[k]);
   Object.keys(mockDatasets).forEach((k) => delete mockDatasets[k]);
@@ -1145,3 +1174,214 @@ describe("POST /api/v1/lab/preview", () => {
     expect(res.json().errors[0].message).toContain("mutually exclusive");
   });
 });
+
+
+// ── POST /lab/backtest/walk-forward + GET (48-T5) ─────────────────────────────
+
+describe("POST /api/v1/lab/backtest/walk-forward", () => {
+  const prismaMock = previewPrisma as unknown as {
+    marketCandle: { findMany: ReturnType<typeof vi.fn> };
+  };
+
+  function makeCandles(n: number) {
+    const nowMs = Date.now();
+    return Array.from({ length: n }, (_, i) => ({
+      openTimeMs: BigInt(nowMs - (n - i) * 15 * 60_000),
+      open: 100, high: 101, low: 99, close: 100.5, volume: 10,
+    }));
+  }
+
+  let ipCounter = 0;
+  function wfHeaders() {
+    ipCounter += 1;
+    const oct = 11 + (ipCounter % 240);
+    return { ...authHeaders(), "x-forwarded-for": `10.48.5.${oct}` };
+  }
+
+  it("returns 400 when required fields are missing", async () => {
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/lab/backtest/walk-forward",
+      headers: wfHeaders(),
+      payload: {},
+    });
+    expect(res.statusCode).toBe(400);
+  });
+
+  it("returns 400 when fold has non-positive params", async () => {
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/lab/backtest/walk-forward",
+      headers: wfHeaders(),
+      payload: {
+        datasetId: "ds-1", strategyVersionId: "sv-1",
+        fold: { isBars: 0, oosBars: 10, step: 5, anchored: false },
+      },
+    });
+    expect(res.statusCode).toBe(400);
+  });
+
+  it("returns 400 when fillAt is invalid", async () => {
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/lab/backtest/walk-forward",
+      headers: wfHeaders(),
+      payload: {
+        datasetId: "ds-1", strategyVersionId: "sv-1",
+        fold: { isBars: 30, oosBars: 10, step: 10, anchored: false },
+        fillAt: "BOGUS",
+      },
+    });
+    expect(res.statusCode).toBe(400);
+  });
+
+  it("returns 404 when StrategyVersion is missing or in another workspace", async () => {
+    mockDatasets["ds-wf-1"] = { id: "ds-wf-1", workspaceId: WS_ID, exchange: "bybit", symbol: "BTCUSDT", interval: "M15", fromTsMs: BigInt(0), toTsMs: BigInt(1), datasetHash: "h" };
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/lab/backtest/walk-forward",
+      headers: wfHeaders(),
+      payload: {
+        datasetId: "ds-wf-1", strategyVersionId: "sv-missing",
+        fold: { isBars: 30, oosBars: 10, step: 10, anchored: false },
+      },
+    });
+    expect(res.statusCode).toBe(404);
+  });
+
+  it("returns 400 when foldCount is below 1 (not enough candles)", async () => {
+    mockStrategyVersions["sv-wf"] = { id: "sv-wf", strategyId: "strat-wf", strategy: { workspaceId: WS_ID }, dslJson: {} };
+    mockDatasets["ds-wf-2"] = { id: "ds-wf-2", workspaceId: WS_ID, exchange: "bybit", symbol: "BTCUSDT", interval: "M15", fromTsMs: BigInt(0), toTsMs: BigInt(1), datasetHash: "h" };
+    prismaMock.marketCandle.findMany.mockResolvedValueOnce(makeCandles(20));
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/lab/backtest/walk-forward",
+      headers: wfHeaders(),
+      payload: {
+        datasetId: "ds-wf-2", strategyVersionId: "sv-wf",
+        fold: { isBars: 30, oosBars: 10, step: 10, anchored: false }, // requires >= 40 candles
+      },
+    });
+    expect(res.statusCode).toBe(400);
+  });
+
+  it("returns 400 when foldCount exceeds 20", async () => {
+    mockStrategyVersions["sv-wf"] = { id: "sv-wf", strategyId: "strat-wf", strategy: { workspaceId: WS_ID }, dslJson: {} };
+    mockDatasets["ds-wf-3"] = { id: "ds-wf-3", workspaceId: WS_ID, exchange: "bybit", symbol: "BTCUSDT", interval: "M15", fromTsMs: BigInt(0), toTsMs: BigInt(1), datasetHash: "h" };
+    // 100 candles, isBars=10/oosBars=1/step=1 → ~90 folds (way over 20)
+    prismaMock.marketCandle.findMany.mockResolvedValueOnce(makeCandles(100));
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/lab/backtest/walk-forward",
+      headers: wfHeaders(),
+      payload: {
+        datasetId: "ds-wf-3", strategyVersionId: "sv-wf",
+        fold: { isBars: 10, oosBars: 1, step: 1, anchored: false },
+      },
+    });
+    expect(res.statusCode).toBe(400);
+    expect(res.json().detail).toContain("foldCount");
+  });
+
+  it("returns 202 with id + foldCount on a valid request", async () => {
+    mockStrategyVersions["sv-wf"] = { id: "sv-wf", strategyId: "strat-wf", strategy: { workspaceId: WS_ID }, dslJson: {} };
+    mockDatasets["ds-wf-4"] = { id: "ds-wf-4", workspaceId: WS_ID, exchange: "bybit", symbol: "BTCUSDT", interval: "M15", fromTsMs: BigInt(0), toTsMs: BigInt(1), datasetHash: "h" };
+    // 100 candles, isBars=30/oosBars=10/step=10 → 7 folds (within [1, 20])
+    prismaMock.marketCandle.findMany.mockResolvedValueOnce(makeCandles(100));
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/lab/backtest/walk-forward",
+      headers: wfHeaders(),
+      payload: {
+        datasetId: "ds-wf-4", strategyVersionId: "sv-wf",
+        fold: { isBars: 30, oosBars: 10, step: 10, anchored: false },
+      },
+    });
+    expect(res.statusCode).toBe(202);
+    const body = res.json();
+    expect(body.id).toMatch(/^wf-/);
+    expect(body.foldCount).toBe(7);
+    expect(body.status).toBe("pending");
+    expect(Array.isArray(body.warnings)).toBe(true);
+  });
+
+  it("attaches a warning when step < oosBars (overlapping OOS)", async () => {
+    mockStrategyVersions["sv-wf"] = { id: "sv-wf", strategyId: "strat-wf", strategy: { workspaceId: WS_ID }, dslJson: {} };
+    mockDatasets["ds-wf-5"] = { id: "ds-wf-5", workspaceId: WS_ID, exchange: "bybit", symbol: "BTCUSDT", interval: "M15", fromTsMs: BigInt(0), toTsMs: BigInt(1), datasetHash: "h" };
+    prismaMock.marketCandle.findMany.mockResolvedValueOnce(makeCandles(80));
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/lab/backtest/walk-forward",
+      headers: wfHeaders(),
+      payload: {
+        datasetId: "ds-wf-5", strategyVersionId: "sv-wf",
+        fold: { isBars: 30, oosBars: 10, step: 5, anchored: false }, // step < oosBars → overlap
+      },
+    });
+    expect(res.statusCode).toBe(202);
+    expect(res.json().warnings).toContain(
+      "step < oosBars — adjacent OOS blocks overlap; aggregate metrics may double-count trades",
+    );
+  });
+});
+
+describe("GET /api/v1/lab/backtest/walk-forward/:id", () => {
+  it("returns 404 when run is missing", async () => {
+    const res = await app.inject({
+      method: "GET",
+      url: "/api/v1/lab/backtest/walk-forward/missing",
+      headers: authHeaders(),
+    });
+    expect(res.statusCode).toBe(404);
+  });
+
+  it("returns 404 when run belongs to another workspace", async () => {
+    mockWalkForwardRuns["wf-other"] = {
+      id: "wf-other",
+      workspaceId: "ws-other",
+      status: "DONE",
+      progress: 1,
+      foldCount: 3,
+      foldConfigJson: {},
+      foldsJson: null,
+      aggregateJson: null,
+      error: null,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    const res = await app.inject({
+      method: "GET",
+      url: "/api/v1/lab/backtest/walk-forward/wf-other",
+      headers: authHeaders(),
+    });
+    expect(res.statusCode).toBe(404);
+  });
+
+  it("returns the run when it belongs to the workspace", async () => {
+    mockWalkForwardRuns["wf-mine"] = {
+      id: "wf-mine",
+      workspaceId: WS_ID,
+      status: "DONE",
+      progress: 1,
+      foldCount: 5,
+      foldConfigJson: { isBars: 50, oosBars: 10, step: 10, anchored: false },
+      foldsJson: [{ foldIndex: 0 }],
+      aggregateJson: { foldCount: 5, avgIsPnlPct: 1.5, avgOosPnlPct: 0.7 },
+      error: null,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    const res = await app.inject({
+      method: "GET",
+      url: "/api/v1/lab/backtest/walk-forward/wf-mine",
+      headers: authHeaders(),
+    });
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    expect(body.id).toBe("wf-mine");
+    expect(body.status).toBe("done");
+    expect(body.foldCount).toBe(5);
+    expect(body.aggregate.avgIsPnlPct).toBe(1.5);
+  });
+});
+
