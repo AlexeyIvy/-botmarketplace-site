@@ -411,6 +411,114 @@ describe("dslEvaluator – execution opts (fees/slippage)", () => {
       expect(withFees.totalPnlPct).toBeLessThanOrEqual(noFees.totalPnlPct + 0.01);
     }
   });
+
+  // -------------------------------------------------------------------------
+  // 46-T2: symmetric slippage on entry AND exit
+  // -------------------------------------------------------------------------
+
+  it("46-T2: slippage applies symmetrically on entry and exit (long)", () => {
+    const candles = makeFlatThenUp(80, 25, 100, 2);
+    const dsl = makeSmaLongDsl(5, 20, 2, 4);
+    const slippageBps = 50;
+
+    const baseline = runDslBacktest(candles, dsl, { feeBps: 0, slippageBps: 0 });
+    const withSlip = runDslBacktest(candles, dsl, { feeBps: 0, slippageBps });
+
+    expect(baseline.trades).toBeGreaterThanOrEqual(1);
+    expect(withSlip.trades).toBe(baseline.trades);
+
+    const entryMult = 1 + slippageBps / 10_000;
+    const exitMult = 1 - slippageBps / 10_000;
+
+    for (const trade of withSlip.tradeLog) {
+      // Entry: default fillAt = "CLOSE" → raw entry is bar.close.
+      const entryBar = candles.find((c) => c.openTime === trade.entryTime)!;
+      expect(trade.entryPrice / entryBar.close).toBeCloseTo(entryMult, 8);
+
+      // Exit: rawExitPrice depends on exit reason. For SL/TP the trigger
+      // price is captured in slPrice/tpPrice; effective exit = trigger * exitMult.
+      // For indicator/time/end_of_data the raw exit is bar.close.
+      if (trade.exitReason === "sl") {
+        expect(trade.exitPrice / trade.slPrice).toBeCloseTo(exitMult, 8);
+      } else if (trade.exitReason === "tp") {
+        expect(trade.exitPrice / trade.tpPrice).toBeCloseTo(exitMult, 8);
+      } else {
+        const exitBar = candles.find((c) => c.openTime === trade.exitTime)!;
+        expect(trade.exitPrice / exitBar.close).toBeCloseTo(exitMult, 8);
+      }
+    }
+  });
+
+  it("46-T2: slippage applies symmetrically on entry and exit (short)", () => {
+    const candles = makeFlatThenDown(80, 25, 200, 2);
+    const dsl = makeSmaShortDsl(5, 20, 2, 4);
+    const slippageBps = 50;
+
+    const baseline = runDslBacktest(candles, dsl, { feeBps: 0, slippageBps: 0 });
+    const withSlip = runDslBacktest(candles, dsl, { feeBps: 0, slippageBps });
+
+    expect(baseline.trades).toBeGreaterThanOrEqual(1);
+    expect(withSlip.trades).toBe(baseline.trades);
+
+    const entryMult = 1 + slippageBps / 10_000;
+    const exitMult = 1 - slippageBps / 10_000;
+
+    for (const trade of withSlip.tradeLog) {
+      const entryBar = candles.find((c) => c.openTime === trade.entryTime)!;
+      expect(trade.entryPrice / entryBar.close).toBeCloseTo(entryMult, 8);
+      if (trade.exitReason === "sl") {
+        expect(trade.exitPrice / trade.slPrice).toBeCloseTo(exitMult, 8);
+      } else if (trade.exitReason === "tp") {
+        expect(trade.exitPrice / trade.tpPrice).toBeCloseTo(exitMult, 8);
+      } else {
+        const exitBar = candles.find((c) => c.openTime === trade.exitTime)!;
+        expect(trade.exitPrice / exitBar.close).toBeCloseTo(exitMult, 8);
+      }
+    }
+  });
+
+  it("46-T2: slippageBps > 0 strictly reduces totalPnlPct in a multi-trade run", () => {
+    // Long-side strategy on flat-then-up — with default SL/TP=2/4 we get
+    // multiple trades over an 80-bar series, enough to make the slippage
+    // delta clearly negative in aggregate.
+    const candles = makeFlatThenUp(80, 25, 100, 2);
+    const dsl = makeSmaLongDsl(5, 20, 2, 4);
+
+    const noSlip = runDslBacktest(candles, dsl, { feeBps: 0, slippageBps: 0 });
+    const withSlip = runDslBacktest(candles, dsl, { feeBps: 0, slippageBps: 100 });
+
+    expect(withSlip.trades).toBe(noSlip.trades);
+    expect(withSlip.trades).toBeGreaterThanOrEqual(1);
+    // Strictly less when slippage > 0 (real round-trip cost is non-zero).
+    expect(withSlip.totalPnlPct).toBeLessThan(noSlip.totalPnlPct);
+  });
+
+  it("46-T2: slippageBps = 0 keeps the engine bit-identical to fee-only behavior", () => {
+    // Backward-compat anchor: at slippageBps = 0, the new symmetric formula
+    // reduces to old fee-only behavior on exit (exitMult = 1 - feeBps/10_000).
+    // Verify entry/exit multipliers match the legacy expectation directly.
+    const candles = makeFlatThenUp(80, 25, 100, 2);
+    const dsl = makeSmaLongDsl(5, 20, 2, 4);
+    const feeBps = 30;
+    const report = runDslBacktest(candles, dsl, { feeBps, slippageBps: 0 });
+
+    const expectedEntryMult = 1 + feeBps / 10_000;
+    const expectedExitMult = 1 - feeBps / 10_000;
+
+    expect(report.trades).toBeGreaterThanOrEqual(1);
+    for (const trade of report.tradeLog) {
+      const entryBar = candles.find((c) => c.openTime === trade.entryTime)!;
+      expect(trade.entryPrice / entryBar.close).toBeCloseTo(expectedEntryMult, 8);
+      if (trade.exitReason === "sl") {
+        expect(trade.exitPrice / trade.slPrice).toBeCloseTo(expectedExitMult, 8);
+      } else if (trade.exitReason === "tp") {
+        expect(trade.exitPrice / trade.tpPrice).toBeCloseTo(expectedExitMult, 8);
+      } else {
+        const exitBar = candles.find((c) => c.openTime === trade.exitTime)!;
+        expect(trade.exitPrice / exitBar.close).toBeCloseTo(expectedExitMult, 8);
+      }
+    }
+  });
 });
 
 describe("dslEvaluator – report field rounding", () => {
