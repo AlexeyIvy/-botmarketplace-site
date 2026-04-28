@@ -4,6 +4,12 @@ import { problem } from "../lib/problem.js";
 import { logger } from "../lib/logger.js";
 import { resolveWorkspace } from "../lib/workspace.js";
 import { runBacktest } from "../lib/backtest.js";
+import {
+  runWalkForward,
+  WalkForwardMtfNotSupportedError,
+} from "../lib/walkForward/run.js";
+import { split as splitFolds } from "../lib/walkForward/split.js";
+import type { FoldConfig } from "../lib/walkForward/types.js";
 import { validateDsl } from "../lib/dslValidator.js";
 import { applyDslSweepParam } from "../lib/dslSweepParam.js";
 import { compileGraph } from "../lib/graphCompiler.js";
@@ -1026,6 +1032,160 @@ export async function labRoutes(app: FastifyInstance) {
   });
 
   // -------------------------------------------------------------------------
+  // Walk-forward validation (docs/48)
+  // -------------------------------------------------------------------------
+
+  // ── POST /lab/backtest/walk-forward ──────────────────────────────────────
+  app.post<{ Body: WalkForwardRequestBody }>("/lab/backtest/walk-forward", {
+    config: { rateLimit: { max: 5, timeWindow: "1 minute" } },
+    onRequest: [app.authenticate],
+  }, async (request, reply) => {
+    const workspace = await resolveWorkspace(request, reply);
+    if (!workspace) return;
+
+    const {
+      datasetId,
+      strategyVersionId,
+      fold,
+      feeBps = 0,
+      slippageBps = 0,
+      fillAt = "CLOSE",
+    } = request.body ?? {};
+
+    // ── Validation — required fields ──────────────────────────────────────
+    if (!datasetId || !strategyVersionId || !fold) {
+      return problem(reply, 400, "Validation Error", "datasetId, strategyVersionId, and fold are required");
+    }
+    if (
+      !Number.isFinite(fold.isBars) || fold.isBars <= 0
+      || !Number.isFinite(fold.oosBars) || fold.oosBars <= 0
+      || !Number.isFinite(fold.step) || fold.step <= 0
+      || typeof fold.anchored !== "boolean"
+    ) {
+      return problem(reply, 400, "Validation Error", "fold.{isBars, oosBars, step} must be positive numbers and fold.anchored must be boolean");
+    }
+    if (!ALLOWED_FILL_AT.includes(fillAt as FillAt)) {
+      return problem(reply, 400, "Validation Error", `fillAt must be one of: ${ALLOWED_FILL_AT.join(", ")}`);
+    }
+
+    // ── Resolve StrategyVersion + Dataset (workspace isolation) ───────────
+    const strategyVersion = await prisma.strategyVersion.findUnique({
+      where: { id: strategyVersionId },
+      include: { strategy: true },
+    });
+    if (!strategyVersion || strategyVersion.strategy.workspaceId !== workspace.id) {
+      return problem(reply, 404, "Not Found", "StrategyVersion not found");
+    }
+    const dataset = await prisma.marketDataset.findUnique({ where: { id: datasetId } });
+    if (!dataset || dataset.workspaceId !== workspace.id) {
+      return problem(reply, 404, "Not Found", "Dataset not found");
+    }
+
+    // ── Pre-flight: load candles + run split() to compute foldCount ───────
+    const dbCandles = await prisma.marketCandle.findMany({
+      where: {
+        exchange: dataset.exchange,
+        symbol: dataset.symbol,
+        interval: dataset.interval,
+        openTimeMs: { gte: dataset.fromTsMs, lte: dataset.toTsMs },
+      },
+      orderBy: { openTimeMs: "asc" },
+    });
+    const candles = dbCandles.map((c) => ({
+      openTime: Number(c.openTimeMs),
+      open: Number(c.open),
+      high: Number(c.high),
+      low: Number(c.low),
+      close: Number(c.close),
+      volume: Number(c.volume),
+    }));
+
+    const cfg: FoldConfig = {
+      isBars: fold.isBars,
+      oosBars: fold.oosBars,
+      step: fold.step,
+      anchored: fold.anchored,
+    };
+
+    let foldCount: number;
+    const warnings: string[] = [];
+    try {
+      const folds = splitFolds(candles, cfg);
+      foldCount = folds.length;
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      return problem(reply, 400, "Validation Error", msg);
+    }
+    if (foldCount < 1 || foldCount > 20) {
+      return problem(reply, 400, "Validation Error", `foldCount=${foldCount} out of bounds [1, 20]`);
+    }
+    if (cfg.step < cfg.oosBars) {
+      // Methodologically suboptimal but allowed — surfaced as a warning.
+      warnings.push("step < oosBars — adjacent OOS blocks overlap; aggregate metrics may double-count trades");
+    }
+
+    // ── Concurrency guard: shared with sweep (per workspace) ──────────────
+    const activeSweeps = await prisma.backtestSweep.count({
+      where: { workspaceId: workspace.id, status: { in: ["PENDING", "RUNNING"] } },
+    });
+    const activeWf = await prisma.walkForwardRun.count({
+      where: { workspaceId: workspace.id, status: { in: ["PENDING", "RUNNING"] } },
+    });
+    if (activeSweeps + activeWf >= 2) {
+      return problem(reply, 429, "Too Many Backtest Jobs", "max 2 concurrent backtest jobs (sweep+walk-forward) per workspace");
+    }
+
+    // ── Create PENDING WalkForwardRun ─────────────────────────────────────
+    const run = await prisma.walkForwardRun.create({
+      data: {
+        workspaceId: workspace.id,
+        strategyVersionId: strategyVersion.id,
+        datasetId: dataset.id,
+        status: "PENDING",
+        foldConfigJson: cfg as object,
+        foldCount,
+      },
+    });
+
+    runWalkForwardAsync(run.id, candles, strategyVersion.dslJson, {
+      feeBps, slippageBps, fillAt: fillAt as FillAt,
+    }, cfg).catch(() => {});
+
+    return reply.status(202).send({
+      id: run.id,
+      foldCount,
+      status: "pending",
+      warnings,
+    });
+  });
+
+  // ── GET /lab/backtest/walk-forward/:id ───────────────────────────────────
+  app.get<{ Params: { id: string } }>("/lab/backtest/walk-forward/:id", {
+    onRequest: [app.authenticate],
+  }, async (request, reply) => {
+    const workspace = await resolveWorkspace(request, reply);
+    if (!workspace) return;
+
+    const run = await prisma.walkForwardRun.findUnique({ where: { id: request.params.id } });
+    if (!run || run.workspaceId !== workspace.id) {
+      return problem(reply, 404, "Not Found", "WalkForwardRun not found");
+    }
+
+    return reply.send({
+      id: run.id,
+      status: run.status.toLowerCase(),
+      progress: run.progress,
+      foldCount: run.foldCount,
+      foldConfig: run.foldConfigJson,
+      folds: run.foldsJson,
+      aggregate: run.aggregateJson,
+      error: run.error,
+      createdAt: run.createdAt.toISOString(),
+      updatedAt: run.updatedAt.toISOString(),
+    });
+  });
+
+  // -------------------------------------------------------------------------
   // Research Journal — CRUD (Task 28)
   // -------------------------------------------------------------------------
 
@@ -1270,6 +1430,15 @@ export async function labRoutes(app: FastifyInstance) {
 // ---------------------------------------------------------------------------
 // Sweep request / response types (Phase C1)
 // ---------------------------------------------------------------------------
+
+interface WalkForwardRequestBody {
+  datasetId: string;
+  strategyVersionId: string;
+  fold: { isBars: number; oosBars: number; step: number; anchored: boolean };
+  feeBps?: number;
+  slippageBps?: number;
+  fillAt?: FillAt;
+}
 
 interface SweepRequestBody {
   datasetId: string;
@@ -1542,6 +1711,92 @@ async function runBacktestAsync(
     await prisma.backtestResult.update({
       where: { id: btId },
       data: { status: "FAILED", errorMessage: msg },
+    }).catch(() => undefined);
+  }
+}
+
+async function runWalkForwardAsync(
+  runId: string,
+  candles: Array<{ openTime: number; open: number; high: number; low: number; close: number; volume: number }>,
+  dslJson: unknown,
+  opts: { feeBps: number; slippageBps: number; fillAt: FillAt },
+  cfg: FoldConfig,
+): Promise<void> {
+  try {
+    await prisma.walkForwardRun.update({
+      where: { id: runId },
+      data: { status: "RUNNING" },
+    });
+
+    // Throttle progress writes — at most one DB update per fold completion,
+    // but coalesce when foldCount is large (ceil(total/10)). For walk-
+    // forward foldCount ≤ 20, so simply write on every fold is fine.
+    const onProgress = async (done: number, total: number) => {
+      try {
+        await prisma.walkForwardRun.update({
+          where: { id: runId },
+          data: { progress: total > 0 ? done / total : 0 },
+        });
+      } catch {
+        // progress updates are best-effort — never fail the run because of them.
+      }
+    };
+
+    const report = runWalkForward(candles, dslJson, opts, cfg, (done, total) => {
+      // fire-and-forget so the runner is not awaited
+      onProgress(done, total).catch(() => {});
+    });
+
+    // Store a truncated FoldReport[] without per-fold tradeLog (size discipline,
+    // docs/48-T4 §4). The full tradeLog only existed in memory during the run.
+    const foldsTruncated = report.folds.map((f) => ({
+      foldIndex: f.foldIndex,
+      isRange: f.isRange,
+      oosRange: f.oosRange,
+      isReport: {
+        trades: f.isReport.trades,
+        wins: f.isReport.wins,
+        winrate: f.isReport.winrate,
+        totalPnlPct: f.isReport.totalPnlPct,
+        maxDrawdownPct: f.isReport.maxDrawdownPct,
+        candles: f.isReport.candles,
+        sharpe: f.isReport.sharpe,
+        profitFactor: f.isReport.profitFactor,
+        expectancy: f.isReport.expectancy,
+      },
+      oosReport: {
+        trades: f.oosReport.trades,
+        wins: f.oosReport.wins,
+        winrate: f.oosReport.winrate,
+        totalPnlPct: f.oosReport.totalPnlPct,
+        maxDrawdownPct: f.oosReport.maxDrawdownPct,
+        candles: f.oosReport.candles,
+        sharpe: f.oosReport.sharpe,
+        profitFactor: f.oosReport.profitFactor,
+        expectancy: f.oosReport.expectancy,
+      },
+    }));
+
+    await prisma.walkForwardRun.update({
+      where: { id: runId },
+      data: {
+        status: "DONE",
+        progress: 1,
+        foldsJson: foldsTruncated as unknown as object,
+        aggregateJson: report.aggregate as unknown as object,
+      },
+    });
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    // Pre-flight MTF rejection arrives here too — we keep the same record
+    // shape (status=FAILED + error) so the UI surfaces the message uniformly.
+    const wfMtf = err instanceof WalkForwardMtfNotSupportedError;
+    if (!wfMtf) {
+      logger.error({ runId, err: msg }, "walkForward run failed");
+    }
+    await prisma.walkForwardRun.update({
+      where: { id: runId },
+      data: { status: "FAILED", error: msg },
     }).catch(() => undefined);
   }
 }
