@@ -695,6 +695,10 @@ export async function labRoutes(app: FastifyInstance) {
         ? (num(reportA.trades)! - num(reportB.trades)!) : null,
       sharpeDelta: num(reportA.sharpe) !== null && num(reportB.sharpe) !== null
         ? (num(reportA.sharpe)! - num(reportB.sharpe)!) : null,
+      profitFactorDelta: num(reportA.profitFactor) !== null && num(reportB.profitFactor) !== null
+        ? (num(reportA.profitFactor)! - num(reportB.profitFactor)!) : null,
+      expectancyDelta: num(reportA.expectancy) !== null && num(reportB.expectancy) !== null
+        ? (num(reportA.expectancy)! - num(reportB.expectancy)!) : null,
     };
 
     // Task 26: enrich compare response with lineage data
@@ -1290,6 +1294,9 @@ interface SweepRow {
   maxDrawdownPct: number;
   tradeCount: number;
   sharpe: number | null;
+  /** Risk-adjusted ranking inputs (49-T3). Both can be null when undefined. */
+  profitFactor: number | null;
+  expectancy: number | null;
 }
 
 // ---------------------------------------------------------------------------
@@ -1395,9 +1402,10 @@ async function runSweepAsync(sweepId: string): Promise<void> {
           data: { status: "DONE", reportJson: report as unknown as object },
         });
 
-        // Compute Sharpe ratio (annualised, assuming 365 trading days)
-        const sharpe = computeSharpe(report.tradeLog.map((t) => t.pnlPct));
-
+        // Risk-adjusted metrics now come straight from the report (49-T3).
+        // The local computeSharpe helper has been removed; sharpeRatio in
+        // apps/api/src/lib/backtestMetrics is bit-for-bit identical (locked
+        // by the 49-T1 regression test), so SweepRow.sharpe is unchanged.
         results.push({
           paramValue: roundedParam,
           backtestResultId: bt.id,
@@ -1405,7 +1413,9 @@ async function runSweepAsync(sweepId: string): Promise<void> {
           winRate: report.winrate,
           maxDrawdownPct: report.maxDrawdownPct,
           tradeCount: report.trades,
-          sharpe,
+          sharpe: report.sharpe,
+          profitFactor: report.profitFactor,
+          expectancy: report.expectancy,
         });
       } catch (err: unknown) {
         const msg = err instanceof Error ? err.message : String(err);
@@ -1422,6 +1432,8 @@ async function runSweepAsync(sweepId: string): Promise<void> {
           maxDrawdownPct: 0,
           tradeCount: 0,
           sharpe: null,
+          profitFactor: null,
+          expectancy: null,
         });
       }
 
@@ -1455,16 +1467,6 @@ async function runSweepAsync(sweepId: string): Promise<void> {
     }).catch(() => undefined);
     logger.error({ sweepId, error: msg }, "Sweep failed");
   }
-}
-
-/** Compute annualised Sharpe ratio from per-trade PnL % array */
-function computeSharpe(pnlPcts: number[]): number | null {
-  if (pnlPcts.length < 2) return null;
-  const mean = pnlPcts.reduce((s, v) => s + v, 0) / pnlPcts.length;
-  const variance = pnlPcts.reduce((s, v) => s + (v - mean) ** 2, 0) / (pnlPcts.length - 1);
-  const stdDev = Math.sqrt(variance);
-  if (stdDev === 0) return null;
-  return Math.round((mean / stdDev) * Math.sqrt(252) * 100) / 100;
 }
 
 // ---------------------------------------------------------------------------
