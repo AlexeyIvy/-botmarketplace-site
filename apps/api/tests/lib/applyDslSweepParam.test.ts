@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { applyDslSweepParam } from "../../src/lib/dslSweepParam.js";
+import { applyDslSweepParam, applyDslSweepParams } from "../../src/lib/dslSweepParam.js";
 
 describe("applyDslSweepParam", () => {
   it("patches the matching nodeId block with the new param value", () => {
@@ -103,5 +103,136 @@ describe("applyDslSweepParam", () => {
     const indicators = entry.indicators as Record<string, unknown>[];
     expect(indicators[0].multiplier).toBe(2.5);
     expect(indicators[0].atrPeriod).toBe(10); // unchanged
+  });
+});
+
+// ---------------------------------------------------------------------------
+// 47-T2: multi-parameter mutation
+// ---------------------------------------------------------------------------
+
+describe("applyDslSweepParams (47-T2)", () => {
+  it("with one entry produces the same result as applyDslSweepParam", () => {
+    const dsl = {
+      entry: {
+        signal: {
+          fast: { blockType: "SMA", nodeId: "n2", length: 10 },
+          slow: { blockType: "SMA", nodeId: "n3", length: 20 },
+        },
+      },
+    };
+
+    const single = applyDslSweepParam(dsl, "n2", "length", 15);
+    const multi = applyDslSweepParams(dsl, [{ blockId: "n2", paramName: "length", value: 15 }]);
+
+    expect(multi).toEqual(single);
+  });
+
+  it("patches two parameters in different blocks", () => {
+    const dsl = {
+      entry: {
+        signal: {
+          fast: { blockType: "SMA", nodeId: "n2", length: 10 },
+          slow: { blockType: "SMA", nodeId: "n3", length: 20 },
+        },
+      },
+    };
+
+    const result = applyDslSweepParams(dsl, [
+      { blockId: "n2", paramName: "length", value: 5 },
+      { blockId: "n3", paramName: "length", value: 30 },
+    ]);
+
+    const fast = (result.entry as { signal: { fast: { length: number } } }).signal.fast;
+    const slow = (result.entry as { signal: { slow: { length: number } } }).signal.slow;
+    expect(fast.length).toBe(5);
+    expect(slow.length).toBe(30);
+  });
+
+  it("patches two distinct paramNames on the same block", () => {
+    const dsl = {
+      entry: {
+        indicators: [
+          { type: "supertrend", nodeId: "n7", atrPeriod: 10, multiplier: 3 },
+        ],
+      },
+    };
+
+    const result = applyDslSweepParams(dsl, [
+      { blockId: "n7", paramName: "atrPeriod", value: 14 },
+      { blockId: "n7", paramName: "multiplier", value: 2.5 },
+    ]);
+
+    const ind = (result.entry as { indicators: Array<Record<string, number>> }).indicators[0];
+    expect(ind.atrPeriod).toBe(14);
+    expect(ind.multiplier).toBe(2.5);
+  });
+
+  it("last entry wins when two entries target the same (blockId, paramName)", () => {
+    const dsl = {
+      entry: {
+        signal: { fast: { blockType: "SMA", nodeId: "n2", length: 10 } },
+      },
+    };
+
+    const result = applyDslSweepParams(dsl, [
+      { blockId: "n2", paramName: "length", value: 5 },
+      { blockId: "n2", paramName: "length", value: 8 },
+    ]);
+
+    const fast = (result.entry as { signal: { fast: { length: number } } }).signal.fast;
+    expect(fast.length).toBe(8);
+  });
+
+  it("silently skips a non-existent blockId (matches single-param behavior)", () => {
+    const dsl = {
+      entry: {
+        signal: { fast: { blockType: "SMA", nodeId: "n2", length: 10 } },
+      },
+    };
+
+    expect(() =>
+      applyDslSweepParams(dsl, [
+        { blockId: "n2", paramName: "length", value: 5 },
+        { blockId: "n-missing", paramName: "length", value: 99 },
+      ]),
+    ).not.toThrow();
+
+    const result = applyDslSweepParams(dsl, [
+      { blockId: "n2", paramName: "length", value: 5 },
+      { blockId: "n-missing", paramName: "length", value: 99 },
+    ]);
+    const fast = (result.entry as { signal: { fast: { length: number } } }).signal.fast;
+    expect(fast.length).toBe(5);
+  });
+
+  it("does not mutate the input DSL", () => {
+    const dsl = {
+      entry: {
+        signal: {
+          fast: { blockType: "SMA", nodeId: "n2", length: 10 },
+          slow: { blockType: "SMA", nodeId: "n3", length: 20 },
+        },
+      },
+    };
+    const before = JSON.parse(JSON.stringify(dsl));
+
+    applyDslSweepParams(dsl, [
+      { blockId: "n2", paramName: "length", value: 99 },
+      { blockId: "n3", paramName: "length", value: 99 },
+    ]);
+
+    expect(dsl).toEqual(before);
+  });
+
+  it("handles an empty params array as identity (returns a deep clone)", () => {
+    const dsl = {
+      entry: {
+        signal: { fast: { blockType: "SMA", nodeId: "n2", length: 10 } },
+      },
+    };
+    const result = applyDslSweepParams(dsl, []);
+    expect(result).toEqual(dsl);
+    // Still a clone, not the same reference.
+    expect(result).not.toBe(dsl);
   });
 });
