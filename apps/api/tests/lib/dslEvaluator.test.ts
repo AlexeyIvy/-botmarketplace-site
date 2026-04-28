@@ -403,6 +403,35 @@ describe("dslEvaluator – determinism", () => {
 // 49-T2: risk-adjusted metrics in DslBacktestReport
 // ---------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------
+// 49-T4: report-shape golden — the report's risk-adjusted fields are exactly
+// what the standalone utilities return on the same tradeLog.
+// ---------------------------------------------------------------------------
+
+describe("dslEvaluator – report metrics golden (49-T4)", () => {
+  it("report.{sharpe,profitFactor,expectancy} equal direct utility calls on tradeLog pnlPcts", async () => {
+    const candles = makeFlatThenUp(80, 25, 100, 2);
+    const report = runDslBacktest(candles, makeSmaLongDsl(5, 20, 2, 4));
+    expect(report.trades).toBeGreaterThanOrEqual(1);
+
+    const pnlPcts = report.tradeLog.map((t) => t.pnlPct);
+    const { sharpeRatio, profitFactor, expectancy } = await import(
+      "../../src/lib/backtestMetrics/index.js"
+    );
+
+    expect(report.sharpe).toBe(sharpeRatio(pnlPcts));
+    expect(report.profitFactor).toBe(profitFactor(pnlPcts));
+    expect(report.expectancy).toBe(expectancy(pnlPcts));
+
+    // Round-trip — same input twice must produce the same report
+    // (determinism check at the report-shape level).
+    const r2 = runDslBacktest(candles, makeSmaLongDsl(5, 20, 2, 4));
+    expect(r2.sharpe).toBe(report.sharpe);
+    expect(r2.profitFactor).toBe(report.profitFactor);
+    expect(r2.expectancy).toBe(report.expectancy);
+  });
+});
+
 describe("dslEvaluator – risk-adjusted metrics in report (49-T2)", () => {
   it("empty report (no trades possible) carries null for all three metrics", () => {
     const report = runDslBacktest([], makeSmaLongDsl());
