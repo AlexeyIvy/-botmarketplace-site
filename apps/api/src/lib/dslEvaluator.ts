@@ -39,6 +39,7 @@ import { resolveMtfIndicator, createMtfCache } from "./mtf/mtfIndicatorResolver.
 import { fvgSeries, sweepSeries, orderBlockSeries, mssSeries } from "./runtime/patternEngine.js";
 import { calcVolumeProfile, type VolumeProfileResult } from "./indicators/volumeProfile.js";
 import { calcProximityFilter, type ProximityMode } from "./indicators/proximityFilter.js";
+import { sharpeRatio, profitFactor, expectancy } from "./backtestMetrics/index.js";
 import { logger } from "./logger.js";
 import type { DcaConfig, SafetyOrderLevel, DcaPositionState } from "./dcaPlanning.js";
 import {
@@ -80,6 +81,16 @@ export interface DslBacktestReport {
   maxDrawdownPct: number;
   candles: number;
   tradeLog: DslTradeRecord[];
+  /**
+   * Risk-adjusted metrics (additive, 49-T2). All three are required fields
+   * but may be `null` when the metric cannot be computed (no trades, single
+   * trade for sharpe, etc.). Existing `BacktestResult.reportJson` rows
+   * persisted before 49-T2 lack these keys; consumers must treat
+   * `undefined` from `reportJson` as `null`.
+   */
+  sharpe: number | null;
+  profitFactor: number | null;
+  expectancy: number | null;
 }
 
 export type DslFillAt = "OPEN" | "CLOSE" | "NEXT_OPEN";
@@ -782,6 +793,7 @@ export function runDslBacktest(
   const emptyReport: DslBacktestReport = {
     trades: 0, wins: 0, winrate: 0, totalPnlPct: 0, maxDrawdownPct: 0,
     candles: candles.length, tradeLog: [],
+    sharpe: null, profitFactor: null, expectancy: null,
   };
 
   const parsed = parseDsl(dslJson);
@@ -1176,6 +1188,14 @@ export function runDslBacktest(
   const winrate = trades > 0 ? wins / trades : 0;
   const totalPnlPct = tradeLog.reduce((s, t) => s + t.pnlPct, 0);
 
+  // Risk-adjusted metrics over per-trade pnl% (49-T2). Each utility handles
+  // its own degenerate cases (n<2 sharpe, all-zeros profitFactor, etc.) and
+  // returns null when undefined.
+  const pnlPcts = tradeLog.map((t) => t.pnlPct);
+  const sharpe = sharpeRatio(pnlPcts);
+  const pf = profitFactor(pnlPcts);
+  const exp = expectancy(pnlPcts);
+
   return {
     trades,
     wins,
@@ -1184,5 +1204,8 @@ export function runDslBacktest(
     maxDrawdownPct: Math.round(maxDrawdownPct * 100) / 100,
     candles: candles.length,
     tradeLog,
+    sharpe,
+    profitFactor: pf,
+    expectancy: exp,
   };
 }
