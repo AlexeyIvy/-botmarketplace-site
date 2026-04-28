@@ -14,6 +14,7 @@ import { apiFetch, getWorkspaceId } from "../../../lib/api";
 import { useLabGraphStore } from "../useLabGraphStore";
 import type { IChartApi, LineData, Time } from "lightweight-charts";
 import OptimisePanel from "./OptimisePanel";
+import WalkForwardPanel from "./WalkForwardPanel";
 import { PreviewPanel } from "../PreviewPanel";
 
 // ---------------------------------------------------------------------------
@@ -30,7 +31,7 @@ function useAiAvailable(): boolean {
   return available;
 }
 
-type TopTab = "backtest" | "optimise";
+type TopTab = "backtest" | "optimise" | "walk-forward";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -1410,6 +1411,7 @@ export default function LabTestPage() {
           {([
             { id: "backtest" as TopTab, label: "Run Backtest" },
             { id: "optimise" as TopTab, label: "Optimise" },
+            { id: "walk-forward" as TopTab, label: "Walk-forward" },
           ]).map((t) => (
             <button
               key={t.id}
@@ -1449,6 +1451,13 @@ export default function LabTestPage() {
               setSelectedBtId(id);
               setTopTab("backtest");
             }}
+          />
+        )}
+
+        {topTab === "walk-forward" && (
+          <WalkForwardPanel
+            datasets={datasets}
+            strategyVersions={strategyVersions}
           />
         )}
       </div>
