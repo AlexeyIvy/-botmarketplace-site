@@ -8,23 +8,31 @@
  * and maintains backward-compatible report types.
  *
  * Execution realism:
- *   fillAt = "CLOSE" — fill at candle close price (only supported value)
+ *   fillAt — fill price reference (default "CLOSE", backward-compatible):
+ *     "CLOSE"     — fill at the signal candle's close (legacy default)
+ *     "OPEN"      — fill at the signal candle's open
+ *     "NEXT_OPEN" — fill at the next candle's open (lookahead-free for
+ *                   indicator signals computed on closed bars)
  *   effectiveEntry = fillPrice * (1 + (feeBps + slippageBps) / 10_000)
  *   effectiveExit  = rawExit  * (1 - feeBps / 10_000)
- *   SL/TP levels and pnlPct are all computed from effective prices.
+ *   SL/TP/trailing trigger on intra-bar high/low and execute at their own
+ *   trigger prices — fillAt does not apply to them. fillAt applies only to
+ *   entry and indicator_exit fills.
  */
 
 import type { Candle } from "./bybitCandles.js";
 import { runDslBacktest } from "./dslEvaluator.js";
-import type { DslBacktestReport, DslTradeRecord, MtfBacktestContext } from "./dslEvaluator.js";
+import type { DslBacktestReport, DslTradeRecord, MtfBacktestContext, DslFillAt } from "./dslEvaluator.js";
 
 // Re-export DSL evaluator types as canonical backtest types
 export type { DslBacktestReport as BacktestReport, DslTradeRecord as TradeRecord, MtfBacktestContext };
 
+export type FillAt = DslFillAt;
+
 export interface ExecOpts {
   feeBps: number;
   slippageBps: number;
-  fillAt: "CLOSE";
+  fillAt: FillAt;
 }
 
 /**
@@ -45,5 +53,6 @@ export function runBacktest(
   return runDslBacktest(candleData, dslJson, {
     feeBps: opts.feeBps ?? 0,
     slippageBps: opts.slippageBps ?? 0,
+    fillAt: opts.fillAt ?? "CLOSE",
   }, mtfContext);
 }
