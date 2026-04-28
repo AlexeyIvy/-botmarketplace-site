@@ -59,6 +59,7 @@ model Workspace {
   datasets            MarketDataset[]
   strategyGraphs      StrategyGraph[]
   backtestSweeps      BacktestSweep[]
+  walkForwardRuns     WalkForwardRun[]
   journalEntries      LabJournalEntry[]
 }
 
@@ -708,6 +709,45 @@ model BacktestSweep {
 
   @@index([workspaceId])
   @@index([workspaceId, createdAt(sort: Desc)])
+}
+
+// ── Walk-forward validation (docs/48) ─────────────────────────────────────────
+
+enum WalkForwardStatus {
+  PENDING
+  RUNNING
+  DONE
+  FAILED
+}
+
+/// Stores a walk-forward validation run.
+/// Mirrors BacktestSweep structurally (workspace cascade, no inverse relations
+/// on strategyVersionId / datasetId — research logs survive parent deletion).
+/// Per-fold reports live in foldsJson without tradeLog (size discipline);
+/// aggregate summary lives in aggregateJson (see docs/48-T3).
+model WalkForwardRun {
+  id                 String            @id @default(cuid())
+  workspaceId        String
+  strategyVersionId  String
+  datasetId          String
+  status             WalkForwardStatus @default(PENDING)
+  /// { isBars, oosBars, step, anchored }
+  foldConfigJson     Json
+  foldCount          Int               @default(0)
+  /// 0..1 — fraction of folds completed
+  progress           Float             @default(0)
+  /// Truncated FoldReport[] (without per-fold tradeLog) — see docs/48-T4 §4
+  foldsJson          Json?
+  aggregateJson      Json?
+  error              String?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId])
+  @@index([workspaceId, createdAt(sort: Desc)])
+  @@index([strategyVersionId])
 }
 
 // ── Stage 7: Funding Rate Arbitrage (#139, #140) ─────────────────────────────
