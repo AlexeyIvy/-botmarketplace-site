@@ -7,6 +7,7 @@
  */
 
 import type { Candle } from "../bybitCandles.js";
+import type { DslBacktestReport } from "../dslEvaluator.js";
 
 export type FoldConfig = {
   /** Length of the in-sample window (bars). Must be > 0. */
@@ -39,4 +40,21 @@ export type Fold = {
   oosSlice: Candle[];
   isRange: FoldRange;
   oosRange: FoldRange;
+};
+
+/** Per-fold backtest reports paired with the slice ranges they were run on. */
+export type FoldReport = {
+  foldIndex: number;
+  isReport: DslBacktestReport;
+  oosReport: DslBacktestReport;
+  isRange: FoldRange;
+  oosRange: FoldRange;
+};
+
+/**
+ * Walk-forward run output. `aggregate` is added in 48-T3; until then the
+ * field is intentionally absent.
+ */
+export type WalkForwardReport = {
+  folds: FoldReport[];
 };
