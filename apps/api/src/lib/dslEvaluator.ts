@@ -85,7 +85,21 @@ export interface DslBacktestReport {
 export type DslFillAt = "OPEN" | "CLOSE" | "NEXT_OPEN";
 
 export interface DslExecOpts {
-  feeBps: number;
+  /**
+   * @deprecated Use {@link takerFeeBps} instead. Retained as a backward-compat
+   * alias: when `takerFeeBps` is omitted, `feeBps` populates it. Removal is a
+   * follow-up after all callers (routes, tests, UI) have been migrated.
+   */
+  feeBps?: number;
+  /** Taker (market-order) fee in basis points. Used for all current fills. */
+  takerFeeBps?: number;
+  /**
+   * Maker (limit-order) fee in basis points. Reserved for the upcoming
+   * limit-order backtest mode — current evaluator uses only `takerFeeBps`
+   * because every fill is market. Defaults to `takerFeeBps` when omitted so
+   * the field is consistent regardless of usage.
+   */
+  makerFeeBps?: number;
   slippageBps: number;
   fillAt: DslFillAt;
 }
@@ -730,7 +744,17 @@ export function runDslBacktest(
   opts: Partial<DslExecOpts> = {},
   mtfContext?: MtfBacktestContext,
 ): DslBacktestReport {
-  const { feeBps = 0, slippageBps = 0, fillAt = "CLOSE" } = opts;
+  // Fee normalization (46-T3):
+  //   takerFeeBps wins over the legacy `feeBps` alias when both are present.
+  //   Only takerFeeBps participates in the multipliers below — every current
+  //   fill is market (taker). opts.makerFeeBps is reserved for the future
+  //   limit-order backtest (out of scope of docs/46) and is intentionally
+  //   not destructured here; the field travels in the API surface only.
+  const takerFeeBps = opts.takerFeeBps ?? opts.feeBps ?? 0;
+  const slippageBps = opts.slippageBps ?? 0;
+  const fillAt = opts.fillAt ?? "CLOSE";
+  // Compatibility alias used in formulas below — keeps the diff minimal.
+  const feeBps = takerFeeBps;
 
   // MTF-aware indicator resolution helper (#134-slice4):
   // When mtfContext is provided, indicator refs with sourceTimeframe resolve

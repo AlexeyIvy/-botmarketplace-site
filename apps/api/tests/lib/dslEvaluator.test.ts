@@ -493,6 +493,69 @@ describe("dslEvaluator – execution opts (fees/slippage)", () => {
     expect(withSlip.totalPnlPct).toBeLessThan(noSlip.totalPnlPct);
   });
 
+  // -------------------------------------------------------------------------
+  // 46-T3: takerFeeBps / makerFeeBps with feeBps alias
+  // -------------------------------------------------------------------------
+
+  it("46-T3: feeBps alone is normalized to takerFeeBps (legacy behavior)", () => {
+    const candles = makeFlatThenUp(80, 25, 100, 2);
+    const dsl = makeSmaLongDsl(5, 20, 2, 4);
+
+    const legacy = runDslBacktest(candles, dsl, { feeBps: 30, slippageBps: 0 });
+    const taker = runDslBacktest(candles, dsl, { takerFeeBps: 30, slippageBps: 0 });
+
+    expect(taker.tradeLog).toEqual(legacy.tradeLog);
+    expect(taker.totalPnlPct).toBe(legacy.totalPnlPct);
+  });
+
+  it("46-T3: takerFeeBps wins when both feeBps and takerFeeBps are present", () => {
+    const candles = makeFlatThenUp(80, 25, 100, 2);
+    const dsl = makeSmaLongDsl(5, 20, 2, 4);
+
+    const both = runDslBacktest(candles, dsl, {
+      feeBps: 10,
+      takerFeeBps: 30,
+      slippageBps: 0,
+    });
+    const onlyTaker = runDslBacktest(candles, dsl, {
+      takerFeeBps: 30,
+      slippageBps: 0,
+    });
+
+    expect(both.tradeLog).toEqual(onlyTaker.tradeLog);
+  });
+
+  it("46-T3: makerFeeBps is captured by the API but does not affect formulas", () => {
+    // Current evaluator uses only takerFeeBps for all fills (taker-only).
+    // makerFeeBps must be accepted in opts but produce a result identical
+    // to running without it.
+    const candles = makeFlatThenUp(80, 25, 100, 2);
+    const dsl = makeSmaLongDsl(5, 20, 2, 4);
+
+    const withMaker = runDslBacktest(candles, dsl, {
+      takerFeeBps: 30,
+      makerFeeBps: 10,
+      slippageBps: 0,
+    });
+    const withoutMaker = runDslBacktest(candles, dsl, {
+      takerFeeBps: 30,
+      slippageBps: 0,
+    });
+
+    expect(withMaker.tradeLog).toEqual(withoutMaker.tradeLog);
+    expect(withMaker.totalPnlPct).toBe(withoutMaker.totalPnlPct);
+  });
+
+  it("46-T3: missing fee fields default to zero (no fee, no slippage)", () => {
+    const candles = makeFlatThenUp(80, 25, 100, 2);
+    const dsl = makeSmaLongDsl(5, 20, 2, 4);
+
+    const empty = runDslBacktest(candles, dsl, { slippageBps: 0 });
+    const explicitZero = runDslBacktest(candles, dsl, { feeBps: 0, slippageBps: 0 });
+
+    expect(empty.tradeLog).toEqual(explicitZero.tradeLog);
+  });
+
   it("46-T2: slippageBps = 0 keeps the engine bit-identical to fee-only behavior", () => {
     // Backward-compat anchor: at slippageBps = 0, the new symmetric formula
     // reduces to old fee-only behavior on exit (exitMult = 1 - feeBps/10_000).

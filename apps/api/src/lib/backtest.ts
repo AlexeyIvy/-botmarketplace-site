@@ -13,8 +13,14 @@
  *     "OPEN"      — fill at the signal candle's open
  *     "NEXT_OPEN" — fill at the next candle's open (lookahead-free for
  *                   indicator signals computed on closed bars)
- *   effectiveEntry = fillPrice * (1 + (feeBps + slippageBps) / 10_000)
- *   effectiveExit  = rawExit  * (1 - (feeBps + slippageBps) / 10_000)
+ *   feeBps / takerFeeBps / makerFeeBps:
+ *     `takerFeeBps` is the canonical taker-fee field. `feeBps` is a
+ *     backward-compat alias that maps to `takerFeeBps` when the latter is
+ *     omitted. `makerFeeBps` is reserved for the upcoming limit-order
+ *     backtest mode and is currently unused in the formulas — every fill is
+ *     market (taker).
+ *   effectiveEntry = fillPrice * (1 + (takerFeeBps + slippageBps) / 10_000)
+ *   effectiveExit  = rawExit  * (1 - (takerFeeBps + slippageBps) / 10_000)
  *   Slippage is symmetric: applied at both entry (cost up) and exit
  *   (proceeds down) — round-trip cost reflects realistic market conditions.
  *   At slippageBps = 0 the formulas reduce to fee-only behavior; existing
@@ -34,7 +40,15 @@ export type { DslBacktestReport as BacktestReport, DslTradeRecord as TradeRecord
 export type FillAt = DslFillAt;
 
 export interface ExecOpts {
-  feeBps: number;
+  /**
+   * @deprecated Use {@link takerFeeBps} instead. Retained as a backward-compat
+   * alias: when `takerFeeBps` is omitted, `feeBps` populates it.
+   */
+  feeBps?: number;
+  /** Taker (market-order) fee in basis points. Used for all current fills. */
+  takerFeeBps?: number;
+  /** Maker (limit-order) fee in basis points. Reserved for future limit-order backtest. */
+  makerFeeBps?: number;
   slippageBps: number;
   fillAt: FillAt;
 }
@@ -55,7 +69,9 @@ export function runBacktest(
   mtfContext?: MtfBacktestContext,
 ): DslBacktestReport {
   return runDslBacktest(candleData, dslJson, {
-    feeBps: opts.feeBps ?? 0,
+    feeBps: opts.feeBps,
+    takerFeeBps: opts.takerFeeBps,
+    makerFeeBps: opts.makerFeeBps,
     slippageBps: opts.slippageBps ?? 0,
     fillAt: opts.fillAt ?? "CLOSE",
   }, mtfContext);
