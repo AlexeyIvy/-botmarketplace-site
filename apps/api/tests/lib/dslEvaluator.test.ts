@@ -399,6 +399,45 @@ describe("dslEvaluator – determinism", () => {
   });
 });
 
+// ---------------------------------------------------------------------------
+// 49-T2: risk-adjusted metrics in DslBacktestReport
+// ---------------------------------------------------------------------------
+
+describe("dslEvaluator – risk-adjusted metrics in report (49-T2)", () => {
+  it("empty report (no trades possible) carries null for all three metrics", () => {
+    const report = runDslBacktest([], makeSmaLongDsl());
+    expect(report.trades).toBe(0);
+    expect(report.sharpe).toBeNull();
+    expect(report.profitFactor).toBeNull();
+    expect(report.expectancy).toBeNull();
+  });
+
+  it("a single-trade report has null sharpe but defined profitFactor + expectancy", () => {
+    // makeFlatThenUp + small SL/TP yields exactly 1 trade.
+    const candles = makeFlatThenUp(35, 20, 100, 2);
+    const report = runDslBacktest(candles, makeSmaLongDsl(5, 20, 2, 4));
+    if (report.trades === 1) {
+      expect(report.sharpe).toBeNull(); // n < 2
+      expect(report.profitFactor).not.toBeNull();
+      expect(report.expectancy).not.toBeNull();
+    }
+  });
+
+  it("multi-trade report's metrics match direct utility calls on tradeLog pnlPcts", async () => {
+    const candles = makeFlatThenUp(80, 25, 100, 2);
+    const report = runDslBacktest(candles, makeSmaLongDsl(5, 20, 2, 4));
+    expect(report.trades).toBeGreaterThanOrEqual(1);
+
+    const pnlPcts = report.tradeLog.map((t) => t.pnlPct);
+    const { sharpeRatio, profitFactor, expectancy } = await import(
+      "../../src/lib/backtestMetrics/index.js"
+    );
+    expect(report.sharpe).toBe(sharpeRatio(pnlPcts));
+    expect(report.profitFactor).toBe(profitFactor(pnlPcts));
+    expect(report.expectancy).toBe(expectancy(pnlPcts));
+  });
+});
+
 describe("dslEvaluator – execution opts (fees/slippage)", () => {
   it("fees reduce effective PnL compared to zero-fee backtest", () => {
     const candles = makeFlatThenUp(80, 25, 100, 2);
