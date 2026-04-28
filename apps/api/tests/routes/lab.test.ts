@@ -660,6 +660,53 @@ describe("GET /api/v1/lab/backtests/compare", () => {
     expect(body.delta.winrateDelta).toBeNull();
   });
 
+  // 49-T3: compare exposes profitFactorDelta and expectancyDelta.
+  it("49-T3: returns profitFactorDelta and expectancyDelta when both reports carry them", async () => {
+    mockBacktests["bt-pf-a"] = {
+      id: "bt-pf-a", workspaceId: WS_ID, status: "DONE",
+      reportJson: { totalPnlPct: 10, winrate: 60, maxDrawdownPct: 4, trades: 12, sharpe: 1.5, profitFactor: 2.4, expectancy: 0.8 },
+      feeBps: 10, slippageBps: 5, engineVersion: "abc123",
+    };
+    mockBacktests["bt-pf-b"] = {
+      id: "bt-pf-b", workspaceId: WS_ID, status: "DONE",
+      reportJson: { totalPnlPct: 7,  winrate: 55, maxDrawdownPct: 6, trades: 12, sharpe: 0.9, profitFactor: 1.4, expectancy: 0.3 },
+      feeBps: 10, slippageBps: 5, engineVersion: "abc123",
+    };
+    const res = await app.inject({
+      method: "GET",
+      url: "/api/v1/lab/backtests/compare?a=bt-pf-a&b=bt-pf-b",
+      headers: authHeaders(),
+    });
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    expect(body.delta.profitFactorDelta).toBeCloseTo(1.0, 2);
+    expect(body.delta.expectancyDelta).toBeCloseTo(0.5, 2);
+  });
+
+  it("49-T3: profitFactorDelta and expectancyDelta are null on legacy pre-49 reports", async () => {
+    // bt-old has the pre-49 reportJson shape (no new fields). The new
+    // delta keys must surface as null without throwing.
+    mockBacktests["bt-old"] = {
+      id: "bt-old", workspaceId: WS_ID, status: "DONE",
+      reportJson: { totalPnlPct: 5, winrate: 50, maxDrawdownPct: 3, trades: 8, sharpe: 0.7 },
+    };
+    mockBacktests["bt-new"] = {
+      id: "bt-new", workspaceId: WS_ID, status: "DONE",
+      reportJson: { totalPnlPct: 10, winrate: 60, maxDrawdownPct: 2, trades: 9, sharpe: 1.1, profitFactor: 1.9, expectancy: 0.4 },
+    };
+    const res = await app.inject({
+      method: "GET",
+      url: "/api/v1/lab/backtests/compare?a=bt-old&b=bt-new",
+      headers: authHeaders(),
+    });
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    expect(body.delta.profitFactorDelta).toBeNull();
+    expect(body.delta.expectancyDelta).toBeNull();
+    // sharpeDelta still works because both rows carry sharpe.
+    expect(body.delta.sharpeDelta).toBeCloseTo(-0.4, 2);
+  });
+
   it("includes lineage data in compare response", async () => {
     mockGraphs["g-lin"] = { id: "g-lin", workspaceId: WS_ID, name: "My Strategy", graphJson: {} };
     mockStrategyVersions["sv-lin"] = { id: "sv-lin", strategyId: "strat-lin" };
