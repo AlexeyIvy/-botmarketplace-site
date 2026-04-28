@@ -1385,3 +1385,128 @@ describe("GET /api/v1/lab/backtest/walk-forward/:id", () => {
   });
 });
 
+
+// ── 48-T7: walk-forward end-to-end lifecycle ─────────────────────────────────
+
+import { smaLongDsl } from "../lib/walkForward/_fixtures.js";
+
+describe("walk-forward lifecycle (48-T7)", () => {
+  const prismaMock = previewPrisma as unknown as {
+    marketCandle: { findMany: ReturnType<typeof vi.fn> };
+  };
+
+  function makeCandles(n: number) {
+    const nowMs = Date.now();
+    return Array.from({ length: n }, (_, i) => ({
+      openTimeMs: BigInt(nowMs - (n - i) * 15 * 60_000),
+      open: 100, high: 101, low: 99, close: 100.5, volume: 10,
+    }));
+  }
+
+  let ipCounter = 0;
+  function wfHeaders() {
+    ipCounter += 1;
+    const oct = 11 + (ipCounter % 240);
+    return { ...authHeaders(), "x-forwarded-for": `10.48.7.${oct}` };
+  }
+
+  // Poll the in-memory mockWalkForwardRuns map until status leaves
+  // pending/running, or until we run out of attempts. Each attempt gives
+  // one microtask tick, which is enough for the synchronous-evaluator
+  // chain to advance.
+  async function waitForTerminal(id: string, maxAttempts = 20): Promise<Record<string, unknown> | null> {
+    for (let i = 0; i < maxAttempts; i++) {
+      const cur = mockWalkForwardRuns[id];
+      if (cur && (cur.status === "DONE" || cur.status === "FAILED")) return cur;
+      // Yield to the microtask queue so prisma.walkForwardRun.update
+      // promises (which are awaited inside runWalkForwardAsync) can settle.
+      await new Promise((r) => setTimeout(r, 5));
+    }
+    return mockWalkForwardRuns[id] ?? null;
+  }
+
+  it("happy path: valid DSL + valid candles → status reaches DONE with aggregate", async () => {
+    mockStrategyVersions["sv-wf-ok"] = {
+      id: "sv-wf-ok",
+      strategyId: "strat-wf-ok",
+      strategy: { workspaceId: WS_ID },
+      dslJson: smaLongDsl(),
+    };
+    mockDatasets["ds-wf-ok"] = {
+      id: "ds-wf-ok", workspaceId: WS_ID, exchange: "bybit", symbol: "BTCUSDT",
+      interval: "M15", fromTsMs: BigInt(0), toTsMs: BigInt(1), datasetHash: "h",
+    };
+    prismaMock.marketCandle.findMany.mockResolvedValueOnce(makeCandles(100));
+
+    const post = await app.inject({
+      method: "POST",
+      url: "/api/v1/lab/backtest/walk-forward",
+      headers: wfHeaders(),
+      payload: {
+        datasetId: "ds-wf-ok",
+        strategyVersionId: "sv-wf-ok",
+        fold: { isBars: 30, oosBars: 10, step: 10, anchored: false },
+      },
+    });
+    expect(post.statusCode).toBe(202);
+    const { id, foldCount } = post.json();
+    expect(foldCount).toBe(7);
+
+    const terminal = await waitForTerminal(id);
+    expect(terminal).not.toBeNull();
+    expect(terminal!.status).toBe("DONE");
+    expect(terminal!.progress).toBe(1);
+    // Aggregate is the WalkForwardAggregate shape from 48-T3.
+    const agg = terminal!.aggregateJson as Record<string, unknown>;
+    expect(agg).toBeTruthy();
+    expect(agg.foldCount).toBe(7);
+    // foldsJson must be present and length-matched, with no per-fold tradeLog.
+    const folds = terminal!.foldsJson as Array<Record<string, unknown>>;
+    expect(folds).toHaveLength(7);
+    expect(folds[0]).not.toHaveProperty("isReport.tradeLog");
+  });
+
+  it("MTF rejection: sourceTimeframe in DSL → status=FAILED with the prescribed message", async () => {
+    const mtfDsl = {
+      ...smaLongDsl(),
+      entry: {
+        ...smaLongDsl().entry,
+        signal: {
+          type: "crossover",
+          fast: { blockType: "SMA", length: 5, sourceTimeframe: "1h" },
+          slow: { blockType: "SMA", length: 20 },
+        },
+      },
+    };
+    mockStrategyVersions["sv-wf-mtf"] = {
+      id: "sv-wf-mtf",
+      strategyId: "strat-wf-mtf",
+      strategy: { workspaceId: WS_ID },
+      dslJson: mtfDsl,
+    };
+    mockDatasets["ds-wf-mtf"] = {
+      id: "ds-wf-mtf", workspaceId: WS_ID, exchange: "bybit", symbol: "BTCUSDT",
+      interval: "M15", fromTsMs: BigInt(0), toTsMs: BigInt(1), datasetHash: "h",
+    };
+    prismaMock.marketCandle.findMany.mockResolvedValueOnce(makeCandles(100));
+
+    const post = await app.inject({
+      method: "POST",
+      url: "/api/v1/lab/backtest/walk-forward",
+      headers: wfHeaders(),
+      payload: {
+        datasetId: "ds-wf-mtf",
+        strategyVersionId: "sv-wf-mtf",
+        fold: { isBars: 30, oosBars: 10, step: 10, anchored: false },
+      },
+    });
+    expect(post.statusCode).toBe(202);
+    const { id } = post.json();
+
+    const terminal = await waitForTerminal(id);
+    expect(terminal).not.toBeNull();
+    expect(terminal!.status).toBe("FAILED");
+    expect(terminal!.error).toContain("MTF-стратегий");
+    expect(terminal!.error).toContain("sourceTimeframe='1h'");
+  });
+});
