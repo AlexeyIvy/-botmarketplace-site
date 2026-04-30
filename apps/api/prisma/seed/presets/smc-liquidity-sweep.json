@@ -1,0 +1,26 @@
+{
+  "name": "SMC Liquidity Sweep",
+  "description": "Smart Money Concepts: liquidity sweep + market-structure-shift entry on FVG retest. DSL is a placeholder; the final golden fixture lands in docs/54.",
+  "dslJson": {
+    "id": "smc-liquidity-sweep",
+    "name": "SMC Liquidity Sweep",
+    "dslVersion": 1,
+    "enabled": true,
+    "market": { "exchange": "bybit", "env": "demo", "category": "linear", "symbol": "BTCUSDT" },
+    "entry": { "side": "Buy" },
+    "risk": { "maxPositionSizeUsd": 100, "riskPerTradePct": 1, "cooldownSeconds": 60 },
+    "execution": { "orderType": "Market", "clientOrderIdPrefix": "smc-sweep" },
+    "guards": { "maxOpenPositions": 1, "maxOrdersPerMinute": 10, "pauseOnError": true }
+  },
+  "defaultBotConfigJson": {
+    "symbol": "BTCUSDT",
+    "timeframe": "M15",
+    "quoteAmount": 100,
+    "maxOpenPositions": 1
+  },
+  "datasetBundleHintJson": {
+    "15m": true,
+    "1H": true,
+    "4H": true
+  }
+}

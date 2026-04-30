@@ -1,0 +1,33 @@
+{
+  "name": "DCA Momentum",
+  "description": "Dollar-cost-average ladder triggered by momentum confirmation. DSL is a placeholder; the final golden fixture lands in docs/54.",
+  "dslJson": {
+    "id": "dca-momentum",
+    "name": "DCA Momentum",
+    "dslVersion": 2,
+    "enabled": true,
+    "market": { "exchange": "bybit", "env": "demo", "category": "linear", "symbol": "BTCUSDT" },
+    "entry": { "side": "Buy" },
+    "risk": { "maxPositionSizeUsd": 100, "riskPerTradePct": 1, "cooldownSeconds": 60 },
+    "execution": { "orderType": "Market", "clientOrderIdPrefix": "dca-mom" },
+    "guards": { "maxOpenPositions": 1, "maxOrdersPerMinute": 10, "pauseOnError": true },
+    "exit": {
+      "stopLoss":   { "type": "fixed_pct", "value": 2 },
+      "takeProfit": { "type": "fixed_pct", "value": 1.5 }
+    },
+    "dca": {
+      "baseOrderSizeUsd": 10,
+      "maxSafetyOrders": 3,
+      "priceStepPct": 1,
+      "stepScale": 1.5,
+      "volumeScale": 1.5,
+      "takeProfitPct": 1.5
+    }
+  },
+  "defaultBotConfigJson": {
+    "symbol": "BTCUSDT",
+    "timeframe": "M15",
+    "quoteAmount": 200,
+    "maxOpenPositions": 1
+  }
+}
