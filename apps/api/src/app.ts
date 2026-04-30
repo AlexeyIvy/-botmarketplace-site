@@ -26,6 +26,7 @@ import { fundingRoutes } from "./routes/funding.js";
 import { hedgeRoutes } from "./routes/hedges.js";
 import { notificationRoutes } from "./routes/notifications.js";
 import { clientErrorRoutes } from "./routes/clientErrors.js";
+import { presetRoutes } from "./routes/presets.js";
 
 /**
  * Wrap a route plugin with a per-route rate-limit override.
@@ -60,6 +61,7 @@ async function registerRoutes(scope: import("fastify").FastifyInstance) {
   await scope.register(authRoutes);
   await scope.register(workspacesRoutes);
   await scope.register(strategyRoutes);
+  await scope.register(presetRoutes);
   await scope.register(botRoutes);
   await scope.register(runRoutes);
   await scope.register(intentRoutes);
