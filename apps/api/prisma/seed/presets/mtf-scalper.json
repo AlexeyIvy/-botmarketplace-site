@@ -1,0 +1,26 @@
+{
+  "name": "MTF Confluence Scalper",
+  "description": "Multi-timeframe confluence scalper aligning M1/M5/M15 trend filters. DSL is a placeholder; the final golden fixture lands in docs/54.",
+  "dslJson": {
+    "id": "mtf-scalper",
+    "name": "MTF Confluence Scalper",
+    "dslVersion": 1,
+    "enabled": true,
+    "market": { "exchange": "bybit", "env": "demo", "category": "linear", "symbol": "BTCUSDT" },
+    "entry": { "side": "Buy" },
+    "risk": { "maxPositionSizeUsd": 50, "riskPerTradePct": 0.5, "cooldownSeconds": 30 },
+    "execution": { "orderType": "Market", "clientOrderIdPrefix": "mtf-scalp" },
+    "guards": { "maxOpenPositions": 1, "maxOrdersPerMinute": 20, "pauseOnError": true }
+  },
+  "defaultBotConfigJson": {
+    "symbol": "BTCUSDT",
+    "timeframe": "M1",
+    "quoteAmount": 50,
+    "maxOpenPositions": 1
+  },
+  "datasetBundleHintJson": {
+    "1m": true,
+    "5m": true,
+    "15m": true
+  }
+}

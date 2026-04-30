@@ -1,0 +1,25 @@
+{
+  "name": "Adaptive Regime",
+  "description": "Trend-following + mean-reversion regime switcher. DSL is a placeholder; the final golden fixture lands in docs/53-T1.",
+  "dslJson": {
+    "id": "adaptive-regime",
+    "name": "Adaptive Regime",
+    "dslVersion": 1,
+    "enabled": true,
+    "market": { "exchange": "bybit", "env": "demo", "category": "linear", "symbol": "BTCUSDT" },
+    "entry": { "side": "Buy" },
+    "risk": { "maxPositionSizeUsd": 100, "riskPerTradePct": 1, "cooldownSeconds": 60 },
+    "execution": { "orderType": "Market", "clientOrderIdPrefix": "adaptive" },
+    "guards": { "maxOpenPositions": 1, "maxOrdersPerMinute": 10, "pauseOnError": true }
+  },
+  "defaultBotConfigJson": {
+    "symbol": "BTCUSDT",
+    "timeframe": "M15",
+    "quoteAmount": 100,
+    "maxOpenPositions": 1
+  },
+  "datasetBundleHintJson": {
+    "5m": true,
+    "1H": true
+  }
+}
