@@ -1,25 +1,28 @@
 /**
- * Strategy Preset routes (docs/51-T2).
+ * Strategy Preset routes (docs/51-T2 + 51-T3).
  *
- * Public catalog of immutable JSON templates that the Lab Library renders
- * as cards and that POST /presets/:slug/instantiate (51-T3) materialises
- * into Strategy + StrategyVersion + Bot triples.
+ * Public catalog of immutable JSON templates. The Lab Library renders the
+ * list as cards and POST /presets/:slug/instantiate materialises them into
+ * Strategy + StrategyVersion + Bot triples in a single Prisma transaction.
  *
  * Endpoints:
- *   POST /presets         — admin-only; create a preset (validates DSL)
- *   GET  /presets         — list (PUBLIC only for anon; all for admin)
- *   GET  /presets/:slug   — single preset with dslJson
+ *   POST /presets                       — admin-only; create a preset (validates DSL)
+ *   GET  /presets                       — list (PUBLIC only for anon; all for admin)
+ *   GET  /presets/:slug                 — single preset with dslJson
+ *   POST /presets/:slug/instantiate     — workspace user; create Strategy + Version + Bot
  *
  * No PATCH / DELETE: presets are intentionally immutable. To replace,
  * create a new slug.
  */
 
+import { randomBytes } from "node:crypto";
 import type { FastifyInstance } from "fastify";
 import { Prisma, PresetVisibility } from "@prisma/client";
 import { prisma } from "../lib/prisma.js";
 import { problem } from "../lib/problem.js";
 import { validateDsl } from "../lib/dslValidator.js";
 import { isAdminRequest } from "../lib/adminGuard.js";
+import { resolveWorkspace } from "../lib/workspace.js";
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -53,6 +56,78 @@ interface CreatePresetBody {
   defaultBotConfigJson: DefaultBotConfig;
   datasetBundleHintJson?: Record<string, unknown> | null;
   visibility?: "PRIVATE" | "PUBLIC";
+}
+
+interface InstantiateBody {
+  overrides?: Partial<{
+    symbol: string;
+    timeframe: Timeframe;
+    quoteAmount: number;
+    maxOpenPositions: number;
+    name: string;
+  }>;
+}
+
+interface ResolvedConfig {
+  symbol: string;
+  timeframe: Timeframe;
+  quoteAmount: number;
+  maxOpenPositions: number;
+  baseName: string;
+}
+
+function resolveConfig(
+  preset: { name: string; defaultBotConfigJson: Prisma.JsonValue },
+  overrides: InstantiateBody["overrides"],
+): { config?: ResolvedConfig; errors: Array<{ field: string; message: string }> } {
+  const errors: Array<{ field: string; message: string }> = [];
+  const cfg = preset.defaultBotConfigJson as Record<string, unknown> | null;
+  if (!cfg || typeof cfg !== "object" || Array.isArray(cfg)) {
+    errors.push({ field: "preset.defaultBotConfigJson", message: "preset has no usable default config" });
+    return { errors };
+  }
+
+  const symbol = (overrides?.symbol ?? cfg.symbol) as unknown;
+  const timeframe = (overrides?.timeframe ?? cfg.timeframe) as unknown;
+  const quoteAmount = (overrides?.quoteAmount ?? cfg.quoteAmount) as unknown;
+  const maxOpenPositions = (overrides?.maxOpenPositions ?? cfg.maxOpenPositions) as unknown;
+  const baseName = (overrides?.name ?? preset.name) as unknown;
+
+  if (typeof symbol !== "string" || symbol.length === 0) {
+    errors.push({ field: "symbol", message: "symbol must be a non-empty string" });
+  }
+  if (typeof timeframe !== "string" || !VALID_TIMEFRAMES.includes(timeframe as Timeframe)) {
+    errors.push({
+      field: "timeframe",
+      message: `timeframe must be one of: ${VALID_TIMEFRAMES.join(", ")}`,
+    });
+  }
+  if (typeof quoteAmount !== "number" || !(quoteAmount > 0)) {
+    errors.push({ field: "quoteAmount", message: "quoteAmount must be > 0" });
+  }
+  if (
+    typeof maxOpenPositions !== "number" ||
+    !Number.isInteger(maxOpenPositions) ||
+    maxOpenPositions < 1
+  ) {
+    errors.push({ field: "maxOpenPositions", message: "maxOpenPositions must be a positive integer" });
+  }
+  if (typeof baseName !== "string" || baseName.length === 0 || baseName.length > 120) {
+    errors.push({ field: "name", message: "name must be 1..120 chars" });
+  }
+
+  if (errors.length > 0) return { errors };
+
+  return {
+    errors: [],
+    config: {
+      symbol: symbol as string,
+      timeframe: timeframe as Timeframe,
+      quoteAmount: quoteAmount as number,
+      maxOpenPositions: maxOpenPositions as number,
+      baseName: baseName as string,
+    },
+  };
 }
 
 // ---------------------------------------------------------------------------
@@ -224,4 +299,98 @@ export async function presetRoutes(app: FastifyInstance) {
 
     return reply.send(preset);
   });
+
+  // POST /presets/:slug/instantiate — workspace user creates Strategy + Version + Bot
+  //
+  // Workspace is taken from the X-Workspace-Id header (same convention as the
+  // rest of the API), not the body. The docs/51-T3 spec sketches `workspaceId`
+  // in the body, but using the header keeps membership enforcement uniform via
+  // resolveWorkspace().
+  app.post<{ Params: { slug: string }; Body: InstantiateBody }>(
+    "/presets/:slug/instantiate",
+    { onRequest: [app.authenticate] },
+    async (request, reply) => {
+      const workspace = await resolveWorkspace(request, reply);
+      if (!workspace) return;
+
+      const admin = isAdminRequest(request);
+      const preset = await prisma.strategyPreset.findUnique({
+        where: { slug: request.params.slug },
+      });
+      // PRIVATE presets are invisible to non-admins (matches GET semantics).
+      if (!preset || (preset.visibility === PresetVisibility.PRIVATE && !admin)) {
+        return problem(reply, 404, "Not Found", "Preset not found");
+      }
+
+      const overrides = request.body?.overrides;
+      const { config, errors } = resolveConfig(preset, overrides);
+      if (!config) {
+        return problem(reply, 400, "Validation Error", "Invalid instantiate payload", { errors });
+      }
+
+      // Generate a unique-per-workspace suffix for both Strategy and Bot names
+      // so repeated instantiate calls do not collide on the (workspaceId, name)
+      // unique index. Six hex chars = 24 bits of entropy — plenty for human
+      // disambiguation, retry-free.
+      const suffix = randomBytes(3).toString("hex");
+      const strategyName = `${config.baseName} (${suffix})`;
+      const botName = `${config.baseName} (${suffix})`;
+
+      try {
+        const result = await prisma.$transaction(async (tx) => {
+          const strategy = await tx.strategy.create({
+            data: {
+              workspaceId: workspace.id,
+              name: strategyName,
+              symbol: config.symbol,
+              timeframe: config.timeframe,
+              status: "DRAFT",
+              templateSlug: preset.slug,
+            },
+          });
+
+          const version = await tx.strategyVersion.create({
+            data: {
+              strategyId: strategy.id,
+              version: 1,
+              dslJson: preset.dslJson as Prisma.InputJsonValue,
+              executionPlanJson: {
+                kind: "preset",
+                presetSlug: preset.slug,
+                createdAt: new Date().toISOString(),
+              } as Prisma.InputJsonValue,
+            },
+          });
+
+          const bot = await tx.bot.create({
+            data: {
+              workspaceId: workspace.id,
+              name: botName,
+              strategyVersionId: version.id,
+              symbol: config.symbol,
+              timeframe: config.timeframe,
+              status: "DRAFT",
+              templateSlug: preset.slug,
+            },
+          });
+
+          return { strategy, version, bot };
+        });
+
+        return reply.status(201).send({
+          botId: result.bot.id,
+          strategyId: result.strategy.id,
+          strategyVersionId: result.version.id,
+        });
+      } catch (err) {
+        if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === "P2002") {
+          // Astronomically unlikely with 24-bit suffix, but handle the
+          // (workspaceId, name) clash explicitly so the client gets a clean
+          // signal to retry.
+          return problem(reply, 409, "Conflict", "Generated name collided; please retry");
+        }
+        throw err;
+      }
+    },
+  );
 }
