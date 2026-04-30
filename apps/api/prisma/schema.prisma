@@ -94,14 +94,17 @@ enum Timeframe {
 }
 
 model Strategy {
-  id          String         @id @default(uuid())
-  workspaceId String
-  name        String
-  symbol      String
-  timeframe   Timeframe
-  status      StrategyStatus @default(DRAFT)
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
+  id           String         @id @default(uuid())
+  workspaceId  String
+  name         String
+  symbol       String
+  timeframe    Timeframe
+  status       StrategyStatus @default(DRAFT)
+  /// Optional link to the StrategyPreset this strategy was instantiated from.
+  /// String reference, no FK — preset can be deleted without cascading.
+  templateSlug String?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
 
   workspace Workspace        @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   versions  StrategyVersion[]
@@ -109,6 +112,7 @@ model Strategy {
 
   @@unique([workspaceId, name])
   @@index([workspaceId])
+  @@index([templateSlug])
 }
 
 model StrategyVersion {
@@ -146,6 +150,9 @@ model Bot {
   symbol               String
   timeframe            Timeframe
   status               BotStatus       @default(DRAFT)
+  /// Optional link to the StrategyPreset this bot was instantiated from.
+  /// String reference, no FK — preset can be deleted without cascading.
+  templateSlug         String?
   createdAt            DateTime        @default(now())
   updatedAt            DateTime        @updatedAt
 
@@ -160,6 +167,7 @@ model Bot {
   @@index([strategyVersionId])
   @@index([workspaceId, symbol])
   @@index([exchangeConnectionId])
+  @@index([templateSlug])
 }
 
 // ── Bot runtime domain ───────────────────────────────────────────
@@ -851,4 +859,33 @@ model LabJournalEntry {
   @@index([workspaceId])
   @@index([strategyGraphVersionId])
   @@index([workspaceId, createdAt(sort: Desc)])
+}
+
+// ── Strategy Preset (docs/51) ───────────────────────────────────────────────
+//
+// Immutable JSON template that acts as a factory for StrategyVersion.
+// Instantiation flow (POST /presets/:slug/instantiate) creates a fresh
+// Strategy + StrategyVersion + Bot triple in a single transaction.
+// Preset itself is not a runtime entity — once a Bot is created, the link
+// is preserved only via Bot.templateSlug (string, no FK).
+
+enum PresetVisibility {
+  PRIVATE
+  PUBLIC
+}
+
+model StrategyPreset {
+  slug                  String           @id
+  name                  String
+  description           String
+  category              String
+  dslJson               Json
+  defaultBotConfigJson  Json
+  datasetBundleHintJson Json?
+  visibility            PresetVisibility @default(PRIVATE)
+  createdAt             DateTime         @default(now())
+  updatedAt             DateTime         @updatedAt
+
+  @@index([visibility])
+  @@index([category])
 }
