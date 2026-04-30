@@ -1,9 +1,11 @@
 /**
- * Route tests: presets.ts (docs/51-T2)
+ * Route tests: presets.ts (docs/51-T2 + 51-T3)
  *
  * Covers POST /presets, GET /presets, GET /presets/:slug — visibility scoping,
- * slug regex, DSL validation, admin token gating, and 404-not-403 leakage rule
- * for PRIVATE presets.
+ * slug regex, DSL validation, admin token gating, 404-not-403 leakage rule —
+ * and POST /presets/:slug/instantiate — workspace gating, override merging,
+ * transactional Strategy + StrategyVersion + Bot create, and rollback when
+ * the Bot.create step fails.
  */
 
 import { describe, it, expect, vi, beforeAll, afterAll, beforeEach } from "vitest";
@@ -11,6 +13,17 @@ import { describe, it, expect, vi, beforeAll, afterAll, beforeEach } from "vites
 // ── Mock state ──────────────────────────────────────────────────────────────
 
 const mockPresets: Record<string, Record<string, unknown>> = {};
+const mockStrategies: Record<string, Record<string, unknown>> = {};
+const mockStrategyVersions: Record<string, Record<string, unknown>> = {};
+const mockBots: Record<string, Record<string, unknown>> = {};
+const mockWorkspaceMemberships: Array<Record<string, unknown>> = [];
+
+let strategyIdCounter = 0;
+let strategyVersionIdCounter = 0;
+let botIdCounter = 0;
+
+// Test-time hook: the next Bot.create raises this error (one-shot).
+let botCreateError: Error | null = null;
 
 // ── Mock Prisma ─────────────────────────────────────────────────────────────
 
@@ -35,21 +48,57 @@ vi.mock("@prisma/client", () => {
   };
 });
 
-vi.mock("../../src/lib/prisma.js", () => ({
-  prisma: {
+vi.mock("../../src/lib/prisma.js", () => {
+  // Build a "tx" client whose create methods write to a per-transaction
+  // staging buffer. On commit, staging is flushed to the global mocks; on
+  // throw, staging is discarded — emulating Prisma rollback semantics.
+  function buildTx(staging: {
+    strategies: Record<string, Record<string, unknown>>;
+    versions: Record<string, Record<string, unknown>>;
+    bots: Record<string, Record<string, unknown>>;
+  }) {
+    return {
+      strategy: {
+        create: vi.fn().mockImplementation(({ data }: { data: Record<string, unknown> }) => {
+          const id = `strat-${++strategyIdCounter}`;
+          const row = { id, ...data, createdAt: new Date(), updatedAt: new Date() };
+          staging.strategies[id] = row;
+          return Promise.resolve(row);
+        }),
+      },
+      strategyVersion: {
+        create: vi.fn().mockImplementation(({ data }: { data: Record<string, unknown> }) => {
+          const id = `sv-${++strategyVersionIdCounter}`;
+          const row = { id, ...data, createdAt: new Date() };
+          staging.versions[id] = row;
+          return Promise.resolve(row);
+        }),
+      },
+      bot: {
+        create: vi.fn().mockImplementation(({ data }: { data: Record<string, unknown> }) => {
+          if (botCreateError) {
+            const err = botCreateError;
+            botCreateError = null;
+            return Promise.reject(err);
+          }
+          const id = `bot-${++botIdCounter}`;
+          const row = { id, ...data, createdAt: new Date(), updatedAt: new Date() };
+          staging.bots[id] = row;
+          return Promise.resolve(row);
+        }),
+      },
+    };
+  }
+
+  const prisma = {
     strategyPreset: {
       create: vi.fn().mockImplementation(async ({ data }: { data: Record<string, unknown> }) => {
         const slug = data.slug as string;
         if (mockPresets[slug]) {
-          // emulate Prisma unique-constraint violation
           const { Prisma } = await import("@prisma/client");
           throw new Prisma.PrismaClientKnownRequestError("Unique constraint failed", { code: "P2002" } as never);
         }
-        const row = {
-          ...data,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        };
+        const row = { ...data, createdAt: new Date(), updatedAt: new Date() };
         mockPresets[slug] = row;
         return row;
       }),
@@ -61,7 +110,6 @@ vi.mock("../../src/lib/prisma.js", () => ({
           if (category !== undefined && p.category !== category) return false;
           return true;
         });
-        // Honour `select`: include only keys with truthy value (mirrors Prisma).
         const projected = select
           ? matched.map((row) => {
               const out: Record<string, unknown> = {};
@@ -77,8 +125,36 @@ vi.mock("../../src/lib/prisma.js", () => ({
         return Promise.resolve(mockPresets[where.slug] ?? null);
       }),
     },
-  },
-}));
+    workspaceMember: {
+      findUnique: vi.fn().mockImplementation(({ where }: { where: { workspaceId_userId: { workspaceId: string; userId: string } } }) => {
+        const m = mockWorkspaceMemberships.find(
+          (r) =>
+            r.workspaceId === where.workspaceId_userId.workspaceId &&
+            r.userId === where.workspaceId_userId.userId,
+        );
+        if (!m) return Promise.resolve(null);
+        return Promise.resolve({ ...m, workspace: { id: m.workspaceId, name: "Test WS" } });
+      }),
+    },
+    $transaction: vi.fn().mockImplementation(async (cb: (tx: ReturnType<typeof buildTx>) => Promise<unknown>) => {
+      const staging = {
+        strategies: {} as Record<string, Record<string, unknown>>,
+        versions: {} as Record<string, Record<string, unknown>>,
+        bots: {} as Record<string, Record<string, unknown>>,
+      };
+      const tx = buildTx(staging);
+      const result = await cb(tx); // throws → staging is dropped (rollback)
+      // Commit: flush staging into the global mocks.
+      Object.assign(mockStrategies, staging.strategies);
+      Object.assign(mockStrategyVersions, staging.versions);
+      Object.assign(mockBots, staging.bots);
+      return result;
+    }),
+    $connect: vi.fn(),
+    $disconnect: vi.fn(),
+  };
+  return { prisma };
+});
 
 // Validate-DSL stub: accept any object that has `dslVersion` set, reject otherwise.
 // This is intentionally narrower than the real validator — we just need a way
@@ -99,11 +175,15 @@ import type { FastifyInstance } from "fastify";
 // ── Setup ───────────────────────────────────────────────────────────────────
 
 let app: FastifyInstance;
+let userToken: string;
 const ADMIN_TOKEN = "test-admin-token-very-secret";
+const WS_ID = "ws-preset-test";
+const USER_ID = "user-preset-1";
 
 beforeAll(async () => {
   process.env.ADMIN_API_TOKEN = ADMIN_TOKEN;
   app = await buildApp();
+  userToken = app.jwt.sign({ sub: USER_ID, email: "preset@test.com" });
 });
 
 afterAll(async () => {
@@ -113,6 +193,16 @@ afterAll(async () => {
 
 beforeEach(() => {
   Object.keys(mockPresets).forEach((k) => delete mockPresets[k]);
+  Object.keys(mockStrategies).forEach((k) => delete mockStrategies[k]);
+  Object.keys(mockStrategyVersions).forEach((k) => delete mockStrategyVersions[k]);
+  Object.keys(mockBots).forEach((k) => delete mockBots[k]);
+  mockWorkspaceMemberships.length = 0;
+  strategyIdCounter = 0;
+  strategyVersionIdCounter = 0;
+  botIdCounter = 0;
+  botCreateError = null;
+
+  mockWorkspaceMemberships.push({ userId: USER_ID, workspaceId: WS_ID, role: "OWNER" });
 });
 
 // ── Helpers ─────────────────────────────────────────────────────────────────
@@ -360,5 +450,165 @@ describe("adminGuard — fail-closed when env is unset", () => {
     } finally {
       process.env.ADMIN_API_TOKEN = previous;
     }
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// POST /api/v1/presets/:slug/instantiate
+// ═══════════════════════════════════════════════════════════════════════════
+
+function userHeaders() {
+  return {
+    authorization: `Bearer ${userToken}`,
+    "x-workspace-id": WS_ID,
+    "content-type": "application/json",
+  };
+}
+
+describe("POST /api/v1/presets/:slug/instantiate", () => {
+  it("returns 401 without auth", async () => {
+    await seedPreset("public-a", "PUBLIC");
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/presets/public-a/instantiate",
+      payload: {},
+    });
+    expect(res.statusCode).toBe(401);
+  });
+
+  it("returns 403 for non-member workspace", async () => {
+    await seedPreset("public-a", "PUBLIC");
+    mockWorkspaceMemberships.length = 0;
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/presets/public-a/instantiate",
+      headers: userHeaders(),
+      payload: {},
+    });
+    expect(res.statusCode).toBe(403);
+  });
+
+  it("returns 404 for unknown slug", async () => {
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/presets/does-not-exist/instantiate",
+      headers: userHeaders(),
+      payload: {},
+    });
+    expect(res.statusCode).toBe(404);
+  });
+
+  it("returns 404 (not 403) for PRIVATE preset without admin token", async () => {
+    await seedPreset("secret", "PRIVATE");
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/presets/secret/instantiate",
+      headers: userHeaders(),
+      payload: {},
+    });
+    expect(res.statusCode).toBe(404);
+  });
+
+  it("instantiates PRIVATE preset when admin token is provided", async () => {
+    await seedPreset("secret", "PRIVATE");
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/presets/secret/instantiate",
+      headers: { ...userHeaders(), "x-admin-token": ADMIN_TOKEN },
+      payload: {},
+    });
+    expect(res.statusCode).toBe(201);
+    const body = res.json();
+    expect(body.botId).toBeDefined();
+    expect(body.strategyId).toBeDefined();
+    expect(body.strategyVersionId).toBeDefined();
+  });
+
+  it("creates exactly one Strategy + Version + Bot, all tagged with templateSlug", async () => {
+    await seedPreset("public-a", "PUBLIC");
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/presets/public-a/instantiate",
+      headers: userHeaders(),
+      payload: {},
+    });
+    expect(res.statusCode).toBe(201);
+    expect(Object.keys(mockStrategies)).toHaveLength(1);
+    expect(Object.keys(mockStrategyVersions)).toHaveLength(1);
+    expect(Object.keys(mockBots)).toHaveLength(1);
+
+    const strategy = Object.values(mockStrategies)[0];
+    const version = Object.values(mockStrategyVersions)[0];
+    const bot = Object.values(mockBots)[0];
+
+    expect(strategy.templateSlug).toBe("public-a");
+    expect(strategy.workspaceId).toBe(WS_ID);
+    expect(bot.templateSlug).toBe("public-a");
+    expect(bot.workspaceId).toBe(WS_ID);
+    expect(bot.status).toBe("DRAFT");
+    expect(bot.strategyVersionId).toBe(version.id);
+    expect(version.strategyId).toBe(strategy.id);
+    expect(version.dslJson).toEqual(VALID_DSL);
+  });
+
+  it("honours overrides.symbol", async () => {
+    await seedPreset("public-a", "PUBLIC");
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/presets/public-a/instantiate",
+      headers: userHeaders(),
+      payload: { overrides: { symbol: "ETHUSDT" } },
+    });
+    expect(res.statusCode).toBe(201);
+    const bot = Object.values(mockBots)[0];
+    expect(bot.symbol).toBe("ETHUSDT");
+  });
+
+  it("rejects unsupported timeframe in overrides (400)", async () => {
+    await seedPreset("public-a", "PUBLIC");
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/presets/public-a/instantiate",
+      headers: userHeaders(),
+      payload: { overrides: { timeframe: "M30" } },
+    });
+    expect(res.statusCode).toBe(400);
+  });
+
+  it("rolls back Strategy + StrategyVersion when Bot.create fails", async () => {
+    await seedPreset("public-a", "PUBLIC");
+    botCreateError = new Error("simulated bot.create failure");
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/presets/public-a/instantiate",
+      headers: userHeaders(),
+      payload: {},
+    });
+    expect(res.statusCode).toBe(500);
+    // Nothing committed — staging was discarded.
+    expect(Object.keys(mockStrategies)).toHaveLength(0);
+    expect(Object.keys(mockStrategyVersions)).toHaveLength(0);
+    expect(Object.keys(mockBots)).toHaveLength(0);
+  });
+
+  it("two consecutive instantiate calls produce two independent triples", async () => {
+    await seedPreset("public-a", "PUBLIC");
+    const r1 = await app.inject({
+      method: "POST",
+      url: "/api/v1/presets/public-a/instantiate",
+      headers: userHeaders(),
+      payload: {},
+    });
+    const r2 = await app.inject({
+      method: "POST",
+      url: "/api/v1/presets/public-a/instantiate",
+      headers: userHeaders(),
+      payload: {},
+    });
+    expect(r1.statusCode).toBe(201);
+    expect(r2.statusCode).toBe(201);
+    expect(r1.json().botId).not.toBe(r2.json().botId);
+    expect(Object.keys(mockBots)).toHaveLength(2);
+    expect(Object.keys(mockStrategies)).toHaveLength(2);
   });
 });
