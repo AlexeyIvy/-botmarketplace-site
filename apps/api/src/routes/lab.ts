@@ -13,6 +13,7 @@ import {
 } from "../types/datasetBundle.js";
 import {
   runWalkForward,
+  runWalkForwardWithBundle,
   WalkForwardMtfNotSupportedError,
 } from "../lib/walkForward/run.js";
 import { split as splitFolds } from "../lib/walkForward/split.js";
@@ -1233,11 +1234,12 @@ export async function labRoutes(app: FastifyInstance) {
       return problem(reply, 404, "Not Found", "Dataset not found");
     }
 
-    // ── Optional multi-interval bundle (docs/52-T4b-3, persistence-only) ─
-    // Validation rules mirror /lab/backtest and /lab/backtest/sweep. The
-    // bundle is persisted for round-trip integrity but the fold runner still
-    // honours the existing MTF preflight (rejects MTF DSLs); a follow-up PR
-    // will slice the bundle per-fold and run runBacktestWithBundle for IS/OOS.
+    // ── Optional multi-interval bundle (docs/52 follow-up: bundle-aware) ─
+    // Validation rules mirror /lab/backtest and /lab/backtest/sweep. When a
+    // bundle is supplied, the fold runner slices each interval per fold and
+    // runs `runBacktestWithBundle` for IS/OOS — MTF DSLs are first-class on
+    // this path (no MTF preflight). Without a bundle the legacy single-TF
+    // runner still rejects MTF DSLs upfront.
     let resolvedBundle: DatasetBundle | null = null;
     if (datasetBundleJson !== undefined && datasetBundleJson !== null) {
       const parsed = parseDatasetBundle(datasetBundleJson, { mode: "backtest" });
@@ -1323,16 +1325,27 @@ export async function labRoutes(app: FastifyInstance) {
         status: "PENDING",
         foldConfigJson: cfg as object,
         foldCount,
-        // 52-T4b-3 (persistence-only): bundle is stored on the row so a
-        // follow-up that implements bundle-aware folding can pick it up
-        // without a schema change. Today's runner ignores it.
+        // The bundle is persisted both for round-trip integrity and so the
+        // fold runner can re-load identical candles on retry.
         ...(resolvedBundle ? { datasetBundleJson: resolvedBundle as unknown as object } : {}),
       },
     });
 
-    runWalkForwardAsync(run.id, candles, strategyVersion.dslJson, {
-      feeBps, slippageBps, fillAt: fillAt as FillAt,
-    }, cfg).catch(() => {});
+    runWalkForwardAsync(
+      run.id,
+      candles,
+      strategyVersion.dslJson,
+      { feeBps, slippageBps, fillAt: fillAt as FillAt },
+      cfg,
+      resolvedBundle
+        ? {
+            bundle: resolvedBundle,
+            primaryInterval: dataset.interval as BundleCandleInterval,
+            symbol: dataset.symbol,
+            untilMs: Number(dataset.toTsMs),
+          }
+        : null,
+    ).catch(() => {});
 
     return reply.status(202).send({
       id: run.id,
@@ -2070,6 +2083,12 @@ async function runWalkForwardAsync(
   dslJson: unknown,
   opts: { feeBps: number; slippageBps: number; fillAt: FillAt },
   cfg: FoldConfig,
+  bundleCtx: {
+    bundle: DatasetBundle;
+    primaryInterval: BundleCandleInterval;
+    symbol: string;
+    untilMs: number;
+  } | null,
 ): Promise<void> {
   try {
     await prisma.walkForwardRun.update({
@@ -2091,10 +2110,37 @@ async function runWalkForwardAsync(
       }
     };
 
-    const report = runWalkForward(candles, dslJson, opts, cfg, (done, total) => {
-      // fire-and-forget so the runner is not awaited
-      onProgress(done, total).catch(() => {});
-    });
+    let report;
+    if (bundleCtx) {
+      // Bundle-aware path: load every interval's candles up to the dataset's
+      // upper bound, then split + slice per fold inside the runner.
+      const candlesByInterval = await loadCandleBundle({
+        symbol: bundleCtx.symbol,
+        bundle: bundleCtx.bundle,
+        // Soft cap: M5 over 5 years ≈ 525k bars, H1 over 10 years ≈ 87k —
+        // 1M comfortably covers any practical walk-forward window without
+        // truncating the dataset (loadCandleBundle uses ORDER BY desc +
+        // take, so a low cap would drop the oldest candles).
+        lookbackBars: 1_000_000,
+        mode: "backtest",
+        until: new Date(bundleCtx.untilMs),
+      });
+      report = runWalkForwardWithBundle({
+        bundle: candlesByInterval,
+        primaryInterval: bundleCtx.primaryInterval,
+        dslJson,
+        opts,
+        foldCfg: cfg,
+        onProgress: (done, total) => {
+          onProgress(done, total).catch(() => {});
+        },
+      });
+    } else {
+      report = runWalkForward(candles, dslJson, opts, cfg, (done, total) => {
+        // fire-and-forget so the runner is not awaited
+        onProgress(done, total).catch(() => {});
+      });
+    }
 
     // Store a truncated FoldReport[] without per-fold tradeLog (size discipline,
     // docs/48-T4 §4). The full tradeLog only existed in memory during the run.
