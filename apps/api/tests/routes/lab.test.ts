@@ -1070,6 +1070,72 @@ describe("POST /api/v1/lab/backtest/sweep", () => {
     expect(finalRow!.bestParamValue).toBe(5);
     expect(finalRow!.bestParamValuesJson).toMatchObject({ "bL.pL": 5 });
   });
+
+  // ── 52-T4b-2: datasetBundleJson plumbing on sweep ─────────────────────────
+  const bundleSweepHeaders = (ip: string) => ({ ...authHeaders(), "x-forwarded-for": ip });
+
+  it("52-T4b: persists datasetBundleJson on the sweep row when provided", async () => {
+    mockStrategyVersions["sv-52-1"] = { id: "sv-52-1", strategyId: "strat-52", strategy: { workspaceId: WS_ID }, dslJson: {} };
+    mockDatasets["ds-52-1"] = { id: "ds-52-1", workspaceId: WS_ID, exchange: "bybit", symbol: "BTCUSDT", interval: "M15", fromTsMs: BigInt(0), toTsMs: BigInt(1), datasetHash: "h" };
+    mockDatasets["ds-52-h1"] = { id: "ds-52-h1", workspaceId: WS_ID, exchange: "bybit", symbol: "BTCUSDT", interval: "H1", fromTsMs: BigInt(0), toTsMs: BigInt(1), datasetHash: "h2" };
+
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/lab/backtest/sweep",
+      headers: bundleSweepHeaders("10.52.b2.1"),
+      payload: {
+        datasetId: "ds-52-1",
+        strategyVersionId: "sv-52-1",
+        sweepParams: [{ blockId: "b1", paramName: "p1", from: 1, to: 3, step: 1 }],
+        datasetBundleJson: { M15: "ds-52-1", H1: "ds-52-h1" },
+      },
+    });
+    expect(res.statusCode).toBe(202);
+    const { sweepId } = res.json();
+    expect(mockSweeps[sweepId]).toBeDefined();
+    expect((mockSweeps[sweepId] as Record<string, unknown>).datasetBundleJson).toEqual({
+      M15: "ds-52-1",
+      H1: "ds-52-h1",
+    });
+  });
+
+  it("52-T4b: rejects bundle whose primary entry mismatches body.datasetId (400)", async () => {
+    mockStrategyVersions["sv-52-2"] = { id: "sv-52-2", strategyId: "strat-52", strategy: { workspaceId: WS_ID }, dslJson: {} };
+    mockDatasets["ds-52-2"] = { id: "ds-52-2", workspaceId: WS_ID, exchange: "bybit", symbol: "BTCUSDT", interval: "M15", fromTsMs: BigInt(0), toTsMs: BigInt(1), datasetHash: "h" };
+
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/lab/backtest/sweep",
+      headers: bundleSweepHeaders("10.52.b2.2"),
+      payload: {
+        datasetId: "ds-52-2",
+        strategyVersionId: "sv-52-2",
+        sweepParams: [{ blockId: "b1", paramName: "p1", from: 1, to: 3, step: 1 }],
+        datasetBundleJson: { M15: "ds-other", H1: "ds-52-h1" },
+      },
+    });
+    expect(res.statusCode).toBe(400);
+    expect(JSON.stringify(res.json())).toMatch(/primary entry must equal body\.datasetId/);
+  });
+
+  it("52-T4b: rejects bundle with `true` placeholder (backtest mode)", async () => {
+    mockStrategyVersions["sv-52-3"] = { id: "sv-52-3", strategyId: "strat-52", strategy: { workspaceId: WS_ID }, dslJson: {} };
+    mockDatasets["ds-52-3"] = { id: "ds-52-3", workspaceId: WS_ID, exchange: "bybit", symbol: "BTCUSDT", interval: "M15", fromTsMs: BigInt(0), toTsMs: BigInt(1), datasetHash: "h" };
+
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/lab/backtest/sweep",
+      headers: bundleSweepHeaders("10.52.b2.3"),
+      payload: {
+        datasetId: "ds-52-3",
+        strategyVersionId: "sv-52-3",
+        sweepParams: [{ blockId: "b1", paramName: "p1", from: 1, to: 3, step: 1 }],
+        datasetBundleJson: { M15: true },
+      },
+    });
+    expect(res.statusCode).toBe(400);
+    expect(JSON.stringify(res.json())).toMatch(/backtest mode requires a concrete datasetId/);
+  });
 });
 
 // ── GET /lab/backtest/sweep/:id ─────────────────────────────────────────────

@@ -952,6 +952,7 @@ export async function labRoutes(app: FastifyInstance) {
       slippageBps = 0,
       fillAt = "CLOSE",
       rankBy = "pnlPct",
+      datasetBundleJson,
     } = request.body ?? {};
 
     // ── 47-T1 normalization ────────────────────────────────────────────
@@ -1045,6 +1046,32 @@ export async function labRoutes(app: FastifyInstance) {
       return problem(reply, 404, "Not Found", "Dataset not found");
     }
 
+    // ── Optional multi-interval bundle (docs/52-T4b-2) ───────────────────────
+    // Same rules as POST /lab/backtest: backtest mode, primary entry equals
+    // body.datasetId, primary TF present. Persisted on the sweep row so the
+    // async runner replays it identically across every grid iteration.
+    let resolvedBundle: DatasetBundle | null = null;
+    if (datasetBundleJson !== undefined && datasetBundleJson !== null) {
+      const parsed = parseDatasetBundle(datasetBundleJson, { mode: "backtest" });
+      if (!parsed.bundle) {
+        return problem(reply, 400, "Validation Error", "Invalid datasetBundleJson", { errors: parsed.errors });
+      }
+      const primaryInterval = dataset.interval as BundleCandleInterval;
+      const pErrors = validateBundleAgainstPrimary(parsed.bundle, primaryInterval);
+      if (pErrors.length > 0) {
+        return problem(reply, 400, "Validation Error", "Invalid datasetBundleJson", { errors: pErrors });
+      }
+      if (parsed.bundle[primaryInterval] !== datasetId) {
+        return problem(reply, 400, "Validation Error", "Invalid datasetBundleJson", {
+          errors: [{
+            field: `datasetBundleJson.${primaryInterval}`,
+            message: `primary entry must equal body.datasetId (${datasetId})`,
+          }],
+        });
+      }
+      resolvedBundle = parsed.bundle;
+    }
+
     // ── Guard: max 2 concurrent sweeps per workspace ─────────────────────────
     const activeSweeps = await prisma.backtestSweep.count({
       where: { workspaceId: workspace.id, status: { in: ["PENDING", "RUNNING"] } },
@@ -1069,6 +1096,9 @@ export async function labRoutes(app: FastifyInstance) {
         rankBy,
         runCount,
         status: "PENDING",
+        // 52-T4b-2: persist bundle so the async runner replays the same set
+        // of intervals on every iteration. NULL ⇒ legacy single-TF sweep.
+        ...(resolvedBundle ? { datasetBundleJson: resolvedBundle as unknown as object } : {}),
       },
     });
 
@@ -1588,6 +1618,13 @@ interface SweepRequestBody {
   fillAt?: FillAt;
   /** Metric by which the best row is chosen (47-T4). Default "pnlPct". */
   rankBy?: RankBy;
+  /**
+   * Optional multi-interval bundle (docs/52-T4). Same rules as on
+   * `POST /lab/backtest`: backtest mode (concrete datasetIds only),
+   * primary entry must equal `body.datasetId`. Persisted on
+   * `BacktestSweep.datasetBundleJson` and replayed on every sweep run.
+   */
+  datasetBundleJson?: unknown;
 }
 
 /**
@@ -1689,25 +1726,48 @@ async function runSweepAsync(sweepId: string): Promise<void> {
     const dataset = await prisma.marketDataset.findUnique({ where: { id: sweep.datasetId } });
     if (!dataset) throw new Error("Dataset not found");
 
-    // Load candles once (shared across all runs)
-    const dbCandles = await prisma.marketCandle.findMany({
-      where: {
-        exchange: dataset.exchange,
-        symbol: dataset.symbol,
-        interval: dataset.interval,
-        openTimeMs: { gte: dataset.fromTsMs, lte: dataset.toTsMs },
-      },
-      orderBy: { openTimeMs: "asc" },
-    });
+    // 52-T4b-2: if the sweep was created with a bundle, load every interval
+    // once and reuse on every grid iteration. Otherwise stay on the legacy
+    // single-TF candle load (bit-for-bit unchanged).
+    const persistedBundle = sweep.datasetBundleJson as unknown;
+    let candleBundle: Awaited<ReturnType<typeof loadCandleBundle>> | null = null;
+    let candles: Array<{
+      openTime: number; open: number; high: number; low: number; close: number; volume: number;
+    }> = [];
 
-    const candles = dbCandles.map((c) => ({
-      openTime: Number(c.openTimeMs),
-      open: Number(c.open),
-      high: Number(c.high),
-      low: Number(c.low),
-      close: Number(c.close),
-      volume: Number(c.volume),
-    }));
+    if (persistedBundle != null) {
+      const parsedBundle = parseDatasetBundle(persistedBundle, { mode: "backtest" });
+      if (!parsedBundle.bundle) {
+        throw new Error(
+          `bundle on BacktestSweep ${sweepId} is invalid: ${parsedBundle.errors.map((e) => e.message).join("; ")}`,
+        );
+      }
+      candleBundle = await loadCandleBundle({
+        symbol: dataset.symbol,
+        bundle: parsedBundle.bundle,
+        lookbackBars: 100_000,
+        mode: "backtest",
+        until: new Date(Number(dataset.toTsMs)),
+      });
+    } else {
+      const dbCandles = await prisma.marketCandle.findMany({
+        where: {
+          exchange: dataset.exchange,
+          symbol: dataset.symbol,
+          interval: dataset.interval,
+          openTimeMs: { gte: dataset.fromTsMs, lte: dataset.toTsMs },
+        },
+        orderBy: { openTimeMs: "asc" },
+      });
+      candles = dbCandles.map((c) => ({
+        openTime: Number(c.openTimeMs),
+        open: Number(c.open),
+        high: Number(c.high),
+        low: Number(c.low),
+        close: Number(c.close),
+        volume: Number(c.volume),
+      }));
+    }
 
     const dslJson = strategyVersion.dslJson;
     if (!dslJson) throw new Error("StrategyVersion has no dslJson");
@@ -1762,12 +1822,21 @@ async function runSweepAsync(sweepId: string): Promise<void> {
       });
 
       try {
-        // DSL-driven backtest — sweep-mutated DSL for this iteration
-        const report = runBacktest(candles, mutatedDsl, {
+        // DSL-driven backtest — sweep-mutated DSL for this iteration.
+        // Bundle path uses look-ahead-safe alignment via runBacktestWithBundle.
+        const execOpts = {
           feeBps: sweep.feeBps,
           slippageBps: sweep.slippageBps,
           fillAt: sweep.fillAt as FillAt,
-        });
+        };
+        const report = candleBundle
+          ? runBacktestWithBundle({
+              bundle: candleBundle,
+              primaryInterval: dataset.interval as BundleCandleInterval,
+              dslJson: mutatedDsl,
+              opts: execOpts,
+            })
+          : runBacktest(candles, mutatedDsl, execOpts);
 
         await prisma.backtestResult.update({
           where: { id: bt.id },
