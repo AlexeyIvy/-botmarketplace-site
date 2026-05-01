@@ -1,25 +1,92 @@
 {
   "name": "Adaptive Regime",
-  "description": "Trend-following + mean-reversion regime switcher. DSL is a placeholder; the final golden fixture lands in docs/53-T1.",
+  "description": "Long-only multi-timeframe strategy that switches between trend-following and mean-reversion regimes. Trend branch enters when H1 EMA(50)>EMA(200) and ADX(H1)>20 align with a positive M5 supertrend. Mean-reversion branch enters when ADX(H1)<20 (flat regime) and M5 RSI(14)<30 (oversold). Exits on ATR(14)*2 stop-loss or +4% take-profit. Bundle: M5 primary + H1 context.",
   "dslJson": {
     "id": "adaptive-regime",
     "name": "Adaptive Regime",
-    "dslVersion": 1,
+    "dslVersion": 2,
     "enabled": true,
-    "market": { "exchange": "bybit", "env": "demo", "category": "linear", "symbol": "BTCUSDT" },
-    "entry": { "side": "Buy" },
-    "risk": { "maxPositionSizeUsd": 100, "riskPerTradePct": 1, "cooldownSeconds": 60 },
-    "execution": { "orderType": "Market", "clientOrderIdPrefix": "adaptive" },
-    "guards": { "maxOpenPositions": 1, "maxOrdersPerMinute": 10, "pauseOnError": true }
+    "market": {
+      "exchange": "bybit",
+      "env": "demo",
+      "category": "linear",
+      "symbol": "BTCUSDT"
+    },
+    "entry": {
+      "side": "Buy",
+      "signal": {
+        "type": "or",
+        "conditions": [
+          {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "compare",
+                "op": ">",
+                "left":  { "blockType": "ema", "length": 50,  "sourceTimeframe": "1h" },
+                "right": { "blockType": "ema", "length": 200, "sourceTimeframe": "1h" }
+              },
+              {
+                "type": "compare",
+                "op": ">",
+                "left":  { "blockType": "supertrend", "period": 10, "multiplier": 3 },
+                "right": { "blockType": "constant", "length": 0 }
+              },
+              {
+                "type": "compare",
+                "op": ">",
+                "left":  { "blockType": "adx", "period": 14, "sourceTimeframe": "1h" },
+                "right": { "blockType": "constant", "length": 20 }
+              }
+            ]
+          },
+          {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "compare",
+                "op": "<",
+                "left":  { "blockType": "rsi", "length": 14 },
+                "right": { "blockType": "constant", "length": 30 }
+              },
+              {
+                "type": "compare",
+                "op": "<",
+                "left":  { "blockType": "adx", "period": 14, "sourceTimeframe": "1h" },
+                "right": { "blockType": "constant", "length": 20 }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "risk": {
+      "maxPositionSizeUsd": 100,
+      "riskPerTradePct": 1,
+      "cooldownSeconds": 60
+    },
+    "execution": {
+      "orderType": "Market",
+      "clientOrderIdPrefix": "adaptive"
+    },
+    "guards": {
+      "maxOpenPositions": 1,
+      "maxOrdersPerMinute": 10,
+      "pauseOnError": true
+    },
+    "exit": {
+      "stopLoss":   { "type": "atr_multiple", "value": 2, "atrPeriod": 14 },
+      "takeProfit": { "type": "fixed_pct",    "value": 4 }
+    }
   },
   "defaultBotConfigJson": {
     "symbol": "BTCUSDT",
-    "timeframe": "M15",
+    "timeframe": "M5",
     "quoteAmount": 100,
     "maxOpenPositions": 1
   },
   "datasetBundleHintJson": {
     "5m": true,
-    "1H": true
+    "1h": true
   }
 }
