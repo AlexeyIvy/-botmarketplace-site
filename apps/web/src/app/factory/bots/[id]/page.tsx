@@ -27,6 +27,7 @@ interface BotDetail {
   timeframe: string;
   status: string;
   exchangeConnectionId: string | null;
+  templateSlug: string | null;
   strategyVersion: {
     id: string;
     version: number;
@@ -183,6 +184,11 @@ export default function BotDetailPage() {
           <p style={{ color: "var(--text-secondary)", marginBottom: 4 }}>
             {bot.symbol} · {bot.timeframe} · {bot.status}
           </p>
+          {bot.templateSlug && (
+            <p style={{ marginBottom: 4 }}>
+              <span style={presetBadge}>From preset: {bot.templateSlug}</span>
+            </p>
+          )}
           <p style={{ color: "var(--text-secondary)", marginBottom: 4, fontSize: 13 }}>
             Strategy:{" "}
             <Link href={`/factory/strategies/${bot.strategyVersion.strategy.id}`}>
@@ -359,3 +365,15 @@ const btnDanger: React.CSSProperties = { ...btn, background: "#da3633" };
 const btnSecondary: React.CSSProperties = { ...btn, background: "var(--bg-secondary)", border: "1px solid var(--border)", color: "var(--text-primary)" };
 const th: React.CSSProperties = { textAlign: "left", padding: "8px 12px", borderBottom: "1px solid var(--border)", color: "var(--text-secondary)", fontSize: 13 };
 const td: React.CSSProperties = { padding: "8px 12px", borderBottom: "1px solid var(--border)", fontSize: 14 };
+const presetBadge: React.CSSProperties = {
+  display: "inline-block",
+  fontSize: 11,
+  fontWeight: 600,
+  textTransform: "uppercase",
+  letterSpacing: "0.06em",
+  padding: "2px 8px",
+  borderRadius: 4,
+  color: "#3B82F6",
+  background: "rgba(59,130,246,0.12)",
+  border: "1px solid rgba(59,130,246,0.4)",
+};
