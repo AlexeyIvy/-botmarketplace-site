@@ -153,6 +153,10 @@ model Bot {
   /// Optional link to the StrategyPreset this bot was instantiated from.
   /// String reference, no FK — preset can be deleted without cascading.
   templateSlug         String?
+  /// Optional multi-interval dataset bundle (docs/52-T1).
+  /// Shape: Partial<Record<CandleInterval, string | true>>; null ⇒ legacy
+  /// single-TF behaviour driven by `timeframe` alone.
+  datasetBundleJson    Json?
   createdAt            DateTime        @default(now())
   updatedAt            DateTime        @updatedAt
 
@@ -719,6 +723,9 @@ model BacktestSweep {
   /// Multi-param best-row values (47-T4). Record<string, number> with key
   /// = `${blockId}.${paramName}`. Null until the run completes.
   bestParamValuesJson Json?
+  /// Optional multi-interval dataset bundle (docs/52-T1).
+  /// Backtest mode: every value MUST be a concrete datasetId string.
+  datasetBundleJson Json?
   createdAt         DateTime    @default(now())
   updatedAt         DateTime    @updatedAt
 
@@ -756,6 +763,9 @@ model WalkForwardRun {
   /// Truncated FoldReport[] (without per-fold tradeLog) — see docs/48-T4 §4
   foldsJson          Json?
   aggregateJson      Json?
+  /// Optional multi-interval dataset bundle (docs/52-T1). Backtest mode:
+  /// every value MUST be a concrete datasetId string.
+  datasetBundleJson  Json?
   error              String?
   createdAt          DateTime          @default(now())
   updatedAt          DateTime          @updatedAt
