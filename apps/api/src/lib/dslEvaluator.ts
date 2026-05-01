@@ -445,6 +445,75 @@ export function getIndicatorValues(
   return new Array(candles.length).fill(null);
 }
 
+/**
+ * Multi-TF runtime evaluation context (docs/52-T3).
+ *
+ * When provided to {@link evaluateEntry} / {@link evaluateExit} (and the
+ * primitives they delegate to), DSL indicator refs that carry a
+ * `sourceTimeframe` resolve their values from the bundle's context-TF
+ * candles instead of the primary candle array.
+ *
+ * Mirrors {@link MtfBacktestContext} but is the runtime variant: callers
+ * typically build the bundle via {@link createCandleBundle} (open-bar
+ * tolerant) rather than the closed-safe variant used by backtests, since
+ * the runtime is evaluating "now".
+ */
+export interface RuntimeMtfContext {
+  bundle: import("./mtf/intervalAlignment.js").CandleBundle;
+  mtfCache: import("./mtf/mtfIndicatorResolver.js").MtfIndicatorCache;
+}
+
+/** Thrown when a DSL ref carries `sourceTimeframe` but no bundle was supplied. */
+export class MtfBundleRequiredError extends Error {
+  readonly sourceTimeframe: string;
+  readonly indicatorType: string;
+  constructor(indicatorType: string, sourceTimeframe: string) {
+    super(
+      `Indicator "${indicatorType}" requires a multi-TF bundle ` +
+      `(sourceTimeframe="${sourceTimeframe}"). Configure bot.datasetBundleJson ` +
+      `to include this timeframe.`,
+    );
+    this.name = "MtfBundleRequiredError";
+    this.indicatorType = indicatorType;
+    this.sourceTimeframe = sourceTimeframe;
+  }
+}
+
+/**
+ * Resolve an indicator ref to its value array, branching on
+ * `ref.sourceTimeframe`:
+ *
+ * - No `sourceTimeframe` → standard {@link getIndicatorValues} on `candles`.
+ * - `sourceTimeframe` set + `mtfContext` provided → context-TF resolution
+ *   via {@link resolveMtfIndicator} (alignment-mapped back to primary bars).
+ * - `sourceTimeframe` set + `mtfContext` missing → throws
+ *   {@link MtfBundleRequiredError} so the caller fails loudly instead of
+ *   silently swallowing the cross-TF intent.
+ */
+export function resolveIndicatorRef(
+  ref: DslIndicatorRef,
+  candles: Candle[],
+  cache: IndicatorCache,
+  mtfContext?: RuntimeMtfContext | null,
+): (number | null)[] {
+  if (ref.sourceTimeframe) {
+    if (!mtfContext) {
+      throw new MtfBundleRequiredError(ref.type, ref.sourceTimeframe);
+    }
+    return resolveMtfIndicator(ref, candles, mtfContext.mtfCache, mtfContext.bundle);
+  }
+  return getIndicatorValues(ref.type, {
+    length: ref.length,
+    period: ref.period,
+    atrPeriod: ref.atrPeriod,
+    multiplier: ref.multiplier,
+    fastPeriod: ref.fastPeriod,
+    slowPeriod: ref.slowPeriod,
+    signalPeriod: ref.signalPeriod,
+    bins: ref.bins,
+  }, candles, cache);
+}
+
 function getVolumeProfileCached(
   params: { period?: number; bins?: number },
   candles: Candle[],
@@ -627,6 +696,7 @@ export function determineSide(
   i: number,
   candles: Candle[],
   cache: IndicatorCache,
+  mtfContext?: RuntimeMtfContext | null,
 ): TradeSide | null {
   // Fixed side
   if (entry.side) {
@@ -636,17 +706,8 @@ export function determineSide(
   // Dynamic sideCondition (DSL v2)
   if (entry.sideCondition) {
     const sc = entry.sideCondition;
-    const indValues = getIndicatorValues(
-      sc.indicator.type,
-      {
-        length: sc.indicator.length,
-        period: (sc.indicator as unknown as Record<string, unknown>).period as number | undefined,
-        atrPeriod: sc.indicator.atrPeriod,
-        multiplier: sc.indicator.multiplier,
-      },
-      candles,
-      cache,
-    );
+    // 52-T3: resolveIndicatorRef branches on sc.indicator.sourceTimeframe.
+    const indValues = resolveIndicatorRef(sc.indicator, candles, cache, mtfContext);
 
     const val = indValues[i];
     if (val === null) return null;

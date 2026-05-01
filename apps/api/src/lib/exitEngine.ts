@@ -21,7 +21,7 @@ import type { PositionSnapshot } from "./positionManager.js";
 import {
   parseDsl,
   evalOp,
-  getIndicatorValues,
+  resolveIndicatorRef,
   computeExitLevels,
   createIndicatorCache,
   type ParsedDsl,
@@ -29,6 +29,7 @@ import {
   type DslExitLevel,
   type DslExit,
   type IndicatorCache,
+  type RuntimeMtfContext,
 } from "./dslEvaluator.js";
 
 // ---------------------------------------------------------------------------
@@ -82,6 +83,13 @@ export interface ExitEngineContext {
   barsHeld: number;
   /** Mutable trailing stop state (updated in-place) */
   trailingState: TrailingStopState;
+  /**
+   * Optional multi-TF runtime context (docs/52-T3). When set, indicator-exit
+   * refs that carry a `sourceTimeframe` resolve from the bundle's context-TF
+   * candles. Refs with `sourceTimeframe` and no bundle throw
+   * {@link MtfBundleRequiredError}.
+   */
+  mtfContext?: RuntimeMtfContext | null;
 }
 
 // ---------------------------------------------------------------------------
@@ -98,7 +106,7 @@ export interface ExitEngineContext {
  * runDslBacktest in dslEvaluator.ts.
  */
 export function evaluateExit(ctx: ExitEngineContext): CloseSignal | null {
-  const { candles, dslJson, position, barsHeld, trailingState } = ctx;
+  const { candles, dslJson, position, barsHeld, trailingState, mtfContext } = ctx;
   if (candles.length < 1) return null;
   if (position.status !== "OPEN") return null;
 
@@ -205,17 +213,9 @@ export function evaluateExit(ctx: ExitEngineContext): CloseSignal | null {
     const ie = exit.indicatorExit;
     const appliesTo = ie.appliesTo ?? "both";
     if (appliesTo === "both" || appliesTo === positionSide) {
-      const indVals = getIndicatorValues(
-        ie.indicator.type,
-        {
-          length: ie.indicator.length,
-          period: (ie.indicator as unknown as Record<string, unknown>).period as number | undefined,
-          atrPeriod: ie.indicator.atrPeriod,
-          multiplier: ie.indicator.multiplier,
-        },
-        candles,
-        cache,
-      );
+      // 52-T3: branch on ie.indicator.sourceTimeframe so indicator exits
+      // declared on a context TF resolve through the bundle.
+      const indVals = resolveIndicatorRef(ie.indicator, candles, cache, mtfContext);
       const val = indVals[i];
       if (val !== null && evalOp(ie.condition.op, val, ie.condition.value)) {
         return {

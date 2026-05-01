@@ -24,6 +24,7 @@ import {
   type TradeSide,
   type DslExitLevel,
   type IndicatorCache,
+  type RuntimeMtfContext,
 } from "./dslEvaluator.js";
 
 // ---------------------------------------------------------------------------
@@ -56,6 +57,13 @@ export interface SignalEngineContext {
   dslJson: unknown;
   /** Current active position (null if no position) */
   position: PositionSnapshot | null;
+  /**
+   * Optional multi-TF runtime context (docs/52-T3). When set, DSL refs that
+   * carry a `sourceTimeframe` resolve from the bundle's context-TF candles.
+   * When absent, refs without `sourceTimeframe` continue to work; refs with
+   * one throw {@link MtfBundleRequiredError}.
+   */
+  mtfContext?: RuntimeMtfContext | null;
 }
 
 // ---------------------------------------------------------------------------
@@ -77,7 +85,7 @@ export function evaluateEntry(ctx: SignalEngineContext): OpenSignal | null {
     return null;
   }
 
-  const { candles, dslJson } = ctx;
+  const { candles, dslJson, mtfContext } = ctx;
   if (candles.length < 2) return null;
 
   const parsed = parseDsl(dslJson);
@@ -86,8 +94,9 @@ export function evaluateEntry(ctx: SignalEngineContext): OpenSignal | null {
   const cache = createIndicatorCache();
   const i = candles.length - 1; // evaluate on the latest candle
 
-  // Determine side
-  const side = determineSide(entry, i, candles, cache);
+  // Determine side — propagate MTF context so sideCondition.indicator with a
+  // `sourceTimeframe` can resolve from the HTF candles in the bundle.
+  const side = determineSide(entry, i, candles, cache, mtfContext);
   if (!side) return null;
 
   // Evaluate entry signal
