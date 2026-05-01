@@ -8,6 +8,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { apiFetch, getWorkspaceId } from "../../../lib/api";
 import { useLabGraphStore } from "../useLabGraphStore";
+import {
+  DatasetBundleSelector,
+  type DatasetBundle,
+  type CandleInterval as BundleCandleInterval,
+} from "../_shared/DatasetBundleSelector";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -136,6 +141,11 @@ export default function WalkForwardPanel({
   const [feeBps, setFeeBps] = useState(10);
   const [slippageBps, setSlippageBps] = useState(5);
   const [fillAt, setFillAt] = useState<FillAt>("CLOSE");
+  const [bundle, setBundle] = useState<DatasetBundle | null>(null);
+
+  // Reset bundle when the primary dataset changes — its (symbol, interval)
+  // anchors the bundle, so any extra TFs become inconsistent (docs/52-T5b).
+  useEffect(() => { setBundle(null); }, [datasetId]);
 
   // Run state
   const [submitting, setSubmitting] = useState(false);
@@ -223,7 +233,7 @@ export default function WalkForwardPanel({
     setSubmitError(null);
     setWarnings([]);
 
-    const body = {
+    const body: Record<string, unknown> = {
       datasetId,
       strategyVersionId: versionId,
       fold: { isBars, oosBars, step, anchored },
@@ -231,6 +241,7 @@ export default function WalkForwardPanel({
       slippageBps,
       fillAt,
     };
+    if (bundle) body.datasetBundleJson = bundle;
 
     const res = await apiFetch<{ id: string; foldCount: number; status: string; warnings: string[] }>(
       "/lab/backtest/walk-forward",
@@ -257,7 +268,7 @@ export default function WalkForwardPanel({
       setSubmitError(res.problem.detail ?? res.problem.title ?? "Unknown error");
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [datasetId, versionId, isBars, oosBars, step, anchored, feeBps, slippageBps, fillAt]);
+  }, [datasetId, versionId, isBars, oosBars, step, anchored, feeBps, slippageBps, fillAt, bundle]);
 
   return (
     <div style={{ padding: "20px 24px", maxWidth: 900, overflow: "auto", height: "100%" }}>
@@ -373,6 +384,23 @@ export default function WalkForwardPanel({
               </select>
             )}
           </FormRow>
+
+          {/* Multi-interval bundle (docs/52-T5b). Bundle is persisted on
+              WalkForwardRun.datasetBundleJson; the fold runner currently
+              ignores it (deferred follow-up). */}
+          {selectedDataset && (
+            <FormRow label="Multi-TF context">
+              <DatasetBundleSelector
+                primaryInterval={selectedDataset.interval as BundleCandleInterval}
+                primaryDatasetId={selectedDataset.datasetId}
+                primarySymbol={selectedDataset.symbol}
+                availableDatasets={readyDatasets}
+                bundle={bundle}
+                onChange={setBundle}
+                disabled={submitting}
+              />
+            </FormRow>
+          )}
 
           <FormRow label="Strategy version">
             {strategyVersions.length === 0 ? (

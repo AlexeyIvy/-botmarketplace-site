@@ -16,6 +16,11 @@ import type { IChartApi, LineData, Time } from "lightweight-charts";
 import OptimisePanel from "./OptimisePanel";
 import WalkForwardPanel from "./WalkForwardPanel";
 import { PreviewPanel } from "../PreviewPanel";
+import {
+  DatasetBundleSelector,
+  type DatasetBundle,
+  type CandleInterval as BundleCandleInterval,
+} from "../_shared/DatasetBundleSelector";
 
 // ---------------------------------------------------------------------------
 // Task 29 — AI Explainability helpers
@@ -452,7 +457,7 @@ function BacktestForm({
 }: {
   datasets: DatasetListItem[];
   strategyVersions: StrategyVersionItem[];
-  onSubmit: (params: { strategyVersionId: string; datasetId: string; feeBps: number; slippageBps: number; fillAt: FillAt }) => void;
+  onSubmit: (params: { strategyVersionId: string; datasetId: string; feeBps: number; slippageBps: number; fillAt: FillAt; datasetBundleJson?: DatasetBundle }) => void;
   submitting: boolean;
   error: string | null;
   activeDatasetId: string | null;
@@ -465,6 +470,12 @@ function BacktestForm({
   const [feeBps, setFeeBps] = useState(10);
   const [slippageBps, setSlippageBps] = useState(5);
   const [fillAt, setFillAt] = useState<FillAt>("CLOSE");
+  const [bundle, setBundle] = useState<DatasetBundle | null>(null);
+
+  // Reset bundle when the primary dataset changes — its (symbol, interval) is
+  // the bundle's anchor, so any extra TFs become inconsistent the moment the
+  // primary moves.
+  useEffect(() => { setBundle(null); }, [datasetId]);
 
   // Sync default dataset when props change
   useEffect(() => {
@@ -513,6 +524,21 @@ function BacktestForm({
           <div style={hintStyle}>{selectedDataset.candleCount.toLocaleString()} candles · hash {selectedDataset.datasetHash.slice(0, 8)}</div>
         )}
       </FormRow>
+
+      {/* Multi-interval bundle (docs/52-T5b) */}
+      {selectedDataset && (
+        <FormRow label="Multi-TF context">
+          <DatasetBundleSelector
+            primaryInterval={selectedDataset.interval as BundleCandleInterval}
+            primaryDatasetId={selectedDataset.datasetId}
+            primarySymbol={selectedDataset.symbol}
+            availableDatasets={readyDatasets}
+            bundle={bundle}
+            onChange={setBundle}
+            disabled={submitting}
+          />
+        </FormRow>
+      )}
 
       {/* Strategy version select */}
       <FormRow label="Strategy version">
@@ -586,7 +612,14 @@ function BacktestForm({
             cursor: canSubmit ? "pointer" : "not-allowed",
           }}
           disabled={!canSubmit}
-          onClick={() => onSubmit({ strategyVersionId: versionId, datasetId, feeBps, slippageBps, fillAt })}
+          onClick={() => onSubmit({
+            strategyVersionId: versionId,
+            datasetId,
+            feeBps,
+            slippageBps,
+            fillAt,
+            ...(bundle ? { datasetBundleJson: bundle } : {}),
+          })}
         >
           {submitting ? "Starting…" : "Run Backtest"}
         </button>
@@ -1111,7 +1144,7 @@ function ResultDetail({
   activeDatasetId: string | null;
   lastCompileVersionId: string | null;
   lastCompileGraphVersionId: string | null;
-  onSubmit: (params: { strategyVersionId: string; datasetId: string; feeBps: number; slippageBps: number; fillAt: FillAt }) => void;
+  onSubmit: (params: { strategyVersionId: string; datasetId: string; feeBps: number; slippageBps: number; fillAt: FillAt; datasetBundleJson?: DatasetBundle }) => void;
 }) {
   const [activeTab, setActiveTab] = useState<ResultTab>("run");
 
@@ -1324,6 +1357,7 @@ export default function LabTestPage() {
     feeBps: number;
     slippageBps: number;
     fillAt: FillAt;
+    datasetBundleJson?: DatasetBundle;
   }) => {
     if (!getWorkspaceId()) return;
     setSubmitting(true);
