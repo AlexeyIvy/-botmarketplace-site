@@ -1,0 +1,78 @@
+{
+  "id": "adaptive-regime",
+  "name": "Adaptive Regime",
+  "dslVersion": 2,
+  "enabled": true,
+  "market": {
+    "exchange": "bybit",
+    "env": "demo",
+    "category": "linear",
+    "symbol": "BTCUSDT"
+  },
+  "entry": {
+    "side": "Buy",
+    "signal": {
+      "type": "or",
+      "conditions": [
+        {
+          "type": "and",
+          "conditions": [
+            {
+              "type": "compare",
+              "op": ">",
+              "left":  { "blockType": "ema", "length": 50,  "sourceTimeframe": "1h" },
+              "right": { "blockType": "ema", "length": 200, "sourceTimeframe": "1h" }
+            },
+            {
+              "type": "compare",
+              "op": ">",
+              "left":  { "blockType": "supertrend", "period": 10, "multiplier": 3 },
+              "right": { "blockType": "constant", "length": 0 }
+            },
+            {
+              "type": "compare",
+              "op": ">",
+              "left":  { "blockType": "adx", "period": 14, "sourceTimeframe": "1h" },
+              "right": { "blockType": "constant", "length": 20 }
+            }
+          ]
+        },
+        {
+          "type": "and",
+          "conditions": [
+            {
+              "type": "compare",
+              "op": "<",
+              "left":  { "blockType": "rsi", "length": 14 },
+              "right": { "blockType": "constant", "length": 30 }
+            },
+            {
+              "type": "compare",
+              "op": "<",
+              "left":  { "blockType": "adx", "period": 14, "sourceTimeframe": "1h" },
+              "right": { "blockType": "constant", "length": 20 }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "risk": {
+    "maxPositionSizeUsd": 100,
+    "riskPerTradePct": 1,
+    "cooldownSeconds": 60
+  },
+  "execution": {
+    "orderType": "Market",
+    "clientOrderIdPrefix": "adaptive"
+  },
+  "guards": {
+    "maxOpenPositions": 1,
+    "maxOrdersPerMinute": 10,
+    "pauseOnError": true
+  },
+  "exit": {
+    "stopLoss":   { "type": "atr_multiple", "value": 2, "atrPeriod": 14 },
+    "takeProfit": { "type": "fixed_pct",    "value": 4 }
+  }
+}

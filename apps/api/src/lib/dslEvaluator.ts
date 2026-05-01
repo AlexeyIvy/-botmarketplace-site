@@ -141,6 +141,11 @@ export interface DslSignalRef {
   length?: number;
   period?: number;
   multiplier?: number;
+  /** Optional: resolve this signal-ref's indicator from a different timeframe.
+   *  Mirrors {@link DslIndicatorRef.sourceTimeframe} (52-T3). When set,
+   *  {@link evaluateSignal} resolves through the supplied {@link RuntimeMtfContext};
+   *  with no context, the call surfaces {@link MtfBundleRequiredError}. */
+  sourceTimeframe?: string;
 }
 
 export interface DslSignal {
@@ -514,6 +519,35 @@ export function resolveIndicatorRef(
   }, candles, cache);
 }
 
+/**
+ * Same branching as {@link resolveIndicatorRef} but for a {@link DslSignalRef}.
+ * Signal refs use `blockType` (not `type`) and lack the indicator-only fields,
+ * so the conversion is mechanical. Threading `mtfContext` lets DSL signal
+ * blocks (`crossover`, `crossunder`, `compare`) reference an HTF series via
+ * `sourceTimeframe` exactly like indicator refs do.
+ */
+export function resolveSignalRef(
+  ref: DslSignalRef,
+  candles: Candle[],
+  cache: IndicatorCache,
+  mtfContext?: RuntimeMtfContext | null,
+): (number | null)[] {
+  if (ref.sourceTimeframe) {
+    if (!mtfContext) {
+      throw new MtfBundleRequiredError(ref.blockType, ref.sourceTimeframe);
+    }
+    const indRef: DslIndicatorRef = {
+      type: ref.blockType,
+      length: ref.length,
+      period: ref.period,
+      multiplier: ref.multiplier,
+      sourceTimeframe: ref.sourceTimeframe,
+    };
+    return resolveMtfIndicator(indRef, candles, mtfContext.mtfCache, mtfContext.bundle);
+  }
+  return getIndicatorValues(ref.blockType, ref, candles, cache);
+}
+
 function getVolumeProfileCached(
   params: { period?: number; bins?: number },
   candles: Candle[],
@@ -593,18 +627,22 @@ export function evaluateSignal(
   candles: Candle[],
   cache: IndicatorCache,
   _depth = 0,
+  mtfContext?: RuntimeMtfContext | null,
 ): boolean {
   if (!signal) return false;
   if (_depth >= MAX_SIGNAL_DEPTH) return false;
 
-  // Composed conditions: and / or
+  // Composed conditions: and / or — propagate mtfContext through recursion
+  // so any nested compare/crossover with sourceTimeframe still resolves
+  // through the bundle (53-T1 adaptive-regime needs and_gate(M5 supertrend +
+  // close > EMA200(H1) + ADX(H1) > 20)).
   if (signal.type === "and") {
     if (!signal.conditions || signal.conditions.length === 0) return false;
-    return signal.conditions.every((sub) => evaluateSignal(sub, i, candles, cache, _depth + 1));
+    return signal.conditions.every((sub) => evaluateSignal(sub, i, candles, cache, _depth + 1, mtfContext));
   }
   if (signal.type === "or") {
     if (!signal.conditions || signal.conditions.length === 0) return false;
-    return signal.conditions.some((sub) => evaluateSignal(sub, i, candles, cache, _depth + 1));
+    return signal.conditions.some((sub) => evaluateSignal(sub, i, candles, cache, _depth + 1, mtfContext));
   }
 
   // Confirm N Bars: sub-signal must be true for N consecutive bars
@@ -613,7 +651,7 @@ export function evaluateSignal(
     const nBars = signal.bars ?? 3;
     if (i < nBars - 1) return false;
     for (let j = i - nBars + 1; j <= i; j++) {
-      if (!evaluateSignal(signal.conditions[0], j, candles, cache, _depth + 1)) return false;
+      if (!evaluateSignal(signal.conditions[0], j, candles, cache, _depth + 1, mtfContext)) return false;
     }
     return true;
   }
@@ -621,8 +659,8 @@ export function evaluateSignal(
   if (signal.type === "crossover" || signal.type === "crossunder") {
     // Cross signal: fast crosses over/under slow
     if (!signal.fast || !signal.slow || i < 1) return false;
-    const fastVals = getIndicatorValues(signal.fast.blockType, signal.fast, candles, cache);
-    const slowVals = getIndicatorValues(signal.slow.blockType, signal.slow, candles, cache);
+    const fastVals = resolveSignalRef(signal.fast, candles, cache, mtfContext);
+    const slowVals = resolveSignalRef(signal.slow, candles, cache, mtfContext);
 
     const curFast = fastVals[i];
     const curSlow = slowVals[i];
@@ -640,8 +678,8 @@ export function evaluateSignal(
 
   if (signal.type === "compare") {
     if (!signal.left || !signal.right) return false;
-    const leftVals = getIndicatorValues(signal.left.blockType, signal.left, candles, cache);
-    const rightVals = getIndicatorValues(signal.right.blockType, signal.right, candles, cache);
+    const leftVals = resolveSignalRef(signal.left, candles, cache, mtfContext);
+    const rightVals = resolveSignalRef(signal.right, candles, cache, mtfContext);
 
     const l = leftVals[i];
     const r = rightVals[i];
@@ -1149,8 +1187,14 @@ export function runDslBacktest(
       }
       if (!side) continue;
 
-      // Evaluate entry signal
-      const signalFired = evaluateSignal(entry.signal, i, candles, cache);
+      // Evaluate entry signal — when a backtest mtfContext is in play we
+      // surface the same bundle to evaluateSignal so signal compare/cross
+      // blocks with `sourceTimeframe` resolve through the HTF series
+      // exactly like sideCondition / indicatorExit already do (52-T3).
+      const signalMtfCtx: RuntimeMtfContext | null = mtfContext && mtfCache
+        ? { bundle: mtfContext.bundle, mtfCache }
+        : null;
+      const signalFired = evaluateSignal(entry.signal, i, candles, cache, 0, signalMtfCtx);
       if (!signalFired) continue;
 
       // Proximity filter gate

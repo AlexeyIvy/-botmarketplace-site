@@ -99,8 +99,11 @@ export function evaluateEntry(ctx: SignalEngineContext): OpenSignal | null {
   const side = determineSide(entry, i, candles, cache, mtfContext);
   if (!side) return null;
 
-  // Evaluate entry signal
-  const signalFired = evaluateSignal(entry.signal, i, candles, cache);
+  // Evaluate entry signal — propagate MTF context so signal compare /
+  // crossover blocks with `sourceTimeframe` resolve through the bundle
+  // (53-T1 adaptive-regime: trend branch needs `compare(close, '>',
+  // EMA200(H1))` plus `compare(ADX(H1), '>', 20)`).
+  const signalFired = evaluateSignal(entry.signal, i, candles, cache, 0, mtfContext);
   if (!signalFired) return null;
 
   // Proximity filter gate: block signal if price is too far from reference level
