@@ -3,7 +3,14 @@ import { prisma } from "../lib/prisma.js";
 import { problem } from "../lib/problem.js";
 import { logger } from "../lib/logger.js";
 import { resolveWorkspace } from "../lib/workspace.js";
-import { runBacktest } from "../lib/backtest.js";
+import { runBacktest, runBacktestWithBundle } from "../lib/backtest.js";
+import { loadCandleBundle, CandleBundleLoadError } from "../lib/mtf/loadCandleBundle.js";
+import {
+  parseDatasetBundle,
+  validateBundleAgainstPrimary,
+  type CandleInterval as BundleCandleInterval,
+  type DatasetBundle,
+} from "../types/datasetBundle.js";
 import {
   runWalkForward,
   WalkForwardMtfNotSupportedError,
@@ -72,6 +79,17 @@ interface StartBacktestBody {
   makerFeeBps?: number;
   slippageBps?: number;
   fillAt?: FillAt;
+  /**
+   * Optional multi-interval bundle (docs/52-T4). When supplied:
+   *  - every value MUST be a concrete `MarketDataset.id` (`backtest` mode);
+   *  - the dataset referenced by `datasetId` is the primary TF and MUST be
+   *    present in the bundle (its interval ⇒ datasetId).
+   *
+   * NB: BacktestResult does not yet persist the bundle; it is consumed in
+   * flight by the async runner. Replays from the DB row alone fall back to
+   * single-TF semantics.
+   */
+  datasetBundleJson?: unknown;
 }
 
 /**
@@ -415,6 +433,7 @@ export async function labRoutes(app: FastifyInstance) {
       makerFeeBps,
       slippageBps = 0,
       fillAt = "CLOSE",
+      datasetBundleJson,
     } = request.body ?? {};
 
     // 46-T3 fee normalization: takerFeeBps wins over the deprecated feeBps
@@ -466,6 +485,34 @@ export async function labRoutes(app: FastifyInstance) {
       return problem(reply, 404, "Not Found", "Dataset not found");
     }
 
+    // ── Optional multi-interval bundle (docs/52-T4) ─────────────────────────
+    // The bundle (when present) drives the backtest engine through
+    // `runBacktestWithBundle`. It MUST contain the primary interval (=
+    // dataset.interval) and the value for that key MUST equal `datasetId`,
+    // so the primary candles fed into the engine match the persisted
+    // BacktestResult's dataset row exactly.
+    let resolvedBundle: DatasetBundle | null = null;
+    if (datasetBundleJson !== undefined && datasetBundleJson !== null) {
+      const parsed = parseDatasetBundle(datasetBundleJson, { mode: "backtest" });
+      if (!parsed.bundle) {
+        return problem(reply, 400, "Validation Error", "Invalid datasetBundleJson", { errors: parsed.errors });
+      }
+      const primaryInterval = dataset.interval as BundleCandleInterval;
+      const pErrors = validateBundleAgainstPrimary(parsed.bundle, primaryInterval);
+      if (pErrors.length > 0) {
+        return problem(reply, 400, "Validation Error", "Invalid datasetBundleJson", { errors: pErrors });
+      }
+      if (parsed.bundle[primaryInterval] !== datasetId) {
+        return problem(reply, 400, "Validation Error", "Invalid datasetBundleJson", {
+          errors: [{
+            field: `datasetBundleJson.${primaryInterval}`,
+            message: `primary entry must equal body.datasetId (${datasetId})`,
+          }],
+        });
+      }
+      resolvedBundle = parsed.bundle;
+    }
+
     // ── Derive symbol / interval / range from dataset ───────────────────────
     const symbol   = dataset.symbol;
     const interval = candleIntervalToBybit(dataset.interval);
@@ -500,7 +547,15 @@ export async function labRoutes(app: FastifyInstance) {
     });
 
     // Run async (fire-and-forget) — pass dslJson for DSL-driven evaluation
-    runBacktestAsync(bt.id, dataset.id, dataset.exchange, symbol, dataset.interval, strategyVersion.dslJson).catch(() => {
+    runBacktestAsync(
+      bt.id,
+      dataset.id,
+      dataset.exchange,
+      symbol,
+      dataset.interval,
+      strategyVersion.dslJson,
+      resolvedBundle,
+    ).catch(() => {
       // errors handled inside runBacktestAsync
     });
 
@@ -1809,6 +1864,7 @@ async function runBacktestAsync(
   symbol: string,
   interval: import("@prisma/client").CandleInterval,
   dslJson: unknown,
+  bundle: DatasetBundle | null = null,
 ): Promise<void> {
   try {
     await prisma.backtestResult.update({
@@ -1822,41 +1878,59 @@ async function runBacktestAsync(
     const dataset = await prisma.marketDataset.findUnique({ where: { id: datasetId } });
     if (!dataset) throw new Error(`Dataset ${datasetId} not found`);
 
-    // Load candles from shared DB table (no workspace filter — candles are global)
-    const dbCandles = await prisma.marketCandle.findMany({
-      where: {
-        exchange,
-        symbol,
-        interval,
-        openTimeMs: {
-          gte: dataset.fromTsMs,
-          lte: dataset.toTsMs,
-        },
-      },
-      orderBy: { openTimeMs: "asc" },
-    });
-
-    // Map to backtest engine format
-    const candles = dbCandles.map((c) => ({
-      openTime: Number(c.openTimeMs),
-      open:   Number(c.open),
-      high:   Number(c.high),
-      low:    Number(c.low),
-      close:  Number(c.close),
-      volume: Number(c.volume),
-    }));
-
-    // Fetch fee/slippage from the BacktestResult record
+    // Fetch fee/slippage from the BacktestResult record (used by both branches)
     const btRecord = await prisma.backtestResult.findUnique({ where: { id: btId } });
-
-    // DSL-driven backtest — behavior determined entirely by compiled DSL.
-    // The persisted fillAt is replayed so re-execution matches the original
-    // request (docs/46-T4).
-    const report = runBacktest(candles, dslJson, {
+    const execOpts = {
       feeBps:      btRecord?.feeBps      ?? 0,
       slippageBps: btRecord?.slippageBps ?? 0,
       fillAt:      (btRecord?.fillAt as FillAt | undefined) ?? "CLOSE",
-    });
+    };
+
+    let report;
+    if (bundle) {
+      // Multi-TF path (docs/52-T4): load every interval in the bundle and
+      // hand the result to runBacktestWithBundle, which uses look-ahead-safe
+      // alignment so HTF indicator values never see future bars.
+      const candleBundle = await loadCandleBundle({
+        symbol,
+        bundle,
+        // Generous lookback — multi-TF backtests typically span weeks; 100k
+        // bars per TF is the same effective horizon the legacy single-TF
+        // path gets via `gte/lte` boundaries (no `take` there).
+        lookbackBars: 100_000,
+        mode: "backtest",
+        until: new Date(Number(dataset.toTsMs)),
+      });
+      report = runBacktestWithBundle({
+        bundle: candleBundle,
+        primaryInterval: interval as BundleCandleInterval,
+        dslJson,
+        opts: execOpts,
+      });
+    } else {
+      // Single-TF (legacy) path — preserved bit-for-bit.
+      const dbCandles = await prisma.marketCandle.findMany({
+        where: {
+          exchange,
+          symbol,
+          interval,
+          openTimeMs: {
+            gte: dataset.fromTsMs,
+            lte: dataset.toTsMs,
+          },
+        },
+        orderBy: { openTimeMs: "asc" },
+      });
+      const candles = dbCandles.map((c) => ({
+        openTime: Number(c.openTimeMs),
+        open:   Number(c.open),
+        high:   Number(c.high),
+        low:    Number(c.low),
+        close:  Number(c.close),
+        volume: Number(c.volume),
+      }));
+      report = runBacktest(candles, dslJson, execOpts);
+    }
 
     await prisma.backtestResult.update({
       where: { id: btId },
@@ -1866,7 +1940,12 @@ async function runBacktestAsync(
       },
     });
   } catch (err: unknown) {
-    const msg = err instanceof Error ? err.message : String(err);
+    const msg =
+      err instanceof CandleBundleLoadError
+        ? `bundle load failed: ${err.message}`
+        : err instanceof Error
+          ? err.message
+          : String(err);
     await prisma.backtestResult.update({
       where: { id: btId },
       data: { status: "FAILED", errorMessage: msg },
