@@ -518,6 +518,83 @@ describe("POST /api/v1/lab/backtest", () => {
     // The canonical taker fee wins over the deprecated alias.
     expect(res.json().feeBps).toBe(30);
   });
+
+  // ── 52-T4b-1: datasetBundleJson plumbing ──────────────────────────────────
+  // Each test uses a distinct X-Forwarded-For so the per-route rate-limit
+  // (5 req/min/ip) is not exhausted by the existing fixtures above.
+  const bundleHeaders = (ip: string) => ({ ...authHeaders(), "x-forwarded-for": ip });
+
+  it("52-T4b: accepts a valid bundle whose primary entry equals body.datasetId (202)", async () => {
+    mockStrategyVersions["sv-1"] = { id: "sv-1", strategyId: "strat-1", strategy: { workspaceId: WS_ID }, dslJson: {} };
+    mockDatasets["ds-1"] = { id: "ds-1", workspaceId: WS_ID, exchange: "bybit", symbol: "BTCUSDT", interval: "M15", fromTsMs: BigInt(1704067200000), toTsMs: BigInt(1706745600000), datasetHash: "abc" };
+    mockDatasets["ds-h1"] = { id: "ds-h1", workspaceId: WS_ID, exchange: "bybit", symbol: "BTCUSDT", interval: "H1", fromTsMs: BigInt(1704067200000), toTsMs: BigInt(1706745600000), datasetHash: "def" };
+
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/lab/backtest",
+      headers: bundleHeaders("10.52.4.1"),
+      payload: {
+        strategyVersionId: "sv-1",
+        datasetId: "ds-1",
+        datasetBundleJson: { M15: "ds-1", H1: "ds-h1" },
+      },
+    });
+    expect(res.statusCode).toBe(202);
+  });
+
+  it("52-T4b: rejects bundle with `true` placeholder in backtest mode (400)", async () => {
+    mockStrategyVersions["sv-1"] = { id: "sv-1", strategyId: "strat-1", strategy: { workspaceId: WS_ID }, dslJson: {} };
+    mockDatasets["ds-1"] = { id: "ds-1", workspaceId: WS_ID, exchange: "bybit", symbol: "BTCUSDT", interval: "M15", fromTsMs: BigInt(1704067200000), toTsMs: BigInt(1706745600000), datasetHash: "abc" };
+
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/lab/backtest",
+      headers: bundleHeaders("10.52.4.2"),
+      payload: {
+        strategyVersionId: "sv-1",
+        datasetId: "ds-1",
+        datasetBundleJson: { M15: true },
+      },
+    });
+    expect(res.statusCode).toBe(400);
+    expect(JSON.stringify(res.json())).toMatch(/backtest mode requires a concrete datasetId/);
+  });
+
+  it("52-T4b: rejects bundle missing primary interval (400)", async () => {
+    mockStrategyVersions["sv-1"] = { id: "sv-1", strategyId: "strat-1", strategy: { workspaceId: WS_ID }, dslJson: {} };
+    mockDatasets["ds-1"] = { id: "ds-1", workspaceId: WS_ID, exchange: "bybit", symbol: "BTCUSDT", interval: "M15", fromTsMs: BigInt(1704067200000), toTsMs: BigInt(1706745600000), datasetHash: "abc" };
+
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/lab/backtest",
+      headers: bundleHeaders("10.52.4.3"),
+      payload: {
+        strategyVersionId: "sv-1",
+        datasetId: "ds-1",
+        datasetBundleJson: { H1: "ds-h1" },
+      },
+    });
+    expect(res.statusCode).toBe(400);
+    expect(JSON.stringify(res.json())).toMatch(/primary timeframe.*M15.*must be present/);
+  });
+
+  it("52-T4b: rejects bundle whose primary entry mismatches body.datasetId (400)", async () => {
+    mockStrategyVersions["sv-1"] = { id: "sv-1", strategyId: "strat-1", strategy: { workspaceId: WS_ID }, dslJson: {} };
+    mockDatasets["ds-1"] = { id: "ds-1", workspaceId: WS_ID, exchange: "bybit", symbol: "BTCUSDT", interval: "M15", fromTsMs: BigInt(1704067200000), toTsMs: BigInt(1706745600000), datasetHash: "abc" };
+
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/lab/backtest",
+      headers: bundleHeaders("10.52.4.4"),
+      payload: {
+        strategyVersionId: "sv-1",
+        datasetId: "ds-1",
+        datasetBundleJson: { M15: "ds-other", H1: "ds-h1" },
+      },
+    });
+    expect(res.statusCode).toBe(400);
+    expect(JSON.stringify(res.json())).toMatch(/primary entry must equal body\.datasetId/);
+  });
 });
 
 // ── GET /lab/backtest/:id ───────────────────────────────────────────────────
