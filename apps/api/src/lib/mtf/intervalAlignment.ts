@@ -152,6 +152,51 @@ export function buildAlignmentMap(
   return map;
 }
 
+/**
+ * Look-ahead-safe variant of `buildAlignmentMap` (docs/52-T4).
+ *
+ * For each primary candle, points to the *last closed* HTF candle — the one
+ * whose period has fully ended at or before the primary candle's openTime.
+ *
+ *   primary[i].openTime ≥ htf[j].openTime + INTERVAL_MS[contextInterval]
+ *
+ * That excludes the HTF candle that *contains* the primary timestamp (which
+ * has not closed yet and would leak future data into the indicator value).
+ *
+ * Used by backtest paths that must be deterministically free of look-ahead
+ * bias. Runtime paths typically still use {@link buildAlignmentMap} —
+ * they are evaluating "now" and want to see partial-bar HTF data.
+ *
+ * @precondition Both arrays are sorted ascending by openTime.
+ */
+export function buildClosedAlignmentMap(
+  primaryCandles: MtfCandle[],
+  contextCandles: MtfCandle[],
+  contextInterval: Interval,
+): number[] {
+  const map = new Array<number>(primaryCandles.length).fill(-1);
+  if (contextCandles.length === 0) return map;
+  const htfMs = INTERVAL_MS[contextInterval];
+
+  let ctxIdx = 0;
+  for (let i = 0; i < primaryCandles.length; i++) {
+    const primaryOpen = primaryCandles[i].openTime;
+    // Advance ctxIdx while the next candidate has already closed by primaryOpen.
+    while (
+      ctxIdx + 1 < contextCandles.length &&
+      contextCandles[ctxIdx + 1].openTime + htfMs <= primaryOpen
+    ) {
+      ctxIdx++;
+    }
+    // Verify the current candidate has closed; otherwise no look-ahead-safe
+    // HTF is available for this primary bar (e.g. start of the dataset).
+    if (contextCandles[ctxIdx].openTime + htfMs <= primaryOpen) {
+      map[i] = ctxIdx;
+    }
+  }
+  return map;
+}
+
 // ---------------------------------------------------------------------------
 // Multi-TF candle bundle
 // ---------------------------------------------------------------------------
@@ -188,6 +233,37 @@ export function createCandleBundle(
     if (interval === primaryInterval) continue;
     if (!INTERVAL_MS[interval as Interval]) continue;
     alignmentMaps[interval] = buildAlignmentMap(primary, candles, interval as Interval);
+  }
+
+  return {
+    primaryInterval,
+    candles: candlesByInterval,
+    alignmentMaps,
+  };
+}
+
+/**
+ * Look-ahead-safe variant of {@link createCandleBundle} (docs/52-T4).
+ *
+ * Pre-computes alignment maps via {@link buildClosedAlignmentMap}, so HTF
+ * indicator values resolved through this bundle never use a HTF candle that
+ * has not yet closed at the primary bar's `openTime`. This is the variant
+ * the backtest engine uses; the runtime path can keep `createCandleBundle`.
+ */
+export function createClosedCandleBundle(
+  primaryInterval: Interval,
+  candlesByInterval: Record<string, MtfCandle[]>,
+): CandleBundle {
+  const primary = candlesByInterval[primaryInterval];
+  if (!primary) {
+    throw new Error(`Primary interval "${primaryInterval}" not found in candle data`);
+  }
+
+  const alignmentMaps: Record<string, number[]> = {};
+  for (const [interval, candles] of Object.entries(candlesByInterval)) {
+    if (interval === primaryInterval) continue;
+    if (!INTERVAL_MS[interval as Interval]) continue;
+    alignmentMaps[interval] = buildClosedAlignmentMap(primary, candles, interval as Interval);
   }
 
   return {
