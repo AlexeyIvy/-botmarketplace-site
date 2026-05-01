@@ -10,6 +10,11 @@ import { apiFetch, getWorkspaceId } from "../../../lib/api";
 import { useLabGraphStore } from "../useLabGraphStore";
 import { BLOCK_DEF_MAP } from "../build/blockDefs";
 import type { LabNode } from "../useLabGraphStore";
+import {
+  DatasetBundleSelector,
+  type DatasetBundle,
+  type CandleInterval as BundleCandleInterval,
+} from "../_shared/DatasetBundleSelector";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -152,6 +157,13 @@ export default function OptimisePanel({
   const [feeBps, setFeeBps] = useState(10);
   const [slippageBps, setSlippageBps] = useState(5);
   const [metric, setMetric] = useState<OptimiseMetric>("pnl");
+  const [bundle, setBundle] = useState<DatasetBundle | null>(null);
+
+  // Reset bundle when the primary dataset changes — its (symbol, interval)
+  // anchors the bundle, so any extra TFs become inconsistent (docs/52-T5b).
+  useEffect(() => { setBundle(null); }, [datasetId]);
+
+  const selectedDataset = readyDatasets.find((d) => d.datasetId === datasetId);
 
   // ── Sweep state ─────────────────────────────────────────────────────────
   const [submitting, setSubmitting] = useState(false);
@@ -292,6 +304,7 @@ export default function OptimisePanel({
       slippageBps,
     };
     if (rankBy) body.rankBy = rankBy;
+    if (bundle) body.datasetBundleJson = bundle;
 
     const res = await apiFetch<{ sweepId: string; runCount: number; estimatedSeconds: number }>(
       "/lab/backtest/sweep",
@@ -315,7 +328,7 @@ export default function OptimisePanel({
       setSubmitError(res.problem.detail ?? res.problem.title ?? "Unknown error");
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [datasetId, versionId, sweepParams, feeBps, slippageBps, metric]);
+  }, [datasetId, versionId, sweepParams, feeBps, slippageBps, metric, bundle]);
 
   // ── Sort results ────────────────────────────────────────────────────────
   const handleSort = (key: SortKey) => {
@@ -727,6 +740,21 @@ export default function OptimisePanel({
               </select>
             )}
           </FormRow>
+
+          {/* Multi-interval bundle (docs/52-T5b) */}
+          {selectedDataset && (
+            <FormRow label="Multi-TF context">
+              <DatasetBundleSelector
+                primaryInterval={selectedDataset.interval as BundleCandleInterval}
+                primaryDatasetId={selectedDataset.datasetId}
+                primarySymbol={selectedDataset.symbol}
+                availableDatasets={readyDatasets}
+                bundle={bundle}
+                onChange={setBundle}
+                disabled={submitting}
+              />
+            </FormRow>
+          )}
 
           {/* Strategy version */}
           <FormRow label="Strategy version">
