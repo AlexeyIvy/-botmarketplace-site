@@ -1201,6 +1201,7 @@ export async function labRoutes(app: FastifyInstance) {
       feeBps = 0,
       slippageBps = 0,
       fillAt = "CLOSE",
+      datasetBundleJson,
     } = request.body ?? {};
 
     // ── Validation — required fields ──────────────────────────────────────
@@ -1230,6 +1231,33 @@ export async function labRoutes(app: FastifyInstance) {
     const dataset = await prisma.marketDataset.findUnique({ where: { id: datasetId } });
     if (!dataset || dataset.workspaceId !== workspace.id) {
       return problem(reply, 404, "Not Found", "Dataset not found");
+    }
+
+    // ── Optional multi-interval bundle (docs/52-T4b-3, persistence-only) ─
+    // Validation rules mirror /lab/backtest and /lab/backtest/sweep. The
+    // bundle is persisted for round-trip integrity but the fold runner still
+    // honours the existing MTF preflight (rejects MTF DSLs); a follow-up PR
+    // will slice the bundle per-fold and run runBacktestWithBundle for IS/OOS.
+    let resolvedBundle: DatasetBundle | null = null;
+    if (datasetBundleJson !== undefined && datasetBundleJson !== null) {
+      const parsed = parseDatasetBundle(datasetBundleJson, { mode: "backtest" });
+      if (!parsed.bundle) {
+        return problem(reply, 400, "Validation Error", "Invalid datasetBundleJson", { errors: parsed.errors });
+      }
+      const primaryInterval = dataset.interval as BundleCandleInterval;
+      const pErrors = validateBundleAgainstPrimary(parsed.bundle, primaryInterval);
+      if (pErrors.length > 0) {
+        return problem(reply, 400, "Validation Error", "Invalid datasetBundleJson", { errors: pErrors });
+      }
+      if (parsed.bundle[primaryInterval] !== datasetId) {
+        return problem(reply, 400, "Validation Error", "Invalid datasetBundleJson", {
+          errors: [{
+            field: `datasetBundleJson.${primaryInterval}`,
+            message: `primary entry must equal body.datasetId (${datasetId})`,
+          }],
+        });
+      }
+      resolvedBundle = parsed.bundle;
     }
 
     // ── Pre-flight: load candles + run split() to compute foldCount ───────
@@ -1295,6 +1323,10 @@ export async function labRoutes(app: FastifyInstance) {
         status: "PENDING",
         foldConfigJson: cfg as object,
         foldCount,
+        // 52-T4b-3 (persistence-only): bundle is stored on the row so a
+        // follow-up that implements bundle-aware folding can pick it up
+        // without a schema change. Today's runner ignores it.
+        ...(resolvedBundle ? { datasetBundleJson: resolvedBundle as unknown as object } : {}),
       },
     });
 
@@ -1589,6 +1621,16 @@ interface WalkForwardRequestBody {
   feeBps?: number;
   slippageBps?: number;
   fillAt?: FillAt;
+  /**
+   * Optional multi-interval bundle (docs/52-T4b-3, persistence-only slice).
+   * Same rules as the other backtest routes: backtest mode (concrete
+   * `MarketDataset.id` strings), primary entry must equal `body.datasetId`.
+   * Persisted on `WalkForwardRun.datasetBundleJson` for round-trip
+   * integrity. The fold runner currently still rejects MTF DSLs at the
+   * `WalkForwardMtfNotSupportedError` preflight; bundle-aware walk-forward
+   * (slicing HTF per fold) lands in a follow-up PR.
+   */
+  datasetBundleJson?: unknown;
 }
 
 interface SweepParam {

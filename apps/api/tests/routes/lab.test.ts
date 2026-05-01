@@ -1954,6 +1954,52 @@ describe("POST /api/v1/lab/backtest/walk-forward", () => {
       "step < oosBars — adjacent OOS blocks overlap; aggregate metrics may double-count trades",
     );
   });
+
+  // ── 52-T4b-3: datasetBundleJson persistence on walk-forward ────────────
+  it("52-T4b: persists datasetBundleJson on the walk-forward row when provided", async () => {
+    mockStrategyVersions["sv-wf-bundle"] = { id: "sv-wf-bundle", strategyId: "strat-wf-b", strategy: { workspaceId: WS_ID }, dslJson: {} };
+    mockDatasets["ds-wf-bundle-m15"] = { id: "ds-wf-bundle-m15", workspaceId: WS_ID, exchange: "bybit", symbol: "BTCUSDT", interval: "M15", fromTsMs: BigInt(0), toTsMs: BigInt(1), datasetHash: "h" };
+    mockDatasets["ds-wf-bundle-h1"] = { id: "ds-wf-bundle-h1", workspaceId: WS_ID, exchange: "bybit", symbol: "BTCUSDT", interval: "H1", fromTsMs: BigInt(0), toTsMs: BigInt(1), datasetHash: "h2" };
+    prismaMock.marketCandle.findMany.mockResolvedValueOnce(makeCandles(80));
+
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/lab/backtest/walk-forward",
+      headers: wfHeaders(),
+      payload: {
+        datasetId: "ds-wf-bundle-m15",
+        strategyVersionId: "sv-wf-bundle",
+        fold: { isBars: 30, oosBars: 10, step: 10, anchored: false },
+        datasetBundleJson: { M15: "ds-wf-bundle-m15", H1: "ds-wf-bundle-h1" },
+      },
+    });
+    expect(res.statusCode).toBe(202);
+    const { id } = res.json();
+    expect(mockWalkForwardRuns[id]).toBeDefined();
+    expect(mockWalkForwardRuns[id].datasetBundleJson).toEqual({
+      M15: "ds-wf-bundle-m15",
+      H1: "ds-wf-bundle-h1",
+    });
+  });
+
+  it("52-T4b: rejects walk-forward bundle whose primary mismatches body.datasetId (400)", async () => {
+    mockStrategyVersions["sv-wf-bundle-bad"] = { id: "sv-wf-bundle-bad", strategyId: "strat-wf-bad", strategy: { workspaceId: WS_ID }, dslJson: {} };
+    mockDatasets["ds-wf-bundle-bad"] = { id: "ds-wf-bundle-bad", workspaceId: WS_ID, exchange: "bybit", symbol: "BTCUSDT", interval: "M15", fromTsMs: BigInt(0), toTsMs: BigInt(1), datasetHash: "h" };
+
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/lab/backtest/walk-forward",
+      headers: wfHeaders(),
+      payload: {
+        datasetId: "ds-wf-bundle-bad",
+        strategyVersionId: "sv-wf-bundle-bad",
+        fold: { isBars: 30, oosBars: 10, step: 10, anchored: false },
+        datasetBundleJson: { M15: "ds-other", H1: "ds-h1" },
+      },
+    });
+    expect(res.statusCode).toBe(400);
+    expect(JSON.stringify(res.json())).toMatch(/primary entry must equal body\.datasetId/);
+  });
 });
 
 describe("GET /api/v1/lab/backtest/walk-forward/:id", () => {
