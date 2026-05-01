@@ -119,7 +119,7 @@ export function parseDatasetBundleOrThrow(
   opts: { mode?: BundleMode } = {},
 ): DatasetBundle {
   const result = parseDatasetBundle(raw, opts);
-  if (result.errors.length > 0) {
+  if (!result.bundle) {
     const summary = result.errors.map((e) => `${e.field}: ${e.message}`).join("; ");
     throw new Error(`Invalid DatasetBundle — ${summary}`);
   }
