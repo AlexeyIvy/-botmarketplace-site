@@ -52,6 +52,24 @@ import {
   type CloseSignal,
   type TrailingStopState,
 } from "./exitEngine.js";
+import {
+  loadCandleBundle,
+  CandleBundleLoadError,
+  type CandlesByInterval,
+} from "./mtf/loadCandleBundle.js";
+import {
+  parseDatasetBundle,
+  type CandleInterval as BundleCandleInterval,
+} from "../types/datasetBundle.js";
+import {
+  createCandleBundle,
+  TIMEFRAME_TO_INTERVAL,
+  type CandleBundle,
+  type Interval as MtfInterval,
+  type MtfCandle,
+} from "./mtf/intervalAlignment.js";
+import { createMtfCache } from "./mtf/mtfIndicatorResolver.js";
+import { type RuntimeMtfContext } from "./dslEvaluator.js";
 import { computeSizing } from "./riskManager.js";
 import { getInstrument, type InstrumentInfo } from "./exchange/instrumentCache.js";
 import { normalizeOrder } from "./exchange/normalizer.js";
@@ -1423,6 +1441,47 @@ const trailingStopStates = new Map<string, TrailingStopState>();
 const lastTradeCloseTimes = new Map<string, number>();
 
 /**
+ * Build a {@link RuntimeMtfContext} from a `loadCandleBundle` result.
+ *
+ * Returns `null` when the primary timeframe has no entry in
+ * {@link TIMEFRAME_TO_INTERVAL} (currently `M30`, which is allowed in
+ * `MarketCandle.interval` but absent from the alignment helper's interval
+ * set). The single-TF path stays correct in that case — only refs with
+ * `sourceTimeframe` would notice, and they would surface their own
+ * `MtfBundleRequiredError` instead of being resolved against an incomplete
+ * bundle.
+ */
+function buildRuntimeMtfContext(
+  bundleByInterval: CandlesByInterval,
+  primaryTimeframe: string,
+): RuntimeMtfContext | null {
+  const primaryAligned = TIMEFRAME_TO_INTERVAL[primaryTimeframe];
+  if (!primaryAligned) return null;
+
+  const candlesByInterval: Record<string, MtfCandle[]> = {};
+  for (const [interval, rows] of bundleByInterval.entries()) {
+    const aligned = TIMEFRAME_TO_INTERVAL[interval];
+    if (!aligned) continue; // skip TFs the alignment helper doesn't know
+    candlesByInterval[aligned] = rows.map((mc) => ({
+      openTime: Number(mc.openTimeMs),
+      open: mc.open.toNumber(),
+      high: mc.high.toNumber(),
+      low: mc.low.toNumber(),
+      close: mc.close.toNumber(),
+      volume: mc.volume.toNumber(),
+    }));
+  }
+
+  if (!candlesByInterval[primaryAligned]) return null;
+
+  const bundle: CandleBundle = createCandleBundle(
+    primaryAligned as MtfInterval,
+    candlesByInterval,
+  );
+  return { bundle, mtfCache: createMtfCache() };
+}
+
+/**
  * Evaluate DSL strategy for all RUNNING runs with compiled DSL.
  *
  * For each run:
@@ -1445,6 +1504,8 @@ async function evaluateStrategies(): Promise<void> {
           select: {
             id: true,
             symbol: true,
+            timeframe: true,
+            datasetBundleJson: true,
             strategyVersion: { select: { dslJson: true } },
           },
         },
@@ -1461,28 +1522,88 @@ async function evaluateStrategies(): Promise<void> {
       if (dsl["enabled"] === false) continue;
 
       const symbol = run.bot.symbol;
+      const timeframe = run.bot.timeframe; // Prisma `Timeframe` enum value
 
       try {
-        // Load recent candles (enough for indicator warm-up, ~200 bars)
-        const recentCandles = await prisma.marketCandle.findMany({
-          where: { symbol },
-          orderBy: { openTimeMs: "desc" },
-          take: 200,
-        });
+        // 52-T3: load candles either through the multi-interval bundle (when
+        // bot.datasetBundleJson is set) or via the legacy single-TF path.
+        //
+        // The legacy branch now filters by `interval: bot.timeframe` —
+        // previously the loader did `where: { symbol }` with no interval
+        // filter, which silently mixed candles across TFs for any symbol that
+        // had several datasets. This is a deliberate bugfix called out in
+        // docs/52-T3 §1; bots whose datasource is correctly synced for their
+        // primary TF are unaffected, but a bot whose only synced data is on a
+        // different TF will now stop receiving candles instead of trading on
+        // mismatched data.
+        const bundleParseResult = run.bot.datasetBundleJson
+          ? parseDatasetBundle(run.bot.datasetBundleJson, { mode: "runtime" })
+          : null;
+        if (bundleParseResult && !bundleParseResult.bundle) {
+          workerLog.error(
+            { runId: run.id, errors: bundleParseResult.errors },
+            "datasetBundleJson failed validation; skipping run tick",
+          );
+          continue;
+        }
+        const parsedBundle = bundleParseResult?.bundle ?? null;
+        if (parsedBundle && !(timeframe in parsedBundle)) {
+          workerLog.error(
+            { runId: run.id, timeframe, bundleIntervals: Object.keys(parsedBundle) },
+            "datasetBundleJson must include the bot's primary timeframe",
+          );
+          continue;
+        }
+
+        let bundleByInterval: CandlesByInterval | null = null;
+        if (parsedBundle) {
+          try {
+            bundleByInterval = await loadCandleBundle({
+              symbol,
+              bundle: parsedBundle,
+              lookbackBars: 200,
+              mode: "runtime",
+              logger: workerLog,
+            });
+          } catch (err) {
+            const detail = err instanceof CandleBundleLoadError
+              ? { field: err.field, message: err.message }
+              : { message: err instanceof Error ? err.message : String(err) };
+            workerLog.error({ runId: run.id, err: detail }, "loadCandleBundle failed");
+            continue;
+          }
+        }
+
+        let recentCandles: { openTimeMs: bigint | number; open: { toNumber(): number }; high: { toNumber(): number }; low: { toNumber(): number }; close: { toNumber(): number }; volume: { toNumber(): number } }[];
+        if (bundleByInterval) {
+          recentCandles = (bundleByInterval.get(timeframe as BundleCandleInterval) ?? []) as typeof recentCandles;
+        } else {
+          const rows = await prisma.marketCandle.findMany({
+            where: { symbol, interval: timeframe },
+            orderBy: { openTimeMs: "desc" },
+            take: 200,
+          });
+          rows.reverse();
+          recentCandles = rows as typeof recentCandles;
+        }
 
         if (recentCandles.length < 2) continue; // not enough data
 
-        // Convert to Candle format and reverse to ascending order
-        const candles = recentCandles
-          .reverse()
-          .map((mc) => ({
-            openTime: Number(mc.openTimeMs),
-            open: mc.open.toNumber(),
-            high: mc.high.toNumber(),
-            low: mc.low.toNumber(),
-            close: mc.close.toNumber(),
-            volume: mc.volume.toNumber(),
-          }));
+        // Convert to Candle format
+        const candles = recentCandles.map((mc) => ({
+          openTime: Number(mc.openTimeMs),
+          open: mc.open.toNumber(),
+          high: mc.high.toNumber(),
+          low: mc.low.toNumber(),
+          close: mc.close.toNumber(),
+          volume: mc.volume.toNumber(),
+        }));
+
+        // Build a runtime MTF context (open-bar-tolerant, NOT closed-safe —
+        // runtime is evaluating "now"). Skipped when no bundle is configured
+        // or the primary TF has no alignment-helper mapping.
+        const mtfContext: RuntimeMtfContext | null =
+          bundleByInterval !== null ? buildRuntimeMtfContext(bundleByInterval, timeframe) : null;
 
         // Get current position
         const position = await getActivePosition(run.id, symbol);
@@ -1528,6 +1649,7 @@ async function evaluateStrategies(): Promise<void> {
             candles,
             dslJson,
             position: null,
+            mtfContext,
           });
 
           if (signal) {
@@ -1707,6 +1829,7 @@ async function evaluateStrategies(): Promise<void> {
             position,
             barsHeld,
             trailingState,
+            mtfContext,
           });
 
           if (closeSignal) {
