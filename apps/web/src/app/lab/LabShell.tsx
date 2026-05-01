@@ -14,6 +14,7 @@ import { PreviewPanel } from "./PreviewPanel";
 
 const TABS = [
   { id: "classic", label: "Classic mode", href: "/lab" },
+  { id: "library", label: "Library",      href: "/lab/library" },
   { id: "data",    label: "Data",         href: "/lab/data" },
   { id: "build",   label: "Build",        href: "/lab/build" },
   { id: "test",    label: "Test",         href: "/lab/test" },
@@ -23,6 +24,7 @@ type TabId = (typeof TABS)[number]["id"];
 
 function getActiveTab(pathname: string): TabId {
   if (pathname === "/lab" || pathname === "/lab/") return "classic";
+  if (pathname.startsWith("/lab/library")) return "library";
   if (pathname.startsWith("/lab/data"))  return "data";
   if (pathname.startsWith("/lab/build")) return "build";
   if (pathname.startsWith("/lab/test"))  return "test";
