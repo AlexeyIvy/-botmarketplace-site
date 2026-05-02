@@ -44,6 +44,10 @@ import { randomUUID } from "node:crypto";
 import { prisma } from "./prisma.js";
 import { logger } from "./logger.js";
 import { classifyExecutionError } from "./errorClassifier.js";
+import {
+  reconcileBalances,
+  type ExchangeConnectionCreds,
+} from "./exchange/balanceReconciler.js";
 
 const log = logger.child({ module: "hedgeBotWorker" });
 
@@ -397,21 +401,71 @@ export async function advanceHedge(
 // Tick loop
 // ---------------------------------------------------------------------------
 
+/**
+ * Load the exchange credentials linked to a hedge via its BotRun → Bot →
+ * ExchangeConnection chain. Returns null if any link is missing — the
+ * caller treats null as "skip the balance check" (safer than blocking
+ * forever on a misconfigured bot).
+ *
+ * The select intentionally pulls only the four credential columns the
+ * reconciler needs; nothing else from ExchangeConnection leaks to the
+ * worker context.
+ */
+async function loadHedgeCreds(botRunId: string): Promise<ExchangeConnectionCreds | null> {
+  const run = await prisma.botRun.findUnique({
+    where: { id: botRunId },
+    select: {
+      bot: {
+        select: {
+          exchangeConnection: {
+            select: {
+              apiKey: true,
+              encryptedSecret: true,
+              spotApiKey: true,
+              spotEncryptedSecret: true,
+            },
+          },
+        },
+      },
+    },
+  });
+  return run?.bot?.exchangeConnection ?? null;
+}
+
 /** One pass: advance every non-terminal hedge. Per-hedge errors are
  *  logged + classified but NEVER bubble — funding-arb errors must not
- *  take down the worker. */
+ *  take down the worker.
+ *
+ *  Behaviour:
+ *   - Default path (no `inputResolver` supplied): for each hedge, load
+ *     creds via `loadHedgeCreds` and wire a `reconcileBeforeEntry`
+ *     callback so the PENDING → ENTRY_PLACED gate consults the live
+ *     Bybit wallet (docs/55-T5 §3). Hedges whose Bot has no linked
+ *     ExchangeConnection skip the check (callback omitted) — no
+ *     blocking, just a warning in the log.
+ *   - Caller-supplied path (`inputResolver` provided): tests + advanced
+ *     callers fully own the input shape. The default credential loader
+ *     is NOT layered underneath — explicit beats implicit.
+ *
+ *  Funding-window / funding-payment signals must still be supplied by
+ *  whichever upstream owns scanner / payment-ledger lookups (out of
+ *  scope for this PR — currently absent, so PENDING / ACTIVE hedges
+ *  no-op until that wiring lands).
+ */
 export async function tickHedgeBotWorker(
   inputResolver?: (hedgeId: string) => HedgeAdvanceInput | Promise<HedgeAdvanceInput>,
 ): Promise<HedgeAdvanceResult[]> {
   const candidates = await prisma.hedgePosition.findMany({
     where: { status: { in: ["PLANNED", "OPENING", "OPEN", "CLOSING"] } },
-    select: { id: true },
+    select: { id: true, symbol: true, botRunId: true },
   });
 
   const out: HedgeAdvanceResult[] = [];
   for (const c of candidates) {
     try {
-      const input = inputResolver ? await inputResolver(c.id) : {};
+      const input = inputResolver
+        ? await inputResolver(c.id)
+        : await buildDefaultInput(c);
       const res = await advanceHedge(c.id, input);
       out.push(res);
     } catch (err) {
@@ -421,6 +475,26 @@ export async function tickHedgeBotWorker(
     }
   }
   return out;
+}
+
+/**
+ * Default `HedgeAdvanceInput` builder used when no `inputResolver` is
+ * supplied. Wires the reconciler callback so production ticks consult
+ * the live Bybit wallet at the entry gate. Funding-window / payment
+ * signals stay undefined here — they are upstream signals out of scope
+ * for this orchestration step.
+ */
+async function buildDefaultInput(
+  hedge: { id: string; symbol: string; botRunId: string },
+): Promise<HedgeAdvanceInput> {
+  const creds = await loadHedgeCreds(hedge.botRunId);
+  if (!creds) {
+    log.warn({ hedgeId: hedge.id }, "no ExchangeConnection linked — balance check skipped");
+    return {};
+  }
+  return {
+    reconcileBeforeEntry: () => reconcileBalances(creds, [hedge.symbol]),
+  };
 }
 
 // ---------------------------------------------------------------------------
