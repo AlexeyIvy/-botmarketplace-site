@@ -1,24 +1,23 @@
 /**
- * SMC Liquidity Sweep — golden DSL pin (docs/54-T3, partial 54-T5).
+ * SMC Liquidity Sweep — golden DSL pin (docs/54-T3, helper-extracted under 54-T5).
  *
- * Mirrors tests/lib/strategies/{adaptiveRegime,dcaMomentum,mtfScalper}.test.ts.
+ * Shared contract checks (seed/golden pin, validateDsl, parseDsl smoke,
+ * supported-primitives — including the SMC pattern blocks `liquidity_sweep`,
+ * `market_structure_shift`) come from `describeGoldenStrategyContract`.
+ * Strategy-specific assertions inline:
  *
- *   1. Seed/golden pin — preset's `dslJson` is byte-equal to the golden.
- *   2. Schema + parse smoke — validateDsl passes, parseDsl yields a
- *      v2-shaped ParsedDsl with ATR-based stop and pattern-based signal.
- *   3. No composite types — every `blockType` (including the SMC pattern
- *      blocks `liquidity_sweep`, `market_structure_shift`) is `supported`
- *      in BLOCK_SUPPORT_MAP.
- *   4. Sanity evaluator (negative cases only — pattern-positive fixtures
- *      are deferred to docs/54-T3 §4):
- *      - Calm/flat bundle across all three TFs → no entry; pattern
- *        blocks legitimately produce zeros, AND-gate stays false.
- *      - H4 downtrend (EMA50 < EMA200) → HTF bias filter blocks even
- *        if the lower-TF patterns happened to fire.
- *      - Pattern blocks resolve through the bundle without throwing
- *        — exercises the runtime evaluator's MTF integration end-to-end
- *        for SMC-pattern refs (their first appearance via DslSignalRef
- *        with sourceTimeframe).
+ *   - parseDsl exit shape — `atr_multiple` SL + `fixed_pct` TP, drift here
+ *     would change behaviour.
+ *   - Sanity evaluator (negative cases only — pattern-positive fixtures
+ *     are deferred to docs/54-T3 §4):
+ *       * Calm/flat bundle across all three TFs → no entry; pattern
+ *         blocks legitimately produce zeros, AND-gate stays false.
+ *       * H4 downtrend (EMA50 < EMA200) → HTF bias filter blocks even
+ *         if the lower-TF patterns happened to fire.
+ *       * Pattern blocks resolve through the bundle without throwing
+ *         — exercises the runtime evaluator's MTF integration end-to-end
+ *         for SMC-pattern refs (their first appearance via DslSignalRef
+ *         with sourceTimeframe).
  *
  * Walk-forward acceptance, demo smoke, and the `pattern engine sanity`
  * fixture (54-T3 §4) need real data and known-sweep candle sequences —
@@ -26,9 +25,8 @@
  */
 
 import { describe, it, expect } from "vitest";
-import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { dirname, join } from "node:path";
+import { dirname } from "node:path";
 import {
   evaluateSignal,
   parseDsl,
@@ -36,7 +34,6 @@ import {
   type DslSignal,
   type RuntimeMtfContext,
 } from "../../../src/lib/dslEvaluator.js";
-import { validateDsl } from "../../../src/lib/dslValidator.js";
 import {
   createCandleBundle,
   INTERVAL_MS,
@@ -44,100 +41,33 @@ import {
   type MtfCandle,
 } from "../../../src/lib/mtf/intervalAlignment.js";
 import { createMtfCache } from "../../../src/lib/mtf/mtfIndicatorResolver.js";
-import { BLOCK_SUPPORT_MAP } from "../../../src/lib/compiler/supportMap.ts";
+import { describeGoldenStrategyContract } from "../../_helpers/strategyAcceptance.js";
 
 // ---------------------------------------------------------------------------
-// Fixture / seed loading
+// Shared contract — seed/golden pin, validateDsl, parseDsl, supported blocks
 // ---------------------------------------------------------------------------
 
-const here = dirname(fileURLToPath(import.meta.url));
-const loadJson = (rel: string): unknown => JSON.parse(readFileSync(join(here, rel), "utf8"));
-
-const goldenDsl = loadJson("../../fixtures/strategies/smc-liquidity-sweep.golden.json") as Record<string, unknown>;
-const seed = loadJson("../../../prisma/seed/presets/smc-liquidity-sweep.json") as { dslJson: unknown };
-
-// ---------------------------------------------------------------------------
-// 1. Seed ⇄ golden pin
-// ---------------------------------------------------------------------------
-
-describe("smc-liquidity-sweep — seed/golden pin", () => {
-  it("seed.dslJson is byte-equal to the golden fixture", () => {
-    expect(seed.dslJson).toEqual(goldenDsl);
-  });
+const { golden: goldenDsl } = describeGoldenStrategyContract({
+  slug: "smc-liquidity-sweep",
+  baseDir: dirname(fileURLToPath(import.meta.url)),
+  goldenPath: "../../fixtures/strategies/smc-liquidity-sweep.golden.json",
+  seedPath: "../../../prisma/seed/presets/smc-liquidity-sweep.json",
 });
 
 // ---------------------------------------------------------------------------
-// 2. Schema + parse smoke
+// Strategy-specific: exit shape pin
 // ---------------------------------------------------------------------------
 
-describe("smc-liquidity-sweep — DSL validity", () => {
-  it("validates against the v2 strategy schema", () => {
-    const errors = validateDsl(goldenDsl);
-    expect(errors).toBeNull();
-  });
-
-  it("parseDsl yields a v2-shaped ParsedDsl with pattern-based signal + ATR exit", () => {
+describe("smc-liquidity-sweep — exit shape", () => {
+  it("parseDsl yields atr_multiple stopLoss + fixed_pct takeProfit", () => {
     const parsed = parseDsl(goldenDsl);
-    expect(parsed.dslVersion).toBe(2);
-    expect(parsed.entry.signal).toBeDefined();
     expect(parsed.exit?.stopLoss?.type).toBe("atr_multiple");
     expect(parsed.exit?.takeProfit?.type).toBe("fixed_pct");
   });
 });
 
 // ---------------------------------------------------------------------------
-// 3. No composite types — every block in BLOCK_SUPPORT_MAP, supported
-// ---------------------------------------------------------------------------
-
-function collectIndicatorBlockTypes(node: unknown, out = new Set<string>()): Set<string> {
-  if (Array.isArray(node)) {
-    for (const item of node) collectIndicatorBlockTypes(item, out);
-    return out;
-  }
-  if (node && typeof node === "object") {
-    const obj = node as Record<string, unknown>;
-    if (typeof obj.blockType === "string") out.add(obj.blockType);
-    if (typeof obj.type === "string") out.add(obj.type);
-    for (const v of Object.values(obj)) collectIndicatorBlockTypes(v, out);
-  }
-  return out;
-}
-
-const STRUCTURAL_TYPES = new Set([
-  "or", "and", "compare", "crossover", "crossunder", "confirm_n_bars",
-  "fixed_pct", "fixed_price", "atr_multiple",
-]);
-
-const SUPPORT_ALIASES: Record<string, string> = {
-  ema: "EMA", rsi: "RSI", sma: "SMA",
-  bollinger: "bollinger",
-  bollinger_lower: "bollinger", bollinger_upper: "bollinger", bollinger_middle: "bollinger",
-  bb_lower: "bollinger", bb_upper: "bollinger", bb_middle: "bollinger",
-};
-
-describe("smc-liquidity-sweep — uses only supported primitives", () => {
-  it("every indicator/block referenced is `supported` in BLOCK_SUPPORT_MAP", () => {
-    const types = collectIndicatorBlockTypes(goldenDsl);
-    const offenders: Array<{ name: string; reason: string }> = [];
-
-    for (const raw of types) {
-      if (STRUCTURAL_TYPES.has(raw)) continue;
-      const canonical = SUPPORT_ALIASES[raw] ?? raw;
-      const entry = BLOCK_SUPPORT_MAP[canonical];
-      if (!entry) {
-        offenders.push({ name: raw, reason: `not in BLOCK_SUPPORT_MAP (looked up as "${canonical}")` });
-        continue;
-      }
-      if (entry.status !== "supported") {
-        offenders.push({ name: raw, reason: `status is "${entry.status}", expected "supported"` });
-      }
-    }
-    expect(offenders).toEqual([]);
-  });
-});
-
-// ---------------------------------------------------------------------------
-// 4. Sanity evaluator on a synthetic {M15, H1, H4} bundle
+// Strategy-specific: sanity evaluator on a synthetic {M15, H1, H4} bundle
 // ---------------------------------------------------------------------------
 
 const t0 = Date.UTC(2026, 0, 1, 0, 0, 0);
