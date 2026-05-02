@@ -12,6 +12,7 @@
  */
 
 import { createHmac } from "node:crypto";
+import { assertTradingEnabled } from "./tradingKillSwitch.js";
 
 // ---------------------------------------------------------------------------
 // Environment-aware base URL
@@ -97,12 +98,20 @@ export interface PlaceOrderResult {
 /**
  * Place a linear perpetual order on Bybit.
  * Throws on network error or non-zero retCode.
+ *
+ * Honours the global TRADING_ENABLED kill switch
+ * (`apps/api/src/lib/tradingKillSwitch.ts`) — if off, throws
+ * `TradingDisabledError` BEFORE any HTTP call. Status / market-data
+ * helpers in this file are deliberately NOT guarded; operators need
+ * diagnostics to keep working during an incident.
  */
 export async function bybitPlaceOrder(
   apiKey: string,
   secret: string,
   params: PlaceOrderParams,
 ): Promise<PlaceOrderResult> {
+  assertTradingEnabled();
+
   const body = JSON.stringify({
     category: params.category ?? "linear",
     symbol: params.symbol,

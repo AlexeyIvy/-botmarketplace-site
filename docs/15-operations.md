@@ -86,20 +86,33 @@ ORDER BY "createdAt" DESC;
 
 If any non-CLOSED row needs to be unwound, see §6.5.
 
-### 6.3) Demo-only trading (force-no-live)
+### 6.3) Halt outbound order placement (TRADING_ENABLED)
 
-`apps/api/src/lib/bybitOrder.ts` reads `BYBIT_ENV`. Setting it to `demo`
-(or unsetting it; demo is the default) routes every Bybit private call
-to `https://api-demo.bybit.com`:
+`apps/api/src/lib/tradingKillSwitch.ts` reads the `TRADING_ENABLED` env
+variable on every order-placement call. Setting it to a false-literal
+value (`false` / `0` / `no` / `off`, case-insensitive) and restarting
+the API process halts every outbound `bybitPlaceOrder` call at the
+lowest layer of the stack:
 
 ```bash
-BYBIT_ENV=demo systemctl restart botmarket-api
+TRADING_ENABLED=false systemctl restart botmarket-api
 ```
 
-A global `TRADING_ENABLED` admin flag is referenced by the go/no-go
-gate template — it does NOT yet exist. Pre-production hardening must
-add it before live is enabled. Until then, `BYBIT_ENV=demo` plus
-`DISABLE_EMBEDDED_WORKER=true` are the documented levers.
+Behaviour:
+
+- Read-only paths (status fetch, market data, balance reconciliation)
+  are NOT guarded — operators can still diagnose during an incident.
+- Pending intents are NOT auto-cancelled. The order placement throws
+  `TradingDisabledError` (classified as `transient` by `errorClassifier`),
+  so the worker retry loop picks the order up on the next tick once
+  the flag flips back. No manual re-queuing required.
+- Default is fail-open (env unset → enabled), so dev / demo
+  environments keep working without an explicit setting.
+
+If the goal is "demo-only trading" rather than full halt, prefer
+`BYBIT_ENV=demo` instead — same restart command, different env
+variable. `BYBIT_ENV` routes private calls to
+`https://api-demo.bybit.com` while keeping the worker alive.
 
 ### 6.4) Roll a preset back from PUBLIC to PRIVATE without deleting it
 

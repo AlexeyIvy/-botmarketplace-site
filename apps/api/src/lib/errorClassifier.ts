@@ -121,6 +121,10 @@ const TRANSIENT_ERROR_PATTERNS = [
   /timeout/i,
   /fetch failed/i,
   /abort/i,
+  // Global kill-switch — operator can re-enable; treat as transient so
+  // the worker retry loop picks the order up on the next tick once
+  // TRADING_ENABLED flips back. See lib/tradingKillSwitch.ts.
+  /trading disabled/i,
 ];
 
 // ---------------------------------------------------------------------------

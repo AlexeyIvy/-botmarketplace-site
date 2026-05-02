@@ -119,10 +119,11 @@ Minimum live-ready observability surface:
 A global admin flag (`TRADING_ENABLED=false`) exists and has been tested
 end-to-end:
 
-- Flipping `TRADING_ENABLED=false` rejects all new `BotIntent` placements with a clear error.
-- Existing in-flight intents drain to a terminal state without placing new orders.
-- The flag is documented in `docs/15-operations.md` and is reachable from the on-call runbook within 60 seconds.
-- The hedge worker (`docs/55-T4`) honours the same flag so funding-arb cannot place legs while the kill switch is on.
+- Flipping `TRADING_ENABLED=false` rejects all new outbound `bybitPlaceOrder` calls with a typed `TradingDisabledError` (implemented in `apps/api/src/lib/tradingKillSwitch.ts`, guard wired into `apps/api/src/lib/bybitOrder.ts`).
+- Existing in-flight intents are NOT auto-cancelled — the placement error classifies as `transient`, so the worker retry loop picks them up once the flag flips back on. Intents do not drift to FAILED simply because trading was paused.
+- The flag is documented in `docs/15-operations.md §6.3` and is reachable from the on-call runbook within 60 seconds.
+- The hedge worker (`docs/55-T4`) routes its leg orders through the same `bybitPlaceOrder` (once 55-T2 wires the spot leg), so it inherits the kill-switch automatically — no separate flag.
+- Read-only paths (status fetch, market-data, balance reconciliation) are deliberately NOT guarded so operators can keep diagnosing during an incident.
 
 `Status:` _PASS / FAIL / PENDING_
 `Evidence:` _commit SHAs / smoke-test record_
