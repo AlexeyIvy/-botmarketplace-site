@@ -88,6 +88,31 @@ enforce that the code and this matrix stay in sync.
 | `order_block` | ✅ | ✅ | ✅ | **supported** | Institutional OB detection #137/#138 |
 | `market_structure_shift` | ✅ | ✅ | ✅ | **supported** | BOS/CHoCH detection #137/#138 |
 
+## Implemented Strategy Presets
+
+> Source of truth: `apps/api/prisma/seed/presets/<slug>.json` (DSL + default config)
+> Golden fixtures: `apps/api/tests/fixtures/strategies/<slug>.golden.json`
+>
+> Each preset below is built entirely on top of the `supported` blocks above —
+> no preset is allowed to depend on a `compile-only` block. The status column
+> tracks delivery into Lab Library, not the underlying block runtime.
+
+| Preset | Visibility | Timeframe(s) | Status | Plan |
+|---|---|---|---|---|
+| `adaptive-regime` | PUBLIC | M5 (single-TF, with H1/H4 regime refs via `sourceTimeframe`) | **delivered** | `docs/53` |
+| `dca-momentum` | PUBLIC | M15 (single-TF) | **delivered** | `docs/54` |
+| `mtf-scalper` | PUBLIC | M1 / M5 / M15 (multi-TF bundle) | **delivered** | `docs/54` |
+| `smc-liquidity-sweep` | PUBLIC | M15 / H1 / H4 (multi-TF bundle, pattern blocks) | **delivered** | `docs/54` |
+| `funding-arb` | _planned BETA_ | n/a (multi-leg perp + spot) | **in progress** | `docs/55` |
+
+**Status legend (preset-level):**
+
+| Status | Meaning |
+|--------|---------|
+| **delivered** | Preset shipped: DSL frozen via golden fixture, primitive-only construction verified by sanity tests, visible in Lab Library at the listed visibility. |
+| **in progress** | DSL or runtime work landed on `main` but at least one closing task (acceptance run, BETA publish, etc.) is still open. See referenced plan for the open T-task list. |
+| **planned** | Spec exists, no implementation work merged. |
+
 ## Summary
 
 | Status | Count | Blocks |

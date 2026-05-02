@@ -4,6 +4,11 @@
 > **Аудитория:** Профессиональные трейдеры  
 > **Edge:** Вход только при совпадении 3 независимых инструментов — highest win rate среди скальп-стратегий
 
+> **Implementation status:** delivered as `mtf-scalper` preset — see `docs/54-T2`.
+> DSL: `apps/api/prisma/seed/presets/mtf-scalper.json`.
+> Golden fixture: `apps/api/tests/fixtures/strategies/mtf-scalper.golden.json`.
+> Visibility in Lab Library: PUBLIC.
+
 ## Концепция
 
 **Конфлюэнс** — это совпадение нескольких независимых инструментов в одной точке. VWAP показывает «справедливую цену» сессии, Volume Profile (POC/VAH/VAL) — зоны максимальной рыночной активности, RSI(3) — мгновенный тайминг перегрева/перепроданности. Вход только когда все три одновременно указывают в одну сторону.

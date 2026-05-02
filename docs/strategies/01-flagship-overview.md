@@ -3,6 +3,25 @@
 > Данный документ описывает 5 флагманских стратегий для Bot Marketplace.  
 > Платформа строится **под стратегии**, а не стратегии под платформу.
 
+## Implementation timeline
+
+> Stage 3 (`docs/50`) launched the 5-flagship implementation track. As of the
+> latest update, **4 of 5 flagships are delivered as PUBLIC presets** in Lab
+> Library. The fifth — Funding Rate Arbitrage — is on a parallel BETA track
+> (`docs/55`) because of its multi-leg execution requirements.
+
+| # | Strategy | Status | Plan | Preset slug |
+|---|---|---|---|---|
+| 🥇 | SMC Liquidity Sweep + FVG + OB | **delivered (PUBLIC)** | `docs/54-T3` | `smc-liquidity-sweep` |
+| 🥈 | Adaptive Regime Bot | **delivered (PUBLIC)** | `docs/53` | `adaptive-regime` |
+| 🥉 | Funding Rate Arbitrage | **in progress (BETA track)** | `docs/55` | `funding-arb` |
+| 4 | MTF Confluence Scalper | **delivered (PUBLIC)** | `docs/54-T2` | `mtf-scalper` |
+| 5 | DCA Momentum Bot | **delivered (PUBLIC)** | `docs/54-T1` | `dca-momentum` |
+
+The capability matrix (`docs/strategies/08-strategy-capability-matrix.md`)
+tracks block-level support for the underlying primitives every preset depends
+on; the table above tracks preset-level delivery status.
+
 ## Критерии отбора
 
 Все стратегии отобраны по трём критериям:
