@@ -1,77 +1,56 @@
 /**
- * DCA Momentum — golden DSL pin (docs/54-T1, partial 54-T5).
+ * DCA Momentum — golden DSL pin (docs/54-T1, helper-extracted under 54-T5).
  *
- * Mirrors tests/lib/strategies/adaptiveRegime.test.ts:
+ * Shared contract checks (seed/golden pin, validateDsl, parseDsl smoke,
+ * supported-primitives) come from `describeGoldenStrategyContract`.
+ * Strategy-specific assertions inline:
  *
- *   1. Seed/golden pin — preset's `dslJson` is byte-equal to the golden.
- *   2. Schema + parse smoke — validateDsl passes, parseDsl yields a
- *      v2-shaped ParsedDsl with the DCA section populated.
- *   3. No composite types — every `blockType` is supported (or a
- *      structural keyword) in BLOCK_SUPPORT_MAP.
- *   4. DCA exposure stays within risk.maxPositionSizeUsd — uses the
- *      production planner so any drift in dcaPlanning is caught here.
- *   5. Sanity evaluator on synthetic single-TF M15 candles:
- *      - Oversold pullback (RSI<40, EMA8<EMA21) → entry fires.
- *      - Strong uptrend (RSI≈70, EMA8>EMA21) → no entry.
+ *   - Deep parseDsl shape — DCA section + indicatorExit + fixed_pct
+ *     stopLoss + takeProfit. Drift in any of these would change the
+ *     preset's behaviour, not just style.
+ *   - DCA exposure stays within `risk.maxPositionSizeUsd` — uses the
+ *     production planner so any drift in dcaPlanning is caught here.
+ *   - Sanity evaluator on synthetic single-TF M15 candles:
+ *       * Oversold pullback (RSI<40, EMA8<EMA21) → entry fires.
+ *       * Strong uptrend (RSI≈70, EMA8>EMA21) → no entry.
  *
  * Walk-forward acceptance and demo smoke (54-T1 §2/§3) need real data
  * and Bybit credentials — not exercised here.
  */
 
 import { describe, it, expect } from "vitest";
-import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { dirname, join } from "node:path";
+import { dirname } from "node:path";
 import {
   evaluateSignal,
   parseDsl,
   createIndicatorCache,
   type DslSignal,
 } from "../../../src/lib/dslEvaluator.js";
-import { validateDsl } from "../../../src/lib/dslValidator.js";
 import {
   generateSafetyOrderSchedule,
   type DcaConfig,
 } from "../../../src/lib/dcaPlanning.js";
-import { BLOCK_SUPPORT_MAP } from "../../../src/lib/compiler/supportMap.ts";
+import { describeGoldenStrategyContract } from "../../_helpers/strategyAcceptance.js";
 
 // ---------------------------------------------------------------------------
-// Fixture / seed loading
+// Shared contract — seed/golden pin, validateDsl, parseDsl, supported blocks
 // ---------------------------------------------------------------------------
 
-const here = dirname(fileURLToPath(import.meta.url));
-
-function loadJson(rel: string): unknown {
-  return JSON.parse(readFileSync(join(here, rel), "utf8"));
-}
-
-const goldenDsl = loadJson("../../fixtures/strategies/dca-momentum.golden.json") as Record<string, unknown>;
-const seed = loadJson("../../../prisma/seed/presets/dca-momentum.json") as { dslJson: unknown };
-
-// ---------------------------------------------------------------------------
-// 1. Seed ⇄ golden pin
-// ---------------------------------------------------------------------------
-
-describe("dca-momentum — seed/golden pin", () => {
-  it("seed.dslJson is byte-equal to the golden fixture", () => {
-    expect(seed.dslJson).toEqual(goldenDsl);
-  });
+const { golden: goldenDsl } = describeGoldenStrategyContract({
+  slug: "dca-momentum",
+  baseDir: dirname(fileURLToPath(import.meta.url)),
+  goldenPath: "../../fixtures/strategies/dca-momentum.golden.json",
+  seedPath: "../../../prisma/seed/presets/dca-momentum.json",
 });
 
 // ---------------------------------------------------------------------------
-// 2. Schema + parse smoke
+// Strategy-specific: deep parseDsl shape (DCA + exit configured)
 // ---------------------------------------------------------------------------
 
-describe("dca-momentum — DSL validity", () => {
-  it("validates against the v2 strategy schema", () => {
-    const errors = validateDsl(goldenDsl);
-    expect(errors).toBeNull();
-  });
-
-  it("parseDsl yields a v2-shaped ParsedDsl with DCA + exit configured", () => {
+describe("dca-momentum — DCA + exit shape", () => {
+  it("parseDsl yields fixed_pct exits, indicatorExit, and the DCA section populated", () => {
     const parsed = parseDsl(goldenDsl);
-    expect(parsed.dslVersion).toBe(2);
-    expect(parsed.entry.signal).toBeDefined();
     expect(parsed.exit?.stopLoss?.type).toBe("fixed_pct");
     expect(parsed.exit?.takeProfit?.type).toBe("fixed_pct");
     expect(parsed.exit?.indicatorExit?.condition.op).toBe("gt");
@@ -81,58 +60,7 @@ describe("dca-momentum — DSL validity", () => {
 });
 
 // ---------------------------------------------------------------------------
-// 3. No composite types — every block in BLOCK_SUPPORT_MAP, supported
-// ---------------------------------------------------------------------------
-
-function collectIndicatorBlockTypes(node: unknown, out = new Set<string>()): Set<string> {
-  if (Array.isArray(node)) {
-    for (const item of node) collectIndicatorBlockTypes(item, out);
-    return out;
-  }
-  if (node && typeof node === "object") {
-    const obj = node as Record<string, unknown>;
-    if (typeof obj.blockType === "string") out.add(obj.blockType);
-    if (typeof obj.type === "string") out.add(obj.type);
-    for (const v of Object.values(obj)) collectIndicatorBlockTypes(v, out);
-  }
-  return out;
-}
-
-const STRUCTURAL_TYPES = new Set([
-  "or", "and", "compare", "crossover", "crossunder", "confirm_n_bars",
-  "fixed_pct", "fixed_price", "atr_multiple",
-]);
-
-const SUPPORT_ALIASES: Record<string, string> = {
-  ema: "EMA", rsi: "RSI", sma: "SMA",
-  bollinger: "bollinger",
-  bollinger_lower: "bollinger", bollinger_upper: "bollinger", bollinger_middle: "bollinger",
-  bb_lower: "bollinger", bb_upper: "bollinger", bb_middle: "bollinger",
-};
-
-describe("dca-momentum — uses only supported primitives", () => {
-  it("every indicator/block referenced is `supported` in BLOCK_SUPPORT_MAP", () => {
-    const types = collectIndicatorBlockTypes(goldenDsl);
-    const offenders: Array<{ name: string; reason: string }> = [];
-
-    for (const raw of types) {
-      if (STRUCTURAL_TYPES.has(raw)) continue;
-      const canonical = SUPPORT_ALIASES[raw] ?? raw;
-      const entry = BLOCK_SUPPORT_MAP[canonical];
-      if (!entry) {
-        offenders.push({ name: raw, reason: `not in BLOCK_SUPPORT_MAP (looked up as "${canonical}")` });
-        continue;
-      }
-      if (entry.status !== "supported") {
-        offenders.push({ name: raw, reason: `status is "${entry.status}", expected "supported"` });
-      }
-    }
-    expect(offenders).toEqual([]);
-  });
-});
-
-// ---------------------------------------------------------------------------
-// 4. DCA ladder fits inside risk.maxPositionSizeUsd
+// Strategy-specific: DCA ladder fits inside risk.maxPositionSizeUsd
 // ---------------------------------------------------------------------------
 
 describe("dca-momentum — DCA exposure inside risk cap", () => {
@@ -149,7 +77,7 @@ describe("dca-momentum — DCA exposure inside risk cap", () => {
 });
 
 // ---------------------------------------------------------------------------
-// 5. Sanity evaluator on synthetic M15 candles (single-TF — no bundle)
+// Strategy-specific: sanity evaluator on synthetic M15 candles
 // ---------------------------------------------------------------------------
 
 interface Candle {
