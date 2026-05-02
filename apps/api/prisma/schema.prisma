@@ -397,6 +397,14 @@ model ExchangeConnection {
   name             String
   apiKey           String
   encryptedSecret  String
+  /// Optional dedicated API key for the spot scope (docs/55-T5).
+  /// When NULL, the linear `apiKey` is reused for spot calls (single-key fallback).
+  spotApiKey           String?
+  /// Optional encrypted secret paired with `spotApiKey`. Same AES-256-GCM
+  /// payload format as `encryptedSecret`; decrypted via `decryptWithFallback`.
+  spotEncryptedSecret  String?
+  /// Optional UI label shown next to the spot key (e.g. "Funding-arb spot key").
+  spotKeyLabel         String?
   status           ExchangeConnectionStatus  @default(UNKNOWN)
   createdAt        DateTime                  @default(now())
   updatedAt        DateTime                  @updatedAt
