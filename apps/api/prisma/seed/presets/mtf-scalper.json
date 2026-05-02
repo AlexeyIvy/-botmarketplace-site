@@ -1,16 +1,66 @@
 {
   "name": "MTF Confluence Scalper",
-  "description": "Multi-timeframe confluence scalper aligning M1/M5/M15 trend filters. DSL is a placeholder; the final golden fixture lands in docs/54.",
+  "description": "Long-only multi-timeframe scalper requiring three-way confluence at entry: M15 trend (EMA50>EMA200), M5 above session VWAP (proxied via short EMA8>VWAP), and M1 RSI(3)<30 timing. Tight ATR(14)*1.5 stop, +0.5% take-profit, indicator exit on RSI(3)>70. Bundle: M1 primary + M5 + M15.",
   "dslJson": {
     "id": "mtf-scalper",
     "name": "MTF Confluence Scalper",
-    "dslVersion": 1,
+    "dslVersion": 2,
     "enabled": true,
-    "market": { "exchange": "bybit", "env": "demo", "category": "linear", "symbol": "BTCUSDT" },
-    "entry": { "side": "Buy" },
-    "risk": { "maxPositionSizeUsd": 50, "riskPerTradePct": 0.5, "cooldownSeconds": 30 },
-    "execution": { "orderType": "Market", "clientOrderIdPrefix": "mtf-scalp" },
-    "guards": { "maxOpenPositions": 1, "maxOrdersPerMinute": 20, "pauseOnError": true }
+    "market": {
+      "exchange": "bybit",
+      "env": "demo",
+      "category": "linear",
+      "symbol": "BTCUSDT"
+    },
+    "entry": {
+      "side": "Buy",
+      "signal": {
+        "type": "and",
+        "conditions": [
+          {
+            "type": "compare",
+            "op": ">",
+            "left":  { "blockType": "ema", "length": 50,  "sourceTimeframe": "15m" },
+            "right": { "blockType": "ema", "length": 200, "sourceTimeframe": "15m" }
+          },
+          {
+            "type": "compare",
+            "op": ">",
+            "left":  { "blockType": "ema",  "length": 8, "sourceTimeframe": "5m" },
+            "right": { "blockType": "vwap",              "sourceTimeframe": "5m" }
+          },
+          {
+            "type": "compare",
+            "op": "<",
+            "left":  { "blockType": "rsi", "length": 3 },
+            "right": { "blockType": "constant", "length": 30 }
+          }
+        ]
+      }
+    },
+    "risk": {
+      "maxPositionSizeUsd": 50,
+      "riskPerTradePct": 0.5,
+      "cooldownSeconds": 10
+    },
+    "execution": {
+      "orderType": "Market",
+      "clientOrderIdPrefix": "mtf-scalp"
+    },
+    "guards": {
+      "maxOpenPositions": 1,
+      "maxOrdersPerMinute": 20,
+      "pauseOnError": true
+    },
+    "exit": {
+      "stopLoss":   { "type": "atr_multiple", "value": 1.5, "atrPeriod": 14 },
+      "takeProfit": { "type": "fixed_pct",    "value": 0.5 },
+      "indicatorExit": {
+        "indicator": { "type": "rsi", "length": 3 },
+        "condition": { "op": "gt", "value": 70 },
+        "appliesTo": "long"
+      }
+    }
   },
   "defaultBotConfigJson": {
     "symbol": "BTCUSDT",
