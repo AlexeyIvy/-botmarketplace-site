@@ -4,6 +4,11 @@
 > **Аудитория:** Новички и пассивные инвесторы  
 > **Edge:** +245% live за 4 года на BTC при drawdown 12% — работает в любом рынке
 
+> **Implementation status:** delivered as `dca-momentum` preset — see `docs/54-T1`.
+> DSL: `apps/api/prisma/seed/presets/dca-momentum.json`.
+> Golden fixture: `apps/api/tests/fixtures/strategies/dca-momentum.golden.json`.
+> Visibility in Lab Library: PUBLIC.
+
 ## Концепция
 
 **Dollar Cost Averaging (DCA)** с моментум-фильтром — наиболее популярный тип автоматизации среди розничных пользователей. Бот открывает базовую позицию при сигнале входа и автоматически усредняется при движении цены против позиции через «safety orders». По мере усреднения TP автоматически пересчитывается к новой средней цене. Моментум-фильтр (RSI + EMA) предотвращает вход в слишком сильный нисходящий тренд.

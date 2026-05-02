@@ -4,6 +4,11 @@
 > **Аудитория:** Профессиональные трейдеры  
 > **Edge:** Единственный подход, объясняющий *почему* движется цена — охота за ликвидностью
 
+> **Implementation status:** delivered as `smc-liquidity-sweep` preset — see `docs/54-T3`.
+> DSL: `apps/api/prisma/seed/presets/smc-liquidity-sweep.json`.
+> Golden fixture: `apps/api/tests/fixtures/strategies/smc-liquidity-sweep.golden.json`.
+> Visibility in Lab Library: PUBLIC.
+
 ## Концепция
 
 **Smart Money Concepts (SMC)** основана на том, что институциональные игроки намеренно «охотятся» за стоп-лоссами розничных трейдеров, чтобы получить ликвидность для своих позиций. Liquidity Sweep — это момент, когда цена пробивает значимый уровень (собирает стопы) и резко разворачивается. Именно в этой точке открывается сделка.

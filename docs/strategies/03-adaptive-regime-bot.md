@@ -4,6 +4,11 @@
 > **Аудитория:** Продвинутые трейдеры  
 > **Edge:** Единственная стратегия, которая не «ломается» при смене режима рынка
 
+> **Implementation status:** delivered as `adaptive-regime` preset — see `docs/53`.
+> DSL: `apps/api/prisma/seed/presets/adaptive-regime.json`.
+> Golden fixture: `apps/api/tests/fixtures/strategies/adaptive-regime.golden.json`.
+> Visibility in Lab Library: PUBLIC.
+
 ## Концепция
 
 Большинство ботов «ломаются» при смене рыночного режима: трендовые стратегии теряют деньги в боковике, и наоборот. Adaptive Regime Bot автоматически определяет текущий режим через ADX и активирует соответствующую подстратегию.
