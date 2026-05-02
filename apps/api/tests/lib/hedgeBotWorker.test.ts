@@ -42,12 +42,19 @@ interface FakeIntent {
 
 const hedgesById = new Map<string, FakeHedge>();
 const intents: FakeIntent[] = [];
+const connectionsByBotRunId = new Map<string, {
+  apiKey: string;
+  encryptedSecret: string;
+  spotApiKey: string | null;
+  spotEncryptedSecret: string | null;
+} | null>();
 const created: Array<Partial<FakeIntent> & { qty?: number; orderLinkId?: string; side?: string }> = [];
 const updates: Array<{ id: string; data: Record<string, unknown> }> = [];
 
 function resetState() {
   hedgesById.clear();
   intents.length = 0;
+  connectionsByBotRunId.clear();
   created.length = 0;
   updates.length = 0;
 }
@@ -62,7 +69,7 @@ vi.mock("../../src/lib/prisma.js", () => ({
         const statuses = new Set(where.status.in);
         return [...hedgesById.values()]
           .filter((h) => statuses.has(h.status))
-          .map((h) => ({ id: h.id }));
+          .map((h) => ({ id: h.id, symbol: h.symbol, botRunId: h.botRunId }));
       }),
       update: vi.fn(async ({ where, data }: { where: { id: string }; data: Record<string, unknown> }) => {
         const h = hedgesById.get(where.id);
@@ -71,6 +78,16 @@ vi.mock("../../src/lib/prisma.js", () => ({
         }
         updates.push({ id: where.id, data });
         return h;
+      }),
+    },
+    botRun: {
+      findUnique: vi.fn(async ({ where }: { where: { id: string } }) => {
+        // The real query goes BotRun → Bot → ExchangeConnection. We
+        // collapse it to a single map keyed by botRunId for tests; the
+        // hedgeBotWorker only reads `run?.bot?.exchangeConnection`.
+        const conn = connectionsByBotRunId.get(where.id);
+        if (conn === undefined) return null;
+        return { bot: { exchangeConnection: conn } };
       }),
     },
     botIntent: {
@@ -98,6 +115,11 @@ vi.mock("../../src/lib/prisma.js", () => ({
       return Promise.all(ops as Promise<unknown>[]);
     }),
   },
+}));
+
+const reconcileBalancesMock = vi.fn();
+vi.mock("../../src/lib/exchange/balanceReconciler.js", () => ({
+  reconcileBalances: (...args: unknown[]) => reconcileBalancesMock(...args),
 }));
 
 vi.mock("../../src/lib/logger.js", () => ({
@@ -405,6 +427,53 @@ describe("tickHedgeBotWorker", () => {
     seedHedge({ id: "terminal", status: "CLOSED" });
     const res = await tickHedgeBotWorker();
     expect(res).toEqual([]);
+  });
+
+  // -------------------------------------------------------------------------
+  // Default-path orchestration: load creds → wire reconcileBalances callback
+  //
+  // The default path produces input { reconcileBeforeEntry: <wired> } only —
+  // it does NOT set fundingWindowOpen, because that signal is owned by the
+  // upstream funding scanner (out of scope here). So in these tests the
+  // PENDING gate short-circuits on the closed-window check before the
+  // reconciler is ever consulted. We instead pin:
+  //   * loadHedgeCreds runs (BotRun.findUnique called with the right id),
+  //   * advance returns no-change at the closed-window branch,
+  //   * the reconciler is NEVER called when the window is closed even
+  //     though the wiring is in place.
+  //
+  // Once the funding-scanner layer lands, a fresh test here will cover
+  // the open-window path end-to-end.
+  // -------------------------------------------------------------------------
+
+  it("default path: loads ExchangeConnection via BotRun.findUnique", async () => {
+    seedHedge({ id: "tick-1", status: "PLANNED", symbol: "BTCUSDT", botRunId: "run-tick-1" });
+    connectionsByBotRunId.set("run-tick-1", {
+      apiKey: "k", encryptedSecret: "enc:s",
+      spotApiKey: "sk", spotEncryptedSecret: "enc:ss",
+    });
+
+    const { prisma } = await import("../../src/lib/prisma.js");
+
+    await tickHedgeBotWorker();
+
+    expect((prisma.botRun.findUnique as ReturnType<typeof vi.fn>)).toHaveBeenCalledWith(
+      expect.objectContaining({ where: { id: "run-tick-1" } }),
+    );
+    // Closed window ⇒ no reconciler call, but wiring was prepared.
+    expect(reconcileBalancesMock).not.toHaveBeenCalled();
+    expect(hedgesById.get("tick-1")?.status).toBe("PLANNED");
+  });
+
+  it("default path: hedge without linked ExchangeConnection — reconciler not wired, no error", async () => {
+    seedHedge({ id: "tick-2", status: "PLANNED", symbol: "BTCUSDT", botRunId: "run-tick-2" });
+    // No connectionsByBotRunId entry for run-tick-2 → loadHedgeCreds returns null.
+
+    const res = await tickHedgeBotWorker();
+
+    expect(res[0]).toMatchObject({ hedgeId: "tick-2", toStage: "PENDING", changed: false });
+    expect(reconcileBalancesMock).not.toHaveBeenCalled();
+    expect(hedgesById.get("tick-2")?.status).toBe("PLANNED");
   });
 });
 
