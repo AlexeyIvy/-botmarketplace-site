@@ -101,6 +101,25 @@ export interface HedgeAdvanceInput {
   /** Quantity to size each leg with on exit (base units). Defaults to
    *  whatever was used on entry. */
   exitQty?: number;
+  /**
+   * Optional balance-reconcile callback invoked at the PENDING → ENTRY_PLACED
+   * transition only (docs/55-T5 §3). When provided:
+   *   - The hedge symbol's classification must be "flat" for entry to proceed.
+   *     Any non-flat result (perp_only / spot_only / balanced / imbalanced)
+   *     is treated as "position already exists" and entry is skipped to
+   *     avoid double-position errors.
+   *   - A thrown error is logged and treated as transient — the tick
+   *     produces no state change so the next tick will retry. funding-arb
+   *     errors must not crash the worker.
+   *
+   * When omitted, the balance check is skipped entirely. This keeps unit
+   * tests that exercise the state machine in isolation simple, and lets
+   * `tickHedgeBotWorker` decide per-hedge whether to load creds + wire a
+   * real reconciler.
+   */
+  reconcileBeforeEntry?: () => Promise<{
+    hedgeStatus: Array<{ symbol: string; status: string }>;
+  }>;
 }
 
 export interface HedgeAdvanceResult {
@@ -269,6 +288,32 @@ export async function advanceHedge(
         log.warn({ hedgeId, qty }, "PENDING → ENTRY_PLACED skipped: entryQty must be > 0");
         return { hedgeId, fromStage, toStage: fromStage, changed: false };
       }
+
+      // Balance gate (docs/55-T5 §3). Optional: when no reconciler is
+      // supplied the check is skipped — keeps unit tests minimal and
+      // lets the caller (tickHedgeBotWorker) decide per-hedge whether
+      // to load credentials.
+      if (input.reconcileBeforeEntry) {
+        let recon: Awaited<ReturnType<NonNullable<HedgeAdvanceInput["reconcileBeforeEntry"]>>>;
+        try {
+          recon = await input.reconcileBeforeEntry();
+        } catch (err) {
+          log.error(
+            { err, hedgeId, symbol: hedge.symbol },
+            "balance reconcile failed — deferring entry to next tick (transient)",
+          );
+          return { hedgeId, fromStage, toStage: fromStage, changed: false };
+        }
+        const symbolStatus = recon.hedgeStatus.find((s) => s.symbol === hedge.symbol);
+        if (symbolStatus && symbolStatus.status !== "flat") {
+          log.warn(
+            { hedgeId, symbol: hedge.symbol, status: symbolStatus.status },
+            "PENDING → ENTRY_PLACED refused: existing perp / spot position for symbol",
+          );
+          return { hedgeId, fromStage, toStage: fromStage, changed: false };
+        }
+      }
+
       await emitHedgeIntents({
         hedgeId,
         botRunId: hedge.botRunId,
