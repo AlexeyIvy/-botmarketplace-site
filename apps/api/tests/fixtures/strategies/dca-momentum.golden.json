@@ -1,0 +1,63 @@
+{
+  "id": "dca-momentum",
+  "name": "DCA Momentum",
+  "dslVersion": 2,
+  "enabled": true,
+  "market": {
+    "exchange": "bybit",
+    "env": "demo",
+    "category": "linear",
+    "symbol": "BTCUSDT"
+  },
+  "entry": {
+    "side": "Buy",
+    "signal": {
+      "type": "and",
+      "conditions": [
+        {
+          "type": "compare",
+          "op": "<",
+          "left":  { "blockType": "rsi", "length": 14 },
+          "right": { "blockType": "constant", "length": 40 }
+        },
+        {
+          "type": "compare",
+          "op": "<",
+          "left":  { "blockType": "ema", "length": 8 },
+          "right": { "blockType": "ema", "length": 21 }
+        }
+      ]
+    }
+  },
+  "risk": {
+    "maxPositionSizeUsd": 1500,
+    "riskPerTradePct": 1,
+    "cooldownSeconds": 60
+  },
+  "execution": {
+    "orderType": "Market",
+    "clientOrderIdPrefix": "dca-mom"
+  },
+  "guards": {
+    "maxOpenPositions": 1,
+    "maxOrdersPerMinute": 10,
+    "pauseOnError": true
+  },
+  "exit": {
+    "stopLoss":   { "type": "fixed_pct", "value": 8 },
+    "takeProfit": { "type": "fixed_pct", "value": 1.5 },
+    "indicatorExit": {
+      "indicator": { "type": "rsi", "length": 14 },
+      "condition": { "op": "gt", "value": 70 },
+      "appliesTo": "long"
+    }
+  },
+  "dca": {
+    "baseOrderSizeUsd": 50,
+    "maxSafetyOrders": 5,
+    "priceStepPct": 1.2,
+    "stepScale": 1.05,
+    "volumeScale": 1.2,
+    "takeProfitPct": 1.5
+  }
+}

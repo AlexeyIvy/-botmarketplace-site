@@ -1,26 +1,66 @@
 {
   "name": "DCA Momentum",
-  "description": "Dollar-cost-average ladder triggered by momentum confirmation. DSL is a placeholder; the final golden fixture lands in docs/54.",
+  "description": "Single-TF (M15) long-only DCA strategy. Entry on momentum reversion: RSI(14)<40 (oversold) AND short EMA(8) below medium EMA(21) (price pulled back from local trend). DCA ladder of 5 safety orders, 1.2% step distance, 1.05× step scale, 1.2× volume scale, +1.5% take-profit per averaged entry. Hard stop-loss at -8% (deeper than the ladder reaches under default params). Indicator exit on RSI(14)>70.",
   "dslJson": {
     "id": "dca-momentum",
     "name": "DCA Momentum",
     "dslVersion": 2,
     "enabled": true,
-    "market": { "exchange": "bybit", "env": "demo", "category": "linear", "symbol": "BTCUSDT" },
-    "entry": { "side": "Buy" },
-    "risk": { "maxPositionSizeUsd": 100, "riskPerTradePct": 1, "cooldownSeconds": 60 },
-    "execution": { "orderType": "Market", "clientOrderIdPrefix": "dca-mom" },
-    "guards": { "maxOpenPositions": 1, "maxOrdersPerMinute": 10, "pauseOnError": true },
+    "market": {
+      "exchange": "bybit",
+      "env": "demo",
+      "category": "linear",
+      "symbol": "BTCUSDT"
+    },
+    "entry": {
+      "side": "Buy",
+      "signal": {
+        "type": "and",
+        "conditions": [
+          {
+            "type": "compare",
+            "op": "<",
+            "left":  { "blockType": "rsi", "length": 14 },
+            "right": { "blockType": "constant", "length": 40 }
+          },
+          {
+            "type": "compare",
+            "op": "<",
+            "left":  { "blockType": "ema", "length": 8 },
+            "right": { "blockType": "ema", "length": 21 }
+          }
+        ]
+      }
+    },
+    "risk": {
+      "maxPositionSizeUsd": 1500,
+      "riskPerTradePct": 1,
+      "cooldownSeconds": 60
+    },
+    "execution": {
+      "orderType": "Market",
+      "clientOrderIdPrefix": "dca-mom"
+    },
+    "guards": {
+      "maxOpenPositions": 1,
+      "maxOrdersPerMinute": 10,
+      "pauseOnError": true
+    },
     "exit": {
-      "stopLoss":   { "type": "fixed_pct", "value": 2 },
-      "takeProfit": { "type": "fixed_pct", "value": 1.5 }
+      "stopLoss":   { "type": "fixed_pct", "value": 8 },
+      "takeProfit": { "type": "fixed_pct", "value": 1.5 },
+      "indicatorExit": {
+        "indicator": { "type": "rsi", "length": 14 },
+        "condition": { "op": "gt", "value": 70 },
+        "appliesTo": "long"
+      }
     },
     "dca": {
-      "baseOrderSizeUsd": 10,
-      "maxSafetyOrders": 3,
-      "priceStepPct": 1,
-      "stepScale": 1.5,
-      "volumeScale": 1.5,
+      "baseOrderSizeUsd": 50,
+      "maxSafetyOrders": 5,
+      "priceStepPct": 1.2,
+      "stepScale": 1.05,
+      "volumeScale": 1.2,
       "takeProfitPct": 1.5
     }
   },
