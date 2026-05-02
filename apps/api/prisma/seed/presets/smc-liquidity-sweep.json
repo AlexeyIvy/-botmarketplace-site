@@ -1,16 +1,61 @@
 {
   "name": "SMC Liquidity Sweep",
-  "description": "Smart Money Concepts: liquidity sweep + market-structure-shift entry on FVG retest. DSL is a placeholder; the final golden fixture lands in docs/54.",
+  "description": "Long-only Smart-Money-Concepts setup. Enters when a bullish liquidity sweep on H1 aligns with a bullish market-structure shift on M15 under an H4 EMA(50)>EMA(200) trend bias. ATR(14)*1.5 stop, +4.5% take-profit (~3:1 R:R). Bundle: M15 primary + H1 + H4. SMC patterns are sparse — expect few signals per session, by design.",
   "dslJson": {
     "id": "smc-liquidity-sweep",
     "name": "SMC Liquidity Sweep",
-    "dslVersion": 1,
+    "dslVersion": 2,
     "enabled": true,
-    "market": { "exchange": "bybit", "env": "demo", "category": "linear", "symbol": "BTCUSDT" },
-    "entry": { "side": "Buy" },
-    "risk": { "maxPositionSizeUsd": 100, "riskPerTradePct": 1, "cooldownSeconds": 60 },
-    "execution": { "orderType": "Market", "clientOrderIdPrefix": "smc-sweep" },
-    "guards": { "maxOpenPositions": 1, "maxOrdersPerMinute": 10, "pauseOnError": true }
+    "market": {
+      "exchange": "bybit",
+      "env": "demo",
+      "category": "linear",
+      "symbol": "BTCUSDT"
+    },
+    "entry": {
+      "side": "Buy",
+      "signal": {
+        "type": "and",
+        "conditions": [
+          {
+            "type": "compare",
+            "op": ">",
+            "left":  { "blockType": "liquidity_sweep", "length": 3, "sourceTimeframe": "1h" },
+            "right": { "blockType": "constant", "length": 0 }
+          },
+          {
+            "type": "compare",
+            "op": ">",
+            "left":  { "blockType": "market_structure_shift", "length": 3 },
+            "right": { "blockType": "constant", "length": 0 }
+          },
+          {
+            "type": "compare",
+            "op": ">",
+            "left":  { "blockType": "ema", "length": 50,  "sourceTimeframe": "4h" },
+            "right": { "blockType": "ema", "length": 200, "sourceTimeframe": "4h" }
+          }
+        ]
+      }
+    },
+    "risk": {
+      "maxPositionSizeUsd": 100,
+      "riskPerTradePct": 1,
+      "cooldownSeconds": 60
+    },
+    "execution": {
+      "orderType": "Market",
+      "clientOrderIdPrefix": "smc"
+    },
+    "guards": {
+      "maxOpenPositions": 1,
+      "maxOrdersPerMinute": 10,
+      "pauseOnError": true
+    },
+    "exit": {
+      "stopLoss":   { "type": "atr_multiple", "value": 1.5, "atrPeriod": 14 },
+      "takeProfit": { "type": "fixed_pct",    "value": 4.5 }
+    }
   },
   "defaultBotConfigJson": {
     "symbol": "BTCUSDT",
@@ -20,7 +65,7 @@
   },
   "datasetBundleHintJson": {
     "15m": true,
-    "1H": true,
-    "4H": true
+    "1h": true,
+    "4h": true
   }
 }

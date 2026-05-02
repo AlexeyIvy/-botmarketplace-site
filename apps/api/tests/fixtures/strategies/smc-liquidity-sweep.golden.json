@@ -1,0 +1,56 @@
+{
+  "id": "smc-liquidity-sweep",
+  "name": "SMC Liquidity Sweep",
+  "dslVersion": 2,
+  "enabled": true,
+  "market": {
+    "exchange": "bybit",
+    "env": "demo",
+    "category": "linear",
+    "symbol": "BTCUSDT"
+  },
+  "entry": {
+    "side": "Buy",
+    "signal": {
+      "type": "and",
+      "conditions": [
+        {
+          "type": "compare",
+          "op": ">",
+          "left":  { "blockType": "liquidity_sweep", "length": 3, "sourceTimeframe": "1h" },
+          "right": { "blockType": "constant", "length": 0 }
+        },
+        {
+          "type": "compare",
+          "op": ">",
+          "left":  { "blockType": "market_structure_shift", "length": 3 },
+          "right": { "blockType": "constant", "length": 0 }
+        },
+        {
+          "type": "compare",
+          "op": ">",
+          "left":  { "blockType": "ema", "length": 50,  "sourceTimeframe": "4h" },
+          "right": { "blockType": "ema", "length": 200, "sourceTimeframe": "4h" }
+        }
+      ]
+    }
+  },
+  "risk": {
+    "maxPositionSizeUsd": 100,
+    "riskPerTradePct": 1,
+    "cooldownSeconds": 60
+  },
+  "execution": {
+    "orderType": "Market",
+    "clientOrderIdPrefix": "smc"
+  },
+  "guards": {
+    "maxOpenPositions": 1,
+    "maxOrdersPerMinute": 10,
+    "pauseOnError": true
+  },
+  "exit": {
+    "stopLoss":   { "type": "atr_multiple", "value": 1.5, "atrPeriod": 14 },
+    "takeProfit": { "type": "fixed_pct",    "value": 4.5 }
+  }
+}
