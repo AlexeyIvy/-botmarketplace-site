@@ -595,6 +595,65 @@ describe("POST /api/v1/lab/backtest", () => {
     expect(res.statusCode).toBe(400);
     expect(JSON.stringify(res.json())).toMatch(/primary entry must equal body\.datasetId/);
   });
+
+  // ── docs/52 follow-up: BacktestResult.datasetBundleJson round-trip ───────
+  // Pins persistence + read-back of the bundle on the result row so a
+  // future replay path (or any consumer reading BacktestResult back) can
+  // re-run on the exact multi-TF dataset, not just the primary.
+  it("52 follow-up: persists datasetBundleJson on BacktestResult and returns it on GET", async () => {
+    mockStrategyVersions["sv-1"] = { id: "sv-1", strategyId: "strat-1", strategy: { workspaceId: WS_ID }, dslJson: {} };
+    mockDatasets["ds-1"] = { id: "ds-1", workspaceId: WS_ID, exchange: "bybit", symbol: "BTCUSDT", interval: "M15", fromTsMs: BigInt(1704067200000), toTsMs: BigInt(1706745600000), datasetHash: "abc" };
+    mockDatasets["ds-h1"] = { id: "ds-h1", workspaceId: WS_ID, exchange: "bybit", symbol: "BTCUSDT", interval: "H1", fromTsMs: BigInt(1704067200000), toTsMs: BigInt(1706745600000), datasetHash: "def" };
+
+    const post = await app.inject({
+      method: "POST",
+      url: "/api/v1/lab/backtest",
+      headers: bundleHeaders("10.52.4.5"),
+      payload: {
+        strategyVersionId: "sv-1",
+        datasetId: "ds-1",
+        datasetBundleJson: { M15: "ds-1", H1: "ds-h1" },
+      },
+    });
+    expect(post.statusCode).toBe(202);
+    const created = post.json() as { id: string; datasetBundleJson?: Record<string, unknown> };
+    expect(created.datasetBundleJson).toEqual({ M15: "ds-1", H1: "ds-h1" });
+
+    // The bundle survived prisma.backtestResult.create — read it back via
+    // the row so a replay path can re-load the same multi-TF candles.
+    const stored = mockBacktests[created.id] as Record<string, unknown>;
+    expect(stored.datasetBundleJson).toEqual({ M15: "ds-1", H1: "ds-h1" });
+
+    const get = await app.inject({
+      method: "GET",
+      url: `/api/v1/lab/backtest/${created.id}`,
+      headers: authHeaders(),
+    });
+    expect(get.statusCode).toBe(200);
+    expect((get.json() as Record<string, unknown>).datasetBundleJson).toEqual({
+      M15: "ds-1", H1: "ds-h1",
+    });
+  });
+
+  it("52 follow-up: leaves datasetBundleJson NULL when the bundle is omitted (single-TF path)", async () => {
+    mockStrategyVersions["sv-1"] = { id: "sv-1", strategyId: "strat-1", strategy: { workspaceId: WS_ID }, dslJson: {} };
+    mockDatasets["ds-1"] = { id: "ds-1", workspaceId: WS_ID, exchange: "bybit", symbol: "BTCUSDT", interval: "M15", fromTsMs: BigInt(1704067200000), toTsMs: BigInt(1706745600000), datasetHash: "abc" };
+
+    const post = await app.inject({
+      method: "POST",
+      url: "/api/v1/lab/backtest",
+      headers: bundleHeaders("10.52.4.6"),
+      payload: { strategyVersionId: "sv-1", datasetId: "ds-1" },
+    });
+    expect(post.statusCode).toBe(202);
+    const created = post.json() as { id: string; datasetBundleJson?: unknown };
+    // Persisted row carries no bundle key, so the response is undefined
+    // rather than a literal null. Pinning this so the legacy single-TF
+    // shape stays bit-for-bit identical for callers that didn't opt in.
+    expect(created.datasetBundleJson).toBeUndefined();
+    const stored = mockBacktests[created.id] as Record<string, unknown>;
+    expect("datasetBundleJson" in stored).toBe(false);
+  });
 });
 
 // ── GET /lab/backtest/:id ───────────────────────────────────────────────────

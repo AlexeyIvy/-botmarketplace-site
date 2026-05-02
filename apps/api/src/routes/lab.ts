@@ -131,6 +131,8 @@ const BACKTEST_SELECT = {
   slippageBps: true,
   fillAt: true,
   engineVersion: true,
+  // docs/52 follow-up — multi-interval bundle the run was executed against.
+  datasetBundleJson: true,
 } as const;
 
 // ---------------------------------------------------------------------------
@@ -543,6 +545,10 @@ export async function labRoutes(app: FastifyInstance) {
         slippageBps,
         fillAt,
         engineVersion,
+        // docs/52 follow-up — persist the bundle so a future replay can
+        // re-run on the exact multi-TF data without inferring from
+        // datasetId alone.
+        ...(resolvedBundle ? { datasetBundleJson: resolvedBundle as unknown as object } : {}),
       },
       select: BACKTEST_SELECT,
     });

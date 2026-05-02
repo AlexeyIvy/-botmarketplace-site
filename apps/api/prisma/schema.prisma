@@ -615,6 +615,10 @@ model BacktestResult {
   engineVersion String         @default("unknown")
   /// Phase 5 — explicit StrategyVersion binding for reproducible backtests
   strategyVersionId String?
+  /// docs/52 follow-up — multi-interval dataset bundle this backtest ran on,
+  /// `Partial<Record<CandleInterval, string | true>>`. NULL ⇒ single-TF run
+  /// driven by `datasetId` alone (legacy + non-MTF strategies).
+  datasetBundleJson Json?
 
   workspace       Workspace       @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   strategy        Strategy        @relation(fields: [strategyId], references: [id], onDelete: Cascade)
