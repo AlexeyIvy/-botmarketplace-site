@@ -219,6 +219,82 @@ describe("PENDING → ENTRY_PLACED", () => {
 });
 
 // ---------------------------------------------------------------------------
+// 1b. PENDING balance gate (55-T5 wiring)
+// ---------------------------------------------------------------------------
+
+describe("PENDING → ENTRY_PLACED — balance gating", () => {
+  it("flat symbol → reconciler called, intents emitted, status → OPENING", async () => {
+    seedHedge({ id: "g1" });
+    const reconcile = vi.fn(async () => ({
+      hedgeStatus: [{ symbol: "BTCUSDT", status: "flat" }],
+    }));
+
+    const res = await advanceHedge("g1", {
+      fundingWindowOpen: true,
+      entryQty: 1.0,
+      reconcileBeforeEntry: reconcile,
+    });
+
+    expect(reconcile).toHaveBeenCalledOnce();
+    expect(res.toStage).toBe<HedgeStage>("ENTRY_PLACED");
+    expect(hedgesById.get("g1")?.status).toBe("OPENING");
+  });
+
+  it.each(["perp_only", "spot_only", "balanced", "imbalanced"])(
+    "non-flat status (%s) refuses entry, no intents emitted, hedge stays PLANNED",
+    async (status) => {
+      seedHedge({ id: `g-${status}` });
+      const reconcile = vi.fn(async () => ({
+        hedgeStatus: [{ symbol: "BTCUSDT", status }],
+      }));
+
+      const res = await advanceHedge(`g-${status}`, {
+        fundingWindowOpen: true,
+        entryQty: 1.0,
+        reconcileBeforeEntry: reconcile,
+      });
+
+      expect(reconcile).toHaveBeenCalledOnce();
+      expect(res.changed).toBe(false);
+      expect(res.toStage).toBe<HedgeStage>("PENDING");
+      expect(created).toHaveLength(0);
+      expect(hedgesById.get(`g-${status}`)?.status).toBe("PLANNED");
+    },
+  );
+
+  it("reconciler throws → entry deferred to next tick, no state change", async () => {
+    seedHedge({ id: "g-err" });
+    const reconcile = vi.fn(async () => {
+      throw new Error("Bybit reconciler HTTP 503");
+    });
+
+    const res = await advanceHedge("g-err", {
+      fundingWindowOpen: true,
+      entryQty: 1.0,
+      reconcileBeforeEntry: reconcile,
+    });
+
+    expect(reconcile).toHaveBeenCalledOnce();
+    expect(res.changed).toBe(false);
+    expect(res.toStage).toBe<HedgeStage>("PENDING");
+    expect(created).toHaveLength(0);
+  });
+
+  it("no reconciler supplied → balance check skipped (legacy unit-test path)", async () => {
+    seedHedge({ id: "g-skip" });
+
+    const res = await advanceHedge("g-skip", {
+      fundingWindowOpen: true,
+      entryQty: 1.0,
+      // reconcileBeforeEntry intentionally omitted
+    });
+
+    expect(res.toStage).toBe<HedgeStage>("ENTRY_PLACED");
+    expect(hedgesById.get("g-skip")?.status).toBe("OPENING");
+  });
+});
+
+// ---------------------------------------------------------------------------
 // 2. ENTRY_PLACED → ACTIVE / ERRORED
 // ---------------------------------------------------------------------------
 
