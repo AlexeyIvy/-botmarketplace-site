@@ -90,6 +90,13 @@ vi.mock("../../src/lib/prisma.js", () => ({
         return { bot: { exchangeConnection: conn } };
       }),
     },
+    fundingSnapshot: {
+      // Default: no snapshot → windowDetector returns { open: false,
+      // paymentReceived: false }, which keeps existing tests' "closed
+      // window" assumption intact. Tests that need to open the window
+      // can override this mock per-case.
+      findFirst: vi.fn(async () => null),
+    },
     botIntent: {
       create: vi.fn(async ({ data }: { data: Record<string, unknown> }) => {
         created.push(data as never);

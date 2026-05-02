@@ -48,6 +48,7 @@ import {
   reconcileBalances,
   type ExchangeConnectionCreds,
 } from "./exchange/balanceReconciler.js";
+import { detectFundingWindow } from "./funding/windowDetector.js";
 
 const log = logger.child({ module: "hedgeBotWorker" });
 
@@ -480,19 +481,30 @@ export async function tickHedgeBotWorker(
 /**
  * Default `HedgeAdvanceInput` builder used when no `inputResolver` is
  * supplied. Wires the reconciler callback so production ticks consult
- * the live Bybit wallet at the entry gate. Funding-window / payment
- * signals stay undefined here — they are upstream signals out of scope
- * for this orchestration step.
+ * the live Bybit wallet at the entry gate, and derives funding-window
+ * signals from the latest `FundingSnapshot.nextFundingAt` via
+ * `detectFundingWindow`. Read-only; safe to call concurrently across
+ * hedges within one tick.
  */
 async function buildDefaultInput(
   hedge: { id: string; symbol: string; botRunId: string },
 ): Promise<HedgeAdvanceInput> {
+  const window = await detectFundingWindow(hedge.symbol, Date.now());
   const creds = await loadHedgeCreds(hedge.botRunId);
+
   if (!creds) {
-    log.warn({ hedgeId: hedge.id }, "no ExchangeConnection linked — balance check skipped");
-    return {};
+    log.warn(
+      { hedgeId: hedge.id, symbol: hedge.symbol },
+      "no ExchangeConnection linked — balance check skipped",
+    );
+    return {
+      fundingWindowOpen: window.open,
+      fundingPaymentReceived: window.paymentReceived,
+    };
   }
   return {
+    fundingWindowOpen: window.open,
+    fundingPaymentReceived: window.paymentReceived,
     reconcileBeforeEntry: () => reconcileBalances(creds, [hedge.symbol]),
   };
 }
