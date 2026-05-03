@@ -41,7 +41,10 @@ import {
   type MtfCandle,
 } from "../../../src/lib/mtf/intervalAlignment.js";
 import { createMtfCache } from "../../../src/lib/mtf/mtfIndicatorResolver.js";
-import { describeGoldenStrategyContract } from "../../_helpers/strategyAcceptance.js";
+import {
+  describeGoldenStrategyContract,
+  describeWalkForwardSmoke,
+} from "../../_helpers/strategyAcceptance.js";
 
 // ---------------------------------------------------------------------------
 // Shared contract — seed/golden pin, validateDsl, parseDsl, supported blocks
@@ -52,6 +55,17 @@ const { golden: goldenDsl } = describeGoldenStrategyContract({
   baseDir: dirname(fileURLToPath(import.meta.url)),
   goldenPath: "../../fixtures/strategies/smc-liquidity-sweep.golden.json",
   seedPath: "../../../prisma/seed/presets/smc-liquidity-sweep.json",
+});
+
+// ---------------------------------------------------------------------------
+// Walk-forward smoke — bundle {M15, H1, H4}, primary M15
+// ---------------------------------------------------------------------------
+
+describeWalkForwardSmoke({
+  slug: "smc-liquidity-sweep",
+  goldenDsl,
+  primaryInterval: "15m",
+  contextIntervals: ["1h", "4h"],
 });
 
 // ---------------------------------------------------------------------------

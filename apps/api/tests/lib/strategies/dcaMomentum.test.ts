@@ -31,7 +31,10 @@ import {
   generateSafetyOrderSchedule,
   type DcaConfig,
 } from "../../../src/lib/dcaPlanning.js";
-import { describeGoldenStrategyContract } from "../../_helpers/strategyAcceptance.js";
+import {
+  describeGoldenStrategyContract,
+  describeWalkForwardSmoke,
+} from "../../_helpers/strategyAcceptance.js";
 
 // ---------------------------------------------------------------------------
 // Shared contract — seed/golden pin, validateDsl, parseDsl, supported blocks
@@ -42,6 +45,16 @@ const { golden: goldenDsl } = describeGoldenStrategyContract({
   baseDir: dirname(fileURLToPath(import.meta.url)),
   goldenPath: "../../fixtures/strategies/dca-momentum.golden.json",
   seedPath: "../../../prisma/seed/presets/dca-momentum.json",
+});
+
+// ---------------------------------------------------------------------------
+// Walk-forward smoke — single-TF M15
+// ---------------------------------------------------------------------------
+
+describeWalkForwardSmoke({
+  slug: "dca-momentum",
+  goldenDsl,
+  primaryInterval: "15m",
 });
 
 // ---------------------------------------------------------------------------
