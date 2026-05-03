@@ -23,6 +23,7 @@ export function PresetCard({
   onUse: (slug: string) => void;
 }) {
   const isPrivate = preset.visibility === "PRIVATE";
+  const isBeta = preset.visibility === "BETA";
   const categoryColor = CATEGORY_COLOR[preset.category] ?? "#6B7280";
 
   return (
@@ -30,6 +31,14 @@ export function PresetCard({
       <div style={headerStyle}>
         <div style={categoryBadgeStyle(categoryColor)}>{preset.category}</div>
         {isPrivate && <div style={privateBadgeStyle}>Private</div>}
+        {isBeta && (
+          <div
+            style={betaBadgeStyle}
+            title="BETA — multi-leg execution, monitor closely"
+          >
+            Beta
+          </div>
+        )}
       </div>
 
       <h3 style={titleStyle}>{preset.name}</h3>
@@ -96,6 +105,22 @@ const privateBadgeStyle: React.CSSProperties = {
   color: "rgba(255,255,255,0.55)",
   background: "rgba(255,255,255,0.06)",
   border: "1px solid rgba(255,255,255,0.18)",
+};
+
+// Yellow/amber accent — same shade family as the `scalping` category badge
+// (#F59E0B) so the visual vocabulary stays consistent. Tooltip carries the
+// operator-facing rationale; on hover the user sees the full advisory.
+const betaBadgeStyle: React.CSSProperties = {
+  fontSize: 10,
+  fontWeight: 700,
+  textTransform: "uppercase",
+  letterSpacing: "0.06em",
+  padding: "2px 8px",
+  borderRadius: 4,
+  color: "#F59E0B",
+  background: "rgba(245, 158, 11, 0.12)",
+  border: "1px solid rgba(245, 158, 11, 0.45)",
+  cursor: "help",
 };
 
 const titleStyle: React.CSSProperties = {
