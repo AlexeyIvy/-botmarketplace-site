@@ -15,6 +15,10 @@ interface ExchangeConn {
   name: string;
   status: string;
   createdAt: string;
+  /** docs/55-T5: true when a dedicated spot key is configured. */
+  hasSpotKey?: boolean;
+  /** docs/55-T5: free-form label for the spot key. */
+  spotKeyLabel?: string | null;
 }
 
 interface TestResult {
@@ -23,7 +27,18 @@ interface TestResult {
   detail: string;
 }
 
-const EMPTY_FORM = { exchange: "BYBIT", name: "", apiKey: "", secret: "" };
+const EMPTY_FORM = {
+  exchange: "BYBIT",
+  name: "",
+  apiKey: "",
+  secret: "",
+  // docs/55-T5: optional dedicated spot scope creds. Empty strings = "not
+  // configured" — only sent to the API when both spotApiKey AND spotSecret
+  // are filled (the backend enforces the both-or-neither rule).
+  spotApiKey: "",
+  spotSecret: "",
+  spotKeyLabel: "",
+};
 
 // ---------------------------------------------------------------------------
 // Page
@@ -39,6 +54,7 @@ export default function ExchangesPage() {
   const [addForm, setAddForm] = useState(EMPTY_FORM);
   const [addError, setAddError] = useState<string | null>(null);
   const [addSaving, setAddSaving] = useState(false);
+  const [spotKeyExpanded, setSpotKeyExpanded] = useState(false);
 
   const [testResults, setTestResults] = useState<Record<string, TestResult>>({});
   const [testing, setTesting] = useState<Record<string, boolean>>({});
@@ -64,20 +80,47 @@ export default function ExchangesPage() {
 
   async function handleAdd() {
     setAddError(null);
-    const { exchange, name, apiKey, secret } = addForm;
+    const { exchange, name, apiKey, secret, spotApiKey, spotSecret, spotKeyLabel } = addForm;
     if (!name.trim() || !apiKey.trim() || !secret.trim()) {
-      setAddError("All fields are required.");
+      setAddError("Name, API key and secret are required.");
       return;
     }
+    // Both-or-neither rule for the spot pair. Mirrors the backend
+    // validator at apps/api/src/routes/exchanges.ts; surfacing it client-side
+    // means the operator gets immediate feedback instead of a round-trip
+    // 400.
+    const trimmedSpotKey = spotApiKey.trim();
+    const trimmedSpotSecret = spotSecret.trim();
+    if (Boolean(trimmedSpotKey) !== Boolean(trimmedSpotSecret)) {
+      setAddError(
+        "Spot API key and spot secret must be supplied together (or both left blank for single-key fallback).",
+      );
+      return;
+    }
+
+    const body: Record<string, unknown> = {
+      exchange,
+      name: name.trim(),
+      apiKey: apiKey.trim(),
+      secret: secret.trim(),
+    };
+    if (trimmedSpotKey && trimmedSpotSecret) {
+      body.spotApiKey = trimmedSpotKey;
+      body.spotSecret = trimmedSpotSecret;
+      const trimmedLabel = spotKeyLabel.trim();
+      if (trimmedLabel) body.spotKeyLabel = trimmedLabel;
+    }
+
     setAddSaving(true);
     const res = await apiFetch<ExchangeConn>("/exchanges", {
       method: "POST",
-      body: JSON.stringify({ exchange, name: name.trim(), apiKey: apiKey.trim(), secret: secret.trim() }),
+      body: JSON.stringify(body),
     });
     setAddSaving(false);
     if (res.ok) {
       setConnections((prev) => [res.data, ...prev]);
       setAddForm({ ...EMPTY_FORM });
+      setSpotKeyExpanded(false);
     } else if (res.problem.status === 401) {
       setSessionExpired(true);
     } else {
@@ -156,6 +199,18 @@ export default function ExchangesPage() {
               <strong style={{ color: "var(--text-primary)", fontSize: 14 }}>{conn.name}</strong>
               <span style={{ color: "var(--text-secondary)", fontSize: 12 }}>{conn.exchange}</span>
               <StatusBadge status={conn.status} />
+              {conn.hasSpotKey && (
+                <span
+                  style={spotPillStyle}
+                  title={
+                    conn.spotKeyLabel
+                      ? `Dedicated spot key: ${conn.spotKeyLabel}`
+                      : "Dedicated spot key configured"
+                  }
+                >
+                  + Spot
+                </span>
+              )}
               {tr && (
                 <span style={{ fontSize: 12, color: tr.status === "CONNECTED" ? "#3fb950" : "#f85149" }}>
                   {tr.detail}
@@ -216,6 +271,48 @@ export default function ExchangesPage() {
             style={inputStyle}
             autoComplete="new-password"
           />
+
+          {/* docs/55-T5: optional dedicated spot scope creds. Hidden by
+              default — single-key Bybit accounts work fine without them
+              (the executor falls back to the linear pair). Operators who
+              want a separate scope for funding-arb expand this section. */}
+          <button
+            type="button"
+            onClick={() => setSpotKeyExpanded((v) => !v)}
+            style={spotToggleStyle}
+          >
+            {spotKeyExpanded ? "▾" : "▸"} Spot key (optional, for funding arbitrage)
+          </button>
+          {spotKeyExpanded && (
+            <div style={spotSectionStyle}>
+              <input
+                placeholder="Spot API Key"
+                value={addForm.spotApiKey}
+                onChange={(e) => setAddForm((f) => ({ ...f, spotApiKey: e.target.value }))}
+                style={inputStyle}
+                autoComplete="off"
+              />
+              <input
+                type="password"
+                placeholder="Spot Secret"
+                value={addForm.spotSecret}
+                onChange={(e) => setAddForm((f) => ({ ...f, spotSecret: e.target.value }))}
+                style={inputStyle}
+                autoComplete="new-password"
+              />
+              <input
+                placeholder="Label (e.g. 'Funding-arb spot')"
+                value={addForm.spotKeyLabel}
+                onChange={(e) => setAddForm((f) => ({ ...f, spotKeyLabel: e.target.value }))}
+                style={inputStyle}
+              />
+              <p style={spotHintStyle}>
+                Required only for funding arbitrage strategy. Leave blank to
+                reuse the linear key for spot calls (single-key Bybit).
+              </p>
+            </div>
+          )}
+
           <button onClick={handleAdd} disabled={addSaving} style={primaryBtn}>
             {addSaving ? "Saving…" : "Add Connection"}
           </button>
@@ -287,4 +384,46 @@ const expiredBanner: React.CSSProperties = {
 const expiredBtn: React.CSSProperties = {
   background: "rgba(255,255,255,0.2)", border: "1px solid rgba(255,255,255,0.4)",
   borderRadius: 4, color: "#fff", cursor: "pointer", fontSize: 13, padding: "4px 12px",
+};
+
+// docs/55-T5: spot-key UI primitives. Same amber as the BETA badge so the
+// "this is the funding-arb feature" visual cue carries across pages.
+const spotPillStyle: React.CSSProperties = {
+  fontSize: 10,
+  fontWeight: 700,
+  textTransform: "uppercase",
+  letterSpacing: "0.04em",
+  padding: "1px 6px",
+  borderRadius: 4,
+  color: "#F59E0B",
+  background: "rgba(245, 158, 11, 0.12)",
+  border: "1px solid rgba(245, 158, 11, 0.45)",
+  cursor: "help",
+};
+
+const spotToggleStyle: React.CSSProperties = {
+  textAlign: "left",
+  background: "transparent",
+  border: "none",
+  color: "var(--text-secondary)",
+  cursor: "pointer",
+  fontSize: 12,
+  padding: "4px 0",
+  fontFamily: "inherit",
+};
+
+const spotSectionStyle: React.CSSProperties = {
+  display: "flex",
+  flexDirection: "column",
+  gap: 8,
+  paddingLeft: 12,
+  borderLeft: "2px solid rgba(245, 158, 11, 0.35)",
+  marginLeft: 2,
+};
+
+const spotHintStyle: React.CSSProperties = {
+  margin: 0,
+  fontSize: 11,
+  color: "var(--text-secondary)",
+  lineHeight: 1.4,
 };

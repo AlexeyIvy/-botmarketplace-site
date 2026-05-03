@@ -16,6 +16,8 @@ function safeView(conn: {
   status: string;
   createdAt: Date;
   updatedAt: Date;
+  spotApiKey?: string | null;
+  spotKeyLabel?: string | null;
 }) {
   return {
     id: conn.id,
@@ -25,6 +27,11 @@ function safeView(conn: {
     status: conn.status,
     createdAt: conn.createdAt,
     updatedAt: conn.updatedAt,
+    // Boolean projection only — never expose the key string itself.
+    // The label IS shown so operators can recognise "is this the spot
+    // key I configured" without ever leaking the secret.
+    hasSpotKey: Boolean(conn.spotApiKey),
+    spotKeyLabel: conn.spotKeyLabel ?? null,
   };
 }
 
@@ -44,12 +51,41 @@ interface CreateBody {
   name: string;
   apiKey: string;
   secret: string;
+  /** Optional dedicated spot scope creds (docs/55-T5). When present, BOTH
+   *  spotApiKey AND spotSecret must be supplied — submitting only one is a
+   *  validation error so we never persist a half-configured spot key. */
+  spotApiKey?: string;
+  spotSecret?: string;
+  /** Free-form label shown alongside the spot key in the UI. Optional. */
+  spotKeyLabel?: string;
 }
 
 interface PatchBody {
   name?: string;
   apiKey?: string;
   secret?: string;
+  /** Same dual-field rule on PATCH: supplying spotApiKey OR spotSecret
+   *  alone is an error, except for the explicit clear path where BOTH
+   *  are passed as `null`. */
+  spotApiKey?: string | null;
+  spotSecret?: string | null;
+  spotKeyLabel?: string | null;
+}
+
+/** Validate an apiKey-shaped string. Returns an error message or null
+ *  when the value passes. Centralised so the same rules apply to the
+ *  linear `apiKey` and the optional `spotApiKey`. */
+function validateApiKeyShape(value: unknown, fieldName: string): string | null {
+  if (typeof value !== "string" || !value) {
+    return `${fieldName} is required`;
+  }
+  if (value.length > API_KEY_MAX_LENGTH) {
+    return `${fieldName} must not exceed ${API_KEY_MAX_LENGTH} characters`;
+  }
+  if (!API_KEY_PATTERN.test(value)) {
+    return `${fieldName} contains invalid characters (only alphanumeric, dash, underscore allowed)`;
+  }
+  return null;
 }
 
 // ---------------------------------------------------------------------------
@@ -65,19 +101,34 @@ export async function exchangeRoutes(app: FastifyInstance) {
     const key = getEncryptionKey(reply);
     if (!key) return;
 
-    const { exchange, name, apiKey, secret } = request.body ?? {};
+    const { exchange, name, apiKey, secret, spotApiKey, spotSecret, spotKeyLabel } =
+      request.body ?? {};
 
     const errors: Array<{ field: string; message: string }> = [];
     if (!exchange || typeof exchange !== "string") errors.push({ field: "exchange", message: "exchange is required" });
     if (!name || typeof name !== "string") errors.push({ field: "name", message: "name is required" });
-    if (!apiKey || typeof apiKey !== "string") {
-      errors.push({ field: "apiKey", message: "apiKey is required" });
-    } else if (apiKey.length > API_KEY_MAX_LENGTH) {
-      errors.push({ field: "apiKey", message: `apiKey must not exceed ${API_KEY_MAX_LENGTH} characters` });
-    } else if (!API_KEY_PATTERN.test(apiKey)) {
-      errors.push({ field: "apiKey", message: "apiKey contains invalid characters (only alphanumeric, dash, underscore allowed)" });
-    }
+    const apiKeyErr = validateApiKeyShape(apiKey, "apiKey");
+    if (apiKeyErr) errors.push({ field: "apiKey", message: apiKeyErr });
     if (!secret || typeof secret !== "string") errors.push({ field: "secret", message: "secret is required" });
+
+    // Spot creds: both-or-neither rule. spotKeyLabel is independent.
+    const hasSpotKey = spotApiKey !== undefined && spotApiKey !== "";
+    const hasSpotSecret = spotSecret !== undefined && spotSecret !== "";
+    if (hasSpotKey !== hasSpotSecret) {
+      errors.push({
+        field: "spotApiKey",
+        message: "spotApiKey and spotSecret must be supplied together (or neither)",
+      });
+    } else if (hasSpotKey && hasSpotSecret) {
+      const spotKeyErr = validateApiKeyShape(spotApiKey, "spotApiKey");
+      if (spotKeyErr) errors.push({ field: "spotApiKey", message: spotKeyErr });
+      if (typeof spotSecret !== "string" || !spotSecret) {
+        errors.push({ field: "spotSecret", message: "spotSecret must be a non-empty string" });
+      }
+    }
+    if (spotKeyLabel !== undefined && typeof spotKeyLabel !== "string") {
+      errors.push({ field: "spotKeyLabel", message: "spotKeyLabel must be a string when provided" });
+    }
     if (errors.length > 0) {
       return problem(reply, 400, "Validation Error", "Invalid exchange connection payload", { errors });
     }
@@ -91,6 +142,8 @@ export async function exchangeRoutes(app: FastifyInstance) {
     }
 
     const encryptedSecret = encrypt(secret, key);
+    const spotEncryptedSecret =
+      hasSpotKey && hasSpotSecret ? encrypt(spotSecret as string, key) : null;
 
     const conn = await prisma.exchangeConnection.create({
       data: {
@@ -99,6 +152,9 @@ export async function exchangeRoutes(app: FastifyInstance) {
         name,
         apiKey,
         encryptedSecret,
+        spotApiKey: hasSpotKey ? (spotApiKey as string) : null,
+        spotEncryptedSecret,
+        spotKeyLabel: spotKeyLabel ?? null,
         status: "UNKNOWN",
       },
     });
@@ -146,7 +202,8 @@ export async function exchangeRoutes(app: FastifyInstance) {
       return problem(reply, 404, "Not Found", "Exchange connection not found");
     }
 
-    const { name, apiKey, secret } = request.body ?? {};
+    const { name, apiKey, secret, spotApiKey, spotSecret, spotKeyLabel } =
+      request.body ?? {};
 
     // Validate apiKey if provided
     if (apiKey !== undefined) {
@@ -172,12 +229,61 @@ export async function exchangeRoutes(app: FastifyInstance) {
       encryptedSecret = encrypt(secret, key);
     }
 
+    // Spot creds — three valid shapes:
+    //   1. Both omitted → no change.
+    //   2. Both null    → clear the spot key.
+    //   3. Both strings → rotate / set the spot key.
+    // Anything else is rejected so we never persist a half-configured key.
+    let spotEncryptedSecret: string | null | undefined; // undefined → no change
+    let spotApiKeyValue: string | null | undefined;
+    const spotKeyOmitted = spotApiKey === undefined && spotSecret === undefined;
+    const spotKeyCleared = spotApiKey === null && spotSecret === null;
+    const spotKeySet = typeof spotApiKey === "string" && typeof spotSecret === "string";
+    if (!spotKeyOmitted) {
+      if (spotKeyCleared) {
+        spotApiKeyValue = null;
+        spotEncryptedSecret = null;
+      } else if (spotKeySet) {
+        const spotKeyErr = validateApiKeyShape(spotApiKey, "spotApiKey");
+        if (spotKeyErr) return problem(reply, 400, "Validation Error", spotKeyErr);
+        if (!spotSecret) {
+          return problem(reply, 400, "Validation Error", "spotSecret must be a non-empty string");
+        }
+        const key = getEncryptionKey(reply);
+        if (!key) return;
+        spotApiKeyValue = spotApiKey;
+        spotEncryptedSecret = encrypt(spotSecret, key);
+      } else {
+        return problem(
+          reply,
+          400,
+          "Validation Error",
+          "spotApiKey and spotSecret must be supplied together (both string to set, both null to clear)",
+        );
+      }
+    }
+
+    if (spotKeyLabel !== undefined && spotKeyLabel !== null && typeof spotKeyLabel !== "string") {
+      return problem(reply, 400, "Validation Error", "spotKeyLabel must be a string or null");
+    }
+
     const updateData: Record<string, unknown> = {};
     if (name !== undefined) updateData.name = name;
     if (apiKey !== undefined) updateData.apiKey = apiKey;
     if (encryptedSecret !== undefined) updateData.encryptedSecret = encryptedSecret;
-    // Reset status to UNKNOWN whenever credentials change
-    if (apiKey !== undefined || secret !== undefined) updateData.status = "UNKNOWN";
+    if (spotApiKeyValue !== undefined) updateData.spotApiKey = spotApiKeyValue;
+    if (spotEncryptedSecret !== undefined) updateData.spotEncryptedSecret = spotEncryptedSecret;
+    if (spotKeyLabel !== undefined) updateData.spotKeyLabel = spotKeyLabel;
+    // Reset status to UNKNOWN whenever ANY credential pair changes — the
+    // operator should re-test the connection after rotation/clear.
+    if (
+      apiKey !== undefined ||
+      secret !== undefined ||
+      spotApiKeyValue !== undefined ||
+      spotEncryptedSecret !== undefined
+    ) {
+      updateData.status = "UNKNOWN";
+    }
 
     const updated = await prisma.exchangeConnection.update({
       where: { id: conn.id },
