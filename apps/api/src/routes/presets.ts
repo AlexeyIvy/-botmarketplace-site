@@ -17,7 +17,7 @@
 
 import { randomBytes } from "node:crypto";
 import type { FastifyInstance, FastifyRequest } from "fastify";
-import { Prisma, PresetVisibility } from "@prisma/client";
+import { Prisma, PresetVisibility, BotMode } from "@prisma/client";
 import { prisma } from "../lib/prisma.js";
 import { problem } from "../lib/problem.js";
 import { validateDsl } from "../lib/dslValidator.js";
@@ -112,6 +112,12 @@ interface ResolvedConfig {
   quoteAmount: number;
   maxOpenPositions: number;
   baseName: string;
+  /** Runtime dispatch mode (docs/55-T4). Comes from
+   *  `defaultBotConfigJson.mode` when present (e.g. funding-arb preset
+   *  ships `"mode": "FUNDING_ARB"`); otherwise falls back to DSL. The
+   *  override block intentionally cannot set this — it is a preset-level
+   *  property, not a per-instantiation tweak. */
+  mode: BotMode;
 }
 
 function resolveConfig(
@@ -130,6 +136,7 @@ function resolveConfig(
   const quoteAmount = (overrides?.quoteAmount ?? cfg.quoteAmount) as unknown;
   const maxOpenPositions = (overrides?.maxOpenPositions ?? cfg.maxOpenPositions) as unknown;
   const baseName = (overrides?.name ?? preset.name) as unknown;
+  const modeRaw = cfg.mode as unknown;
 
   if (typeof symbol !== "string" || symbol.length === 0) {
     errors.push({ field: "symbol", message: "symbol must be a non-empty string" });
@@ -154,6 +161,19 @@ function resolveConfig(
     errors.push({ field: "name", message: "name must be 1..120 chars" });
   }
 
+  // Mode (docs/55-T4). Absent ⇒ DSL. Present must match the BotMode enum.
+  let mode: BotMode = BotMode.DSL;
+  if (modeRaw !== undefined && modeRaw !== null) {
+    if (typeof modeRaw !== "string" || !(Object.values(BotMode) as string[]).includes(modeRaw)) {
+      errors.push({
+        field: "mode",
+        message: `mode must be one of: ${(Object.values(BotMode) as string[]).join(", ")}`,
+      });
+    } else {
+      mode = modeRaw as BotMode;
+    }
+  }
+
   if (errors.length > 0) return { errors };
 
   return {
@@ -164,6 +184,7 @@ function resolveConfig(
       quoteAmount: quoteAmount as number,
       maxOpenPositions: maxOpenPositions as number,
       baseName: baseName as string,
+      mode,
     },
   };
 }
@@ -431,6 +452,7 @@ export async function presetRoutes(app: FastifyInstance) {
               timeframe: config.timeframe,
               status: "DRAFT",
               templateSlug: preset.slug,
+              mode: config.mode,
             },
           });
 

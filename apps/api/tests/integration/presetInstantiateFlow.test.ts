@@ -70,7 +70,8 @@ vi.mock("@prisma/client", () => {
       InputJsonValue: {} as never,
       PrismaClientKnownRequestError,
     },
-    PresetVisibility: { PRIVATE: "PRIVATE", PUBLIC: "PUBLIC" },
+    PresetVisibility: { PRIVATE: "PRIVATE", BETA: "BETA", PUBLIC: "PUBLIC" },
+    BotMode: { DSL: "DSL", FUNDING_ARB: "FUNDING_ARB" },
   };
 });
 

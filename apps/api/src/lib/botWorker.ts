@@ -1505,6 +1505,7 @@ async function evaluateStrategies(): Promise<void> {
             id: true,
             symbol: true,
             timeframe: true,
+            mode: true,
             datasetBundleJson: true,
             strategyVersion: { select: { dslJson: true } },
           },
@@ -1514,6 +1515,14 @@ async function evaluateStrategies(): Promise<void> {
     });
 
     for (const run of runningRuns) {
+      // Routing seam (docs/55-T4): FUNDING_ARB bots do not run the DSL
+      // evaluator. Their intents are emitted by hedgeBotWorker.ts as it
+      // advances HedgePosition rows; the DSL evaluator would either no-op
+      // on the placeholder DSL or, worse, fire stray intents on a misseed.
+      // The skip MUST come before the dslJson presence check so a missing
+      // / malformed DSL on a funding-arb preset cannot abort the loop.
+      if (run.bot?.mode === "FUNDING_ARB") continue;
+
       const dslJson = run.bot?.strategyVersion?.dslJson;
       if (!dslJson || typeof dslJson !== "object") continue;
 
