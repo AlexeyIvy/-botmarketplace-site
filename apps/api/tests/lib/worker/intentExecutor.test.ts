@@ -247,6 +247,125 @@ describe("executeIntent", () => {
     );
   });
 
+  // -------------------------------------------------------------------------
+  // Spot category dispatch (docs/55-T2 follow-up)
+  //
+  // funding-arb hedge intents emitted by hedgeBotWorker carry
+  // `metaJson.category = "spot" | "linear"`. The executor must:
+  //   * route the spot intents to Bybit's spot scope (category=spot in the
+  //     order payload),
+  //   * use spot creds when present (single-key fallback when not),
+  //   * skip the linear-only normalizer (its lot/tick rules don't apply).
+  // Linear intents (default / no category) keep their existing path.
+  // -------------------------------------------------------------------------
+
+  it("spot intent routes to Bybit category=spot, skips linear normalizer", async () => {
+    mockDecrypt.mockReturnValue("plain-secret");
+    mockBybitPlaceOrder.mockResolvedValue({
+      orderId: "bybit-spot-1",
+      orderLinkId: "lnk-1",
+    });
+
+    const intent = makeIntent({
+      metaJson: { hedgeId: "h-1", legSide: "SPOT_BUY", category: "spot" },
+      botRun: {
+        id: "run-1",
+        bot: {
+          id: "bot-1",
+          symbol: "BTCUSDT",
+          exchangeConnectionId: "ec-1",
+          exchangeConnection: {
+            apiKey: "linear-key",
+            encryptedSecret: "linear-enc",
+            spotApiKey: "spot-key",
+            spotEncryptedSecret: "spot-enc",
+          },
+          strategyVersion: { dslJson: { enabled: true } },
+        },
+      },
+    });
+
+    await executeIntent(intent as never, mockLog);
+
+    expect(mockGetInstrument).not.toHaveBeenCalled();
+    expect(mockNormalizeOrder).not.toHaveBeenCalled();
+    expect(mockBybitPlaceOrder).toHaveBeenCalledOnce();
+
+    // Args: (apiKey, secret, params)
+    const callArgs = mockBybitPlaceOrder.mock.calls[0];
+    expect(callArgs?.[0]).toBe("spot-key");
+    // decryptWithFallback was called against the spot cipher.
+    expect(mockDecrypt).toHaveBeenCalledWith("spot-enc", expect.anything());
+    expect(callArgs?.[2]).toMatchObject({ category: "spot", side: "Buy", symbol: "BTCUSDT" });
+  });
+
+  it("spot intent with no spot key falls back to linear creds (single-key Bybit)", async () => {
+    mockDecrypt.mockReturnValue("plain-secret");
+    mockBybitPlaceOrder.mockResolvedValue({ orderId: "bybit-spot-2", orderLinkId: "lnk-2" });
+
+    const intent = makeIntent({
+      metaJson: { hedgeId: "h-2", legSide: "SPOT_BUY", category: "spot" },
+      botRun: {
+        id: "run-1",
+        bot: {
+          id: "bot-1",
+          symbol: "BTCUSDT",
+          exchangeConnectionId: "ec-1",
+          exchangeConnection: {
+            apiKey: "linear-key",
+            encryptedSecret: "linear-enc",
+            spotApiKey: null,
+            spotEncryptedSecret: null,
+          },
+          strategyVersion: { dslJson: { enabled: true } },
+        },
+      },
+    });
+
+    await executeIntent(intent as never, mockLog);
+
+    const callArgs = mockBybitPlaceOrder.mock.calls[0];
+    expect(callArgs?.[0]).toBe("linear-key");
+    expect(mockDecrypt).toHaveBeenCalledWith("linear-enc", expect.anything());
+    expect(callArgs?.[2]).toMatchObject({ category: "spot" });
+  });
+
+  it("linear intent (default — no category in metaJson) keeps the normalizer + linear creds", async () => {
+    mockDecrypt.mockReturnValue("plain-secret");
+    mockGetInstrument.mockResolvedValue({ lotSizeFilter: {}, priceFilter: {} });
+    mockNormalizeOrder.mockReturnValue({
+      valid: true,
+      order: { qty: "0.01", price: undefined, diagnostics: {} },
+    });
+    mockBybitPlaceOrder.mockResolvedValue({ orderId: "bybit-lin-1", orderLinkId: "lnk-3" });
+
+    const intent = makeIntent({
+      metaJson: {},
+      botRun: {
+        id: "run-1",
+        bot: {
+          id: "bot-1",
+          symbol: "BTCUSDT",
+          exchangeConnectionId: "ec-1",
+          exchangeConnection: {
+            apiKey: "linear-key",
+            encryptedSecret: "linear-enc",
+            spotApiKey: "spot-key",
+            spotEncryptedSecret: "spot-enc",
+          },
+          strategyVersion: { dslJson: { enabled: true } },
+        },
+      },
+    });
+
+    await executeIntent(intent as never, mockLog);
+
+    expect(mockNormalizeOrder).toHaveBeenCalledOnce();
+    const callArgs = mockBybitPlaceOrder.mock.calls[0];
+    expect(callArgs?.[0]).toBe("linear-key");
+    expect(callArgs?.[2]).toMatchObject({ category: "linear" });
+  });
+
   it("dead-letters when max retries exceeded", async () => {
     mockGetEncryptionKeyRaw.mockReturnValue(Buffer.alloc(32));
     mockDecrypt.mockReturnValue("secret");

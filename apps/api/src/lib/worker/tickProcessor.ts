@@ -177,7 +177,16 @@ export async function processIntents(workerLog: Logger): Promise<void> {
                 symbol: true,
                 exchangeConnectionId: true,
                 exchangeConnection: {
-                  select: { apiKey: true, encryptedSecret: true },
+                  select: {
+                    apiKey: true,
+                    encryptedSecret: true,
+                    // docs/55-T5: optional spot scope keys consumed by
+                    // executeIntent for spot-category intents (funding-arb).
+                    // Null when the operator hasn't configured a dedicated
+                    // spot key — executor falls back to the linear pair.
+                    spotApiKey: true,
+                    spotEncryptedSecret: true,
+                  },
                 },
                 strategyVersion: {
                   select: { dslJson: true },
