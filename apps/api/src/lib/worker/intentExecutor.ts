@@ -44,10 +44,33 @@ export interface IntentRecord {
       id: string;
       symbol: string;
       exchangeConnectionId: string | null;
-      exchangeConnection: { apiKey: string; encryptedSecret: string } | null;
+      /** Spot fields are nullable (docs/55-T5). When `metaJson.category === "spot"`
+       *  on an intent, the executor uses the spot key/secret pair if present,
+       *  falling back to the linear pair when not — single-key Bybit accounts
+       *  with both scopes work without configuring a dedicated spot key. */
+      exchangeConnection: {
+        apiKey: string;
+        encryptedSecret: string;
+        spotApiKey: string | null;
+        spotEncryptedSecret: string | null;
+      } | null;
       strategyVersion: { dslJson: Prisma.JsonValue } | null;
     };
   };
+}
+
+/** Read `metaJson.category` and coerce to a Bybit category. Defaults to
+ *  "linear" so legacy DSL intents (no category in metaJson) keep their
+ *  pre-#364 behaviour. funding-arb hedge intents emitted by
+ *  `hedgeBotWorker.emitHedgeIntents` carry `category: "spot" | "linear"`
+ *  per leg and rely on this dispatch to reach the correct Bybit instrument
+ *  scope. */
+function readIntentCategory(metaJson: Prisma.JsonValue): "linear" | "spot" {
+  if (metaJson && typeof metaJson === "object" && !Array.isArray(metaJson)) {
+    const v = (metaJson as Record<string, unknown>)["category"];
+    if (v === "spot") return "spot";
+  }
+  return "linear";
 }
 
 // ---------------------------------------------------------------------------
@@ -96,7 +119,20 @@ export async function executeIntent(intent: IntentRecord, parentLog: Logger): Pr
       intentLog.info("intent simulated (demo mode)");
     } else {
       // ── Live mode: place order on Bybit ──────────────────────────────────
-      const plainSecret = decryptWithFallback(bot.exchangeConnection.encryptedSecret);
+      const category = readIntentCategory(intent.metaJson);
+
+      // Per-category credential selection (docs/55-T5 §4 single-key fallback):
+      // spot intents prefer the dedicated spot key/secret pair; when either
+      // half is missing the linear pair is reused. Linear intents always use
+      // the linear pair — unchanged behaviour.
+      const conn = bot.exchangeConnection;
+      const apiKey =
+        category === "spot" && conn.spotApiKey ? conn.spotApiKey : conn.apiKey;
+      const secretCipher =
+        category === "spot" && conn.spotEncryptedSecret
+          ? conn.spotEncryptedSecret
+          : conn.encryptedSecret;
+      const plainSecret = decryptWithFallback(secretCipher);
 
       const dsl = bot.strategyVersion?.dslJson as { execution?: { orderType?: string } } | null;
       const orderType =
@@ -107,50 +143,63 @@ export async function executeIntent(intent: IntentRecord, parentLog: Logger): Pr
       let qtyStr = intent.qty.toString();
       let priceStr = intent.price && orderType === "Limit" ? intent.price.toString() : undefined;
 
-      try {
-        const instrument = await getInstrument(bot.symbol);
-        const normalized = normalizeOrder(
-          {
-            symbol: bot.symbol,
-            side,
-            orderType,
-            qty: Number(intent.qty.toString()),
-            price: intent.price ? Number(intent.price.toString()) : undefined,
-          },
-          instrument,
-        );
+      // Order-rule normalization is linear-only — the cached instrument
+      // metadata comes from Bybit's `category=linear` instruments-info
+      // endpoint and the lot/tick rules differ from spot (different decimal
+      // precision, different minOrderQty, base-vs-quote sizing on Market).
+      // For spot intents we trust the upstream sizing (REST /hedges path
+      // computes qty from instrument-info via getSpotInstrumentInfo when
+      // 55-T1 lands; hedgeBotWorker.emitHedgeIntents currently passes the
+      // operator-provided qty as-is). Skip the linear normalizer to avoid
+      // a wrong-rules rejection.
+      if (category === "linear") {
+        try {
+          const instrument = await getInstrument(bot.symbol);
+          const normalized = normalizeOrder(
+            {
+              symbol: bot.symbol,
+              side,
+              orderType,
+              qty: Number(intent.qty.toString()),
+              price: intent.price ? Number(intent.price.toString()) : undefined,
+            },
+            instrument,
+          );
 
-        if (!normalized.valid) {
-          throw new Error(`Order normalization failed: ${normalized.reason}`);
+          if (!normalized.valid) {
+            throw new Error(`Order normalization failed: ${normalized.reason}`);
+          }
+
+          qtyStr = normalized.order.qty;
+          priceStr = normalized.order.price;
+
+          intentLog.info(
+            {
+              diagnostics: normalized.order.diagnostics,
+              env: isBybitLive() ? "live" : "demo",
+              baseUrl: getBybitBaseUrl(),
+            },
+            "order normalized",
+          );
+        } catch (normErr) {
+          intentLog.warn({ err: normErr }, "order normalization error");
+          throw normErr;
         }
-
-        qtyStr = normalized.order.qty;
-        priceStr = normalized.order.price;
-
+      } else {
         intentLog.info(
-          {
-            diagnostics: normalized.order.diagnostics,
-            env: isBybitLive() ? "live" : "demo",
-            baseUrl: getBybitBaseUrl(),
-          },
-          "order normalized",
+          { category, env: isBybitLive() ? "live" : "demo", baseUrl: getBybitBaseUrl() },
+          "spot intent — linear normalizer skipped",
         );
-      } catch (normErr) {
-        intentLog.warn({ err: normErr }, "order normalization error");
-        throw normErr;
       }
 
-      const result = await bybitPlaceOrder(
-        bot.exchangeConnection.apiKey,
-        plainSecret,
-        {
-          symbol: bot.symbol,
-          side,
-          orderType,
-          qty: qtyStr,
-          ...(priceStr ? { price: priceStr } : {}),
-        },
-      );
+      const result = await bybitPlaceOrder(apiKey, plainSecret, {
+        category,
+        symbol: bot.symbol,
+        side,
+        orderType,
+        qty: qtyStr,
+        ...(priceStr ? { price: priceStr } : {}),
+      });
 
       const meta = {
         ...(intent.metaJson && typeof intent.metaJson === "object" ? intent.metaJson as Record<string, unknown> : {}),

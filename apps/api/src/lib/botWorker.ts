@@ -571,7 +571,12 @@ async function executeIntent(intent: {
       id: string;
       symbol: string;
       exchangeConnectionId: string | null;
-      exchangeConnection: { apiKey: string; encryptedSecret: string } | null;
+      exchangeConnection: {
+        apiKey: string;
+        encryptedSecret: string;
+        spotApiKey: string | null;
+        spotEncryptedSecret: string | null;
+      } | null;
       strategyVersion: { dslJson: Prisma.JsonValue } | null;
     };
   };
