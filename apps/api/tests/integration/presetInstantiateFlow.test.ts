@@ -252,12 +252,12 @@ function userHeaders() {
 // ═══════════════════════════════════════════════════════════════════════════
 
 describe("preset instantiate flow (e2e, mocked Prisma)", () => {
-  it("seed populates 4 presets in PRIVATE state", async () => {
+  it("seed populates all flagship presets in PRIVATE state", async () => {
     const results = await seedPresets(
       mockedPrisma as unknown as import("@prisma/client").PrismaClient,
     );
     expect(results.map((r) => r.slug).sort()).toEqual(
-      ["adaptive-regime", "dca-momentum", "mtf-scalper", "smc-liquidity-sweep"],
+      ["adaptive-regime", "dca-momentum", "funding-arb", "mtf-scalper", "smc-liquidity-sweep"],
     );
     for (const slug of Object.keys(mockPresets)) {
       expect(mockPresets[slug].visibility).toBe("PRIVATE");

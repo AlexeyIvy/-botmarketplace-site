@@ -19,7 +19,13 @@ import { validateDsl } from "../../src/lib/dslValidator.js";
 const HERE = dirname(fileURLToPath(import.meta.url));
 const SEED_DIR = resolve(HERE, "../../prisma/seed/presets");
 
-const SLUGS = ["adaptive-regime", "dca-momentum", "mtf-scalper", "smc-liquidity-sweep"] as const;
+const SLUGS = [
+  "adaptive-regime",
+  "dca-momentum",
+  "mtf-scalper",
+  "smc-liquidity-sweep",
+  "funding-arb",
+] as const;
 
 // ---------------------------------------------------------------------------
 // Fixture-level DSL validation (no Prisma involved)
@@ -115,5 +121,17 @@ describe("seedPresets()", () => {
     expect(mockPresets["dca-momentum"].category).toBe("dca");
     expect(mockPresets["mtf-scalper"].category).toBe("scalping");
     expect(mockPresets["smc-liquidity-sweep"].category).toBe("smc");
+    expect(mockPresets["funding-arb"].category).toBe("arb");
+  });
+
+  it("funding-arb seeds with enabled=false so the DSL evaluator emits no intents", async () => {
+    // Mode-based routing (docs/55-T4) is not yet wired; until it is,
+    // instantiating this preset would put the bot on the regular DSL
+    // path. The placeholder DSL must short-circuit at the
+    // `enabled: false` gate (botWorker.ts stage 12) so we never emit
+    // accidental orders on a preset whose real runtime is hedgeBotWorker.
+    await seedPresets(mockPrisma as unknown as import("@prisma/client").PrismaClient);
+    const dsl = mockPresets["funding-arb"].dslJson as Record<string, unknown>;
+    expect(dsl.enabled).toBe(false);
   });
 });
