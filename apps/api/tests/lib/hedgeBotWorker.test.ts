@@ -65,10 +65,11 @@ vi.mock("../../src/lib/prisma.js", () => ({
       findUnique: vi.fn(async ({ where }: { where: { id: string } }) => {
         return hedgesById.get(where.id) ?? null;
       }),
-      findMany: vi.fn(async ({ where }: { where: { status: { in: string[] } } }) => {
+      findMany: vi.fn(async ({ where }: { where: { botRunId?: string; status: { in: string[] } } }) => {
         const statuses = new Set(where.status.in);
         return [...hedgesById.values()]
           .filter((h) => statuses.has(h.status))
+          .filter((h) => where.botRunId === undefined || h.botRunId === where.botRunId)
           .map((h) => ({ id: h.id, symbol: h.symbol, botRunId: h.botRunId }));
       }),
       update: vi.fn(async ({ where, data }: { where: { id: string }; data: Record<string, unknown> }) => {
@@ -148,6 +149,7 @@ import {
   advanceHedge,
   startHedgeBotWorker,
   tickHedgeBotWorker,
+  tickHedgeBotWorkerForBotRun,
   type HedgeStage,
 } from "../../src/lib/hedgeBotWorker.js";
 
@@ -481,6 +483,61 @@ describe("tickHedgeBotWorker", () => {
     expect(res[0]).toMatchObject({ hedgeId: "tick-2", toStage: "PENDING", changed: false });
     expect(reconcileBalancesMock).not.toHaveBeenCalled();
     expect(hedgesById.get("tick-2")?.status).toBe("PLANNED");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// 5b. tickHedgeBotWorkerForBotRun — bot-scoped delegation (docs/55-T4)
+// ---------------------------------------------------------------------------
+
+describe("tickHedgeBotWorkerForBotRun", () => {
+  it("only advances hedges whose botRunId matches the scope", async () => {
+    seedHedge({ id: "scoped-a", status: "PLANNED", botRunId: "run-A" });
+    seedHedge({ id: "scoped-b", status: "PLANNED", botRunId: "run-B" });
+
+    const res = await tickHedgeBotWorkerForBotRun("run-A", () => ({
+      fundingWindowOpen: true,
+      entryQty: 1.0,
+    }));
+
+    expect(res).toHaveLength(1);
+    expect(res[0]).toMatchObject({ hedgeId: "scoped-a", toStage: "ENTRY_PLACED" });
+    expect(hedgesById.get("scoped-a")?.status).toBe("OPENING");
+    // Cross-tenant isolation: the other run's hedge stays untouched.
+    expect(hedgesById.get("scoped-b")?.status).toBe("PLANNED");
+  });
+
+  it("returns empty when the scoped run has no eligible hedges", async () => {
+    seedHedge({ id: "other", status: "PLANNED", botRunId: "run-other" });
+    const res = await tickHedgeBotWorkerForBotRun("run-empty");
+    expect(res).toEqual([]);
+  });
+
+  it("filters by status: terminal hedges in scope are skipped", async () => {
+    seedHedge({ id: "scope-closed", status: "CLOSED", botRunId: "run-X" });
+    seedHedge({ id: "scope-open",   status: "OPENING", botRunId: "run-X" });
+
+    const res = await tickHedgeBotWorkerForBotRun("run-X", () => ({}));
+
+    // Only OPENING gets a tick; the CLOSED hedge is excluded by the
+    // status filter (same as the global tick).
+    expect(res).toHaveLength(1);
+    expect(res[0].hedgeId).toBe("scope-open");
+  });
+
+  it("isolates a per-hedge throw within the scoped run", async () => {
+    seedHedge({ id: "ok",  status: "PLANNED", botRunId: "run-iso" });
+    seedHedge({ id: "bad", status: "PLANNED", botRunId: "run-iso" });
+
+    const res = await tickHedgeBotWorkerForBotRun("run-iso", (hedgeId) => {
+      if (hedgeId === "bad") throw new Error("synthetic");
+      return { fundingWindowOpen: true, entryQty: 1.0 };
+    });
+
+    expect(res).toHaveLength(1);
+    expect(res[0]).toMatchObject({ hedgeId: "ok", toStage: "ENTRY_PLACED" });
+    expect(hedgesById.get("ok")?.status).toBe("OPENING");
+    expect(hedgesById.get("bad")?.status).toBe("PLANNED");
   });
 });
 
