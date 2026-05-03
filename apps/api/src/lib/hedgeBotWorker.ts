@@ -43,6 +43,7 @@
 import { randomUUID } from "node:crypto";
 import { prisma } from "./prisma.js";
 import { logger } from "./logger.js";
+import { decryptWithFallback } from "./crypto.js";
 import { classifyExecutionError } from "./errorClassifier.js";
 import {
   reconcileBalances,
@@ -523,8 +524,35 @@ export async function tickHedgeBotWorkerForBotRun(
 async function buildDefaultInput(
   hedge: { id: string; symbol: string; botRunId: string },
 ): Promise<HedgeAdvanceInput> {
-  const window = await detectFundingWindow(hedge.symbol, Date.now());
   const creds = await loadHedgeCreds(hedge.botRunId);
+
+  // When creds are present we feed them into windowDetector so the
+  // funding-payment signal comes from Bybit's transaction-log
+  // (authoritative). Without creds the timestamp proxy is the only
+  // option — same fallback the windowDetector itself does internally.
+  // The linear key/secret pair signs the ledger query because funding
+  // settles on the perp side; the spot fallback isn't relevant here.
+  //
+  // A decrypt failure (key rotated out, payload corrupt) must NOT take
+  // down the tick — fall back to the timestamp proxy with a warning,
+  // same posture the ledger path itself takes on transport / API errors.
+  let ledgerCreds: { apiKey: string; secret: string } | undefined;
+  if (creds) {
+    try {
+      ledgerCreds = {
+        apiKey: creds.apiKey,
+        secret: decryptWithFallback(creds.encryptedSecret),
+      };
+    } catch (err) {
+      log.warn(
+        { err: err instanceof Error ? err.message : String(err), hedgeId: hedge.id },
+        "decrypt linear secret failed — windowDetector will use timestamp proxy",
+      );
+    }
+  }
+  const window = await detectFundingWindow(hedge.symbol, Date.now(), {
+    creds: ledgerCreds,
+  });
 
   if (!creds) {
     log.warn(
