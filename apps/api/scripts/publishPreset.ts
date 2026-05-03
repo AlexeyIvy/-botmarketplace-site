@@ -1,8 +1,8 @@
 #!/usr/bin/env tsx
 /**
- * Promote a StrategyPreset to PUBLIC (or roll it back to PRIVATE) —
- * admin CLI tool for the visibility-flip step shared by docs/53-T4 and
- * docs/54-T1..T3 closing.
+ * Promote a StrategyPreset between visibility tiers — admin CLI tool for
+ * the visibility-flip step shared by docs/53-T4, docs/54-T1..T3, and
+ * docs/55-T6.
  *
  * Why a script and not an HTTP endpoint:
  *   - Visibility flips are infrequent and audited (commit / chat record).
@@ -16,13 +16,12 @@
  *     --slug adaptive-regime --visibility PUBLIC
  *
  *   pnpm --filter @botmarketplace/api exec tsx scripts/publishPreset.ts \
- *     --slug adaptive-regime --visibility PRIVATE --dry-run
+ *     --slug funding-arb --visibility BETA --dry-run
  *
  * Lookup is by slug (unique). Visibility values must match the Prisma
- * `PresetVisibility` enum — currently `PRIVATE` | `PUBLIC`. The BETA
- * value lands with docs/55-T6; this script will accept it without
- * source-edit once the enum is extended (we read the allowed values
- * from `@prisma/client` at runtime).
+ * `PresetVisibility` enum (`PRIVATE` | `BETA` | `PUBLIC` as of 55-T6).
+ * `allowedVisibilities()` reads the enum dynamically, so future
+ * additions land without a source edit here.
  *
  * The script is idempotent: setting the visibility a preset already has
  * is a no-op with a clear "already at <visibility>, no change" message.

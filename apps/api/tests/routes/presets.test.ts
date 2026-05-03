@@ -44,7 +44,7 @@ vi.mock("@prisma/client", () => {
       InputJsonValue: {} as never,
       PrismaClientKnownRequestError,
     },
-    PresetVisibility: { PRIVATE: "PRIVATE", PUBLIC: "PUBLIC" },
+    PresetVisibility: { PRIVATE: "PRIVATE", BETA: "BETA", PUBLIC: "PUBLIC" },
   };
 });
 
@@ -105,8 +105,18 @@ vi.mock("../../src/lib/prisma.js", () => {
       findMany: vi.fn().mockImplementation(({ where, select }: { where: Record<string, unknown>; select?: Record<string, boolean> }) => {
         const visibility = where?.visibility;
         const category = where?.category;
+        // Visibility filter supports `value` (eq) and `{ in: [...] }` (Prisma's
+        // OR-set), the two shapes the route uses for three-tier scoping.
+        const visibilityIn =
+          visibility && typeof visibility === "object" && "in" in (visibility as object)
+            ? ((visibility as { in: unknown[] }).in)
+            : null;
         const matched = Object.values(mockPresets).filter((p) => {
-          if (visibility !== undefined && p.visibility !== visibility) return false;
+          if (visibilityIn != null) {
+            if (!visibilityIn.includes(p.visibility)) return false;
+          } else if (visibility !== undefined && p.visibility !== visibility) {
+            return false;
+          }
           if (category !== undefined && p.category !== category) return false;
           return true;
         });
@@ -227,7 +237,7 @@ const VALID_BODY = {
   },
 };
 
-async function seedPreset(slug: string, visibility: "PRIVATE" | "PUBLIC", category = "trend") {
+async function seedPreset(slug: string, visibility: "PRIVATE" | "BETA" | "PUBLIC", category = "trend") {
   mockPresets[slug] = {
     slug,
     name: `Preset ${slug}`,
@@ -391,6 +401,46 @@ describe("GET /api/v1/presets", () => {
     expect(rows[0]).not.toHaveProperty("dslJson");
     expect(rows[0]).toHaveProperty("defaultBotConfigJson");
   });
+
+  // ── BETA visibility tier (docs/55-T6 §A4) ─────────────────────────────────
+
+  it("anonymous list excludes BETA presets", async () => {
+    await seedPreset("public-a", "PUBLIC");
+    await seedPreset("beta-a", "BETA", "arb");
+
+    const res = await app.inject({ method: "GET", url: "/api/v1/presets" });
+    const slugs = (res.json() as Array<{ slug: string }>).map((p) => p.slug);
+    expect(slugs).toEqual(["public-a"]);
+  });
+
+  it("authenticated list includes both PUBLIC and BETA presets", async () => {
+    await seedPreset("public-a", "PUBLIC");
+    await seedPreset("beta-a", "BETA", "arb");
+    await seedPreset("private-a", "PRIVATE");
+
+    const res = await app.inject({
+      method: "GET",
+      url: "/api/v1/presets",
+      headers: { authorization: `Bearer ${userToken}` },
+    });
+    expect(res.statusCode).toBe(200);
+    const slugs = (res.json() as Array<{ slug: string }>).map((p) => p.slug).sort();
+    expect(slugs).toEqual(["beta-a", "public-a"]);
+  });
+
+  it("admin can filter by ?visibility=BETA", async () => {
+    await seedPreset("public-a", "PUBLIC");
+    await seedPreset("beta-a", "BETA", "arb");
+    await seedPreset("private-a", "PRIVATE");
+
+    const res = await app.inject({
+      method: "GET",
+      url: "/api/v1/presets?visibility=BETA",
+      headers: { "x-admin-token": ADMIN_TOKEN },
+    });
+    const slugs = (res.json() as Array<{ slug: string }>).map((p) => p.slug);
+    expect(slugs).toEqual(["beta-a"]);
+  });
 });
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -428,6 +478,25 @@ describe("GET /api/v1/presets/:slug", () => {
     });
     expect(res.statusCode).toBe(200);
     expect(res.json().slug).toBe("secret");
+  });
+
+  // ── BETA visibility tier (docs/55-T6 §A4) ─────────────────────────────────
+
+  it("returns 404 for BETA preset without authentication", async () => {
+    await seedPreset("beta-arb", "BETA", "arb");
+    const res = await app.inject({ method: "GET", url: "/api/v1/presets/beta-arb" });
+    expect(res.statusCode).toBe(404);
+  });
+
+  it("returns 200 for BETA preset with a valid Bearer token", async () => {
+    await seedPreset("beta-arb", "BETA", "arb");
+    const res = await app.inject({
+      method: "GET",
+      url: "/api/v1/presets/beta-arb",
+      headers: { authorization: `Bearer ${userToken}` },
+    });
+    expect(res.statusCode).toBe(200);
+    expect(res.json().visibility).toBe("BETA");
   });
 });
 
@@ -522,6 +591,18 @@ describe("POST /api/v1/presets/:slug/instantiate", () => {
     expect(body.botId).toBeDefined();
     expect(body.strategyId).toBeDefined();
     expect(body.strategyVersionId).toBeDefined();
+  });
+
+  it("instantiates BETA preset for an authenticated non-admin user (docs/55-T6)", async () => {
+    await seedPreset("beta-arb", "BETA", "arb");
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/presets/beta-arb/instantiate",
+      headers: userHeaders(),
+      payload: {},
+    });
+    expect(res.statusCode).toBe(201);
+    expect(res.json().botId).toBeDefined();
   });
 
   it("creates exactly one Strategy + Version + Bot, all tagged with templateSlug", async () => {
