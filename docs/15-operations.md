@@ -106,6 +106,10 @@ Behaviour:
   `TradingDisabledError` (classified as `transient` by `errorClassifier`),
   so the worker retry loop picks the order up on the next tick once
   the flag flips back. No manual re-queuing required.
+- For active funding-arb hedges this means **both legs park in
+  PENDING** for the duration of the kill switch — `summariseLegStates`
+  sees neither `bothFilled` nor a terminal failure and the hedge stays
+  in `OPENING` / `CLOSING`. See §6.6 for inspection queries.
 - Default is fail-open (env unset → enabled), so dev / demo
   environments keep working without an explicit setting.
 
@@ -162,4 +166,96 @@ WHERE id = '<run-id>';
 If the run itself should be stopped: transition it to STOPPING via the
 HTTP API (`POST /runs/:id/stop`) — the worker honours the transition
 on its next tick.
+
+### 6.6) Diagnose a stuck hedge (funding-arb)
+
+The hedge worker's state machine is more constrained than a DSL bot run
+— a hedge passes through five persisted statuses, each driven by leg
+intents emitted on the previous tick. Mapping (skeleton-stage ↔
+`HedgePosition.status`):
+
+| Skeleton stage  | Persisted `status` | Meaning |
+|---|---|---|
+| `PENDING`       | `PLANNED`  | Awaiting funding-window signal. |
+| `ENTRY_PLACED`  | `OPENING`  | Both entry legs emitted, awaiting fills. |
+| `ACTIVE`        | `OPEN`     | Both entry legs FILLED, awaiting funding payment. |
+| `EXIT_PLACED`   | `CLOSING`  | Exit legs emitted, awaiting fills. |
+| `CLOSED`        | `CLOSED`   | Both exit legs FILLED. Terminal. |
+| `ERRORED`       | `FAILED`   | Partial fill / unrecoverable. Terminal. |
+
+A hedge is "stuck" if it sits in a non-terminal status (`PLANNED`,
+`OPENING`, `OPEN`, `CLOSING`) for materially longer than the next
+funding event would take to clear (Bybit settles every 8h; budget 30
+minutes either side). Most stuck cases are explainable by one of:
+
+- `TRADING_ENABLED` flipped to off mid-hedge (§6.3) — legs park in
+  PENDING, status stays `OPENING` / `CLOSING` until the flag flips back.
+- `ENABLE_HEDGE_WORKER` was unset (§6.2) — the tick loop never runs.
+- `FundingSnapshot.nextFundingAt` is missing or stale for the symbol —
+  `windowDetector` returns `paymentReceived=false` indefinitely and a
+  hedge in `OPEN` cannot transition to `EXIT_PLACED`. Check the funding
+  ingestion cron.
+
+**Inspection queries.** All three feed back into the same hedge id;
+copy it once and reuse:
+
+```sql
+-- 1. List non-terminal hedges by age — oldest first
+SELECT id, symbol, status, "createdAt", "closedAt"
+FROM "HedgePosition"
+WHERE status IN ('PLANNED', 'OPENING', 'OPEN', 'CLOSING')
+ORDER BY "createdAt" ASC;
+
+-- 2. Both leg intents for a single hedge — order is entry then exit
+SELECT "intentId", type, state, side, qty, "metaJson"->>'category' AS category, "createdAt"
+FROM "BotIntent"
+WHERE "metaJson"->>'hedgeId' = '<hedge-id>'
+ORDER BY "createdAt" ASC;
+
+-- 3. Latest funding snapshot for the hedge symbol
+SELECT symbol, "fundingRate", "nextFundingAt", timestamp
+FROM "FundingSnapshot"
+WHERE symbol = '<symbol>'
+ORDER BY timestamp DESC LIMIT 1;
+```
+
+Query 1 lists candidates; query 2 reveals which leg is parked and why
+(e.g. `state = PENDING` × `category = spot` ⇒ spot-leg never executed,
+typically because 55-T2 wiring is not yet in place on this environment);
+query 3 confirms the funding-window upstream is fresh.
+
+**Log filter.** All hedge-worker output carries `module:
+"hedgeBotWorker"`. Stage transitions are logged at `info`, errors and
+balance-reconcile failures at `error`:
+
+```bash
+journalctl -u botmarket-api -o cat | jq 'select(.module == "hedgeBotWorker")'
+```
+
+**Manual unwind (last resort).** If a hedge must be retired without
+waiting for the worker — e.g. the strategy spec changed and the
+in-flight legs are wrong — first transition each leg's `BotIntent` to
+`CANCELLED` via the existing intent-state endpoint:
+
+```bash
+# Repeat for both intentIds returned by query 2 above. The endpoint
+# rejects already-terminal intents with 409 — that's fine, just skip.
+curl -X PATCH https://api.example.com/api/v1/runs/<run-id>/intents/<intent-id>/state \
+  -H "Authorization: Bearer <token>" -H "Content-Type: application/json" \
+  -d '{"state":"CANCELLED"}'
+```
+
+Then manually transition the hedge:
+
+```sql
+-- Mark a hedge as terminally failed without touching legs
+UPDATE "HedgePosition" SET status = 'FAILED', "closedAt" = NOW()
+WHERE id = '<hedge-id>' AND status IN ('PLANNED', 'OPENING', 'OPEN', 'CLOSING');
+```
+
+The hedge worker honours the terminal status on its next tick — once
+`status IN ('CLOSED', 'FAILED')` it stops considering the row entirely.
+Do **not** flip a hedge backward (e.g. `OPENING → PLANNED`); the worker
+re-emits leg intents when it sees `PLANNED + fundingWindowOpen` and
+will create duplicate orders.
 
