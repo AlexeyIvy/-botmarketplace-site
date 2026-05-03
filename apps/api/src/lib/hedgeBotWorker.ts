@@ -433,9 +433,37 @@ async function loadHedgeCreds(botRunId: string): Promise<ExchangeConnectionCreds
   return run?.bot?.exchangeConnection ?? null;
 }
 
-/** One pass: advance every non-terminal hedge. Per-hedge errors are
- *  logged + classified but NEVER bubble — funding-arb errors must not
- *  take down the worker.
+type HedgeCandidate = { id: string; symbol: string; botRunId: string };
+
+const NON_TERMINAL_STATUSES = ["PLANNED", "OPENING", "OPEN", "CLOSING"] as const;
+
+/** Shared advance loop. Per-hedge errors are logged + classified but NEVER
+ *  bubble — funding-arb errors must not take down the worker. Used by both
+ *  the global `tickHedgeBotWorker` and the bot-scoped
+ *  `tickHedgeBotWorkerForBotRun` so the inputResolver / default-input
+ *  semantics stay identical regardless of how candidates were sourced. */
+async function advanceCandidates(
+  candidates: HedgeCandidate[],
+  inputResolver?: (hedgeId: string) => HedgeAdvanceInput | Promise<HedgeAdvanceInput>,
+): Promise<HedgeAdvanceResult[]> {
+  const out: HedgeAdvanceResult[] = [];
+  for (const c of candidates) {
+    try {
+      const input = inputResolver
+        ? await inputResolver(c.id)
+        : await buildDefaultInput(c);
+      const res = await advanceHedge(c.id, input);
+      out.push(res);
+    } catch (err) {
+      const classification = classifyExecutionError(err);
+      log.error({ err, hedgeId: c.id, classification }, "hedge advance failed (isolated)");
+      // Swallow — funding-arb tick must keep ticking for other hedges.
+    }
+  }
+  return out;
+}
+
+/** One pass: advance every non-terminal hedge across the whole installation.
  *
  *  Behaviour:
  *   - Default path (no `inputResolver` supplied): for each hedge, load
@@ -452,30 +480,36 @@ async function loadHedgeCreds(botRunId: string): Promise<ExchangeConnectionCreds
  *  whichever upstream owns scanner / payment-ledger lookups (out of
  *  scope for this PR — currently absent, so PENDING / ACTIVE hedges
  *  no-op until that wiring lands).
+ *
+ *  Used by the env-gated `startHedgeBotWorker` daemon. Per-bot delegation
+ *  from the mainline botWorker poll lives in `tickHedgeBotWorkerForBotRun`.
  */
 export async function tickHedgeBotWorker(
   inputResolver?: (hedgeId: string) => HedgeAdvanceInput | Promise<HedgeAdvanceInput>,
 ): Promise<HedgeAdvanceResult[]> {
   const candidates = await prisma.hedgePosition.findMany({
-    where: { status: { in: ["PLANNED", "OPENING", "OPEN", "CLOSING"] } },
+    where: { status: { in: [...NON_TERMINAL_STATUSES] } },
     select: { id: true, symbol: true, botRunId: true },
   });
+  return advanceCandidates(candidates, inputResolver);
+}
 
-  const out: HedgeAdvanceResult[] = [];
-  for (const c of candidates) {
-    try {
-      const input = inputResolver
-        ? await inputResolver(c.id)
-        : await buildDefaultInput(c);
-      const res = await advanceHedge(c.id, input);
-      out.push(res);
-    } catch (err) {
-      const classification = classifyExecutionError(err);
-      log.error({ err, hedgeId: c.id, classification }, "hedge advance failed (isolated)");
-      // Swallow — funding-arb tick must keep ticking for other hedges.
-    }
-  }
-  return out;
+/** Bot-scoped variant: advance only the non-terminal hedges that belong to
+ *  one BotRun. Used by `botWorker.evaluateStrategies` to delegate
+ *  FUNDING_ARB bots — the DSL evaluator already short-circuits on
+ *  `bot.mode === "FUNDING_ARB"`, so this call replaces the no-op skip with
+ *  a real per-bot tick that runs every botWorker poll (4s) instead of the
+ *  60s global daemon cadence. Same advance semantics as the global tick,
+ *  just narrower findMany. */
+export async function tickHedgeBotWorkerForBotRun(
+  botRunId: string,
+  inputResolver?: (hedgeId: string) => HedgeAdvanceInput | Promise<HedgeAdvanceInput>,
+): Promise<HedgeAdvanceResult[]> {
+  const candidates = await prisma.hedgePosition.findMany({
+    where: { botRunId, status: { in: [...NON_TERMINAL_STATUSES] } },
+    select: { id: true, symbol: true, botRunId: true },
+  });
+  return advanceCandidates(candidates, inputResolver);
 }
 
 /**

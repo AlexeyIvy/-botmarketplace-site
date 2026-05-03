@@ -28,6 +28,7 @@
 import { logger } from "./logger.js";
 import { Prisma } from "@prisma/client";
 import { prisma } from "./prisma.js";
+import { tickHedgeBotWorkerForBotRun } from "./hedgeBotWorker.js";
 import { transition, isValidTransition } from "./stateMachine.js";
 import {
   bybitPlaceOrder,
@@ -1516,12 +1517,24 @@ async function evaluateStrategies(): Promise<void> {
 
     for (const run of runningRuns) {
       // Routing seam (docs/55-T4): FUNDING_ARB bots do not run the DSL
-      // evaluator. Their intents are emitted by hedgeBotWorker.ts as it
-      // advances HedgePosition rows; the DSL evaluator would either no-op
-      // on the placeholder DSL or, worse, fire stray intents on a misseed.
-      // The skip MUST come before the dslJson presence check so a missing
-      // / malformed DSL on a funding-arb preset cannot abort the loop.
-      if (run.bot?.mode === "FUNDING_ARB") continue;
+      // evaluator — their intents are emitted by `tickHedgeBotWorkerForBotRun`
+      // as it advances this run's HedgePosition rows. The delegation MUST
+      // come before the dslJson presence check so a missing / malformed DSL
+      // on a funding-arb preset cannot abort the loop. Per-bot errors are
+      // isolated by `advanceCandidates` (logged + swallowed); the outer
+      // try/catch here also guards against a `findMany` failure so one bad
+      // bot can't stall evaluation for the rest.
+      if (run.bot?.mode === "FUNDING_ARB") {
+        try {
+          await tickHedgeBotWorkerForBotRun(run.id);
+        } catch (err) {
+          workerLog.error(
+            { err, runId: run.id, botId: run.bot.id },
+            "hedgeBotWorker delegation failed (isolated)",
+          );
+        }
+        continue;
+      }
 
       const dslJson = run.bot?.strategyVersion?.dslJson;
       if (!dslJson || typeof dslJson !== "object") continue;
