@@ -14,7 +14,7 @@ import type { ProblemDetails } from "../api";
 // ---------------------------------------------------------------------------
 
 export type PresetCategory = "trend" | "dca" | "scalping" | "smc" | "arb";
-export type PresetVisibility = "PRIVATE" | "PUBLIC";
+export type PresetVisibility = "PRIVATE" | "BETA" | "PUBLIC";
 export type PresetTimeframe = "M1" | "M5" | "M15" | "H1";
 
 export interface PresetDefaultBotConfig {
