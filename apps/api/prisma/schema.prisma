@@ -140,6 +140,21 @@ enum BotStatus {
   DISABLED
 }
 
+/// Runtime dispatch mode for a Bot (docs/55-T4).
+///
+/// - DSL          — default; the regular DSL evaluator (botWorker.evaluateStrategies)
+///                  drives intent emission per tick.
+/// - FUNDING_ARB  — funding-arbitrage bot. Skipped by the DSL evaluator;
+///                  intent emission is delegated to `hedgeBotWorker.ts` once
+///                  the bot-scoped delegation lands. Until then this is a
+///                  routing seam only — FUNDING_ARB bots persist correctly,
+///                  emit no DSL intents, and hedgeBotWorker advances any
+///                  HedgePosition rows linked to them as before.
+enum BotMode {
+  DSL
+  FUNDING_ARB
+}
+
 model Bot {
   id                   String          @id @default(uuid())
   workspaceId          String
@@ -150,6 +165,10 @@ model Bot {
   symbol               String
   timeframe            Timeframe
   status               BotStatus       @default(DRAFT)
+  /// Runtime dispatch mode (docs/55-T4). DSL → regular evaluator path;
+  /// FUNDING_ARB → DSL evaluator skipped, hedge runtime owns intents.
+  /// Existing rows backfill to DSL via column default.
+  mode                 BotMode         @default(DSL)
   /// Optional link to the StrategyPreset this bot was instantiated from.
   /// String reference, no FK — preset can be deleted without cascading.
   templateSlug         String?

@@ -45,6 +45,7 @@ vi.mock("@prisma/client", () => {
       PrismaClientKnownRequestError,
     },
     PresetVisibility: { PRIVATE: "PRIVATE", BETA: "BETA", PUBLIC: "PUBLIC" },
+    BotMode: { DSL: "DSL", FUNDING_ARB: "FUNDING_ARB" },
   };
 });
 
@@ -237,14 +238,25 @@ const VALID_BODY = {
   },
 };
 
-async function seedPreset(slug: string, visibility: "PRIVATE" | "BETA" | "PUBLIC", category = "trend") {
+async function seedPreset(
+  slug: string,
+  visibility: "PRIVATE" | "BETA" | "PUBLIC",
+  category = "trend",
+  configOverrides: Record<string, unknown> = {},
+) {
   mockPresets[slug] = {
     slug,
     name: `Preset ${slug}`,
     description: `Description ${slug}`,
     category,
     dslJson: VALID_DSL,
-    defaultBotConfigJson: { symbol: "BTCUSDT", timeframe: "M15", quoteAmount: 100, maxOpenPositions: 1 },
+    defaultBotConfigJson: {
+      symbol: "BTCUSDT",
+      timeframe: "M15",
+      quoteAmount: 100,
+      maxOpenPositions: 1,
+      ...configOverrides,
+    },
     datasetBundleHintJson: null,
     visibility,
     createdAt: new Date(),
@@ -627,6 +639,7 @@ describe("POST /api/v1/presets/:slug/instantiate", () => {
     expect(bot.templateSlug).toBe("public-a");
     expect(bot.workspaceId).toBe(WS_ID);
     expect(bot.status).toBe("DRAFT");
+    expect(bot.mode).toBe("DSL"); // 55-T4: defaults to DSL when preset has no mode
     expect(bot.strategyVersionId).toBe(version.id);
     expect(version.strategyId).toBe(strategy.id);
     expect(version.dslJson).toEqual(VALID_DSL);
@@ -691,5 +704,33 @@ describe("POST /api/v1/presets/:slug/instantiate", () => {
     expect(r1.json().botId).not.toBe(r2.json().botId);
     expect(Object.keys(mockBots)).toHaveLength(2);
     expect(Object.keys(mockStrategies)).toHaveLength(2);
+  });
+
+  // ── Bot.mode propagation (docs/55-T4) ─────────────────────────────────────
+
+  it("persists Bot.mode = FUNDING_ARB when preset's defaultBotConfigJson sets it", async () => {
+    await seedPreset("funding-arb-test", "BETA", "arb", { mode: "FUNDING_ARB" });
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/presets/funding-arb-test/instantiate",
+      headers: userHeaders(),
+      payload: {},
+    });
+    expect(res.statusCode).toBe(201);
+    const bot = Object.values(mockBots)[0];
+    expect(bot.mode).toBe("FUNDING_ARB");
+  });
+
+  it("rejects an unknown mode value with 400 + clear error", async () => {
+    await seedPreset("bad-mode", "PUBLIC", "trend", { mode: "TURBO_CRYPTO" });
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/presets/bad-mode/instantiate",
+      headers: userHeaders(),
+      payload: {},
+    });
+    expect(res.statusCode).toBe(400);
+    const body = res.json() as { errors: Array<{ field: string; message: string }> };
+    expect(body.errors.some((e) => e.field === "mode" && /must be one of/.test(e.message))).toBe(true);
   });
 });

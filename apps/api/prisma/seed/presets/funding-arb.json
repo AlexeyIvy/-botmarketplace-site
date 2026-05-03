@@ -37,6 +37,8 @@
   "defaultBotConfigJson": {
     "symbol": "BTCUSDT",
     "mode": "FUNDING_ARB",
+    "timeframe": "M15",
+    "maxOpenPositions": 1,
     "minFundingRate": 0.0002,
     "maxSpreadBps": 5,
     "quoteAmount": 1000
