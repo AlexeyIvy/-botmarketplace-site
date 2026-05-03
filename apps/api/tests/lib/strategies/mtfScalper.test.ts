@@ -34,7 +34,10 @@ import {
   type MtfCandle,
 } from "../../../src/lib/mtf/intervalAlignment.js";
 import { createMtfCache } from "../../../src/lib/mtf/mtfIndicatorResolver.js";
-import { describeGoldenStrategyContract } from "../../_helpers/strategyAcceptance.js";
+import {
+  describeGoldenStrategyContract,
+  describeWalkForwardSmoke,
+} from "../../_helpers/strategyAcceptance.js";
 
 // ---------------------------------------------------------------------------
 // Shared contract — seed/golden pin, validateDsl, parseDsl, supported blocks
@@ -45,6 +48,17 @@ const { golden: goldenDsl } = describeGoldenStrategyContract({
   baseDir: dirname(fileURLToPath(import.meta.url)),
   goldenPath: "../../fixtures/strategies/mtf-scalper.golden.json",
   seedPath: "../../../prisma/seed/presets/mtf-scalper.json",
+});
+
+// ---------------------------------------------------------------------------
+// Walk-forward smoke — bundle {M1, M5, M15}, primary M1
+// ---------------------------------------------------------------------------
+
+describeWalkForwardSmoke({
+  slug: "mtf-scalper",
+  goldenDsl,
+  primaryInterval: "1m",
+  contextIntervals: ["5m", "15m"],
 });
 
 // ---------------------------------------------------------------------------

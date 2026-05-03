@@ -36,7 +36,10 @@ import {
   type MtfCandle,
 } from "../../../src/lib/mtf/intervalAlignment.js";
 import { createMtfCache } from "../../../src/lib/mtf/mtfIndicatorResolver.js";
-import { describeGoldenStrategyContract } from "../../_helpers/strategyAcceptance.js";
+import {
+  describeGoldenStrategyContract,
+  describeWalkForwardSmoke,
+} from "../../_helpers/strategyAcceptance.js";
 
 // ---------------------------------------------------------------------------
 // Shared contract — seed/golden pin, validateDsl, parseDsl, supported blocks
@@ -47,6 +50,17 @@ const { golden: goldenDsl } = describeGoldenStrategyContract({
   baseDir: dirname(fileURLToPath(import.meta.url)),
   goldenPath: "../../fixtures/strategies/adaptive-regime.golden.json",
   seedPath: "../../../prisma/seed/presets/adaptive-regime.json",
+});
+
+// ---------------------------------------------------------------------------
+// Walk-forward smoke — bundle {M5, H1}, primary M5
+// ---------------------------------------------------------------------------
+
+describeWalkForwardSmoke({
+  slug: "adaptive-regime",
+  goldenDsl,
+  primaryInterval: "5m",
+  contextIntervals: ["1h"],
 });
 
 // ---------------------------------------------------------------------------
