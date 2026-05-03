@@ -1,0 +1,44 @@
+{
+  "name": "Funding Arbitrage (Bybit Perp + Spot)",
+  "description": "Delta-neutral hedge: short perp + long spot when funding rate is positive. Multi-leg execution gated by docs/55-T4 mode routing — runtime path is `hedgeBotWorker.ts`, not the DSL evaluator. The dslJson below is a placeholder with `enabled: false` so the regular bot worker cancels any intents it might emit if the preset is instantiated before mode routing lands. Promotion to BETA visibility happens in docs/55-T6 once the acceptance gate is closed.",
+  "dslJson": {
+    "id": "funding-arb",
+    "name": "Funding Arbitrage",
+    "dslVersion": 2,
+    "enabled": false,
+    "market": {
+      "exchange": "bybit",
+      "env": "demo",
+      "category": "linear",
+      "symbol": "BTCUSDT"
+    },
+    "entry": {
+      "side": "Sell"
+    },
+    "risk": {
+      "maxPositionSizeUsd": 1000,
+      "riskPerTradePct": 1,
+      "cooldownSeconds": 60
+    },
+    "execution": {
+      "orderType": "Market",
+      "clientOrderIdPrefix": "fundarb"
+    },
+    "guards": {
+      "maxOpenPositions": 1,
+      "maxOrdersPerMinute": 10,
+      "pauseOnError": true
+    },
+    "exit": {
+      "stopLoss":   { "type": "fixed_pct", "value": 1 },
+      "takeProfit": { "type": "fixed_pct", "value": 1 }
+    }
+  },
+  "defaultBotConfigJson": {
+    "symbol": "BTCUSDT",
+    "mode": "FUNDING_ARB",
+    "minFundingRate": 0.0002,
+    "maxSpreadBps": 5,
+    "quoteAmount": 1000
+  }
+}
