@@ -118,7 +118,11 @@ export async function fundingRoutes(app: FastifyInstance) {
       });
 
       return reply.send({
-        candidates,
+        candidates: candidates.map((c) => ({
+          ...c,
+          nextFundingAt:
+            c.nextFundingAt != null ? new Date(c.nextFundingAt).toISOString() : null,
+        })),
         updatedAt: new Date().toISOString(),
       });
     },

@@ -104,6 +104,13 @@ describe("GET /api/v1/terminal/funding/scanner", () => {
       expect(typeof c.annualizedYieldPct).toBe("number");
       expect(typeof c.basisBps).toBe("number");
       expect(typeof c.streak).toBe("number");
+      // nextFundingAt is serialised as an ISO string (or null when no
+      // snapshots backed the candidate). Should round-trip through Date.
+      expect(["string", "object"]).toContain(typeof c.nextFundingAt);
+      if (c.nextFundingAt !== null) {
+        expect(typeof c.nextFundingAt).toBe("string");
+        expect(Number.isFinite(Date.parse(c.nextFundingAt))).toBe(true);
+      }
     }
   });
 

@@ -40,6 +40,13 @@ export interface FundingCandidate {
   streak: number;
   /** Average funding rate over the lookback window. */
   avgRate: number;
+  /**
+   * Next funding settlement time (ms epoch) from the most recent snapshot,
+   * or null if the candidate has no snapshots. Same units as
+   * `FundingSnapshot.nextFundingAt`; route layer serialises to ISO before
+   * returning to clients.
+   */
+  nextFundingAt: number | null;
 }
 
 /** Thresholds for the scanner to filter candidates. */
