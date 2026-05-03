@@ -893,6 +893,7 @@ model LabJournalEntry {
 
 enum PresetVisibility {
   PRIVATE
+  BETA
   PUBLIC
 }
 

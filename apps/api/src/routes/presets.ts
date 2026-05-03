@@ -16,13 +16,51 @@
  */
 
 import { randomBytes } from "node:crypto";
-import type { FastifyInstance } from "fastify";
+import type { FastifyInstance, FastifyRequest } from "fastify";
 import { Prisma, PresetVisibility } from "@prisma/client";
 import { prisma } from "../lib/prisma.js";
 import { problem } from "../lib/problem.js";
 import { validateDsl } from "../lib/dslValidator.js";
 import { isAdminRequest } from "../lib/adminGuard.js";
 import { resolveWorkspace } from "../lib/workspace.js";
+
+// ---------------------------------------------------------------------------
+// Visibility helpers
+// ---------------------------------------------------------------------------
+
+/**
+ * Soft authentication for endpoints that have public + authenticated tiers
+ * (docs/55-T6 §A4). Unlike `app.authenticate`, this never sends a 401: it
+ * simply reports whether a valid Bearer token was supplied so the handler
+ * can scope its visibility filter accordingly.
+ */
+async function tryAuthenticate(request: FastifyRequest): Promise<boolean> {
+  try {
+    await request.jwtVerify();
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+interface ViewerScope {
+  admin: boolean;
+  authed: boolean;
+}
+
+/**
+ * Three-tier visibility check: PRIVATE → admin only, BETA → authed users
+ * (admin always passes), PUBLIC → everyone. The funding-arb preset lives
+ * at BETA per docs/55-T6 — visible to authenticated users with an explicit
+ * "experimental, multi-leg" badge in the UI, but kept off the anonymous
+ * landing page until promoted to PUBLIC.
+ */
+function canViewPreset(visibility: PresetVisibility, scope: ViewerScope): boolean {
+  if (scope.admin) return true;
+  if (visibility === PresetVisibility.PUBLIC) return true;
+  if (visibility === PresetVisibility.BETA) return scope.authed;
+  return false; // PRIVATE — admin-only, already short-circuited above
+}
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -55,7 +93,7 @@ interface CreatePresetBody {
   dslJson: unknown;
   defaultBotConfigJson: DefaultBotConfig;
   datasetBundleHintJson?: Record<string, unknown> | null;
-  visibility?: "PRIVATE" | "PUBLIC";
+  visibility?: "PRIVATE" | "BETA" | "PUBLIC";
 }
 
 interface InstantiateBody {
@@ -192,8 +230,13 @@ function validateCreateBody(
     }
   }
 
-  if (b.visibility !== undefined && b.visibility !== "PRIVATE" && b.visibility !== "PUBLIC") {
-    errors.push({ field: "visibility", message: "visibility must be PRIVATE or PUBLIC" });
+  if (
+    b.visibility !== undefined &&
+    b.visibility !== "PRIVATE" &&
+    b.visibility !== "BETA" &&
+    b.visibility !== "PUBLIC"
+  ) {
+    errors.push({ field: "visibility", message: "visibility must be PRIVATE, BETA, or PUBLIC" });
   }
 
   if (errors.length > 0) return { errors };
@@ -246,18 +289,32 @@ export async function presetRoutes(app: FastifyInstance) {
     }
   });
 
-  // GET /presets — public (PUBLIC only) or admin (all)
+  // GET /presets — three-tier visibility scoping (docs/55-T6 §A4):
+  //   • anon         → PUBLIC only
+  //   • authed user  → PUBLIC + BETA (BETA gates experimental presets like funding-arb
+  //                    behind login while still keeping them off the anonymous landing)
+  //   • admin        → all (or filtered by ?visibility=…)
   app.get<{ Querystring: { category?: string; visibility?: string } }>(
     "/presets",
     async (request, reply) => {
       const admin = isAdminRequest(request);
+      const authed = await tryAuthenticate(request);
       const where: Prisma.StrategyPresetWhereInput = {};
 
       // Visibility scoping
-      if (!admin) {
+      if (admin) {
+        if (
+          request.query?.visibility === "PRIVATE" ||
+          request.query?.visibility === "BETA" ||
+          request.query?.visibility === "PUBLIC"
+        ) {
+          where.visibility = request.query.visibility as PresetVisibility;
+        }
+        // else: admin sees everything regardless of visibility
+      } else if (authed) {
+        where.visibility = { in: [PresetVisibility.PUBLIC, PresetVisibility.BETA] };
+      } else {
         where.visibility = PresetVisibility.PUBLIC;
-      } else if (request.query?.visibility === "PRIVATE" || request.query?.visibility === "PUBLIC") {
-        where.visibility = request.query.visibility as PresetVisibility;
       }
 
       // Category filter
@@ -285,15 +342,17 @@ export async function presetRoutes(app: FastifyInstance) {
     },
   );
 
-  // GET /presets/:slug — full record
+  // GET /presets/:slug — full record. Visibility rules mirror the list endpoint
+  // (docs/55-T6 §A4): PRIVATE is admin-only; BETA requires authentication; PUBLIC
+  // is open. 404 (not 403) on hidden so existence is not revealed.
   app.get<{ Params: { slug: string } }>("/presets/:slug", async (request, reply) => {
     const admin = isAdminRequest(request);
+    const authed = admin ? true : await tryAuthenticate(request);
     const preset = await prisma.strategyPreset.findUnique({
       where: { slug: request.params.slug },
     });
 
-    // 404 (not 403) on PRIVATE without admin so existence is not revealed.
-    if (!preset || (preset.visibility === PresetVisibility.PRIVATE && !admin)) {
+    if (!preset || !canViewPreset(preset.visibility, { admin, authed })) {
       return problem(reply, 404, "Not Found", "Preset not found");
     }
 
@@ -317,8 +376,9 @@ export async function presetRoutes(app: FastifyInstance) {
       const preset = await prisma.strategyPreset.findUnique({
         where: { slug: request.params.slug },
       });
-      // PRIVATE presets are invisible to non-admins (matches GET semantics).
-      if (!preset || (preset.visibility === PresetVisibility.PRIVATE && !admin)) {
+      // Endpoint runs under app.authenticate, so authed=true by construction.
+      // Mirror GET semantics so PRIVATE is admin-only and BETA visible to authed.
+      if (!preset || !canViewPreset(preset.visibility, { admin, authed: true })) {
         return problem(reply, 404, "Not Found", "Preset not found");
       }
 
