@@ -130,6 +130,9 @@ describe("buildCandidate", () => {
     expect(c.basisBps).toBeCloseTo(1.49, 1);
     expect(c.streak).toBe(3);
     expect(c.avgRate).toBeCloseTo(0.0002, 6);
+    // nextFundingAt mirrors the most recent snapshot — 3rd snapshot's
+    // nextFundingAt = T0 + 3 * H8.
+    expect(c.nextFundingAt).toBe(T0 + 3 * H8);
   });
 
   it("handles null spread", () => {
@@ -143,6 +146,7 @@ describe("buildCandidate", () => {
     expect(c.currentRate).toBe(0);
     expect(c.annualizedYieldPct).toBe(0);
     expect(c.streak).toBe(0);
+    expect(c.nextFundingAt).toBeNull();
   });
 
   it("handles negative funding rates (short-pay)", () => {

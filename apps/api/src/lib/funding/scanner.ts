@@ -80,9 +80,8 @@ export function buildCandidate(
   snapshots: FundingSnapshot[],
   spread: SpreadSnapshot | null,
 ): FundingCandidate {
-  const currentRate = snapshots.length > 0
-    ? snapshots[snapshots.length - 1].fundingRate
-    : 0;
+  const last = snapshots.length > 0 ? snapshots[snapshots.length - 1] : null;
+  const currentRate = last?.fundingRate ?? 0;
 
   return {
     symbol,
@@ -91,6 +90,7 @@ export function buildCandidate(
     basisBps: spread?.basisBps ?? 0,
     streak: fundingStreak(snapshots),
     avgRate: averageFundingRate(snapshots),
+    nextFundingAt: last?.nextFundingAt ?? null,
   };
 }
 
