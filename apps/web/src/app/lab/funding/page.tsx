@@ -39,6 +39,20 @@ export default function LabFundingPage() {
   const [scanning, setScanning] = useState(false);
   const [error, setError] = useState<ProblemDetails | null>(null);
 
+  // workspaceId is read from localStorage which is undefined on the server.
+  // Reading it at render time produces SSR HTML with the "no workspace"
+  // warning visible, then the client may have a workspaceId and not render
+  // the warning → React error #418 hydration mismatch. Defer the read into
+  // a mount-time effect so the first client render matches the SSR pass,
+  // and gate the warning on `mounted` so it never flickers for users who
+  // do have a workspace set.
+  const [mounted, setMounted] = useState(false);
+  const [workspaceId, setWorkspaceIdState] = useState<string | null>(null);
+  useEffect(() => {
+    setWorkspaceIdState(getWorkspaceId());
+    setMounted(true);
+  }, []);
+
   // Auth gate — same posture as /exchanges and other authenticated pages.
   useEffect(() => {
     if (!getToken()) {
@@ -68,8 +82,6 @@ export default function LabFundingPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const workspaceId = getWorkspaceId();
-
   return (
     <div style={pageStyle}>
       <header style={headerStyle}>
@@ -94,7 +106,7 @@ export default function LabFundingPage() {
         </div>
       </header>
 
-      {!workspaceId && (
+      {mounted && !workspaceId && (
         <div style={warnBoxStyle}>
           No active workspace. Set one on the Factory page before opening a
           hedge bot — instantiation will otherwise fail.
