@@ -28,14 +28,13 @@
  * so callers can branch without parsing free-form messages.
  */
 
-import { createHmac } from "node:crypto";
 import { logger } from "../logger.js";
 import { decryptWithFallback } from "../crypto.js";
 import { getBybitBaseUrl } from "../bybitOrder.js";
+import { bybitAuthHeaders } from "./bybitAuth.js";
 
 const log = logger.child({ module: "balanceReconciler" });
 
-const RECV_WINDOW = "5000";
 const USER_AGENT = "botmarketplace-reconciler/1";
 /** `||perp| - spot| / max(|perp|, spot)` accepted as 'balanced'. */
 const HEDGE_BALANCE_TOLERANCE = 0.005;
@@ -128,29 +127,8 @@ interface WalletBalanceResponse {
 }
 
 // ---------------------------------------------------------------------------
-// Signing — mirrors apps/api/src/lib/bybitOrder.ts
+// HTTP wrapper — auth helpers live in `./bybitAuth.ts`.
 // ---------------------------------------------------------------------------
-
-function sign(secret: string, timestamp: string, apiKey: string, payload: string): string {
-  return createHmac("sha256", secret)
-    .update(`${timestamp}${apiKey}${RECV_WINDOW}${payload}`)
-    .digest("hex");
-}
-
-function authHeaders(
-  apiKey: string,
-  secret: string,
-  timestamp: string,
-  payload: string,
-): Record<string, string> {
-  return {
-    "X-BAPI-API-KEY": apiKey,
-    "X-BAPI-SIGN": sign(secret, timestamp, apiKey, payload),
-    "X-BAPI-TIMESTAMP": timestamp,
-    "X-BAPI-RECV-WINDOW": RECV_WINDOW,
-    "User-Agent": USER_AGENT,
-  };
-}
 
 async function bybitGet<T extends { retCode: number; retMsg: string }>(
   apiKey: string,
@@ -163,7 +141,7 @@ async function bybitGet<T extends { retCode: number; retMsg: string }>(
   const url = `${getBybitBaseUrl()}${path}?${qs}`;
 
   const res = await fetch(url, {
-    headers: authHeaders(apiKey, secret, timestamp, qs),
+    headers: bybitAuthHeaders(apiKey, secret, timestamp, qs, USER_AGENT),
   });
   if (!res.ok) {
     throw new BalanceReconcilerError(

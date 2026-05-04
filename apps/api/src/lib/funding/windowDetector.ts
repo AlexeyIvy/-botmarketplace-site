@@ -32,9 +32,9 @@
  * `FundingSnapshot.nextFundingAt`; this module is read-only on that table.
  */
 
-import { createHmac } from "node:crypto";
 import { prisma } from "../prisma.js";
 import { getBybitBaseUrl } from "../bybitOrder.js";
+import { bybitAuthHeaders } from "../exchange/bybitAuth.js";
 import { logger } from "../logger.js";
 
 const log = logger.child({ module: "windowDetector" });
@@ -43,7 +43,6 @@ export const ENTRY_PRE_BUFFER_MS = 30 * 60_000; // 30 min before funding
 export const PAYMENT_LAG_MS = 60_000;           // 1 min after funding
 export const PAYMENT_WINDOW_MS = 30 * 60_000;   // 30 min payment window
 
-const RECV_WINDOW = "5000";
 const USER_AGENT = "botmarketplace-funding/1";
 /** Pull a few rows in case multiple SETTLEMENT events land in the same
  *  query window; we only need to know that ≥1 matches. Bybit's max here
@@ -209,19 +208,10 @@ async function queryFundingLedger(q: FundingLedgerQuery): Promise<boolean> {
   };
   const qs = new URLSearchParams(params).toString();
   const timestamp = Date.now().toString();
-  const sign = createHmac("sha256", q.creds.secret)
-    .update(`${timestamp}${q.creds.apiKey}${RECV_WINDOW}${qs}`)
-    .digest("hex");
 
   const url = `${getBybitBaseUrl()}/v5/account/transaction-log?${qs}`;
   const res = await fetch(url, {
-    headers: {
-      "X-BAPI-API-KEY": q.creds.apiKey,
-      "X-BAPI-SIGN": sign,
-      "X-BAPI-TIMESTAMP": timestamp,
-      "X-BAPI-RECV-WINDOW": RECV_WINDOW,
-      "User-Agent": USER_AGENT,
-    },
+    headers: bybitAuthHeaders(q.creds.apiKey, q.creds.secret, timestamp, qs, USER_AGENT),
   });
   if (!res.ok) {
     throw new Error(`Bybit ledger HTTP ${res.status} ${res.statusText}`);

@@ -11,8 +11,8 @@
  *   BYBIT_BASE_URL  → explicit override (takes precedence)
  */
 
-import { createHmac } from "node:crypto";
 import { assertTradingEnabled } from "./tradingKillSwitch.js";
+import { bybitAuthHeaders } from "./exchange/bybitAuth.js";
 
 // ---------------------------------------------------------------------------
 // Environment-aware base URL
@@ -45,31 +45,7 @@ export function isBybitLive(): boolean {
   return getBybitBaseUrl() === BYBIT_LIVE_URL;
 }
 
-const RECV_WINDOW = "5000";
-
-// ---------------------------------------------------------------------------
-// Signing
-// ---------------------------------------------------------------------------
-
-function sign(secret: string, timestamp: string, apiKey: string, payload: string): string {
-  const preSign = `${timestamp}${apiKey}${RECV_WINDOW}${payload}`;
-  return createHmac("sha256", secret).update(preSign).digest("hex");
-}
-
-function authHeaders(
-  apiKey: string,
-  secret: string,
-  timestamp: string,
-  payload: string,
-): Record<string, string> {
-  return {
-    "X-BAPI-API-KEY": apiKey,
-    "X-BAPI-SIGN": sign(secret, timestamp, apiKey, payload),
-    "X-BAPI-TIMESTAMP": timestamp,
-    "X-BAPI-RECV-WINDOW": RECV_WINDOW,
-    "User-Agent": "botmarketplace-terminal/1",
-  };
-}
+const USER_AGENT = "botmarketplace-terminal/1";
 
 // ---------------------------------------------------------------------------
 // Place order
@@ -128,7 +104,7 @@ export async function bybitPlaceOrder(
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      ...authHeaders(apiKey, secret, timestamp, body),
+      ...bybitAuthHeaders(apiKey, secret, timestamp, body, USER_AGENT),
     },
     body,
   });
@@ -213,7 +189,7 @@ async function _fetchOrderFromEndpoint(
   const timestamp = Date.now().toString();
 
   const res = await fetch(`${getBybitBaseUrl()}${path}?${qs}`, {
-    headers: authHeaders(apiKey, secret, timestamp, qs),
+    headers: bybitAuthHeaders(apiKey, secret, timestamp, qs, USER_AGENT),
   });
 
   if (!res.ok) {
