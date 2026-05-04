@@ -37,5 +37,20 @@ SyslogIdentifier=botmarket-worker
 Environment=NODE_ENV=production
 Environment=PATH=/usr/bin:/usr/local/bin:/usr/local/share/pnpm
 
+# Hardening (docs/30 Phase 9). MemoryDenyWriteExecute is intentionally
+# omitted — V8 JIT requires writable+executable pages.
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+NoNewPrivileges=true
+RestrictNamespaces=true
+LockPersonality=true
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+ReadWritePaths=/opt/-botmarketplace-site /var/log
+
+# Worker never binds a listening socket — drop all capabilities.
+CapabilityBoundingSet=
+AmbientCapabilities=
+
 [Install]
 WantedBy=multi-user.target

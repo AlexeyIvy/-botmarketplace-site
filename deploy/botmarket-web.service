@@ -39,5 +39,18 @@ SyslogIdentifier=botmarket-web
 Environment=NODE_ENV=production
 Environment=PORT=3000
 
+# Hardening (docs/30 Phase 9). MemoryDenyWriteExecute is intentionally
+# omitted — V8 JIT requires writable+executable pages. Web only writes
+# to .next/cache at runtime (Next.js fetch cache, ISR), so the writable
+# path is scoped to the build output directory.
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+NoNewPrivileges=true
+RestrictNamespaces=true
+LockPersonality=true
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+ReadWritePaths=/opt/-botmarketplace-site/apps/web/.next
+
 [Install]
 WantedBy=multi-user.target
