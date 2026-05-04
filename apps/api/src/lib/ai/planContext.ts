@@ -1,4 +1,5 @@
 import { prisma } from "../prisma.js";
+import { sanitiseForPrompt } from "./sanitize.js";
 
 // ---------------------------------------------------------------------------
 // Plan context — extended workspace snapshot for /ai/plan
@@ -126,7 +127,8 @@ async function fetchPlanContextData(workspaceId: string): Promise<PlanContext> {
       updatedAt: Date; versions: Array<{ id: string; version: number }>;
     }) => ({
       id: s.id,
-      name: s.name,
+      // User-controlled — sanitise before forwarding to LLM (docs/34 §C2).
+      name: sanitiseForPrompt(s.name),
       symbol: s.symbol,
       timeframe: String(s.timeframe),
       status: String(s.status),
@@ -139,7 +141,7 @@ async function fetchPlanContextData(workspaceId: string): Promise<PlanContext> {
       strategyVersionId: string; updatedAt: Date;
     }) => ({
       id: b.id,
-      name: b.name,
+      name: sanitiseForPrompt(b.name),
       symbol: b.symbol,
       timeframe: String(b.timeframe),
       status: String(b.status),
@@ -158,7 +160,7 @@ async function fetchPlanContextData(workspaceId: string): Promise<PlanContext> {
       id: string; name: string; exchange: string; status: string;
     }) => ({
       id: ec.id,
-      name: ec.name,
+      name: sanitiseForPrompt(ec.name),
       exchange: ec.exchange,
       status: String(ec.status),
     })),

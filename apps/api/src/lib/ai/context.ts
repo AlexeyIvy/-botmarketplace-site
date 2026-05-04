@@ -1,4 +1,5 @@
 import { prisma } from "../prisma.js";
+import { sanitiseForPrompt } from "./sanitize.js";
 
 // ---------------------------------------------------------------------------
 // Types — whitelist-only fields (never fetch apiKey / encryptedSecret / etc.)
@@ -154,7 +155,8 @@ async function fetchContextData(workspaceId: string): Promise<WorkspaceContext> 
     workspace: { id: workspaceId },
     strategies: strategies.map((s: { id: string; name: string; status: string; symbol: string; timeframe: string; updatedAt: Date }) => ({
       id: s.id,
-      name: s.name,
+      // User-controlled — sanitise before forwarding to LLM (docs/34 §C2).
+      name: sanitiseForPrompt(s.name),
       status: String(s.status),
       symbol: s.symbol,
       timeframe: String(s.timeframe),
@@ -162,7 +164,7 @@ async function fetchContextData(workspaceId: string): Promise<WorkspaceContext> 
     })),
     bots: bots.map((b: { id: string; name: string; status: string; symbol: string; timeframe: string; strategyVersionId: string; updatedAt: Date }) => ({
       id: b.id,
-      name: b.name,
+      name: sanitiseForPrompt(b.name),
       status: String(b.status),
       symbol: b.symbol,
       timeframe: String(b.timeframe),
@@ -173,7 +175,10 @@ async function fetchContextData(workspaceId: string): Promise<WorkspaceContext> 
       id: r.id,
       botId: r.botId,
       state: String(r.state),
-      errorCode: r.errorCode,
+      // errorCode is a short enum-shaped tag (e.g. "RATE_LIMITED") but we
+      // sanitise defensively in case a runtime path forwards a free-form
+      // error string here in the future.
+      errorCode: r.errorCode === null ? null : sanitiseForPrompt(r.errorCode, 80),
       durationMinutes: r.durationMinutes,
       createdAt: r.createdAt.toISOString(),
     })),
@@ -184,7 +189,11 @@ async function fetchContextData(workspaceId: string): Promise<WorkspaceContext> 
       symbol: bt.symbol,
       interval: bt.interval,
       status: String(bt.status),
-      errorMessage: bt.errorMessage,
+      // errorMessage often contains exception text — could include stack
+      // fragments, user-typed identifiers, third-party error strings.
+      // Cap at 300 chars — enough to convey the failure shape without
+      // becoming a payload smuggling vector.
+      errorMessage: bt.errorMessage === null ? null : sanitiseForPrompt(bt.errorMessage, 300),
       createdAt: bt.createdAt.toISOString(),
     })),
   };
