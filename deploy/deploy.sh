@@ -80,7 +80,7 @@ fi
 # 6. Sync systemd units (reinstall if deploy/*.service changed in the repo)
 echo "[6/7] Syncing systemd units..."
 UNITS_CHANGED=0
-for svc in botmarket-api botmarket-web; do
+for svc in botmarket-api botmarket-web botmarket-worker; do
   src="$APP_DIR/deploy/$svc.service"
   dst="/etc/systemd/system/$svc.service"
   if [[ -f "$src" ]] && ! cmp -s "$src" "$dst" 2>/dev/null; then
@@ -98,13 +98,20 @@ fi
 echo "[7/7] Restarting services..."
 systemctl restart botmarket-api
 systemctl restart botmarket-web
+# botmarket-worker hosts the funding-arb hedge runtime + the DSL evaluator
+# loop. Skipping it leaves long-lived worker code stale across deploys —
+# any change to botWorker.ts / hedgeBotWorker.ts / intentExecutor.ts /
+# windowDetector.ts / preset evaluator does NOT take effect until the
+# unit is restarted explicitly. Always restart all three.
+systemctl restart botmarket-worker
 
 # Wait a moment and show status
 sleep 3
 echo ""
 echo "Service status:"
-systemctl is-active botmarket-api && echo "  ✓ botmarket-api is running" || echo "  ✗ botmarket-api FAILED"
-systemctl is-active botmarket-web  && echo "  ✓ botmarket-web is running"  || echo "  ✗ botmarket-web FAILED"
+systemctl is-active botmarket-api    && echo "  ✓ botmarket-api is running"    || echo "  ✗ botmarket-api FAILED"
+systemctl is-active botmarket-web    && echo "  ✓ botmarket-web is running"    || echo "  ✗ botmarket-web FAILED"
+systemctl is-active botmarket-worker && echo "  ✓ botmarket-worker is running" || echo "  ✗ botmarket-worker FAILED"
 
 echo ""
 DEPLOYED_REF=$(git describe --tags --always 2>/dev/null || git rev-parse --short HEAD)
@@ -113,6 +120,7 @@ echo ""
 echo "Done. Check logs with:"
 echo "  journalctl -u botmarket-api -f"
 echo "  journalctl -u botmarket-web -f"
+echo "  journalctl -u botmarket-worker -f"
 echo ""
 echo "Run smoke tests with:"
 echo "  bash deploy/smoke-test.sh"
