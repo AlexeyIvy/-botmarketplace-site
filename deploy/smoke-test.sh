@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # smoke-test.sh — MVP release smoke tests
-# Usage: bash deploy/smoke-test.sh [--base-url https://botmarketplace.store]
+# Usage: bash deploy/smoke-test.sh [--base-url https://botmarketplace.ru]
 # Exit code: 0 = all passed, 1 = failures found
 
 set -euo pipefail
 
-BASE_URL="${BASE_URL:-https://botmarketplace.store}"
+BASE_URL="${BASE_URL:-https://botmarketplace.ru}"
 TEST_EMAIL="smoke_$(date +%s)@test.com"
 TEST_PASS="Smoke1234!"
 TEST_EMAIL2="smoke2_$(date +%s)@test.com"

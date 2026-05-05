@@ -10,7 +10,7 @@
 ## Текущее состояние
 
 - **Stages 1-8**: завершены, 944 теста, последний PR #185
-- **VPS**: botmarketplace.store, systemd (botmarketplace-api, botmarketplace-web), PR #185 deployed
+- **VPS**: botmarketplace.ru, systemd (botmarketplace-api, botmarketplace-web), PR #185 deployed
 - **28 блоков** в визуальном конструкторе (19 supported, 9 compile-only)
 - **Известный техдолг**: security, observability, compile-only блоки, funding pipeline
 
@@ -439,7 +439,7 @@ Session 11: 11.3 — funding UI
 > Копируй и вставляй в терминальный Claude Code на VPS после мерджа любого PR.
 
 ```
-Задеплой последние изменения botmarketplace.store.
+Задеплой последние изменения botmarketplace.ru.
 
 cd /opt/-botmarketplace-site
 git pull origin main

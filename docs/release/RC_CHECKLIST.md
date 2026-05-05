@@ -9,10 +9,10 @@
 
 | # | Проверка | Команда / шаги | Критерий прохождения |
 |---|---------|----------------|----------------------|
-| 1.1 | API liveness | `curl -s https://botmarketplace.store/api/v1/healthz \| jq .` | `{"status":"ok","uptime":<number>,"timestamp":"<ISO>"}` |
-| 1.2 | API readiness (DB) | `curl -s https://botmarketplace.store/api/v1/readyz \| jq .` | `{"status":"ok"}` |
-| 1.3 | Web UI доступен | `curl -s -o /dev/null -w "%{http_code}" https://botmarketplace.store/login` | `200` |
-| 1.4 | Correlation ID | `curl -sI https://botmarketplace.store/api/v1/healthz \| grep -i x-request-id` | Заголовок присутствует |
+| 1.1 | API liveness | `curl -s https://botmarketplace.ru/api/v1/healthz \| jq .` | `{"status":"ok","uptime":<number>,"timestamp":"<ISO>"}` |
+| 1.2 | API readiness (DB) | `curl -s https://botmarketplace.ru/api/v1/readyz \| jq .` | `{"status":"ok"}` |
+| 1.3 | Web UI доступен | `curl -s -o /dev/null -w "%{http_code}" https://botmarketplace.ru/login` | `200` |
+| 1.4 | Correlation ID | `curl -sI https://botmarketplace.ru/api/v1/healthz \| grep -i x-request-id` | Заголовок присутствует |
 | 1.5 | systemd services | `systemctl is-active botmarket-api && systemctl is-active botmarket-web` | оба `active` |
 | 1.6 | Bot worker online | `journalctl -u botmarket-api --no-pager -n 50 \| grep "botWorker.*started"` | Строка присутствует |
 

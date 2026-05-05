@@ -118,27 +118,27 @@ const workerLog = pino({
 
 ```bash
 # Enhanced healthz
-curl -s https://botmarketplace.store/api/v1/healthz | jq .
+curl -s https://botmarketplace.ru/api/v1/healthz | jq .
 # Expected: { "status": "ok", "uptime": <number>, "timestamp": "<ISO>" }
 
 # X-Request-Id автогенерация
-curl -sI https://botmarketplace.store/api/v1/healthz | grep -i x-request-id
+curl -sI https://botmarketplace.ru/api/v1/healthz | grep -i x-request-id
 # Expected: x-request-id: <uuid>
 
 # Клиентский ID возвращается эхом
-curl -sI https://botmarketplace.store/api/v1/healthz -H "X-Request-Id: my-trace-42" | grep -i x-request-id
+curl -sI https://botmarketplace.ru/api/v1/healthz -H "X-Request-Id: my-trace-42" | grep -i x-request-id
 # Expected: x-request-id: my-trace-42
 
 # Rate-limit возвращает 429 (не 500)
 for i in $(seq 1 6); do
-  curl -s -o /dev/null -w "%{http_code}\n" -X POST https://botmarketplace.store/api/v1/auth/register \
+  curl -s -o /dev/null -w "%{http_code}\n" -X POST https://botmarketplace.ru/api/v1/auth/register \
     -H "Content-Type: application/json" \
     -d "{\"email\":\"rl_${i}_$(date +%s)@x.com\",\"password\":\"Test1234!\"}"
 done
 # Ожидаем: 201 201 201 429 429 429
 
 # Трассировка запроса через логи
-REQ_ID=$(curl -sI https://botmarketplace.store/api/v1/healthz | grep -i x-request-id | awk '{print $2}' | tr -d '\r')
+REQ_ID=$(curl -sI https://botmarketplace.ru/api/v1/healthz | grep -i x-request-id | awk '{print $2}' | tr -d '\r')
 sudo journalctl -u botmarket-api --since "5 minutes ago" | grep "$REQ_ID"
 
 # Полный smoke test (83 теста, после сброса rate-limit window ~15 мин)

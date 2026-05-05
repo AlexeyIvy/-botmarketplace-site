@@ -489,7 +489,7 @@ echo "Test 10.5 (terminal ticker, public) → $R5 (expected: 200)"
 ### ШАГ 11 — Запуск полного smoke-test скрипта
 
 ```bash
-bash deploy/smoke-test.sh --base-url https://botmarketplace.store 2>&1 | tail -30
+bash deploy/smoke-test.sh --base-url https://botmarketplace.ru 2>&1 | tail -30
 ```
 
 Зафиксируй итоговый PASS/FAIL count.

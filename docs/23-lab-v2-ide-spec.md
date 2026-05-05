@@ -38,7 +38,7 @@ Current project documentation describes `/lab` primarily as:
 - AI chat,
 - backtest report.
 
-This is acceptable for MVP, but insufficient for the intended product direction of **botmarketplace.store** as a serious trading research environment.
+This is acceptable for MVP, but insufficient for the intended product direction of **botmarketplace.ru** as a serious trading research environment.
 
 The target vision requires `/lab` to become a **research IDE**, not just a JSON editor.
 The user must be able to:
@@ -1636,7 +1636,7 @@ Priority order MUST be:
 - **Phase 5 extends `BacktestResult`** (which already has `datasetId`/`datasetHash`/`engineVersion` from Stage 19) — binding is mostly UI work.
 - **Classic mode (DslEditor + AiChat + BacktestReport) MUST NOT be removed** until Phase 4 is accepted.
 
-This sequence minimizes rework, keeps the system compatible with the current architecture, and creates the strongest foundation for future AI-assisted strategy research inside botmarketplace.store.
+This sequence minimizes rework, keeps the system compatible with the current architecture, and creates the strongest foundation for future AI-assisted strategy research inside botmarketplace.ru.
 
 ---
 

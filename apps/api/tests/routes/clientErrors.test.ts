@@ -39,7 +39,7 @@ describe("POST /api/v1/client-errors", () => {
       payload: {
         message: "Cannot read property 'foo' of undefined",
         stack: "TypeError: Cannot read...\n  at Component",
-        url: "https://botmarketplace.store/terminal",
+        url: "https://botmarketplace.ru/terminal",
         timestamp: new Date().toISOString(),
       },
     });
