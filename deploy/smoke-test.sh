@@ -1165,17 +1165,20 @@ if [[ "$S18_AVAIL" != "true" ]]; then
   red "POST /ai/plan skipped — AI provider not available"
   ((++FAIL))
 else
-  # `|| true` guards against pipefail bubbling out of the embedded
-  # `echo … | python3 …` substitution. On AI rate-limit cooldown the
-  # response payload can be truncated/non-JSON; the embedded python3
-  # in -d is fine, but this pattern was the original §18.6 abort point
-  # in `set -euo pipefail`. Guard the whole assignment — the empty/bad
-  # response is then handled by the explicit `[[ -n "$S18_PLAN_ID" ]]`
-  # checks below (same posture as §3 helpers).
+  # Pre-encode the message as a JSON string in its own statement, NOT
+  # embedded inside the curl `-d` arg. The embedded `$(echo … | python3
+  # …)` pattern (used previously) interacts badly with `set -euo pipefail`:
+  # on AI rate-limit cooldown the inner pipe could fail in a way that
+  # caused the outer assignment to abort the whole script (#380's `||
+  # true` masked the loud abort but turned it into a silent halt of
+  # subsequent stages — observed 2026-05-06: smoke run terminated after
+  # §18.5 with exit 0, never reaching §19+). Decoupling lets us guard
+  # each step explicitly.
+  S18_PLAN_MSG_JSON=$(printf '%s' "$S18_PLAN_MSG" | python3 -c 'import sys,json; print(json.dumps(sys.stdin.read().strip()))' 2>/dev/null) || S18_PLAN_MSG_JSON='""'
   S18_PLAN_RESP=$(curl -s -X POST "$BASE_URL/api/v1/ai/plan" \
     -H "Authorization: Bearer $TOKEN" \
     -H "Content-Type: application/json" \
-    -d "{\"message\":$(echo "$S18_PLAN_MSG" | python3 -c 'import sys,json; print(json.dumps(sys.stdin.read().strip()))')}") || true
+    -d "{\"message\":$S18_PLAN_MSG_JSON}") || true
 
   S18_PLAN_ID=$(echo "$S18_PLAN_RESP" | grep -o '"planId":"[^"]*"' | head -1 | cut -d'"' -f4)
   S18_PLAN_HAS_ACTIONS=$(echo "$S18_PLAN_RESP" | grep -o '"actionId"' | head -1)
@@ -1251,10 +1254,11 @@ except: pass
 
   # 18.11 Chain test: CREATE_STRATEGY + CREATE_STRATEGY_VERSION with dependsOn
   S18_CHAIN_MSG='Create a new strategy named SmokeChain with RSI14 indicator, then create version 1 for it'
+  S18_CHAIN_MSG_JSON=$(printf '%s' "$S18_CHAIN_MSG" | python3 -c 'import sys,json; print(json.dumps(sys.stdin.read().strip()))' 2>/dev/null) || S18_CHAIN_MSG_JSON='""'
   S18_CHAIN_RESP=$(curl -s -X POST "$BASE_URL/api/v1/ai/plan" \
     -H "Authorization: Bearer $TOKEN" \
     -H "Content-Type: application/json" \
-    -d "{\"message\":$(echo "$S18_CHAIN_MSG" | python3 -c 'import sys,json; print(json.dumps(sys.stdin.read().strip()))')}") || true
+    -d "{\"message\":$S18_CHAIN_MSG_JSON}") || true
 
   S18_CHAIN_PLAN_ID=$(echo "$S18_CHAIN_RESP" | grep -o '"planId":"[^"]*"' | head -1 | cut -d'"' -f4)
   S18_CHAIN_COUNT=$(echo "$S18_CHAIN_RESP" | python3 -c "
@@ -1339,10 +1343,11 @@ else
   # 19.2 Full bot lifecycle plan: CREATE_BOT + START_RUN + STOP_RUN
   S19_BOT_MSG='Create a new bot named SmokeBot18c from the most recent strategy version available, then start a run for 1 minute, then stop that run'
 
+  S19_BOT_MSG_JSON=$(printf '%s' "$S19_BOT_MSG" | python3 -c 'import sys,json; print(json.dumps(sys.stdin.read().strip()))' 2>/dev/null) || S19_BOT_MSG_JSON='""'
   S19_PLAN_RESP=$(curl -s -X POST "$BASE_URL/api/v1/ai/plan" \
     -H "Authorization: Bearer $TOKEN" \
     -H "Content-Type: application/json" \
-    -d "{\"message\":$(echo "$S19_BOT_MSG" | python3 -c 'import sys,json; print(json.dumps(sys.stdin.read().strip()))')}") || true
+    -d "{\"message\":$S19_BOT_MSG_JSON}") || true
 
   S19_PLAN_ID=$(echo "$S19_PLAN_RESP" | grep -o '"planId":"[^"]*"' | head -1 | cut -d'"' -f4)
   S19_ACTION_COUNT=$(echo "$S19_PLAN_RESP" | python3 -c "
@@ -1471,10 +1476,11 @@ except: pass
 
   # 19.6 CREATE_BOT with invalid strategyVersionId → 404 (cross-workspace / not found)
   S19_BADBOT_MSG='Create a bot named BadBot with strategyVersionId 00000000-0000-0000-0000-000000000000, symbol BTCUSDT, timeframe M15'
+  S19_BADBOT_MSG_JSON=$(printf '%s' "$S19_BADBOT_MSG" | python3 -c 'import sys,json; print(json.dumps(sys.stdin.read().strip()))' 2>/dev/null) || S19_BADBOT_MSG_JSON='""'
   S19_BADPLAN_RESP=$(curl -s -X POST "$BASE_URL/api/v1/ai/plan" \
     -H "Authorization: Bearer $TOKEN" \
     -H "Content-Type: application/json" \
-    -d "{\"message\":$(echo "$S19_BADBOT_MSG" | python3 -c 'import sys,json; print(json.dumps(sys.stdin.read().strip()))')}") || true
+    -d "{\"message\":$S19_BADBOT_MSG_JSON}") || true
   S19_BADPLAN_ID=$(echo "$S19_BADPLAN_RESP" | grep -o '"planId":"[^"]*"' | head -1 | cut -d'"' -f4)
   S19_BAD_ACT_ID=$(echo "$S19_BADPLAN_RESP" | python3 -c "
 import sys,json
@@ -1498,10 +1504,11 @@ except: pass
 
   # 19.7 START_RUN with non-existent botId → 404
   S19_BADRUN_MSG='Start a run for bot 00000000-0000-0000-0000-000000000000'
+  S19_BADRUN_MSG_JSON=$(printf '%s' "$S19_BADRUN_MSG" | python3 -c 'import sys,json; print(json.dumps(sys.stdin.read().strip()))' 2>/dev/null) || S19_BADRUN_MSG_JSON='""'
   S19_BADRUN_PLAN_RESP=$(curl -s -X POST "$BASE_URL/api/v1/ai/plan" \
     -H "Authorization: Bearer $TOKEN" \
     -H "Content-Type: application/json" \
-    -d "{\"message\":$(echo "$S19_BADRUN_MSG" | python3 -c 'import sys,json; print(json.dumps(sys.stdin.read().strip()))')}") || true
+    -d "{\"message\":$S19_BADRUN_MSG_JSON}") || true
   S19_BADRUN_PLAN_ID=$(echo "$S19_BADRUN_PLAN_RESP" | grep -o '"planId":"[^"]*"' | head -1 | cut -d'"' -f4)
   S19_BADRUN_ACT_ID=$(echo "$S19_BADRUN_PLAN_RESP" | python3 -c "
 import sys,json
