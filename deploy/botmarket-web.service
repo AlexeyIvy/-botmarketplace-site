@@ -40,7 +40,10 @@ Environment=NODE_ENV=production
 Environment=PORT=3000
 
 # Hardening (docs/30 Phase 9). MemoryDenyWriteExecute is intentionally
-# omitted — V8 JIT requires writable+executable pages. Web only writes
+# omitted — V8 JIT requires writable+executable pages. AF_NETLINK is
+# required by getifaddrs(3) which Node's os.networkInterfaces() calls
+# during Next.js listen() — without it, startup aborts with
+# EAFNOSUPPORT (errno 97). See incident 2026-05-06. Web only writes
 # to .next/cache at runtime (Next.js fetch cache, ISR), so the writable
 # path is scoped to the build output directory.
 ProtectSystem=strict
@@ -49,7 +52,7 @@ PrivateTmp=true
 NoNewPrivileges=true
 RestrictNamespaces=true
 LockPersonality=true
-RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX AF_NETLINK
 ReadWritePaths=/opt/-botmarketplace-site/apps/web/.next
 
 [Install]
