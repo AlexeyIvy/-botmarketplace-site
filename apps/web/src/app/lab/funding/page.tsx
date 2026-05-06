@@ -53,13 +53,6 @@ export default function LabFundingPage() {
     setMounted(true);
   }, []);
 
-  // Auth gate — same posture as /exchanges and other authenticated pages.
-  useEffect(() => {
-    if (!getToken()) {
-      router.push("/login");
-    }
-  }, [router]);
-
   const runScan = useCallback(async () => {
     setScanning(true);
     setError(null);
@@ -73,12 +66,20 @@ export default function LabFundingPage() {
     setUpdatedAt(res.data.updatedAt);
   }, [opts]);
 
-  // Run an initial scan on mount so the page is not blank — matches the
-  // expected operator workflow ("open the page → see today's candidates").
+  // Auth gate + initial scan in a single guarded effect. Splitting these
+  // into sibling effects causes the scan request to fire before the
+  // redirect lands (React runs both effects in the same commit), so an
+  // unauthenticated visitor briefly sees a 401 error flash before the
+  // redirect. Same posture as /exchanges/page.tsx.
   useEffect(() => {
+    if (!getToken()) {
+      router.push("/login");
+      return;
+    }
     void runScan();
-    // Intentionally not depending on runScan: we only auto-scan on first
-    // mount. Subsequent scans are explicit via the button.
+    // Run only on mount. runScan closes over the initial `opts` (DEFAULT_OPTS)
+    // which is what we want for the first auto-scan; subsequent scans are
+    // explicit via the button.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
