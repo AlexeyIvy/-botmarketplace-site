@@ -1165,10 +1165,17 @@ if [[ "$S18_AVAIL" != "true" ]]; then
   red "POST /ai/plan skipped — AI provider not available"
   ((++FAIL))
 else
+  # `|| true` guards against pipefail bubbling out of the embedded
+  # `echo … | python3 …` substitution. On AI rate-limit cooldown the
+  # response payload can be truncated/non-JSON; the embedded python3
+  # in -d is fine, but this pattern was the original §18.6 abort point
+  # in `set -euo pipefail`. Guard the whole assignment — the empty/bad
+  # response is then handled by the explicit `[[ -n "$S18_PLAN_ID" ]]`
+  # checks below (same posture as §3 helpers).
   S18_PLAN_RESP=$(curl -s -X POST "$BASE_URL/api/v1/ai/plan" \
     -H "Authorization: Bearer $TOKEN" \
     -H "Content-Type: application/json" \
-    -d "{\"message\":$(echo "$S18_PLAN_MSG" | python3 -c 'import sys,json; print(json.dumps(sys.stdin.read().strip()))')}")
+    -d "{\"message\":$(echo "$S18_PLAN_MSG" | python3 -c 'import sys,json; print(json.dumps(sys.stdin.read().strip()))')}") || true
 
   S18_PLAN_ID=$(echo "$S18_PLAN_RESP" | grep -o '"planId":"[^"]*"' | head -1 | cut -d'"' -f4)
   S18_PLAN_HAS_ACTIONS=$(echo "$S18_PLAN_RESP" | grep -o '"actionId"' | head -1)
@@ -1213,7 +1220,7 @@ except: pass
     S18_EXEC_RESP=$(curl -s -X POST "$BASE_URL/api/v1/ai/execute" \
       -H "Authorization: Bearer $TOKEN" \
       -H "Content-Type: application/json" \
-      -d "{\"planId\":\"$S18_PLAN_ID\",\"actionId\":\"$S18_ACTION_ID\"}")
+      -d "{\"planId\":\"$S18_PLAN_ID\",\"actionId\":\"$S18_ACTION_ID\"}") || true
     S18_EXEC_STATUS=$(echo "$S18_EXEC_RESP" | grep -o '"status":"[^"]*"' | head -1 | cut -d'"' -f4)
     S18_EXEC_AT=$(echo "$S18_EXEC_RESP" | grep -o '"executedAt":"[^"]*"' | head -1 | cut -d'"' -f4)
 
@@ -1247,7 +1254,7 @@ except: pass
   S18_CHAIN_RESP=$(curl -s -X POST "$BASE_URL/api/v1/ai/plan" \
     -H "Authorization: Bearer $TOKEN" \
     -H "Content-Type: application/json" \
-    -d "{\"message\":$(echo "$S18_CHAIN_MSG" | python3 -c 'import sys,json; print(json.dumps(sys.stdin.read().strip()))')}")
+    -d "{\"message\":$(echo "$S18_CHAIN_MSG" | python3 -c 'import sys,json; print(json.dumps(sys.stdin.read().strip()))')}") || true
 
   S18_CHAIN_PLAN_ID=$(echo "$S18_CHAIN_RESP" | grep -o '"planId":"[^"]*"' | head -1 | cut -d'"' -f4)
   S18_CHAIN_COUNT=$(echo "$S18_CHAIN_RESP" | python3 -c "
@@ -1335,7 +1342,7 @@ else
   S19_PLAN_RESP=$(curl -s -X POST "$BASE_URL/api/v1/ai/plan" \
     -H "Authorization: Bearer $TOKEN" \
     -H "Content-Type: application/json" \
-    -d "{\"message\":$(echo "$S19_BOT_MSG" | python3 -c 'import sys,json; print(json.dumps(sys.stdin.read().strip()))')}")
+    -d "{\"message\":$(echo "$S19_BOT_MSG" | python3 -c 'import sys,json; print(json.dumps(sys.stdin.read().strip()))')}") || true
 
   S19_PLAN_ID=$(echo "$S19_PLAN_RESP" | grep -o '"planId":"[^"]*"' | head -1 | cut -d'"' -f4)
   S19_ACTION_COUNT=$(echo "$S19_PLAN_RESP" | python3 -c "
@@ -1368,7 +1375,7 @@ except: pass
     S19_CB_RESP=$(curl -s -X POST "$BASE_URL/api/v1/ai/execute" \
       -H "Authorization: Bearer $TOKEN" \
       -H "Content-Type: application/json" \
-      -d "{\"planId\":\"$S19_PLAN_ID\",\"actionId\":\"$S19_CREATEBOT_ID\"}")
+      -d "{\"planId\":\"$S19_PLAN_ID\",\"actionId\":\"$S19_CREATEBOT_ID\"}") || true
     S19_CB_STATUS=$(echo "$S19_CB_RESP" | grep -o '"status":"[^"]*"' | head -1 | cut -d'"' -f4)
     S19_BOT_ID=$(echo "$S19_CB_RESP" | python3 -c "
 import sys,json
@@ -1411,7 +1418,7 @@ except: pass
     S19_SR_RESP=$(curl -s -X POST "$BASE_URL/api/v1/ai/execute" \
       -H "Authorization: Bearer $TOKEN" \
       -H "Content-Type: application/json" \
-      -d "{\"planId\":\"$S19_PLAN_ID\",\"actionId\":\"$S19_STARTRUN_ID\"}")
+      -d "{\"planId\":\"$S19_PLAN_ID\",\"actionId\":\"$S19_STARTRUN_ID\"}") || true
     S19_SR_STATUS=$(echo "$S19_SR_RESP" | grep -o '"status":"[^"]*"' | head -1 | cut -d'"' -f4)
     S19_RUN_ID=$(echo "$S19_SR_RESP" | python3 -c "
 import sys,json
@@ -1444,7 +1451,7 @@ except: pass
     S19_STOP_RESP=$(curl -s -X POST "$BASE_URL/api/v1/ai/execute" \
       -H "Authorization: Bearer $TOKEN" \
       -H "Content-Type: application/json" \
-      -d "{\"planId\":\"$S19_PLAN_ID\",\"actionId\":\"$S19_STOPRUN_ID\"}")
+      -d "{\"planId\":\"$S19_PLAN_ID\",\"actionId\":\"$S19_STOPRUN_ID\"}") || true
     S19_STOP_STATUS=$(echo "$S19_STOP_RESP" | grep -o '"status":"[^"]*"' | head -1 | cut -d'"' -f4)
     S19_STOP_STATE=$(echo "$S19_STOP_RESP" | python3 -c "
 import sys,json
@@ -1467,7 +1474,7 @@ except: pass
   S19_BADPLAN_RESP=$(curl -s -X POST "$BASE_URL/api/v1/ai/plan" \
     -H "Authorization: Bearer $TOKEN" \
     -H "Content-Type: application/json" \
-    -d "{\"message\":$(echo "$S19_BADBOT_MSG" | python3 -c 'import sys,json; print(json.dumps(sys.stdin.read().strip()))')}")
+    -d "{\"message\":$(echo "$S19_BADBOT_MSG" | python3 -c 'import sys,json; print(json.dumps(sys.stdin.read().strip()))')}") || true
   S19_BADPLAN_ID=$(echo "$S19_BADPLAN_RESP" | grep -o '"planId":"[^"]*"' | head -1 | cut -d'"' -f4)
   S19_BAD_ACT_ID=$(echo "$S19_BADPLAN_RESP" | python3 -c "
 import sys,json
@@ -1494,7 +1501,7 @@ except: pass
   S19_BADRUN_PLAN_RESP=$(curl -s -X POST "$BASE_URL/api/v1/ai/plan" \
     -H "Authorization: Bearer $TOKEN" \
     -H "Content-Type: application/json" \
-    -d "{\"message\":$(echo "$S19_BADRUN_MSG" | python3 -c 'import sys,json; print(json.dumps(sys.stdin.read().strip()))')}")
+    -d "{\"message\":$(echo "$S19_BADRUN_MSG" | python3 -c 'import sys,json; print(json.dumps(sys.stdin.read().strip()))')}") || true
   S19_BADRUN_PLAN_ID=$(echo "$S19_BADRUN_PLAN_RESP" | grep -o '"planId":"[^"]*"' | head -1 | cut -d'"' -f4)
   S19_BADRUN_ACT_ID=$(echo "$S19_BADRUN_PLAN_RESP" | python3 -c "
 import sys,json
