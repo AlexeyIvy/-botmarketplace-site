@@ -51,3 +51,8 @@ packages/*/tests/**/*.d.ts.map
 
 # Claude Code secrets (never commit tokens)
 .claude/secrets
+
+# demoSmoke harness output (docs/53-T3 / 54-T1..T3 / 55-T6 sub-gate).
+# Reports may include workspace IDs and run identifiers — keep them off
+# git; operators excerpt summary lines into companion-docs by hand.
+apps/api/scripts/.smoke-output/
