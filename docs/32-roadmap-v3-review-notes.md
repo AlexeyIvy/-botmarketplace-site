@@ -88,7 +88,7 @@ Task #13 (crypto тесты)            → решает замечание 2.2 
 
 ### Замечание 7.1 — Расхождение имён nginx конфигов (severity: INFO)
 
-На VPS реально активен `/etc/nginx/sites-enabled/botmarketplace.conf`, а не `botmarketplace.store`. Файл `deploy/nginx.conf` в репо синхронизирован с актуальной структурой (включая upstream блоки).
+На VPS реально активен `/etc/nginx/sites-enabled/botmarketplace.conf`, а не `botmarketplace.ru`. Файл `deploy/nginx.conf` в репо синхронизирован с актуальной структурой (включая upstream блоки).
 
 ---
 

@@ -127,7 +127,7 @@ if (exitQty <= 0) {
 | **Файлы** | `apps/api/src/app.ts` |
 
 **Проблема:**
-- CORS: `["https://botmarketplace.store"]` захардкожен. Staging/dev домены не пройдут.
+- CORS: `["https://botmarketplace.ru"]` захардкожен. Staging/dev домены не пройдут.
 - trustProxy: `"127.0.0.1"` захардкожен. За cloud load balancer (10.x.x.x) rate-limit ломается.
 
 **Решение:**
@@ -135,7 +135,7 @@ if (exitQty <= 0) {
 // CORS
 const corsOrigin = process.env.CORS_ORIGIN
   ? process.env.CORS_ORIGIN.split(",")
-  : (process.env.NODE_ENV === "production" ? ["https://botmarketplace.store"] : true);
+  : (process.env.NODE_ENV === "production" ? ["https://botmarketplace.ru"] : true);
 
 // trustProxy
 trustProxy: process.env.TRUST_PROXY || "127.0.0.1",
