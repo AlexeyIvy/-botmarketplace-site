@@ -1112,6 +1112,24 @@ fi
 # ─── 18. Stage 18b — AI Actions Execute ──────────────────────────────────────
 header "18. Stage 18b — AI Actions Execute"
 
+# AI block (§18 + §19) deals with optional response shapes from a
+# rate-limit-prone provider. Many extractions are `S..._FOO=$(echo
+# "$RESP" | grep -o '"foo":...' | cut ...)`; under `set -euo pipefail`,
+# a no-match (which is a totally normal outcome here) makes the inner
+# pipe exit 1, the substitution exit 1, and the script aborts on the
+# next command. That's the silent halt observed 2026-05-06: bash -x
+# trace pinpointed `S18_PLAN_ID=` (empty) right before the script
+# stopped — set -e fired on the empty extraction, not on python3
+# substitution as #380/#384 hypothesised.
+#
+# Solution: locally drop strict mode for the AI block. Each test still
+# uses explicit `[[ -n "$S..._ID" ]]` / `check "..." "$expected"
+# "$actual"` guards to convert a missing field into a regular FAIL,
+# so we don't lose error detection — we just stop conflating "test
+# failed" with "harness aborted before reaching test". Re-enabled
+# before §20 (datasets), which uses the strict-mode-friendly pattern.
+set +eo pipefail
+
 # 18.0 GET /ai/status — public endpoint, no auth needed
 S18_STATUS=$(curl -s "$BASE_URL/api/v1/ai/status")
 S18_AVAIL=$(echo "$S18_STATUS" | grep -o '"available":[^,}]*' | cut -d: -f2 | tr -d ' "')
@@ -1530,6 +1548,11 @@ except: pass
     ((++PASS))
   fi
 fi
+
+# Re-enable strict mode for the remaining §20+ stages, which use simple
+# curl probes + `check` helpers and don't depend on best-effort field
+# extraction the way the AI block did.
+set -eo pipefail
 
 # ─── 20. Stage 19 — Datasets & Reproducibility ──────────────────────────────
 header "20. Stage 19 — Datasets & Reproducibility"
