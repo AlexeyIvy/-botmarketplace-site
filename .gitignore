@@ -7,6 +7,14 @@ dist/
 .DS_Store
 Thumbs.db
 
+# Stray non-pnpm lockfiles. Project is fully on pnpm-lock.yaml; npm/yarn
+# artifacts at any depth (typically created by accidental `npm install`
+# in an app subdir) trigger Next.js workspace-root warnings and confuse
+# CI. See incident 2026-05-06: apps/{api,web}/package-lock.json crept in
+# and were committed.
+package-lock.json
+yarn.lock
+
 # Prisma
 apps/api/prisma/migrations/**/migration_lock.toml
 
