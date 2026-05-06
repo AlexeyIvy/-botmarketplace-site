@@ -104,7 +104,7 @@ git push origin v0.1.0-rc1
 bash deploy/smoke-test.sh
 
 # Против production
-BASE_URL=https://botmarketplace.store bash deploy/smoke-test.sh
+BASE_URL=https://botmarketplace.ru bash deploy/smoke-test.sh
 
 # С worker secret (production mode)
 BOT_WORKER_SECRET="$(grep BOT_WORKER_SECRET .env | cut -d= -f2 | tr -d '"')" \

@@ -203,13 +203,13 @@ psql "$DATABASE_URL" -c "SELECT 1"
 
 ```bash
 # Получить X-Request-Id из ответа
-REQ_ID=$(curl -sI https://botmarketplace.store/api/v1/healthz | grep -i x-request-id | awk '{print $2}' | tr -d '\r')
+REQ_ID=$(curl -sI https://botmarketplace.ru/api/v1/healthz | grep -i x-request-id | awk '{print $2}' | tr -d '\r')
 
 # Найти все записи в логах
 journalctl -u botmarket-api --since "1 hour ago" | grep "$REQ_ID"
 
 # Клиент может задать свой ID для удобного поиска:
-curl -H "X-Request-Id: debug-session-1" https://botmarketplace.store/api/v1/healthz
+curl -H "X-Request-Id: debug-session-1" https://botmarketplace.ru/api/v1/healthz
 journalctl -u botmarket-api | grep "debug-session-1"
 ```
 
@@ -248,7 +248,7 @@ journalctl -u botmarket-api --since "10 minutes ago" | head -50
 systemctl restart botmarket-api
 
 # Проверить текущее состояние:
-curl -v https://botmarketplace.store/api/v1/auth/login \
+curl -v https://botmarketplace.ru/api/v1/auth/login \
   -X POST -H "Content-Type: application/json" \
   -d '{"email":"test@example.com","password":"Test1234!"}'
 # Если 429 — смотреть заголовки Retry-After
@@ -527,13 +527,13 @@ cold (Glacier / B2 Archive).
 systemctl is-active botmarket-api && systemctl is-active botmarket-web
 
 # 2. API liveness
-curl -s https://botmarketplace.store/api/v1/healthz | jq .
+curl -s https://botmarketplace.ru/api/v1/healthz | jq .
 
 # 3. Correlation ID в ответе
-curl -sI https://botmarketplace.store/api/v1/healthz | grep -i x-request-id
+curl -sI https://botmarketplace.ru/api/v1/healthz | grep -i x-request-id
 
 # 4. Web UI доступен
-curl -s -o /dev/null -w "%{http_code}" https://botmarketplace.store/login
+curl -s -o /dev/null -w "%{http_code}" https://botmarketplace.ru/login
 
 # 5. Полный smoke suite
 bash deploy/smoke-test.sh
@@ -720,7 +720,7 @@ journalctl -u botmarket-api -f | grep botWorker
 journalctl -u botmarket-api --since "1 hour ago" | grep '"level":50'
 
 # EMERGENCY: остановить все активные runs
-curl -s -X POST https://botmarketplace.store/api/v1/runs/stop-all \
+curl -s -X POST https://botmarketplace.ru/api/v1/runs/stop-all \
   -H "Authorization: Bearer $YOUR_TOKEN" \
   -H "X-Workspace-Id: $YOUR_WS_ID"
 ```

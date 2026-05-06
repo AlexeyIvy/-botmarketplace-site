@@ -328,7 +328,7 @@ Stage 19 добавляет новые проверки (Section 19) и manual c
 
 ### 15.1 Manual curl checks (как в RC checklist стиле)
 Переменные:
-- BASE=https://botmarketplace.store/api/v1
+- BASE=https://botmarketplace.ru/api/v1
 - TOKEN и WS_ID получены через существующий auth flow
 
 A) Create dataset (expected 201/200 + fields):
