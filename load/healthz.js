@@ -9,7 +9,7 @@ import { Trend } from "k6/metrics";
 //
 // Usage:
 //   BASE_URL=http://localhost:4000 k6 run load/healthz.js
-//   BASE_URL=https://staging.botmarketplace.store k6 run load/healthz.js
+//   BASE_URL=https://staging.botmarketplace.ru k6 run load/healthz.js
 //
 // Output: JSON summary goes to stdout; p95/p99 latencies + error rate in
 // the trend metrics.
