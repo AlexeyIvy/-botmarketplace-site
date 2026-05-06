@@ -94,7 +94,9 @@ export async function buildApp() {
 
   const corsOrigin = process.env.CORS_ORIGIN
     ? process.env.CORS_ORIGIN.split(",")
-    : (process.env.NODE_ENV === "production" ? ["https://botmarketplace.store"] : true);
+    : (process.env.NODE_ENV === "production"
+        ? ["https://botmarketplace.ru", "https://www.botmarketplace.ru"]
+        : true);
 
   await app.register(cors, {
     origin: corsOrigin,

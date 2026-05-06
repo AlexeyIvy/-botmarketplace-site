@@ -8,7 +8,7 @@
 set -euo pipefail
 
 APP_DIR="/opt/-botmarketplace-site"
-DOMAIN="botmarketplace.store"
+DOMAIN="botmarketplace.ru"
 
 cd "$APP_DIR"
 
