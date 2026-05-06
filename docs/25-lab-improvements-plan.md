@@ -1,14 +1,42 @@
 # LAB IMPROVEMENTS PLAN — Post Phase-4B Hardening & Feature Expansion
 **Project:** BotMarketplace
 **Repository:** `AlexeyIvy/-botmarketplace-site`
-**Status:** Ready for implementation — phased, per-PR delivery
+**Status:** All issues closed in code as of 2026-05-06 audit (see §0). Per-phase narrative below preserved as historical reference.
 **Author role:** Senior Software Engineer / Product Architect
 **Scope:** Bug fixes, architectural hardening, UX improvements, and new features identified after Phase 4B completion. Builds on `docs/23-lab-v2-ide-spec.md` and on the implemented state of `useLabGraphStore`, `LabBuildCanvas`, `blockDefs.ts`, `LabShell`, and `ClassicMode`.
 **Change type:** Additive, backward-compatible, phased.
 
 ---
 
+## 0. Implementation status (2026-05-06 audit)
+
+All 17 issues in the §2 registry are closed in code. The status column was
+last updated mid-2026 when only B1/B2 were marked ✅; A1/A2/C1 work landed
+afterwards without doc-side updates. This audit reconciles the table with
+the working tree at `main@270bd2c`.
+
+| Phase | Items | Status | Code anchors |
+|---|---|---|---|
+| A1 | BUG-01, BUG-02, BUG-03, UX-01, ARCH-01 | ✅ closed | `apps/web/src/app/lab/useLabGraphStore.ts` (atomic `hydrateGraph`, timers inside `create()` closure, `LabEdge = Edge<StrategyEdgeData>`); `apps/web/src/app/lab/build/page.tsx` (`canvasContainerRef` + `tabIndex={0}`); `apps/web/src/app/lab/LabShell.tsx` (badge `dimmed`/`variant` derived from state) |
+| A2 | BUG-04, UX-02, UX-03, UX-04, FEAT-01, FEAT-04, ARCH-02 | ✅ closed | `useLabGraphStore.saveGraphNow` (3-attempt exponential backoff retry); `apps/web/src/app/lab/labApi.ts` (typed fetch helpers); `LabShell.tsx:539` (placeholder removed, A2-3 Option A); `build/page.tsx` (`handleNewGraph` + always-visible selector); `build/page.tsx:1025` (JsonHighlight + DOMPurify for DSL preview); `build/blockDefs.ts:104` (`Constant` block); `build/nodes/StrategyNode.tsx:164` (`useConnectionContext` → port highlight) |
+| B1 | UX-05, UX-06, UX-07, FEAT-03 | ✅ closed | already marked in registry |
+| B2 | FEAT-02 | ✅ closed | already marked in registry |
+| C1 | FEAT-05 | ✅ closed | `apps/api/prisma/schema.prisma:728` (`BacktestSweep`); `apps/web/src/app/lab/test/OptimisePanel.tsx` (multi-param `sweepParams` form, 47-T1+T5 multi-param echo) |
+
+No outstanding work tracked by this document. Future Lab improvements
+should be tracked in a new doc (`docs/26-…` or successor) rather than
+appended here.
+
+---
+
 ## CHANGE LOG
+
+**Revision 2 — 2026-05-06 (audit):**
+- Verified all 17 registry items against `main@270bd2c`; all closed in code.
+- Added §0 implementation-status table with code anchors.
+- Issue registry rows below struck-through across the board to match.
+- Phase narrative bodies (§3 onwards) left unmodified — they remain
+  the source of intent for future Lab improvement docs.
 
 **Revision 1 — March 2026 (initial expert pass):**
 - Identified race condition in `hydrateGraph` (three separate `set()` calls).
@@ -47,26 +75,28 @@ All changes below are additive. Classic mode is preserved. No schema changes bef
 
 Each issue tracked here has a severity, a phase assignment, and a source reference.
 
+All rows below carry `✅` per the §0 audit (2026-05-06).
+
 | ID | Description | Severity | Phase |
 |---|---|---|---|
-| BUG-01 | `hydrateGraph` uses three non-atomic `set()` calls — race condition risk | 🔴 HIGH | A1 |
-| BUG-02 | Module-level `_validationTimer`, `_saveTimer`, `_nodeSeq` — SSR/test leak | 🔴 HIGH | A1 |
-| BUG-03 | `handleKeyDown` bound to `window` — not scoped to canvas focus | 🟡 MEDIUM | A1 |
-| BUG-04 | `save_error` state — no retry logic; user stuck until next mutation | 🟡 MEDIUM | A2 |
-| UX-01 | Validation/Run badges in Context Bar always `dimmed: true` | 🔴 HIGH | A1 |
-| UX-02 | Dual Inspector — `LabShell` placeholder + `InspectorPanel` inside Build tab | 🟡 MEDIUM | A2 |
-| UX-03 | Graph selector hidden at single-graph state; no `+ New Graph` button | 🟡 MEDIUM | A2 |
-| UX-04 | DSL Preview — plain `JSON.stringify` without syntax highlighting | 🟡 MEDIUM | A2 |
+| BUG-01 | ~~`hydrateGraph` uses three non-atomic `set()` calls — race condition risk~~ | 🔴 HIGH | A1 ✅ |
+| BUG-02 | ~~Module-level `_validationTimer`, `_saveTimer`, `_nodeSeq` — SSR/test leak~~ | 🔴 HIGH | A1 ✅ |
+| BUG-03 | ~~`handleKeyDown` bound to `window` — not scoped to canvas focus~~ | 🟡 MEDIUM | A1 ✅ |
+| BUG-04 | ~~`save_error` state — no retry logic; user stuck until next mutation~~ | 🟡 MEDIUM | A2 ✅ |
+| UX-01 | ~~Validation/Run badges in Context Bar always `dimmed: true`~~ | 🔴 HIGH | A1 ✅ |
+| UX-02 | ~~Dual Inspector — `LabShell` placeholder + `InspectorPanel` inside Build tab~~ | 🟡 MEDIUM | A2 ✅ |
+| UX-03 | ~~Graph selector hidden at single-graph state; no `+ New Graph` button~~ | 🟡 MEDIUM | A2 ✅ |
+| UX-04 | ~~DSL Preview — plain `JSON.stringify` without syntax highlighting~~ | 🟡 MEDIUM | A2 ✅ |
 | UX-05 | ~~Empty canvas — no onboarding state, no template shortcut~~ | 🟡 MEDIUM | B1 ✅ |
 | UX-06 | ~~Graph name hardcoded `"Untitled Graph"` — no rename affordance~~ | 🟡 MEDIUM | B1 ✅ |
 | UX-07 | ~~No keyboard shortcut help overlay (`?` or `Cmd+/`)~~ | 🟢 LOW | B1 ✅ |
-| FEAT-01 | Missing `Constant` block — `Compare` block unusable for numeric thresholds | 🔴 HIGH | A2 |
+| FEAT-01 | ~~Missing `Constant` block — `Compare` block unusable for numeric thresholds~~ | 🔴 HIGH | A2 ✅ |
 | FEAT-02 | ~~Missing `MACD`, `Bollinger`, `ATR`, `Volume`, `AND/OR Gate` blocks~~ | 🟡 MEDIUM | B2 ✅ |
 | FEAT-03 | ~~Equity curve absent from Classic Mode results after backtest~~ | 🟡 MEDIUM | B1 ✅ |
-| FEAT-04 | Port highlight during drag missing — compatible targets not visualised | 🟡 MEDIUM | A2 |
-| FEAT-05 | Parametric optimisation (Grid Search) — run sweep over param range | 🟢 LOW | C1 |
-| ARCH-01 | `LabEdge` typed as `Edge` — too wide; should be `Edge<StrategyEdgeData>` | 🟡 MEDIUM | A1 |
-| ARCH-02 | Fetch logic inside components — no `labApi.ts` abstraction layer | 🟡 MEDIUM | A2 |
+| FEAT-04 | ~~Port highlight during drag missing — compatible targets not visualised~~ | 🟡 MEDIUM | A2 ✅ |
+| FEAT-05 | ~~Parametric optimisation (Grid Search) — run sweep over param range~~ | 🟢 LOW | C1 ✅ |
+| ARCH-01 | ~~`LabEdge` typed as `Edge` — too wide; should be `Edge<StrategyEdgeData>`~~ | 🟡 MEDIUM | A1 ✅ |
+| ARCH-02 | ~~Fetch logic inside components — no `labApi.ts` abstraction layer~~ | 🟡 MEDIUM | A2 ✅ |
 
 ---
 
