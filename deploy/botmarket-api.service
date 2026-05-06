@@ -42,14 +42,17 @@ Environment=NODE_ENV=production
 Environment=PATH=/usr/bin:/usr/local/bin:/usr/local/share/pnpm
 
 # Hardening (docs/30 Phase 9). MemoryDenyWriteExecute is intentionally
-# omitted — V8 JIT requires writable+executable pages.
+# omitted — V8 JIT requires writable+executable pages. AF_NETLINK is
+# required by getifaddrs(3) which Node's os.networkInterfaces() calls
+# during Fastify listen() — without it, startup aborts with
+# EAFNOSUPPORT (errno 97). See incident 2026-05-06.
 ProtectSystem=strict
 ProtectHome=true
 PrivateTmp=true
 NoNewPrivileges=true
 RestrictNamespaces=true
 LockPersonality=true
-RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX AF_NETLINK
 ReadWritePaths=/opt/-botmarketplace-site /var/log
 
 [Install]
