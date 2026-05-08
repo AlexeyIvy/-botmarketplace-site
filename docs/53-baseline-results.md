@@ -31,12 +31,29 @@ Notes: _populate after run_
 
 Status: PENDING
 
-Harness:
+### Pre-flight checklist (operator)
+
+Before running, verify:
+1. **Bybit demo connection wired** — go to `/exchanges`, add a Bybit demo
+   key, click **Test**. The status badge must show CONNECTED with non-empty
+   `permissions` containing at least `ContractTrade:Order`. Note the
+   connection id (visible after expanding the row, or via
+   `pnpm --filter @botmarketplace/api exec prisma studio` → `ExchangeConnection`).
+2. **Environment** on the host running the api process:
+   - `BYBIT_ENV=demo` (or `BYBIT_BASE_URL` pointing at `api-demo.bybit.com`)
+     — the harness refuses to start with `BYBIT_ENV=live`.
+   - `TRADING_ENABLED` not set to `false` / `0` / `off` / `no` — fail-open
+     default is fine; explicit `true` also fine.
+3. **JWT token** for an authed user with workspace membership — copy from
+   browser localStorage after `/login` (`accessToken` key).
+
+### Harness command
 
 ```
 pnpm --filter @botmarketplace/api exec tsx scripts/demoSmoke.ts \
   --preset adaptive-regime \
   --workspace <ws-id> \
+  --connection <conn-id> \
   --token "$DEMO_JWT" \
   --base-url http://localhost:3001/api/v1 \
   --duration-min 30 \
@@ -44,25 +61,53 @@ pnpm --filter @botmarketplace/api exec tsx scripts/demoSmoke.ts \
   --quote-amount 50
 ```
 
-Acceptance (from `apps/api/scripts/demoSmoke.ts:evaluateAcceptance`):
-- `finalRunState ∉ {FAILED, TIMED_OUT}`
-- `errorEventCount === 0`
-- `failedIntentCount === 0`
-- `harnessHttpFailures === 0`
-- `intentCount > 0` (warning if 0; operator decides rerun)
+`--connection` is **required**. Without it the bot is created with
+`exchangeConnectionId: null` and intents auto-simulate
+(`apps/api/src/lib/worker/intentExecutor.ts:93`) — the harness would
+return PASS without any real Bybit traffic. The CLI rejects the missing
+flag with exit code 2.
+
+### Acceptance (from `apps/api/scripts/demoSmoke.ts:evaluateAcceptance`)
+
+HARD FAIL if any of:
+- `finalRunState ∈ {FAILED, TIMED_OUT}`
+- `errorEventCount > 0`
+- `failedIntentCount > 0`
+- `harnessHttpFailures > 0`
+- `simulatedEventCount > 0` (proof bot fell into demo simulation mode)
+- `marketEventCount === 0` (engine never received any market data)
+
+WARNING (does not fail):
+- `intentCount === 0` while `marketEventCount > 0` — legit flat market;
+  operator decides rerun.
+
+Pre-flight FAIL (exit code 3 — no bot is created):
+- connection not found, FAILED, or non-Bybit
+- `BYBIT_ENV=live`
+- `TRADING_ENABLED` off
+- post-instantiate `bot.exchangeConnectionId` mismatch
+
+### Result
 
 | Field | Value |
 | ----- | ----- |
 | Run timestamp |  |
 | Duration (min) |  |
+| Bybit env | demo \| live \| unknown |
+| Connection id |  |
 | Final run state |  |
 | Intent count |  |
 | Failed intents |  |
 | Error events |  |
+| Simulated events | 0 (must be 0) |
+| Market events |  |
+| Order samples (orderId list) |  |
 | Acceptance | PASS \| FAIL |
 | Report file | `apps/api/scripts/.smoke-output/<ts>-adaptive-regime.json` |
 
-Notes: _operator pastes summary excerpt + sign-off here_
+Notes: _operator pastes summary excerpt + sign-off here. Cross-check
+`Order samples` on bybit.com → Demo Trading → Order History — they must
+appear as real demo orders._
 
 ---
 
