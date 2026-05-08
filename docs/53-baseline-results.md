@@ -45,7 +45,17 @@ Before running, verify:
    - `TRADING_ENABLED` not set to `false` / `0` / `off` / `no` — fail-open
      default is fine; explicit `true` also fine.
 3. **JWT token** for an authed user with workspace membership — copy from
-   browser localStorage after `/login` (`accessToken` key).
+   browser localStorage after `/login` (`accessToken` key), or
+   `curl POST /api/v1/auth/login` directly. JWT TTL is 1h — start the run
+   within ~5 min of obtaining the token (a 30-min run leaves ~25 min slack).
+4. **Admin token (`ADMIN_API_TOKEN`)** for PRIVATE presets. Every flagship
+   ships PRIVATE pre-acceptance, and `/presets/:slug/instantiate` returns
+   `404 Preset not found` (intentional info-leak protection — same code
+   as "really not found") for non-admin requests against PRIVATE presets.
+   The harness `--admin-token` flag (or `DEMO_SMOKE_ADMIN_TOKEN` env var)
+   sends the token as `X-Admin-Token` header. On prod the value lives in
+   the api process's `ADMIN_API_TOKEN` env var. Skip the flag only after
+   `publishPreset.ts` flips the preset to BETA / PUBLIC.
 
 ### Harness command
 
@@ -55,6 +65,7 @@ pnpm --filter @botmarketplace/api exec tsx scripts/demoSmoke.ts \
   --workspace <ws-id> \
   --connection <conn-id> \
   --token "$DEMO_JWT" \
+  --admin-token "$ADMIN_API_TOKEN" \
   --base-url http://localhost:3001/api/v1 \
   --duration-min 30 \
   --symbol BTCUSDT \

@@ -22,10 +22,16 @@
  *     --workspace ws_xyz \
  *     --connection conn_xyz \
  *     --token "$DEMO_JWT" \
+ *     --admin-token "$ADMIN_API_TOKEN" \
  *     --base-url http://localhost:3001/api/v1 \
  *     --duration-min 30 \
  *     --symbol BTCUSDT \
  *     --quote-amount 50
+ *
+ * `--admin-token` обязателен пока target preset PRIVATE (все 5 флагманов
+ * до publishPreset.ts флипа). Без него `/presets/:slug/instantiate`
+ * вернёт 404 ("Preset not found" — намеренно скрывает существование).
+ * Опускайте флаг только когда preset уже флипнут в BETA / PUBLIC.
  *
  * `--connection` обязателен. Без exchangeConnectionId на боте
  * `intentExecutor` (apps/api/src/lib/worker/intentExecutor.ts:93)
@@ -60,6 +66,14 @@ export interface ParsedSmokeArgs {
    *  thin tokenizer. */
   connection?: string;
   token?: string;
+  /**
+   * X-Admin-Token shared secret. Required when the target preset has
+   * visibility PRIVATE (true for every flagship until publishPreset.ts
+   * flips it post-acceptance) — without it `/presets/:slug/instantiate`
+   * returns 404 "Preset not found" by design (404 not 403 to avoid leaking
+   * existence). Optional: omit when the preset is already BETA / PUBLIC.
+   */
+  adminToken?: string;
   baseUrl?: string;
   durationMin?: number;
   pollIntervalSec?: number;
@@ -77,6 +91,7 @@ export function parseArgs(argv: readonly string[]): ParsedSmokeArgs {
     else if (arg === "--workspace") out.workspace = argv[++i];
     else if (arg === "--connection") out.connection = argv[++i];
     else if (arg === "--token") out.token = argv[++i];
+    else if (arg === "--admin-token") out.adminToken = argv[++i];
     else if (arg === "--base-url") out.baseUrl = argv[++i];
     else if (arg === "--duration-min") out.durationMin = Number(argv[++i]);
     else if (arg === "--poll-interval-sec") out.pollIntervalSec = Number(argv[++i]);
@@ -528,15 +543,28 @@ interface BuildApiInput {
    * is invisible until a real run hits the route.
    */
   workspaceId: string;
+  /**
+   * Optional X-Admin-Token shared secret. When omitted the harness can
+   * only target BETA / PUBLIC presets — `/presets/:slug/instantiate`
+   * returns 404 for PRIVATE presets without admin (intentional 404-not-403
+   * info-leak protection in `presets.ts:canViewPreset`). Every flagship
+   * starts PRIVATE pre-acceptance, so demoSmoke runs against them require
+   * this token. Routes that don't gate on admin (bots/runs) ignore the
+   * header — including it in default headers when set is harmless.
+   */
+  adminToken?: string;
   prisma: PrismaClient;
 }
 
 export function buildDefaultApi(input: BuildApiInput): SmokeApi {
-  const headers = {
+  const headers: Record<string, string> = {
     "content-type": "application/json",
     authorization: `Bearer ${input.token}`,
     "x-workspace-id": input.workspaceId,
   };
+  if (input.adminToken) {
+    headers["x-admin-token"] = input.adminToken;
+  }
 
   async function postJson<T>(path: string, body: unknown): Promise<T> {
     const res = await fetch(`${input.baseUrl}${path}`, {
@@ -546,7 +574,23 @@ export function buildDefaultApi(input: BuildApiInput): SmokeApi {
     });
     if (!res.ok) {
       const text = await res.text().catch(() => "");
-      throw new Error(`POST ${path} -> ${res.status} ${res.statusText}: ${text.slice(0, 200)}`);
+      // Operator-friendly hint: 404 on /presets/*/instantiate without admin
+      // token is almost always a PRIVATE-visibility issue, not a missing
+      // preset. Surface that interpretation so the operator does not chase
+      // a phantom seed problem.
+      let hint = "";
+      if (
+        res.status === 404 &&
+        path.startsWith("/presets/") &&
+        path.endsWith("/instantiate") &&
+        !input.adminToken
+      ) {
+        hint =
+          " | hint: target preset may be PRIVATE — every flagship is PRIVATE pre-acceptance. " +
+          "Re-run with --admin-token \"$ADMIN_API_TOKEN\" (or set DEMO_SMOKE_ADMIN_TOKEN env var). " +
+          "See docs/53-baseline-results.md §2 pre-flight checklist.";
+      }
+      throw new Error(`POST ${path} -> ${res.status} ${res.statusText}: ${text.slice(0, 200)}${hint}`);
     }
     return (await res.json()) as T;
   }
@@ -687,6 +731,8 @@ export interface ValidatedSmokeConfig {
   workspace: string;
   connection: string;
   token: string;
+  /** Optional X-Admin-Token; required when preset visibility is PRIVATE. */
+  adminToken?: string;
   baseUrl: string;
   durationMin: number;
   pollIntervalSec: number;
@@ -707,6 +753,7 @@ export function validateCliArgs(parsed: ParsedSmokeArgs, env: Record<string, str
   const workspace = parsed.workspace ?? env.DEMO_SMOKE_WORKSPACE;
   const connection = parsed.connection ?? env.DEMO_SMOKE_CONNECTION;
   const token = parsed.token ?? env.DEMO_SMOKE_TOKEN;
+  const adminToken = parsed.adminToken ?? env.DEMO_SMOKE_ADMIN_TOKEN;
   const baseUrl = parsed.baseUrl ?? env.DEMO_SMOKE_BASE_URL ?? "http://localhost:3001/api/v1";
 
   if (!preset) return { kind: "error", reason: "--preset <slug> is required (or DEMO_SMOKE_PRESET)" };
@@ -742,6 +789,7 @@ export function validateCliArgs(parsed: ParsedSmokeArgs, env: Record<string, str
       workspace,
       connection,
       token,
+      adminToken,
       baseUrl,
       durationMin,
       pollIntervalSec,
@@ -765,7 +813,11 @@ async function main(): Promise<number> {
 
   if (cfg.dryRun) {
     console.log("[demoSmoke] dry-run — config validated, no run executed:");
-    console.log(JSON.stringify({ ...cfg, token: "<redacted>" }, null, 2));
+    console.log(JSON.stringify({
+      ...cfg,
+      token: "<redacted>",
+      adminToken: cfg.adminToken ? "<redacted>" : undefined,
+    }, null, 2));
     return 0;
   }
 
@@ -774,6 +826,7 @@ async function main(): Promise<number> {
     baseUrl: cfg.baseUrl,
     token: cfg.token,
     workspaceId: cfg.workspace,
+    adminToken: cfg.adminToken,
     prisma,
   });
 
