@@ -42,6 +42,7 @@ describe("demoSmoke.parseArgs", () => {
       "--workspace", "ws-1",
       "--connection", "conn-7",
       "--token", "jwt",
+      "--admin-token", "admin-secret",
       "--base-url", "http://api.test/v1",
       "--duration-min", "45",
       "--poll-interval-sec", "30",
@@ -55,6 +56,7 @@ describe("demoSmoke.parseArgs", () => {
       workspace: "ws-1",
       connection: "conn-7",
       token: "jwt",
+      adminToken: "admin-secret",
       baseUrl: "http://api.test/v1",
       durationMin: 45,
       pollIntervalSec: 30,
@@ -145,6 +147,33 @@ describe("demoSmoke.validateCliArgs", () => {
       expect(r.config.baseUrl).toBe("http://localhost:3001/api/v1");
       expect(r.config.connection).toBe("c");
     }
+  });
+
+  it("admin-token is optional; absent → adminToken=undefined", () => {
+    const r = validateCliArgs(baseValid, baseEnv);
+    expect(r.kind).toBe("ok");
+    if (r.kind === "ok") expect(r.config.adminToken).toBeUndefined();
+  });
+
+  it("admin-token via flag is forwarded", () => {
+    const r = validateCliArgs({ ...baseValid, adminToken: "secret-flag" }, baseEnv);
+    expect(r.kind).toBe("ok");
+    if (r.kind === "ok") expect(r.config.adminToken).toBe("secret-flag");
+  });
+
+  it("admin-token via DEMO_SMOKE_ADMIN_TOKEN env is forwarded when flag absent", () => {
+    const r = validateCliArgs(baseValid, { DEMO_SMOKE_ADMIN_TOKEN: "secret-env" });
+    expect(r.kind).toBe("ok");
+    if (r.kind === "ok") expect(r.config.adminToken).toBe("secret-env");
+  });
+
+  it("flag --admin-token wins over env DEMO_SMOKE_ADMIN_TOKEN", () => {
+    const r = validateCliArgs(
+      { ...baseValid, adminToken: "from-flag" },
+      { DEMO_SMOKE_ADMIN_TOKEN: "from-env" },
+    );
+    expect(r.kind).toBe("ok");
+    if (r.kind === "ok") expect(r.config.adminToken).toBe("from-flag");
   });
 });
 
@@ -789,5 +818,118 @@ describe("demoSmoke.buildDefaultApi — wire headers", () => {
       expect(headers["x-workspace-id"]).toBe("ws-xyz");
       expect(headers["authorization"]).toBe("Bearer jwt-abc");
     }
+  });
+
+  it("X-Admin-Token header is sent when adminToken is provided", async () => {
+    const recorded: Array<{ url: string; init: RequestInit }> = [];
+    globalThis.fetch = vi.fn(async (url: string | URL, init?: RequestInit) => {
+      recorded.push({ url: String(url), init: init ?? {} });
+      return new Response(
+        JSON.stringify({ botId: "bot-1", strategyId: "s-1", strategyVersionId: "sv-1", exchangeConnectionId: "conn-1" }),
+        { status: 201, headers: { "content-type": "application/json" } },
+      );
+    }) as typeof fetch;
+
+    const api = buildDefaultApi({
+      baseUrl: "http://api.test/api/v1",
+      token: "jwt-abc",
+      workspaceId: "ws-xyz",
+      adminToken: "admin-secret",
+      prisma: fakePrisma,
+    });
+
+    await api.instantiatePreset({
+      slug: "adaptive-regime",
+      workspaceId: "ws-xyz",
+      exchangeConnectionId: "conn-1",
+      overrides: {},
+    });
+
+    const headers = recorded[0].init.headers as Record<string, string>;
+    expect(headers["x-admin-token"]).toBe("admin-secret");
+  });
+
+  it("X-Admin-Token header is omitted when adminToken not provided", async () => {
+    const recorded: Array<{ url: string; init: RequestInit }> = [];
+    globalThis.fetch = vi.fn(async (url: string | URL, init?: RequestInit) => {
+      recorded.push({ url: String(url), init: init ?? {} });
+      return new Response(
+        JSON.stringify({ botId: "bot-1", strategyId: "s-1", strategyVersionId: "sv-1", exchangeConnectionId: "conn-1" }),
+        { status: 201, headers: { "content-type": "application/json" } },
+      );
+    }) as typeof fetch;
+
+    const api = buildDefaultApi({
+      baseUrl: "http://api.test/api/v1",
+      token: "jwt-abc",
+      workspaceId: "ws-xyz",
+      prisma: fakePrisma,
+    });
+
+    await api.instantiatePreset({
+      slug: "adaptive-regime",
+      workspaceId: "ws-xyz",
+      exchangeConnectionId: "conn-1",
+      overrides: {},
+    });
+
+    const headers = recorded[0].init.headers as Record<string, string>;
+    expect(headers["x-admin-token"]).toBeUndefined();
+  });
+
+  it("404 on /presets/*/instantiate without admin token surfaces operator hint", async () => {
+    globalThis.fetch = vi.fn(async () => {
+      return new Response(
+        JSON.stringify({ title: "Not Found", detail: "Preset not found" }),
+        { status: 404, statusText: "Not Found", headers: { "content-type": "application/json" } },
+      );
+    }) as typeof fetch;
+
+    const api = buildDefaultApi({
+      baseUrl: "http://api.test/api/v1",
+      token: "jwt-abc",
+      workspaceId: "ws-xyz",
+      prisma: fakePrisma,
+    });
+
+    await expect(
+      api.instantiatePreset({
+        slug: "adaptive-regime",
+        workspaceId: "ws-xyz",
+        exchangeConnectionId: "conn-1",
+        overrides: {},
+      }),
+    ).rejects.toThrow(/PRIVATE.*--admin-token|admin-token.*PRIVATE/);
+  });
+
+  it("404 on /presets/*/instantiate WITH admin token surfaces no false hint", async () => {
+    globalThis.fetch = vi.fn(async () => {
+      return new Response(
+        JSON.stringify({ title: "Not Found", detail: "Preset not found" }),
+        { status: 404, statusText: "Not Found", headers: { "content-type": "application/json" } },
+      );
+    }) as typeof fetch;
+
+    const api = buildDefaultApi({
+      baseUrl: "http://api.test/api/v1",
+      token: "jwt-abc",
+      workspaceId: "ws-xyz",
+      adminToken: "admin-secret",
+      prisma: fakePrisma,
+    });
+
+    let caught: Error | null = null;
+    try {
+      await api.instantiatePreset({
+        slug: "missing-slug",
+        workspaceId: "ws-xyz",
+        exchangeConnectionId: "conn-1",
+        overrides: {},
+      });
+    } catch (err) {
+      caught = err as Error;
+    }
+    expect(caught).not.toBeNull();
+    expect(caught!.message).not.toMatch(/--admin-token/);
   });
 });
