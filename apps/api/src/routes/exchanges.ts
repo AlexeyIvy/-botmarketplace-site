@@ -3,6 +3,7 @@ import { prisma } from "../lib/prisma.js";
 import { problem } from "../lib/problem.js";
 import { resolveWorkspace } from "../lib/workspace.js";
 import { getEncryptionKey, encrypt, decryptWithFallback } from "../lib/crypto.js";
+import { bybitVerifyApiKey } from "../lib/exchange/bybitVerify.js";
 
 // ---------------------------------------------------------------------------
 // Safe projection — never return encryptedSecret or apiKey in responses
@@ -309,7 +310,11 @@ export async function exchangeRoutes(app: FastifyInstance) {
     return reply.status(204).send();
   });
 
-  // POST /exchanges/:id/test — demo-first connectivity check
+  // POST /exchanges/:id/test — real read-only call to Bybit /v5/user/query-api.
+  //
+  // Returns enriched metadata (env, permissions, expiry, readOnly) so the
+  // operator gets an instant, accurate answer about a freshly wired key
+  // before committing to a 30-min smoke run.
   app.post<{ Params: { id: string } }>("/exchanges/:id/test", { onRequest: [app.authenticate] }, async (request, reply) => {
     const workspace = await resolveWorkspace(request, reply);
     if (!workspace) return;
@@ -329,28 +334,63 @@ export async function exchangeRoutes(app: FastifyInstance) {
       return problem(reply, 500, "Internal Server Error", "Failed to decrypt exchange credentials");
     }
 
-    // Demo-first: validate that credentials are non-empty and perform a lightweight
-    // reachability check. A real exchange call (e.g. GET /v5/account/info on Bybit)
-    // would be wired in Stage 9b.
-    let status: "CONNECTED" | "FAILED" = "FAILED";
-    let detail = "Connection test failed";
+    if (!conn.apiKey || !decryptedSecret) {
+      await prisma.exchangeConnection.update({
+        where: { id: conn.id },
+        data: { status: "FAILED" },
+      });
+      return reply.send({
+        id: conn.id,
+        status: "FAILED" as const,
+        detail: "Stored credentials are empty",
+      });
+    }
 
-    if (conn.apiKey && decryptedSecret) {
-      // Demo placeholder: credentials present → optimistically mark CONNECTED.
-      // Stage 9b will replace this with a real exchange API call.
-      status = "CONNECTED";
-      detail = "Credentials verified (demo-first — real exchange call deferred to Stage 9b)";
+    if (conn.exchange !== "BYBIT") {
+      // Other exchanges are not yet wired into the verify helper. Surface a
+      // FAILED result rather than mis-reporting CONNECTED.
+      await prisma.exchangeConnection.update({
+        where: { id: conn.id },
+        data: { status: "FAILED" },
+      });
+      return reply.send({
+        id: conn.id,
+        status: "FAILED" as const,
+        detail: `Test endpoint not implemented for exchange ${conn.exchange}`,
+      });
+    }
+
+    const verify = await bybitVerifyApiKey(conn.apiKey, decryptedSecret);
+
+    if (!verify.ok) {
+      await prisma.exchangeConnection.update({
+        where: { id: conn.id },
+        data: { status: "FAILED" },
+      });
+      return reply.send({
+        id: conn.id,
+        status: "FAILED" as const,
+        detail: verify.detail,
+      });
     }
 
     await prisma.exchangeConnection.update({
       where: { id: conn.id },
-      data: { status },
+      data: { status: "CONNECTED" },
     });
 
+    const permLabel = verify.readOnly
+      ? "read-only"
+      : `${verify.permissions.length} permissions`;
+    const expiryLabel = verify.expiresAt ? ` · expires ${verify.expiresAt}` : "";
     return reply.send({
       id: conn.id,
-      status,
-      detail,
+      status: "CONNECTED" as const,
+      detail: `Bybit ${verify.env} key verified (${permLabel})${expiryLabel}`,
+      env: verify.env,
+      permissions: verify.permissions,
+      expiresAt: verify.expiresAt,
+      readOnly: verify.readOnly,
     });
   });
 }

@@ -25,6 +25,14 @@ interface TestResult {
   id: string;
   status: string;
   detail: string;
+  /** Populated only on CONNECTED — Bybit env inferred from configured base URL. */
+  env?: "demo" | "live";
+  /** Populated only on CONNECTED — flat list of `Group:Scope` granted permissions. */
+  permissions?: string[];
+  /** Populated only on CONNECTED — ISO expiry timestamp, or null when no expiry. */
+  expiresAt?: string | null;
+  /** Populated only on CONNECTED — true when Bybit reports the key is read-only. */
+  readOnly?: boolean;
 }
 
 const EMPTY_FORM = {
@@ -212,9 +220,20 @@ export default function ExchangesPage() {
                 </span>
               )}
               {tr && (
-                <span style={{ fontSize: 12, color: tr.status === "CONNECTED" ? "#3fb950" : "#f85149" }}>
-                  {tr.detail}
-                </span>
+                <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                  <span style={{ fontSize: 12, color: tr.status === "CONNECTED" ? "#3fb950" : "#f85149" }}>
+                    {tr.detail}
+                  </span>
+                  {tr.status === "CONNECTED" && tr.permissions && tr.permissions.length > 0 && (
+                    <span
+                      style={{ fontSize: 11, color: "var(--text-secondary)" }}
+                      title={tr.permissions.join("\n")}
+                    >
+                      {tr.permissions.slice(0, 4).join(", ")}
+                      {tr.permissions.length > 4 ? `, +${tr.permissions.length - 4} more` : ""}
+                    </span>
+                  )}
+                </div>
               )}
             </div>
             <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
