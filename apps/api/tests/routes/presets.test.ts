@@ -17,6 +17,7 @@ const mockStrategies: Record<string, Record<string, unknown>> = {};
 const mockStrategyVersions: Record<string, Record<string, unknown>> = {};
 const mockBots: Record<string, Record<string, unknown>> = {};
 const mockWorkspaceMemberships: Array<Record<string, unknown>> = [];
+const mockExchangeConnections: Record<string, { id: string; workspaceId: string; status: string; exchange: string }> = {};
 
 let strategyIdCounter = 0;
 let strategyVersionIdCounter = 0;
@@ -136,6 +137,11 @@ vi.mock("../../src/lib/prisma.js", () => {
         return Promise.resolve(mockPresets[where.slug] ?? null);
       }),
     },
+    exchangeConnection: {
+      findUnique: vi.fn().mockImplementation(({ where }: { where: { id: string } }) => {
+        return Promise.resolve(mockExchangeConnections[where.id] ?? null);
+      }),
+    },
     workspaceMember: {
       findUnique: vi.fn().mockImplementation(({ where }: { where: { workspaceId_userId: { workspaceId: string; userId: string } } }) => {
         const m = mockWorkspaceMemberships.find(
@@ -207,6 +213,7 @@ beforeEach(() => {
   Object.keys(mockStrategies).forEach((k) => delete mockStrategies[k]);
   Object.keys(mockStrategyVersions).forEach((k) => delete mockStrategyVersions[k]);
   Object.keys(mockBots).forEach((k) => delete mockBots[k]);
+  Object.keys(mockExchangeConnections).forEach((k) => delete mockExchangeConnections[k]);
   mockWorkspaceMemberships.length = 0;
   strategyIdCounter = 0;
   strategyVersionIdCounter = 0;
@@ -732,5 +739,99 @@ describe("POST /api/v1/presets/:slug/instantiate", () => {
     expect(res.statusCode).toBe(400);
     const body = res.json() as { errors: Array<{ field: string; message: string }> };
     expect(body.errors.some((e) => e.field === "mode" && /must be one of/.test(e.message))).toBe(true);
+  });
+});
+
+// ── exchangeConnectionId binding ────────────────────────────────────────────
+
+describe("POST /api/v1/presets/:slug/instantiate — exchangeConnectionId", () => {
+  const OTHER_WS_ID = "ws-other";
+
+  it("binds bot.exchangeConnectionId when a same-workspace connection is supplied", async () => {
+    await seedPreset("public-a", "PUBLIC");
+    mockExchangeConnections["conn-1"] = {
+      id: "conn-1",
+      workspaceId: WS_ID,
+      status: "CONNECTED",
+      exchange: "BYBIT",
+    };
+
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/presets/public-a/instantiate",
+      headers: userHeaders(),
+      payload: { exchangeConnectionId: "conn-1" },
+    });
+
+    expect(res.statusCode).toBe(201);
+    const body = res.json();
+    expect(body.exchangeConnectionId).toBe("conn-1");
+
+    const bot = Object.values(mockBots)[0];
+    expect(bot.exchangeConnectionId).toBe("conn-1");
+  });
+
+  it("omitting exchangeConnectionId leaves bot.exchangeConnectionId unset (back-compat)", async () => {
+    await seedPreset("public-a", "PUBLIC");
+
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/presets/public-a/instantiate",
+      headers: userHeaders(),
+      payload: {},
+    });
+
+    expect(res.statusCode).toBe(201);
+    const body = res.json();
+    expect(body.exchangeConnectionId).toBeNull();
+
+    const bot = Object.values(mockBots)[0];
+    expect(bot.exchangeConnectionId).toBeUndefined();
+  });
+
+  it("rejects empty-string exchangeConnectionId with 400", async () => {
+    await seedPreset("public-a", "PUBLIC");
+
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/presets/public-a/instantiate",
+      headers: userHeaders(),
+      payload: { exchangeConnectionId: "" },
+    });
+
+    expect(res.statusCode).toBe(400);
+  });
+
+  it("returns 404 when connection belongs to a different workspace (no info leak)", async () => {
+    await seedPreset("public-a", "PUBLIC");
+    mockExchangeConnections["conn-other"] = {
+      id: "conn-other",
+      workspaceId: OTHER_WS_ID,
+      status: "CONNECTED",
+      exchange: "BYBIT",
+    };
+
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/presets/public-a/instantiate",
+      headers: userHeaders(),
+      payload: { exchangeConnectionId: "conn-other" },
+    });
+
+    expect(res.statusCode).toBe(404);
+    expect(Object.keys(mockBots)).toHaveLength(0);
+  });
+
+  it("returns 404 when connection id is unknown", async () => {
+    await seedPreset("public-a", "PUBLIC");
+
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/presets/public-a/instantiate",
+      headers: userHeaders(),
+      payload: { exchangeConnectionId: "conn-does-not-exist" },
+    });
+
+    expect(res.statusCode).toBe(404);
   });
 });

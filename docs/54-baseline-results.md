@@ -13,8 +13,9 @@ preset.
 
 The smoke harness itself is preset-agnostic
 (`apps/api/scripts/demoSmoke.ts` — see `docs/53-baseline-results.md §2`
-for invocation shape). All three sections below reuse the same
-acceptance criteria as `docs/53-T3`.
+for invocation shape, including the **required** `--connection <id>`
+flag and the pre-flight checklist). All three sections below reuse the
+same acceptance criteria as `docs/53-T3`.
 
 ---
 
@@ -36,10 +37,15 @@ Invocation: `--preset dca-momentum --duration-min 30`.
 | ----- | ----- |
 | Run timestamp |  |
 | Duration (min) |  |
+| Bybit env | demo \| live \| unknown |
+| Connection id |  |
 | Final run state |  |
 | Intent count |  |
 | Failed intents |  |
 | Error events |  |
+| Simulated events | 0 (must be 0) |
+| Market events |  |
+| Order samples (orderId list) |  |
 | Acceptance | PASS \| FAIL |
 | Report file | `apps/api/scripts/.smoke-output/<ts>-dca-momentum.json` |
 
@@ -69,10 +75,15 @@ Invocation: `--preset mtf-scalper --duration-min 30`.
 | ----- | ----- |
 | Run timestamp |  |
 | Duration (min) |  |
+| Bybit env | demo \| live \| unknown |
+| Connection id |  |
 | Final run state |  |
 | Intent count |  |
 | Failed intents |  |
 | Error events |  |
+| Simulated events | 0 (must be 0) |
+| Market events |  |
+| Order samples (orderId list) |  |
 | Acceptance | PASS \| FAIL |
 | Report file | `apps/api/scripts/.smoke-output/<ts>-mtf-scalper.json` |
 
@@ -102,10 +113,15 @@ Invocation: `--preset smc-liquidity-sweep --duration-min 30`.
 | ----- | ----- |
 | Run timestamp |  |
 | Duration (min) |  |
+| Bybit env | demo \| live \| unknown |
+| Connection id |  |
 | Final run state |  |
 | Intent count |  |
 | Failed intents |  |
 | Error events |  |
+| Simulated events | 0 (must be 0) |
+| Market events |  |
+| Order samples (orderId list) |  |
 | Acceptance | PASS \| FAIL |
 | Report file | `apps/api/scripts/.smoke-output/<ts>-smc-liquidity-sweep.json` |
 

@@ -104,6 +104,18 @@ interface InstantiateBody {
     maxOpenPositions: number;
     name: string;
   }>;
+  /**
+   * Optional exchange connection to bind to the new bot. When omitted, the
+   * bot is created with `exchangeConnectionId: null` and stays in
+   * simulation mode (intentExecutor:93) — fine for engine smoke / CI runs,
+   * not acceptable for the docs/53-T3 acceptance gate which depends on
+   * real Bybit traffic. demoSmoke makes this required at the CLI layer.
+   *
+   * Cross-workspace bypass is rejected with 404 — same code as
+   * "preset not found", to avoid leaking existence of other workspaces'
+   * connections.
+   */
+  exchangeConnectionId?: string;
 }
 
 interface ResolvedConfig {
@@ -409,6 +421,24 @@ export async function presetRoutes(app: FastifyInstance) {
         return problem(reply, 400, "Validation Error", "Invalid instantiate payload", { errors });
       }
 
+      // Optional exchange connection binding. When provided, validate that
+      // the connection exists and belongs to the same workspace; cross-
+      // workspace IDs are rejected with 404 (same as "preset not found")
+      // so existence of other workspaces' connections is not leaked.
+      const requestedConnectionId = request.body?.exchangeConnectionId;
+      if (requestedConnectionId !== undefined) {
+        if (typeof requestedConnectionId !== "string" || requestedConnectionId.length === 0) {
+          return problem(reply, 400, "Validation Error", "exchangeConnectionId must be a non-empty string");
+        }
+        const conn = await prisma.exchangeConnection.findUnique({
+          where: { id: requestedConnectionId },
+          select: { id: true, workspaceId: true },
+        });
+        if (!conn || conn.workspaceId !== workspace.id) {
+          return problem(reply, 404, "Not Found", "Exchange connection not found");
+        }
+      }
+
       // Generate a unique-per-workspace suffix for both Strategy and Bot names
       // so repeated instantiate calls do not collide on the (workspaceId, name)
       // unique index. Six hex chars = 24 bits of entropy — plenty for human
@@ -453,6 +483,9 @@ export async function presetRoutes(app: FastifyInstance) {
               status: "DRAFT",
               templateSlug: preset.slug,
               mode: config.mode,
+              ...(requestedConnectionId
+                ? { exchangeConnectionId: requestedConnectionId }
+                : {}),
             },
           });
 
@@ -463,6 +496,7 @@ export async function presetRoutes(app: FastifyInstance) {
           botId: result.bot.id,
           strategyId: result.strategy.id,
           strategyVersionId: result.version.id,
+          exchangeConnectionId: requestedConnectionId ?? null,
         });
       } catch (err) {
         if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === "P2002") {
