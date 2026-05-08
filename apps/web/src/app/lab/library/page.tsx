@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { listPresets, type PresetSummary } from "../../../lib/api/presets";
 import type { ProblemDetails } from "../../../lib/api";
-import { getWorkspaceId } from "../../../lib/api";
+import { useWorkspaceMount } from "../../../lib/workspace";
 import { PresetCard } from "./PresetCard";
 import { InstantiateDialog } from "./InstantiateDialog";
 
@@ -72,20 +72,7 @@ export default function LabLibraryPage() {
 
   const selected = selectedSlug ? presets.find((p) => p.slug === selectedSlug) ?? null : null;
 
-  // workspaceId is read from localStorage which is undefined on the server.
-  // Reading it at render time produces SSR HTML with the "no workspace"
-  // warning visible, then the client may have a workspaceId and not render
-  // the warning → React error #418 hydration mismatch (same bug as
-  // /lab/funding hit in PR #371). Defer the read into a mount-time
-  // `useEffect` so the first client render matches SSR, and gate the
-  // warning on `mounted` so it never flickers for users who do have a
-  // workspace set.
-  const [mounted, setMounted] = useState(false);
-  const [workspaceId, setWorkspaceIdState] = useState<string | null>(null);
-  useEffect(() => {
-    setWorkspaceIdState(getWorkspaceId());
-    setMounted(true);
-  }, []);
+  const { mounted, workspaceId } = useWorkspaceMount();
 
   return (
     <div style={pageStyle}>
