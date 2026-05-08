@@ -1,5 +1,14 @@
 const API_PREFIX = "/api/v1";
 
+/**
+ * Reads the active `workspaceId` from `localStorage`. Returns `null` on the
+ * server (no `window`).
+ *
+ * Safe in event handlers and `useEffect` bodies. Do **not** call at render
+ * time — gating render output on this value produces SSR/hydration drift
+ * (React error #418). For render-time gating use `useWorkspaceMount()` /
+ * `<WorkspaceGate>` from `lib/workspace.tsx` instead.
+ */
 export function getWorkspaceId(): string | null {
   if (typeof window === "undefined") return null;
   return localStorage.getItem("workspaceId");
