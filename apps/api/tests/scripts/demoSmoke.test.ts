@@ -13,7 +13,8 @@
  * Без сети, без БД, без real time — sleep / now инжектируются.
  */
 
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, afterEach } from "vitest";
+import { PrismaClient } from "@prisma/client";
 import {
   parseArgs,
   validateCliArgs,
@@ -23,6 +24,7 @@ import {
   resolveBybitEnv,
   isTradingEnabled,
   runDemoSmoke,
+  buildDefaultApi,
   PreflightError,
   type SmokeApi,
   type SmokeMetrics,
@@ -703,5 +705,89 @@ describe("demoSmoke.runDemoSmoke", () => {
 
     expect(report.acceptance.pass).toBe(false);
     expect(report.acceptance.failures.join(",")).toMatch(/simulatedEventCount=4/);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// buildDefaultApi — auth + workspace header regression
+// ---------------------------------------------------------------------------
+//
+// First real run of the harness against prod hit a 400 on
+// /presets/:slug/instantiate because the route reads workspaceId from
+// X-Workspace-Id header (not from body), and buildDefaultApi was not
+// sending the header. Tests for runDemoSmoke use a mocked SmokeApi that
+// bypasses buildDefaultApi entirely, so the gap was invisible. These
+// tests fake the global `fetch` and assert the wire-level shape.
+
+describe("demoSmoke.buildDefaultApi — wire headers", () => {
+  const fakePrisma = {} as unknown as PrismaClient;
+  const originalFetch = globalThis.fetch;
+
+  afterEach(() => {
+    globalThis.fetch = originalFetch;
+  });
+
+  it("sends Authorization Bearer + X-Workspace-Id on every postJson call", async () => {
+    const recorded: Array<{ url: string; init: RequestInit }> = [];
+    globalThis.fetch = vi.fn(async (url: string | URL, init?: RequestInit) => {
+      recorded.push({ url: String(url), init: init ?? {} });
+      return new Response(
+        JSON.stringify({
+          botId: "bot-1",
+          strategyId: "s-1",
+          strategyVersionId: "sv-1",
+          exchangeConnectionId: "conn-1",
+        }),
+        { status: 201, headers: { "content-type": "application/json" } },
+      );
+    }) as typeof fetch;
+
+    const api = buildDefaultApi({
+      baseUrl: "http://api.test/api/v1",
+      token: "jwt-abc",
+      workspaceId: "ws-xyz",
+      prisma: fakePrisma,
+    });
+
+    await api.instantiatePreset({
+      slug: "adaptive-regime",
+      workspaceId: "ws-xyz",
+      exchangeConnectionId: "conn-1",
+      overrides: {},
+    });
+
+    expect(recorded).toHaveLength(1);
+    const headers = recorded[0].init.headers as Record<string, string>;
+    expect(headers["authorization"]).toBe("Bearer jwt-abc");
+    expect(headers["x-workspace-id"]).toBe("ws-xyz");
+    expect(headers["content-type"]).toBe("application/json");
+  });
+
+  it("startRun and stopRun also include X-Workspace-Id", async () => {
+    const recorded: Array<{ url: string; init: RequestInit }> = [];
+    globalThis.fetch = vi.fn(async (url: string | URL, init?: RequestInit) => {
+      recorded.push({ url: String(url), init: init ?? {} });
+      return new Response(JSON.stringify({ id: "run-1", state: "RUNNING" }), {
+        status: 200,
+        headers: { "content-type": "application/json" },
+      });
+    }) as typeof fetch;
+
+    const api = buildDefaultApi({
+      baseUrl: "http://api.test/api/v1",
+      token: "jwt-abc",
+      workspaceId: "ws-xyz",
+      prisma: fakePrisma,
+    });
+
+    await api.startRun({ botId: "bot-1", durationMinutes: 5 });
+    await api.stopRun({ botId: "bot-1", runId: "run-1" });
+
+    expect(recorded).toHaveLength(2);
+    for (const call of recorded) {
+      const headers = call.init.headers as Record<string, string>;
+      expect(headers["x-workspace-id"]).toBe("ws-xyz");
+      expect(headers["authorization"]).toBe("Bearer jwt-abc");
+    }
   });
 });

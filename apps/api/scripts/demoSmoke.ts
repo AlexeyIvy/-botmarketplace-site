@@ -518,6 +518,16 @@ export async function runDemoSmoke(args: RunDemoSmokeArgs): Promise<SmokeReport>
 interface BuildApiInput {
   baseUrl: string;
   token: string;
+  /**
+   * Workspace id for the `X-Workspace-Id` header. Every authed write route
+   * resolves the active workspace from this header (`resolveWorkspace` in
+   * `apps/api/src/lib/workspace.ts`); the body's `workspaceId` is ignored.
+   * Without this header, `/presets/:slug/instantiate` returns 400 long
+   * before pre-flight or auth checks have a chance to surface a clearer
+   * message — the unit-test mocks bypass `resolveWorkspace`, so the gap
+   * is invisible until a real run hits the route.
+   */
+  workspaceId: string;
   prisma: PrismaClient;
 }
 
@@ -525,6 +535,7 @@ export function buildDefaultApi(input: BuildApiInput): SmokeApi {
   const headers = {
     "content-type": "application/json",
     authorization: `Bearer ${input.token}`,
+    "x-workspace-id": input.workspaceId,
   };
 
   async function postJson<T>(path: string, body: unknown): Promise<T> {
@@ -759,7 +770,12 @@ async function main(): Promise<number> {
   }
 
   const prisma = new PrismaClient();
-  const api = buildDefaultApi({ baseUrl: cfg.baseUrl, token: cfg.token, prisma });
+  const api = buildDefaultApi({
+    baseUrl: cfg.baseUrl,
+    token: cfg.token,
+    workspaceId: cfg.workspace,
+    prisma,
+  });
 
   try {
     const report = await runDemoSmoke({
