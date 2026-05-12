@@ -131,24 +131,22 @@ Pre-flight FAIL (exit code 3 — no bot is created):
 
 | Field | Value |
 | ----- | ----- |
-| Run timestamp |  |
-| Duration (min) |  |
-| Bybit env | demo \| live \| unknown |
-| Connection id |  |
-| Final run state |  |
-| Intent count |  |
-| Failed intents |  |
-| Error events |  |
-| Simulated events | 0 (must be 0) |
-| Strategy activity events (`signal_*`) |  |
-| Pre-flight candle count |  |
-| Order samples (orderId list) |  |
-| Acceptance | PASS \| FAIL |
-| Report file | `apps/api/scripts/.smoke-output/<ts>-adaptive-regime.json` |
+| Run timestamp | 2026-05-12T13:17:27.073Z |
+| Duration (min) | 30.04 |
+| Bybit env | demo |
+| Connection id | 4ebbe088-7153-4dd4-b9b6-05b638069837 |
+| Final run state | STOPPED |
+| Intent count | 0 |
+| Failed intents | 0 |
+| Error events | 0 |
+| Simulated events | 0 |
+| Strategy activity events (`signal_*`) | 0 |
+| Pre-flight candle count | 8640 |
+| Order samples (orderId list) | (none) |
+| Acceptance | PASS |
+| Report file | `apps/api/scripts/.smoke-output/2026-05-12T13-47-29-666Z-adaptive-regime.json` |
 
-Notes: _operator pastes summary excerpt + sign-off here. Cross-check
-`Order samples` on bybit.com → Demo Trading → Order History — they must
-appear as real demo orders._
+Notes: Operator: claude-vps-session 2026-05-12; dataset BTCUSDT M5=8640 rows / H1=720 rows (last 30 days); deploy.sh [4/8] seed OK; pre-flight candle gate PASS.
 
 ---
 
