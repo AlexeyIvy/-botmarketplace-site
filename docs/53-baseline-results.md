@@ -56,6 +56,14 @@ Before running, verify:
    sends the token as `X-Admin-Token` header. On prod the value lives in
    the api process's `ADMIN_API_TOKEN` env var. Skip the flag only after
    `publishPreset.ts` flips the preset to BETA / PUBLIC.
+5. **Market data ≥ `--min-candle-count`** for the strategy's primary
+   `(symbol, interval)` pair. The harness counts `MarketCandle` rows
+   before instantiating; below the floor (default 200, matching the
+   engine's lookback in `apps/api/src/lib/botWorker.ts:1371`) it
+   fail-fasts with exit code 3. Without this gate the engine quietly
+   `continue`s on every tick (`botWorker.ts:1377`) and the operator
+   wastes 30 minutes collecting zero signals/intents. Top up via
+   `POST /lab/datasets` before retrying (`docs/55-T6` workflow).
 
 ### Harness command
 
@@ -69,8 +77,17 @@ pnpm --filter @botmarketplace/api exec tsx scripts/demoSmoke.ts \
   --base-url http://localhost:3001/api/v1 \
   --duration-min 30 \
   --symbol BTCUSDT \
-  --quote-amount 50
+  --quote-amount 50 \
+  --candle-symbol BTCUSDT \
+  --candle-interval M5 \
+  --min-candle-count 200
 ```
+
+`--candle-symbol` / `--candle-interval` / `--min-candle-count` are
+optional — defaults are `BTCUSDT` (or whatever `--symbol` resolves to)
+/ `M5` / `200`, suitable for `adaptive-regime`'s primary timeframe.
+Override when running a preset whose primary TF is different (e.g.
+`--candle-interval H1` for `daily-trend`).
 
 `--connection` is **required**. Without it the bot is created with
 `exchangeConnectionId: null` and intents auto-simulate
@@ -86,17 +103,29 @@ HARD FAIL if any of:
 - `failedIntentCount > 0`
 - `harnessHttpFailures > 0`
 - `simulatedEventCount > 0` (proof bot fell into demo simulation mode)
-- `marketEventCount === 0` (engine never received any market data)
 
 WARNING (does not fail):
-- `intentCount === 0` while `marketEventCount > 0` — legit flat market;
-  operator decides rerun.
+- `intentCount === 0` AND `strategyActivityCount > 0` — strategy
+  evaluated and emitted signals but none crossed entry threshold (legit
+  flat market); operator decides rerun.
+- `intentCount === 0` AND `strategyActivityCount === 0` — engine had
+  enough candles on entry (pre-flight passed) but produced no signals.
+  Likely short run or genuinely flat market; operator reviews logs.
 
 Pre-flight FAIL (exit code 3 — no bot is created):
 - connection not found, FAILED, or non-Bybit
 - `BYBIT_ENV=live`
 - `TRADING_ENABLED` off
+- `MarketCandle[symbol, interval] < --min-candle-count` (data starvation)
 - post-instantiate `bot.exchangeConnectionId` mismatch
+
+> **Historical note.** Earlier revisions HARD-FAILed on
+> `marketEventCount === 0` looking for `market_*` / `candle_*` /
+> `tick_*` / `regime_*` event prefixes. The engine never emits those —
+> the metric was always 0 and every run flunked. The real "engine
+> received data" gate is now the pre-flight candle count (catches the
+> root cause in < 1s), and the post-run check counts `signal_*` events
+> as an informative `strategyActivityCount` metric.
 
 ### Result
 
@@ -111,7 +140,8 @@ Pre-flight FAIL (exit code 3 — no bot is created):
 | Failed intents |  |
 | Error events |  |
 | Simulated events | 0 (must be 0) |
-| Market events |  |
+| Strategy activity events (`signal_*`) |  |
+| Pre-flight candle count |  |
 | Order samples (orderId list) |  |
 | Acceptance | PASS \| FAIL |
 | Report file | `apps/api/scripts/.smoke-output/<ts>-adaptive-regime.json` |

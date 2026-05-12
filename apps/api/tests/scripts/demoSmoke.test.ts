@@ -48,6 +48,9 @@ describe("demoSmoke.parseArgs", () => {
       "--poll-interval-sec", "30",
       "--symbol", "ETHUSDT",
       "--quote-amount", "75",
+      "--candle-symbol", "BTCUSDT",
+      "--candle-interval", "H1",
+      "--min-candle-count", "500",
       "--output-dir", "/tmp/x",
       "--dry-run",
     ]);
@@ -62,6 +65,9 @@ describe("demoSmoke.parseArgs", () => {
       pollIntervalSec: 30,
       symbol: "ETHUSDT",
       quoteAmount: 75,
+      candleSymbol: "BTCUSDT",
+      candleInterval: "H1",
+      minCandleCount: 500,
       outputDir: "/tmp/x",
       dryRun: true,
     });
@@ -175,6 +181,57 @@ describe("demoSmoke.validateCliArgs", () => {
     expect(r.kind).toBe("ok");
     if (r.kind === "ok") expect(r.config.adminToken).toBe("from-flag");
   });
+
+  it("candle gate defaults: BTCUSDT / M5 / 200", () => {
+    const r = validateCliArgs(baseValid, baseEnv);
+    expect(r.kind).toBe("ok");
+    if (r.kind === "ok") {
+      expect(r.config.candleSymbol).toBe("BTCUSDT");
+      expect(r.config.candleInterval).toBe("M5");
+      expect(r.config.minCandleCount).toBe(200);
+    }
+  });
+
+  it("candleSymbol falls back to --symbol when --candle-symbol omitted", () => {
+    const r = validateCliArgs({ ...baseValid, symbol: "ETHUSDT" }, baseEnv);
+    expect(r.kind).toBe("ok");
+    if (r.kind === "ok") expect(r.config.candleSymbol).toBe("ETHUSDT");
+  });
+
+  it("explicit --candle-symbol wins over --symbol", () => {
+    const r = validateCliArgs(
+      { ...baseValid, symbol: "ETHUSDT", candleSymbol: "BTCUSDT" },
+      baseEnv,
+    );
+    expect(r.kind).toBe("ok");
+    if (r.kind === "ok") expect(r.config.candleSymbol).toBe("BTCUSDT");
+  });
+
+  it("rejects invalid --candle-interval", () => {
+    const r = validateCliArgs({ ...baseValid, candleInterval: "h2" }, baseEnv);
+    expect(r.kind).toBe("error");
+    if (r.kind === "error") expect(r.reason).toMatch(/candle-interval/);
+  });
+
+  it("rejects out-of-range --min-candle-count", () => {
+    const r = validateCliArgs({ ...baseValid, minCandleCount: 0 }, baseEnv);
+    expect(r.kind).toBe("error");
+    if (r.kind === "error") expect(r.reason).toMatch(/min-candle-count/);
+  });
+
+  it("env DEMO_SMOKE_CANDLE_* override defaults", () => {
+    const r = validateCliArgs(baseValid, {
+      DEMO_SMOKE_CANDLE_SYMBOL: "SOLUSDT",
+      DEMO_SMOKE_CANDLE_INTERVAL: "H1",
+      DEMO_SMOKE_MIN_CANDLE_COUNT: "1000",
+    });
+    expect(r.kind).toBe("ok");
+    if (r.kind === "ok") {
+      expect(r.config.candleSymbol).toBe("SOLUSDT");
+      expect(r.config.candleInterval).toBe("H1");
+      expect(r.config.minCandleCount).toBe(1000);
+    }
+  });
 });
 
 // ---------------------------------------------------------------------------
@@ -188,7 +245,8 @@ const baseMetrics = (): SmokeMetrics => ({
   failedIntentCount: 0,
   errorEventCount: 0,
   simulatedEventCount: 0,
-  marketEventCount: 12,
+  strategyActivityCount: 12,
+  preflightCandleCount: 250,
   harnessHttpFailures: 0,
   actualDurationMin: 30,
 });
@@ -201,11 +259,18 @@ describe("demoSmoke.evaluateAcceptance", () => {
     expect(r.warnings).toEqual([]);
   });
 
-  it("warns (not fails) when intentCount=0 with market events present", () => {
-    const r = evaluateAcceptance({ ...baseMetrics(), intentCount: 0 });
+  it("warns (not fails) when intentCount=0 with strategyActivityCount>0 (flat market)", () => {
+    const r = evaluateAcceptance({ ...baseMetrics(), intentCount: 0, strategyActivityCount: 5 });
     expect(r.pass).toBe(true);
-    expect(r.warnings.length).toBeGreaterThan(0);
-    expect(r.warnings[0]).toMatch(/intentCount=0/);
+    expect(r.warnings).toHaveLength(1);
+    expect(r.warnings[0]).toMatch(/legitimate flat market/);
+  });
+
+  it("warns (not fails) when intentCount=0 AND strategyActivityCount=0 (silent run)", () => {
+    const r = evaluateAcceptance({ ...baseMetrics(), intentCount: 0, strategyActivityCount: 0 });
+    expect(r.pass).toBe(true);
+    expect(r.warnings).toHaveLength(1);
+    expect(r.warnings[0]).toMatch(/strategyActivityCount=0/);
   });
 
   it("fails on FAILED finalRunState", () => {
@@ -244,10 +309,10 @@ describe("demoSmoke.evaluateAcceptance", () => {
     expect(r.failures.join(",")).toMatch(/exchangeConnectionId likely null/);
   });
 
-  it("HARD FAIL on marketEventCount=0 (engine dead)", () => {
-    const r = evaluateAcceptance({ ...baseMetrics(), marketEventCount: 0, intentCount: 0 });
-    expect(r.pass).toBe(false);
-    expect(r.failures.join(",")).toMatch(/marketEventCount=0/);
+  it("strategyActivityCount=0 is NOT a HARD FAIL (data starvation is gated pre-flight)", () => {
+    const r = evaluateAcceptance({ ...baseMetrics(), strategyActivityCount: 0 });
+    expect(r.pass).toBe(true);
+    expect(r.failures).toEqual([]);
   });
 
   it("aggregates multiple failures", () => {
@@ -307,13 +372,19 @@ describe("demoSmoke.isTradingEnabled", () => {
 describe("demoSmoke.preflightChecks", () => {
   const goodConn: ConnectionInfo = { id: "c1", status: "CONNECTED", exchange: "BYBIT" };
   const goodEnv: Record<string, string | undefined> = { BYBIT_ENV: "demo", TRADING_ENABLED: "true" };
+  const goodCandles = {
+    candleCount: 250,
+    minCandleCount: 200,
+    candleSymbol: "BTCUSDT",
+    candleInterval: "M5",
+  };
 
-  it("passes on healthy demo + connected bybit + trading enabled", () => {
-    expect(preflightChecks({ connection: goodConn, env: goodEnv })).toEqual([]);
+  it("passes on healthy demo + connected bybit + trading enabled + candles ≥ min", () => {
+    expect(preflightChecks({ connection: goodConn, env: goodEnv, ...goodCandles })).toEqual([]);
   });
 
   it("fails when connection is null", () => {
-    const out = preflightChecks({ connection: null, env: goodEnv });
+    const out = preflightChecks({ connection: null, env: goodEnv, ...goodCandles });
     expect(out.length).toBe(1);
     expect(out[0]).toMatch(/connection not found/);
   });
@@ -322,6 +393,7 @@ describe("demoSmoke.preflightChecks", () => {
     const out = preflightChecks({
       connection: { ...goodConn, status: "FAILED" },
       env: goodEnv,
+      ...goodCandles,
     });
     expect(out.some((m) => m.includes("connection.status=FAILED"))).toBe(true);
   });
@@ -330,26 +402,59 @@ describe("demoSmoke.preflightChecks", () => {
     const out = preflightChecks({
       connection: { ...goodConn, exchange: "OKX" },
       env: goodEnv,
+      ...goodCandles,
     });
     expect(out.some((m) => m.includes("exchange=OKX"))).toBe(true);
   });
 
   it("fails when BYBIT_ENV=live (anti-live guard)", () => {
-    const out = preflightChecks({ connection: goodConn, env: { ...goodEnv, BYBIT_ENV: "live" } });
+    const out = preflightChecks({
+      connection: goodConn,
+      env: { ...goodEnv, BYBIT_ENV: "live" },
+      ...goodCandles,
+    });
     expect(out.some((m) => m.includes("BYBIT_ENV=live"))).toBe(true);
   });
 
   it("fails when TRADING_ENABLED=off", () => {
-    const out = preflightChecks({ connection: goodConn, env: { ...goodEnv, TRADING_ENABLED: "off" } });
+    const out = preflightChecks({
+      connection: goodConn,
+      env: { ...goodEnv, TRADING_ENABLED: "off" },
+      ...goodCandles,
+    });
     expect(out.some((m) => m.includes("TRADING_ENABLED is off"))).toBe(true);
+  });
+
+  it("fails when MarketCandle count < minCandleCount", () => {
+    const out = preflightChecks({
+      connection: goodConn,
+      env: goodEnv,
+      ...goodCandles,
+      candleCount: 5,
+    });
+    expect(out.some((m) => m.includes("MarketCandle[BTCUSDT/M5]=5"))).toBe(true);
+    expect(out.some((m) => m.includes("silent-continue"))).toBe(true);
+  });
+
+  it("passes when MarketCandle count exactly equals the floor", () => {
+    expect(
+      preflightChecks({
+        connection: goodConn,
+        env: goodEnv,
+        ...goodCandles,
+        candleCount: goodCandles.minCandleCount,
+      }),
+    ).toEqual([]);
   });
 
   it("aggregates multiple failures", () => {
     const out = preflightChecks({
       connection: { ...goodConn, status: "UNKNOWN" },
       env: { BYBIT_ENV: "live", TRADING_ENABLED: "0" },
+      ...goodCandles,
+      candleCount: 0,
     });
-    expect(out.length).toBe(3);
+    expect(out.length).toBe(4);
   });
 });
 
@@ -400,23 +505,25 @@ function buildFakeApi(opts: {
   errorEventsByPoll?: number[];
   /** Final-readout values (single-shot at end of runDemoSmoke). */
   simulatedEventCount?: number;
-  marketEventCount?: number;
+  strategyActivityCount?: number;
   placedOrderSamples?: string[];
   /** Connection metadata returned by getConnection (defaults to healthy CONNECTED Bybit). */
   connection?: ConnectionInfo | null;
   /** Bot row returned by getBot (defaults to bot bound to "conn-1"). */
   botBindConnectionId?: string | null;
+  /** Row count returned by countCandles (default 250 — above default min 200). */
+  candleCount?: number;
   /** If set, instantiatePreset throws once before succeeding. */
   failFirstInstantiate?: boolean;
   /** If true, getRun throws on every call. */
   throwOnGetRun?: boolean;
-}): { api: SmokeApi; calls: { instantiate: number; start: number; stop: number; getRun: number; countIntents: number; countErrors: number; getConnection: number; getBot: number; lastInstantiateInput?: { exchangeConnectionId: string } } } {
+}): { api: SmokeApi; calls: { instantiate: number; start: number; stop: number; getRun: number; countIntents: number; countErrors: number; getConnection: number; getBot: number; countCandles: number; lastInstantiateInput?: { exchangeConnectionId: string }; lastCountCandles?: { symbol: string; interval: string } } } {
   let pollIdx = 0;
   let instantiateCount = 0;
   let stopped = false;
   const calls: ReturnType<typeof buildFakeApi>["calls"] = {
     instantiate: 0, start: 0, stop: 0, getRun: 0, countIntents: 0, countErrors: 0,
-    getConnection: 0, getBot: 0,
+    getConnection: 0, getBot: 0, countCandles: 0,
   };
 
   const api: SmokeApi = {
@@ -477,10 +584,17 @@ function buildFakeApi(opts: {
     async countSimulatedEvents() {
       return opts.simulatedEventCount ?? 0;
     },
-    async countMarketEvents() {
+    async countStrategyActivityEvents() {
       // Default to 12 — non-zero so existing tests pass without explicit
-      // setup; tests asserting marketEventCount=0 supply 0 explicitly.
-      return opts.marketEventCount ?? 12;
+      // setup; tests asserting strategyActivityCount=0 supply 0 explicitly.
+      return opts.strategyActivityCount ?? 12;
+    },
+    async countCandles(symbol, interval) {
+      calls.countCandles++;
+      calls.lastCountCandles = { symbol, interval };
+      // Default 250 — comfortably above the standard 200 floor so the gate
+      // never trips by accident in tests that don't care about pre-flight.
+      return opts.candleCount ?? 250;
     },
     async samplePlacedOrders() {
       return opts.placedOrderSamples ?? [];
@@ -488,6 +602,14 @@ function buildFakeApi(opts: {
   };
   return { api, calls };
 }
+
+/** Default candle-gate args injected into runDemoSmoke for tests that don't
+ *  care about pre-flight: BTCUSDT M5 ≥ 200 — matches the validator defaults. */
+const DEFAULT_CANDLE_ARGS = {
+  candleSymbol: "BTCUSDT",
+  candleInterval: "M5",
+  minCandleCount: 200,
+};
 
 const DEFAULT_ENV: Record<string, string | undefined> = {
   BYBIT_ENV: "demo",
@@ -506,7 +628,8 @@ describe("demoSmoke.runDemoSmoke", () => {
       ],
       errorEventsByPoll: [0, 0, 0, 0],
       placedOrderSamples: ["bybit-ord-1", "bybit-ord-2"],
-      marketEventCount: 30,
+      strategyActivityCount: 30,
+      candleCount: 250,
     });
 
     let now = 1_000_000;
@@ -519,6 +642,7 @@ describe("demoSmoke.runDemoSmoke", () => {
       durationMin: 2,        // 2 минуты × 60s polls = 2 итерации
       pollIntervalSec: 60,
       overrides: { symbol: "BTCUSDT", quoteAmount: 50 },
+      ...DEFAULT_CANDLE_ARGS,
       api,
       sleep,
       now: () => now,
@@ -537,7 +661,10 @@ describe("demoSmoke.runDemoSmoke", () => {
     expect(report.metrics.failedIntentCount).toBe(0);
     expect(report.metrics.harnessHttpFailures).toBe(0);
     expect(report.metrics.simulatedEventCount).toBe(0);
-    expect(report.metrics.marketEventCount).toBe(30);
+    expect(report.metrics.strategyActivityCount).toBe(30);
+    expect(report.metrics.preflightCandleCount).toBe(250);
+    expect(calls.countCandles).toBe(1);
+    expect(calls.lastCountCandles).toEqual({ symbol: "BTCUSDT", interval: "M5" });
     expect(report.acceptance.pass).toBe(true);
     expect(report.botId).toBe("bot-1");
     expect(report.runId).toBe("run-1");
@@ -560,6 +687,7 @@ describe("demoSmoke.runDemoSmoke", () => {
         durationMin: 1,
         pollIntervalSec: 60,
         overrides: {},
+        ...DEFAULT_CANDLE_ARGS,
         api,
         sleep: async () => { /* never */ },
         now: () => now,
@@ -581,6 +709,7 @@ describe("demoSmoke.runDemoSmoke", () => {
         durationMin: 1,
         pollIntervalSec: 60,
         overrides: {},
+        ...DEFAULT_CANDLE_ARGS,
         api,
         sleep: async () => {},
         now: () => 0,
@@ -589,6 +718,34 @@ describe("demoSmoke.runDemoSmoke", () => {
       }),
     ).rejects.toBeInstanceOf(PreflightError);
     expect(calls.instantiate).toBe(0);
+  });
+
+  it("PreflightError when MarketCandle count below minimum — no instantiate", async () => {
+    const { api, calls } = buildFakeApi({
+      runStates: ["RUNNING"],
+      candleCount: 50, // < default min 200 → starvation → must fail-fast
+    });
+    let now = 0;
+    await expect(
+      runDemoSmoke({
+        presetSlug: "p",
+        workspaceId: "ws-1",
+        exchangeConnectionId: "conn-1",
+        durationMin: 1,
+        pollIntervalSec: 60,
+        overrides: {},
+        ...DEFAULT_CANDLE_ARGS,
+        api,
+        sleep: async () => {},
+        now: () => now,
+        env: DEFAULT_ENV,
+        log: () => {},
+      }),
+    ).rejects.toBeInstanceOf(PreflightError);
+    expect(calls.countCandles).toBe(1);
+    expect(calls.lastCountCandles).toEqual({ symbol: "BTCUSDT", interval: "M5" });
+    expect(calls.instantiate).toBe(0);
+    expect(calls.start).toBe(0);
   });
 
   it("PreflightError when bot bind verification fails (route ignored connectionId)", async () => {
@@ -604,6 +761,7 @@ describe("demoSmoke.runDemoSmoke", () => {
         durationMin: 1,
         pollIntervalSec: 60,
         overrides: {},
+        ...DEFAULT_CANDLE_ARGS,
         api,
         sleep: async () => {},
         now: () => 0,
@@ -633,6 +791,7 @@ describe("demoSmoke.runDemoSmoke", () => {
       durationMin: 10,
       pollIntervalSec: 60,
       overrides: {},
+      ...DEFAULT_CANDLE_ARGS,
       api,
       sleep,
       now: () => now,
@@ -663,6 +822,7 @@ describe("demoSmoke.runDemoSmoke", () => {
       durationMin: 1,
       pollIntervalSec: 60,
       overrides: {},
+      ...DEFAULT_CANDLE_ARGS,
       api,
       sleep,
       now: () => now,
@@ -676,12 +836,12 @@ describe("demoSmoke.runDemoSmoke", () => {
     expect(report.acceptance.failures.some((f) => f.includes("harnessHttpFailures"))).toBe(true);
   });
 
-  it("warns when intentCount remains 0 with market events present", async () => {
+  it("warns (not fails) when intentCount=0 with signal events present", async () => {
     const { api } = buildFakeApi({
       runStates: ["RUNNING"],
       intentsByPoll: [{ total: 0, failed: 0 }, { total: 0, failed: 0 }],
       errorEventsByPoll: [0, 0],
-      marketEventCount: 8,
+      strategyActivityCount: 8,
     });
 
     let now = 0;
@@ -694,6 +854,7 @@ describe("demoSmoke.runDemoSmoke", () => {
       durationMin: 1,
       pollIntervalSec: 60,
       overrides: {},
+      ...DEFAULT_CANDLE_ARGS,
       api,
       sleep,
       now: () => now,
@@ -712,7 +873,7 @@ describe("demoSmoke.runDemoSmoke", () => {
       intentsByPoll: [{ total: 4, failed: 0 }],
       errorEventsByPoll: [0],
       simulatedEventCount: 4,
-      marketEventCount: 10,
+      strategyActivityCount: 10,
     });
 
     let now = 0;
@@ -725,6 +886,7 @@ describe("demoSmoke.runDemoSmoke", () => {
       durationMin: 1,
       pollIntervalSec: 60,
       overrides: {},
+      ...DEFAULT_CANDLE_ARGS,
       api,
       sleep,
       now: () => now,
