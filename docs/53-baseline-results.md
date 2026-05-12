@@ -119,6 +119,15 @@ Pre-flight FAIL (exit code 3 — no bot is created):
 - `MarketCandle[symbol, interval] < --min-candle-count` (data starvation)
 - post-instantiate `bot.exchangeConnectionId` mismatch
 
+Runtime mid-run starvation (data depleted after a run is already
+RUNNING, or single-TF flows that bypass the pre-flight gate) now
+surfaces as `BotEvent.type=dataset_insufficient` emitted by `botWorker`
+on each sufficient → insufficient transition (one event per starvation
+episode, not per poll tick). Payload: `{ symbol, interval, candleCount,
+requiredCount }`. Operator query:
+`SELECT * FROM "BotEvent" WHERE "botRunId" = $1 AND type =
+'dataset_insufficient' ORDER BY "createdAt" DESC`.
+
 > **Historical note.** Earlier revisions HARD-FAILed on
 > `marketEventCount === 0` looking for `market_*` / `candle_*` /
 > `tick_*` / `regime_*` event prefixes. The engine never emits those —
