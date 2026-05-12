@@ -43,6 +43,9 @@
  *  - connection.status === "CONNECTED" (свежий /test пройден)
  *  - BYBIT_ENV !== "live" (anti-live guard, демо-only)
  *  - TRADING_ENABLED не выключен (kill switch off → все intents в FAILED)
+ *  - MarketCandle[symbol, interval] ≥ minCandleCount (без данных botWorker
+ *    делает silent `continue` на каждом тике — gate висел бы 5/30 минут
+ *    собирая нули; теперь fail-fast за секунду)
  *  - после instantiate bot.exchangeConnectionId === requested (catches DB rollback)
  *
  * Результат: JSON-отчёт в `apps/api/scripts/.smoke-output/<timestamp>-<slug>.json`
@@ -79,6 +82,18 @@ export interface ParsedSmokeArgs {
   pollIntervalSec?: number;
   symbol?: string;
   quoteAmount?: number;
+  /** Symbol for the pre-flight MarketCandle gate. Defaults to `--symbol`
+   *  (which itself defaults to the preset's hardcoded symbol — BTCUSDT for
+   *  adaptive-regime). Override when a preset trades multiple symbols. */
+  candleSymbol?: string;
+  /** CandleInterval for the pre-flight gate. Must match botWorker's
+   *  primary timeframe — engine reads `prisma.marketCandle.findMany({
+   *  symbol, interval: bot.timeframe })` and silently skips ticks when
+   *  fewer than 2 rows are present. Default M5. */
+  candleInterval?: string;
+  /** Minimum row count for the pre-flight gate. Default 200 = engine's
+   *  `take: 200` lookback in botWorker.ts:1371. */
+  minCandleCount?: number;
   outputDir?: string;
   dryRun: boolean;
 }
@@ -97,6 +112,9 @@ export function parseArgs(argv: readonly string[]): ParsedSmokeArgs {
     else if (arg === "--poll-interval-sec") out.pollIntervalSec = Number(argv[++i]);
     else if (arg === "--symbol") out.symbol = argv[++i];
     else if (arg === "--quote-amount") out.quoteAmount = Number(argv[++i]);
+    else if (arg === "--candle-symbol") out.candleSymbol = argv[++i];
+    else if (arg === "--candle-interval") out.candleInterval = argv[++i];
+    else if (arg === "--min-candle-count") out.minCandleCount = Number(argv[++i]);
     else if (arg === "--output-dir") out.outputDir = argv[++i];
     else if (arg === "--dry-run") out.dryRun = true;
   }
@@ -126,12 +144,23 @@ export interface SmokeMetrics {
    */
   simulatedEventCount: number;
   /**
-   * Число BotEvent рыночных категорий (`market_*`, `candle_*`, `tick_*`,
-   * `signal_*`, `regime_*`). Если 0 — engine не получает данные / poll-loop
-   * мёртвый, отсутствие intents объясняется не flat market'ом, а сломанной
-   * data-pipeline.
+   * Число BotEvent c `type` ∈ {`signal_entry`, `signal_exit`,
+   * `signal_generated`} — единственные prefix'ы, которые engine реально
+   * emit'ит (см. `botWorker.ts` / `routes/runs.ts` — иных `market_*` /
+   * `candle_*` / `tick_*` / `regime_*` событий нет). Если 0 — strategy
+   * либо не получила данные, либо честно «молчит» на flat market'е;
+   * harness не может различить эти случаи post-hoc, поэтому метрика
+   * информативна, а HARD FAIL за data-starvation теперь ловится pre-flight'ом
+   * (см. `preflightChecks` + `--min-candle-count`).
    */
-  marketEventCount: number;
+  strategyActivityCount: number;
+  /**
+   * Число MarketCandle строк для `(candleSymbol, candleInterval)` на момент
+   * pre-flight. < `minCandleCount` → fail. Фиксируется в отчёте для аудита
+   * (operator видит сколько свечей было перед стартом, без необходимости
+   * лезть в Prisma вручную).
+   */
+  preflightCandleCount: number;
   /** Сколько HTTP запросов harness'а получили статус >= 400 (auth issues / rate limits). */
   harnessHttpFailures: number;
   /** Реальная длительность run'а в минутах. */
@@ -148,16 +177,23 @@ export interface SmokeAcceptance {
 }
 
 /**
- * Acceptance критерии (docs/53-T3, расширено в #PR-после-effa475):
+ * Acceptance критерии (docs/53-T3, ревизия после PR #391 false-positive):
  *   1. finalRunState !== "FAILED" / "TIMED_OUT"  → fail.
  *   2. errorEventCount === 0                      → fail.
  *   3. harnessHttpFailures === 0                  → fail.
  *   4. failedIntentCount === 0                    → fail.
  *   5. simulatedEventCount === 0                  → fail (бот в sim-режиме).
- *   6. marketEventCount > 0                       → fail (engine не получает данные).
- *   7. intentCount > 0                            → graded warning:
- *        - duration < 15 min          → warning (короткий run, ок что 0)
- *        - market events ≥ 1 + ≥15min → warning (legit flat market)
+ *   6. intentCount === 0 + strategyActivityCount === 0 → warning
+ *      (engine закрыт молчанием, root cause уже отсечён pre-flight'ом).
+ *   7. intentCount === 0 + strategyActivityCount > 0   → warning
+ *      (strategy эвалюировалась, но условий entry не было — flat market).
+ *
+ * Что НЕ проверяется здесь, но раньше проверялось ошибочно:
+ *   - `marketEventCount > 0` — был HARD FAIL по префиксам
+ *     `market_/candle_/tick_/regime_`, которые engine никогда не emit'ит;
+ *     метрика всегда давала 0 и валила любой run. Заменено на pre-flight
+ *     `MarketCandle ≥ minCandleCount` (см. preflightChecks) — настоящий
+ *     детерминированный root cause «engine не видит данных».
  *
  * Pure function — все границы тестируются без сети.
  */
@@ -183,16 +219,20 @@ export function evaluateAcceptance(metrics: SmokeMetrics): SmokeAcceptance {
       `demo simulation mode, exchangeConnectionId likely null)`,
     );
   }
-  if (metrics.marketEventCount === 0) {
-    failures.push(
-      "marketEventCount=0 — strategy never received market data (engine / poll-loop broken)",
-    );
-  }
   if (metrics.intentCount === 0) {
-    warnings.push(
-      "intentCount=0 — strategy did not emit any intents; may be flat market or DSL bug, " +
-      "operator should review logs and rerun if needed",
-    );
+    if (metrics.strategyActivityCount === 0) {
+      warnings.push(
+        "intentCount=0 and strategyActivityCount=0 — strategy emitted no signals; " +
+        "pre-flight candle gate passed, so engine had data on entry but produced " +
+        "no output. Likely either short run or genuine flat market; review logs.",
+      );
+    } else {
+      warnings.push(
+        `intentCount=0 with strategyActivityCount=${metrics.strategyActivityCount} — ` +
+        "strategy evaluated and produced signals but none crossed entry threshold " +
+        "(legitimate flat market). Operator may rerun if longer-duration sanity needed.",
+      );
+    }
   }
   return { pass: failures.length === 0, warnings, failures };
 }
@@ -265,9 +305,18 @@ export interface SmokeApi {
    *  demo simulation mode (intentExecutor:93). Should be 0 for a real run. */
   countSimulatedEvents(runId: string): Promise<number>;
 
-  /** Count BotEvent of market data category — non-zero proves the engine
-   *  is alive, even when intentCount=0 (legit flat market). */
-  countMarketEvents(runId: string): Promise<number>;
+  /** Count BotEvent whose `type` starts with `signal_` — the only "engine
+   *  produced strategy output" prefix the live code actually emits
+   *  (`signal_entry` / `signal_exit` / `signal_generated`; see
+   *  botWorker.ts:1521,1661 and routes/runs.ts:414). Informative, not a
+   *  HARD FAIL — see `evaluateAcceptance` for the rationale. */
+  countStrategyActivityEvents(runId: string): Promise<number>;
+
+  /** Pre-flight read used by `preflightChecks` to guarantee the engine has
+   *  enough candles before `instantiate` happens. Without this gate the
+   *  silent `recentCandles.length < 2 → continue` path in botWorker:1377
+   *  burns the full --duration-min producing zero events. */
+  countCandles(symbol: string, interval: string): Promise<number>;
 
   /** First N orderId values from BotIntent (FILLED or PLACED). Lets the
    *  operator cross-check on bybit.com/demo/orders. */
@@ -285,6 +334,15 @@ export interface RunDemoSmokeArgs {
   durationMin: number;
   pollIntervalSec: number;
   overrides: { symbol?: string; quoteAmount?: number };
+  /** Symbol the pre-flight candle gate counts on. Independent of preset
+   *  overrides so multi-symbol presets can still gate on their primary. */
+  candleSymbol: string;
+  /** CandleInterval the pre-flight gate counts on. Must match the bot's
+   *  primary timeframe (the one botWorker.ts:1369 queries). */
+  candleInterval: string;
+  /** Minimum row count before pre-flight passes. Engine lookback is 200
+   *  (`take: 200` in botWorker.ts:1371) so anything lower silently degrades. */
+  minCandleCount: number;
   api: SmokeApi;
   /** Inject sleep so tests advance virtual time without real waits. */
   sleep: (ms: number) => Promise<void>;
@@ -356,12 +414,22 @@ export function isTradingEnabled(env: Record<string, string | undefined>): boole
 }
 
 /**
- * Pre-flight bundle. Pure: takes already-fetched connection plus env, returns
- * the list of failed checks (empty = OK).
+ * Pre-flight bundle. Pure: takes already-fetched connection / candle count
+ * plus env, returns the list of failed checks (empty = OK).
+ *
+ * `candleCount` is required because the most expensive class of false-PASS
+ * in earlier harness revisions was data-starvation: botWorker.ts:1377
+ * silently `continue`s when fewer than 2 candles are loaded, so a 30-min
+ * run produces zero signals/intents and the post-run gate cannot tell that
+ * apart from a legitimate flat market. Gate it here, before instantiate.
  */
 export function preflightChecks(input: {
   connection: ConnectionInfo | null;
   env: Record<string, string | undefined>;
+  candleCount: number;
+  minCandleCount: number;
+  candleSymbol: string;
+  candleInterval: string;
 }): string[] {
   const failures: string[] = [];
 
@@ -386,6 +454,15 @@ export function preflightChecks(input: {
   if (!isTradingEnabled(input.env)) {
     failures.push(
       "TRADING_ENABLED is off (every intent would land in FAILED state — fix env first)",
+    );
+  }
+
+  if (input.candleCount < input.minCandleCount) {
+    failures.push(
+      `MarketCandle[${input.candleSymbol}/${input.candleInterval}]=${input.candleCount} ` +
+      `< minCandleCount=${input.minCandleCount} — engine would silent-continue at ` +
+      "botWorker.ts:1377 on every tick (no signal/intent ever emitted). Run " +
+      "POST /lab/datasets to sync history before retrying.",
     );
   }
 
@@ -415,17 +492,32 @@ export async function runDemoSmoke(args: RunDemoSmokeArgs): Promise<SmokeReport>
     `connection=${args.exchangeConnectionId} duration=${args.durationMin}min`,
   );
 
-  // ── Pre-flight: bail out before instantiate when env / connection are
-  //    obviously misconfigured. Failures here throw `PreflightError` so
-  //    `main()` can map to a distinct exit code (3) and the operator does
-  //    not get a 30-minute "FAIL" report for a 1-second config issue.
+  // ── Pre-flight: bail out before instantiate when env / connection /
+  //    market data are obviously misconfigured. Failures here throw
+  //    `PreflightError` so `main()` can map to a distinct exit code (3)
+  //    and the operator does not get a 30-minute "FAIL" report for a
+  //    1-second config issue.
   const connection = await args.api.getConnection(args.exchangeConnectionId);
-  const preflightFailures = preflightChecks({ connection, env: args.env });
+  // countCandles bypasses the harness http-failure counter on purpose: pre-flight
+  // failures are fatal regardless, and we want the underlying Prisma error to
+  // surface verbatim so the operator can diagnose DB connectivity.
+  const preflightCandleCount = await args.api.countCandles(args.candleSymbol, args.candleInterval);
+  const preflightFailures = preflightChecks({
+    connection,
+    env: args.env,
+    candleCount: preflightCandleCount,
+    minCandleCount: args.minCandleCount,
+    candleSymbol: args.candleSymbol,
+    candleInterval: args.candleInterval,
+  });
   if (preflightFailures.length > 0) {
     throw new PreflightError(preflightFailures);
   }
   const bybitEnv = resolveBybitEnv(args.env);
-  log(`[demoSmoke] pre-flight OK · bybitEnv=${bybitEnv} · connection.status=CONNECTED`);
+  log(
+    `[demoSmoke] pre-flight OK · bybitEnv=${bybitEnv} · ` +
+    `connection.status=CONNECTED · candles[${args.candleSymbol}/${args.candleInterval}]=${preflightCandleCount}`,
+  );
 
   const created = await args.api.instantiatePreset({
     slug: args.presetSlug,
@@ -494,7 +586,7 @@ export async function runDemoSmoke(args: RunDemoSmokeArgs): Promise<SmokeReport>
   lastIntents = await safeCall(() => args.api.countIntents(run.id), lastIntents);
   lastErrorEvents = await safeCall(() => args.api.countErrorEvents(run.id), lastErrorEvents);
   const simulatedEventCount = await safeCall(() => args.api.countSimulatedEvents(run.id), 0);
-  const marketEventCount = await safeCall(() => args.api.countMarketEvents(run.id), 0);
+  const strategyActivityCount = await safeCall(() => args.api.countStrategyActivityEvents(run.id), 0);
   const placedOrderSamples = await safeCall(() => args.api.samplePlacedOrders(run.id, 5), []);
 
   const finishedAt = args.now();
@@ -505,7 +597,8 @@ export async function runDemoSmoke(args: RunDemoSmokeArgs): Promise<SmokeReport>
     failedIntentCount: lastIntents.failed,
     errorEventCount: lastErrorEvents,
     simulatedEventCount,
-    marketEventCount,
+    strategyActivityCount,
+    preflightCandleCount,
     harnessHttpFailures,
     actualDurationMin: (finishedAt - startedAt) / 60_000,
   };
@@ -663,21 +756,28 @@ export function buildDefaultApi(input: BuildApiInput): SmokeApi {
       });
     },
 
-    async countMarketEvents(runId) {
-      // Match the categories listed in SmokeMetrics.marketEventCount JSDoc.
-      // Bybit-side evaluator emits e.g. "regime_check", "signal_entry",
-      // "candle_close" — proof the engine is alive even on flat market.
+    async countStrategyActivityEvents(runId) {
+      // The only `type` prefix the engine actually emits as a "strategy
+      // produced output" signal is `signal_*` — botWorker writes
+      // `signal_entry`/`signal_exit`, runs.ts writes `signal_generated`.
+      // Earlier revisions also OR'd `market_*`/`candle_*`/`tick_*`/`regime_*`
+      // which no code path ever produces, so the count was always 0 and the
+      // gate false-failed every run. See SmokeMetrics docstring.
       return input.prisma.botEvent.count({
         where: {
           botRunId: runId,
-          OR: [
-            { type: { startsWith: "market_" } },
-            { type: { startsWith: "candle_" } },
-            { type: { startsWith: "tick_" } },
-            { type: { startsWith: "signal_" } },
-            { type: { startsWith: "regime_" } },
-          ],
+          type: { startsWith: "signal_" },
         },
+      });
+    },
+
+    async countCandles(symbol, interval) {
+      // Cast: interval comes in as plain string (validated upstream against
+      // the CandleInterval enum). Prisma's generated types require the
+      // enum, which the script can't import without pulling the full
+      // client schema into the CLI surface.
+      return input.prisma.marketCandle.count({
+        where: { symbol, interval: interval as never },
       });
     },
 
@@ -738,9 +838,14 @@ export interface ValidatedSmokeConfig {
   pollIntervalSec: number;
   symbol?: string;
   quoteAmount?: number;
+  candleSymbol: string;
+  candleInterval: string;
+  minCandleCount: number;
   outputDir: string;
   dryRun: boolean;
 }
+
+const VALID_CANDLE_INTERVALS = ["M1", "M5", "M15", "M30", "H1", "H4", "D1"] as const;
 
 export type ValidationResult =
   | { kind: "ok"; config: ValidatedSmokeConfig }
@@ -780,6 +885,28 @@ export function validateCliArgs(parsed: ParsedSmokeArgs, env: Record<string, str
     return { kind: "error", reason: `--poll-interval-sec must be 1..600 (got ${parsed.pollIntervalSec})` };
   }
 
+  // Pre-flight candle gate defaults. The candle symbol falls back to the
+  // bot's trading --symbol when the operator did not pass an explicit
+  // override, otherwise BTCUSDT (every flagship trades it). Interval M5
+  // is the primary timeframe of adaptive-regime and the recommended demo
+  // smoke baseline.
+  const candleSymbol = parsed.candleSymbol ?? env.DEMO_SMOKE_CANDLE_SYMBOL ?? parsed.symbol ?? "BTCUSDT";
+  const candleInterval = parsed.candleInterval ?? env.DEMO_SMOKE_CANDLE_INTERVAL ?? "M5";
+  if (!(VALID_CANDLE_INTERVALS as readonly string[]).includes(candleInterval)) {
+    return {
+      kind: "error",
+      reason: `--candle-interval must be one of ${VALID_CANDLE_INTERVALS.join(", ")} (got "${candleInterval}")`,
+    };
+  }
+
+  const minCandleCountRaw = parsed.minCandleCount ?? Number(env.DEMO_SMOKE_MIN_CANDLE_COUNT ?? 200);
+  if (!Number.isFinite(minCandleCountRaw) || minCandleCountRaw < 2 || minCandleCountRaw > 100_000) {
+    return {
+      kind: "error",
+      reason: `--min-candle-count must be 2..100000 (got ${parsed.minCandleCount ?? env.DEMO_SMOKE_MIN_CANDLE_COUNT})`,
+    };
+  }
+
   const outputDir = parsed.outputDir ?? join(dirname(__filename), ".smoke-output");
 
   return {
@@ -795,6 +922,9 @@ export function validateCliArgs(parsed: ParsedSmokeArgs, env: Record<string, str
       pollIntervalSec,
       symbol: parsed.symbol,
       quoteAmount: parsed.quoteAmount,
+      candleSymbol,
+      candleInterval,
+      minCandleCount: minCandleCountRaw,
       outputDir,
       dryRun: parsed.dryRun,
     },
@@ -838,6 +968,9 @@ async function main(): Promise<number> {
       durationMin: cfg.durationMin,
       pollIntervalSec: cfg.pollIntervalSec,
       overrides: { symbol: cfg.symbol, quoteAmount: cfg.quoteAmount },
+      candleSymbol: cfg.candleSymbol,
+      candleInterval: cfg.candleInterval,
+      minCandleCount: cfg.minCandleCount,
       api,
       sleep: (ms) => new Promise((r) => setTimeout(r, ms)),
       now: () => Date.now(),
@@ -856,7 +989,8 @@ async function main(): Promise<number> {
     console.log(`connection:    ${report.exchangeConnectionId}`);
     console.log(`finalState:    ${report.metrics.finalRunState}`);
     console.log(`intents:       ${report.metrics.intentCount} (failed=${report.metrics.failedIntentCount})`);
-    console.log(`marketEvents:  ${report.metrics.marketEventCount}`);
+    console.log(`signalEvents:  ${report.metrics.strategyActivityCount}`);
+    console.log(`candlesPre:    ${report.metrics.preflightCandleCount} (gate ≥ ${cfg.minCandleCount})`);
     console.log(`simulated:     ${report.metrics.simulatedEventCount}`);
     console.log(`errorEvents:   ${report.metrics.errorEventCount}`);
     console.log(`httpFailures:  ${report.metrics.harnessHttpFailures}`);
