@@ -15,6 +15,16 @@
 
 set -euo pipefail
 
+# Force a sane umask before any file is created. Incident 2026-05-08:
+# operator ran credential-capture (`umask 077; read -rs ...`) in the same
+# shell that then invoked deploy.sh — the inherited 077 mask caused build
+# artifacts (.next/, .prisma/) to be created with mode 600, which the
+# botmarket systemd user could not read once ownership was also wrong.
+# All three services crashed-looped with EACCES until manual `chown -R`
+# recovery. Pinning umask here makes the script robust to whatever the
+# parent shell left set.
+umask 022
+
 APP_DIR="/opt/-botmarketplace-site"
 BRANCH="${BRANCH:-main}"
 REF=""  # tag or SHA; if set, overrides BRANCH for checkout
@@ -41,7 +51,7 @@ else
 fi
 
 # 1. Pull latest code
-echo "[1/7] Git fetch + checkout..."
+echo "[1/8] Git fetch + checkout..."
 git fetch origin --tags
 if [[ -n "$REF" ]]; then
   # Detached HEAD at tag/SHA — reproducible, pinned deploy
@@ -52,22 +62,31 @@ else
 fi
 
 # 2. Install dependencies
-echo "[2/7] Installing dependencies..."
+echo "[2/8] Installing dependencies..."
 pnpm install --frozen-lockfile
 
 # 3. Run DB migrations + regenerate Prisma client
-echo "[3/7] Running DB migrations..."
+echo "[3/8] Running DB migrations..."
 pnpm run db:migrate
-echo "[3/7] Regenerating Prisma client..."
+echo "[3/8] Regenerating Prisma client..."
 pnpm --filter @botmarketplace/api exec prisma generate
 
-# 4. Build
-echo "[4/7] Building API and Web..."
+# 4. Seed StrategyPresets (idempotent upsert — see prisma/seed/seedPresets.ts).
+# Presets are essential prod data (UI Library, demoSmoke harness gate);
+# without this step a fresh deploy leaves an empty preset catalog and
+# `/presets/:slug/instantiate` returns 404. The upsert deliberately omits
+# `visibility` on the update branch, so an admin-promoted preset is never
+# rolled back to PRIVATE by a subsequent seed run.
+echo "[4/8] Seeding StrategyPresets..."
+pnpm --filter @botmarketplace/api exec prisma db seed
+
+# 5. Build
+echo "[5/8] Building API and Web..."
 pnpm run build:api
 pnpm run build:web
 
-# 5. Check critical env vars
-echo "[5/7] Checking env..."
+# 6. Check critical env vars
+echo "[6/8] Checking env..."
 ENV_FILE="$APP_DIR/.env"
 if [[ -f "$ENV_FILE" ]]; then
   if ! grep -q "^BOT_WORKER_SECRET=" "$ENV_FILE" || grep -q '^BOT_WORKER_SECRET="change-me-in-production"' "$ENV_FILE"; then
@@ -77,8 +96,8 @@ if [[ -f "$ENV_FILE" ]]; then
   fi
 fi
 
-# 6. Sync systemd units (reinstall if deploy/*.service changed in the repo)
-echo "[6/7] Syncing systemd units..."
+# 7. Sync systemd units (reinstall if deploy/*.service changed in the repo)
+echo "[7/8] Syncing systemd units..."
 UNITS_CHANGED=0
 for svc in botmarket-api botmarket-web botmarket-worker; do
   src="$APP_DIR/deploy/$svc.service"
@@ -94,8 +113,8 @@ if [[ $UNITS_CHANGED -eq 1 ]]; then
   echo "      systemd daemon reloaded"
 fi
 
-# 7. Restart services
-echo "[7/7] Restarting services..."
+# 8. Restart services
+echo "[8/8] Restarting services..."
 systemctl restart botmarket-api
 systemctl restart botmarket-web
 # botmarket-worker hosts the funding-arb hedge runtime + the DSL evaluator
