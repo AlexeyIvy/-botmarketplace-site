@@ -64,8 +64,8 @@
     "maxOpenPositions": 1
   },
   "datasetBundleHintJson": {
-    "15m": true,
-    "1h": true,
-    "4h": true
+    "M15": true,
+    "H1": true,
+    "H4": true
   }
 }
