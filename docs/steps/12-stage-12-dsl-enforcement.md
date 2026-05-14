@@ -93,7 +93,7 @@ No changes to auth or workspace isolation. All new worker paths are internal (no
 ## 7) Verification Commands
 
 ```sh
-export BASE=http://localhost:3000/api/v1
+export BASE=http://localhost:4000/api/v1
 
 # Register and get token
 REG=$(curl -s -X POST $BASE/auth/register \
