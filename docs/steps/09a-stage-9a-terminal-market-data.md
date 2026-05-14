@@ -54,7 +54,7 @@
 ### Предварительно
 
 ```sh
-export BASE=http://localhost:3000/api/v1
+export BASE=http://localhost:4000/api/v1
 
 # Получить токен
 TOKEN=$(curl -s -X POST $BASE/auth/login \
