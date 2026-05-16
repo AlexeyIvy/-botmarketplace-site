@@ -189,6 +189,10 @@ import {
   _processIntents as processIntents,
   _executeIntent as executeIntent,
   _reconcilePlacedIntents as reconcilePlacedIntents,
+  _emitDatasetInsufficient as emitDatasetInsufficient,
+  _clearDatasetInsufficient as clearDatasetInsufficient,
+  _clearDatasetInsufficientForRun as clearDatasetInsufficientForRun,
+  _datasetInsufficientFlags as datasetInsufficientFlags,
 } from "../../src/lib/botWorker.js";
 
 import { bybitPlaceOrder, bybitGetOrderStatus, mapBybitStatus } from "../../src/lib/bybitOrder.js";
@@ -1061,5 +1065,92 @@ describe("reconcilePlacedIntents (real function)", () => {
 
     // Should not throw, should not update intent
     expect(mockBotIntentUpdate).not.toHaveBeenCalled();
+  });
+});
+
+describe("dataset_insufficient BotEvent emission (#397)", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockBotEventCreate.mockResolvedValue(undefined);
+    datasetInsufficientFlags.clear();
+  });
+
+  it("emits exactly one BotEvent across 10 consecutive insufficient ticks (transition-only)", async () => {
+    const runId = "run-ds-1";
+    for (let i = 0; i < 10; i++) {
+      await emitDatasetInsufficient(runId, "BTCUSDT", "M5", 0, 2);
+    }
+    const calls = mockBotEventCreate.mock.calls.filter(
+      (c) => (c[0] as { data: { type: string } }).data.type === "dataset_insufficient",
+    );
+    expect(calls).toHaveLength(1);
+    expect(calls[0][0]).toMatchObject({
+      data: {
+        botRunId: runId,
+        type: "dataset_insufficient",
+        payloadJson: { symbol: "BTCUSDT", interval: "M5", candleCount: 0, requiredCount: 2 },
+      },
+    });
+  });
+
+  it("re-emits after a sufficient→insufficient transition cycle", async () => {
+    const runId = "run-ds-2";
+    await emitDatasetInsufficient(runId, "BTCUSDT", "M5", 1, 2);
+    // Sufficient tick → clear the flag.
+    clearDatasetInsufficient(runId, "BTCUSDT", "M5");
+    // Dataset drops again → second emit.
+    await emitDatasetInsufficient(runId, "BTCUSDT", "M5", 0, 2);
+    const calls = mockBotEventCreate.mock.calls.filter(
+      (c) => (c[0] as { data: { type: string } }).data.type === "dataset_insufficient",
+    );
+    expect(calls).toHaveLength(2);
+  });
+
+  it("keys are scoped per (runId, symbol, interval)", async () => {
+    await emitDatasetInsufficient("run-A", "BTCUSDT", "M5", 0, 2);
+    await emitDatasetInsufficient("run-B", "BTCUSDT", "M5", 0, 2);
+    await emitDatasetInsufficient("run-A", "ETHUSDT", "M5", 0, 2);
+    await emitDatasetInsufficient("run-A", "BTCUSDT", "H1", 0, 2);
+    const calls = mockBotEventCreate.mock.calls.filter(
+      (c) => (c[0] as { data: { type: string } }).data.type === "dataset_insufficient",
+    );
+    expect(calls).toHaveLength(4);
+  });
+
+  it("clears flag on DB error so the next tick retries the emit", async () => {
+    const runId = "run-ds-err";
+    mockBotEventCreate.mockRejectedValueOnce(new Error("connection lost"));
+    await emitDatasetInsufficient(runId, "BTCUSDT", "M5", 0, 2);
+    expect(datasetInsufficientFlags.has(`${runId}|BTCUSDT|M5`)).toBe(false);
+    // Next tick succeeds → second attempt creates the event.
+    mockBotEventCreate.mockResolvedValueOnce(undefined);
+    await emitDatasetInsufficient(runId, "BTCUSDT", "M5", 0, 2);
+    expect(mockBotEventCreate).toHaveBeenCalledTimes(2);
+    expect(datasetInsufficientFlags.has(`${runId}|BTCUSDT|M5`)).toBe(true);
+  });
+
+  it("clearDatasetInsufficientForRun removes all entries for a runId", async () => {
+    await emitDatasetInsufficient("run-X", "BTCUSDT", "M5", 0, 2);
+    await emitDatasetInsufficient("run-X", "ETHUSDT", "H1", 0, 2);
+    await emitDatasetInsufficient("run-Y", "BTCUSDT", "M5", 0, 2);
+    expect(datasetInsufficientFlags.size).toBe(3);
+    clearDatasetInsufficientForRun("run-X");
+    expect(datasetInsufficientFlags.size).toBe(1);
+    expect(datasetInsufficientFlags.has("run-Y|BTCUSDT|M5")).toBe(true);
+  });
+
+  it("stopRun clears dataset_insufficient flags for the run", async () => {
+    const runId = "run-stop-ds";
+    await emitDatasetInsufficient(runId, "BTCUSDT", "M5", 0, 2);
+    await emitDatasetInsufficient(runId, "BTCUSDT", "H1", 0, 2);
+    expect(datasetInsufficientFlags.size).toBe(2);
+
+    mockBotRunFindUnique.mockResolvedValueOnce({ id: runId, state: "STOPPING", botId: "bot-stop" });
+    mockBotRunCount.mockResolvedValueOnce(0);
+    mockTransition.mockResolvedValueOnce(undefined);
+
+    await stopRun(runId);
+
+    expect(datasetInsufficientFlags.size).toBe(0);
   });
 });

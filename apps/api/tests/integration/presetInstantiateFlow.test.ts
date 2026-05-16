@@ -325,6 +325,12 @@ describe("preset instantiate flow (e2e, mocked Prisma)", () => {
     expect(version).toBeDefined();
     expect(version.strategyId).toBe(strategyId);
     expect(version.dslJson).toEqual(fixture.dslJson);
+
+    // docs/52-T1 — adaptive-regime's preset.datasetBundleHintJson is
+    // materialized onto Bot.datasetBundleJson so botWorker takes the
+    // multi-TF path instead of the legacy single-TF one.
+    expect(bot.datasetBundleJson).toEqual(fixture.datasetBundleHintJson);
+    expect(bot.datasetBundleJson).toEqual({ M5: true, H1: true });
   });
 
   it("PRIVATE preset cannot be instantiated without admin token (404)", async () => {

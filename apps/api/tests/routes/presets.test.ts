@@ -250,6 +250,7 @@ async function seedPreset(
   visibility: "PRIVATE" | "BETA" | "PUBLIC",
   category = "trend",
   configOverrides: Record<string, unknown> = {},
+  datasetBundleHintJson: Record<string, unknown> | null = null,
 ) {
   mockPresets[slug] = {
     slug,
@@ -264,7 +265,7 @@ async function seedPreset(
       maxOpenPositions: 1,
       ...configOverrides,
     },
-    datasetBundleHintJson: null,
+    datasetBundleHintJson,
     visibility,
     createdAt: new Date(),
     updatedAt: new Date(),
@@ -739,6 +740,84 @@ describe("POST /api/v1/presets/:slug/instantiate", () => {
     expect(res.statusCode).toBe(400);
     const body = res.json() as { errors: Array<{ field: string; message: string }> };
     expect(body.errors.some((e) => e.field === "mode" && /must be one of/.test(e.message))).toBe(true);
+  });
+
+  // ── datasetBundleHintJson materialization (docs/52-T1) ────────────────────
+
+  it("materializes preset.datasetBundleHintJson onto Bot.datasetBundleJson", async () => {
+    await seedPreset(
+      "mtf-preset",
+      "PUBLIC",
+      "trend",
+      { timeframe: "M5" },
+      { M5: true, H1: true },
+    );
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/presets/mtf-preset/instantiate",
+      headers: userHeaders(),
+      payload: {},
+    });
+    expect(res.statusCode).toBe(201);
+    const bot = Object.values(mockBots)[0] as { datasetBundleJson?: unknown };
+    expect(bot.datasetBundleJson).toEqual({ M5: true, H1: true });
+  });
+
+  it("leaves Bot.datasetBundleJson absent when preset.datasetBundleHintJson is null", async () => {
+    await seedPreset("single-tf", "PUBLIC");
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/presets/single-tf/instantiate",
+      headers: userHeaders(),
+      payload: {},
+    });
+    expect(res.statusCode).toBe(201);
+    const bot = Object.values(mockBots)[0] as { datasetBundleJson?: unknown };
+    expect(bot.datasetBundleJson).toBeUndefined();
+  });
+
+  it("rejects preset with invalid datasetBundleHintJson shape (422)", async () => {
+    await seedPreset(
+      "bad-hint",
+      "PUBLIC",
+      "trend",
+      { timeframe: "M5" },
+      { "5m": true, "1h": true }, // lowercase TV keys — invalid for the bundle contract
+    );
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/presets/bad-hint/instantiate",
+      headers: userHeaders(),
+      payload: {},
+    });
+    expect(res.statusCode).toBe(422);
+    const body = res.json() as { detail: string; errors: Array<{ field: string; message: string }> };
+    expect(body.detail).toMatch(/datasetBundleHintJson/);
+    expect(body.errors.some((e) => /unknown interval/.test(e.message))).toBe(true);
+    // No rows committed on validation failure.
+    expect(Object.keys(mockBots)).toHaveLength(0);
+    expect(Object.keys(mockStrategies)).toHaveLength(0);
+  });
+
+  it("rejects when bot timeframe is not present in datasetBundleHintJson keys (422)", async () => {
+    await seedPreset(
+      "tf-mismatch",
+      "PUBLIC",
+      "trend",
+      { timeframe: "M5" },
+      { M15: true, H1: true }, // valid shape but missing M5 → mismatch
+    );
+    const res = await app.inject({
+      method: "POST",
+      url: "/api/v1/presets/tf-mismatch/instantiate",
+      headers: userHeaders(),
+      payload: {},
+    });
+    expect(res.statusCode).toBe(422);
+    const body = res.json() as { detail: string; errors: Array<{ field: string; message: string }> };
+    expect(body.detail).toMatch(/timeframe/i);
+    expect(body.errors[0].message).toMatch(/M5.*M15.*H1|M15.*H1/);
+    expect(Object.keys(mockBots)).toHaveLength(0);
   });
 });
 

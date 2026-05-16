@@ -59,7 +59,7 @@ node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ### Предварительно
 
 ```sh
-export BASE=http://localhost:3000/api/v1
+export BASE=http://localhost:4000/api/v1
 export SECRET_ENCRYPTION_KEY=$(node -e "console.log(require('crypto').randomBytes(32).toString('hex'))")
 
 # Зарегистрировать / залогиниться

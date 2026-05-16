@@ -437,6 +437,7 @@ async function stopRun(runId: string) {
     });
     trailingStopStates.delete(runId);
     lastTradeCloseTimes.delete(runId);
+    clearDatasetInsufficientForRun(runId);
     await syncBotStatus(run.botId);
   } catch (err) {
     workerLog.error({ err, runId }, "stopRun error");
@@ -469,6 +470,7 @@ async function timeoutExpiredRuns() {
       });
       trailingStopStates.delete(run.id);
       lastTradeCloseTimes.delete(run.id);
+      clearDatasetInsufficientForRun(run.id);
       workerLog.warn({ runId: run.id, state: run.state }, "stuck ephemeral run → FAILED");
       await syncBotStatus(run.botId);
       notifyRunEvent(run.workspaceId, {
@@ -510,6 +512,7 @@ async function timeoutExpiredRuns() {
       });
       trailingStopStates.delete(run.id);
       lastTradeCloseTimes.delete(run.id);
+      clearDatasetInsufficientForRun(run.id);
       workerLog.info({ runId: run.id, elapsed, maxDurationMs }, "run timed out");
       await syncBotStatus(run.botId);
       notifyRunEvent(run.workspaceId, {
@@ -1207,6 +1210,71 @@ const trailingStopStates = new Map<string, TrailingStopState>();
 const lastTradeCloseTimes = new Map<string, number>();
 
 /**
+ * Tracks (runId, symbol, interval) tuples currently in a "dataset
+ * insufficient" state — i.e. the last tick saw fewer than the required
+ * candles to evaluate the strategy. Used to rate-limit the
+ * `dataset_insufficient` BotEvent to one emit per
+ * sufficient → insufficient transition, so an operator sees a single
+ * signal per starvation episode instead of one per poll tick.
+ *
+ * Pre-flight check (#395) catches insufficient data at run start; this
+ * surface covers the runtime mid-run case where the dataset is depleted
+ * (or the gate was bypassed in single-TF flows) so the silent
+ * `continue` in `evaluateStrategies` no longer hides the condition.
+ */
+const datasetInsufficientFlags = new Set<string>();
+
+function datasetInsufficientKey(runId: string, symbol: string, interval: string): string {
+  return `${runId}|${symbol}|${interval}`;
+}
+
+async function emitDatasetInsufficient(
+  runId: string,
+  symbol: string,
+  interval: string,
+  candleCount: number,
+  requiredCount: number,
+): Promise<void> {
+  const key = datasetInsufficientKey(runId, symbol, interval);
+  if (datasetInsufficientFlags.has(key)) return;
+  datasetInsufficientFlags.add(key);
+  try {
+    await prisma.botEvent.create({
+      data: {
+        botRunId: runId,
+        type: "dataset_insufficient",
+        payloadJson: {
+          symbol,
+          interval,
+          candleCount,
+          requiredCount,
+        } as Prisma.InputJsonValue,
+      },
+    });
+    workerLog.warn(
+      { runId, symbol, interval, candleCount, requiredCount },
+      "dataset insufficient at runtime; strategy evaluation skipped",
+    );
+  } catch (err) {
+    // Don't lose the transition signal on a DB hiccup: clear the flag so the
+    // next tick will retry the emit. Tick itself continues regardless.
+    datasetInsufficientFlags.delete(key);
+    workerLog.error({ err, runId, symbol, interval }, "failed to emit dataset_insufficient BotEvent");
+  }
+}
+
+function clearDatasetInsufficient(runId: string, symbol: string, interval: string): void {
+  datasetInsufficientFlags.delete(datasetInsufficientKey(runId, symbol, interval));
+}
+
+function clearDatasetInsufficientForRun(runId: string): void {
+  const prefix = `${runId}|`;
+  for (const key of datasetInsufficientFlags) {
+    if (key.startsWith(prefix)) datasetInsufficientFlags.delete(key);
+  }
+}
+
+/**
  * Build a {@link RuntimeMtfContext} from a `loadCandleBundle` result.
  *
  * Returns `null` when the primary timeframe has no entry in
@@ -1374,7 +1442,11 @@ async function evaluateStrategies(): Promise<void> {
           recentCandles = rows as typeof recentCandles;
         }
 
-        if (recentCandles.length < 2) continue; // not enough data
+        if (recentCandles.length < 2) {
+          await emitDatasetInsufficient(run.id, symbol, timeframe, recentCandles.length, 2);
+          continue;
+        }
+        clearDatasetInsufficient(run.id, symbol, timeframe);
 
         // Convert to Candle format
         const candles = recentCandles.map((mc) => ({
@@ -1793,6 +1865,12 @@ export { stopRun as _stopRun };
 export { processIntents as _processIntents };
 export { executeIntent as _executeIntent };
 export { reconcilePlacedIntents as _reconcilePlacedIntents };
+export {
+  emitDatasetInsufficient as _emitDatasetInsufficient,
+  clearDatasetInsufficient as _clearDatasetInsufficient,
+  clearDatasetInsufficientForRun as _clearDatasetInsufficientForRun,
+  datasetInsufficientFlags as _datasetInsufficientFlags,
+};
 
 export function startBotWorker(): () => Promise<void> {
   workerLog.info({ workerId: WORKER_ID, interval: POLL_INTERVAL_MS }, "botWorker started");

@@ -283,7 +283,7 @@ type DatasetBundle = Partial<Record<CandleInterval, string | true>>;
 5. UX-требования:
    - Если у пользователя нет datasets для нужного `(symbol, interval)` — селектор интервалов помечает их disabled с подсказкой "No dataset available for this TF. Sync M5/H1/etc data first."
    - Все `availableDatasets` грузятся через существующий API, без новых endpoints.
-6. Никаких изменений в Library page (51-T5) — там `datasetBundleHintJson` пресета используется чисто как информационная подсказка для пользователя, фактический bundle для бота настраивается на странице бота.
+6. Никаких изменений в Library page (51-T5) — там `datasetBundleHintJson` пресета остаётся информационной подсказкой в UI. При `POST /presets/:slug/instantiate` хинт автоматически материализуется в `Bot.datasetBundleJson` (`routes/presets.ts`): хинт прогоняется через `parseDatasetBundle({mode:"runtime"})`; невалидный shape или несоответствие `bot.timeframe ∉ keys(hint)` отдаёт 422 до записи в БД. Если у preset'а `datasetBundleHintJson = null` — Bot создаётся без bundle (legacy single-TF путь).
 
 **Тест-план:**
 - Ручной smoke: запустить backtest на single TF — поведение прежнее.

@@ -51,3 +51,45 @@ MVP MUST:
 - `WEBHOOK_SECRET`
 - `DB_URL`
 
+## 6) Privilege model для `deploy.sh`
+
+Текущее состояние (verified 2026-05-13, follow-up #3):
+
+- `deploy/deploy.sh` не содержит ни одного внутреннего вызова `sudo`. Скрипт целиком ожидает root-окружения: `cp /etc/systemd/system/`, `systemctl daemon-reload`, `systemctl restart botmarket-{api,web,worker}`, `journalctl -u …`.
+- На VPS он запускается одной внешней `sudo bash deploy/deploy.sh` либо напрямую под `root`.
+- `ubuntu` имеет `NOPASSWD:ALL` из `/etc/sudoers.d/90-cloud-init-users` (cloud-init default). `botmarket` (uid 997) — service-юзер для рантайма, не в sudoers.
+- Никаких password-prompt'ов в существующих deploy-логах нет.
+
+Если позже появится отдельный CI-юзер (например `claude-ci`) и захочется убрать его из `sudo ALL=(ALL)`, минимальный sudoers-fragment с принципом least-privilege:
+
+```sudo
+# /etc/sudoers.d/botmarket-deploy   (mode 0440, root:root)
+Cmnd_Alias BOTMARKET_DEPLOY = \
+    /usr/bin/bash /opt/-botmarketplace-site/deploy/deploy.sh, \
+    /usr/bin/bash /opt/-botmarketplace-site/deploy/deploy.sh --ref *, \
+    /usr/bin/bash /opt/-botmarketplace-site/deploy/deploy.sh --branch *
+Cmnd_Alias BOTMARKET_UNITS = \
+    /usr/bin/systemctl restart botmarket-api, \
+    /usr/bin/systemctl restart botmarket-web, \
+    /usr/bin/systemctl restart botmarket-worker, \
+    /usr/bin/systemctl is-active botmarket-api, \
+    /usr/bin/systemctl is-active botmarket-web, \
+    /usr/bin/systemctl is-active botmarket-worker, \
+    /usr/bin/systemctl show -p ActiveState --value botmarket-worker
+Cmnd_Alias BOTMARKET_LOGS = \
+    /usr/bin/journalctl -u botmarket-api *, \
+    /usr/bin/journalctl -u botmarket-web *, \
+    /usr/bin/journalctl -u botmarket-worker *
+
+claude-ci ALL=(root) NOPASSWD: BOTMARKET_DEPLOY, BOTMARKET_UNITS, BOTMARKET_LOGS
+```
+
+Принципы:
+- Точные пути бинарей (`/usr/bin/systemctl`, `/usr/bin/journalctl`), без wildcards в путях.
+- Wildcards только в аргументах `journalctl` (`-n`, `--since`, `-f`).
+- Без `ALL` и без `NOPASSWD:ALL`.
+
+Polkit-альтернатива покрывает только `systemctl`, но не `cp` в `/etc/systemd/system/` — для end-to-end deploy нужен sudoers-путь.
+
+Сейчас этот fragment **НЕ применён**. Появится потребность — применять без расширения области.
+

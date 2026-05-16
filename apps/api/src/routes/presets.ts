@@ -23,6 +23,11 @@ import { problem } from "../lib/problem.js";
 import { validateDsl } from "../lib/dslValidator.js";
 import { isAdminRequest } from "../lib/adminGuard.js";
 import { resolveWorkspace } from "../lib/workspace.js";
+import {
+  parseDatasetBundle,
+  bundleIntervals,
+  type CandleInterval,
+} from "../types/datasetBundle.js";
 
 // ---------------------------------------------------------------------------
 // Visibility helpers
@@ -439,6 +444,45 @@ export async function presetRoutes(app: FastifyInstance) {
         }
       }
 
+      // docs/52-T1 — materialize the preset's multi-TF bundle hint onto the
+      // Bot row so botWorker.evaluateStrategies picks up the multi-interval
+      // path instead of the legacy single-TF one (mtfContext=null). Validated
+      // up-front so a broken preset surfaces as 422 before any rows are
+      // written, and so the bot's primary timeframe is guaranteed to be
+      // present in the bundle (mirrors the runtime check in
+      // botWorker.ts:evaluateStrategies, just earlier).
+      let materializedBundle: Record<CandleInterval, string | true> | null = null;
+      if (preset.datasetBundleHintJson !== null && preset.datasetBundleHintJson !== undefined) {
+        const parsed = parseDatasetBundle(preset.datasetBundleHintJson, { mode: "runtime" });
+        if (!parsed.bundle) {
+          return problem(
+            reply,
+            422,
+            "Validation Error",
+            "Preset has invalid datasetBundleHintJson",
+            { errors: parsed.errors },
+          );
+        }
+        const intervals = bundleIntervals(parsed.bundle);
+        if (!intervals.includes(config.timeframe as CandleInterval)) {
+          return problem(
+            reply,
+            422,
+            "Validation Error",
+            "Bot timeframe is not present in preset.datasetBundleHintJson",
+            {
+              errors: [
+                {
+                  field: "datasetBundleHintJson",
+                  message: `bot timeframe ${config.timeframe} not in bundle intervals [${intervals.join(", ")}]`,
+                },
+              ],
+            },
+          );
+        }
+        materializedBundle = parsed.bundle as Record<CandleInterval, string | true>;
+      }
+
       // Generate a unique-per-workspace suffix for both Strategy and Bot names
       // so repeated instantiate calls do not collide on the (workspaceId, name)
       // unique index. Six hex chars = 24 bits of entropy — plenty for human
@@ -485,6 +529,9 @@ export async function presetRoutes(app: FastifyInstance) {
               mode: config.mode,
               ...(requestedConnectionId
                 ? { exchangeConnectionId: requestedConnectionId }
+                : {}),
+              ...(materializedBundle
+                ? { datasetBundleJson: materializedBundle as Prisma.InputJsonValue }
                 : {}),
             },
           });
