@@ -1,15 +1,17 @@
-"""R001 Android/Pydroid full free monthly Deribit BTC options collector.
+"""R001 Android/Pydroid free monthly Deribit BTC options collector v0.4.
 
 Collects first-of-month BTC option ticker snapshots from Tardis without an API
 key, one month at a time, at a fixed 12:00 UTC decision timestamp.
 
-Designed for Android/Pydroid reliability:
-- resumable checkpointing (completed months are not fetched again),
-- one compact request per month,
-- retry/backoff on transient HTTP/network failures,
-- month-level append to CSV so progress survives app interruption,
-- explicit failure log,
-- no look-ahead: only local timestamps <= decision time are retained.
+Reliability design for Android/Pydroid:
+- each month is written atomically to its own shard CSV;
+- reruns skip only valid month shards, not a fragile append-only state flag;
+- no duplicate months after app/process interruption;
+- final combined CSV is rebuilt deterministically from shards;
+- retry/backoff on transient HTTP/network failures;
+- explicit failure/state logs;
+- no look-ahead: only local timestamps <= decision time are retained;
+- basic per-month quality diagnostics are persisted.
 
 Research-only screening data. First-of-month snapshots are not a substitute for
 full intramonth option history or final validation.
@@ -29,6 +31,7 @@ from urllib.request import Request, urlopen
 
 BASE = "https://api.tardis.dev/v1/data-feeds/deribit"
 DOWNLOAD = "/storage/emulated/0/Download"
+WORKDIR = os.path.join(DOWNLOAD, "r001_tardis_monthly_parts")
 OUTPUT = os.path.join(DOWNLOAD, "r001_tardis_free_monthly_2019-10_to_2026-09.csv")
 STATE = os.path.join(DOWNLOAD, "r001_tardis_free_monthly_state.json")
 FAILURES = os.path.join(DOWNLOAD, "r001_tardis_free_monthly_failures.txt")
@@ -43,6 +46,10 @@ REQUEST_TIMEOUT = 120
 MAX_RETRIES = 3
 RETRY_BASE_SECONDS = 3
 SLEEP_BETWEEN_MONTHS = 1.0
+
+# Sanity checks are intentionally permissive for early/sparse option markets.
+MIN_ROWS_PER_MONTH = 20
+MIN_DELTA_COVERAGE = 0.50
 
 FIELDS = [
     "decision_time",
@@ -131,6 +138,8 @@ def parse_line(raw):
 
 
 def build_url(day):
+    # Window 11:55:00 through 12:00:59 UTC when LOOKBACK_MINUTES=5.
+    # We later reject any message whose local timestamp is after exactly 12:00:00.
     start_minute = 60 - LOOKBACK_MINUTES
     start_hour = DECISION_HOUR - 1
     from_value = f"{day}T{start_hour:02d}:{start_minute:02d}:00.000Z"
@@ -190,31 +199,75 @@ def extract_ticker(msg):
     }
 
 
-def load_state():
-    if not os.path.exists(STATE):
-        return {"completed": [], "failed": {}}
+def shard_path(day):
+    return os.path.join(WORKDIR, f"{day}.csv")
+
+
+def is_valid_shard(day):
+    path = shard_path(day)
+    if not os.path.exists(path) or os.path.getsize(path) == 0:
+        return False
     try:
-        with open(STATE, "r", encoding="utf-8") as f:
-            obj = json.load(f)
-        if not isinstance(obj, dict):
-            raise ValueError
-        obj.setdefault("completed", [])
-        obj.setdefault("failed", {})
-        return obj
+        with open(path, "r", encoding="utf-8", newline="") as f:
+            reader = csv.DictReader(f)
+            if reader.fieldnames != FIELDS:
+                return False
+            count = 0
+            for row in reader:
+                count += 1
+                if row.get("decision_time", "")[:10] != day:
+                    return False
+            return count >= MIN_ROWS_PER_MONTH
     except Exception:
-        return {"completed": [], "failed": {}}
+        return False
+
+
+def write_shard_atomic(day, rows):
+    path = shard_path(day)
+    tmp = path + ".tmp"
+    with open(tmp, "w", encoding="utf-8", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=FIELDS)
+        writer.writeheader()
+        for row in rows:
+            writer.writerow({k: row.get(k) for k in FIELDS})
+        f.flush()
+        os.fsync(f.fileno())
+    os.replace(tmp, path)
+
+
+def rebuild_output(months):
+    tmp = OUTPUT + ".tmp"
+    total = 0
+    with open(tmp, "w", encoding="utf-8", newline="") as out:
+        writer = csv.DictWriter(out, fieldnames=FIELDS)
+        writer.writeheader()
+        for day in months:
+            if not is_valid_shard(day):
+                continue
+            with open(shard_path(day), "r", encoding="utf-8", newline="") as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    writer.writerow({k: row.get(k) for k in FIELDS})
+                    total += 1
+        out.flush()
+        os.fsync(out.fileno())
+    os.replace(tmp, OUTPUT)
+    return total
 
 
 def save_state(state):
     tmp = STATE + ".tmp"
     with open(tmp, "w", encoding="utf-8") as f:
         json.dump(state, f, indent=2, sort_keys=True)
+        f.flush()
+        os.fsync(f.fileno())
     os.replace(tmp, STATE)
 
 
 def log_failure(day, message):
+    stamp = datetime.now(timezone.utc).isoformat()
     with open(FAILURES, "a", encoding="utf-8") as f:
-        f.write(f"{day}\t{message}\n")
+        f.write(f"{stamp}\t{day}\t{message}\n")
 
 
 def collect_month(day):
@@ -225,13 +278,15 @@ def collect_month(day):
     req = Request(
         url,
         headers={
-            "User-Agent": "r001-android-research/0.3",
+            "User-Agent": "r001-android-research/0.4",
             "Accept-Encoding": "gzip",
         },
     )
 
     latest = {}
     line_count = 0
+    parse_failures = 0
+    future_lines = 0
 
     with urlopen(req, timeout=REQUEST_TIMEOUT) as response:
         encoding = (response.headers.get("Content-Encoding") or "").lower()
@@ -241,9 +296,11 @@ def collect_month(day):
             line_count += 1
             parsed = parse_line(raw)
             if parsed is None:
+                parse_failures += 1
                 continue
             local_ts_us, msg = parsed
             if local_ts_us > decision_us:
+                future_lines += 1
                 continue
             row = extract_ticker(msg)
             if row is None:
@@ -257,69 +314,88 @@ def collect_month(day):
                 latest[symbol] = row
 
     rows = sorted(latest.values(), key=lambda x: x["instrument_name"])
+    with_delta = sum(1 for r in rows if r["delta"] is not None)
     two_sided = sum(
         1 for r in rows
         if (r["best_bid_price"] or 0) > 0 and (r["best_ask_price"] or 0) > 0
     )
-    with_delta = sum(1 for r in rows if r["delta"] is not None)
+    delta_coverage = with_delta / len(rows) if rows else 0.0
 
-    return rows, line_count, with_delta, two_sided
+    if len(rows) < MIN_ROWS_PER_MONTH:
+        raise ValueError(f"Too few BTC option rows: {len(rows)}")
+    if delta_coverage < MIN_DELTA_COVERAGE:
+        raise ValueError(f"Delta coverage too low: {delta_coverage:.1%}")
 
-
-def append_rows(rows):
-    new_file = not os.path.exists(OUTPUT) or os.path.getsize(OUTPUT) == 0
-    with open(OUTPUT, "a", encoding="utf-8", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=FIELDS)
-        if new_file:
-            writer.writeheader()
-        for row in rows:
-            writer.writerow({k: row.get(k) for k in FIELDS})
+    stats = {
+        "raw_lines": line_count,
+        "parse_failures": parse_failures,
+        "future_lines_rejected": future_lines,
+        "btc_options": len(rows),
+        "with_delta": with_delta,
+        "delta_coverage": delta_coverage,
+        "two_sided": two_sided,
+        "two_sided_coverage": two_sided / len(rows) if rows else 0.0,
+    }
+    return rows, stats
 
 
 def main():
     os.makedirs(DOWNLOAD, exist_ok=True)
+    os.makedirs(WORKDIR, exist_ok=True)
     months = month_list()
-    state = load_state()
-    completed = set(state.get("completed", []))
 
     print("=" * 64)
-    print("R001 FREE MONTHLY DERIBIT COLLECTOR v0.3")
+    print("R001 FREE MONTHLY DERIBIT COLLECTOR v0.4")
     print(f"Period: {months[0]} -> {months[-1]}")
     print(f"Decision time: {DECISION_HOUR:02d}:00 UTC")
     print("No API key / first-of-month free Tardis data")
-    print("Resumable: YES")
+    print("Crash-safe monthly shards: YES")
     print("=" * 64)
-    print("Already completed:", len(completed), "/", len(months))
-    print("Output:", OUTPUT)
+
+    completed = [day for day in months if is_valid_shard(day)]
+    state = {
+        "version": "0.4",
+        "period": [months[0], months[-1]],
+        "decision_hour_utc": DECISION_HOUR,
+        "completed": completed,
+        "failed": {},
+        "stats": {},
+    }
+    save_state(state)
+
+    print("Valid existing month shards:", len(completed), "/", len(months))
+    print("Parts folder:", WORKDIR)
+    print("Final output:", OUTPUT)
 
     for idx, day in enumerate(months, start=1):
-        if day in completed:
-            print(f"[{idx}/{len(months)}] SKIP {day} (already completed)")
+        if is_valid_shard(day):
+            print(f"[{idx}/{len(months)}] SKIP {day} (valid shard exists)")
             continue
 
         print()
         print(f"[{idx}/{len(months)}] Fetching {day} {DECISION_HOUR:02d}:00 UTC")
-
         success = False
         last_error = None
 
         for attempt in range(1, MAX_RETRIES + 1):
             try:
-                rows, raw_lines, with_delta, two_sided = collect_month(day)
-                if not rows:
-                    raise ValueError("No BTC option rows returned")
+                rows, stats = collect_month(day)
+                write_shard_atomic(day, rows)
+                if not is_valid_shard(day):
+                    raise ValueError("Shard failed post-write validation")
 
-                append_rows(rows)
-                state["completed"].append(day)
-                state.get("failed", {}).pop(day, None)
+                state["stats"][day] = stats
+                state["failed"].pop(day, None)
+                state["completed"] = [d for d in months if is_valid_shard(d)]
                 save_state(state)
-                completed.add(day)
 
-                print("  raw lines:", raw_lines)
-                print("  BTC options:", len(rows))
-                print("  with delta:", with_delta)
-                print("  two-sided:", two_sided)
-                print("  saved: YES")
+                print("  raw lines:", stats["raw_lines"])
+                print("  parse failures:", stats["parse_failures"])
+                print("  future lines rejected:", stats["future_lines_rejected"])
+                print("  BTC options:", stats["btc_options"])
+                print("  delta coverage: %.1f%%" % (100 * stats["delta_coverage"]))
+                print("  two-sided coverage: %.1f%%" % (100 * stats["two_sided_coverage"]))
+                print("  saved atomically: YES")
                 success = True
                 break
 
@@ -337,32 +413,45 @@ def main():
                 break
 
         if not success:
-            state.setdefault("failed", {})[day] = last_error or "unknown error"
+            state["failed"][day] = last_error or "unknown error"
+            state["completed"] = [d for d in months if is_valid_shard(d)]
             save_state(state)
             log_failure(day, last_error or "unknown error")
             print("  month recorded as FAILED; collector continues")
 
         time.sleep(SLEEP_BETWEEN_MONTHS)
 
-    state = load_state()
-    completed_final = len(set(state.get("completed", [])))
-    failed_final = len(state.get("failed", {}))
+    # Rebuild the combined dataset from validated month shards only.
+    total_rows = rebuild_output(months)
+    completed_final = [day for day in months if is_valid_shard(day)]
+    failed_final = [day for day in months if day not in completed_final]
+
+    state["completed"] = completed_final
+    state["failed"] = {day: state["failed"].get(day, "missing/invalid shard") for day in failed_final}
+    state["combined_rows"] = total_rows
+    state["finished_at_utc"] = datetime.now(timezone.utc).isoformat()
+    save_state(state)
 
     print()
     print("=" * 64)
     print("FINISHED")
     print("=" * 64)
-    print("Completed months:", completed_final, "/", len(months))
-    print("Failed months:", failed_final)
+    print("Completed months:", len(completed_final), "/", len(months))
+    print("Failed/missing months:", len(failed_final))
+    print("Combined rows:", total_rows)
     if os.path.exists(OUTPUT):
         print("Output size: %.2f MB" % (os.path.getsize(OUTPUT) / (1024 * 1024)))
     print("Output:", OUTPUT)
     print("State:", STATE)
+    print("Parts folder:", WORKDIR)
     if failed_final:
         print("Failures log:", FAILURES)
-        print("Run the same script again later; completed months will be skipped.")
+        print("Missing months:", ", ".join(failed_final))
+        print("Run the same script again later; valid shards will be skipped.")
+    else:
+        print("All months collected successfully.")
     print()
-    print("When complete, upload the CSV to ChatGPT for E003-S screening.")
+    print("Upload the combined CSV to ChatGPT for E003-S screening.")
     input("Press Enter to finish...")
 
 
