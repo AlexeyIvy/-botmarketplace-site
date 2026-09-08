@@ -1,16 +1,17 @@
 """Android/Pydroid smoke test for free first-of-month Deribit BTC option snapshots.
 
-This script is intentionally self-contained: copy into Pydroid 3 and press Run.
-It requests small first-of-month Tardis HTTP windows for 2020-03 through 2020-06
+Self-contained: copy into Pydroid 3 and press Run.
+Requests small first-of-month Tardis HTTP windows for 2020-03 through 2020-06
 at 12:00 UTC, reconstructs the latest BTC option ticker state at decision time,
 and writes one compact CSV to Android Download.
 
-Research-only. No API key required for Tardis' first-day-of-month sample access.
+Research-only. No API key required for Tardis first-day-of-month sample access.
 """
 
 from __future__ import annotations
 
 import csv
+import gzip
 import json
 import os
 import time
@@ -71,22 +72,37 @@ def parse_name(name):
     }
 
 
-def parse_line(raw):
-    """Tardis data-feeds line: <localTimestamp> <exchange JSON>."""
-    text = raw.decode("utf-8").strip()
-    if not text:
-        return None
+def iso_to_us(value):
+    """Convert Tardis ISO-8601 local timestamp to integer microseconds UTC."""
     try:
+        text = value.strip()
+        if text.endswith("Z"):
+            text = text[:-1] + "+00:00"
+        dt = datetime.fromisoformat(text)
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        return int(dt.timestamp() * 1_000_000)
+    except Exception:
+        return None
+
+
+def parse_line(raw):
+    """Tardis data-feeds line: <ISO localTimestamp> <exchange JSON>."""
+    try:
+        text = raw.decode("utf-8").strip()
+        if not text:
+            return None
         ts_text, json_text = text.split(" ", 1)
-        local_ts = int(ts_text)
+        local_ts_us = iso_to_us(ts_text)
+        if local_ts_us is None:
+            return None
         msg = json.loads(json_text)
-        return local_ts, msg
+        return local_ts_us, msg
     except Exception:
         return None
 
 
 def build_url(day, hour, lookback_minutes):
-    # Ask for a compact slice ending at the decision minute.
     start_minute = 60 - lookback_minutes if lookback_minutes > 0 else 0
     start_hour = hour - 1 if hour > 0 else 23
     from_value = f"{day}T{start_hour:02d}:{start_minute:02d}:00.000Z"
@@ -117,7 +133,9 @@ def extract_ticker(msg):
 
     exchange_ts = data.get("timestamp")
     try:
-        exchange_ts = int(exchange_ts) * 1000 if exchange_ts is not None and int(exchange_ts) < 10**15 else int(exchange_ts)
+        exchange_ts = int(exchange_ts)
+        if exchange_ts < 10**15:
+            exchange_ts *= 1000
     except Exception:
         exchange_ts = None
 
@@ -148,38 +166,56 @@ def collect_month(day):
     url = build_url(day, DECISION_HOUR, LOOKBACK_MINUTES)
 
     print()
-    print("Fetching", day, "at", f"{DECISION_HOUR:02d}:00 UTC")
-    print(url)
+    print("Fetching:", day, f"{DECISION_HOUR:02d}:00 UTC")
 
-    req = Request(url, headers={"User-Agent": "r001-android-research/0.1", "Accept-Encoding": "identity"})
+    req = Request(
+        url,
+        headers={
+            "User-Agent": "r001-android-research/0.2",
+            "Accept-Encoding": "gzip",
+        },
+    )
+
     latest = {}
     line_count = 0
 
     with urlopen(req, timeout=120) as resp:
-        for raw in resp:
+        encoding = (resp.headers.get("Content-Encoding") or "").lower()
+        stream = gzip.GzipFile(fileobj=resp) if encoding == "gzip" else resp
+
+        for raw in stream:
             line_count += 1
             parsed = parse_line(raw)
             if parsed is None:
                 continue
-            local_ts, msg = parsed
-            if local_ts > decision_us:
+
+            local_ts_us, msg = parsed
+
+            # No look-ahead: ignore anything captured after decision time.
+            if local_ts_us > decision_us:
                 continue
+
             row = extract_ticker(msg)
             if row is None:
                 continue
-            row["decision_time"] = decision.isoformat()
-            row["local_timestamp_us"] = local_ts
 
-            prev = latest.get(row["instrument_name"])
-            if prev is None or row["local_timestamp_us"] > prev["local_timestamp_us"]:
-                latest[row["instrument_name"]] = row
+            row["decision_time"] = decision.isoformat()
+            row["local_timestamp_us"] = local_ts_us
+
+            symbol = row["instrument_name"]
+            prev = latest.get(symbol)
+            if prev is None or local_ts_us > prev["local_timestamp_us"]:
+                latest[symbol] = row
 
     rows = sorted(latest.values(), key=lambda x: x["instrument_name"])
-    two_sided = sum(1 for r in rows if (r["best_bid_price"] or 0) > 0 and (r["best_ask_price"] or 0) > 0)
+    two_sided = sum(
+        1 for r in rows
+        if (r["best_bid_price"] or 0) > 0 and (r["best_ask_price"] or 0) > 0
+    )
     with_delta = sum(1 for r in rows if r["delta"] is not None)
 
     print("Raw feed lines:", line_count)
-    print("BTC option instruments:", len(rows))
+    print("BTC options:", len(rows))
     print("With delta:", with_delta)
     print("Two-sided bid/ask:", two_sided)
 
@@ -188,8 +224,8 @@ def collect_month(day):
 
 def main():
     print("=" * 60)
-    print("R001 FREE TARDIS MONTHLY TEST")
-    print("Months: 2020-03 to 2020-06")
+    print("R001 FREE TARDIS MONTHLY TEST v0.2")
+    print("2020-03 -> 2020-06")
     print("Decision time: 12:00 UTC")
     print("No API key")
     print("=" * 60)
@@ -202,23 +238,25 @@ def main():
             rows = collect_month(day)
             all_rows.extend(rows)
         except Exception as e:
-            print("FAILED:", day, repr(e))
+            print()
+            print("FAILED:", day)
+            print(repr(e))
             failures.append((day, repr(e)))
-        time.sleep(1.0)
+        time.sleep(1)
 
     if not all_rows:
         print()
-        print("No rows collected.")
+        print("NO DATA COLLECTED")
         print("Failures:", failures)
         input("Press Enter to exit...")
         return
 
     os.makedirs(os.path.dirname(OUTPUT), exist_ok=True)
     with open(OUTPUT, "w", encoding="utf-8", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=FIELDS)
-        w.writeheader()
+        writer = csv.DictWriter(f, fieldnames=FIELDS)
+        writer.writeheader()
         for row in all_rows:
-            w.writerow({k: row.get(k) for k in FIELDS})
+            writer.writerow({key: row.get(key) for key in FIELDS})
 
     size_kb = os.path.getsize(OUTPUT) / 1024
 
@@ -230,9 +268,9 @@ def main():
     print("Output:", OUTPUT)
     print(f"Size: {size_kb:.1f} KB")
     if failures:
-        print("Failed months:", failures)
+        print("Some months failed:", failures)
     print()
-    print("Upload this CSV to ChatGPT for validation.")
+    print("Upload the resulting CSV to ChatGPT.")
     input("Press Enter to finish...")
 
 
