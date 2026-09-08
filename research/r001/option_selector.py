@@ -23,6 +23,7 @@ class OptionQuote:
 
     @property
     def dte(self) -> float:
+        """Quote-time DTE, retained for diagnostics only."""
         return (self.expiration_us - self.timestamp_us) / MICROS_PER_DAY
 
     @property
@@ -80,17 +81,22 @@ def select_option(
 ) -> SelectionResult:
     """Select an executable historical option quote without look-ahead.
 
+    Selection uses information available at the decision timestamp only.
+    Contract DTE is measured at the *decision timestamp*, not at each quote's
+    slightly different exchange timestamp. This avoids microsecond quote-time
+    differences accidentally dominating delta ranking inside the same expiry.
+
     Ranking is intentionally simple and auditable:
       1. Filter to quotes known at decision time and not stale.
-      2. Filter option type and DTE window.
+      2. Filter option type and DTE window using decision-time DTE.
       3. Require usable delta and executable ask (and bid if configured).
-      4. Rank first by distance to target DTE, then target |delta|,
+      4. Rank by distance to target DTE, then target |delta|,
          then tighter spread, then symbol for deterministic tie-breaking.
 
     Buy-side backtests should execute at quote.ask_price, not mark/mid.
     """
     max_age_us = int(config.max_quote_age_seconds * 1_000_000)
-    eligible: list[OptionQuote] = []
+    eligible: list[tuple[OptionQuote, float]] = []
 
     for q in quotes:
         if q.timestamp_us > decision_timestamp_us:
@@ -99,33 +105,38 @@ def select_option(
             continue
         if q.option_type != config.option_type:
             continue
-        if not (config.min_dte <= q.dte <= config.max_dte):
+
+        dte_at_decision = (q.expiration_us - decision_timestamp_us) / MICROS_PER_DAY
+        if not (config.min_dte <= dte_at_decision <= config.max_dte):
             continue
+
         if q.delta is None or q.ask_price is None or q.ask_price <= 0:
             continue
         if config.require_two_sided and (q.bid_price is None or q.bid_price < 0):
             continue
         if q.ask_amount is not None and q.ask_amount < config.min_ask_amount:
             continue
-        eligible.append(q)
+
+        eligible.append((q, dte_at_decision))
 
     if not eligible:
         raise ValueError("No eligible historical option quote for selection")
 
-    def rank(q: OptionQuote) -> tuple[float, float, float, str]:
+    def rank(item: tuple[OptionQuote, float]) -> tuple[float, float, float, str]:
+        q, dte_at_decision = item
         spread = q.spread if q.spread is not None else float("inf")
         return (
-            abs(q.dte - config.target_dte),
-            abs(abs(q.delta) - config.target_abs_delta),
+            abs(dte_at_decision - config.target_dte),
+            abs(abs(q.delta or 0.0) - config.target_abs_delta),
             spread,
             q.symbol,
         )
 
-    chosen = min(eligible, key=rank)
+    chosen, chosen_dte = min(eligible, key=rank)
     return SelectionResult(
         quote=chosen,
         delta_error=abs(abs(chosen.delta or 0.0) - config.target_abs_delta),
-        dte_error=abs(chosen.dte - config.target_dte),
+        dte_error=abs(chosen_dte - config.target_dte),
     )
 
 
