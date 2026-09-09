@@ -132,16 +132,28 @@ Any such change is a separately versioned hypothesis.
 
 Before any R003-E002 output was inspected, the Android launcher was revised for interruption safety. This revision **does not change the frozen economic engine or any research rule**.
 
-The launcher now:
+The launcher:
 
 - keeps the exact frozen economic engine at commit `84ab935899b22b8610d7184b192a1b5e8e6df36d`;
 - uses persistent workspace `/storage/emulated/0/Download/R003_E002_WORKSPACE`;
 - fixes a first-run UTC data cutoff in `snapshot.json` so a resumed run cannot silently move the historical endpoint forward;
 - atomically caches each downloaded API page as compressed JSON under `_cache/`;
 - resumes from already cached pages after Pydroid/Android interruption rather than restarting network downloads;
-- keeps `_cache/` separate from the 9 user-facing result files;
+- keeps cache separate from the 9 user-facing result files;
 - warns on low free storage before the heavy download begins.
 
-Resumable launcher commit: `76f5b0ff110c14008efb44ef5c7b8b2c60c9be32`.
+Initial resumable launcher commit: `76f5b0ff110c14008efb44ef5c7b8b2c60c9be32`.
 
 If interruption occurs after downloads are complete but during calculation, the next run reuses the complete source cache and recomputes the deterministic analysis from the beginning. This is acceptable because no source bytes need to be re-downloaded and the frozen data cutoff remains unchanged.
+
+### Post-success cache compaction
+
+A subsequent pre-result usability revision keeps the same frozen engine and snapshot but reduces file clutter after a successful run:
+
+- while a run is incomplete, page-level checkpoint files remain untouched because they are the resume mechanism;
+- only after the full engine run returns successfully, the launcher verifies and packs the entire `_cache/` tree into one `_cache_bundle.zip` archive and removes the page directories;
+- the 9 result files remain individually available under `results/` for audit/upload;
+- if the launcher is ever rerun later, it automatically restores `_cache/` from `_cache_bundle.zip`, reuses the same snapshot/cutoff, and can recompute deterministically;
+- no market data, page hashes, economic accounting, parameters, or decision rules are changed by this compaction.
+
+Cache-compacting launcher commit: `8ac2f52600e5ee1994d0956352a3be54bea926c6`.
