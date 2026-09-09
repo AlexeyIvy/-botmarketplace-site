@@ -127,3 +127,21 @@ After E002 output is inspected, do not rescue the same sample by changing:
 - venue.
 
 Any such change is a separately versioned hypothesis.
+
+## 13. Pre-result mobile reliability revision
+
+Before any R003-E002 output was inspected, the Android launcher was revised for interruption safety. This revision **does not change the frozen economic engine or any research rule**.
+
+The launcher now:
+
+- keeps the exact frozen economic engine at commit `84ab935899b22b8610d7184b192a1b5e8e6df36d`;
+- uses persistent workspace `/storage/emulated/0/Download/R003_E002_WORKSPACE`;
+- fixes a first-run UTC data cutoff in `snapshot.json` so a resumed run cannot silently move the historical endpoint forward;
+- atomically caches each downloaded API page as compressed JSON under `_cache/`;
+- resumes from already cached pages after Pydroid/Android interruption rather than restarting network downloads;
+- keeps `_cache/` separate from the 9 user-facing result files;
+- warns on low free storage before the heavy download begins.
+
+Resumable launcher commit: `76f5b0ff110c14008efb44ef5c7b8b2c60c9be32`.
+
+If interruption occurs after downloads are complete but during calculation, the next run reuses the complete source cache and recomputes the deterministic analysis from the beginning. This is acceptable because no source bytes need to be re-downloaded and the frozen data cutoff remains unchanged.
