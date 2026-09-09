@@ -2,7 +2,8 @@
 
 Implementation-only revision: the frozen research engine/economic rules are unchanged.
 This launcher adds a persistent workspace, atomic page caching, resume after interruption,
-a fixed first-run data cutoff, progress logging, and disk-space checks.
+a fixed first-run data cutoff, progress logging, disk-space checks, and post-success
+cache compaction into one archive.
 """
 
 from __future__ import annotations
@@ -14,6 +15,7 @@ import os
 import re
 import shutil
 import sys
+import zipfile
 from datetime import datetime, timezone
 from pathlib import Path
 from urllib.request import Request, urlopen
@@ -23,6 +25,7 @@ WORKSPACE = DOWNLOAD / "R003_E002_WORKSPACE"
 CACHE = WORKSPACE / "_cache"
 RESULTS = WORKSPACE / "results"
 SNAPSHOT_FILE = WORKSPACE / "snapshot.json"
+CACHE_BUNDLE = WORKSPACE / "_cache_bundle.zip"
 
 # Economic/accounting engine remains exactly the pre-result frozen commit.
 ENGINE_COMMIT = "84ab935899b22b8610d7184b192a1b5e8e6df36d"
@@ -102,8 +105,57 @@ def load_or_create_snapshot() -> dict:
     return snap
 
 
+def restore_cache_bundle_if_needed() -> None:
+    """Restore compacted cache only when a later rerun actually needs it."""
+    if CACHE.exists() and any(CACHE.iterdir()):
+        return
+    if not CACHE_BUNDLE.exists():
+        return
+    print("Restoring resumable cache from:", CACHE_BUNDLE)
+    if CACHE.exists():
+        shutil.rmtree(CACHE)
+    with zipfile.ZipFile(CACHE_BUNDLE, "r") as zf:
+        zf.extractall(WORKSPACE)
+    if not CACHE.exists():
+        raise RuntimeError("Cache bundle did not contain expected _cache directory")
+
+
+def compact_cache_after_success() -> None:
+    """Pack page-level checkpoints into one archive only after a successful full run."""
+    if not CACHE.exists():
+        return
+    files = [p for p in CACHE.rglob("*") if p.is_file()]
+    if not files:
+        return
+
+    tmp = CACHE_BUNDLE.with_suffix(".zip.tmp")
+    if tmp.exists():
+        tmp.unlink()
+    # Page files are already gzip-compressed, so ZIP_STORED avoids wasting CPU.
+    with zipfile.ZipFile(tmp, "w", compression=zipfile.ZIP_STORED, allowZip64=True) as zf:
+        for p in files:
+            zf.write(p, arcname=str(p.relative_to(WORKSPACE)))
+    os.replace(tmp, CACHE_BUNDLE)
+
+    # Verify the archive before deleting the page tree.
+    with zipfile.ZipFile(CACHE_BUNDLE, "r") as zf:
+        bad = zf.testzip()
+        if bad is not None:
+            raise RuntimeError(f"Cache bundle verification failed at {bad}")
+        archived = set(zf.namelist())
+    expected = {str(p.relative_to(WORKSPACE)) for p in files}
+    if not expected.issubset(archived):
+        raise RuntimeError("Cache bundle is missing one or more checkpoint files")
+
+    shutil.rmtree(CACHE)
+    print(
+        f"Checkpoint cache compacted: {len(files)} files -> {CACHE_BUNDLE.name} "
+        f"({CACHE_BUNDLE.stat().st_size / (1024*1024):.1f} MB)"
+    )
+
+
 def download_engine() -> None:
-    req = Request(ENGINE_URL, headers={"User-Agent": "r003-research-mobile-resume/0.2"})
+    req = Request(ENGINE_URL, headers={"User-Agent": "r003-research-mobile-resume/0.3"})
     with urlopen(req, timeout=60) as resp:
         raw = resp.read()
     atomic_write_bytes(ENGINE_FILE, raw)
@@ -174,7 +226,6 @@ def install_resumable_fetchers(ns: dict, cutoff_ms: int) -> None:
         start = int(DOWNLOAD_START.timestamp() * 1000)
         last_open = None
 
-        # Replay already downloaded pages from local compressed cache.
         for meta in manifest["pages"]:
             raw, obj = read_page(folder, meta)
             if not isinstance(obj, list):
@@ -392,6 +443,7 @@ def main() -> None:
     print("=" * 72)
 
     check_disk()
+    restore_cache_bundle_if_needed()
     CACHE.mkdir(parents=True, exist_ok=True)
     RESULTS.mkdir(parents=True, exist_ok=True)
     snap = load_or_create_snapshot()
@@ -403,8 +455,6 @@ def main() -> None:
     download_engine()
     source = ENGINE_FILE.read_text(encoding="utf-8")
 
-    # Load the frozen engine without invoking its CLI main(), then replace only
-    # its source-download functions with resumable equivalents. Research logic stays frozen.
     ns = {
         "__name__": "r003_e002_frozen_engine",
         "__file__": str(ENGINE_FILE),
@@ -419,12 +469,16 @@ def main() -> None:
         print("Cache has been preserved. Re-run this same launcher to resume downloads.")
         raise
 
+    # Only after every result has been generated successfully do we replace the
+    # many checkpoint files with one archive. A later rerun restores it automatically.
+    compact_cache_after_success()
+
     print()
     print("RUN FINISHED")
     print("Workspace size:", f"{workspace_size_mb():.1f} MB")
     print("Upload the 9 result files from:")
     print(RESULTS)
-    print("Do NOT upload the _cache folder or the .py engine copy.")
+    print("Do NOT upload _cache_bundle.zip, snapshot.json, or the .py engine copy.")
 
 
 if __name__ == "__main__":
