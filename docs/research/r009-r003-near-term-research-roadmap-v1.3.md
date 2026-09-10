@@ -2,100 +2,133 @@
 
 **Project:** BotMarketplace / botmarketplace.store  
 **Date:** 2026-09-10  
-**Status:** R009 forward frozen; R003-E002 implementation promising with marginal recent capital efficiency  
-**Research posture:** antifragility-first, falsification-first, forward evidence priority
+**Status:** R009 forward frozen; R003-E002 IMPLEMENTATION_PROMISING but recent capital efficiency MARGINAL; R003-E003 forward frozen  
+**Research posture:** falsification-first, no historical rescue tuning, opportunity-cost aware, common-mode risk aware
 
-## 1. R009
+## 1. Primary strategic interpretation
 
-R009 v0.1 remains the primary directional/portfolio candidate.
+R009 and R003 are both worth carrying forward, but for different reasons:
 
-- E001 status: PROMISING_SCREEN.
-- E002 forward inception remains fixed at 2026-09-10 00:00 UTC.
-- No parameter reset or retuning because of R003.
-- Original BTC SMA120 forward control continues independently.
+- **R009** is the primary directional/portfolio candidate and already has a fixed forward clock.
+- **R003** has a historically real funding-carry mechanism after implementation realism, but its recent return is only marginal relative to safer capital alternatives.
 
-## 2. R003-E002 canonical result
+Neither candidate is authorized for production or real-money scaling.
 
-Canonical result:
+## 2. Correct interpretation of R003-E002
 
-`docs/research/r003-e002-results-v0.1.md`
+R003-E002 showed low historical model drawdown and no modeled margin failure under the frozen 50/50 construction.
 
-Formal status:
+This means the strategy was resilient **inside the simulator**, not that it is antifragile or bankruptcy-proof in the real world.
 
-> **IMPLEMENTATION_PROMISING**
+Unmodeled tail risks still include exchange failure, USDT impairment, exact liquidation rules, execution gaps, API/legging failure and access constraints.
 
-Qualifier:
+Do not use the phrase “anti-fragile R003” unless a later design contains a demonstrated stress-benefit mechanism beyond simple survival.
 
-> **POST_2023 CAPITAL EFFICIENCY = MARGINAL**
+## 3. Safe-capital hurdle now becomes explicit
 
-Baseline 10 bps/leg:
+The latest available U.S. Treasury bill snapshot before forward freeze is recorded in:
 
-- PRIMARY_2020 CAGR ~6.60%, Max DD ~-1.33%, ending ~1.533x;
-- PRE_2023 CAGR ~10.14%;
-- POST_2023 CAGR ~3.74%, Max DD ~-1.10%;
-- PRIMARY minimum conservative intrahour collateral ratio ~18.45%;
-- no low-headroom or hard-margin failure.
+`docs/research/safe-sleeve-hurdle-snapshot-2026-09-10.md`
 
-Funding is the economic source: ZERO_FUNDING PRIMARY CAGR is ~-0.23%, while REALIZED_FUNDING is ~+6.60%.
+Frozen primary inception reference:
 
-## 3. Important caution
+- 13-week Treasury bill coupon-equivalent yield: **3.90% annualized**.
 
-Recent funding economics are much weaker than 2020-2021.
+Frozen research compensation floor:
 
-- POST_2023 baseline CAGR is only ~3.74%;
-- POST_2023 adverse-funding CAGR is ~1.41%;
-- descriptive trailing-365-day canonical NAV return at the frozen endpoint is only ~1.50%;
-- 2026 YTD through the historical cutoff is ~0.80% cumulative.
+- Treasury +2pp: **5.90% annualized**.
 
-Therefore R003 is preserved, but historical success does not justify immediate capital deployment or option-premium spending.
+Inflation remains secondary context, not the primary opportunity-cost benchmark.
 
-## 4. Next R003 stage
+## 4. R003-E003 forward paper
 
-Open a forward/shadow R003 record only with the exact frozen implementation economics.
+Protocol:
 
-Forward work should record:
+`docs/research/r003-e003-forward-paper-protocol-v0.1.md`
 
-- live BTCUSDT spot and perpetual prices;
-- mark price and realized funding;
-- actual/executable bid-ask snapshots where available;
-- intended equal-BTC hedge quantities;
-- futures collateral and liquidation headroom;
-- modeled versus executable two-leg entry/rehedge/exit costs;
-- cumulative funding, pair/basis P&L and NAV;
-- contemporaneous safe-sleeve opportunity-cost benchmark.
+Implementation freeze:
 
-No positive-funding activation threshold, leverage tuning or collateral optimization is allowed.
+`docs/research/r003-e003-forward-implementation-freeze-v0.1.md`
 
-## 5. Safe-sleeve comparison becomes mandatory
+Frozen engine commit:
 
-Because recent fully funded carry is only marginal, R003 must now be judged against a real safe-capital opportunity cost before production promotion.
+`a0bbdb4a5deff9854f162ed7ad2a3c6f848cd5cc`
 
-This comparison is an implementation/economic hurdle, not a historical rescue parameter.
+Mobile launcher commit:
 
-Priority order for the safe sleeve remains:
+`9f65aa4426aa3123b2914724e1f9bc24ab4b7ccd`
 
-1. stress availability;
-2. capital survival;
-3. independence from crypto/exchange joint failure;
-4. transfer reliability;
-5. yield.
+Immutable forward boundary:
 
-## 6. Carry-funded convexity remains deferred
+**2026-09-10 12:00 UTC**.
 
-Do not yet open a production-style carry-funded option strategy.
+First paper position is established only at the close of the first fully closed common 1h bar after that boundary; funding before that actual establishment close is excluded.
 
-Only if R003 forward/shadow evidence remains economically useful after safe-sleeve opportunity cost should a new candidate be specified as:
+No terminal positive promotion before 365 days + 1,000 funding events + 10 completed month-end rebalance opportunities.
 
-> accumulated realized carry -> ring-fenced premium budget -> bounded long convexity
+## 5. R009 forward remains unchanged
 
-The premium budget may not depend on contemporaneous future funding remaining positive in a crash.
+R009-E002 continues from its already frozen inception.
 
-## 7. Immediate priority hierarchy
+Do not change SMA120, sleeve sizes, drawdown levels, costs, reset logic or benchmark set.
 
-1. Start/maintain R009-E002 forward paper from its already frozen inception.
-2. Freeze R003 forward/shadow protocol before counting any new R003 performance.
-3. Continue original BTC SMA120 forward control.
-4. Compare R003 economics with explicit safe-sleeve opportunity cost.
-5. Do not retune R003/R008/R009 on inspected history.
-6. Carry-funded convexity remains conditional on forward R003 support.
-7. ETH unchanged-rule R009 structural falsification remains secondary.
+R003 results do not alter R009.
+
+## 6. Original BTC SMA120 forward remains unchanged
+
+The original frozen BTC SMA120 forward control continues independently and must not be reset by either R009 or R003 research.
+
+## 7. Common-mode operational risk rule
+
+Do not count R003 and R009 as fully diversified merely because their economic return sources differ.
+
+If both depend on Binance/USDT, they share failure modes.
+
+Future portfolio construction must separate:
+
+- economic alpha/carry diversification;
+- venue/custody/collateral diversification.
+
+A material off-venue safe reserve remains mandatory before any antifragile production claim.
+
+## 8. No profit rescue on inspected history
+
+Forbidden for R003 v0.1:
+
+- leverage increase;
+- lower collateral fraction;
+- funding-entry thresholds;
+- funding forecasts;
+- funding moving averages;
+- rebalance-frequency search;
+- selective regime activation;
+- venue shopping after results.
+
+Forbidden for R009 v0.1:
+
+- SMA retuning;
+- sleeve-weight search;
+- drawdown-threshold search;
+- recovery/reset tuning;
+- added technical filters.
+
+## 9. Carry-funded convexity remains later
+
+Do not start a long-option program merely because R003 historical carry was positive.
+
+Only if forward R003 produces sufficiently persistent excess return versus safe capital should a new candidate test:
+
+> realized carry transferred to ring-fenced reserve -> bounded option-premium budget -> long convexity
+
+Funding must not be assumed to remain positive in the same crisis where protection is needed.
+
+## 10. Immediate execution order
+
+1. Run R009-E002 now that its forward inception has passed; retain its fixed original clock.
+2. Run R003-E003 after the first two fully closed common hourly bars exist after the 2026-09-10 12:00 UTC boundary.
+3. Re-run both forward trackers periodically without parameter changes.
+4. Use monthly R003 descriptive checks and quarterly R009 descriptive checks; do not infer terminal edge from short samples.
+5. Maintain the original BTC SMA120 forward control.
+6. Do not start another nearby historical BTC price-rule search while these forward records accumulate.
+7. Later secondary structural falsification: unchanged-rule ETH test for R009, only after forward infrastructure is stable.
+8. Only after forward support, analyze a combined portfolio with explicit off-venue safe reserve and common-mode stress scenarios.
