@@ -120,20 +120,33 @@ The 10% threshold is a research buffer, not Binance's exact liquidation formula.
 
 No claim of live liquidation safety may be made from this proxy alone.
 
-## 9. Safe-capital hurdle
+## 9. Safe-capital hurdles
 
 Frozen benchmark snapshot:
 
 `docs/research/safe-sleeve-hurdle-snapshot-2026-09-10.md`
 
-Forward dashboard must retain:
+Forward dashboard must retain both immutable inception references:
 
 - 13-week Treasury-bill inception hurdle: **3.90% annualized**;
-- research compensation floor: **5.90% annualized** (= Treasury +2pp).
+- research compensation floor: **5.90% annualized** (= Treasury inception rate +2pp).
 
-These fixed inception references may not be changed after observing forward results.
+These fixed references may not be changed after observing forward results.
 
-Current Treasury rates may additionally be recorded at later review dates as descriptive context.
+### Causal dynamic Treasury reference
+
+Also maintain a non-tunable, time-varying opportunity-cost proxy from the official U.S. Treasury **13-week Treasury bill coupon-equivalent** daily series.
+
+Causality rule:
+
+- a Treasury quote dated calendar day `d` becomes usable by the forward benchmark only on calendar day `d+1`;
+- weekends/holidays forward-fill the latest already-available quote;
+- accrue an hourly safe-reference NAV from the causally available annualized rate;
+- never backfill a newly published quote into earlier forward hours.
+
+This dynamic series is an opportunity-cost proxy, not an exact investable rolling-bill total-return index.
+
+If the Treasury source is temporarily unavailable, Binance forward P&L may still be recorded, but the safe-hurdle comparison must be flagged incomplete and no final capital-efficiency conclusion may be issued until the benchmark is reconstructed.
 
 Inflation is contextual only and is not the primary hurdle.
 
@@ -160,7 +173,8 @@ Required outputs:
 5. `r003_e003_margin.csv`
 6. `r003_e003_funding_events.csv`
 7. `r003_e003_monthly.csv`
-8. `r003_e003_summary.md`
+8. `r003_e003_safe_hurdle_daily.csv`
+9. `r003_e003_summary.md`
 
 ## 12. Review cadence
 
@@ -196,8 +210,9 @@ Broadly require after sufficient evidence:
 - no persistent breach of the 10% research headroom buffer;
 - 25 bps/leg stress remains economically viable;
 - realized funding materially improves results versus ZERO_FUNDING;
-- forward annualized return exceeds the frozen 3.90% Treasury hurdle;
-- preferably exceeds the frozen 5.90% Treasury+2pp compensation floor;
+- forward economics exceed the causally accrued dynamic 13-week Treasury opportunity-cost proxy;
+- the frozen 3.90% inception hurdle remains visible as an anti-benchmark-moving reference;
+- preferably the result is also consistent with the frozen 5.90% compensation floor;
 - no single short regime explains nearly all gains;
 - basis/operational behavior remains consistent with implementation assumptions.
 
@@ -207,13 +222,14 @@ Use if:
 
 - sample is still too short;
 - return is positive but only marginal versus Treasury;
+- the dynamic Treasury comparison is incomplete;
 - or comparisons are mixed.
 
 ### FORWARD_NEGATIVE
 
 Use after sufficient evidence if:
 
-- net carry is persistently below the Treasury hurdle;
+- net carry is persistently below the causal dynamic Treasury hurdle;
 - adverse funding/cost stress erases economics;
 - margin headroom becomes unacceptable;
 - or funding no longer materially compensates basis/execution drag.
@@ -240,7 +256,8 @@ During E003 do not change:
 - funding treatments;
 - margin diagnostics;
 - fixed inception;
-- Treasury hurdle references;
+- frozen Treasury inception references;
+- causal dynamic Treasury rule;
 - no funding activation threshold;
 - no leverage;
 - no trend/volatility filter;
