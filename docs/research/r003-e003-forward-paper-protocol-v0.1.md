@@ -64,17 +64,19 @@ Do not silently switch venues or sources. A permanent source change requires a v
 
 The protocol is frozen during 2026-09-10 UTC.
 
-To avoid ambiguity around the 00:00 funding boundary, set:
+Set the immutable forward decision boundary to:
 
-> **Forward portfolio inception: 2026-09-11 01:00:00 UTC.**
+> **2026-09-10 12:00:00 UTC.**
 
-The portfolio is notionally established at the first common hourly bar opening at or after that timestamp.
+To avoid using an unclosed bar as an execution price, the paper portfolio is first established at the **close of the first fully closed common 1h bar whose open time is >= 2026-09-10 12:00 UTC**. Under normal hourly continuity this is the bar closing at approximately 12:59:59.999 UTC.
 
-Funding events with timestamp <= the inception timestamp are excluded from forward P&L.
+The first realized forward pair P&L is therefore the next complete common hourly interval after that initial establishment close.
 
-The inception may never move forward because the first tracker run occurs later.
+Funding events with timestamp <= the actual initial establishment close are excluded from forward P&L. Only funding events occurring after the paper portfolio is already established may contribute.
 
-If the tracker is first run days or months later, it must reconstruct the forward record causally from the fixed inception.
+The inception boundary and initial-establishment rule may never move forward because the first tracker run occurs later.
+
+If the tracker is first run days or months later, it must reconstruct the record causally from this fixed boundary.
 
 ## 6. Price and funding accounting
 
