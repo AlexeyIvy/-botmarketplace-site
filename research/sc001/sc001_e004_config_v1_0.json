@@ -1,0 +1,120 @@
+{
+  "archive_subdir": "archives",
+  "arm_latest_utc": "23:29:00.000",
+  "arm_minutes": 15,
+  "bootstrap": {
+    "lower_quantile": 0.05,
+    "quantile_method": "nearest_rank",
+    "resamples": 10000,
+    "seed": 20260915
+  },
+  "breakout_buffer_bps": 2.0,
+  "compression_percentile": 0.2,
+  "compression_window_minutes": 15,
+  "confirmation": {
+    "end": "2024-03-30",
+    "gates": {
+      "active_days_min": 6,
+      "bootstrap_lcb_bps_strict_gt": 10.0,
+      "completed_max": 40,
+      "completed_min": 15,
+      "completion_rate_min": 0.99,
+      "each_side_completed_min": 4,
+      "lat1000_mean_bps_min": 12.0,
+      "lat1000_trimmed_mean_bps_min": 8.0,
+      "lat500_mean_bps_min": 15.0,
+      "lat500_trimmed_mean_bps_min": 10.0,
+      "max_side_share_max": 0.8,
+      "mean_bps_min": 20.0,
+      "median_bps_min": 10.0,
+      "median_daily_mean_bps_min": 12.0,
+      "positive_active_day_share_min": 0.7,
+      "top1_abs_day_share_max": 0.35,
+      "top3_abs_day_share_max": 0.7,
+      "trimmed_mean_bps_min": 15.0
+    },
+    "indicator_warmup_start": "2024-03-19",
+    "start": "2024-03-21"
+  },
+  "cooldown_minutes": 15,
+  "decision_latest_utc": "23:44:54.999",
+  "diagnostics": {
+    "breakout_buffer_bps": [
+      0.0,
+      5.0
+    ],
+    "compression_percentile": [
+      0.1,
+      0.3
+    ],
+    "compression_window_minutes": [
+      10,
+      30
+    ],
+    "holding_minutes": [
+      10,
+      30
+    ],
+    "one_factor_only": true
+  },
+  "discovery": {
+    "end": "2024-03-20",
+    "gates": {
+      "active_days_min": 12,
+      "bootstrap_lcb_bps_strict_gt": 10.0,
+      "completed_max": 80,
+      "completed_min": 30,
+      "completion_rate_min": 0.99,
+      "each_side_completed_min": 8,
+      "lat1000_mean_bps_min": 12.0,
+      "lat1000_trimmed_mean_bps_min": 8.0,
+      "lat500_mean_bps_min": 15.0,
+      "lat500_trimmed_mean_bps_min": 10.0,
+      "max_side_share_max": 0.75,
+      "mean_bps_min": 20.0,
+      "median_bps_min": 10.0,
+      "median_daily_mean_bps_min": 12.0,
+      "positive_active_day_share_min": 0.7,
+      "top1_abs_day_share_max": 0.25,
+      "top3_abs_day_share_max": 0.55,
+      "trimmed_mean_bps_min": 15.0
+    },
+    "indicator_warmup_start": "2024-03-01",
+    "start": "2024-03-01"
+  },
+  "entry_exit_tolerance_ms": 5000,
+  "expected_header": [
+    "instrument_name",
+    "trade_id",
+    "side",
+    "price",
+    "size",
+    "created_time"
+  ],
+  "experiment": "SC001-E004",
+  "firewalls": {
+    "final": false,
+    "l2": false,
+    "q2": false,
+    "use_flow_impulse": false,
+    "use_tfi": false,
+    "validation": false
+  },
+  "holding_minutes": 15,
+  "instrument": "BTC-USDT-SWAP",
+  "max_decisions_per_utc_day": 4,
+  "preflight_spec_path": "docs/research/sc001-e004-implementation-preflight-spec-v1.1.md",
+  "preflight_spec_version": "1.1",
+  "primary_id": "E004_P_W15_Q20_LB1440_B2_ARM15_LAT250_H15_CAP4",
+  "primary_latency_ms": 250,
+  "protocol_path": "docs/research/sc001-e004-volatility-compression-breakout-executable-protocol-v1.0.md",
+  "protocol_version": "1.0",
+  "source_report": "sc001_e003_okx_march_trade_stage_report.json",
+  "source_root": "SC001_E003_OKX_MARCH_TRADES",
+  "source_stage": "SC001-E003-OKX-MARCH-TRADE-STAGE",
+  "stress_latencies_ms": [
+    500,
+    1000
+  ],
+  "threshold_lookback_minutes": 1440
+}
