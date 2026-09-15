@@ -351,8 +351,11 @@ def test_p28_one_position() -> None:
 
 
 def test_p29_actual_exit_controls() -> None:
+    # Intended exit target 601250; actual first trade is 650000.
+    # A compression block closing exactly at the actual exit timestamp is NOT
+    # "subsequently closing" and must therefore be skipped.
     s = scenario_stream([(1_250, 100.0), (650_000, 101.0)])
-    r = e.simulate_scenario(s, [ep(0, 1_000), ep(620_000, 620_100)], 250, 600_000)
+    r = e.simulate_scenario(s, [ep(0, 1_000), ep(650_000, 650_100)], 250, 600_000)
     assert_true(r["completed"] == 1 and r["skipped_while_open"] == 1)
 
 
