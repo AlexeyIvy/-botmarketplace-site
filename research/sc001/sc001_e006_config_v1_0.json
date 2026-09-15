@@ -1,0 +1,84 @@
+{
+  "experiment": "SC001-E006",
+  "protocol_version": "1.0",
+  "primary_id": "E006_POSBASIS_G10_VWAP10_LB6H_TRIG50_EXIT10_LAT500_H30_CAP4",
+  "spot_instrument": "BTC-USDT",
+  "perp_instrument": "BTC-USDT-SWAP",
+  "grid_ms": 10000,
+  "vwap_window_ms": 10000,
+  "baseline_lookback_points": 2160,
+  "baseline_min_valid_points": 2052,
+  "trigger_dislocation_bps": 50.0,
+  "exit_dislocation_bps": 10.0,
+  "primary_latency_ms": 500,
+  "stress_latencies_ms": [1000, 2000],
+  "proxy_tolerance_ms": 5000,
+  "max_hold_ms": 1800000,
+  "cooldown_ms": 600000,
+  "max_entry_decisions_per_day": 4,
+  "latest_entry_decision_utc": "23:29:00.000",
+  "bootstrap": {
+    "resamples": 10000,
+    "seed": 20260915,
+    "lower_quantile": 0.05
+  },
+  "discovery": {
+    "start": "2024-03-01",
+    "end": "2024-03-20",
+    "gates": {
+      "completed_min": 20,
+      "active_days_min": 10,
+      "completion_rate_min": 0.98,
+      "mean_bps_min": 40.0,
+      "trimmed_mean_bps_min": 35.0,
+      "median_bps_min": 25.0,
+      "median_daily_mean_bps_min": 30.0,
+      "positive_active_day_share_min": 0.70,
+      "bootstrap_lcb_bps_strict_gt": 20.0,
+      "top1_abs_day_share_max": 0.30,
+      "top3_abs_day_share_max": 0.65,
+      "lat1000_mean_bps_min": 35.0,
+      "lat1000_trimmed_mean_bps_min": 30.0,
+      "lat2000_mean_bps_min": 30.0,
+      "lat2000_trimmed_mean_bps_min": 25.0
+    }
+  },
+  "confirmation": {
+    "warmup_start": "2024-03-21",
+    "start": "2024-03-22",
+    "end": "2024-03-30",
+    "gates": {
+      "completed_min": 10,
+      "active_days_min": 5,
+      "completion_rate_min": 0.98,
+      "mean_bps_min": 40.0,
+      "trimmed_mean_bps_min": 35.0,
+      "median_bps_min": 25.0,
+      "median_daily_mean_bps_min": 30.0,
+      "positive_active_day_share_min": 0.6666666666666666,
+      "bootstrap_lcb_bps_strict_gt": 20.0,
+      "top1_abs_day_share_max": 0.40,
+      "top3_abs_day_share_max": 0.75,
+      "lat1000_mean_bps_min": 35.0,
+      "lat1000_trimmed_mean_bps_min": 30.0,
+      "lat2000_mean_bps_min": 30.0,
+      "lat2000_trimmed_mean_bps_min": 25.0
+    }
+  },
+  "diagnostics": {
+    "baseline_hours": [3, 12],
+    "trigger_bps": [40.0, 60.0],
+    "exit_bps": [0.0, 20.0],
+    "max_hold_minutes": [15, 60]
+  },
+  "firewalls": {
+    "primary_positive_basis_only": true,
+    "use_tfi": false,
+    "use_flow_impulse": false,
+    "use_e004_compression": false,
+    "l2": false,
+    "q2": false,
+    "validation": false,
+    "final": false
+  }
+}
