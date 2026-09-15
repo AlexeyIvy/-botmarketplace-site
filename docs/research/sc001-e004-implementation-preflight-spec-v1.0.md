@@ -109,7 +109,7 @@ Run the parser and causal state machine on 2024-03-01..20 with return calculatio
 
 Allowed checks:
 
-- first eligible minute equals 2024-03-02 00:00 UTC if data continuity permits;
+- first eligible minute equals 2024-03-02 00:15 UTC: 15 minutes to form the first complete statistic plus 1,440 prior minute statistics;
 - number of evaluated/eligible minutes;
 - missing-window counts;
 - compression/tie counts without values;
