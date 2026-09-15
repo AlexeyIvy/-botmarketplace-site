@@ -238,10 +238,8 @@ def reconstruct_utc_day(date_text: str, cfg: dict, manifest: dict[str, dict], *,
     hi = lo + DAY_MS
     d1 = next_day_text(date_text)
     timestamps = array("q")
-    trade_ids = array("q")
     prices = array("d")
     sides = array("b") if include_side else None
-    src_seq = array("q")
     minute_seen = bytearray(1440)
     buy = sell = 0
     target_last_ts = None
@@ -258,9 +256,7 @@ def reconstruct_utc_day(date_text: str, cfg: dict, manifest: dict[str, dict], *,
                 target_last_ts = ts
                 target_last_tid = tid
                 timestamps.append(ts)
-                trade_ids.append(tid)
                 prices.append(px)
-                src_seq.append(global_seq)
                 if sides is not None:
                     sides.append(1 if side == "buy" else -1)
                 if side == "buy": buy += 1
@@ -275,8 +271,7 @@ def reconstruct_utc_day(date_text: str, cfg: dict, manifest: dict[str, dict], *,
         fail(f"UTC minute coverage failure for {date_text}: {sum(minute_seen)}/1440")
     return {
         "date": date_text, "start_ms": lo, "end_ms": hi,
-        "timestamps": timestamps, "trade_ids": trade_ids, "prices": prices,
-        "source_seq": src_seq, "sides": sides,
+        "timestamps": timestamps, "prices": prices, "sides": sides,
         "buy_count": buy, "sell_count": sell,
     }
 
@@ -285,22 +280,18 @@ def load_stream(start: str, end: str, cfg: dict, manifest: dict[str, dict]) -> d
     end_ms = date_ms(end) + DAY_MS
     timestamps = array("q")
     prices = array("d")
-    seqs = array("q")
     day_counts = {}
-    gseq = 0
     for d in iter_dates(start, end):
         one = reconstruct_utc_day(d, cfg, manifest)
         day_counts[d] = len(one["timestamps"])
         for i in range(len(one["timestamps"])):
             timestamps.append(int(one["timestamps"][i]))
             prices.append(float(one["prices"][i]))
-            seqs.append(gseq)
-            gseq += 1
     if len(timestamps) != len(prices):
         fail("stream length mismatch")
     return {
         "start": start, "end": end, "start_ms": start_ms, "end_ms": end_ms,
-        "timestamps": timestamps, "prices": prices, "seqs": seqs,
+        "timestamps": timestamps, "prices": prices,
         "day_counts": day_counts,
     }
 
@@ -670,17 +661,14 @@ def evaluate_gates(phase: str, metrics: dict, stress500: dict, stress1000: dict,
     add("bootstrap_lcb", metrics["bootstrap_95_lcb_bps"] is not None and metrics["bootstrap_95_lcb_bps"] > g["bootstrap_lcb_bps_strict_gt"], metrics["bootstrap_95_lcb_bps"], f"> {g['bootstrap_lcb_bps_strict_gt']}")
     add("top1_concentration", metrics["top1_abs_day_share"] <= g["top1_abs_day_share_max"], metrics["top1_abs_day_share"], f"<= {g['top1_abs_day_share_max']}")
     add("top3_concentration", metrics["top3_abs_day_share"] <= g["top3_abs_day_share_max"], metrics["top3_abs_day_share"], f"<= {g['top3_abs_day_share_max']}")
-    add("each_side_count", min(metrics["long_completed"], metrics["short_completed"]) >= g["each_side_completed_min"],
-        min(metrics["long_completed"], metrics["short_completed"]), f">= {g['each_side_completed_min']} each")
+    add("each_side_count", min(metrics["long_completed"], metrics["short_completed"]) >= g["each_side_completed_min"], min(metrics["long_completed"], metrics["short_completed"]), f">= {g['each_side_completed_min']} each")
     add("max_side_share", metrics["max_side_share"] <= g["max_side_share_max"], metrics["max_side_share"], f"<= {g['max_side_share_max']}")
     add("lat500_mean", stress500["mean_bps"] is not None and stress500["mean_bps"] >= g["lat500_mean_bps_min"], stress500["mean_bps"], f">= {g['lat500_mean_bps_min']}")
     add("lat500_trim", stress500["trimmed_mean_bps"] is not None and stress500["trimmed_mean_bps"] >= g["lat500_trimmed_mean_bps_min"], stress500["trimmed_mean_bps"], f">= {g['lat500_trimmed_mean_bps_min']}")
     add("lat1000_mean", stress1000["mean_bps"] is not None and stress1000["mean_bps"] >= g["lat1000_mean_bps_min"], stress1000["mean_bps"], f">= {g['lat1000_mean_bps_min']}")
     add("lat1000_trim", stress1000["trimmed_mean_bps"] is not None and stress1000["trimmed_mean_bps"] >= g["lat1000_trimmed_mean_bps_min"], stress1000["trimmed_mean_bps"], f">= {g['lat1000_trimmed_mean_bps_min']}")
-    add("daily_cap", sim_meta.get("max_decisions_per_day_observed", 99) <= cfg["max_decisions_per_utc_day"],
-        sim_meta.get("max_decisions_per_day_observed"), f"<= {cfg['max_decisions_per_utc_day']}")
-    add("max_one_position", sim_meta.get("max_concurrent_positions", 99) <= 1,
-        sim_meta.get("max_concurrent_positions"), "<= 1")
+    add("daily_cap", sim_meta.get("max_decisions_per_day_observed", 99) <= cfg["max_decisions_per_utc_day"], sim_meta.get("max_decisions_per_day_observed"), f"<= {cfg['max_decisions_per_utc_day']}")
+    add("max_one_position", sim_meta.get("max_concurrent_positions", 99) <= 1, sim_meta.get("max_concurrent_positions"), "<= 1")
     return all(x["pass"] for x in checks), checks
 
 def required_labels_for_phase(phase: str, cfg: dict) -> set[str]:
@@ -758,59 +746,23 @@ def write_phase_artifacts(outdir: Path, phase: str, cfg_path: Path, cfg: dict,
                           stress500: dict, stress1000: dict, sim_meta: dict,
                           gate_rows: list[dict], terminal: str, indicator_meta: dict) -> None:
     atomic_text(outdir / "sc001_e004_frozen_config.json", cfg_path.read_text(encoding="utf-8"))
-    manifest_out = [{
-        "date": d, "filename": x["filename"], "bytes": x["bytes"], "sha256": x["sha256"]
-    } for d,x in sorted(manifest.items())]
+    manifest_out = [{"date": d, "filename": x["filename"], "bytes": x["bytes"], "sha256": x["sha256"]} for d,x in sorted(manifest.items())]
     atomic_json(outdir / "sc001_e004_input_manifest.json", {"archives": manifest_out})
     trows = []
     for e in events:
-        trows.append([
-            e["date"], e["arm_ts"], e["decision_ts"], "LONG" if e["direction"]==1 else "SHORT",
-            e.get("entry_ts"), e.get("exit_ts"), e.get("entry_price"), e.get("exit_price"),
-            e.get("gross_edge_bps"), int(bool(e.get("completed")))
-        ])
-    write_csv_atomic(outdir / "sc001_e004_trades.csv",
-                     ["date","arm_ts_ms","decision_ts_ms","side","entry_ts_ms","exit_ts_ms",
-                      "entry_price","exit_price","gross_edge_bps","completed"], trows)
+        trows.append([e["date"], e["arm_ts"], e["decision_ts"], "LONG" if e["direction"]==1 else "SHORT", e.get("entry_ts"), e.get("exit_ts"), e.get("entry_price"), e.get("exit_price"), e.get("gross_edge_bps"), int(bool(e.get("completed")))])
+    write_csv_atomic(outdir / "sc001_e004_trades.csv", ["date","arm_ts_ms","decision_ts_ms","side","entry_ts_ms","exit_ts_ms","entry_price","exit_price","gross_edge_bps","completed"], trows)
     drows = []
     for d,mean in metrics["daily_means_bps"].items():
         vals = [e["gross_edge_bps"] for e in events if e.get("completed") and e["date"]==d]
         drows.append([d, len(vals), mean, sum(vals), int(mean>0)])
-    write_csv_atomic(outdir / "sc001_e004_daily_metrics.csv",
-                     ["date","completed_trades","mean_gross_edge_bps","sum_gross_edge_bps","positive_mean"], drows)
-    aggregate = {
-        "stage": STAGE, "phase": phase, "primary_id": cfg["primary_id"],
-        "primary_metrics": metrics,
-        "latency_500ms_metrics": stress500,
-        "latency_1000ms_metrics": stress1000,
-        "simulation_meta": sim_meta,
-        "indicator_meta": indicator_meta,
-        "gates": gate_rows,
-        "terminal_status": terminal,
-    }
+    write_csv_atomic(outdir / "sc001_e004_daily_metrics.csv", ["date","completed_trades","mean_gross_edge_bps","sum_gross_edge_bps","positive_mean"], drows)
+    aggregate = {"stage": STAGE, "phase": phase, "primary_id": cfg["primary_id"], "primary_metrics": metrics, "latency_500ms_metrics": stress500, "latency_1000ms_metrics": stress1000, "simulation_meta": sim_meta, "indicator_meta": indicator_meta, "gates": gate_rows, "terminal_status": terminal}
     atomic_json(outdir / "sc001_e004_aggregate_metrics.json", aggregate)
     ident = runtime_identity(cfg_path)
-    state = {
-        "stage": STAGE, "phase": phase, "protocol_version": "1.0",
-        "preflight_spec_version": "1.1", "terminal_status": terminal,
-        **ident,
-        "q2_accessed": False, "validation_or_final_accessed": False,
-        "l2_accessed": False, "tfi_used": False, "flow_impulse_used": False,
-    }
+    state = {"stage": STAGE, "phase": phase, "protocol_version": "1.0", "preflight_spec_version": "1.1", "terminal_status": terminal, **ident, "q2_accessed": False, "validation_or_final_accessed": False, "l2_accessed": False, "tfi_used": False, "flow_impulse_used": False}
     atomic_json(outdir / "sc001_e004_run_state.json", state)
-    summary = [
-        f"# SC001-E004 {phase.upper()}",
-        "",
-        f"Terminal status: `{terminal}`",
-        f"Primary configuration: `{cfg['primary_id']}`",
-        f"Decisions: {metrics['decisions']}",
-        f"Completed: {metrics['completed_trades']}",
-        f"Mean gross edge: {metrics['mean_bps']}",
-        f"Median gross edge: {metrics['median_bps']}",
-        f"Trimmed mean gross edge: {metrics['trimmed_mean_bps']}",
-        "",
-        "All gates must pass. Diagnostic variants cannot alter this terminal verdict.",
-    ]
+    summary = [f"# SC001-E004 {phase.upper()}", "", f"Terminal status: `{terminal}`", f"Primary configuration: `{cfg['primary_id']}`", f"Decisions: {metrics['decisions']}", f"Completed: {metrics['completed_trades']}", f"Mean gross edge: {metrics['mean_bps']}", f"Median gross edge: {metrics['median_bps']}", f"Trimmed mean gross edge: {metrics['trimmed_mean_bps']}", "", "All gates must pass. Diagnostic variants cannot alter this terminal verdict."]
     atomic_text(outdir / "sc001_e004_summary.md", "\n".join(summary)+"\n")
 
 def run_phase(phase: str, cfg_path: Path) -> str:
@@ -821,84 +773,49 @@ def run_phase(phase: str, cfg_path: Path) -> str:
     phase_cfg = cfg[phase]
     labels = required_labels_for_phase(phase, cfg)
     manifest = source_manifest(cfg, labels)
-    for d in sorted(labels):
-        verify_archive_identity(manifest[d], full_crc=True)
+    for d in sorted(labels): verify_archive_identity(manifest[d], full_crc=True)
     stream = load_stream(phase_cfg["indicator_warmup_start"], phase_cfg["end"], cfg, manifest)
     indicators, indicator_meta = build_minute_indicators(stream, cfg)
-    events, sim_meta = simulate_primary(
-        stream, indicators, cfg, phase_cfg["start"], phase_cfg["end"], calculate_alpha=True
-    )
+    events, sim_meta = simulate_primary(stream, indicators, cfg, phase_cfg["start"], phase_cfg["end"], calculate_alpha=True)
     stress500_events = replay_latency(stream, events, cfg, 500, calculate_alpha=True)
     stress1000_events = replay_latency(stream, events, cfg, 1000, calculate_alpha=True)
     metrics = scenario_metrics(events, cfg, include_bootstrap=True)
     s500 = scenario_metrics(stress500_events, cfg, include_bootstrap=False)
     s1000 = scenario_metrics(stress1000_events, cfg, include_bootstrap=False)
     passed, gates = evaluate_gates(phase, metrics, s500, s1000, sim_meta, cfg)
-    terminal = (
-        "E004_DISCOVERY_PASS_OPEN_CONFIRMATION_ONCE" if phase=="discovery" and passed
-        else "E004_DISCOVERY_FAIL" if phase=="discovery"
-        else "E004_CONFIRMATION_PASS_OPEN_L2_PROTOCOL_FREEZE" if passed
-        else "E004_CONFIRMATION_FAIL"
-    )
+    terminal = ("E004_DISCOVERY_PASS_OPEN_CONFIRMATION_ONCE" if phase=="discovery" and passed else "E004_DISCOVERY_FAIL" if phase=="discovery" else "E004_CONFIRMATION_PASS_OPEN_L2_PROTOCOL_FREEZE" if passed else "E004_CONFIRMATION_FAIL")
     outdir = output_root_for_phase(cfg, phase)
     ensure_new_output_dir(outdir)
-    write_phase_artifacts(outdir, phase, cfg_path, cfg, manifest, events, metrics, s500, s1000,
-                          sim_meta, gates, terminal, indicator_meta)
+    write_phase_artifacts(outdir, phase, cfg_path, cfg, manifest, events, metrics, s500, s1000, sim_meta, gates, terminal, indicator_meta)
     print(terminal)
     return terminal
 
 def diagnostic_variants(cfg: dict) -> list[tuple[str,dict]]:
     out = []
-    for x in cfg["diagnostics"]["compression_window_minutes"]:
-        out.append((f"W{x}", {"window_minutes": int(x)}))
-    for x in cfg["diagnostics"]["compression_percentile"]:
-        out.append((f"Q{int(round(x*100))}", {"percentile": float(x)}))
-    for x in cfg["diagnostics"]["breakout_buffer_bps"]:
-        out.append((f"B{x:g}", {"breakout_buffer_bps": float(x)}))
-    for x in cfg["diagnostics"]["holding_minutes"]:
-        out.append((f"H{x}", {"holding_minutes": int(x)}))
-    if len(out) != 8:
-        fail("diagnostic neighborhood must contain exactly 8 one-factor variants")
+    for x in cfg["diagnostics"]["compression_window_minutes"]: out.append((f"W{x}", {"window_minutes": int(x)}))
+    for x in cfg["diagnostics"]["compression_percentile"]: out.append((f"Q{int(round(x*100))}", {"percentile": float(x)}))
+    for x in cfg["diagnostics"]["breakout_buffer_bps"]: out.append((f"B{x:g}", {"breakout_buffer_bps": float(x)}))
+    for x in cfg["diagnostics"]["holding_minutes"]: out.append((f"H{x}", {"holding_minutes": int(x)}))
+    if len(out) != 8: fail("diagnostic neighborhood must contain exactly 8 one-factor variants")
     return out
 
 def run_diagnostics(phase: str, cfg_path: Path) -> None:
     cfg = load_config(cfg_path)
     root = output_root_for_phase(cfg, phase)
     state = load_json(root / "sc001_e004_run_state.json")
-    allowed = {
-        "E004_DISCOVERY_FAIL","E004_DISCOVERY_PASS_OPEN_CONFIRMATION_ONCE",
-        "E004_CONFIRMATION_FAIL","E004_CONFIRMATION_PASS_OPEN_L2_PROTOCOL_FREEZE"
-    }
-    if state.get("terminal_status") not in allowed:
-        fail("diagnostics blocked: primary terminal verdict absent")
+    allowed = {"E004_DISCOVERY_FAIL","E004_DISCOVERY_PASS_OPEN_CONFIRMATION_ONCE","E004_CONFIRMATION_FAIL","E004_CONFIRMATION_PASS_OPEN_L2_PROTOCOL_FREEZE"}
+    if state.get("terminal_status") not in allowed: fail("diagnostics blocked: primary terminal verdict absent")
     phase_cfg = cfg[phase]
     labels = required_labels_for_phase(phase, cfg)
     manifest = source_manifest(cfg, labels)
     stream = load_stream(phase_cfg["indicator_warmup_start"], phase_cfg["end"], cfg, manifest)
     rows = []
     for name, change in diagnostic_variants(cfg):
-        inds, _ = build_minute_indicators(
-            stream, cfg,
-            window_minutes=change.get("window_minutes"),
-            percentile=change.get("percentile"),
-        )
-        ev, _ = simulate_primary(
-            stream, inds, cfg, phase_cfg["start"], phase_cfg["end"],
-            breakout_buffer_bps=change.get("breakout_buffer_bps"),
-            holding_minutes=change.get("holding_minutes"),
-            calculate_alpha=True,
-        )
+        inds, _ = build_minute_indicators(stream, cfg, window_minutes=change.get("window_minutes"), percentile=change.get("percentile"))
+        ev, _ = simulate_primary(stream, inds, cfg, phase_cfg["start"], phase_cfg["end"], breakout_buffer_bps=change.get("breakout_buffer_bps"), holding_minutes=change.get("holding_minutes"), calculate_alpha=True)
         m = scenario_metrics(ev, cfg, include_bootstrap=False)
-        rows.append({
-            "variant": name, "single_change": change,
-            "completed_trades": m["completed_trades"], "mean_bps": m["mean_bps"],
-            "median_bps": m["median_bps"], "trimmed_mean_bps": m["trimmed_mean_bps"],
-            "non_promotional": True,
-        })
-    atomic_json(root / "sc001_e004_diagnostics_read_only.json", {
-        "phase": phase, "primary_terminal_status_unchanged": state["terminal_status"],
-        "variants": rows, "cannot_rescue_primary": True,
-    })
+        rows.append({"variant": name, "single_change": change, "completed_trades": m["completed_trades"], "mean_bps": m["mean_bps"], "median_bps": m["median_bps"], "trimmed_mean_bps": m["trimmed_mean_bps"], "non_promotional": True})
+    atomic_json(root / "sc001_e004_diagnostics_read_only.json", {"phase": phase, "primary_terminal_status_unchanged": state["terminal_status"], "variants": rows, "cannot_rescue_primary": True})
 
 def main() -> None:
     ap = argparse.ArgumentParser()
@@ -907,10 +824,8 @@ def main() -> None:
     ap.add_argument("--config", default=str(DEFAULT_CONFIG_PATH))
     args = ap.parse_args()
     cfg_path = Path(args.config).expanduser().resolve()
-    if args.mode in {"discovery","confirmation"}:
-        run_phase(args.mode, cfg_path)
-    else:
-        run_diagnostics(args.phase, cfg_path)
+    if args.mode in {"discovery","confirmation"}: run_phase(args.mode, cfg_path)
+    else: run_diagnostics(args.phase, cfg_path)
 
 if __name__ == "__main__":
     main()
