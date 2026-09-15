@@ -441,7 +441,7 @@ def simulate_scenario(stream: dict, episodes: list[dict], latency_ms: int, horiz
 
     for e in episodes:
         arm_ts = int(e["arm_ts"])
-        if arm_ts < open_until:
+        if arm_ts <= open_until:
             skipped_while_open += 1
             continue
 
