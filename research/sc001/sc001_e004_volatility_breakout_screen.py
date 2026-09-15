@@ -54,6 +54,8 @@ ARCHIVES = SOURCE_ROOT / "archives"
 SOURCE_REPORT = SOURCE_ROOT / "sc001_e003_okx_march_trade_stage_report.json"
 
 WORKSPACE = DATA_ROOT / "SC001_E004_VOLATILITY_BREAKOUT"
+PREFLIGHT_ROOT = WORKSPACE / "preflight"
+PREFLIGHT_REPORT = PREFLIGHT_ROOT / "sc001_e004_preflight_report.json"
 DISCOVERY_ROOT = WORKSPACE / "discovery"
 CONFIRM_ROOT = WORKSPACE / "confirmation"
 DISCOVERY_REPORT = DISCOVERY_ROOT / "sc001_e004_discovery_report.json"
@@ -652,6 +654,34 @@ def evaluate_gates(stage: str, aggs: dict[str, dict]) -> tuple[str, list[dict]]:
     return verdict, gate_rows
 
 
+def require_preflight_authorized() -> dict:
+    rep = load_json(PREFLIGHT_REPORT)
+    if rep.get("stage") != "SC001-E004-PREFLIGHT" or rep.get("version") != "0.1":
+        fail("alpha is closed: E004 preflight report identity mismatch")
+    if rep.get("status") != "E004_PREFLIGHT_PASS":
+        fail("alpha is closed: terminal E004_PREFLIGHT_PASS not found")
+    if rep.get("engine_sha256") != script_sha():
+        fail("alpha is closed: engine SHA differs from preflight")
+    if rep.get("protocol") != PROTOCOL:
+        fail("alpha is closed: preflight protocol identity mismatch")
+    if rep.get("real_source_integrity_run") is not True:
+        fail("alpha is closed: real-source integrity preflight was not run")
+    si = rep.get("source_integrity") or {}
+    if si.get("archive_count") != 31 or si.get("target_day_count") != 30 or si.get("all_minutes_complete") is not True:
+        fail("alpha is closed: source integrity summary mismatch")
+    for key in (
+        "alpha_calculated",
+        "pnl_calculated",
+        "compression_events_exposed",
+        "breakout_candidates_exposed",
+        "q2_market_data_body_accessed",
+        "validation_or_final_accessed",
+    ):
+        if rep.get(key) is not False:
+            fail(f"alpha is closed: preflight firewall mismatch for {key}")
+    return rep
+
+
 def require_confirmation_authorized() -> dict:
     rep = load_json(DISCOVERY_REPORT)
     if rep.get("stage") != STAGE or rep.get("version") != VERSION:
@@ -669,6 +699,7 @@ def require_confirmation_authorized() -> dict:
 
 
 def run_mode(mode: str, workers: int) -> dict:
+    require_preflight_authorized()
     if mode == "discovery":
         days = DISCOVERY_DAYS
         out_report = DISCOVERY_REPORT
