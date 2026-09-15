@@ -16,7 +16,7 @@ This is a mechanism and gross-economics screen. It is not a profitability claim 
 - E004 is independent from E001, E002 and E003.
 - Base E004 uses neither E002 TFI nor E003 FLOW_IMPULSE.
 - It does not alter R009-E002, R003-E003 Binance, R003-X003 Bybit, R010-E001 or Safe-Sleeve S002.
-- DEV-DISCOVERY is 2024-03-01..20. Because 24 hours of causal warm-up are required, the first eligible minute is 2024-03-02 00:00 UTC.
+- DEV-DISCOVERY is 2024-03-01..20. Because 24 hours of causal warm-up are required, the first eligible minute is 2024-03-02 00:15 UTC because the first complete 15-minute statistic is at 2024-03-01 00:15 and 1,440 prior minute statistics are then required.
 - DEV-CONFIRMATION is 2024-03-21..30 and stays unopened until terminal Discovery PASS.
 - Q2, formal Validation and Final remain closed.
 - No E004 return, trade, aggregate alpha metric or direction-specific result may be emitted before implementation preflight PASS.
