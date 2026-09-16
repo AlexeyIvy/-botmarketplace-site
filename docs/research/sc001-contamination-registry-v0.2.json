@@ -1,0 +1,71 @@
+{
+  "stage": "SC001-CONTAMINATION-REGISTRY",
+  "version": "0.2",
+  "date": "2026-09-16",
+  "status": "CONSERVATIVE_REGISTRY_UPDATED_THROUGH_UNIVERSE_CALIBRATION",
+  "scope": "SCALPING_RESEARCH_SC001",
+  "supersedes": "docs/research/sc001-contamination-registry-v0.1.json",
+  "default_rule": "IF_PRIOR_USE_STATUS_IS_UNCERTAIN_TREAT_AS_NOT_FRESH_UNTIL_AUDITED",
+  "notes": [
+    "E001-E008 terminal verdicts remain unchanged.",
+    "Universe-construction calibration data are engineering/contaminated for redesigned research even when no strategy PnL was calculated.",
+    "Cross-asset same-date observations share regime information and are not automatically independent time confirmation.",
+    "Historical universe seed and metadata-only archive existence checks do not by themselves create strategy-outcome contamination."
+  ],
+  "inherited_registry": "docs/research/sc001-contamination-registry-v0.1.json",
+  "new_entries": [
+    {
+      "venue": "OKX",
+      "instrument_scope": "ALL_66_BOTH_ANCHORS_PASS_IN_SC001_HISTORICAL_UNIVERSE_SEEDED_PROBE",
+      "instrument_count": 66,
+      "product": "USDT-SWAP",
+      "dates": [
+        "2024-02-24",
+        "2024-02-25",
+        "2024-02-26",
+        "2024-02-27",
+        "2024-02-28",
+        "2024-02-29"
+      ],
+      "data_types": ["official_OKX_1Dutc_history_candles"],
+      "prior_uses": ["historical_universe_liquidity_calibration", "universe_design"],
+      "classification": "UNIVERSE_ENGINEERING_CONTAMINATED",
+      "fresh_for_new_confirmation": false,
+      "fresh_for_new_discovery": false,
+      "allowed_future_use": "engineering_calibration_or_read_only_only",
+      "parent_report": "~/sc001_data/SC001_PREPERIOD_LIQUIDITY_CALIBRATION/sc001_preperiod_liquidity_calibration_report.json",
+      "note": "These six dates informed the multi-asset universe and therefore may not be presented as untouched evidence for a redesigned strategy family."
+    },
+    {
+      "venue": "OKX",
+      "instrument_scope": "PROVISIONAL_TOP12_FROM_LIQUIDITY_CALIBRATION",
+      "instruments": [
+        "BTC-USDT-SWAP",
+        "ETH-USDT-SWAP",
+        "SOL-USDT-SWAP",
+        "DOGE-USDT-SWAP",
+        "ORDI-USDT-SWAP",
+        "FIL-USDT-SWAP",
+        "UNI-USDT-SWAP",
+        "XRP-USDT-SWAP",
+        "LTC-USDT-SWAP",
+        "OP-USDT-SWAP",
+        "BCH-USDT-SWAP",
+        "SUI-USDT-SWAP"
+      ],
+      "dates": ["2023-12-30", "2024-02-29"],
+      "data_types": ["historical_archive_metadata_HEAD_only"],
+      "prior_uses": ["historical_existence_anchor_check"],
+      "classification": "METADATA_ONLY_NOT_STRATEGY_OUTCOME_CONTAMINATED",
+      "fresh_for_new_confirmation": "REQUIRES_ROLE_FREEZE_AND_SHARED_REGIME_REVIEW",
+      "fresh_for_new_discovery": "REQUIRES_ROLE_FREEZE_AND_SHARED_REGIME_REVIEW",
+      "allowed_future_use": "metadata_governance_only_until_chronology_freeze"
+    }
+  ],
+  "required_before_new_promotion": [
+    "backfill_prior_use_for_exact_final_universe_and_dates",
+    "freeze_engineering_discovery_asset_holdout_confirmation_forward_roles",
+    "freeze_registry_hash_in_new_experiment_manifest",
+    "do_not_reuse_2024_02_24_through_2024_02_29_as_untouched_promotional_evidence"
+  ]
+}
