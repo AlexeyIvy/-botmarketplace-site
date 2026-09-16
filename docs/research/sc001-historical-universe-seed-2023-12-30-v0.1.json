@@ -1,0 +1,15 @@
+{
+  "stage": "SC001-HISTORICAL-UNIVERSE-SEED",
+  "version": "0.1",
+  "status": "FROZEN_SEED_NOT_FINAL_UNIVERSE",
+  "snapshot_date": "2023-12-30",
+  "source": "CoinMarketCap public historical snapshot 2023-12-30",
+  "purpose": "Broad pre-period symbol seed only. Not final universe, not a performance ranking, and not proof of OKX listing.",
+  "selection_note": "Symbols are the volatile/non-stable candidates from the historical top-100 snapshot. Stablecoins are excluded from the seed. Final OKX eligibility requires exact historical archive existence and later pre-period liquidity calibration.",
+  "symbols": [
+    "BTC","ETH","BNB","SOL","XRP","ADA","AVAX","DOGE","DOT","TRX","MATIC","LINK","TON","SHIB","ICP","LTC","BCH","UNI","ATOM","XLM","NEAR","LEO","OP","OKB","ETC","INJ","XMR","IMX","HBAR","FIL","APT","KAS","VET","CRO","LDO","MNT","STX","ARB","BSV","TIA","EGLD","ALGO","RUNE","QNT","RNDR","SATS","ORDI","GRT","AAVE","MKR","MINA","SEI","FLOW","FTM","THETA","SAND","AXS","SNX","BTT","FTT","HNT","KCS","XTZ","IOTA","MANA","NEO","EOS","KAVA","WEMIX","ROSE","CAKE","BONK","LUNC","GALA","SUI","KLAY","BEAM","BGB","XDC","ASTR","XEC","WOO","OSMO","CHZ","FXS","TRB","CFX","CRV","AR","AXL","RPL","APE","CSPR"
+  ],
+  "excluded_stable_symbols": ["USDT","USDC","DAI","TUSD","FDUSD","BUSD","USDD"],
+  "promotional_universe_frozen": false,
+  "strategy_performance_used": false
+}
