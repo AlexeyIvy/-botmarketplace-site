@@ -1,0 +1,108 @@
+{
+  "stage": "SC001-CONTAMINATION-REGISTRY",
+  "version": "0.1",
+  "date": "2026-09-16",
+  "status": "INITIAL_CONSERVATIVE_REGISTRY",
+  "completeness": "PARTIAL_KNOWN_HIGH_PRIORITY_ONLY",
+  "default_rule": "IF_PRIOR_USE_STATUS_IS_UNCERTAIN_TREAT_AS_NOT_FRESH_UNTIL_AUDITED",
+  "scope": "SCALPING_RESEARCH_SC001",
+  "notes": [
+    "This registry is intentionally conservative.",
+    "It records known high-priority SC001 BTC periods first and must be backfilled before any date is labeled fresh for a new promotional experiment.",
+    "Body acquisition without alpha does not by itself imply outcome contamination, but dates already used for engineering/design are not eligible as untouched Confirmation for a redesigned system.",
+    "E001-E008 terminal verdicts remain unchanged."
+  ],
+  "entries": [
+    {
+      "venue": "OKX",
+      "instrument": "BTC-USDT-SWAP",
+      "product": "SWAP",
+      "dates": ["2024-01-14", "2024-01-31", "2024-02-12", "2024-02-13"],
+      "data_types": ["trades", "L2"],
+      "prior_uses": ["E008_engineering", "queue_model", "stale_latch", "mechanical_validation"],
+      "classification": "ENGINEERING_CONTAMINATED",
+      "fresh_for_new_confirmation": false,
+      "fresh_for_new_discovery": false,
+      "allowed_future_use": "engineering_or_read_only_only"
+    },
+    {
+      "venue": "OKX",
+      "instrument": "BTC-USDT-SWAP",
+      "product": "SWAP",
+      "dates": ["2024-01-06", "2024-01-13", "2024-01-19", "2024-01-24", "2024-02-06", "2024-02-11", "2024-02-21", "2024-02-23"],
+      "data_types": ["trades", "L2"],
+      "prior_uses": ["E008_promotional_discovery", "E008_postmortem", "E008_microstructure_forensic", "execution_model_redesign_inputs"],
+      "classification": "OUTCOME_AND_DESIGN_CONTAMINATED",
+      "fresh_for_new_confirmation": false,
+      "fresh_for_new_discovery": false,
+      "allowed_future_use": "engineering_read_only_or_model_calibration_only"
+    },
+    {
+      "venue": "OKX",
+      "instrument": "BTC-USDT-SWAP",
+      "product": "SWAP",
+      "dates": ["2024-01-08", "2024-01-28", "2024-02-10", "2024-02-20"],
+      "data_types": ["reserved_E008_confirmation"],
+      "prior_uses": ["E008_confirmation_date_freeze_only"],
+      "classification": "PRIOR_PROTOCOL_RESERVED_NOT_USED_FOR_E008_PERFORMANCE",
+      "fresh_for_new_confirmation": false,
+      "fresh_for_new_discovery": false,
+      "allowed_future_use": "do_not_repurpose_without_explicit_governance_review",
+      "note": "Conservative exclusion avoids silently recycling dates previously reserved as protected confirmation."
+    },
+    {
+      "venue": "OKX",
+      "instrument": "BTC-USDT-SWAP",
+      "product": "SWAP",
+      "date_range": {"start": "2024-03-01", "end": "2024-03-20"},
+      "data_types": ["trades"],
+      "prior_uses": ["E003_discovery", "E004_discovery", "E006_discovery", "E007_discovery"],
+      "classification": "MULTI_EXPERIMENT_OUTCOME_CONTAMINATED",
+      "fresh_for_new_confirmation": false,
+      "fresh_for_new_discovery": false,
+      "allowed_future_use": "engineering_read_only_or_strict_legacy_diagnostic_only"
+    },
+    {
+      "venue": "OKX",
+      "instrument": "BTC-USDT-SWAP",
+      "product": "SWAP",
+      "dates": ["2024-03-21"],
+      "data_types": ["trades"],
+      "prior_uses": ["boundary_neighbor", "warmup_or_synchronization_in_prior_SC001_work"],
+      "classification": "BOUNDARY_ENGINEERING_CONTAMINATED",
+      "fresh_for_new_confirmation": false,
+      "fresh_for_new_discovery": false,
+      "allowed_future_use": "engineering_or_boundary_only"
+    },
+    {
+      "venue": "OKX",
+      "instrument": "BTC-USDT-SWAP",
+      "product": "SWAP",
+      "date_range": {"start": "2024-03-22", "end": "2024-03-30"},
+      "data_types": ["trade_archives_acquired_in_March_source_stage", "prior_confirmation_reservations"],
+      "prior_uses": ["prior_SC001_protected_confirmation_calendar"],
+      "classification": "PRIOR_RESERVED_AND_SOURCE_AVAILABLE_NOT_FRESH_BY_DEFAULT",
+      "fresh_for_new_confirmation": false,
+      "fresh_for_new_discovery": false,
+      "allowed_future_use": "only_after_explicit_prior_access_audit",
+      "note": "March trade source stage acquired March 1-31 archives. These dates are conservatively excluded from fresh redesigned promotion unless a later audit proves an allowed role."
+    },
+    {
+      "venue": "OKX",
+      "instrument": "BTC-USDT-SWAP",
+      "product": "SWAP",
+      "dates": ["2024-03-31"],
+      "data_types": ["trade_archive"],
+      "prior_uses": ["D_plus_1_neighbor_acquired_by_E003_March_source_stage"],
+      "classification": "BOUNDARY_SOURCE_CONTAMINATED",
+      "fresh_for_new_confirmation": false,
+      "fresh_for_new_discovery": false,
+      "allowed_future_use": "engineering_or_boundary_only"
+    }
+  ],
+  "required_before_new_promotion": [
+    "backfill_all_candidate_instrument_date_prior_uses",
+    "assign_engineering_discovery_asset_holdout_confirmation_forward_roles",
+    "freeze_registry_hash_in_new_experiment_manifest"
+  ]
+}
