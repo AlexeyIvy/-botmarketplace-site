@@ -1,0 +1,48 @@
+{
+  "stage": "SC001-FIRST-GENERATION-MULTI-ASSET-UNIVERSE-FREEZE",
+  "version": "1.0",
+  "date": "2026-09-16",
+  "status": "FROZEN",
+  "scope": "SCALPING_RESEARCH_SC001",
+  "product_family": "OKX_LINEAR_USDT_SWAP",
+  "selection_parent": "SC001_PREPERIOD_LIQUIDITY_CALIBRATION_PASS",
+  "structure_parent": "SC001_CONTRACT_STRUCTURE_SPEC_AVAILABILITY_AUDIT_PASS",
+  "selection_rule": {
+    "parent_pool": "66 BOTH_ANCHORS_PASS instruments",
+    "calibration_dates": ["2024-02-24", "2024-02-25", "2024-02-26", "2024-02-27", "2024-02-28", "2024-02-29"],
+    "eligibility_floor_median_daily_quote_turnover_usdt": 10000000,
+    "ranking_metric": "median_daily_volCcyQuote_USDT_desc",
+    "tie_break": "exact_instrument_id_asc",
+    "target_n": 12,
+    "manual_substitution_allowed": false
+  },
+  "universe_ranked": [
+    {"rank": 1, "symbol": "BTC", "instrument": "BTC-USDT-SWAP"},
+    {"rank": 2, "symbol": "ETH", "instrument": "ETH-USDT-SWAP"},
+    {"rank": 3, "symbol": "SOL", "instrument": "SOL-USDT-SWAP"},
+    {"rank": 4, "symbol": "DOGE", "instrument": "DOGE-USDT-SWAP"},
+    {"rank": 5, "symbol": "ORDI", "instrument": "ORDI-USDT-SWAP"},
+    {"rank": 6, "symbol": "FIL", "instrument": "FIL-USDT-SWAP"},
+    {"rank": 7, "symbol": "UNI", "instrument": "UNI-USDT-SWAP"},
+    {"rank": 8, "symbol": "XRP", "instrument": "XRP-USDT-SWAP"},
+    {"rank": 9, "symbol": "LTC", "instrument": "LTC-USDT-SWAP"},
+    {"rank": 10, "symbol": "OP", "instrument": "OP-USDT-SWAP"},
+    {"rank": 11, "symbol": "BCH", "instrument": "BCH-USDT-SWAP"},
+    {"rank": 12, "symbol": "SUI", "instrument": "SUI-USDT-SWAP"}
+  ],
+  "all_12_structurally_comparable": true,
+  "contract_structure": {
+    "instrument_type": "SWAP",
+    "contract_type": "linear",
+    "settlement_currency": "USDT"
+  },
+  "historical_exact_execution_specs": {
+    "tickSz": "UNRESOLVED",
+    "lotSz": "UNRESOLVED",
+    "minSz": "UNRESOLVED",
+    "ctVal": "UNRESOLVED",
+    "rule": "CURRENT_METADATA_MUST_NOT_BE_USED_AS_HISTORICAL_PROOF"
+  },
+  "strategy_signal_or_pnl_used_for_selection": false,
+  "freeze_rule": "No symbol may be added, removed, or replaced because of later strategy performance. Any alternative universe is a new experiment family/version."
+}
