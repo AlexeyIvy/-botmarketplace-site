@@ -1,0 +1,92 @@
+{
+  "stage": "SC001-E008-MAKER-DISCOVERY-IMPLEMENTATION-FREEZE",
+  "version": "1.0",
+  "status": "FROZEN",
+  "date": "2026-09-16",
+  "purpose": "Freeze maker Discovery implementation identity and all inherited mechanics before the first promotional maker P&L run.",
+  "config": {
+    "instrument": "BTC-USDT-SWAP",
+    "discovery_dates": [
+      "2024-01-06",
+      "2024-01-13",
+      "2024-01-19",
+      "2024-01-24",
+      "2024-02-06",
+      "2024-02-11",
+      "2024-02-21",
+      "2024-02-23"
+    ],
+    "order_qty_contracts": 1.0,
+    "primary_placement_cancel_latency_ms": 250,
+    "latency_stress_ms": 500,
+    "quote_ttl_ms": 30000,
+    "max_inventory_abs_contracts": 1.0,
+    "max_inventory_hold_ms": 60000,
+    "stale_threshold_ms": 5000,
+    "forced_taker_proxy_window_ms": 5000,
+    "maker_fee_bps": 2.0,
+    "taker_fee_bps": 5.0,
+    "queue_stress_initial_ahead_multiplier": 2.0,
+    "bootstrap_reps": 10000,
+    "bootstrap_seed": 8008,
+    "funding_boundaries_utc_hours": [0, 8, 16],
+    "funding_firewall_half_width_ms": 120000,
+    "no_new_flat_cycle_after_utc": "23:58:00",
+    "same_ms_trade_l2_queue_credit": false,
+    "cancellation_size_decrease_queue_credit": false,
+    "level_disappearance_implies_fill": false,
+    "snapshot_resync_cancels_live_quotes": true,
+    "incremental_update_restores_stale_trust": false
+  },
+  "files": {
+    "maker_discovery_runner": {
+      "path": "research/sc001/sc001_e008_maker_discovery.py",
+      "git_blob_sha": "db36513655f0df3af135a1651027d02b2c9ec6db"
+    },
+    "maker_discovery_implementation_protocol": {
+      "path": "docs/research/sc001-e008-maker-discovery-implementation-protocol-v1.0.md",
+      "git_blob_sha": "3c69ef62eb1757456adf808eb134f8ed95646c23"
+    },
+    "canonical_maker_protocol": {
+      "path": "docs/research/sc001-e008-passive-maker-executable-protocol-v1.0.md",
+      "git_blob_sha": "2a2acaa98d832a85ec394c04bdd70da0f83699bc"
+    },
+    "semantic_integrity_protocol": {
+      "path": "docs/research/sc001-e008-discovery-semantic-integrity-protocol-v1.0.md",
+      "git_blob_sha": "2a14c0069e02e164d7b2c3807e08bd1d1ac2db47"
+    },
+    "semantic_integrity_runner": {
+      "path": "research/sc001/sc001_e008_discovery_semantic_integrity.py",
+      "git_blob_sha": "a03c85ee99765ede733de6e6d8a05c8903430ef0"
+    },
+    "queue_mechanics_protocol": {
+      "path": "docs/research/sc001-e008-conservative-queue-simulator-mechanics-protocol-v0.1.md",
+      "git_blob_sha": "e27f8663f95569ff2e19bd32322f73e8b420218a"
+    },
+    "queue_simulator_synthetic": {
+      "path": "research/sc001/sc001_e008_queue_simulator_synthetic_v0_1.py",
+      "git_blob_sha": "bec5d54b63bb632b29dc969173d29504839a8f3f"
+    },
+    "stale_latch_protocol": {
+      "path": "docs/research/sc001-e008-stale-latch-data-model-protocol-v0.2.md",
+      "git_blob_sha": "7236f014b111e4dcb9e4465beab11c36299b9d12"
+    }
+  },
+  "preflight_required_tokens": [
+    "E008_MAKER_DISCOVERY_IMPLEMENTATION_PREFLIGHT_PASS",
+    "E008_MAKER_DISCOVERY_IDENTITY_GATE_PASS"
+  ],
+  "preflight_firewall": {
+    "maker_orders_created": false,
+    "fill_simulation_calculated": false,
+    "spread_capture_calculated": false,
+    "fees_calculated": false,
+    "inventory_pnl_calculated": false,
+    "profitability_calculated": false,
+    "tfi_used": false,
+    "confirmation_body_accessed": false,
+    "q2_accessed": false,
+    "validation_or_final_accessed": false
+  },
+  "run_authorization": "Only exact dual preflight/identity PASS may authorize the single frozen promotional E008 Discovery run."
+}
