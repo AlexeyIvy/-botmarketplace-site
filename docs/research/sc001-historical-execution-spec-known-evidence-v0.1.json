@@ -1,0 +1,140 @@
+{
+  "stage": "SC001-HISTORICAL-EXECUTION-SPEC-KNOWN-EVIDENCE",
+  "version": "0.1",
+  "date": "2026-09-16",
+  "status": "FROZEN_PRE_INVENTORY_EVIDENCE_PACK",
+  "scope": "SC001 first-generation 12-instrument OKX USDT-SWAP universe",
+  "rules": [
+    "Only explicitly reviewed official OKX evidence is included.",
+    "Absence of an event in this pack is not proof of no historical change.",
+    "Current API metadata remains diagnostic only and cannot resolve a historical field by itself."
+  ],
+  "fee_reference": {
+    "maker_bps": 2.0,
+    "taker_bps": 5.0,
+    "classification": "HISTORICALLY_SUPPORTED_REGULAR_USER_REFERENCE_NOT_ACCOUNT_SPECIFIC_EXACT_TIER",
+    "source": "https://www.okx.com/en-gb/help/trading-fee-rules-faq"
+  },
+  "events": [
+    {
+      "instrument": "SOL-USDT-SWAP",
+      "field": "lotSz/minSz",
+      "effective_date": "2024-04-11",
+      "before_contracts": "1",
+      "after_contracts": "0.1",
+      "source": "https://www.okx.com/en-us/help/okx-to-postpone-adjusting-minimum-order-quantities-for-several-futures-2024-03-28"
+    },
+    {
+      "instrument": "DOGE-USDT-SWAP",
+      "field": "lotSz/minSz",
+      "effective_date": "2024-04-11",
+      "before_contracts": "1",
+      "after_contracts": "0.1",
+      "source": "https://www.okx.com/en-us/help/okx-to-postpone-adjusting-minimum-order-quantities-for-several-futures-2024-03-28"
+    },
+    {
+      "instrument": "BCH-USDT-SWAP",
+      "field": "lotSz/minSz",
+      "effective_date": "2024-04-11",
+      "before_contracts": "1",
+      "after_contracts": "0.1",
+      "source": "https://www.okx.com/en-us/help/okx-to-postpone-adjusting-minimum-order-quantities-for-several-futures-2024-03-28"
+    },
+    {
+      "instrument": "XRP-USDT-SWAP",
+      "field": "lotSz/minSz",
+      "effective_date": "2024-04-11",
+      "before_contracts": "1",
+      "after_contracts": "0.1",
+      "source": "https://www.okx.com/en-us/help/okx-to-postpone-adjusting-minimum-order-quantities-for-several-futures-2024-03-28"
+    },
+    {
+      "instrument": "SOL-USDT-SWAP",
+      "field": "lotSz/minSz",
+      "effective_date": "2024-06-06",
+      "before_contracts": "0.1",
+      "after_contracts": "0.01",
+      "source": "https://www.okx.com/en-us/help/okx-to-adjust-the-minimum-order-quantities-for-several-futures-240531"
+    },
+    {
+      "instrument": "BTC-USDT-SWAP",
+      "field": "lotSz/minSz",
+      "effective_date": "2025-01-22",
+      "before_contracts": "0.1",
+      "after_contracts": "0.01",
+      "source": "https://www.okx.com/en-us/help/okx-to-adjust-the-minimum-order-quantities-of-spots-and-futures"
+    },
+    {
+      "instrument": "DOGE-USDT-SWAP",
+      "field": "lotSz/minSz",
+      "effective_date": "2025-01-22",
+      "before_contracts": "0.1",
+      "after_contracts": "0.01",
+      "source": "https://www.okx.com/en-us/help/okx-to-adjust-the-minimum-order-quantities-of-spots-and-futures"
+    },
+    {
+      "instrument": "XRP-USDT-SWAP",
+      "field": "lotSz/minSz",
+      "effective_date": "2025-01-22",
+      "before_contracts": "0.1",
+      "after_contracts": "0.01",
+      "source": "https://www.okx.com/en-us/help/okx-to-adjust-the-minimum-order-quantities-of-spots-and-futures"
+    },
+    {
+      "instrument": "ETH-USDT-SWAP",
+      "field": "lotSz/minSz",
+      "effective_date": "2025-01-09",
+      "before_contracts": "0.1",
+      "after_contracts": "0.01",
+      "source": "https://www.okx.com/en-us/help/okx-to-postpone-adjusting-minimum-order-quantities-for-ethusdt-perpetual-and"
+    },
+    {
+      "instrument": "ORDI-USDT-SWAP",
+      "field": "listing_baseline",
+      "effective_date": "2023-05-21",
+      "ctVal": "0.1",
+      "tickSz": "0.001",
+      "source": "https://www.okx.com/en-us/help/okx-to-enable-margin-trading-and-savings-and-list-perpetual-for-ordi"
+    },
+    {
+      "instrument": "SUI-USDT-SWAP",
+      "field": "listing_baseline",
+      "effective_date": "2023-05-05",
+      "ctVal": "1",
+      "tickSz": "0.0001",
+      "source": "https://www.okx.com/en-us/help/okx-to-enable-margin-trading-and-savings-and-list-perpetual-for-sui"
+    },
+    {
+      "instrument": "UNI-USDT-SWAP",
+      "field": "listing_baseline",
+      "effective_date": "2020-09-17",
+      "ctVal": "1",
+      "tickSz": "0.001",
+      "source": "https://www.okx.com/en-us/help/okx-to-enable-margin-trading-savings-and-list-usdt-margined-perpetual-swap-for-uni"
+    },
+    {
+      "instrument": "LTC-USDT-SWAP",
+      "field": "listing_baseline",
+      "effective_date": "2019-12-27",
+      "ctVal": "1",
+      "tickSz": "0.01",
+      "source": "https://www.okx.com/en-us/help/ltcusdt-and-bchusdt-perpetual-swap-available-soon"
+    },
+    {
+      "instrument": "BCH-USDT-SWAP",
+      "field": "listing_baseline",
+      "effective_date": "2019-12-27",
+      "ctVal": "0.1",
+      "tickSz": "0.01",
+      "source": "https://www.okx.com/en-us/help/ltcusdt-and-bchusdt-perpetual-swap-available-soon"
+    },
+    {
+      "instrument": "XRP-USDT-SWAP",
+      "field": "listing_baseline",
+      "effective_date": "2019-12-30",
+      "ctVal": "100",
+      "tickSz": "0.0001",
+      "source": "https://www.okx.com/en-us/help/xrpusdt-and-etcusdt-perpetual-swap-available-soon"
+    }
+  ]
+}
