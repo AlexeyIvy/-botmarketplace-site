@@ -99,11 +99,14 @@ def preflight() -> int:
 
     rep = {
         'stage': 'SC001-E007R1-TRADE-SEMANTIC-PREFLIGHT',
+        'protocol_version': '0.2',
         'status': PREFLIGHT_PASS,
         'source_files': 128,
         'target_utc_days': len(ASSETS) * len(TARGET_DATES),
         'assets': list(ASSETS),
         'target_dates': list(TARGET_DATES),
+        'minute_coverage_is_diagnostic': True,
+        'hard_integrity_uses_trade_id_continuity': True,
         'asset_holdout_accessed': False,
         'august_confirmation_accessed': False,
         'strategy_signal_calculated': False,
@@ -111,8 +114,10 @@ def preflight() -> int:
     }
     atomic(PREFLIGHT_REPORT, rep)
     print(PREFLIGHT_PASS)
+    print('protocol_version = 0.2')
     print('source_files = 128')
     print('target_utc_days = 120')
+    print('minute coverage is diagnostic = True')
     print('asset holdout accessed = False')
     print('August Confirmation accessed = False')
     print('strategy signal/PnL calculated = False')
@@ -227,6 +232,7 @@ def target_day(sym: str, day: str, byfn: dict[str, dict]) -> dict:
     count = 0
     prev_ts = prev_id = None
     gaps = 0
+    max_intertrade_gap_ms = 0
     minutes: set[int] = set()
     sides: set[str] = set()
     first_ts = last_ts = None
@@ -234,8 +240,10 @@ def target_day(sym: str, day: str, byfn: dict[str, dict]) -> dict:
 
     for p in (p0, p1):
         for tid, ts, side in iter_target_rows(p, inst, lo, hi):
-            if prev_ts is not None and ts < prev_ts:
-                fail(f'target timestamp reversal {inst} {day}')
+            if prev_ts is not None:
+                if ts < prev_ts:
+                    fail(f'target timestamp reversal {inst} {day}')
+                max_intertrade_gap_ms = max(max_intertrade_gap_ms, ts - prev_ts)
             if prev_id is not None:
                 if tid <= prev_id:
                     fail(f'target trade-id duplicate/backward {inst} {day}: {tid} <= {prev_id}')
@@ -255,8 +263,9 @@ def target_day(sym: str, day: str, byfn: dict[str, dict]) -> dict:
         fail(f'target trade-id gaps {inst} {day}: {gaps}')
     if sides != {'buy', 'sell'}:
         fail(f'target missing side breadth {inst} {day}: {sorted(sides)}')
-    if len(minutes) != 1440 or min(minutes) != 0 or max(minutes) != 1439:
-        fail(f'target minute coverage {inst} {day}: {len(minutes)}/1440')
+
+    missing_minutes = sorted(set(range(1440)) - minutes)
+    coverage_class = 'COMPLETE_1440' if not missing_minutes else 'SPARSE_BUT_ID_CONTINUOUS'
 
     return {
         'instrument': inst,
@@ -268,13 +277,15 @@ def target_day(sym: str, day: str, byfn: dict[str, dict]) -> dict:
         'last_trade_id': last_id,
         'trade_id_gaps': gaps,
         'minute_buckets': len(minutes),
+        'missing_minute_buckets': missing_minutes,
+        'minute_coverage_class': coverage_class,
+        'max_intertrade_gap_ms': max_intertrade_gap_ms,
         'both_sides': sides == {'buy', 'sell'},
         'performance_role': 'BOUNDARY_WARMUP' if day == '2024-06-30' else 'DISCOVERY_PERFORMANCE',
     }
 
 
 def run() -> int:
-    # Re-run fast fail-closed parent checks before body scan.
     preflight()
     byfn = parent_map()
 
@@ -297,25 +308,46 @@ def run() -> int:
             print(f'UTC-STITCH [{ai}/8 {di}/15] {sym} {day}', flush=True)
             m = target_day(sym, day, byfn)
             day_rows.append(m)
-            print(f'PASS UTC rows={m["rows"]} minutes={m["minute_buckets"]} gaps={m["trade_id_gaps"]}', flush=True)
+            print(
+                f'PASS UTC rows={m["rows"]} minutes={m["minute_buckets"]} '
+                f'gaps={m["trade_id_gaps"]} coverage={m["minute_coverage_class"]} '
+                f'max_gap_ms={m["max_intertrade_gap_ms"]}',
+                flush=True,
+            )
 
     if len(source_rows) != 128:
         fail(f'source qualification count mismatch {len(source_rows)}')
     if len(day_rows) != 120:
         fail(f'target day qualification count mismatch {len(day_rows)}')
 
+    sparse = [r for r in day_rows if r['minute_coverage_class'] == 'SPARSE_BUT_ID_CONTINUOUS']
+
     rep = {
         'stage': 'SC001-E007R1-TRADE-SEMANTIC-INTEGRITY',
+        'protocol_version': '0.2',
         'status': SEMANTIC_PASS,
         'source_files_qualified': 128,
         'source_files_expected': 128,
         'reconstructed_utc_days_qualified': 120,
         'reconstructed_utc_days_expected': 120,
+        'sparse_but_id_continuous_days': len(sparse),
+        'sparse_days': [
+            {
+                'instrument': r['instrument'],
+                'date': r['date'],
+                'minute_buckets': r['minute_buckets'],
+                'missing_minute_buckets': r['missing_minute_buckets'],
+                'max_intertrade_gap_ms': r['max_intertrade_gap_ms'],
+                'performance_role': r['performance_role'],
+            }
+            for r in sparse
+        ],
         'assets': list(ASSETS),
         'target_dates': list(TARGET_DATES),
         'source_files': source_rows,
         'utc_days': day_rows,
         'utc_stitch_rule': 'archive D + archive D+1; retain created_time in UTC [D,D+1)',
+        'minute_coverage_rule': 'diagnostic_only_when_trade_ids_are_contiguous',
         'asset_holdout_accessed': False,
         'august_confirmation_accessed': False,
         'l2_body_accessed': False,
@@ -327,6 +359,7 @@ def run() -> int:
     print(SEMANTIC_PASS)
     print('source_files_qualified = 128 / 128')
     print('reconstructed_utc_days_qualified = 120 / 120')
+    print('sparse_but_id_continuous_days =', len(sparse))
     print('asset holdout accessed = False')
     print('August Confirmation accessed = False')
     print('strategy signal/PnL calculated = False')
