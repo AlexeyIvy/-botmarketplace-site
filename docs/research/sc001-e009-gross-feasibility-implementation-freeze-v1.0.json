@@ -4,7 +4,7 @@
   "date": "2026-09-17",
   "status": "FROZEN_BEFORE_FIRST_GROSS_OUTPUT",
   "runner": "research/sc001/sc001_e009_gross_feasibility.py",
-  "runner_git_blob_sha": "619936f703225470474636ebd7187fe029cbc320",
+  "runner_git_blob_sha": "2bcea8cbc8bf578de2e3c9cc5564fb8ca4b333e5",
   "protocol": "docs/research/sc001-e009-gross-feasibility-executable-protocol-v0.1.md",
   "protocol_git_blob_sha": "2e27449335f54e40a3cee3602185b65e73568135",
   "semantic_parent_required": "E009_TRADE_SEMANTIC_INTEGRITY_PASS",
@@ -30,6 +30,7 @@
     "latest_entry_utc": "23:49:00"
   },
   "volatility_window_semantics": "For current VWAP bucket k, use the 360 possible valid consecutive-5s log-return slots k-371 through k-12 inclusive; their right edges end no later than t-60s. Require >=240 valid returns. This excludes the current 60-second displacement interval. Missing 5-second VWAPs are never forward-filled; invalid normalized points break the strict-crossing chain.",
+  "stress_replay_ordering_guard": "A stress-latency entry at or after the frozen primary exit_decision_ts is invalid and classified entry_after_exit_decision.",
   "cross_asset_zero_completion_mean_bps": 0,
   "one_shot_terminal_guard": true,
   "asset_holdout_accessed": false,
