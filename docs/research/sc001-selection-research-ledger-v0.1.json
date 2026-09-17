@@ -1,0 +1,57 @@
+{
+  "stage": "SC001-SELECTION-RESEARCH-LEDGER",
+  "version": "0.1",
+  "date": "2026-09-17",
+  "status": "FROZEN_BEFORE_SENTINEL_OUTCOMES",
+  "purpose": "Count strategy/feature variants considered during nonpromotional C1-C6 selection so sentinel survivors are not treated as if selected from a single hypothesis.",
+  "parent_plan": "docs/research/sc001-c1-c6-selection-calibration-sandbox-sentinel-mde-plan-v0.1.md",
+  "candidate_variants": [
+    {
+      "candidate": "C1",
+      "variants": ["strict_legacy_E006_mechanism_multiasset"],
+      "count": 1,
+      "auxiliary_feature_variants": 0
+    },
+    {
+      "candidate": "C2",
+      "variants": ["5m_trailing_VWAP_reference", "5m_median_of_completed_1m_VWAP_reference"],
+      "count": 2,
+      "auxiliary_feature_variants": 0
+    },
+    {
+      "candidate": "C3",
+      "variants": ["5m_completed_bar_expansion_breakout", "10m_completed_bar_expansion_breakout"],
+      "count": 2,
+      "auxiliary_feature_variants": 0
+    },
+    {
+      "candidate": "C4",
+      "variants": ["BTC_30s_to_alt_60s", "BTC_60s_to_alt_60s", "ETH_30s_to_alt_60s", "ETH_60s_to_alt_60s"],
+      "count": 4,
+      "auxiliary_feature_variants": 0
+    },
+    {
+      "candidate": "C5",
+      "variants": ["30s_flow_z3_price_confirmed_exhaustion_to_5m_reversal"],
+      "count": 1,
+      "auxiliary_feature_variants": 0
+    },
+    {
+      "candidate": "C6",
+      "variants": ["5m_cross_sectional_equal_weight_residual_top1_bottom1_15m"],
+      "count": 1,
+      "auxiliary_feature_variants": 0
+    }
+  ],
+  "total_strategy_variants": 11,
+  "forbidden_unlogged_additions": [
+    "post_outcome_threshold_grid",
+    "post_outcome_horizon_grid",
+    "indicator_bundle_addition",
+    "winner_asset_selection",
+    "time_of_day_filter_selected_after_outcome",
+    "manual_event_day selection",
+    "custom_composite_optimized_on_sentinel_output"
+  ],
+  "rule": "Any additional human, LLM, or script-generated variant considered after this freeze must be appended in a new ledger version before its outcome is computed."
+}
