@@ -1,0 +1,136 @@
+{
+  "stage": "SC001-CONTAMINATION-REGISTRY",
+  "version": "0.4",
+  "date": "2026-09-17",
+  "status": "CONSERVATIVE_REGISTRY_UPDATED_THROUGH_E009_AND_SELECTION_SANDBOX_FREEZE",
+  "scope": "SCALPING_RESEARCH_SC001",
+  "supersedes": "docs/research/sc001-contamination-registry-v0.3.json",
+  "default_rule": "IF_PRIOR_USE_STATUS_IS_UNCERTAIN_TREAT_AS_NOT_FRESH_UNTIL_AUDITED",
+  "frozen_universe": [
+    "BTC-USDT-SWAP", "ETH-USDT-SWAP", "SOL-USDT-SWAP", "DOGE-USDT-SWAP",
+    "ORDI-USDT-SWAP", "FIL-USDT-SWAP", "UNI-USDT-SWAP", "XRP-USDT-SWAP",
+    "LTC-USDT-SWAP", "OP-USDT-SWAP", "BCH-USDT-SWAP", "SUI-USDT-SWAP"
+  ],
+  "known_contaminated_or_nonpromotional": [
+    {
+      "role": "UNIVERSE_LIQUIDITY_CALIBRATION",
+      "instruments": "FROZEN_UNIVERSE",
+      "date_range": {"start": "2024-02-24", "end": "2024-02-29"},
+      "classification": "ENGINEERING_CALIBRATION_CONTAMINATED",
+      "fresh_for_future_promotion": false
+    },
+    {
+      "role": "LEGACY_E006_BTC_DISCOVERY",
+      "instruments": ["BTC-USDT", "BTC-USDT-SWAP"],
+      "date_range": {"start": "2024-03-01", "end": "2024-03-20"},
+      "classification": "OUTCOME_SEEN_CONTAMINATED",
+      "fresh_for_future_promotion": false
+    },
+    {
+      "role": "E007R1_DISCOVERY",
+      "instruments": ["BTC-USDT-SWAP", "ETH-USDT-SWAP", "DOGE-USDT-SWAP", "ORDI-USDT-SWAP", "UNI-USDT-SWAP", "XRP-USDT-SWAP", "OP-USDT-SWAP", "BCH-USDT-SWAP"],
+      "date_range": {"start": "2024-07-01", "end": "2024-07-14"},
+      "classification": "OUTCOME_SEEN_CONTAMINATED",
+      "body_accessed": true,
+      "strategy_outcome_seen": true,
+      "fresh_for_future_promotion": false
+    },
+    {
+      "role": "E007R1_BOUNDARY_SOURCE",
+      "dates": ["2024-06-30", "2024-07-15"],
+      "classification": "BOUNDARY_NONPERFORMANCE_ACCESSED",
+      "fresh_for_performance": false
+    },
+    {
+      "role": "E009_DISCOVERY",
+      "instruments": ["BTC-USDT-SWAP", "ETH-USDT-SWAP", "DOGE-USDT-SWAP", "ORDI-USDT-SWAP", "UNI-USDT-SWAP", "XRP-USDT-SWAP", "OP-USDT-SWAP", "BCH-USDT-SWAP"],
+      "date_range": {"start": "2024-09-01", "end": "2024-09-14"},
+      "classification": "OUTCOME_SEEN_CONTAMINATED",
+      "body_accessed": true,
+      "strategy_outcome_seen": true,
+      "fresh_for_future_promotion": false
+    },
+    {
+      "role": "E009_BOUNDARY_SOURCE",
+      "dates": ["2024-08-31", "2024-09-15"],
+      "classification": "BOUNDARY_NONPERFORMANCE_ACCESSED",
+      "fresh_for_performance": false
+    }
+  ],
+  "selection_calibration_sandbox": {
+    "status": "FROZEN_NONPROMOTIONAL_POOL",
+    "purpose": "candidate/feature selection, sentinel falsification, variance/MDE planning only",
+    "allowed_primary_periods": [
+      {
+        "instruments": ["BTC-USDT-SWAP", "ETH-USDT-SWAP", "DOGE-USDT-SWAP", "ORDI-USDT-SWAP", "UNI-USDT-SWAP", "XRP-USDT-SWAP", "OP-USDT-SWAP", "BCH-USDT-SWAP"],
+        "date_range": {"start": "2024-07-01", "end": "2024-07-14"},
+        "reason": "already contaminated by E007R1"
+      },
+      {
+        "instruments": ["BTC-USDT-SWAP", "ETH-USDT-SWAP", "DOGE-USDT-SWAP", "ORDI-USDT-SWAP", "UNI-USDT-SWAP", "XRP-USDT-SWAP", "OP-USDT-SWAP", "BCH-USDT-SWAP"],
+        "date_range": {"start": "2024-09-01", "end": "2024-09-14"},
+        "reason": "already contaminated by E009"
+      }
+    ],
+    "legacy_basis_calibration_only": {
+      "instruments": ["BTC-USDT", "BTC-USDT-SWAP"],
+      "date_range": {"start": "2024-03-01", "end": "2024-03-20"},
+      "reason": "already contaminated by E006"
+    },
+    "rule": "Any additional source/body opened to complete calibration on these already-contaminated dates inherits NONPROMOTIONAL_SELECTION_CALIBRATION status. No clean date may be added without a new registry version before access."
+  },
+  "still_protected_unopened": [
+    {
+      "role": "JULY_ASSET_HOLDOUT",
+      "instruments": ["SOL-USDT-SWAP", "FIL-USDT-SWAP", "LTC-USDT-SWAP", "SUI-USDT-SWAP"],
+      "date_range": {"start": "2024-07-01", "end": "2024-07-14"},
+      "classification": "PROTECTED_UNOPENED",
+      "may_be_used_for_selection_sandbox": false
+    },
+    {
+      "role": "UNASSIGNED_GAP",
+      "date_range": {"start": "2024-07-16", "end": "2024-07-30"},
+      "classification": "UNOPENED_DO_NOT_MINE",
+      "may_be_used_for_selection_sandbox": false
+    },
+    {
+      "role": "AUGUST_PROTECTED_PERIOD",
+      "date_range": {"start": "2024-08-01", "end": "2024-08-30"},
+      "classification": "UNOPENED_DO_NOT_REPURPOSE_WITHOUT_NEW_GOVERNANCE",
+      "may_be_used_for_selection_sandbox": false
+    },
+    {
+      "role": "SEPTEMBER_ASSET_HOLDOUT",
+      "instruments": ["SOL-USDT-SWAP", "FIL-USDT-SWAP", "LTC-USDT-SWAP", "SUI-USDT-SWAP"],
+      "date_range": {"start": "2024-09-01", "end": "2024-09-14"},
+      "classification": "PROTECTED_UNOPENED",
+      "may_be_used_for_selection_sandbox": false
+    },
+    {
+      "role": "E009_OCTOBER_CONFIRMATION",
+      "instruments": "FROZEN_UNIVERSE",
+      "date_range": {"start": "2024-10-01", "end": "2024-10-14"},
+      "classification": "PROTECTED_UNOPENED",
+      "may_be_used_for_selection_sandbox": false
+    },
+    {
+      "role": "LEGACY_E006_CONFIRMATION",
+      "instruments": ["BTC-USDT", "BTC-USDT-SWAP"],
+      "date_range": {"start": "2024-03-22", "end": "2024-03-30"},
+      "classification": "PROTECTED_LEGACY_UNOPENED",
+      "may_be_used_for_selection_sandbox": false
+    }
+  ],
+  "selection_rule": "Anything inspected for feature choice, parameter choice, candidate selection, sentinel design/outcome, variance estimation or MDE planning is nonpromotional for the resulting implementation.",
+  "required_before_new_promotion": [
+    "complete_selection_sandbox_and_sentinel_stage",
+    "freeze_small_diversified_research_batch",
+    "assign_new_experiment_id",
+    "freeze_fresh_discovery_asset_holdout_confirmation_roles",
+    "freeze_historical_execution_spec_handling",
+    "validate_strategy_appropriate_execution_kernel",
+    "freeze_strategy_specific_protocol_and_gates",
+    "freeze_code_config_data_run_manifest",
+    "open_only_authorized_role_in_sequence"
+  ]
+}
