@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import argparse, bisect, csv, io, json, math, os, statistics, subprocess, zipfile
+import argparse, csv, io, json, math, os, statistics, subprocess, zipfile
 from array import array
 from collections import Counter
 from datetime import datetime, timezone
@@ -200,8 +200,8 @@ def replay(primary,stream,lat):
         if leg is None:r['incomplete_reason']='entry_missing'; out.append(r); continue
         ets,ep=leg
         if reverted(p['direction'],ep,p['target_price']):r['incomplete_reason']='entry_already_reverted'; out.append(r); continue
-        if ets>=xd:r['incomplete_reason']='entry_after_exit_decision'; out.append(r); continue
-        x=proxy(stream,xd+lat,de)
+        if ets>=int(xd): r['incomplete_reason']='entry_after_exit_decision'; out.append(r); continue
+        x=proxy(stream,int(xd)+lat,de)
         if x is None:r['incomplete_reason']='exit_missing'; out.append(r); continue
         _xt,xp=x; r['completed']=True; r['gross_edge_bps']=p['direction']*10000.0*(xp/ep-1.0); out.append(r)
     return out
@@ -236,7 +236,7 @@ def run():
     contrib={s:abs(float(per[s]['primary']['sum_gross_bps'])) for s in ASSETS}; denom=sum(contrib.values()); top_share=max(contrib.values())/denom if denom>0 else 1.0
     gates={'all_8_attempted':len(per)==8,'active_assets_gte_6':active>=6,'assets_completed_gte5_count_gte4':active5>=4,'pooled_completed_gte40':len(completed)>=40,'equal_weight_mean_gte20':eq>=20.0,'median_instrument_mean_gte15':med>=15.0,'positive_instruments_gte5':pos>=5,'pooled_trimmed_mean_gte15':trimmed(pooled) is not None and trimmed(pooled)>=15.0,'pooled_median_gte10':bool(pooled) and statistics.median(pooled)>=10.0,'lat1000_equal_weight_gte15':stress_eq['1000']>=15.0,'lat2000_equal_weight_gte10':stress_eq['2000']>=10.0,'top_instrument_abs_contribution_lte035':top_share<=0.35}
     status=PASS if all(gates.values()) else FAIL
-    rep={'stage':STAGE,'status':status,'protocol':'sc001-e009-gross-feasibility-executable-protocol-v0.1.md','assets':list(ASSETS),'performance_dates':[PERF_START,PERF_END],'per_instrument':per,'aggregate':{'active_assets':active,'assets_with_gte5_completed':active5,'pooled_completed':len(completed),'equal_weight_instrument_mean_bps':eq,'median_instrument_mean_bps':med,'positive_instrument_count':pos,'pooled_mean_bps':statistics.fmean(pooled) if pooled else None,'pooled_median_bps':statistics.median(pooled) if pooled else None,'pooled_trimmed_mean_bps':trimmed(pooled),'stress_equal_weight_mean_bps':stress_eq,'top_instrument_abs_contribution_share':top_share,'instrument_mean_bps':inst_means},'gates':gates,'failed_gates':[k for k,v in gates.items() if not v],'gross_bps_calculated':True,'discrete_contract_pnl_calculated':False,'fees_or_net_pnl_calculated':False,'l2_accessed':False,'asset_holdout_accessed':False,'october_confirmation_accessed':False,'august_repurposed':False,'historical_exact_execution_specs_verified':False,'volatility_window_semantics':{'return_slots':360,'end_offset_buckets':12,'min_valid_returns':240,'current_60s_excluded':True,'invalid_grid_breaks_crossing_chain':True}}
+    rep={'stage':STAGE,'status':status,'protocol':'sc001-e009-gross-feasibility-executable-protocol-v0.1.md','assets':list(ASSETS),'performance_dates':[PERF_START,PERF_END],'per_instrument':per,'aggregate':{'active_assets':active,'assets_with_gte5_completed':active5,'pooled_completed':len(completed),'equal_weight_instrument_mean_bps':eq,'median_instrument_mean_bps':med,'positive_instrument_count':pos,'pooled_mean_bps':statistics.fmean(pooled) if pooled else None,'pooled_median_bps':statistics.median(pooled) if pooled else None,'pooled_trimmed_mean_bps':trimmed(pooled),'stress_equal_weight_mean_bps':stress_eq,'top_instrument_abs_contribution_share':top_share,'instrument_mean_bps':inst_means},'gates':gates,'failed_gates':[k for k,v in gates.items() if not v],'gross_bps_calculated':True,'discrete_contract_pnl_calculated':False,'fees_or_net_pnl_calculated':False,'l2_accessed':False,'asset_holdout_accessed':False,'october_confirmation_accessed':False,'august_repurposed':False,'historical_exact_execution_specs_verified':False,'volatility_window_semantics':{'return_slots':360,'end_offset_buckets':12,'min_valid_returns':240,'current_60s_excluded':True,'invalid_grid_breaks_crossing_chain':True},'stress_entry_after_exit_guard':True}
     atomic(REPORT,rep)
     print(status); print('active_assets =',active,'/ 8'); print('pooled_completed =',len(completed)); print('equal_weight_mean_bps =',eq); print('median_instrument_mean_bps =',med); print('positive_instruments =',pos,'/ 8'); print('pooled_trimmed_mean_bps =',rep['aggregate']['pooled_trimmed_mean_bps']); print('pooled_median_bps =',rep['aggregate']['pooled_median_bps']); print('lat1000_equal_weight_mean_bps =',stress_eq['1000']); print('lat2000_equal_weight_mean_bps =',stress_eq['2000']); print('top_instrument_abs_contribution_share =',top_share); print('failed_gates =',rep['failed_gates']); print('discrete contract PnL calculated = False'); print('asset holdout accessed = False'); print('October Confirmation accessed = False'); print('August repurposed = False'); print('report =',REPORT)
     return 0 if status==PASS else 2
