@@ -1,0 +1,41 @@
+{
+  "stage": "SC001-CONTAMINATION-REGISTRY",
+  "version": "0.5",
+  "date": "2026-09-17",
+  "status": "CONSERVATIVE_REGISTRY_UPDATED_FOR_LEGACY_E003_SOURCE_PRESENCE_SEMANTICS",
+  "scope": "SCALPING_RESEARCH_SC001",
+  "supersedes": "docs/research/sc001-contamination-registry-v0.4.json",
+  "default_rule": "IF_PRIOR_USE_STATUS_IS_UNCERTAIN_TREAT_AS_NOT_FRESH_UNTIL_AUDITED",
+  "inherited_registry": "docs/research/sc001-contamination-registry-v0.4.json",
+  "clarification": {
+    "legacy_e003_march_swap_source": {
+      "path": "SC001_E003_OKX_MARCH_TRADES",
+      "known_local_date_span_includes": "2024-03-22..2024-03-30",
+      "classification": "PREEXISTING_LEGACY_E003_SOURCE_PRESENCE",
+      "meaning": "local presence of these BTC-USDT-SWAP archives is not by itself evidence that E006 Confirmation was opened or used",
+      "selection_stage_rule": "C1-C6 preflight may observe filenames only; it must not open/hash March 22-30 bodies",
+      "e006_confirmation_role_remains_protected": true
+    },
+    "legacy_e006_spot_confirmation": {
+      "path": "SC001_E006_SPOT_FEASIBILITY",
+      "date_range": {"start": "2024-03-22", "end": "2024-03-30"},
+      "classification": "PROTECTED_E006_CONFIRMATION_ROLE",
+      "local_body_presence_requires_reconciliation": true,
+      "may_be_used_for_selection_sandbox": false
+    }
+  },
+  "unchanged_selection_calibration_pool": {
+    "july_e007r1": {"start": "2024-07-01", "end": "2024-07-14", "assets": ["BTC","ETH","DOGE","ORDI","UNI","XRP","OP","BCH"]},
+    "september_e009": {"start": "2024-09-01", "end": "2024-09-14", "assets": ["BTC","ETH","DOGE","ORDI","UNI","XRP","OP","BCH"]},
+    "legacy_e006_btc_only": {"start": "2024-03-01", "end": "2024-03-20", "assets": ["BTC-USDT","BTC-USDT-SWAP"]}
+  },
+  "still_protected": [
+    "July SOL/FIL/LTC/SUI holdout 2024-07-01..14",
+    "July gap 2024-07-16..30",
+    "August protected period 2024-08-01..30",
+    "September SOL/FIL/LTC/SUI holdout 2024-09-01..14",
+    "October Confirmation 2024-10-01..14",
+    "E006 Confirmation role 2024-03-22..30"
+  ],
+  "selection_rule": "Anything inspected for feature choice, parameter choice, candidate selection, sentinel design/outcome, variance estimation or MDE planning is nonpromotional for the resulting implementation. Presence of a file is not automatically equivalent to use by a later experiment; role-specific access must be tracked explicitly."
+}
