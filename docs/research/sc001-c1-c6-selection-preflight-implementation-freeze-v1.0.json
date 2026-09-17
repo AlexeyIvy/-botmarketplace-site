@@ -1,0 +1,15 @@
+{
+  "stage": "SC001-C1C6-SELECTION-PREFLIGHT-IMPLEMENTATION-FREEZE",
+  "version": "1.0",
+  "date": "2026-09-17",
+  "status": "FROZEN_BEFORE_SELECTION_PREFLIGHT_RUN",
+  "runner_path": "research/sc001/sc001_c1c6_selection_preflight.py",
+  "runner_git_blob_sha": "03ca5185bc1977c11d0dd2efebb22d3820185a6c",
+  "protocol_path": "docs/research/sc001-c1-c6-selection-preflight-protocol-v0.1.md",
+  "protocol_git_blob_sha": "d5eb318ea7ddbe757d1b2ea28d579a2b39e788f7",
+  "required_pass_token": "SC001_C1C6_SELECTION_PREFLIGHT_PASS",
+  "purpose": "No-alpha local integrity, contamination-firewall and runtime preflight before C1-C6 sentinel implementation.",
+  "promotional_alpha_authorized": false,
+  "sentinel_outcome_authorized": false,
+  "protected_data_access_authorized": false
+}
