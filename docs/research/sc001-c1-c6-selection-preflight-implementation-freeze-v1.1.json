@@ -1,0 +1,20 @@
+{
+  "stage": "SC001-C1C6-SELECTION-PREFLIGHT-IMPLEMENTATION-FREEZE",
+  "version": "1.1",
+  "date": "2026-09-17",
+  "status": "FROZEN_AFTER_V0_1_FALSE_POSITIVE_BEFORE_SENTINEL_OUTCOME",
+  "reason": "v0.1 falsely treated legacy E003 March 22-30 swap archive presence as E006 Confirmation access; v0.2 preserves hard firewalls while making that specific pre-existing source presence nonfatal",
+  "runner_path": "research/sc001/sc001_c1c6_selection_preflight_v0_2.py",
+  "runner_git_blob_sha": "750bcf75ae500a9b4da7643a4e6889658ad6326c",
+  "protocol_path": "docs/research/sc001-c1-c6-selection-preflight-protocol-v0.2.md",
+  "protocol_git_blob_sha": "4b0102d82d37e138299b140a55cc2c13624499ec",
+  "exact_pass_token": "SC001_C1C6_SELECTION_PREFLIGHT_PASS",
+  "economic_rules_changed": false,
+  "sentinel_rules_changed": false,
+  "variant_budget_changed": false,
+  "promotional_data_accessed_by_fix": false,
+  "strategy_signal_calculated_by_fix": false,
+  "sentinel_outcome_calculated_by_fix": false,
+  "pnl_calculated_by_fix": false,
+  "allowed_rerun": "mechanical no-alpha preflight rerun only"
+}
