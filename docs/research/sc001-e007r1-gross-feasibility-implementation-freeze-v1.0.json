@@ -1,0 +1,34 @@
+{
+  "stage": "SC001-E007R1-GROSS-FEASIBILITY-IMPLEMENTATION-FREEZE",
+  "version": "1.0",
+  "date": "2026-09-17",
+  "status": "FROZEN_BEFORE_FIRST_GROSS_OUTPUT",
+  "runner_path": "research/sc001/sc001_e007r1_gross_feasibility.py",
+  "runner_git_blob_sha": "d849cb7d5734bac32060c9322b771abbce01565b",
+  "protocol_path": "docs/research/sc001-e007r1-multiasset-gross-feasibility-protocol-v0.1.md",
+  "protocol_git_blob_sha": "4d1b8515a3230b5ddcf2640267435db6955bb6cd",
+  "assets": ["BTC", "ETH", "DOGE", "ORDI", "UNI", "XRP", "OP", "BCH"],
+  "performance_dates": {"start": "2024-07-01", "end": "2024-07-14"},
+  "parameters": {
+    "grid_ms": 5000,
+    "anchor_offset_buckets": 12,
+    "threshold_bps": 80.0,
+    "retracement_fraction": 0.5,
+    "primary_latency_ms": 500,
+    "stress_latencies_ms": [1000, 2000],
+    "tolerance_ms": 5000,
+    "max_hold_ms": 600000,
+    "cooldown_ms": 600000,
+    "daily_cap": 4,
+    "latest_entry_utc": "23:49:00"
+  },
+  "cross_asset_aggregate_rule": "All 8 frozen Discovery assets remain in equal-weight and median instrument aggregates; an instrument with zero completed events contributes 0 bps rather than being dropped.",
+  "top_contribution_rule": "abs(sum gross bps by instrument) / sum across instruments of abs(sum gross bps by instrument)",
+  "firewalls": {
+    "asset_holdout_accessed": false,
+    "august_confirmation_accessed": false,
+    "l2_accessed": false,
+    "fees_or_net_pnl_calculated": false,
+    "discrete_contract_pnl_calculated": false
+  }
+}
