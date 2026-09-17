@@ -1,0 +1,20 @@
+{
+  "stage": "SC001-C1-SPOT-SELECTION-METADATA-PREFLIGHT-IMPLEMENTATION-FREEZE",
+  "version": "0.1",
+  "date": "2026-09-17",
+  "status": "FROZEN_BEFORE_METADATA_PREFLIGHT_RUN",
+  "runner_path": "research/sc001/sc001_c1_selection_spot_metadata_preflight_v0_1.py",
+  "runner_git_blob_sha": "e86d94086efcec078614af974c2bff64900fa665",
+  "protocol_path": "docs/research/sc001-c1-selection-spot-metadata-and-acquisition-protocol-v0.1.md",
+  "protocol_git_blob_sha": "c760eb186d554ce33def65e835b8a63022509741",
+  "exact_pass_token": "C1_SPOT_METADATA_PREFLIGHT_PASS",
+  "market_data_body_download_authorized": false,
+  "strategy_signal_authorized": false,
+  "sentinel_outcome_authorized": false,
+  "basis_return_pnl_authorized": false,
+  "promotional_alpha_authorized": false,
+  "protected_data_authorized": false,
+  "sentinel_variant_budget": 11,
+  "c1_sentinel_variant_budget": 1,
+  "next_allowed_action": "syntax-check and run metadata-only preflight on VPS"
+}
