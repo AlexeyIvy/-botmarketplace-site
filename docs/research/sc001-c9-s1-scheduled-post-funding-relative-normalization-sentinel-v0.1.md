@@ -139,9 +139,10 @@ Require all:
 - pooled evaluable event-asset observations >= 500;
 - each of 8 assets has >= 60 evaluable nonzero-funding events;
 - events span >= 25 UTC calendar days;
-- both positive-funding and negative-funding observations must exist somewhere in the pooled sample.
+- positive-funding observations >= 20 pooled;
+- negative-funding observations >= 20 pooled.
 
-If the negative-funding side is absent or extremely sparse, do not invent a threshold or separate winner side; retain the fixed rule and report the sign-breadth limitation.
+If either funding-sign side has fewer than 20 pooled observations, do not invent a threshold or separate winner side; retain the fixed rule and report the sign-breadth limitation.
 
 ## 8. Economic gates
 
