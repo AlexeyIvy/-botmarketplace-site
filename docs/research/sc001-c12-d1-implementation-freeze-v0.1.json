@@ -1,0 +1,29 @@
+{
+  "stage": "SC001-C12-D1-IMPLEMENTATION-FREEZE",
+  "version": "0.1",
+  "date": "2026-09-18",
+  "status": "FROZEN_BEFORE_C12_D1_RUN",
+  "candidate_id": "C12",
+  "protocol_path": "docs/research/sc001-c12-d1-spot-trade-semantics-protocol-v0.1.md",
+  "protocol_git_blob_sha": "f57313115d5a88d707aa63d5ed5951dfa53ad563",
+  "runner_path": "research/sc001/sc001_c12_d1_spot_trade_semantics_v0_1.py",
+  "runner_git_blob_sha": "dd9f6548fac8698e1c8ffa175441b2b59f020342",
+  "contamination_registry_path": "docs/research/sc001-contamination-registry-v0.15.json",
+  "contamination_registry_git_blob_sha": "7311ee3a5e21c0d1050fdc8314af88f14b55d46d",
+  "parent_d0_result_path": "docs/research/sc001-c12-d0-source-parity-pass-result-v0.1.md",
+  "parent_d0_result_git_blob_sha": "f42184b7d85f00c0c7b35d241e9f56ffabedd83c",
+  "fixed_date": "2025-01-15",
+  "authorized_bodies": [
+    "USDC-USDT-trades-2025-01-15.zip",
+    "USDC-USDT-trades-2025-01-16.zip"
+  ],
+  "peg_deviation_authorized": false,
+  "parity_threshold_authorized": false,
+  "reversion_outcome_authorized": false,
+  "strategy_signal_authorized": false,
+  "pnl_authorized": false,
+  "promotional_alpha_authorized": false,
+  "exact_pass_token": "C12_D1_SPOT_TRADE_SEMANTICS_PASS",
+  "review_token": "C12_D1_SPOT_TRADE_SEMANTICS_REVIEW",
+  "next_allowed_action": "syntax-check and run C12-D1 engineering-only spot trade semantics stage"
+}
