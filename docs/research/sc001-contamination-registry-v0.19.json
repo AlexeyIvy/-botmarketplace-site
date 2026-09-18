@@ -1,0 +1,66 @@
+{
+  "stage": "SC001-CONTAMINATION-REGISTRY",
+  "version": "0.19",
+  "date": "2026-09-19",
+  "status": "UPDATED_AFTER_C11_V2_CORRECTED_AUDIT_AND_CHRONOLOGY_FREEZE_BEFORE_SELECTION_PRICE_OUTCOME",
+  "scope": "SCALPING_RESEARCH_SC001",
+  "supersedes": "docs/research/sc001-contamination-registry-v0.18.json",
+  "default_rule": "IF_PRIOR_USE_STATUS_IS_UNCERTAIN_TREAT_AS_NOT_FRESH_UNTIL_AUDITED",
+  "inherited_registry": "docs/research/sc001-contamination-registry-v0.18.json",
+  "c11_v2_corrected_audit": {
+    "status": "C11_V2_FRESH_CHRONOLOGY_AUDIT_V02_PASS",
+    "document": "docs/research/sc001-c11-v2-fresh-chronology-contamination-source-audit-v0.2.md",
+    "e001_historical_price_exposure": {
+      "venue": "Binance",
+      "instrument": "BTCUSDT USD-M perpetual",
+      "resolution": "1h",
+      "window_end_utc": "2026-09-09T19:00:00Z",
+      "implication": "later historical dates through cutoff are not globally price-unseen within SC001"
+    },
+    "h1_2025": "CONTAMINATED_FOR_C11_V2_DIRECTION_DESIGN",
+    "q4_2025": "SOURCE_CALENDAR_IRREGULAR_INCOMPLETE_CORE_FAMILY_CADENCE"
+  },
+  "c11_v2_selection_calibration": {
+    "classification": "NONPROMOTIONAL_SELECTION_CALIBRATION",
+    "contamination_qualifier": "C11_MICROSTRUCTURE_OUTCOME_UNOPENED_BUT_SC001_COARSE_PRICE_EXPOSED",
+    "chronology_freeze": "docs/research/sc001-c11-v2-chronology-freeze-v0.1.md",
+    "event_count": 24,
+    "cpi_count": 12,
+    "employment_count": 12,
+    "calendar_blocks": [
+      "2025-Q3",
+      "2026-Q1",
+      "2026-Q2",
+      "2026-Q3"
+    ],
+    "q4_2025_excluded_for_source_calendar_integrity": true,
+    "historical_trade_body_access_authorized": false,
+    "first_impulse_authorized": false,
+    "residual_headroom_authorized": false,
+    "direction_outcome_authorized": false,
+    "execution_authorized": false,
+    "pnl_authorized": false
+  },
+  "c11_v2_confirmation": {
+    "classification": "UNTOUCHED_PROSPECTIVE_CONFIRMATION",
+    "chronology_freeze": "docs/research/sc001-c11-v2-chronology-freeze-v0.1.md",
+    "identity_rule": "for each reference month 2026-09 through 2027-02 include Employment Situation and Consumer Price Index",
+    "frozen_slot_count": 12,
+    "publication_dates_may_be_updated_only_from_official_bls_before_release": true,
+    "canceled_identity_replacement_allowed": false,
+    "historical_trade_body_access_authorized": false,
+    "first_impulse_authorized": false,
+    "residual_headroom_authorized": false,
+    "direction_outcome_authorized": false,
+    "confirmation_authorized": false,
+    "execution_authorized": false,
+    "pnl_authorized": false
+  },
+  "source_state": {
+    "c11_d0_source_semantics": "C11_D0_SOURCE_CALENDAR_PREFLIGHT_PASS",
+    "selection_exact_archive_metadata_verified": false,
+    "confirmation_archive_metadata_verified": false,
+    "next_required_stage": "24_EVENT_SELECTION_METADATA_ONLY_PREFLIGHT"
+  },
+  "selection_rule": "Anything inspected for feature choice, threshold, horizon, asset subset, execution mode, event definition or candidate selection is nonpromotional for that implementation."
+}
