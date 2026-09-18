@@ -1,0 +1,35 @@
+{
+  "stage": "SC001-CONTAMINATION-REGISTRY",
+  "version": "0.14",
+  "date": "2026-09-18",
+  "status": "UPDATED_BEFORE_C7_MULTI_ASSET_L2_BODY_ACCESS",
+  "scope": "SCALPING_RESEARCH_SC001",
+  "supersedes": "docs/research/sc001-contamination-registry-v0.13.json",
+  "default_rule": "IF_PRIOR_USE_STATUS_IS_UNCERTAIN_TREAT_AS_NOT_FRESH_UNTIL_AUDITED",
+  "inherited_registry": "docs/research/sc001-contamination-registry-v0.13.json",
+  "c7_spread_selection_calibration": {
+    "candidate": "C7",
+    "mechanism": "spread-qualified non-BTC passive/hybrid maker universe",
+    "classification": "NONPROMOTIONAL_SELECTION_CALIBRATION",
+    "venue": "OKX",
+    "target_utc_date": "2024-02-12",
+    "universe": [
+      "ETH-USDT-SWAP",
+      "DOGE-USDT-SWAP",
+      "ORDI-USDT-SWAP",
+      "UNI-USDT-SWAP",
+      "XRP-USDT-SWAP",
+      "OP-USDT-SWAP",
+      "BCH-USDT-SWAP"
+    ],
+    "authorized_body_family": "<INST>-L2orderbook-400lv-2024-02-12.tar.gz",
+    "body_access_authorized": true,
+    "spread_values_may_be_opened": true,
+    "maker_order_simulation_authorized": false,
+    "fill_model_authorized": false,
+    "queue_model_authorized": false,
+    "pnl_authorized": false,
+    "promotional_evidence_authorized": false
+  },
+  "selection_rule": "Anything inspected for feature choice, parameter choice, candidate selection, sentinel design/outcome, variance estimation or MDE planning is nonpromotional for the resulting implementation."
+}
