@@ -1,0 +1,36 @@
+{
+  "stage": "SC001-CONTAMINATION-REGISTRY",
+  "version": "0.16",
+  "date": "2026-09-18",
+  "status": "UPDATED_BEFORE_C11_H1_PRICE_BODY_ACCESS_AND_C12_H1_METADATA_BATCH",
+  "scope": "SCALPING_RESEARCH_SC001",
+  "supersedes": "docs/research/sc001-contamination-registry-v0.15.json",
+  "default_rule": "IF_PRIOR_USE_STATUS_IS_UNCERTAIN_TREAT_AS_NOT_FRESH_UNTIL_AUDITED",
+  "inherited_registry": "docs/research/sc001-contamination-registry-v0.15.json",
+  "c11_h1_price_headroom_calibration": {
+    "candidate": "C11",
+    "classification": "NONPROMOTIONAL_SELECTION_CALIBRATION",
+    "window": "2025-01-01_to_2025-06-30",
+    "event_families": ["Consumer Price Index", "Employment Situation"],
+    "event_count": 12,
+    "historical_trade_body_access_authorized": true,
+    "macro_release_value_authorized": false,
+    "macro_surprise_authorized": false,
+    "direction_signal_authorized": false,
+    "pnl_authorized": false,
+    "promotional_evidence_authorized": false
+  },
+  "c12_h1_metadata_selection_plan": {
+    "candidate": "C12",
+    "classification": "NONPROMOTIONAL_SELECTION_CALIBRATION",
+    "target_window": "2025-01-01_to_2025-06-30",
+    "selection_rule": "calendar H1 2025, chosen before peg outcome",
+    "required_archive_window": "2025-01-01_to_2025-07-01 inclusive source support",
+    "historical_trade_body_access_authorized": false,
+    "peg_deviation_authorized": false,
+    "reversion_outcome_authorized": false,
+    "threshold_selection_authorized": false,
+    "promotional_evidence_authorized": false
+  },
+  "selection_rule": "Anything inspected for feature choice, threshold, horizon, asset subset, execution mode, event definition or candidate selection is nonpromotional for that implementation."
+}
