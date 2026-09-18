@@ -75,25 +75,31 @@ def beta_history(maps, target: str, t: int) -> float | None:
     return ordinary_ols_beta(xs, ys)
 
 
+def point_z(maps, leader: str, t: int, impulse_horizon: int) -> tuple[float | None, float | None]:
+    cur = horizon_return(maps, leader, t, impulse_horizon)
+    hist = history_returns(maps, leader, t, impulse_horizon)
+    if cur is None or hist is None:
+        return None, None
+    try:
+        return float(cur), float(robust_zscore(cur, hist))
+    except Exception:
+        return float(cur), None
+
+
 def variant_events(maps, leader: str, impulse_horizon: int) -> tuple[list[dict], list[dict]]:
     leader_events: list[dict] = []
     obs: list[dict] = []
     for day in PERF_DAYS:
-        prev_z: float | None = None
         start = date_ms(day)
         end = start + 86_400_000
-        first = start + impulse_horizon
+        first = start
         t = first
-        # Same-day 60s target outcome only.
+        # Same-day 60s target outcome only. Previous Z is recomputed causally
+        # at t-horizon so day-boundary crossings can use allowed warm-up history
+        # without carrying state across the July->September gap.
         while t <= end - TARGET_HORIZON_MS:
-            cur = horizon_return(maps, leader, t, impulse_horizon)
-            hist = history_returns(maps, leader, t, impulse_horizon)
-            z = None
-            if cur is not None and hist is not None:
-                try:
-                    z = robust_zscore(cur, hist)
-                except Exception:
-                    z = None
+            cur, z = point_z(maps, leader, t, impulse_horizon)
+            _prev_cur, prev_z = point_z(maps, leader, t - impulse_horizon, impulse_horizon)
 
             crossed = z is not None and prev_z is not None and abs(prev_z) < Z_THRESHOLD and abs(z) >= Z_THRESHOLD
             if crossed:
@@ -130,10 +136,6 @@ def variant_events(maps, leader: str, impulse_horizon: int) -> tuple[list[dict],
                             "raw_signed_target_response_bps": raw_signed,
                             "signed_residual_response_bps": residual_signed,
                         })
-            if z is not None:
-                prev_z = float(z)
-            else:
-                prev_z = None
             t += impulse_horizon
 
     return leader_events, obs
