@@ -1,0 +1,57 @@
+{
+  "stage": "SC001-CONTAMINATION-REGISTRY",
+  "version": "0.8",
+  "date": "2026-09-18",
+  "status": "UPDATED_AFTER_C9_D1_V02_OCTOBER_FUNDING_BODY_ACCESS",
+  "scope": "SCALPING_RESEARCH_SC001",
+  "supersedes": "docs/research/sc001-contamination-registry-v0.7.json",
+  "default_rule": "IF_PRIOR_USE_STATUS_IS_UNCERTAIN_TREAT_AS_NOT_FRESH_UNTIL_AUDITED",
+  "inherited_registry": "docs/research/sc001-contamination-registry-v0.7.json",
+  "c9_d1_selection_calibration": {
+    "candidate": "C9",
+    "venue": "OKX",
+    "assets": ["BTC","ETH","DOGE","ORDI","UNI","XRP","OP","BCH"],
+    "september_funding_archive": {
+      "source_archive_month": "2024-09",
+      "classification": "NONPROMOTIONAL_SELECTION_CALIBRATION",
+      "body_access_authorized": true
+    },
+    "october_funding_archive": {
+      "source_archive_month": "2024-10",
+      "classification": "CONTAMINATED_BY_IMPLEMENTATION_INCIDENT_NONPROMOTIONAL",
+      "body_access_occurred": true,
+      "body_access_reason": "C9-D1 v0.2 accepted both September and October metadata files and parsed both before timestamp boundary validation",
+      "clean_c9_confirmation_eligibility": false
+    }
+  },
+  "channel_specific_contamination": {
+    "c9_october_2024_funding": {
+      "assets": ["BTC","ETH","DOGE","ORDI","UNI","XRP","OP","BCH"],
+      "contaminated": true,
+      "applies_to": "future C9 implementations using funding-state evidence",
+      "does_not_imply_access_to": [
+        "October trade bodies",
+        "October SPOT bodies",
+        "October L2/order-book bodies",
+        "October mark-price historical bodies",
+        "October index-price historical bodies"
+      ]
+    }
+  },
+  "still_protected_channels": [
+    "July SOL/FIL/LTC/SUI holdout 2024-07-01..14",
+    "July gap trade/SPOT/L2/mark/index channels unless separately contaminated",
+    "August protected trade/SPOT/L2/mark/index channels unless separately contaminated",
+    "September SOL/FIL/LTC/SUI holdout 2024-09-01..14",
+    "October trade/SPOT/L2/mark/index Confirmation channels remain protected unless separately accessed",
+    "E006 Confirmation role 2024-03-22..30"
+  ],
+  "c9_guardrails": [
+    "October 2024 funding data may not be used as clean C9 Confirmation evidence.",
+    "Repaired D1 code may access only the exact September funding ZIP.",
+    "Do not delete locally retained October funding ZIPs; keep them as audit artifacts.",
+    "Local file presence is not authorization for future use.",
+    "No strategy return, threshold, event window, signal or PnL may be inferred from the incident."
+  ],
+  "selection_rule": "Anything inspected for feature choice, parameter choice, candidate selection, sentinel design/outcome, variance estimation or MDE planning is nonpromotional for the resulting implementation."
+}
