@@ -1,0 +1,39 @@
+{
+  "stage": "SC001-CONTAMINATION-REGISTRY",
+  "version": "0.20",
+  "date": "2026-09-19",
+  "status": "UPDATED_AFTER_C11_V2_METADATA_PASS_AND_STAGE_AB_FREEZE_BEFORE_SELECTION_PRICE_OUTCOME",
+  "scope": "SCALPING_RESEARCH_SC001",
+  "supersedes": "docs/research/sc001-contamination-registry-v0.19.json",
+  "default_rule": "IF_PRIOR_USE_STATUS_IS_UNCERTAIN_TREAT_AS_NOT_FRESH_UNTIL_AUDITED",
+  "inherited_registry": "docs/research/sc001-contamination-registry-v0.19.json",
+  "c11_v2_selection_calibration": {
+    "classification": "NONPROMOTIONAL_SELECTION_CALIBRATION",
+    "contamination_qualifier": "C11_MICROSTRUCTURE_OUTCOME_UNOPENED_BUT_SC001_COARSE_PRICE_EXPOSED",
+    "chronology_freeze": "docs/research/sc001-c11-v2-chronology-freeze-v0.1.md",
+    "metadata_pass_result": "docs/research/sc001-c11-v2-selection-metadata-preflight-pass-result-v0.3.md",
+    "stage_ab_protocol": "docs/research/sc001-c11-direction-rule-v2-stage-ab-selection-protocol-v1.0.md",
+    "event_count": 24,
+    "cpi_count": 12,
+    "employment_count": 12,
+    "historical_trade_body_access_authorized": true,
+    "residual_post_decision_headroom_authorized": true,
+    "first_impulse_direction_authorized": true,
+    "continuation_outcome_authorized": true,
+    "macro_release_value_authorized": false,
+    "macro_surprise_authorized": false,
+    "execution_model_authorized": false,
+    "pnl_authorized": false,
+    "confirmation_outcome_authorized": false,
+    "promotional_alpha_authorized": false,
+    "authorization_boundary": "ONLY_EXACT_24_EVENT_SELECTION_CALIBRATION_SET_UNDER_FROZEN_V1_0_STAGE_AB_PROTOCOL"
+  },
+  "c11_v2_confirmation": {
+    "classification": "UNTOUCHED_PROSPECTIVE_CONFIRMATION",
+    "frozen_slot_count": 12,
+    "outcome_access_authorized": false,
+    "execution_authorized": false,
+    "pnl_authorized": false
+  },
+  "selection_rule": "Anything inspected for feature choice, threshold, horizon, asset subset, execution mode, event definition or candidate selection is nonpromotional for that implementation."
+}
