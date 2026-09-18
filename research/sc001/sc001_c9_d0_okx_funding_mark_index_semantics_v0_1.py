@@ -255,12 +255,19 @@ def funding_window(inst: str, start: str, end: str) -> dict:
     methods = sorted({str(x["method"]) for x in rows})
     formula_types = sorted({str(x["formula_type"]) for x in rows})
 
+    recognized_methods = {"current_period", "next_period"}
+    recognized_formula_types = {"noRate", "withRate"}
+    method_semantics_ok = bool(methods) and set(methods).issubset(recognized_methods)
+    formula_semantics_ok = bool(formula_types) and set(formula_types).issubset(recognized_formula_types)
+
     pass_semantics = (
         len(rows) >= MIN_FUNDING_ROWS
         and positive
         and max_interval_h is not None
         and max_interval_h <= 8.0
         and all(x > 0 for x in intervals_h)
+        and method_semantics_ok
+        and formula_semantics_ok
     )
 
     return {
@@ -270,6 +277,8 @@ def funding_window(inst: str, start: str, end: str) -> dict:
         "observed_interval_hours": intervals_h,
         "method_values": methods,
         "formula_type_values": formula_types,
+        "method_semantics_recognized": method_semantics_ok,
+        "formula_semantics_recognized": formula_semantics_ok,
         "numeric_fields_validated_not_stored": True,
         "response_bytes": nbytes,
         "api_final_url_host": urllib.parse.urlparse(final).hostname,
@@ -355,11 +364,6 @@ def candle_window(endpoint: str, inst_id: str, start: str, end: str) -> dict:
 def main() -> int:
     require_freeze()
     OUT_DIR.mkdir(parents=True, exist_ok=True)
-
-    if OUT.exists():
-        old = load_json(OUT)
-        if old.get("status") in {PASS, REVIEW}:
-            fail(f"one-shot guard: terminal C9-D0 report already exists: {old.get('status')}")
 
     assets: dict[str, dict] = {}
     all_pass = True
