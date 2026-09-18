@@ -1,0 +1,38 @@
+{
+  "stage": "SC001-C9-D0-DATA-SEMANTICS-IMPLEMENTATION-FREEZE",
+  "version": "0.1",
+  "date": "2026-09-18",
+  "status": "FROZEN_BEFORE_C9_D0_RUN",
+  "runner_path": "research/sc001/sc001_c9_d0_okx_funding_mark_index_semantics_v0_1.py",
+  "runner_git_blob_sha": "433f35c7da90cca26c6e4863c04c34e1e5eb8c9d",
+  "protocol_path": "docs/research/sc001-c9-d0-okx-funding-mark-index-data-semantics-protocol-v0.1.md",
+  "protocol_git_blob_sha": "d40ff705bb6451c75059394a6d19bf9157aff6dd",
+  "probe_universe": [
+    "BTC-USDT-SWAP",
+    "ETH-USDT-SWAP",
+    "DOGE-USDT-SWAP",
+    "ORDI-USDT-SWAP",
+    "UNI-USDT-SWAP",
+    "XRP-USDT-SWAP",
+    "OP-USDT-SWAP",
+    "BCH-USDT-SWAP"
+  ],
+  "probe_windows": [
+    {"label": "JULY", "start": "2024-07-01", "end": "2024-07-14"},
+    {"label": "SEPTEMBER", "start": "2024-09-01", "end": "2024-09-14"}
+  ],
+  "bar": "4H",
+  "exact_pass_token": "C9_D0_DATA_SEMANTICS_PASS",
+  "review_token": "C9_D0_DATA_SEMANTICS_REVIEW",
+  "returns_authorized": false,
+  "basis_transition_authorized": false,
+  "strategy_signal_authorized": false,
+  "sentinel_outcome_authorized": false,
+  "pnl_authorized": false,
+  "direction_selection_authorized": false,
+  "threshold_selection_authorized": false,
+  "event_window_selection_authorized": false,
+  "protected_data_authorized": false,
+  "promotional_alpha_authorized": false,
+  "next_allowed_action": "syntax-check and run C9-D0 data-semantics probe on VPS"
+}
