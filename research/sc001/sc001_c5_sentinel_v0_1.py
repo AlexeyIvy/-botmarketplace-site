@@ -43,7 +43,7 @@ def run_asset(asset: str) -> list[dict]:
 
         for i, b in enumerate(bars):
             t = b.close_ms
-            d = day_text(t - 1)
+            d = day_text(t)
             if i < HISTORY_BARS:
                 continue
             hist = bars[i-HISTORY_BARS:i]
