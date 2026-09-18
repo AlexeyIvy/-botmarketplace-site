@@ -1,0 +1,43 @@
+{
+  "stage": "SC001-CONTAMINATION-REGISTRY",
+  "version": "0.10",
+  "date": "2026-09-18",
+  "status": "UPDATED_BEFORE_C8_D1_HISTORICAL_TRADE_BODY_ACCESS",
+  "scope": "SCALPING_RESEARCH_SC001",
+  "supersedes": "docs/research/sc001-contamination-registry-v0.9.json",
+  "default_rule": "IF_PRIOR_USE_STATUS_IS_UNCERTAIN_TREAT_AS_NOT_FRESH_UNTIL_AUDITED",
+  "inherited_registry": "docs/research/sc001-contamination-registry-v0.9.json",
+  "c8_d1_engineering_clock_calibration": {
+    "candidate": "C8",
+    "stage": "D1_HISTORICAL_BODY_SCHEMA_CLOCK_INTEGRITY",
+    "classification": "NONPROMOTIONAL_ENGINEERING_CLOCK_CALIBRATION",
+    "utc_date": "2025-01-15",
+    "venue_instruments": {
+      "OKX": "BTC-USDT-SWAP",
+      "BYBIT": "BTCUSDT"
+    },
+    "authorized_bodies": [
+      "BTC-USDT-SWAP-trades-2025-01-15.zip",
+      "BTCUSDT2025-01-15.csv.gz"
+    ],
+    "purpose": "Historical schema/timestamp/order qualification and timestamp-only causal synchronization coverage; no cross-venue price comparison.",
+    "historical_price_fields_may_be_parsed_for_numeric_schema_validation": true,
+    "cross_venue_price_comparison_authorized": false,
+    "cross_venue_return_authorized": false,
+    "dislocation_authorized": false,
+    "lag_authorized": false,
+    "leader_selection_authorized": false,
+    "strategy_signal_authorized": false,
+    "pnl_authorized": false,
+    "promotional_evidence_authorized": false
+  },
+  "c9_funding_channel_state": {
+    "september_2024": "NONPROMOTIONAL_SELECTION_CALIBRATION",
+    "october_2024": "CONTAMINATED_BY_D1_V02_INCIDENT_NONPROMOTIONAL"
+  },
+  "still_protected_channels": [
+    "Existing SC001 protected/holdout/Confirmation channels remain protected unless separately registered before body access.",
+    "C8-D1 authorization is limited to the exact two 2025-01-15 trade bodies named above."
+  ],
+  "selection_rule": "Anything inspected for feature choice, parameter choice, candidate selection, sentinel design/outcome, variance estimation or MDE planning is nonpromotional for the resulting implementation."
+}
