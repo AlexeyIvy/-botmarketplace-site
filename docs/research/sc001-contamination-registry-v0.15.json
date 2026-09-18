@@ -1,0 +1,37 @@
+{
+  "stage": "SC001-CONTAMINATION-REGISTRY",
+  "version": "0.15",
+  "date": "2026-09-18",
+  "status": "UPDATED_BEFORE_C11_CALENDAR_BATCH_AND_C12_SPOT_BODY_SEMANTICS",
+  "scope": "SCALPING_RESEARCH_SC001",
+  "supersedes": "docs/research/sc001-contamination-registry-v0.14.json",
+  "default_rule": "IF_PRIOR_USE_STATUS_IS_UNCERTAIN_TREAT_AS_NOT_FRESH_UNTIL_AUDITED",
+  "inherited_registry": "docs/research/sc001-contamination-registry-v0.14.json",
+  "c11_selection_calibration_calendar": {
+    "candidate": "C11",
+    "classification": "NONPROMOTIONAL_SELECTION_CALIBRATION",
+    "window": "2025-01-01_to_2025-06-30",
+    "event_families": ["Consumer Price Index", "Employment Situation"],
+    "event_count_planned": 12,
+    "purpose": "Freeze C11 H1 2025 official event chronology and archive availability before any post-release price outcome.",
+    "historical_trade_body_access_authorized": false,
+    "post_release_price_outcome_authorized": false,
+    "promotional_evidence_authorized": false
+  },
+  "c12_engineering_source_semantics": {
+    "candidate": "C12",
+    "classification": "NONPROMOTIONAL_ENGINEERING_SOURCE_CALIBRATION",
+    "target_utc_date": "2025-01-15",
+    "authorized_bodies": [
+      "USDC-USDT-trades-2025-01-15.zip",
+      "USDC-USDT-trades-2025-01-16.zip"
+    ],
+    "purpose": "Qualify SPOT trade archive schema/timestamp/boundary semantics without computing peg deviation.",
+    "historical_trade_body_access_authorized": true,
+    "peg_deviation_authorized": false,
+    "reversion_outcome_authorized": false,
+    "threshold_selection_authorized": false,
+    "promotional_evidence_authorized": false
+  },
+  "selection_rule": "Anything inspected for feature choice, threshold, horizon, asset subset, execution mode, event definition or candidate selection is nonpromotional for that implementation."
+}
