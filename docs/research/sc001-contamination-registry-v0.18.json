@@ -1,0 +1,79 @@
+{
+  "stage": "SC001-CONTAMINATION-REGISTRY",
+  "version": "0.18",
+  "date": "2026-09-19",
+  "status": "UPDATED_AFTER_C11_V2_FRESH_CHRONOLOGY_CONTAMINATION_SOURCE_AUDIT_BEFORE_ANY_FRESH_PRICE_OUTCOME",
+  "scope": "SCALPING_RESEARCH_SC001",
+  "supersedes": "docs/research/sc001-contamination-registry-v0.17.json",
+  "default_rule": "IF_PRIOR_USE_STATUS_IS_UNCERTAIN_TREAT_AS_NOT_FRESH_UNTIL_AUDITED",
+  "inherited_registry": "docs/research/sc001-contamination-registry-v0.17.json",
+  "c11_v2_fresh_chronology_audit": {
+    "audit_status": "C11_V2_FRESH_CHRONOLOGY_AUDIT_PASS",
+    "audit_document": "docs/research/sc001-c11-v2-fresh-chronology-contamination-source-audit-v0.1.md",
+    "h1_2025_classification": "CONTAMINATED_FOR_C11_V2_DIRECTION_DESIGN",
+    "q4_2025_classification": "SOURCE_CALENDAR_IRREGULAR_NOT_PRIMARY_FRESH_CHRONOLOGY",
+    "candidate_selection_calibration": {
+      "classification": "CANDIDATE_FRESH_NOT_YET_PRICE_AUTHORIZED",
+      "calendar_rule": "2025-Q3 plus 2026-Q1, excluding Q4-2025 prospectively for official BLS lapse-in-appropriations calendar irregularity",
+      "event_families": [
+        "Consumer Price Index",
+        "Employment Situation"
+      ],
+      "event_count": 12,
+      "events": [
+        "2025-07-03 Employment Situation",
+        "2025-07-15 Consumer Price Index",
+        "2025-08-01 Employment Situation",
+        "2025-08-12 Consumer Price Index",
+        "2025-09-05 Employment Situation",
+        "2025-09-11 Consumer Price Index",
+        "2026-01-09 Employment Situation",
+        "2026-01-13 Consumer Price Index",
+        "2026-02-11 Employment Situation",
+        "2026-02-13 Consumer Price Index",
+        "2026-03-06 Employment Situation",
+        "2026-03-11 Consumer Price Index"
+      ],
+      "historical_trade_body_access_authorized": false,
+      "first_impulse_authorized": false,
+      "residual_headroom_authorized": false,
+      "direction_outcome_authorized": false,
+      "pnl_authorized": false
+    },
+    "candidate_confirmation": {
+      "classification": "UNTOUCHED_CANDIDATE_CONFIRMATION_CLOSED",
+      "calendar_rule": "2026-Q2 plus 2026-Q3",
+      "event_families": [
+        "Consumer Price Index",
+        "Employment Situation"
+      ],
+      "event_count": 12,
+      "events": [
+        "2026-04-03 Employment Situation",
+        "2026-04-10 Consumer Price Index",
+        "2026-05-08 Employment Situation",
+        "2026-05-12 Consumer Price Index",
+        "2026-06-05 Employment Situation",
+        "2026-06-10 Consumer Price Index",
+        "2026-07-02 Employment Situation",
+        "2026-07-14 Consumer Price Index",
+        "2026-08-07 Employment Situation",
+        "2026-08-12 Consumer Price Index",
+        "2026-09-04 Employment Situation",
+        "2026-09-11 Consumer Price Index"
+      ],
+      "historical_trade_body_access_authorized": false,
+      "direction_outcome_authorized": false,
+      "confirmation_authorized": false,
+      "pnl_authorized": false
+    },
+    "source_state": {
+      "c11_d0_source_semantics": "C11_D0_SOURCE_CALENDAR_PREFLIGHT_PASS",
+      "exact_candidate_archive_metadata_verified": false,
+      "next_required_stage": "FORMAL_CHRONOLOGY_FREEZE_THEN_METADATA_ONLY_D1_STYLE_PREFLIGHT"
+    },
+    "fresh_price_outcome_opened_by_audit": false,
+    "chronology_formally_frozen": false
+  },
+  "selection_rule": "Anything inspected for feature choice, threshold, horizon, asset subset, execution mode, event definition or candidate selection is nonpromotional for that implementation."
+}
