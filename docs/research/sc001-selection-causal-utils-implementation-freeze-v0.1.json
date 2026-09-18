@@ -1,0 +1,20 @@
+{
+  "stage": "SC001-SELECTION-CAUSAL-UTILS-IMPLEMENTATION-FREEZE",
+  "version": "0.1",
+  "date": "2026-09-18",
+  "status": "FROZEN_BEFORE_GOLDEN_RUN",
+  "protocol_path": "docs/research/sc001-shared-causal-trade-bar-return-utilities-protocol-v0.1.md",
+  "protocol_git_blob_sha": "20afa656740c4785f6c1afb21a7f2dbb35ef5eb1",
+  "library_path": "research/sc001/sc001_selection_causal_utils_v0_1.py",
+  "library_git_blob_sha": "a7953274e5e47c7dd1280b20c16d479ca90badc4",
+  "golden_runner_path": "research/sc001/sc001_selection_causal_utils_golden_v0_1.py",
+  "golden_runner_git_blob_sha": "c0aade86aabfe4a241fca454004f3f07d5b33255",
+  "exact_pass_token": "SC001_SELECTION_CAUSAL_UTILS_GOLDEN_PASS",
+  "market_data_body_required": false,
+  "sentinel_outcome_authorized": false,
+  "strategy_pnl_authorized": false,
+  "protected_data_authorized": false,
+  "promotional_alpha_authorized": false,
+  "sentinel_variant_budget": 11,
+  "next_allowed_action": "syntax-check frozen library and golden runner, then run synthetic/golden tests on VPS"
+}
