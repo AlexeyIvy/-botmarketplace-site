@@ -1,0 +1,48 @@
+{
+  "stage": "SC001-CONTAMINATION-REGISTRY",
+  "version": "0.9",
+  "date": "2026-09-18",
+  "status": "UPDATED_BEFORE_C9_D2_MARK_INDEX_BODY_ACCESS",
+  "scope": "SCALPING_RESEARCH_SC001",
+  "supersedes": "docs/research/sc001-contamination-registry-v0.8.json",
+  "default_rule": "IF_PRIOR_USE_STATUS_IS_UNCERTAIN_TREAT_AS_NOT_FRESH_UNTIL_AUDITED",
+  "inherited_registry": "docs/research/sc001-contamination-registry-v0.8.json",
+  "c9_d2_mark_index_selection_calibration": {
+    "candidate": "C9",
+    "stage": "D2_MARK_INDEX_15M_ACQUISITION_AND_INTEGRITY",
+    "venue": "OKX",
+    "assets": ["BTC","ETH","DOGE","ORDI","UNI","XRP","OP","BCH"],
+    "channels": ["historical_mark_price_15m","historical_index_price_15m"],
+    "utc_window": {
+      "start_inclusive": "2024-08-31T00:00:00Z",
+      "end_exclusive": "2024-10-01T00:00:00Z"
+    },
+    "classification": "NONPROMOTIONAL_SELECTION_CALIBRATION",
+    "purpose": "Qualify and normalize causal 15-minute mark/index history covering all September funding events plus prior-day warmup without opening October UTC mark/index data.",
+    "returns_authorized": false,
+    "state_transition_outcome_authorized": false,
+    "strategy_signal_authorized": false,
+    "pnl_authorized": false,
+    "promotional_evidence_authorized": false
+  },
+  "c9_funding_channel_state": {
+    "september_2024": "NONPROMOTIONAL_SELECTION_CALIBRATION",
+    "october_2024": "CONTAMINATED_BY_D1_V02_INCIDENT_NONPROMOTIONAL"
+  },
+  "still_protected_channels": [
+    "July SOL/FIL/LTC/SUI holdout 2024-07-01..14",
+    "July gap channels unless separately contaminated",
+    "August channels before 2024-08-31 remain protected unless separately contaminated",
+    "September SOL/FIL/LTC/SUI holdout 2024-09-01..14",
+    "October UTC trade/SPOT/L2/mark/index Confirmation channels 2024-10-01..14 remain protected",
+    "E006 Confirmation role 2024-03-22..30"
+  ],
+  "c9_guardrails": [
+    "C9-D2 may open mark/index values only inside [2024-08-31T00:00:00Z, 2024-10-01T00:00:00Z).",
+    "C9-D2 must not request or admit any October UTC mark/index candle.",
+    "C9-D2 must not calculate returns, premium transitions, strategy direction, threshold, event window, signal or PnL.",
+    "October 2024 funding is already contaminated for C9 and remains nonpromotional.",
+    "October trade/SPOT/L2/mark/index channels remain separately protected."
+  ],
+  "selection_rule": "Anything inspected for feature choice, parameter choice, candidate selection, sentinel design/outcome, variance estimation or MDE planning is nonpromotional for the resulting implementation."
+}
