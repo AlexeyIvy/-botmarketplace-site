@@ -1,0 +1,29 @@
+{
+  "stage": "SC001-C8-D0-V0.2-IMPLEMENTATION-FREEZE",
+  "version": "0.1",
+  "date": "2026-09-18",
+  "status": "FROZEN_BEFORE_C8_D0_V02_RUN",
+  "protocol_path": "docs/research/sc001-c8-d0-okx-bybit-source-clock-semantics-protocol-v0.2.md",
+  "protocol_git_blob_sha": "0ef2b1f88ac68c84acb161785d2c481ee58d3ec6",
+  "runner_path": "research/sc001/sc001_c8_d0_v02_okx_bybit_source_clock_preflight.py",
+  "runner_git_blob_sha": "6c7a5892fcb0f8a2c4d68b94f6198b7863b71fdd",
+  "fixed_date": "2025-01-15",
+  "okx_instrument": "BTC-USDT-SWAP",
+  "bybit_symbol": "BTCUSDT",
+  "okx_metadata_query_windows": [
+    "2025-01-15 UTC label day",
+    "2025-01-14 UTC previous day"
+  ],
+  "exact_pass_token": "C8_D0_V02_SOURCE_CLOCK_PREFLIGHT_PASS",
+  "review_token": "C8_D0_V02_SOURCE_CLOCK_PREFLIGHT_REVIEW",
+  "historical_archive_body_authorized": false,
+  "cross_venue_price_comparison_authorized": false,
+  "cross_venue_return_authorized": false,
+  "dislocation_authorized": false,
+  "lag_authorized": false,
+  "leader_selection_authorized": false,
+  "strategy_signal_authorized": false,
+  "pnl_authorized": false,
+  "promotional_alpha_authorized": false,
+  "next_allowed_action": "syntax-check and run C8-D0 v0.2 source/clock preflight on VPS"
+}
