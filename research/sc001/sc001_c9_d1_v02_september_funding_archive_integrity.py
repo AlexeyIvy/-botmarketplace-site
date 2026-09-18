@@ -37,7 +37,7 @@ CHUNK = 1024 * 1024
 
 ROOT = Path(__file__).resolve().parents[2]
 PROTOCOL = ROOT / "docs/research/sc001-c9-d1-september-funding-archive-acquisition-integrity-protocol-v0.2.md"
-REGISTRY = ROOT / "docs/research/sc001-contamination-registry-v0.6.json"
+REGISTRY = ROOT / "docs/research/sc001-contamination-registry-v0.7.json"
 FREEZE = ROOT / "docs/research/sc001-c9-d1-v0.2-implementation-freeze-v0.1.json"
 
 DATA_ROOT = Path(
@@ -122,7 +122,7 @@ def require_freeze() -> dict:
 
 def require_registry() -> dict:
     reg = load_json(REGISTRY)
-    if str(reg.get("version")) != "0.6":
+    if str(reg.get("version")) != "0.7":
         fail("contamination registry version mismatch")
     row = reg.get("c9_d1_selection_calibration") or {}
     if row.get("classification") != "NONPROMOTIONAL_SELECTION_CALIBRATION":
