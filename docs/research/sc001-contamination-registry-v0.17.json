@@ -1,0 +1,40 @@
+{
+  "stage": "SC001-CONTAMINATION-REGISTRY",
+  "version": "0.17",
+  "date": "2026-09-18",
+  "status": "UPDATED_BEFORE_C11_S1_DIRECTIONAL_OUTCOME_AND_C12_S0_H1_PRICE_BODY_ACCESS",
+  "scope": "SCALPING_RESEARCH_SC001",
+  "supersedes": "docs/research/sc001-contamination-registry-v0.16.json",
+  "default_rule": "IF_PRIOR_USE_STATUS_IS_UNCERTAIN_TREAT_AS_NOT_FRESH_UNTIL_AUDITED",
+  "inherited_registry": "docs/research/sc001-contamination-registry-v0.16.json",
+  "c11_s1_directional_calibration": {
+    "candidate": "C11",
+    "classification": "NONPROMOTIONAL_SELECTION_CALIBRATION",
+    "window": "2025-01-01_to_2025-06-30",
+    "event_count": 12,
+    "event_families": ["Consumer Price Index", "Employment Situation"],
+    "historical_trade_body_access_authorized": true,
+    "first_impulse_direction_authorized": true,
+    "continuation_outcome_authorized": true,
+    "macro_release_value_authorized": false,
+    "macro_surprise_authorized": false,
+    "pnl_authorized": false,
+    "promotional_evidence_authorized": false
+  },
+  "c12_s0_h1_parity_calibration": {
+    "candidate": "C12",
+    "classification": "NONPROMOTIONAL_SELECTION_CALIBRATION",
+    "target_window": "2025-01-01_to_2025-06-30",
+    "source_archive_window": "2025-01-01_to_2025-07-01",
+    "source_archive_count": 182,
+    "historical_trade_body_access_authorized": true,
+    "peg_deviation_authorized": true,
+    "reversion_outcome_authorized": true,
+    "entry_threshold_bps": 30.0,
+    "parity_rearm_exit_band_bps": 10.0,
+    "max_hold_minutes": 30,
+    "pnl_authorized": false,
+    "promotional_evidence_authorized": false
+  },
+  "selection_rule": "Anything inspected for feature choice, threshold, horizon, asset subset, execution mode, event definition or candidate selection is nonpromotional for that implementation."
+}
