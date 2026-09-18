@@ -1,0 +1,28 @@
+{
+  "stage": "SC001-C11-D0-IMPLEMENTATION-FREEZE",
+  "version": "0.1",
+  "date": "2026-09-18",
+  "status": "FROZEN_BEFORE_C11_D0_RUN",
+  "candidate_id": "C11",
+  "candidate_name": "SCHEDULED_TIER1_US_MACRO_RELEASE_IMPULSE",
+  "candidate_assignment_path": "docs/research/sc001-c11-candidate-assignment-freeze-v0.1.md",
+  "candidate_assignment_git_blob_sha": "9cd2ec7984410ce81db4c2a91c233a6b247c8e6e",
+  "protocol_path": "docs/research/sc001-c11-d0-source-calendar-preflight-protocol-v0.1.md",
+  "protocol_git_blob_sha": "5d2ae42f6f90875947d6b285d57954139a8b41fa",
+  "runner_path": "research/sc001/sc001_c11_d0_source_calendar_preflight_v0_1.py",
+  "runner_git_blob_sha": "f0f4b2a414596d959f62da2304f3a198718c8bd4",
+  "representative_events": [
+    "2025-01-15 CPI 08:30 ET / 13:30 UTC",
+    "2025-02-07 Employment Situation 08:30 ET / 13:30 UTC"
+  ],
+  "historical_trade_body_authorized": false,
+  "macro_release_value_authorized": false,
+  "macro_surprise_authorized": false,
+  "post_release_move_authorized": false,
+  "direction_signal_authorized": false,
+  "pnl_authorized": false,
+  "promotional_alpha_authorized": false,
+  "exact_pass_token": "C11_D0_SOURCE_CALENDAR_PREFLIGHT_PASS",
+  "review_token": "C11_D0_SOURCE_CALENDAR_PREFLIGHT_REVIEW",
+  "next_allowed_action": "syntax-check and run C11-D0 metadata-only source/calendar preflight on VPS"
+}
