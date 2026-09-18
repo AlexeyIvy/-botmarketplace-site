@@ -1,0 +1,41 @@
+{
+  "stage": "SC001-CONTAMINATION-REGISTRY",
+  "version": "0.11",
+  "date": "2026-09-18",
+  "status": "UPDATED_BEFORE_C8_D1_V02_OKX_NEIGHBOR_BODY_ACCESS",
+  "scope": "SCALPING_RESEARCH_SC001",
+  "supersedes": "docs/research/sc001-contamination-registry-v0.10.json",
+  "default_rule": "IF_PRIOR_USE_STATUS_IS_UNCERTAIN_TREAT_AS_NOT_FRESH_UNTIL_AUDITED",
+  "inherited_registry": "docs/research/sc001-contamination-registry-v0.10.json",
+  "c8_d1_v02_engineering_clock_calibration": {
+    "candidate": "C8",
+    "stage": "D1_V02_OKX_UTC_STITCH_HISTORICAL_CLOCK_INTEGRITY",
+    "classification": "NONPROMOTIONAL_ENGINEERING_CLOCK_CALIBRATION",
+    "target_utc_date": "2025-01-15",
+    "venue_instruments": {
+      "OKX": "BTC-USDT-SWAP",
+      "BYBIT": "BTCUSDT"
+    },
+    "authorized_bodies": [
+      "BTC-USDT-SWAP-trades-2025-01-15.zip",
+      "BTC-USDT-SWAP-trades-2025-01-16.zip",
+      "BTCUSDT2025-01-15.csv.gz"
+    ],
+    "okx_reconstruction_rule": "archive D plus archive D+1, retain created_time in UTC [D,D+1)",
+    "purpose": "Repair known OKX archive-day boundary and remeasure timestamp-only synchronization under unchanged frozen clock gates.",
+    "historical_price_fields_may_be_parsed_for_numeric_schema_validation": true,
+    "cross_venue_price_comparison_authorized": false,
+    "cross_venue_return_authorized": false,
+    "dislocation_authorized": false,
+    "lag_authorized": false,
+    "leader_selection_authorized": false,
+    "strategy_signal_authorized": false,
+    "pnl_authorized": false,
+    "promotional_evidence_authorized": false
+  },
+  "c9_funding_channel_state": {
+    "september_2024": "NONPROMOTIONAL_SELECTION_CALIBRATION",
+    "october_2024": "CONTAMINATED_BY_D1_V02_INCIDENT_NONPROMOTIONAL"
+  },
+  "selection_rule": "Anything inspected for feature choice, parameter choice, candidate selection, sentinel design/outcome, variance estimation or MDE planning is nonpromotional for the resulting implementation."
+}
