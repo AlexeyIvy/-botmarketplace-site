@@ -1,0 +1,33 @@
+{
+  "stage": "SC001-C7-D0-IMPLEMENTATION-FREEZE",
+  "version": "0.1",
+  "date": "2026-09-18",
+  "status": "FROZEN_BEFORE_C7_D0_RUN",
+  "protocol_path": "docs/research/sc001-c7-d0-multi-asset-l2-metadata-preflight-v0.1.md",
+  "protocol_git_blob_sha": "99af882028a7f554d5105e6a01c64677cae3cb78",
+  "runner_path": "research/sc001/sc001_c7_d0_multi_asset_l2_metadata_preflight_v0_1.py",
+  "runner_git_blob_sha": "54e4f282dcc155d46c413cf8f774f178679af354",
+  "fixed_date": "2024-02-12",
+  "universe": [
+    "ETH-USDT-SWAP",
+    "DOGE-USDT-SWAP",
+    "ORDI-USDT-SWAP",
+    "UNI-USDT-SWAP",
+    "XRP-USDT-SWAP",
+    "OP-USDT-SWAP",
+    "BCH-USDT-SWAP"
+  ],
+  "historical_l2_module": "4",
+  "exact_pass_token": "C7_D0_MULTI_ASSET_L2_METADATA_PASS",
+  "review_token": "C7_D0_MULTI_ASSET_L2_METADATA_REVIEW",
+  "historical_l2_body_authorized": false,
+  "spread_authorized": false,
+  "top_of_book_depth_authorized": false,
+  "maker_order_simulation_authorized": false,
+  "fill_model_authorized": false,
+  "queue_model_authorized": false,
+  "adverse_selection_authorized": false,
+  "pnl_authorized": false,
+  "promotional_alpha_authorized": false,
+  "next_allowed_action": "syntax-check and run C7-D0 metadata-only multi-asset L2 preflight on VPS"
+}
