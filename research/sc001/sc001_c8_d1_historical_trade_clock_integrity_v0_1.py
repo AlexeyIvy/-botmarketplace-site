@@ -409,7 +409,13 @@ def parse_bybit(path: Path) -> dict:
         if not header or len(header) < 5:
             fail("Bybit header missing/short")
         low = [str(x).strip().lower() for x in header]
-        if low[0] != "timestamp" or low[2] != "side" or low[3] != "size" or low[4] != "price":
+        if (
+            low[0] != "timestamp"
+            or low[1] != "symbol"
+            or low[2] != "side"
+            or low[3] != "size"
+            or low[4] != "price"
+        ):
             fail(f"Bybit first-five header semantics mismatch: {header[:5]}")
         prev_ts = None
         for row in r:
@@ -420,8 +426,11 @@ def parse_bybit(path: Path) -> dict:
                 continue
             try:
                 ts = int(round(float(row[0]) * 1_000_000))
+                symbol = row[1].strip()
                 side = row[2].strip()
                 size = float(row[3]); price = float(row[4])
+                if symbol != "BTCUSDT":
+                    raise ValueError("symbol")
                 if side not in {"Buy", "Sell"}:
                     raise ValueError("side")
                 if not (math.isfinite(size) and size > 0 and math.isfinite(price) and price > 0):
@@ -518,15 +527,29 @@ def joint_sync_metrics(a: list[int], b: list[int]) -> dict:
     }
 
 
+def asof_selected_ts(ts: list[int], boundary: int) -> int | None:
+    import bisect
+    i = bisect.bisect_right(ts, boundary) - 1
+    if i < 0:
+        return None
+    selected = ts[i]
+    return selected if boundary - selected <= STALE_US else None
+
+
 def golden_tests() -> None:
     sample = [1_000_000, 2_000_000, 4_000_000]
+    selected_seq = [
+        asof_selected_ts(sample, b)
+        for b in (1_000_000, 2_000_000, 3_000_000, 4_000_000, 5_000_000)
+    ]
+    finite_selected = [x for x in selected_seq if x is not None]
     checks = [
         asof_staleness(sample, 500_000) is None,
         asof_staleness(sample, 2_000_000) == 0,
-        asof_staleness(sample, 3_000_000) == 1_000_000,
-        asof_staleness(sample, 4_000_000) == 0,
         asof_staleness(sample, 6_000_000) == 2_000_000,
         asof_staleness(sample, 6_000_001) is None,
+        asof_selected_ts(sample, 2_000_000) == 2_000_000,
+        finite_selected == sorted(finite_selected),
     ]
     if not all(checks):
         fail("C8-D1 synchronization golden check failed")
@@ -539,6 +562,7 @@ def main() -> int:
         require_registry()
         d0 = require_d0()
         golden_tests()
+        OUT_DIR.mkdir(parents=True, exist_ok=True)
 
         checks = d0.get("checks") or {}
         okx_parent = checks.get("okx_historical_archive") or {}
@@ -583,6 +607,7 @@ def main() -> int:
             "okx_zero_timestamp_reversals": okx["timestamp_reversals"] == 0,
             "bybit_zero_timestamp_reversals": bybit["timestamp_reversals"] == 0,
             "okx_trade_id_strict": okx["trade_id_nonmonotonic"] == 0,
+            "okx_single_timestamp_scale": len(okx["timestamp_scales"]) == 1,
             "okx_grid_share_gte098": okx_sync["usable_share"] >= 0.98,
             "bybit_grid_share_gte098": bybit_sync["usable_share"] >= 0.98,
             "joint_grid_share_gte095": joint["joint_usable_share"] >= 0.95,
