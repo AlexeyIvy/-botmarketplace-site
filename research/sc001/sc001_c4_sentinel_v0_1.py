@@ -78,9 +78,8 @@ def beta_history(maps, target: str, t: int) -> float | None:
 def variant_events(maps, leader: str, impulse_horizon: int) -> tuple[list[dict], list[dict]]:
     leader_events: list[dict] = []
     obs: list[dict] = []
-    prev_z: float | None = None
-
     for day in PERF_DAYS:
+        prev_z: float | None = None
         start = date_ms(day)
         end = start + 86_400_000
         first = start + impulse_horizon
