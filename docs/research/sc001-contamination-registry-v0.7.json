@@ -1,0 +1,54 @@
+{
+  "stage": "SC001-CONTAMINATION-REGISTRY",
+  "version": "0.7",
+  "date": "2026-09-18",
+  "status": "BOUNDARY_SEMANTICS_CLARIFIED_BEFORE_C9_D1_V02",
+  "scope": "SCALPING_RESEARCH_SC001",
+  "supersedes": "docs/research/sc001-contamination-registry-v0.6.json",
+  "default_rule": "IF_PRIOR_USE_STATUS_IS_UNCERTAIN_TREAT_AS_NOT_FRESH_UNTIL_AUDITED",
+  "inherited_registry": "docs/research/sc001-contamination-registry-v0.6.json",
+  "c9_d1_selection_calibration": {
+    "candidate": "C9",
+    "stage": "D1_FUNDING_ARCHIVE_ACQUISITION_AND_INTEGRITY",
+    "venue": "OKX",
+    "source": "market-data-history module=3 monthly FundingRate archive",
+    "source_archive_month": "2024-09 UTC+8",
+    "source_archive_start_utc": "2024-08-31T16:00:00Z",
+    "source_archive_end_boundary_utc": "2024-09-30T16:00:00Z",
+    "funding_timestamp_rule": "start <= funding_time <= exact archive_end_boundary; any later timestamp is forbidden",
+    "assets": ["BTC","ETH","DOGE","ORDI","UNI","XRP","OP","BCH"],
+    "classification": "NONPROMOTIONAL_SELECTION_CALIBRATION",
+    "newly_nonpromotional_utc_dates_for_these_assets": {
+      "start": "2024-09-15",
+      "end": "2024-09-30"
+    },
+    "already_nonpromotional_overlap": [
+      "2024-08-31 boundary/source support",
+      "2024-09-01..2024-09-14 E009 selection/calibration"
+    ],
+    "exact_end_boundary_is_utc_date_2024_09_30": true,
+    "october_utc_confirmation_accessed_by_boundary_rule": false,
+    "returns_authorized": false,
+    "state_transition_outcome_authorized": false,
+    "strategy_signal_authorized": false,
+    "pnl_authorized": false,
+    "promotional_evidence_authorized": false
+  },
+  "still_protected": [
+    "July SOL/FIL/LTC/SUI holdout 2024-07-01..14",
+    "July gap 2024-07-16..30",
+    "August protected period 2024-08-01..30",
+    "September SOL/FIL/LTC/SUI holdout 2024-09-01..14",
+    "October Confirmation 2024-10-01..14",
+    "E006 Confirmation role 2024-03-22..30"
+  ],
+  "c9_guardrails": [
+    "C9-D1 may open only the September 2024 UTC+8 FundingRate archive month for the eight frozen assets.",
+    "The exact 2024-09-30T16:00:00Z funding boundary event is permitted because it is on UTC date 2024-09-30.",
+    "Any funding timestamp later than 2024-09-30T16:00:00Z is forbidden.",
+    "Do not open July 2024 funding monthly body.",
+    "Do not open October 2024 funding monthly body.",
+    "No mark/index return, basis transition, strategy direction, threshold, event window or PnL may be computed in C9-D1."
+  ],
+  "selection_rule": "Anything inspected for feature choice, parameter choice, candidate selection, sentinel design/outcome, variance estimation or MDE planning is nonpromotional for the resulting implementation."
+}
