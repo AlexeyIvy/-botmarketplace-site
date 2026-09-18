@@ -1,0 +1,38 @@
+{
+  "stage": "SC001-CONTAMINATION-REGISTRY",
+  "version": "0.13",
+  "date": "2026-09-18",
+  "status": "UPDATED_BEFORE_C10_L2_BODY_REUSE",
+  "scope": "SCALPING_RESEARCH_SC001",
+  "supersedes": "docs/research/sc001-contamination-registry-v0.12.json",
+  "default_rule": "IF_PRIOR_USE_STATUS_IS_UNCERTAIN_TREAT_AS_NOT_FRESH_UNTIL_AUDITED",
+  "inherited_registry": "docs/research/sc001-contamination-registry-v0.12.json",
+  "c10_l2_selection_calibration": {
+    "candidate": "C10",
+    "mechanism": "one-sided near-touch L2 liquidity vacuum",
+    "classification": "NONPROMOTIONAL_SELECTION_CALIBRATION",
+    "venue": "OKX",
+    "instrument": "BTC-USDT-SWAP",
+    "target_utc_date": "2024-02-12",
+    "pilot_selection_rule": "ordinary weekday in the already-qualified four-day Q1 BTC L2 set",
+    "authorized_body": "BTC-USDT-SWAP-L2orderbook-400lv-2024-02-12.tar.gz",
+    "source_parent": "SC001_DATA_Q009B_OKX_L2_BATCH_B",
+    "price_and_book_values_may_be_opened": true,
+    "c5_labels_authorized": false,
+    "aggressive_flow_conditioning_authorized": false,
+    "fill_model_authorized": false,
+    "queue_model_authorized": false,
+    "pnl_authorized": false,
+    "promotional_evidence_authorized": false
+  },
+  "c8_price_selection_calibration": {
+    "candidate": "C8B",
+    "target_utc_date": "2025-01-20",
+    "classification": "NONPROMOTIONAL_SELECTION_CALIBRATION"
+  },
+  "c9_funding_channel_state": {
+    "september_2024": "NONPROMOTIONAL_SELECTION_CALIBRATION",
+    "october_2024": "CONTAMINATED_BY_D1_V02_INCIDENT_NONPROMOTIONAL"
+  },
+  "selection_rule": "Anything inspected for feature choice, parameter choice, candidate selection, sentinel design/outcome, variance estimation or MDE planning is nonpromotional for the resulting implementation."
+}
