@@ -1,0 +1,23 @@
+{
+  "stage": "SC001-C1C6-SENTINEL-BATCH-IMPLEMENTATION-FREEZE",
+  "version": "0.1",
+  "date": "2026-09-18",
+  "status": "FROZEN_BEFORE_FIRST_SENTINEL_OUTCOME",
+  "batch_protocol_path": "docs/research/sc001-c1-c6-sentinel-batch-execution-protocol-v0.1.md",
+  "batch_protocol_git_blob_sha": "3579b646c1b2ad2022cf33e2dcbc8c539a422b81",
+  "sentinel_freeze_path": "docs/research/sc001-c1-c6-sentinel-implementation-freeze-v0.1.json",
+  "sentinel_freeze_git_blob_sha": "bbd850953ca8915c51706eee360ebb9689640eb1",
+  "sentinel_freeze_expected_blob_sha": "bbd850953ca8915c51706eee360ebb9689640eb1",
+  "batch_runner_path": "research/sc001/sc001_c1c6_sentinel_batch_v0_1.py",
+  "batch_runner_git_blob_sha": "e1fb38353c721816380c45130a7e95b8861d8543",
+  "execution_order": ["C1","C2","C3","C4","C5","C6"],
+  "total_strategy_variants": 11,
+  "exact_preflight_pass_token": "SC001_C1C6_SENTINEL_BATCH_PREFLIGHT_PASS",
+  "exact_batch_complete_token": "SC001_C1C6_SENTINEL_BATCH_COMPLETE",
+  "execution_failure_token": "SC001_C1C6_SENTINEL_BATCH_EXECUTION_FAIL",
+  "between_result_adaptation_allowed": false,
+  "protected_data_authorized": false,
+  "promotional_alpha_authorized": false,
+  "live_trading_authorized": false,
+  "next_allowed_action": "syntax-check batch runner, run batch preflight, then if exact PASS execute batch run in tmux"
+}
