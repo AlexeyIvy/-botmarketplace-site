@@ -139,6 +139,37 @@ def require_global_parents() -> dict:
     if int(c1.get("archive_files_qualified", 0)) != 256 or int(c1.get("reconstructed_utc_asset_days_qualified", 0)) != 240:
         fail("C1 spot counts mismatch")
 
+    if j.get("asset_holdout_accessed") is not False or j.get("august_confirmation_accessed") is not False:
+        fail("July semantic firewall mismatch")
+    if j.get("strategy_signal_calculated") is not False or j.get("strategy_pnl_calculated") is not False:
+        fail("July semantic alpha firewall mismatch")
+
+    if (
+        s.get("asset_holdout_accessed") is not False
+        or s.get("october_confirmation_accessed") is not False
+        or s.get("august_repurposed") is not False
+    ):
+        fail("September semantic firewall mismatch")
+    if s.get("strategy_signal_calculated") is not False or s.get("strategy_pnl_calculated") is not False:
+        fail("September semantic alpha firewall mismatch")
+
+    c1_false = (
+        "strategy_signal_calculated",
+        "sentinel_outcome_calculated",
+        "basis_calculated",
+        "returns_calculated",
+        "pnl_calculated",
+        "promotional_alpha_accessed",
+        "protected_holdout_body_accessed",
+        "july_gap_body_accessed",
+        "august_protected_body_accessed",
+        "october_confirmation_body_accessed",
+        "legacy_e006_confirmation_body_accessed",
+    )
+    for key in c1_false:
+        if c1.get(key) is not False:
+            fail(f"C1 spot firewall mismatch: {key}")
+
     return {"golden": gold, "july": j, "september": s, "c1_spot": c1}
 
 
