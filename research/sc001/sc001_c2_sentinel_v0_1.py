@@ -47,7 +47,7 @@ def run_variant(asset: str, variant: str) -> list[dict]:
 
         for i, b in enumerate(bars):
             t = b.close_ms
-            d = day_text(t - 1)
+            d = day_text(t)
             if d not in perf or i < 4:
                 continue
             if t > date_ms(d) + 86_400_000 - HORIZON_MS:
