@@ -53,7 +53,7 @@ def run() -> int:
     for day in PERF_DAYS:
         start = date_ms(day)
         # exact non-overlapping 15-minute decision slots
-        t = start + HOLD_MS
+        t = start
         while t <= start + 86_400_000 - HOLD_MS:
             if t % HOLD_MS != 0:
                 t += HOLD_MS
