@@ -1,0 +1,59 @@
+{
+  "stage": "SC001-C1C6-SENTINEL-IMPLEMENTATION-FREEZE",
+  "version": "0.1",
+  "date": "2026-09-18",
+  "status": "FROZEN_BEFORE_FIRST_SENTINEL_OUTCOME",
+  "parent_plan_path": "docs/research/sc001-c1-c6-selection-calibration-sandbox-sentinel-mde-plan-v0.1.md",
+  "parent_plan_git_blob_sha": "6f5a76ad727990f63bfa096c442172e2b0108fa1",
+  "selection_ledger_path": "docs/research/sc001-selection-research-ledger-v0.1.json",
+  "selection_ledger_git_blob_sha": "28849bd591b740fa9a519339bf9bf90681d0582a",
+  "executable_protocol_path": "docs/research/sc001-c1-c6-sentinel-executable-protocol-v0.1.md",
+  "executable_protocol_git_blob_sha": "9fd9dd9722f95c895a89e4bd6edcf6aae6e20f9a",
+  "run_manifest_path": "docs/research/sc001-c1-c6-sentinel-run-manifest-v0.1.json",
+  "run_manifest_git_blob_sha": "2ff476ea9434060a1b4e7d3f93ab2ca335cdd845",
+  "common_helper_path": "research/sc001/sc001_selection_sentinel_common_v0_1.py",
+  "common_helper_git_blob_sha": "427d900ea0e0722c325fdef627d548b66d14da67",
+  "causal_utils_path": "research/sc001/sc001_selection_causal_utils_v0_1.py",
+  "causal_utils_git_blob_sha": "a7953274e5e47c7dd1280b20c16d479ca90badc4",
+  "master_preflight_path": "research/sc001/sc001_c1c6_sentinel_implementation_preflight_v0_1.py",
+  "master_preflight_git_blob_sha": "c8a0a9ebef87dfe6dbe47748bf238bfcc23af77d",
+  "runners": {
+    "C1": {
+      "path": "research/sc001/sc001_c1_sentinel_v0_1.py",
+      "git_blob_sha": "4ea35dcab0b6f8098c91ab031045686b76038f5d",
+      "variant_count": 1
+    },
+    "C2": {
+      "path": "research/sc001/sc001_c2_sentinel_v0_1.py",
+      "git_blob_sha": "69996686255490c92470ea9482eb47fbf0b136f5",
+      "variant_count": 2
+    },
+    "C3": {
+      "path": "research/sc001/sc001_c3_sentinel_v0_1.py",
+      "git_blob_sha": "1db653eff22156142e89d32fca857c1b2bb39680",
+      "variant_count": 2
+    },
+    "C4": {
+      "path": "research/sc001/sc001_c4_sentinel_v0_1.py",
+      "git_blob_sha": "fdd3ff742bee97047bdfaa7d7cc5d4947ca51ef1",
+      "variant_count": 4
+    },
+    "C5": {
+      "path": "research/sc001/sc001_c5_sentinel_v0_1.py",
+      "git_blob_sha": "bba126b7357f0ed03bb93c4aba815910e710ecc8",
+      "variant_count": 1
+    },
+    "C6": {
+      "path": "research/sc001/sc001_c6_sentinel_v0_1.py",
+      "git_blob_sha": "6479502e7e11b78021bd7806a9621d4070d6bc78",
+      "variant_count": 1
+    }
+  },
+  "total_strategy_variants": 11,
+  "exact_master_preflight_pass_token": "SC001_C1C6_SENTINEL_IMPLEMENTATION_PREFLIGHT_PASS",
+  "sentinel_outcome_authorized_before_master_pass": false,
+  "protected_data_authorized": false,
+  "promotional_alpha_authorized": false,
+  "live_trading_authorized": false,
+  "next_allowed_action": "syntax-check frozen files and run master implementation preflight only"
+}
