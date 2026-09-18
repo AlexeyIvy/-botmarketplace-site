@@ -1,0 +1,43 @@
+{
+  "stage": "SC001-C9-D2-IMPLEMENTATION-FREEZE",
+  "version": "0.1",
+  "date": "2026-09-18",
+  "status": "FROZEN_BEFORE_C9_D2_RUN",
+  "protocol_path": "docs/research/sc001-c9-d2-mark-index-15m-acquisition-integrity-protocol-v0.1.md",
+  "protocol_git_blob_sha": "a28256790fb8e7f3953271b2cdae0583bc28c994",
+  "runner_path": "research/sc001/sc001_c9_d2_mark_index_15m_integrity_v0_1.py",
+  "runner_git_blob_sha": "6c16c0a3136349fb5bc63eaef4909b5e6f3d362c",
+  "contamination_registry_path": "docs/research/sc001-contamination-registry-v0.9.json",
+  "contamination_registry_git_blob_sha": "42202c03259676c1b40937db031e9f08ba30b153",
+  "parent_d1_required_status": "C9_D1_V03_FUNDING_ARCHIVE_INTEGRITY_PASS",
+  "probe_universe": [
+    "BTC-USDT-SWAP",
+    "ETH-USDT-SWAP",
+    "DOGE-USDT-SWAP",
+    "ORDI-USDT-SWAP",
+    "UNI-USDT-SWAP",
+    "XRP-USDT-SWAP",
+    "OP-USDT-SWAP",
+    "BCH-USDT-SWAP"
+  ],
+  "bar": "15m",
+  "utc_window": {
+    "start_inclusive": "2024-08-31T00:00:00Z",
+    "end_exclusive": "2024-10-01T00:00:00Z"
+  },
+  "expected_rows_per_source": 2976,
+  "exact_pass_token": "C9_D2_MARK_INDEX_15M_INTEGRITY_PASS",
+  "review_token": "C9_D2_MARK_INDEX_15M_INTEGRITY_REVIEW",
+  "returns_authorized": false,
+  "premium_authorized": false,
+  "state_transition_outcome_authorized": false,
+  "strategy_signal_authorized": false,
+  "sentinel_outcome_authorized": false,
+  "pnl_authorized": false,
+  "direction_selection_authorized": false,
+  "threshold_selection_authorized": false,
+  "event_window_selection_authorized": false,
+  "october_utc_mark_index_authorized": false,
+  "promotional_alpha_authorized": false,
+  "next_allowed_action": "syntax-check and run C9-D2 mark/index 15m integrity stage"
+}
