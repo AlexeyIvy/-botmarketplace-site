@@ -4,7 +4,7 @@
   "date": "2026-09-18",
   "status": "FROZEN_BEFORE_C9_D0_RUN",
   "runner_path": "research/sc001/sc001_c9_d0_okx_funding_mark_index_semantics_v0_1.py",
-  "runner_git_blob_sha": "433f35c7da90cca26c6e4863c04c34e1e5eb8c9d",
+  "runner_git_blob_sha": "ff57e8f3d163ea043db928ecafd25f49a91c6b78",
   "protocol_path": "docs/research/sc001-c9-d0-okx-funding-mark-index-data-semantics-protocol-v0.1.md",
   "protocol_git_blob_sha": "d40ff705bb6451c75059394a6d19bf9157aff6dd",
   "probe_universe": [
