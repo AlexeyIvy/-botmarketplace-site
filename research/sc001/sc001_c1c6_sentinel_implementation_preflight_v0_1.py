@@ -47,6 +47,8 @@ def check_identities() -> dict:
     expected = {
         "executable_protocol": ROOT / fr["executable_protocol_path"],
         "run_manifest": ROOT / fr["run_manifest_path"],
+        "parent_plan": ROOT / fr["parent_plan_path"],
+        "selection_ledger": ROOT / fr["selection_ledger_path"],
         "common_helper": ROOT / fr["common_helper_path"],
         "causal_utils": ROOT / fr["causal_utils_path"],
     }
@@ -78,8 +80,13 @@ def check_identities() -> dict:
         fail("run manifest status mismatch")
     if int(manifest.get("total_strategy_variants", 0)) != 11:
         fail("run manifest variant budget mismatch")
-    counts = sum(int((manifest.get("candidates") or {}).get(c, {}).get("count", 0)) for c in CANDIDATES)
-    if counts != 11:
+    counts_by_candidate = {
+        c: int((manifest.get("candidates") or {}).get(c, {}).get("count", 0))
+        for c in CANDIDATES
+    }
+    if counts_by_candidate != {"C1": 1, "C2": 2, "C3": 2, "C4": 4, "C5": 1, "C6": 1}:
+        fail(f"run manifest candidate counts mismatch: {counts_by_candidate}")
+    if sum(counts_by_candidate.values()) != 11:
         fail("run manifest candidate counts do not sum to 11")
 
     ledger = load_json(LEDGER)
@@ -87,6 +94,12 @@ def check_identities() -> dict:
         fail("selection ledger status mismatch")
     if int(ledger.get("total_strategy_variants", 0)) != 11:
         fail("selection ledger total mismatch")
+    ledger_counts = {
+        str(row.get("candidate")): int(row.get("count", 0))
+        for row in (ledger.get("candidate_variants") or [])
+    }
+    if ledger_counts != counts_by_candidate:
+        fail(f"selection ledger/run-manifest count mismatch: {ledger_counts} != {counts_by_candidate}")
 
     return actual
 
