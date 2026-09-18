@@ -1,0 +1,51 @@
+{
+  "stage": "SC001-CONTAMINATION-REGISTRY",
+  "version": "0.6",
+  "date": "2026-09-18",
+  "status": "UPDATED_BEFORE_C9_D1_FUNDING_BODY_ACCESS",
+  "scope": "SCALPING_RESEARCH_SC001",
+  "supersedes": "docs/research/sc001-contamination-registry-v0.5.json",
+  "default_rule": "IF_PRIOR_USE_STATUS_IS_UNCERTAIN_TREAT_AS_NOT_FRESH_UNTIL_AUDITED",
+  "inherited_registry": "docs/research/sc001-contamination-registry-v0.5.json",
+  "c9_d1_selection_calibration": {
+    "candidate": "C9",
+    "stage": "D1_FUNDING_ARCHIVE_ACQUISITION_AND_INTEGRITY",
+    "venue": "OKX",
+    "source": "market-data-history module=3 monthly FundingRate archive",
+    "source_archive_month": "2024-09 UTC+8",
+    "source_time_window_utc": {
+      "start_inclusive": "2024-08-31T16:00:00Z",
+      "end_exclusive": "2024-09-30T16:00:00Z"
+    },
+    "assets": ["BTC","ETH","DOGE","ORDI","UNI","XRP","OP","BCH"],
+    "classification": "NONPROMOTIONAL_SELECTION_CALIBRATION",
+    "newly_nonpromotional_utc_dates_for_these_assets": {
+      "start": "2024-09-15",
+      "end": "2024-09-30"
+    },
+    "already_nonpromotional_overlap": [
+      "2024-08-31 boundary/source support",
+      "2024-09-01..2024-09-14 E009 selection/calibration"
+    ],
+    "returns_authorized": false,
+    "state_transition_outcome_authorized": false,
+    "strategy_signal_authorized": false,
+    "pnl_authorized": false,
+    "promotional_evidence_authorized": false
+  },
+  "still_protected": [
+    "July SOL/FIL/LTC/SUI holdout 2024-07-01..14",
+    "July gap 2024-07-16..30",
+    "August protected period 2024-08-01..30",
+    "September SOL/FIL/LTC/SUI holdout 2024-09-01..14",
+    "October Confirmation 2024-10-01..14",
+    "E006 Confirmation role 2024-03-22..30"
+  ],
+  "c9_guardrails": [
+    "C9-D1 may open only the September 2024 UTC+8 FundingRate archive month for the eight frozen assets.",
+    "Do not open July 2024 funding monthly body.",
+    "Do not open October 2024 funding monthly body.",
+    "No mark/index return, basis transition, strategy direction, threshold, event window or PnL may be computed in C9-D1."
+  ],
+  "selection_rule": "Anything inspected for feature choice, parameter choice, candidate selection, sentinel design/outcome, variance estimation or MDE planning is nonpromotional for the resulting implementation."
+}
