@@ -1,0 +1,41 @@
+{
+  "stage": "SC001-CONTAMINATION-REGISTRY",
+  "version": "0.12",
+  "date": "2026-09-18",
+  "status": "UPDATED_BEFORE_C8_PRICE_CALIBRATION_BODY_ACCESS",
+  "scope": "SCALPING_RESEARCH_SC001",
+  "supersedes": "docs/research/sc001-contamination-registry-v0.11.json",
+  "default_rule": "IF_PRIOR_USE_STATUS_IS_UNCERTAIN_TREAT_AS_NOT_FRESH_UNTIL_AUDITED",
+  "inherited_registry": "docs/research/sc001-contamination-registry-v0.11.json",
+  "c8_price_selection_calibration": {
+    "candidate": "C8B",
+    "mechanism": "paired cross-venue transient relative-basis headroom",
+    "classification": "NONPROMOTIONAL_SELECTION_CALIBRATION",
+    "target_utc_date": "2025-01-20",
+    "selection_rule": "first Monday after 2025-01-15 engineering clock-qualification day",
+    "qualified_temporal_representation": "STRICT_COACTIVE_1S_NO_CARRY_FORWARD",
+    "venue_instruments": {
+      "OKX": "BTC-USDT-SWAP",
+      "BYBIT": "BTCUSDT"
+    },
+    "authorized_bodies": [
+      "BTC-USDT-SWAP-trades-2025-01-20.zip",
+      "BTC-USDT-SWAP-trades-2025-01-21.zip",
+      "BTCUSDT2025-01-20.csv.gz"
+    ],
+    "okx_d_plus_1_role": "source support for UTC 2025-01-20 reconstruction",
+    "price_values_may_be_opened": true,
+    "cross_venue_price_comparison_authorized_only_after_d3_integrity_pass_and_frozen_c8b_s0_protocol": true,
+    "promotional_evidence_authorized": false
+  },
+  "c8_engineering_clock_evidence": {
+    "utc_date": "2025-01-15",
+    "classification": "NONPROMOTIONAL_ENGINEERING_CLOCK_CALIBRATION",
+    "qualified_representation": "STRICT_COACTIVE_1S_NO_CARRY_FORWARD"
+  },
+  "c9_funding_channel_state": {
+    "september_2024": "NONPROMOTIONAL_SELECTION_CALIBRATION",
+    "october_2024": "CONTAMINATED_BY_D1_V02_INCIDENT_NONPROMOTIONAL"
+  },
+  "selection_rule": "Anything inspected for feature choice, parameter choice, candidate selection, sentinel design/outcome, variance estimation or MDE planning is nonpromotional for the resulting implementation."
+}
