@@ -14,8 +14,8 @@ fi
 mkdir -p "$OPS"
 cd "$REPO"
 
-echo "===== SELF-TEST B13-C v0.2 ====="
-SC001_DATA_ROOT="$DATA" python3 -u research/sc001/sc001_b13c_bybit_prospective_liquidation_collector_v0_2.py --mode self-test
+echo "===== SELF-TEST B13-C v0.3 ====="
+SC001_DATA_ROOT="$DATA" python3 -u research/sc001/sc001_b13c_bybit_prospective_liquidation_collector_v0_3.py --mode self-test
 
 echo "===== SELF-TEST B14-A P0 v0.3 ====="
 SC001_DATA_ROOT="$DATA" python3 -u research/sc001/sc001_b14a_p0_prospective_trade_collector_v0_3.py --mode self-test
