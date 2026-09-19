@@ -1,0 +1,51 @@
+{
+  "stage": "SC001-CONTAMINATION-REGISTRY",
+  "version": "0.27",
+  "date": "2026-09-19",
+  "status": "UPDATED_BEFORE_B14A_FUTURESCHAIN_BODY_SCHEMA_QUALIFICATION",
+  "scope": "SCALPING_RESEARCH_SC001",
+  "supersedes": "docs/research/sc001-contamination-registry-v0.26.json",
+  "inherited_registry": "docs/research/sc001-contamination-registry-v0.26.json",
+  "b14a_identity_freeze": {
+    "candidate_label": "B14-A_NOT_YET_C13",
+    "canonical_d0_sha256": "a7a36245ee668450960873e22f0ce515c95e6c990564fa8df4fedf97d6fbd5e8",
+    "identity_freeze_path": "docs/research/sc001-b14a-exact-12-future-expiry-identity-freeze-v0.1.json",
+    "contract_count": 12,
+    "price_outcome_access_authorized": false,
+    "contract_drop_or_replacement_authorized": false
+  },
+  "b14a_body_schema_qualification": {
+    "classification": "ENGINEERING_SOURCE_SCHEMA_QUALIFICATION",
+    "probe_date": "2026-09-16",
+    "authorized_family_archives": [
+      "BTC-USD-futureschain-trades-2026-09-16.zip",
+      "ETH-USD-futureschain-trades-2026-09-16.zip"
+    ],
+    "futureschain_body_download_authorized": true,
+    "futureschain_body_open_authorized": true,
+    "header_schema_access_authorized": true,
+    "instrument_name_column_access_authorized": true,
+    "row_count_source_quality_authorized": true,
+    "price_value_parse_or_store_authorized": false,
+    "basis_authorized": false,
+    "return_authorized": false,
+    "settlePx_authorized": false,
+    "delivery_price_authorized": false,
+    "convergence_authorized": false,
+    "strategy_signal_authorized": false,
+    "execution_model_authorized": false,
+    "pnl_authorized": false,
+    "candidate_id_assignment_authorized": false,
+    "promotional_evidence_authorized": false
+  },
+  "b13c_prospective_collection": {
+    "classification": "PROTECTED_PROSPECTIVE_RAW_LIQUIDATION_STREAM",
+    "raw_liquidation_event_access_authorized": true,
+    "post_event_return_authorized": false,
+    "continuation_reversal_authorized": false,
+    "threshold_selection_authorized": false,
+    "symbol_ranking_authorized": false,
+    "pnl_authorized": false
+  },
+  "selection_rule": "Anything inspected for feature choice, threshold, horizon, asset subset, execution mode, event definition or candidate selection is nonpromotional for that implementation."
+}
