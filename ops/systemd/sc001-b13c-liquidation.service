@@ -12,7 +12,7 @@ WorkingDirectory=/home/botmarket/botmarketplace-site
 Environment=SC001_DATA_ROOT=/home/botmarket/sc001_data
 Environment=PYTHONUNBUFFERED=1
 ExecStartPre=/usr/bin/mkdir -p /home/botmarket/sc001_data/SC001_B13C_PROSPECTIVE_LIQUIDATIONS
-ExecStart=/usr/bin/python3 -u /home/botmarket/botmarketplace-site/research/sc001/sc001_b13c_bybit_prospective_liquidation_collector_v0_2.py --mode collect
+ExecStart=/usr/bin/python3 -u /home/botmarket/botmarketplace-site/research/sc001/sc001_b13c_bybit_prospective_liquidation_collector_v0_3.py --mode collect
 Restart=on-failure
 RestartSec=15s
 KillSignal=SIGTERM
