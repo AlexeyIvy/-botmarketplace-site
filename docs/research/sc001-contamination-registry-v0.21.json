@@ -1,0 +1,25 @@
+{
+  "stage": "SC001-CONTAMINATION-REGISTRY",
+  "version": "0.21",
+  "date": "2026-09-19",
+  "status": "UPDATED_AFTER_C11_TERMINAL_DIRECTION_CAPTURE_DISPOSITION",
+  "scope": "SCALPING_RESEARCH_SC001",
+  "supersedes": "docs/research/sc001-contamination-registry-v0.20.json",
+  "inherited_registry": "docs/research/sc001-contamination-registry-v0.20.json",
+  "c11_final_disposition": {
+    "terminal_state": "C11_TERMINAL_REJECT_DIRECTION_CAPTURE",
+    "selection_terminal_state": "C11_V2_SC_REJECT_DIRECTION_RETENTION",
+    "postmortem_state": "C11_V2_DIRECTION_RETENTION_READONLY_POSTMORTEM_PASS",
+    "selection_chronology_classification": "OUTCOME_CONTAMINATED_NONPROMOTIONAL_SELECTION_CALIBRATION",
+    "prospective_confirmation": {
+      "status": "UNOPENED_UNCONSUMED",
+      "outcome_access_authorized": false,
+      "automatic_reassignment_authorized": false,
+      "future_reuse_requires_new_audit": true
+    },
+    "execution_model_authorized": false,
+    "pnl_authorized": false,
+    "c11_retest_authorized": false
+  },
+  "selection_rule": "Anything inspected for feature choice, threshold, horizon, asset subset, execution mode, event definition or candidate selection is nonpromotional for that implementation."
+}
