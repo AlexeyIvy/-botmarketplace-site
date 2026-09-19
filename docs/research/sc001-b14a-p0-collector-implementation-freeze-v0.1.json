@@ -1,0 +1,43 @@
+{
+  "stage": "SC001-B14A-P0-PROSPECTIVE-TRADE-COLLECTOR-IMPLEMENTATION-FREEZE",
+  "version": "0.1",
+  "date": "2026-09-19",
+  "status": "FROZEN_BEFORE_B14A_P0_COLLECTION",
+  "candidate_label": "B14-A_NOT_YET_C13",
+  "protocol_path": "docs/research/sc001-b14a-p0-prospective-2026-09-25-headroom-protocol-v0.1.md",
+  "protocol_git_blob_sha": "791e29158e7154bf154cceaf3badfac61e464d56",
+  "contamination_registry_path": "docs/research/sc001-contamination-registry-v0.29.json",
+  "contamination_registry_git_blob_sha": "97f2d626e130801ae29dd24939dab3e2272432e3",
+  "runner_path": "research/sc001/sc001_b14a_p0_prospective_trade_collector_v0_1.py",
+  "runner_git_blob_sha": "5b258faf411a2d31722b62216dc0c6e10bf7927d",
+  "websocket_url": "wss://ws.okx.com:8443/ws/v5/public",
+  "instruments": [
+    "BTC-USD-260925",
+    "BTC-USD-SWAP",
+    "ETH-USD-260925",
+    "ETH-USD-SWAP"
+  ],
+  "expiry_ms": 1790323200000,
+  "t0_ms": 1790321400000,
+  "capture_start_ms": 1790321340000,
+  "capture_end_ms": 1790323320000,
+  "connect_at_ms": 1790321310000,
+  "headroom_hurdle_bps": 50.0,
+  "raw_trade_capture_authorized": true,
+  "basis_calculation_during_collection_authorized": false,
+  "convergence_authorized": false,
+  "settlePx_analysis_authorized": false,
+  "execution_model_authorized": false,
+  "pnl_authorized": false,
+  "candidate_id_assignment_authorized": false,
+  "promotional_evidence_authorized": false,
+  "self_test_pass_token": "B14A_P0_COLLECTOR_SELF_TEST_PASS",
+  "self_test_review_token": "B14A_P0_COLLECTOR_SELF_TEST_REVIEW",
+  "collection_states": [
+    "B14A_P0_COLLECTION_WAITING",
+    "B14A_P0_COLLECTION_RUNNING",
+    "B14A_P0_COLLECTION_COMPLETE",
+    "B14A_P0_COLLECTION_REVIEW"
+  ],
+  "next_allowed_action": "run P0 collector self-test; if PASS, launch scheduled waiting collector in tmux"
+}
