@@ -7,7 +7,6 @@ StartLimitIntervalSec=0
 [Service]
 Type=simple
 User=botmarket
-Group=botmarket
 WorkingDirectory=/home/botmarket/botmarketplace-site
 Environment=SC001_DATA_ROOT=/home/botmarket/sc001_data
 Environment=PYTHONUNBUFFERED=1
