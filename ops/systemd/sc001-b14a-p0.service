@@ -1,0 +1,28 @@
+[Unit]
+Description=SC001 B14-A P0 Prospective Expiry Trade Collector
+Wants=network-online.target
+After=network-online.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+User=botmarket
+Group=botmarket
+WorkingDirectory=/home/botmarket/botmarketplace-site
+Environment=SC001_DATA_ROOT=/home/botmarket/sc001_data
+Environment=PYTHONUNBUFFERED=1
+ExecStartPre=/usr/bin/mkdir -p /home/botmarket/sc001_data/SC001_B14A_P0_20260925
+ExecStart=/usr/bin/python3 -u /home/botmarket/botmarketplace-site/research/sc001/sc001_b14a_p0_prospective_trade_collector_v0_3.py --mode collect
+Restart=on-failure
+RestartSec=15s
+KillSignal=SIGTERM
+TimeoutStopSec=30s
+NoNewPrivileges=true
+PrivateTmp=true
+UMask=0027
+LimitNOFILE=65536
+StandardOutput=append:/home/botmarket/sc001_data/SC001_B14A_P0_20260925/systemd.log
+StandardError=append:/home/botmarket/sc001_data/SC001_B14A_P0_20260925/systemd.log
+
+[Install]
+WantedBy=multi-user.target
