@@ -288,7 +288,7 @@ def qualify_symbols()->list[dict]:
         })
     return rows
 
-def initial_state()->tuple[dict,bool]:
+def initial_state()->tuple[dict,bool,bool]:
     if STATE.exists():
         s=load_json(STATE)
         if s.get("stage") not in {STAGE,LEGACY_STAGE}:
@@ -298,11 +298,15 @@ def initial_state()->tuple[dict,bool]:
         migrated=s.get("stage")==LEGACY_STAGE
         s["stage"]=STAGE
         s["version"]="0.2"
-        s.setdefault("last_heartbeat_ms",s.get("last_message_ms"))
+        if migrated:
+            s["last_heartbeat_ms"]=None
+            s["legacy_v01_migration_seen"]=True
+        else:
+            s.setdefault("last_heartbeat_ms",s.get("stopped_ms"))
         s.setdefault("process_restart_count",0)
         s.setdefault("cumulative_process_gap_ms",0)
         s.setdefault("process_restart_gaps",[])
-        return s,True
+        return s,True,migrated
     t=now_ms()
     s={
         "stage":STAGE,
@@ -329,12 +333,12 @@ def initial_state()->tuple[dict,bool]:
         "strategy_outcomes_calculated":False,
     }
     atomic_json(STATE,s)
-    return s,False
+    return s,False,False
 
-def record_process_start_gap(s:dict,had_state:bool)->None:
+def record_process_start_gap(s:dict,had_state:bool,migrated_from_v01:bool)->None:
     t=now_ms()
-    if had_state:
-        prev=s.get("last_heartbeat_ms") or s.get("last_message_ms") or s.get("stopped_ms")
+    if had_state and not migrated_from_v01:
+        prev=s.get("last_heartbeat_ms") or s.get("stopped_ms")
         if prev is not None:
             prev=int(prev)
             gap=max(0,t-prev)
@@ -346,6 +350,8 @@ def record_process_start_gap(s:dict,had_state:bool)->None:
             if len(gaps)>1000:
                 del gaps[:-1000]
             log_connection("PROCESS_RESTART_GAP","process",**rec)
+    elif migrated_from_v01:
+        log_connection("LEGACY_V01_TO_V02_MIGRATION","process",note="planned gap recorded externally")
     s["last_heartbeat_ms"]=t
     atomic_json(STATE,s)
 
@@ -424,8 +430,8 @@ def run_collector()->int:
         output_write_selftest()
 
         metadata=qualify_symbols()
-        state,had_state=initial_state()
-        record_process_start_gap(state,had_state)
+        state,had_state,migrated_from_v01=initial_state()
+        record_process_start_gap(state,had_state,migrated_from_v01)
         state["source_qualified_symbols"]=len(metadata)
         state["status"]=RUNNING
         save_state(state)
