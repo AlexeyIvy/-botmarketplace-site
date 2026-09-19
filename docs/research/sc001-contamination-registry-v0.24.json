@@ -1,0 +1,32 @@
+{
+  "stage": "SC001-CONTAMINATION-REGISTRY",
+  "version": "0.24",
+  "date": "2026-09-19",
+  "status": "UPDATED_BEFORE_B13B_S0_HISTORICAL_LAUNCH_PRICE_HEADROOM",
+  "scope": "SCALPING_RESEARCH_SC001",
+  "supersedes": "docs/research/sc001-contamination-registry-v0.23.json",
+  "inherited_registry": "docs/research/sc001-contamination-registry-v0.23.json",
+  "b13b_historical_launch_calibration": {
+    "candidate_label": "B13-B_NOT_YET_C13",
+    "classification": "NONPROMOTIONAL_SURVIVOR_CENSORED_STRUCTURAL_CALIBRATION",
+    "event_count": 7,
+    "event_freeze_path": "docs/research/sc001-b13b-exact-7-event-launch-set-freeze-v0.1.md",
+    "historical_trade_body_access_authorized": true,
+    "price_access_authorized": true,
+    "absolute_launch_basis_authorized": true,
+    "convergence_authorized": false,
+    "relative_return_authorized": false,
+    "strategy_signal_authorized": false,
+    "execution_model_authorized": false,
+    "pnl_authorized": false,
+    "candidate_id_assignment_authorized": false,
+    "promotional_evidence_authorized": false,
+    "authorization_boundary": "ONLY_FIRST_COACTIVE_1S_ABSOLUTE_LAUNCH_BASIS_FOR_EXACT_FROZEN_7_EVENTS"
+  },
+  "b13b_future_launch_stream": {
+    "classification": "PROSPECTIVE_EVENT_STREAM",
+    "price_outcome_access_authorized": false,
+    "automatic_event_substitution_authorized": false
+  },
+  "selection_rule": "Anything inspected for feature choice, threshold, horizon, asset subset, execution mode, event definition or candidate selection is nonpromotional for that implementation."
+}
