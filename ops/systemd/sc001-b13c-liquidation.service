@@ -1,7 +1,7 @@
 [Unit]
 Description=SC001 B13-C Bybit Prospective Liquidation Collector
-Wants=network-online.target
-After=network-online.target
+Wants=network-online.target time-sync.target
+After=network-online.target time-sync.target
 StartLimitIntervalSec=0
 
 [Service]
