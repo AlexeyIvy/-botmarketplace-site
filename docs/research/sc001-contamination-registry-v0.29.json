@@ -1,0 +1,39 @@
+{
+  "stage": "SC001-CONTAMINATION-REGISTRY",
+  "version": "0.29",
+  "date": "2026-09-19",
+  "status": "UPDATED_BEFORE_B14A_P0_PROSPECTIVE_PRICE_CAPTURE",
+  "scope": "SCALPING_RESEARCH_SC001",
+  "supersedes": "docs/research/sc001-contamination-registry-v0.28.json",
+  "inherited_registry": "docs/research/sc001-contamination-registry-v0.28.json",
+  "b14a_p0": {
+    "classification": "PROSPECTIVE_HEADROOM_PILOT_2026_09_25",
+    "expiry_utc": "2026-09-25T08:00:00Z",
+    "decision_anchor_utc": "2026-09-25T07:30:00Z",
+    "instruments": [
+      "BTC-USD-260925",
+      "BTC-USD-SWAP",
+      "ETH-USD-260925",
+      "ETH-USD-SWAP"
+    ],
+    "raw_trade_capture_authorized": true,
+    "price_access_authorized_for_frozen_p0_only": true,
+    "basis_readout_authorized_after_capture": true,
+    "headroom_hurdle_bps": 50,
+    "convergence_authorized": false,
+    "settlePx_analysis_authorized": false,
+    "execution_model_authorized": false,
+    "pnl_authorized": false,
+    "candidate_id_assignment_authorized": false,
+    "promotional_evidence_authorized": false
+  },
+  "b13c_prospective_collection": {
+    "classification": "PROTECTED_PROSPECTIVE_RAW_LIQUIDATION_STREAM",
+    "raw_liquidation_event_access_authorized": true,
+    "post_event_return_authorized": false,
+    "continuation_reversal_authorized": false,
+    "threshold_selection_authorized": false,
+    "symbol_ranking_authorized": false,
+    "pnl_authorized": false
+  }
+}
