@@ -1,0 +1,50 @@
+{
+  "stage": "SC001-B14A-FUTURESCHAIN-BODY-SCHEMA-IMPLEMENTATION-FREEZE",
+  "version": "0.1",
+  "date": "2026-09-19",
+  "status": "FROZEN_BEFORE_B14A_CHAIN_SCHEMA_RUN",
+  "candidate_label": "B14-A_NOT_YET_C13",
+  "protocol_path": "docs/research/sc001-b14a-futureschain-body-schema-qualification-protocol-v0.1.md",
+  "protocol_git_blob_sha": "8c4d807501f694181b178323957094baf2a0ea70",
+  "identity_freeze_path": "docs/research/sc001-b14a-exact-12-future-expiry-identity-freeze-v0.1.json",
+  "identity_freeze_git_blob_sha": "d665b4600c6fa6f48f30a4d9ca9f54477a5423e1",
+  "contamination_registry_path": "docs/research/sc001-contamination-registry-v0.27.json",
+  "contamination_registry_git_blob_sha": "054ae6e9d5cdb43dd2ee28115e36b680c6f8d030",
+  "runner_path": "research/sc001/sc001_b14a_futureschain_body_schema_v0_1.py",
+  "runner_git_blob_sha": "e0e3197d5ee179d2ad55e377d154c40a3c487fbd",
+  "canonical_d0_report_sha256": "a7a36245ee668450960873e22f0ce515c95e6c990564fa8df4fedf97d6fbd5e8",
+  "probe_date": "2026-09-16",
+  "families": ["BTC-USD","ETH-USD"],
+  "authorized_archives": [
+    "BTC-USD-futureschain-trades-2026-09-16.zip",
+    "ETH-USD-futureschain-trades-2026-09-16.zip"
+  ],
+  "allowed_schema_classes": ["LEGACY_6","SOURCE_7"],
+  "required_target_contracts": [
+    "BTC-USD-260925",
+    "ETH-USD-260925"
+  ],
+  "min_distinct_contract_ids_per_family": 2,
+  "futureschain_body_download_authorized": true,
+  "futureschain_body_open_authorized": true,
+  "header_schema_access_authorized": true,
+  "instrument_name_column_access_authorized": true,
+  "price_value_parse_or_store_authorized": false,
+  "basis_authorized": false,
+  "return_authorized": false,
+  "settlePx_authorized": false,
+  "delivery_price_authorized": false,
+  "convergence_authorized": false,
+  "strategy_signal_authorized": false,
+  "execution_model_authorized": false,
+  "pnl_authorized": false,
+  "candidate_id_assignment_authorized": false,
+  "promotional_evidence_authorized": false,
+  "self_test_pass_token": "B14A_CHAIN_SCHEMA_SELF_TEST_PASS",
+  "self_test_review_token": "B14A_CHAIN_SCHEMA_SELF_TEST_REVIEW",
+  "exact_terminal_states": [
+    "B14A_FUTURESCHAIN_BODY_SCHEMA_PASS",
+    "B14A_FUTURESCHAIN_BODY_SCHEMA_REVIEW"
+  ],
+  "next_allowed_action": "run body-schema self-test; if PASS, run exact two-archive engineering schema qualification"
+}
