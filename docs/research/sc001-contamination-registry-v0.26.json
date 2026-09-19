@@ -1,0 +1,34 @@
+{
+  "stage": "SC001-CONTAMINATION-REGISTRY",
+  "version": "0.26",
+  "date": "2026-09-19",
+  "status": "UPDATED_BEFORE_B13C_PROSPECTIVE_RAW_LIQUIDATION_COLLECTION",
+  "scope": "SCALPING_RESEARCH_SC001",
+  "supersedes": "docs/research/sc001-contamination-registry-v0.25.json",
+  "inherited_registry": "docs/research/sc001-contamination-registry-v0.25.json",
+  "b13c_historical": {
+    "state": "B13C_DEFER_HISTORICAL_DATA_FEASIBILITY",
+    "reason": "NO_FREE_QUALIFIED_LONG_EVENT_LEVEL_EXPLICIT_LIQUIDATION_HISTORY",
+    "historical_alpha_test_authorized": false
+  },
+  "b13c_prospective_collection": {
+    "classification": "PROTECTED_PROSPECTIVE_RAW_LIQUIDATION_STREAM",
+    "venue": "BYBIT",
+    "symbols": [
+      "BTCUSDT","ETHUSDT","SOLUSDT","DOGEUSDT","ORDIUSDT","FILUSDT",
+      "UNIUSDT","XRPUSDT","LTCUSDT","OPUSDT","BCHUSDT","SUIUSDT"
+    ],
+    "raw_liquidation_event_access_authorized": true,
+    "source_quality_diagnostics_authorized": true,
+    "post_event_return_authorized": false,
+    "pre_event_return_authorized": false,
+    "continuation_reversal_authorized": false,
+    "threshold_selection_authorized": false,
+    "symbol_ranking_authorized": false,
+    "execution_model_authorized": false,
+    "pnl_authorized": false,
+    "candidate_id_assignment_authorized": false,
+    "promotional_evidence_authorized": false
+  },
+  "selection_rule": "Anything inspected for feature choice, threshold, horizon, asset subset, execution mode, event definition or candidate selection is nonpromotional for that implementation."
+}
