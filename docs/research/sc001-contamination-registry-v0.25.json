@@ -1,0 +1,41 @@
+{
+  "stage": "SC001-CONTAMINATION-REGISTRY",
+  "version": "0.25",
+  "date": "2026-09-19",
+  "status": "UPDATED_AFTER_B13B_S0_SEMANTIC_IDENTITY_AUDIT",
+  "scope": "SCALPING_RESEARCH_SC001",
+  "supersedes": "docs/research/sc001-contamination-registry-v0.24.json",
+  "inherited_registry": "docs/research/sc001-contamination-registry-v0.24.json",
+  "b13b_historical_launch_calibration": {
+    "candidate_label": "B13-B_NOT_YET_C13",
+    "classification": "OUTCOME_CONTAMINATED_NONPROMOTIONAL_SURVIVOR_CENSORED_CALIBRATION",
+    "raw_runner_output": "B13B_S0_LAUNCH_DISLOCATION_HEADROOM_SURVIVE",
+    "binding_research_state": "B13B_S0_DEFER_SAMPLE",
+    "defer_reason": "CROSS_VENUE_UNDERLYING_IDENTITY_FAILURE_2_OF_7",
+    "semantic_invalid_events": [
+      "BB 2026-06-01 OKX equity vs Bybit BounceBit crypto",
+      "QNT 2026-06-05 OKX equity vs Bybit Quant crypto"
+    ],
+    "semantically_noncollision_events_descriptive_only": [
+      "KITE",
+      "UB",
+      "MEGA",
+      "IRYS",
+      "VVV"
+    ],
+    "historical_replacement_authorized": false,
+    "historical_convergence_authorized": false,
+    "execution_model_authorized": false,
+    "pnl_authorized": false,
+    "candidate_id_assignment_authorized": false,
+    "promotional_evidence_authorized": false
+  },
+  "b13b_future_launch_stream": {
+    "classification": "PROSPECTIVE_EVENT_STREAM",
+    "admission_requires_underlying_identity_audit": true,
+    "admission_requires_price_denominator_audit": true,
+    "price_outcome_access_authorized": false,
+    "automatic_event_substitution_authorized": false
+  },
+  "selection_rule": "Anything inspected for feature choice, threshold, horizon, asset subset, execution mode, event definition or candidate selection is nonpromotional for that implementation."
+}
