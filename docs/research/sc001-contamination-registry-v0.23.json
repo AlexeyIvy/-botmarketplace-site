@@ -1,0 +1,39 @@
+{
+  "stage": "SC001-CONTAMINATION-REGISTRY",
+  "version": "0.23",
+  "date": "2026-09-19",
+  "status": "UPDATED_AFTER_B13B_EXACT_7_EVENT_IDENTITY_FREEZE_BEFORE_PRICE_OUTCOME",
+  "scope": "SCALPING_RESEARCH_SC001",
+  "supersedes": "docs/research/sc001-contamination-registry-v0.22.json",
+  "inherited_registry": "docs/research/sc001-contamination-registry-v0.22.json",
+  "b13b_historical_launch_calibration": {
+    "candidate_label": "B13-B_NOT_YET_C13",
+    "classification": "NONPROMOTIONAL_SURVIVOR_CENSORED_STRUCTURAL_CALIBRATION",
+    "d0_report_sha256": "82012a614a1f5652c483df87fb70f811f66b56e9035e41f8d146f7accd81e2f6",
+    "event_freeze_path": "docs/research/sc001-b13b-exact-7-event-launch-set-freeze-v0.1.md",
+    "event_count": 7,
+    "events": [
+      "KITE 2026-04-09T03:00:00Z",
+      "UB 2026-04-28T13:30:00Z",
+      "MEGA 2026-04-30T12:00:00Z",
+      "IRYS 2026-05-27T11:15:00Z",
+      "BB 2026-06-01T09:00:00Z",
+      "QNT 2026-06-05T10:30:00Z",
+      "VVV 2026-07-03T06:00:00Z"
+    ],
+    "historical_trade_body_access_authorized": false,
+    "price_access_authorized": false,
+    "relative_basis_authorized": false,
+    "launch_dislocation_authorized": false,
+    "execution_model_authorized": false,
+    "pnl_authorized": false,
+    "promotional_evidence_authorized": false,
+    "automatic_confirmation_role_authorized": false
+  },
+  "b13b_future_launch_stream": {
+    "classification": "PROSPECTIVE_EVENT_STREAM",
+    "price_outcome_access_authorized": false,
+    "automatic_event_substitution_authorized": false
+  },
+  "selection_rule": "Anything inspected for feature choice, threshold, horizon, asset subset, execution mode, event definition or candidate selection is nonpromotional for that implementation."
+}
