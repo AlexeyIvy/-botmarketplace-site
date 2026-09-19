@@ -1,0 +1,43 @@
+{
+  "stage": "SC001-B14A-D0-DATED-FUTURES-SOURCE-ARCHIVE-METADATA-IMPLEMENTATION-FREEZE",
+  "version": "0.1",
+  "date": "2026-09-19",
+  "status": "FROZEN_BEFORE_B14A_D0_RUN",
+  "candidate_label": "B14-A_NOT_YET_C13",
+  "protocol_path": "docs/research/sc001-b14a-d0-dated-futures-source-archive-metadata-protocol-v0.1.md",
+  "protocol_git_blob_sha": "b47e254ff5610a2cd0718ede541798c7a8c85700",
+  "source_audit_path": "docs/research/sc001-b14a-okx-dated-futures-source-settlement-spec-audit-v0.1.md",
+  "source_audit_git_blob_sha": "83bbdb9efeed8e067086f6185cd397b19b56a3cc",
+  "runner_path": "research/sc001/sc001_b14a_d0_dated_futures_source_archive_metadata_v0_1.py",
+  "runner_git_blob_sha": "64e03adc3d3ef5e5812dda93f2aded3504c709a2",
+  "families": ["BTC-USDT","ETH-USDT"],
+  "hedges": ["BTC-USDT-SWAP","ETH-USDT-SWAP"],
+  "admission": {
+    "instType": "FUTURES",
+    "ruleType": "normal",
+    "instCategory": "1",
+    "ctType": "linear",
+    "settleCcy": "USDT"
+  },
+  "min_future_contracts_per_family": 2,
+  "min_archive_metadata_pass_per_family": 1,
+  "futures_trade_body_download_authorized": false,
+  "futures_trade_body_open_authorized": false,
+  "swap_trade_body_open_authorized": false,
+  "price_access_authorized": false,
+  "basis_authorized": false,
+  "estimated_settlement_price_authorized": false,
+  "delivery_price_authorized": false,
+  "convergence_authorized": false,
+  "strategy_signal_authorized": false,
+  "execution_model_authorized": false,
+  "pnl_authorized": false,
+  "candidate_id_assignment_authorized": false,
+  "self_test_pass_token": "B14A_D0_SELF_TEST_PASS",
+  "self_test_review_token": "B14A_D0_SELF_TEST_REVIEW",
+  "exact_terminal_states": [
+    "B14A_D0_SOURCE_ARCHIVE_METADATA_PASS",
+    "B14A_D0_SOURCE_ARCHIVE_METADATA_REVIEW"
+  ],
+  "next_allowed_action": "run B14-A D0 self-test; if PASS, run metadata-only source/archive probe"
+}
