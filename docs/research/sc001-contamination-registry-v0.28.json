@@ -1,0 +1,39 @@
+{
+  "stage": "SC001-CONTAMINATION-REGISTRY",
+  "version": "0.28",
+  "date": "2026-09-19",
+  "status": "UPDATED_BEFORE_B14A_HEDGE_FUNDING_COST_PREFLIGHT",
+  "scope": "SCALPING_RESEARCH_SC001",
+  "supersedes": "docs/research/sc001-contamination-registry-v0.27.json",
+  "inherited_registry": "docs/research/sc001-contamination-registry-v0.27.json",
+  "b14a_cost_calibration": {
+    "candidate_label": "B14-A_NOT_YET_C13",
+    "classification": "NONPROMOTIONAL_STRUCTURAL_COST_CALIBRATION",
+    "window": "2026-06-01_to_2026-08-31",
+    "instruments": ["BTC-USD-SWAP","ETH-USD-SWAP"],
+    "funding_rate_access_authorized": true,
+    "funding_timestamp_access_authorized": true,
+    "static_cost_arithmetic_authorized": true,
+    "futures_price_access_authorized": false,
+    "swap_price_access_authorized": false,
+    "basis_authorized": false,
+    "return_authorized": false,
+    "settlePx_authorized": false,
+    "delivery_price_authorized": false,
+    "convergence_authorized": false,
+    "strategy_signal_authorized": false,
+    "execution_model_authorized": false,
+    "pnl_authorized": false,
+    "candidate_id_assignment_authorized": false,
+    "promotional_evidence_authorized": false
+  },
+  "b13c_prospective_collection": {
+    "classification": "PROTECTED_PROSPECTIVE_RAW_LIQUIDATION_STREAM",
+    "raw_liquidation_event_access_authorized": true,
+    "post_event_return_authorized": false,
+    "continuation_reversal_authorized": false,
+    "threshold_selection_authorized": false,
+    "symbol_ranking_authorized": false,
+    "pnl_authorized": false
+  }
+}
