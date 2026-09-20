@@ -1,0 +1,12 @@
+{
+  "admitted_assets": 146,
+  "directed_edges": 310,
+  "excluded_assets": 9,
+  "identity_review_assets": 46,
+  "price_data_used": false,
+  "quote_review": true,
+  "quote_routes": 9,
+  "source_run": "20260920T210446Z",
+  "status": "B15_P1_CANONICAL_ROUTE_UNIVERSE_IDENTITY_REVIEW",
+  "transfer_status_used_for_selection": false
+}

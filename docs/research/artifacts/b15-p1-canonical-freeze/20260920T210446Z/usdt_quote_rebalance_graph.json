@@ -1,0 +1,65 @@
+[
+  {
+    "asset": "USDT",
+    "bybit_chain": "APTOS",
+    "network_uid": "aptos:mainnet",
+    "okx_chain": "USDT-Aptos",
+    "representation_identity": "0x357b0b74bc833e95a115ad22604854d6b0fca151cecd94111770e5d6ffc9dc2b"
+  },
+  {
+    "asset": "USDT",
+    "bybit_chain": "ARBI",
+    "network_uid": "arbitrum:one",
+    "okx_chain": "USDT-Arbitrum One",
+    "representation_identity": "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9"
+  },
+  {
+    "asset": "USDT",
+    "bybit_chain": "CAVAX",
+    "network_uid": "avalanche:c-chain",
+    "okx_chain": "USDT-Avalanche C-Chain",
+    "representation_identity": "0x9702230a8ea53601f5cd2dc00fdbc13d4df4a8c7"
+  },
+  {
+    "asset": "USDT",
+    "bybit_chain": "ETH",
+    "network_uid": "ethereum:mainnet",
+    "okx_chain": "USDT-ERC20",
+    "representation_identity": "0xdac17f958d2ee523a2206206994597c13d831ec7"
+  },
+  {
+    "asset": "USDT",
+    "bybit_chain": "OP",
+    "network_uid": "optimism:mainnet",
+    "okx_chain": "USDT-Optimism",
+    "representation_identity": "0x94b008aa00579c1307b0ef2c499ad98a8ce58e58"
+  },
+  {
+    "asset": "USDT",
+    "bybit_chain": "MATIC",
+    "network_uid": "polygon:pos",
+    "okx_chain": "USDT-Polygon",
+    "representation_identity": "0xc2132d05d31c914a87c6611c10748aeb04b58e8f"
+  },
+  {
+    "asset": "USDT",
+    "bybit_chain": "SOL",
+    "network_uid": "solana:mainnet",
+    "okx_chain": "USDT-Solana",
+    "representation_identity": "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB"
+  },
+  {
+    "asset": "USDT",
+    "bybit_chain": "TRX",
+    "network_uid": "tron:mainnet",
+    "okx_chain": "USDT-TRC20",
+    "representation_identity": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"
+  },
+  {
+    "asset": "USDT",
+    "bybit_chain": "TON",
+    "network_uid": "ton:mainnet",
+    "okx_chain": "USDT-The Open Network (TON)",
+    "representation_identity": "EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs"
+  }
+]

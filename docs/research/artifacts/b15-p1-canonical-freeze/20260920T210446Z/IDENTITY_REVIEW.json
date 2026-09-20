@@ -1,0 +1,481 @@
+[
+  {
+    "asset": "AVAX",
+    "proven_representations": [
+      {
+        "asset": "AVAX",
+        "bybit_chain": "CAVAX",
+        "bybit_chainType": "CAVAX",
+        "kind": "native",
+        "network_uid": "avalanche:c-chain",
+        "okx_chain": "AVAX-Avalanche C-Chain",
+        "representation_identity": "native:AVAX"
+      }
+    ],
+    "reasons": [
+      "UNRESOLVED_OBSERVED_ROUTE_OR_IDENTITY"
+    ]
+  },
+  {
+    "asset": "BABYDOGE",
+    "proven_representations": [
+      {
+        "asset": "BABYDOGE",
+        "bybit_chain": "BSC",
+        "bybit_chainType": "BNB Smart Chain",
+        "kind": "token",
+        "network_uid": "bsc:mainnet",
+        "okx_chain": "BABYDOGE-BSC",
+        "representation_identity": "0xc748673057861a797275cd8a068abb95a902e8de"
+      }
+    ],
+    "reasons": [
+      "UNRESOLVED_OBSERVED_ROUTE_OR_IDENTITY"
+    ]
+  },
+  {
+    "asset": "BCH",
+    "proven_representations": [
+      {
+        "asset": "BCH",
+        "bybit_chain": "BCH",
+        "bybit_chainType": "Bitcoin Cash",
+        "kind": "native",
+        "network_uid": "bitcoincash:mainnet",
+        "okx_chain": "BCH-BitcoinCash",
+        "representation_identity": "native:BCH"
+      }
+    ],
+    "reasons": [
+      "UNRESOLVED_OBSERVED_ROUTE_OR_IDENTITY"
+    ]
+  },
+  {
+    "asset": "BTC",
+    "proven_representations": [
+      {
+        "asset": "BTC",
+        "bybit_chain": "BTC",
+        "bybit_chainType": "Bitcoin",
+        "kind": "native",
+        "network_uid": "bitcoin:mainnet",
+        "okx_chain": "BTC-Bitcoin",
+        "representation_identity": "native:BTC"
+      }
+    ],
+    "reasons": [
+      "UNRESOLVED_OBSERVED_ROUTE_OR_IDENTITY"
+    ]
+  },
+  {
+    "asset": "CC",
+    "reasons": [
+      "NO_PROVEN_COMMON_REPRESENTATION"
+    ]
+  },
+  {
+    "asset": "CELO",
+    "reasons": [
+      "NO_PROVEN_COMMON_REPRESENTATION"
+    ]
+  },
+  {
+    "asset": "DOT",
+    "reasons": [
+      "NO_PROVEN_COMMON_REPRESENTATION"
+    ]
+  },
+  {
+    "asset": "EGLD",
+    "reasons": [
+      "NO_PROVEN_COMMON_REPRESENTATION"
+    ]
+  },
+  {
+    "asset": "ENJ",
+    "reasons": [
+      "NO_PROVEN_COMMON_REPRESENTATION"
+    ]
+  },
+  {
+    "asset": "ETC",
+    "proven_representations": [
+      {
+        "asset": "ETC",
+        "bybit_chain": "ETC",
+        "bybit_chainType": "Ethereum Classic",
+        "kind": "native",
+        "network_uid": "ethereumclassic:mainnet",
+        "okx_chain": "ETC-Ethereum Classic",
+        "representation_identity": "native:ETC"
+      }
+    ],
+    "reasons": [
+      "UNRESOLVED_OBSERVED_ROUTE_OR_IDENTITY"
+    ]
+  },
+  {
+    "asset": "ETH",
+    "proven_representations": [
+      {
+        "asset": "ETH",
+        "bybit_chain": "ARBI",
+        "bybit_chainType": "Arbitrum One",
+        "kind": "native",
+        "network_uid": "arbitrum:one",
+        "okx_chain": "ETH-Arbitrum One",
+        "representation_identity": "native:ETH"
+      },
+      {
+        "asset": "ETH",
+        "bybit_chain": "BASE",
+        "bybit_chainType": "Base Mainnet",
+        "kind": "native",
+        "network_uid": "base:mainnet",
+        "okx_chain": "ETH-Base",
+        "representation_identity": "native:ETH"
+      },
+      {
+        "asset": "ETH",
+        "bybit_chain": "ETH",
+        "bybit_chainType": "Ethereum",
+        "kind": "native",
+        "network_uid": "ethereum:mainnet",
+        "okx_chain": "ETH-ERC20",
+        "representation_identity": "native:ETH"
+      },
+      {
+        "asset": "ETH",
+        "bybit_chain": "LINEA",
+        "bybit_chainType": "LINEA",
+        "kind": "native",
+        "network_uid": "linea:mainnet",
+        "okx_chain": "ETH-Linea",
+        "representation_identity": "native:ETH"
+      }
+    ],
+    "reasons": [
+      "UNRESOLVED_OBSERVED_ROUTE_OR_IDENTITY"
+    ]
+  },
+  {
+    "asset": "FIL",
+    "proven_representations": [
+      {
+        "asset": "FIL",
+        "bybit_chain": "FIL",
+        "bybit_chainType": "Filecoin",
+        "kind": "native",
+        "network_uid": "filecoin:mainnet",
+        "okx_chain": "FIL-Filecoin",
+        "representation_identity": "native:FIL"
+      }
+    ],
+    "reasons": [
+      "UNRESOLVED_OBSERVED_ROUTE_OR_IDENTITY"
+    ]
+  },
+  {
+    "asset": "FLR",
+    "reasons": [
+      "NO_PROVEN_COMMON_REPRESENTATION"
+    ]
+  },
+  {
+    "asset": "FOGO",
+    "reasons": [
+      "NO_PROVEN_COMMON_REPRESENTATION"
+    ]
+  },
+  {
+    "asset": "G",
+    "proven_representations": [
+      {
+        "asset": "G",
+        "bybit_chain": "ETH",
+        "bybit_chainType": "Ethereum",
+        "kind": "token",
+        "network_uid": "ethereum:mainnet",
+        "okx_chain": "G-ERC20",
+        "representation_identity": "0x9c7beba8f6ef6643abd725e45a4e8387ef260649"
+      }
+    ],
+    "reasons": [
+      "UNRESOLVED_OBSERVED_ROUTE_OR_IDENTITY"
+    ]
+  },
+  {
+    "asset": "GRAM",
+    "reasons": [
+      "NO_PROVEN_COMMON_REPRESENTATION"
+    ]
+  },
+  {
+    "asset": "HBAR",
+    "reasons": [
+      "NO_PROVEN_COMMON_REPRESENTATION"
+    ]
+  },
+  {
+    "asset": "HYPE",
+    "reasons": [
+      "NO_PROVEN_COMMON_REPRESENTATION"
+    ]
+  },
+  {
+    "asset": "ICP",
+    "reasons": [
+      "NO_PROVEN_COMMON_REPRESENTATION"
+    ]
+  },
+  {
+    "asset": "KAIA",
+    "reasons": [
+      "NO_PROVEN_COMMON_REPRESENTATION"
+    ]
+  },
+  {
+    "asset": "KSM",
+    "reasons": [
+      "NO_PROVEN_COMMON_REPRESENTATION"
+    ]
+  },
+  {
+    "asset": "LINK",
+    "proven_representations": [
+      {
+        "asset": "LINK",
+        "bybit_chain": "ETH",
+        "bybit_chainType": "Ethereum",
+        "kind": "token",
+        "network_uid": "ethereum:mainnet",
+        "okx_chain": "LINK-ERC20",
+        "representation_identity": "0x514910771af9ca656af840dff83e8264ecf986ca"
+      }
+    ],
+    "reasons": [
+      "UNRESOLVED_OBSERVED_ROUTE_OR_IDENTITY"
+    ]
+  },
+  {
+    "asset": "LTC",
+    "proven_representations": [
+      {
+        "asset": "LTC",
+        "bybit_chain": "LTC",
+        "bybit_chainType": "LTC",
+        "kind": "native",
+        "network_uid": "litecoin:mainnet",
+        "okx_chain": "LTC-Litecoin",
+        "representation_identity": "native:LTC"
+      }
+    ],
+    "reasons": [
+      "UNRESOLVED_OBSERVED_ROUTE_OR_IDENTITY"
+    ]
+  },
+  {
+    "asset": "LUNA",
+    "reasons": [
+      "NO_PROVEN_COMMON_REPRESENTATION"
+    ]
+  },
+  {
+    "asset": "MINA",
+    "reasons": [
+      "NO_PROVEN_COMMON_REPRESENTATION"
+    ]
+  },
+  {
+    "asset": "MON",
+    "reasons": [
+      "NO_PROVEN_COMMON_REPRESENTATION"
+    ]
+  },
+  {
+    "asset": "NIGHT",
+    "reasons": [
+      "NO_PROVEN_COMMON_REPRESENTATION"
+    ]
+  },
+  {
+    "asset": "ORDI",
+    "reasons": [
+      "NO_PROVEN_COMMON_REPRESENTATION"
+    ]
+  },
+  {
+    "asset": "QTUM",
+    "reasons": [
+      "NO_PROVEN_COMMON_REPRESENTATION"
+    ]
+  },
+  {
+    "asset": "RVN",
+    "reasons": [
+      "NO_PROVEN_COMMON_REPRESENTATION"
+    ]
+  },
+  {
+    "asset": "S",
+    "reasons": [
+      "NO_PROVEN_COMMON_REPRESENTATION"
+    ]
+  },
+  {
+    "asset": "SATS",
+    "reasons": [
+      "NO_PROVEN_COMMON_REPRESENTATION"
+    ]
+  },
+  {
+    "asset": "SHIB",
+    "proven_representations": [
+      {
+        "asset": "SHIB",
+        "bybit_chain": "ETH",
+        "bybit_chainType": "Ethereum",
+        "kind": "token",
+        "network_uid": "ethereum:mainnet",
+        "okx_chain": "SHIB-ERC20",
+        "representation_identity": "0x95ad61b0a150d79219dcf64e1e6cc01f0b64c4ce"
+      }
+    ],
+    "reasons": [
+      "UNRESOLVED_OBSERVED_ROUTE_OR_IDENTITY"
+    ]
+  },
+  {
+    "asset": "SOL",
+    "proven_representations": [
+      {
+        "asset": "SOL",
+        "bybit_chain": "SOL",
+        "bybit_chainType": "SOL",
+        "kind": "native",
+        "network_uid": "solana:mainnet",
+        "okx_chain": "SOL-Solana",
+        "representation_identity": "native:SOL"
+      }
+    ],
+    "reasons": [
+      "UNRESOLVED_OBSERVED_ROUTE_OR_IDENTITY"
+    ]
+  },
+  {
+    "asset": "STX",
+    "reasons": [
+      "NO_PROVEN_COMMON_REPRESENTATION"
+    ]
+  },
+  {
+    "asset": "SUSHI",
+    "proven_representations": [
+      {
+        "asset": "SUSHI",
+        "bybit_chain": "ETH",
+        "bybit_chainType": "Ethereum",
+        "kind": "token",
+        "network_uid": "ethereum:mainnet",
+        "okx_chain": "SUSHI-ERC20",
+        "representation_identity": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+      }
+    ],
+    "reasons": [
+      "UNRESOLVED_OBSERVED_ROUTE_OR_IDENTITY"
+    ]
+  },
+  {
+    "asset": "THETA",
+    "reasons": [
+      "NO_PROVEN_COMMON_REPRESENTATION"
+    ]
+  },
+  {
+    "asset": "TIA",
+    "reasons": [
+      "NO_PROVEN_COMMON_REPRESENTATION"
+    ]
+  },
+  {
+    "asset": "TRX",
+    "proven_representations": [
+      {
+        "asset": "TRX",
+        "bybit_chain": "TRX",
+        "bybit_chainType": "TRX",
+        "kind": "native",
+        "network_uid": "tron:mainnet",
+        "okx_chain": "TRX-TRC20",
+        "representation_identity": "native:TRX"
+      }
+    ],
+    "reasons": [
+      "UNRESOLVED_OBSERVED_ROUTE_OR_IDENTITY"
+    ]
+  },
+  {
+    "asset": "UNI",
+    "proven_representations": [
+      {
+        "asset": "UNI",
+        "bybit_chain": "ETH",
+        "bybit_chainType": "Ethereum",
+        "kind": "token",
+        "network_uid": "ethereum:mainnet",
+        "okx_chain": "UNI-ERC20",
+        "representation_identity": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984"
+      }
+    ],
+    "reasons": [
+      "UNRESOLVED_OBSERVED_ROUTE_OR_IDENTITY"
+    ]
+  },
+  {
+    "asset": "WAXP",
+    "reasons": [
+      "NO_PROVEN_COMMON_REPRESENTATION"
+    ]
+  },
+  {
+    "asset": "XLM",
+    "reasons": [
+      "NO_PROVEN_COMMON_REPRESENTATION"
+    ]
+  },
+  {
+    "asset": "XPL",
+    "reasons": [
+      "NO_PROVEN_COMMON_REPRESENTATION"
+    ]
+  },
+  {
+    "asset": "XRP",
+    "proven_representations": [
+      {
+        "asset": "XRP",
+        "bybit_chain": "XRP",
+        "bybit_chainType": "XRP",
+        "kind": "native",
+        "network_uid": "xrp-ledger:mainnet",
+        "okx_chain": "XRP-XRP",
+        "representation_identity": "native:XRP"
+      }
+    ],
+    "reasons": [
+      "UNRESOLVED_OBSERVED_ROUTE_OR_IDENTITY"
+    ]
+  },
+  {
+    "asset": "ZETA",
+    "reasons": [
+      "NO_PROVEN_COMMON_REPRESENTATION"
+    ]
+  },
+  {
+    "asset": "ZIL",
+    "reasons": [
+      "NO_PROVEN_COMMON_REPRESENTATION"
+    ]
+  }
+]
