@@ -1,0 +1,30 @@
+{
+  "stage": "SC001-B15-P1-READONLY-CAPABILITY-PREFLIGHT-IMPLEMENTATION-FREEZE",
+  "version": "0.1",
+  "date": "2026-09-20",
+  "status": "FROZEN_BEFORE_B15_P1_READONLY_CAPABILITY_PREFLIGHT",
+  "protocol_path": "docs/research/sc001-b15-p1-readonly-capability-preflight-v0.1.md",
+  "protocol_git_blob_sha": "acdf82f306135d9a58be15b2cdff02c085c0b738",
+  "security_contract_path": "docs/research/sc001-b15-p1-read-only-credential-security-contract-v0.1.md",
+  "security_contract_git_blob_sha": "41534289c446aca751f4ffb16c969157a2c5ecc9",
+  "runner_path": "research/sc001/sc001_b15_p1_readonly_capability_preflight_v0_1.py",
+  "runner_git_blob_sha": "e48df39df10e75459b88770eba217edaae49db17",
+  "credential_file": "/home/botmarket/.config/sc001/b15-p1.env",
+  "credential_file_mode": "0600",
+  "default_okx_base_url": "https://openapi.okx.com",
+  "default_bybit_base_url": "https://api.bybit.com",
+  "okx_required_permission": "read_only",
+  "bybit_required_readOnly": 1,
+  "max_clock_skew_ms": 10000,
+  "price_access_authorized": false,
+  "order_access_authorized": false,
+  "transfer_access_authorized": false,
+  "withdraw_access_authorized": false,
+  "spread_basis_authorized": false,
+  "pnl_authorized": false,
+  "exact_terminal_states": [
+    "B15_P1_READONLY_CAPABILITY_PASS",
+    "B15_P1_READONLY_CAPABILITY_REVIEW"
+  ],
+  "next_allowed_action": "install credentials locally on VPS, then run capability preflight"
+}
