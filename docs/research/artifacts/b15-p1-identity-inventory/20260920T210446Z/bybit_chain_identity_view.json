@@ -1,0 +1,1802 @@
+[
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "1INCH",
+    "contract_address_raw": "0x111111111117dc0aa78b770fa6a738034120c302"
+  },
+  {
+    "chainType": "SOL",
+    "chain_raw": "SOL",
+    "coin": "2Z",
+    "contract_address_raw": "J6pQQ3FAcJQeWPPGppWRb4nM8jU3wLyYbRrLh7feMfvd"
+  },
+  {
+    "chainType": "Vaulta",
+    "chain_raw": "EOS",
+    "coin": "A",
+    "contract_address_raw": "core.vaulta"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "AAVE",
+    "contract_address_raw": "0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "ACH",
+    "contract_address_raw": "0xed04915c23f00a313a544955524eb7dbd823143d"
+  },
+  {
+    "chainType": "ADA",
+    "chain_raw": "ADA",
+    "coin": "ADA",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "AEVO",
+    "contract_address_raw": "0xB528edBef013aff855ac3c50b381f253aF13b997"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "AGLD",
+    "contract_address_raw": "0x32353a6c91143bfd6c7d363b546e62a9a2489a20"
+  },
+  {
+    "chainType": "Base Mainnet",
+    "chain_raw": "BASE",
+    "coin": "AIXBT",
+    "contract_address_raw": "0x4F9Fd6Be4a90f2620860d680c0d4d5Fb53d1A825"
+  },
+  {
+    "chainType": "ALGO",
+    "chain_raw": "ALGO",
+    "coin": "ALGO",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "Arbitrum One",
+    "chain_raw": "ARBI",
+    "coin": "ANIME",
+    "contract_address_raw": "0x37a645648dF29205C6261289983FB04ECD70b4B3"
+  },
+  {
+    "chainType": "ERC20",
+    "chain_raw": "ETH",
+    "coin": "ANIME",
+    "contract_address_raw": "0x4DC26fC5854e7648a064a4ABD590bBE71724C277"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "APE",
+    "contract_address_raw": "0x4d224452801aced8b2f0aebe155379bb5d594381"
+  },
+  {
+    "chainType": "APTOS",
+    "chain_raw": "APTOS",
+    "coin": "APT",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "AR",
+    "chain_raw": "AR",
+    "coin": "AR",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "Arbitrum One",
+    "chain_raw": "ARBI",
+    "coin": "ARB",
+    "contract_address_raw": "0x912CE59144191C1204E64559FE8253a0e49E6548"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "ARKM",
+    "contract_address_raw": "0x6E2a43be0B1d33b726f0CA3b8de60b3482b8b050"
+  },
+  {
+    "chainType": "BNB Smart Chain ",
+    "chain_raw": "BSC",
+    "coin": "ASTER",
+    "contract_address_raw": "0x000Ae314E2A2172a039B26378814C252734f556A"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "ATH",
+    "contract_address_raw": "0xbe0Ed4138121EcFC5c0E56B40517da27E6c5226B"
+  },
+  {
+    "chainType": "ATOM",
+    "chain_raw": "ATOM",
+    "coin": "ATOM",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "CAVAX",
+    "chain_raw": "CAVAX",
+    "coin": "AVAX",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "AVAX",
+    "chain_raw": "XAVAX",
+    "coin": "AVAX",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "Base Mainnet",
+    "chain_raw": "BASE",
+    "coin": "AVNT",
+    "contract_address_raw": "0x696F9436B67233384889472Cd7cD58A6fB5DF4f1"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "AXS",
+    "contract_address_raw": "0xbb0e17ef65f82ab018d8edd776e8dd940327b28b"
+  },
+  {
+    "chainType": "BNB Smart Chain",
+    "chain_raw": "BSC",
+    "coin": "BABYDOGE",
+    "contract_address_raw": "0xc748673057861a797275cd8a068abb95a902e8de"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "BARD",
+    "contract_address_raw": "0xf0DB65D17e30a966C2ae6A21f6BBA71cea6e9754"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "BASED",
+    "contract_address_raw": "0x4f2b33840227DDD0e28da8d4185D6fa07ADfed87"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "BAT",
+    "contract_address_raw": "0x0d8775f648430679a709e98d2b0cb6250d2887ef"
+  },
+  {
+    "chainType": "Bitcoin Cash",
+    "chain_raw": "BCH",
+    "coin": "BCH",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "Berachain",
+    "chain_raw": "BERA",
+    "coin": "BERA",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "BICO",
+    "contract_address_raw": "0xf17e65822b568b3903685a7c9f496cf7656cc6c2"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "BLUR",
+    "contract_address_raw": "0x5283d291dbcf85356a21ba090e6db59121208b44"
+  },
+  {
+    "chainType": "BNB Smart Chain",
+    "chain_raw": "BSC",
+    "coin": "BNB",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "Solana",
+    "chain_raw": "SOL",
+    "coin": "BOME",
+    "contract_address_raw": "ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82"
+  },
+  {
+    "chainType": "SOL",
+    "chain_raw": "SOL",
+    "coin": "BONK",
+    "contract_address_raw": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "BREV",
+    "contract_address_raw": "0x086F405146Ce90135750Bbec9A063a8B20A8bfFb"
+  },
+  {
+    "chainType": "Bitcoin",
+    "chain_raw": "BTC",
+    "coin": "BTC",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "BNB Smart Chain ",
+    "chain_raw": "BSC",
+    "coin": "CAT",
+    "contract_address_raw": "0x6894CDe390a3f51155ea41Ed24a33A4827d3063D"
+  },
+  {
+    "chainType": "Mantle Mainnet",
+    "chain_raw": "MANTLE",
+    "coin": "CATI",
+    "contract_address_raw": "0x1Bdd8878252DaddD3Af2ba30628813271294eDc0"
+  },
+  {
+    "chainType": "Ton",
+    "chain_raw": "TON",
+    "coin": "CATI",
+    "contract_address_raw": "EQD-cvR0Nz6XAyRBvbhz-abTrRC6sI5tvHvvpeQraV9UAAD7"
+  },
+  {
+    "chainType": "Canton",
+    "chain_raw": "CANTON",
+    "coin": "CC",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "CELO",
+    "chain_raw": "CELO",
+    "coin": "CELO",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "Ethereum ",
+    "chain_raw": "ETH",
+    "coin": "CFG",
+    "contract_address_raw": "0xcccCCCcCCC33D538DBC2EE4fEab0a7A1FF4e8A94"
+  },
+  {
+    "chainType": "Arbitrum One",
+    "chain_raw": "ARBI",
+    "coin": "CHIP",
+    "contract_address_raw": "0x0C1c1C109FE34733fca54b82d7B46B75CFb71F6e"
+  },
+  {
+    "chainType": "Chiliz Chain",
+    "chain_raw": "CHILIZ",
+    "coin": "CHZ",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "CHZ",
+    "contract_address_raw": "0x3506424f91fd33084466f402d5d97f05f8e3b4af"
+  },
+  {
+    "chainType": "Chiliz Chain",
+    "chain_raw": "CHILIZ",
+    "coin": "CITY",
+    "contract_address_raw": "0x7bd6242d775faef1d50b2aa18c2fbf329bddf295"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "COMP",
+    "contract_address_raw": "0xc00e94cb662c3520282e6f5717214004a7f26888"
+  },
+  {
+    "chainType": "CORE",
+    "chain_raw": "CORE",
+    "coin": "CORE",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "CRV",
+    "contract_address_raw": "0xd533a949740bb3306d119cc777fa900ba034cd52"
+  },
+  {
+    "chainType": "Casper",
+    "chain_raw": "CSPR",
+    "coin": "CSPR",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "Data Network",
+    "chain_raw": "STORY",
+    "coin": "DATA",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "Base Mainnet",
+    "chain_raw": "BASE",
+    "coin": "DEGEN",
+    "contract_address_raw": "0x4ed4E862860beD51a9570b96d89aF5E1B0Efefed"
+  },
+  {
+    "chainType": "Dogecoin",
+    "chain_raw": "DOGE",
+    "coin": "DOGE",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "TON",
+    "chain_raw": "TON",
+    "coin": "DOGS",
+    "contract_address_raw": "EQCvxJy4eG8hyHBFsZ7eePxrRsUQSFE_jpptRAYBmcG_DOGS"
+  },
+  {
+    "chainType": "Solana",
+    "chain_raw": "SOL",
+    "coin": "DOOD",
+    "contract_address_raw": "DvjbEsdca43oQcw2h3HW1CT7N3x5vRcr3QrvTUHnXvgV"
+  },
+  {
+    "chainType": "Polkadot AssetHub ",
+    "chain_raw": "DOTAH",
+    "coin": "DOT",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "DYDX",
+    "chain_raw": "DYDX",
+    "coin": "DYDX",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "EDGE",
+    "contract_address_raw": "0xB0076DE78Dc50581770BBa1D211dDc0aD4F2a241"
+  },
+  {
+    "chainType": "EGLD",
+    "chain_raw": "EGLD",
+    "coin": "EGLD",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "EIGEN",
+    "contract_address_raw": "0xec53bF9167f50cDEB3Ae105f56099aaaB9061F83"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "ENA",
+    "contract_address_raw": "0x57e114B691Db790C35207b2e685D4A43181e6061"
+  },
+  {
+    "chainType": "Mantle Network",
+    "chain_raw": "MANTLE",
+    "coin": "ENA",
+    "contract_address_raw": "0x58538e6A46E07434d7E7375Bc268D3cb839C0133"
+  },
+  {
+    "chainType": "Enjin",
+    "chain_raw": "ENJIN",
+    "coin": "ENJ",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "ENJ",
+    "contract_address_raw": "0xf629cbd94d3791c9250152bd8dfbdf380e2a3b9c"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "ENS",
+    "contract_address_raw": "0xc18360217d8f7ab5e7c516566761ea12ce7f9d72"
+  },
+  {
+    "chainType": "Ethereum Classic",
+    "chain_raw": "ETC",
+    "coin": "ETC",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "Arbitrum One",
+    "chain_raw": "ARBI",
+    "coin": "ETH",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "Arbitrum Nova",
+    "chain_raw": "ARBINOVA",
+    "coin": "ETH",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "Base Mainnet",
+    "chain_raw": "BASE",
+    "coin": "ETH",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "BNB Smart Chain",
+    "chain_raw": "BSC",
+    "coin": "ETH",
+    "contract_address_raw": "0x2170ed0880ac9a755fd29b2688956bd959f933f8"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "ETH",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "LINEA",
+    "chain_raw": "LINEA",
+    "coin": "ETH",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "Mantle Network",
+    "chain_raw": "MANTLE",
+    "coin": "ETH",
+    "contract_address_raw": "0xdEAddEaDdeadDEadDEADDEAddEADDEAddead1111"
+  },
+  {
+    "chainType": "OP Mainnet",
+    "chain_raw": "OP",
+    "coin": "ETH",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "zkSync Lite",
+    "chain_raw": "ZKSYNC",
+    "coin": "ETH",
+    "contract_address_raw": "0x0000000000000000000000000000000000000000"
+  },
+  {
+    "chainType": "zkSync Era",
+    "chain_raw": "ZKV2",
+    "coin": "ETH",
+    "contract_address_raw": "0x000000000000000000000000000000000000800a"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "ETHFI",
+    "contract_address_raw": "0xFe0c30065B384F05761f15d0CC899D4F9F9Cc0eB"
+  },
+  {
+    "chainType": "ETHW",
+    "chain_raw": "ETHW",
+    "coin": "ETHW",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "FET",
+    "contract_address_raw": "0xaea46A60368A7bD060eec7DF8CBa43b7EF41Ad85"
+  },
+  {
+    "chainType": "Filecoin",
+    "chain_raw": "FIL",
+    "coin": "FIL",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "BNB Smart Chain",
+    "chain_raw": "BSC",
+    "coin": "FLOKI",
+    "contract_address_raw": "0xfb5b838b6cfeedc2873ab27866079ac55363d37e"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "FLOKI",
+    "contract_address_raw": "0xcf0c122c6b73ff809c693db761e7baebe62b6a2e"
+  },
+  {
+    "chainType": "FLOW",
+    "chain_raw": "FLOW",
+    "coin": "FLOW",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "FLR",
+    "chain_raw": "FLR",
+    "coin": "FLR",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "FLUID",
+    "contract_address_raw": "0x6f40d4A6237C257fff2dB00FA0510DeEECd303eb"
+  },
+  {
+    "chainType": "FOGO",
+    "chain_raw": "FOGO",
+    "coin": "FOGO",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "BEP20",
+    "chain_raw": "BSC",
+    "coin": "G",
+    "contract_address_raw": "0x9C7BEBa8F6eF6643aBd725e45a4E8387eF260649"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "G",
+    "contract_address_raw": "0x9C7BEBa8F6eF6643aBd725e45a4E8387eF260649"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "GALA",
+    "contract_address_raw": "0xd1d2eb1b1e90b638588728b4130137d262c87cae"
+  },
+  {
+    "chainType": "BNB Smart Chain",
+    "chain_raw": "BSC",
+    "coin": "GMT",
+    "contract_address_raw": "0x3019bf2a2ef8040c242c9a4c5c4bd4c81678b2a1"
+  },
+  {
+    "chainType": "ERC20",
+    "chain_raw": "ETH",
+    "coin": "GMT",
+    "contract_address_raw": "0xe3c408BD53c31C085a1746AF401A4042954ff740"
+  },
+  {
+    "chainType": "Polygon PoS",
+    "chain_raw": "MATIC",
+    "coin": "GMT",
+    "contract_address_raw": "0x714DB550b574b3E927af3D93E26127D15721D4C2"
+  },
+  {
+    "chainType": "SOL",
+    "chain_raw": "SOL",
+    "coin": "GMT",
+    "contract_address_raw": "7i5KKsX2weiTkry7jA4ZwSuXGhs5eJBEjY8vVxR4pfRx"
+  },
+  {
+    "chainType": "Arbitrum One",
+    "chain_raw": "ARBI",
+    "coin": "GMX",
+    "contract_address_raw": "0xfc5a1a6eb076a2c7ad06ed22c90d7e710e35ad0a"
+  },
+  {
+    "chainType": "CAVAX",
+    "chain_raw": "CAVAX",
+    "coin": "GMX",
+    "contract_address_raw": "0x62edc0692BD897D2295872a9FFCac5425011c661"
+  },
+  {
+    "chainType": "Solana",
+    "chain_raw": "SOL",
+    "coin": "GOAT",
+    "contract_address_raw": "CzLSujWBLFsSjncfkh59rUFqvafWcY5tzedWJSuypump"
+  },
+  {
+    "chainType": "TON",
+    "chain_raw": "TON",
+    "coin": "GRAM",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "Solana",
+    "chain_raw": "SOL",
+    "coin": "GRASS",
+    "contract_address_raw": "Grass7B4RdKfBCjTKgSqnXkqjwiGvQyFbuSCUJr3XXjs"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "GRT",
+    "contract_address_raw": "0xc944e90c64b2c07662a292be6244bdf05cda44a7"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "GRVT",
+    "contract_address_raw": "0xAD29F2723fcdBcF665F210F25E06f97477e417cF"
+  },
+  {
+    "chainType": "HBAR",
+    "chain_raw": "HBAR",
+    "coin": "HBAR",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "TON",
+    "chain_raw": "TON",
+    "coin": "HMSTR",
+    "contract_address_raw": "EQAJ8uWd7EBqsmpSWaRdf_I-8R8-XHwh3gsNKhy-UrdrPcUo"
+  },
+  {
+    "chainType": "SOL",
+    "chain_raw": "SOL",
+    "coin": "HUMA",
+    "contract_address_raw": "HUMA1821qVDKta3u2ovmfDQeW2fSQouSKE8fkF44wvGw"
+  },
+  {
+    "chainType": "HyperEVM",
+    "chain_raw": "HYPEREVM",
+    "coin": "HYPE",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "ICP",
+    "chain_raw": "ICP",
+    "coin": "ICP",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "BNB Smart Chain",
+    "chain_raw": "BSC",
+    "coin": "ID",
+    "contract_address_raw": "0x2dfF88A56767223A5529eA5960Da7A3F5f766406"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "ID",
+    "contract_address_raw": "0x2dfF88A56767223A5529eA5960Da7A3F5f766406"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "IMX",
+    "contract_address_raw": "0xf57e7e7c23978c3caec3c3548e3d615c346e79ff"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "INJ",
+    "contract_address_raw": "0xe28b3b32b6c345a34ff64674606124dd5aceca30"
+  },
+  {
+    "chainType": "INJ",
+    "chain_raw": "INJ",
+    "coin": "INJ",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "Solana",
+    "chain_raw": "SOL",
+    "coin": "JTO",
+    "contract_address_raw": "jtojtomepa8beP8AuQc6eXt5FriJwfFMwQx2v2f9mCL"
+  },
+  {
+    "chainType": "Solana",
+    "chain_raw": "SOL",
+    "coin": "JUP",
+    "contract_address_raw": "JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN"
+  },
+  {
+    "chainType": "KAIA",
+    "chain_raw": "KLAY",
+    "coin": "KAIA",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "Solana",
+    "chain_raw": "SOL",
+    "coin": "KMNO",
+    "contract_address_raw": "KMNo3nJsBXfcpJTVhZcXLW7RmTwTt4GVFE7suUBo9sS"
+  },
+  {
+    "chainType": "Kusama Asset Hub",
+    "chain_raw": "KSMAH",
+    "coin": "KSM",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "Solana",
+    "chain_raw": "SOL",
+    "coin": "LAYER",
+    "contract_address_raw": "LAYER4xPpTCb3QL8S9u41EAhAX7mhBn8Q6xMTwY2Yzc"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "LDO",
+    "contract_address_raw": "0x5a98fcbea516cf06857215779fd812ca3bef1b32"
+  },
+  {
+    "chainType": "Ethereum ",
+    "chain_raw": "ETH",
+    "coin": "LINEA",
+    "contract_address_raw": "0x1789e0043623282D5DCc7F213d703C6D8BAfBB04"
+  },
+  {
+    "chainType": "LINEA",
+    "chain_raw": "LINEA",
+    "coin": "LINEA",
+    "contract_address_raw": "0x1789e0043623282D5DCc7F213d703C6D8BAfBB04"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "LINK",
+    "contract_address_raw": "0x514910771af9ca656af840dff83e8264ecf986ca"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "LIT",
+    "contract_address_raw": "0x232CE3bd40fCd6f80f3d55A522d03f25Df784Ee2"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "LRC",
+    "contract_address_raw": "0xbbbbca6a901c926f240b89eacb641d8aec7aeafd"
+  },
+  {
+    "chainType": "LTC",
+    "chain_raw": "LTC",
+    "coin": "LTC",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "Terra",
+    "chain_raw": "LUNANEW",
+    "coin": "LUNA",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "Arbitrum One",
+    "chain_raw": "ARBI",
+    "coin": "MAGIC",
+    "contract_address_raw": "0x539bdE0d7Dbd336b79148AA742883198BBF60342"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "MANA",
+    "contract_address_raw": "0x0f5d2fb29fb7d3cfee444a200298f468908cc942"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "MASK",
+    "contract_address_raw": "0x69af81e73a73b40adf4f3d4223cd9b1ece623074"
+  },
+  {
+    "chainType": "Solana",
+    "chain_raw": "SOL",
+    "coin": "ME",
+    "contract_address_raw": "MEFNBXixkEbait3xn9bkm8WsJzXtVsaJEn4c8Sam21u"
+  },
+  {
+    "chainType": "MegaETH",
+    "chain_raw": "MEGAETH",
+    "coin": "MEGA",
+    "contract_address_raw": "0x28B7E77f82B25B95953825F1E3eA0E36c1c29861"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "MEME",
+    "contract_address_raw": "0xb131f4a55907b10d1f0a50d8ab8fa09ec342cd74"
+  },
+  {
+    "chainType": "Merlin Chain",
+    "chain_raw": "MERLIN",
+    "coin": "MERL",
+    "contract_address_raw": "0x5c46bFF4B38dc1EAE09C5BAc65872a1D8bc87378"
+  },
+  {
+    "chainType": "Solana",
+    "chain_raw": "SOL",
+    "coin": "MET",
+    "contract_address_raw": "METvsvVRapdj9cFLzq4Tr43xK4tAjQfwX76z3n6mWQL"
+  },
+  {
+    "chainType": "Solana",
+    "chain_raw": "SOL",
+    "coin": "MEW",
+    "contract_address_raw": "MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5"
+  },
+  {
+    "chainType": "MINA",
+    "chain_raw": "MINA",
+    "coin": "MINA",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "SUI",
+    "chain_raw": "SUI",
+    "coin": "MMT",
+    "contract_address_raw": "0x35169bc93e1fddfcf3a82a9eae726d349689ed59e4b065369af8789fe59f8608::mmt::MMT"
+  },
+  {
+    "chainType": "Monad",
+    "chain_raw": "MONAD",
+    "coin": "MON",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "Base Mainnet",
+    "chain_raw": "BASE",
+    "coin": "MORPHO",
+    "contract_address_raw": "0xBAa5CC21fd487B8Fcc2F632f3F4E8D37262a0842"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "MORPHO",
+    "contract_address_raw": "0x58D97B57BB95320F9a05dC918Aef65434969c2B2"
+  },
+  {
+    "chainType": "ERC20",
+    "chain_raw": "ETH",
+    "coin": "MOVE",
+    "contract_address_raw": "0x3073f7aAA4DB83f95e9FFf17424F71D4751a3073"
+  },
+  {
+    "chainType": "Movement Network",
+    "chain_raw": "MOVE",
+    "coin": "MOVE",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "NEAR",
+    "chain_raw": "NEAR",
+    "coin": "NEAR",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "TRX",
+    "chain_raw": "TRX",
+    "coin": "NFT",
+    "contract_address_raw": "TFczxzPhnThNSqr5by8tvxsdCFRRz6cPNq"
+  },
+  {
+    "chainType": "ADA",
+    "chain_raw": "ADA",
+    "coin": "NIGHT",
+    "contract_address_raw": "0691b2fecca1ac4f53cb6dfb00b7013e561d1f34403b957cbb5af1fa:4e49474854"
+  },
+  {
+    "chainType": "BNB Smart Chain",
+    "chain_raw": "BSC",
+    "coin": "NIGHT",
+    "contract_address_raw": "0xFe930c2d63AeD9b82fC4DBC801920dD2c1a3224F"
+  },
+  {
+    "chainType": "TON",
+    "chain_raw": "TON",
+    "coin": "NOT",
+    "contract_address_raw": "EQAvlWFDxGF2lXm67y4yzC17wYKD9A0guwPkMs1gOsM__NOT"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "ONDO",
+    "contract_address_raw": "0xfAbA6f8e4a5E8Ab82F62fe7C39859FA577269BE3"
+  },
+  {
+    "chainType": "OP Mainnet",
+    "chain_raw": "OP",
+    "coin": "OP",
+    "contract_address_raw": "0x4200000000000000000000000000000000000042"
+  },
+  {
+    "chainType": "Bitcoin",
+    "chain_raw": "BTC",
+    "coin": "ORDI",
+    "contract_address_raw": "ordi"
+  },
+  {
+    "chainType": "Base Mainnet",
+    "chain_raw": "BASE",
+    "coin": "PARTI",
+    "contract_address_raw": "0x59264f02D301281f3393e1385c0aEFd446Eb0F00"
+  },
+  {
+    "chainType": "BNB Smart Chain",
+    "chain_raw": "BSC",
+    "coin": "PARTI",
+    "contract_address_raw": "0x59264f02D301281f3393e1385c0aEFd446Eb0F00"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "PENDLE",
+    "contract_address_raw": "0x808507121b80c02388fad14726482e061b8da827"
+  },
+  {
+    "chainType": "SOL",
+    "chain_raw": "SOL",
+    "coin": "PENGU",
+    "contract_address_raw": "2zMMhcVQEXDtdE6vsFS7S7D5oUodfJHE8vd1gnBouauv"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "PEOPLE",
+    "contract_address_raw": "0x7a58c0be72be218b41c608b7fe7c5bb630736c71"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "PEPE",
+    "contract_address_raw": "0x6982508145454ce325ddbe47a25d4ec3d2311933"
+  },
+  {
+    "chainType": "SOLANA",
+    "chain_raw": "SOL",
+    "coin": "PNUT",
+    "contract_address_raw": "2qEHjDLDLbuBgRYvsxhc5D6uDWAivNFZGan56P1tpump"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "POL",
+    "contract_address_raw": "0x455e53CBB86018Ac2B8092FdCd39d8444aFFC3F6"
+  },
+  {
+    "chainType": "Polygon PoS",
+    "chain_raw": "MATIC",
+    "coin": "POL",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "BNB Smart Chain ",
+    "chain_raw": "BSC",
+    "coin": "PROVE",
+    "contract_address_raw": "0x7DDf164CEcfddd0f992299D033B5a11279A15929"
+  },
+  {
+    "chainType": "Ethereum ",
+    "chain_raw": "ETH",
+    "coin": "PROVE",
+    "contract_address_raw": "0x6BEF15D938d4E72056AC92Ea4bDD0D76B1C4ad29"
+  },
+  {
+    "chainType": "SOL",
+    "chain_raw": "SOL",
+    "coin": "PUMP",
+    "contract_address_raw": "pumpCmXqMfrsAkQ5r49WcJnRayYRqmXz6ae8H7H9Dfn"
+  },
+  {
+    "chainType": "Solana",
+    "chain_raw": "SOL",
+    "coin": "PYTH",
+    "contract_address_raw": "HZ1JovNiVvGrGNiiYvEozEVgZ58xaU3RKwX8eACQBCt3"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "PYUSD",
+    "contract_address_raw": "0x6c3ea9036406852006290770BEdFcAbA0e23A0e8"
+  },
+  {
+    "chainType": "Solana",
+    "chain_raw": "SOL",
+    "coin": "PYUSD",
+    "contract_address_raw": "2b1kV6DkPAnxd5ixfnxCpjxmKwqjjaYmCZfHsFu24GXo"
+  },
+  {
+    "chainType": "QTUM",
+    "chain_raw": "QTUM",
+    "coin": "QTUM",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "Solana",
+    "chain_raw": "SOL",
+    "coin": "RENDER",
+    "contract_address_raw": "rndrizKT3MK1iimdxRdWabcF7Zg7AR5T4nud4EkHBof"
+  },
+  {
+    "chainType": "Ethereum ",
+    "chain_raw": "ETH",
+    "coin": "RESOLV",
+    "contract_address_raw": "0x259338656198eC7A76c729514D3CB45Dfbf768A1"
+  },
+  {
+    "chainType": "Ethereum ",
+    "chain_raw": "ETH",
+    "coin": "RLUSD",
+    "contract_address_raw": "0x8292Bb45bf1Ee4d140127049757C2E0fF06317eD"
+  },
+  {
+    "chainType": "XRP",
+    "chain_raw": "XRP",
+    "coin": "RLUSD",
+    "contract_address_raw": "524C555344000000000000000000000000000000"
+  },
+  {
+    "chainType": "Base Mainnet",
+    "chain_raw": "BASE",
+    "coin": "ROBO",
+    "contract_address_raw": "0x407A5fb66CB1b3d50004f7091c08A27B42ba6d6F"
+  },
+  {
+    "chainType": "BNB Smart Chain",
+    "chain_raw": "BSC",
+    "coin": "ROBO",
+    "contract_address_raw": "0x475cbf5919608e0c6Af00e7bf87FaB83bF3Ef6e2"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "ROBO",
+    "contract_address_raw": "0x32b4d049fE4c888D2b92eEcaf729F44DF6B1F36E"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "RPL",
+    "contract_address_raw": "0xD33526068D116cE69F19A9ee46F0bd304F21A51f"
+  },
+  {
+    "chainType": "RVN",
+    "chain_raw": "RVN",
+    "coin": "RVN",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "Sonic",
+    "chain_raw": "SONIC",
+    "coin": "S",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "SAFE",
+    "contract_address_raw": "0x5aFE3855358E112B5647B952709E6165e1c1eEEe"
+  },
+  {
+    "chainType": "BNB Smart Chain",
+    "chain_raw": "BSC",
+    "coin": "SAHARA",
+    "contract_address_raw": "0xFDFfB411C4A70AA7C95D5C981a6Fb4Da867e1111"
+  },
+  {
+    "chainType": "Ethereum ",
+    "chain_raw": "ETH",
+    "coin": "SAHARA",
+    "contract_address_raw": "0xFDFfB411C4A70AA7C95D5C981a6Fb4Da867e1111"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "SAND",
+    "contract_address_raw": "0x3845badade8e6dff049820680d1f14bd3903a5d0"
+  },
+  {
+    "chainType": "Bitcoin",
+    "chain_raw": "BTC",
+    "coin": "SATS",
+    "contract_address_raw": "sats"
+  },
+  {
+    "chainType": "Scroll",
+    "chain_raw": "SCROLL",
+    "coin": "SCR",
+    "contract_address_raw": "0xd29687c813D741E2F938F4aC377128810E217b1b"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "SD",
+    "contract_address_raw": "0x30d20208d987713f46dfd34ef128bb16c404d10f"
+  },
+  {
+    "chainType": "SEI",
+    "chain_raw": "SEI",
+    "coin": "SEI",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "SEIEVM",
+    "chain_raw": "SEIEVM",
+    "coin": "SEI",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "SENT",
+    "contract_address_raw": "0x56A3BA04E95d34268A19b2a4474DC979baBDaf76"
+  },
+  {
+    "chainType": "BNB Smart Chain",
+    "chain_raw": "BSC",
+    "coin": "SHIB",
+    "contract_address_raw": "0x2859e4544c4bb03966803b044a93563bd2d0dd4d"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "SHIB",
+    "contract_address_raw": "0x95ad61b0a150d79219dcf64e1e6cc01f0b64c4ce"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "SKY",
+    "contract_address_raw": "0x56072C95FAA701256059aa122697B133aDEd9279"
+  },
+  {
+    "chainType": "BNB Smart Chain",
+    "chain_raw": "BSC",
+    "coin": "SLX",
+    "contract_address_raw": "0x02bcC4C181B83a8c0A342BC003389CbEcb4BC54D"
+  },
+  {
+    "chainType": "Solana",
+    "chain_raw": "SOL",
+    "coin": "SLX",
+    "contract_address_raw": "SLXdx4BUt2v9uJQNzWqSfzTJ9UKLUDsvxHFMEEdrfgq"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "SNX",
+    "contract_address_raw": "0xc011a73ee8576fb46f5e1c5751ca3b9fe0af2a6f"
+  },
+  {
+    "chainType": "SOL",
+    "chain_raw": "SOL",
+    "coin": "SOL",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "Solana",
+    "chain_raw": "SOL",
+    "coin": "SONIC",
+    "contract_address_raw": "SonicxvLud67EceaEzCLRnMTBqzYUUYNr93DBkBdDES"
+  },
+  {
+    "chainType": "BNB Smart Chain",
+    "chain_raw": "BSC",
+    "coin": "SPK",
+    "contract_address_raw": "0xAfF2e841851700D1Fc101995Ee6b81Ae21Bb87D7"
+  },
+  {
+    "chainType": "Ethereum ",
+    "chain_raw": "ETH",
+    "coin": "SPK",
+    "contract_address_raw": "0xc20059e0317DE91738d13af027DfC4a50781b066"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "SSV",
+    "contract_address_raw": "0x9D65fF81a3c488d585bBfb0Bfe3c7707c7917f54"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "STETH",
+    "contract_address_raw": "0xae7ab96520de3a18e5e111b5eaab095312d7fe84"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "STRK",
+    "contract_address_raw": "0xCa14007Eff0dB1f8135f4C25B34De49AB0d42766"
+  },
+  {
+    "chainType": "Starknet",
+    "chain_raw": "STARKNET",
+    "coin": "STRK",
+    "contract_address_raw": "0x04718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d"
+  },
+  {
+    "chainType": "Stacks",
+    "chain_raw": "STX",
+    "coin": "STX",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "SUI",
+    "chain_raw": "SUI",
+    "coin": "SUI",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "SUSHI",
+    "contract_address_raw": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+  },
+  {
+    "chainType": "THETA",
+    "chain_raw": "THETA",
+    "coin": "THETA",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "Celestia",
+    "chain_raw": "CELESTIA",
+    "coin": "TIA",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "Solana",
+    "chain_raw": "SOL",
+    "coin": "TNSR",
+    "contract_address_raw": "TNSRxcUxoT9xBG3de7PiJyTDYu7kskLqcpddxnEJAS6"
+  },
+  {
+    "chainType": "Base Mainnet",
+    "chain_raw": "BASE",
+    "coin": "TOSHI",
+    "contract_address_raw": "0xAC1Bd2486aAf3B5C0fc3Fd868558b082a531B2B4"
+  },
+  {
+    "chainType": "Solana",
+    "chain_raw": "SOL",
+    "coin": "TRUMP",
+    "contract_address_raw": "6p6xgHyF7AeE6TZkSmFsko444wqoP15icUSqi2jfGiPN"
+  },
+  {
+    "chainType": "TRX",
+    "chain_raw": "TRX",
+    "coin": "TRX",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "UMA",
+    "contract_address_raw": "0x04fa0d235c4abf4bcf4787af4cf447de572ef828"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "UNI",
+    "contract_address_raw": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "USAT",
+    "contract_address_raw": "0x07041776f5007ACa2A54844F50503a18A72A8b68"
+  },
+  {
+    "chainType": "APTOS",
+    "chain_raw": "APTOS",
+    "coin": "USD1",
+    "contract_address_raw": "0x05fabd1b12e39967a3c24e91b7b8f67719a6dacee74f3c8b9fb7d93e855437d2"
+  },
+  {
+    "chainType": "BNB Smart Chain",
+    "chain_raw": "BSC",
+    "coin": "USD1",
+    "contract_address_raw": "0x8d0D000Ee44948FC98c9B98A4FA4921476f08B0d"
+  },
+  {
+    "chainType": "Ethereum ",
+    "chain_raw": "ETH",
+    "coin": "USD1",
+    "contract_address_raw": "0x8d0D000Ee44948FC98c9B98A4FA4921476f08B0d"
+  },
+  {
+    "chainType": "Mantle Network",
+    "chain_raw": "MANTLE",
+    "coin": "USD1",
+    "contract_address_raw": "0x111111d2bf19e43C34263401e0CAd979eD1cdb61"
+  },
+  {
+    "chainType": "SOL",
+    "chain_raw": "SOL",
+    "coin": "USD1",
+    "contract_address_raw": "USD1ttGY1N17NEEHLmELoaybftRBUSErhqYiQzvEmuB"
+  },
+  {
+    "chainType": "TRC20",
+    "chain_raw": "TRX",
+    "coin": "USD1",
+    "contract_address_raw": "TPFqcBAaaUMCSVRCqPaQ9QnzKhmuoLR6Rc"
+  },
+  {
+    "chainType": "APTOS",
+    "chain_raw": "APTOS",
+    "coin": "USDC",
+    "contract_address_raw": "0xbae207659db88bea0cbead6da0ed00aac12edcdda169e591cd41c94180b46f3b"
+  },
+  {
+    "chainType": "Arbitrum One",
+    "chain_raw": "ARBI",
+    "coin": "USDC",
+    "contract_address_raw": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831"
+  },
+  {
+    "chainType": "Arc Network",
+    "chain_raw": "ARC",
+    "coin": "USDC",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "Base Mainnet",
+    "chain_raw": "BASE",
+    "coin": "USDC",
+    "contract_address_raw": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"
+  },
+  {
+    "chainType": "BNB Smart Chain",
+    "chain_raw": "BSC",
+    "coin": "USDC",
+    "contract_address_raw": "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d"
+  },
+  {
+    "chainType": "CAVAX",
+    "chain_raw": "CAVAX",
+    "coin": "USDC",
+    "contract_address_raw": "0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E"
+  },
+  {
+    "chainType": "Codex",
+    "chain_raw": "CODEX",
+    "coin": "USDC",
+    "contract_address_raw": "0xd996633a415985DBd7D6D12f4A4343E31f5037cf"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "USDC",
+    "contract_address_raw": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"
+  },
+  {
+    "chainType": "HBAR",
+    "chain_raw": "HBAR",
+    "coin": "USDC",
+    "contract_address_raw": "0.0.456858"
+  },
+  {
+    "chainType": "Mantle Network",
+    "chain_raw": "MANTLE",
+    "coin": "USDC",
+    "contract_address_raw": "0x09Bc4E0D864854c6aFB6eB9A9cdF58aC190D0dF9"
+  },
+  {
+    "chainType": "Polygon PoS",
+    "chain_raw": "MATIC",
+    "coin": "USDC",
+    "contract_address_raw": "0x3c499c542cef5e3811e1192ce70d8cc03d5c3359"
+  },
+  {
+    "chainType": "Polygon(bridged)",
+    "chain_raw": "MATIC.E",
+    "coin": "USDC",
+    "contract_address_raw": "0x2791bca1f2de4661ed88a30c99a7a9449aa84174"
+  },
+  {
+    "chainType": "Monad",
+    "chain_raw": "MONAD",
+    "coin": "USDC",
+    "contract_address_raw": "0x754704Bc059F8C67012fEd69BC8A327a5aafb603"
+  },
+  {
+    "chainType": "OP Mainnet",
+    "chain_raw": "OP",
+    "coin": "USDC",
+    "contract_address_raw": "0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85"
+  },
+  {
+    "chainType": "SEIEVM",
+    "chain_raw": "SEIEVM",
+    "coin": "USDC",
+    "contract_address_raw": "0xe15fC38F6D8c56aF07bbCBe3BAf5708A2Bf42392"
+  },
+  {
+    "chainType": "SOL",
+    "chain_raw": "SOL",
+    "coin": "USDC",
+    "contract_address_raw": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+  },
+  {
+    "chainType": "Sonic",
+    "chain_raw": "SONIC",
+    "coin": "USDC",
+    "contract_address_raw": "0x29219dd400f2Bf60E5a23d13Be72B486D4038894"
+  },
+  {
+    "chainType": "SUI",
+    "chain_raw": "SUI",
+    "coin": "USDC",
+    "contract_address_raw": "0xdba34672e30cb065b1f93e3ab55318768fd6fef66c15942c9f7cb846e2f900e7::usdc::USDC"
+  },
+  {
+    "chainType": "XDC",
+    "chain_raw": "XDC",
+    "coin": "USDC",
+    "contract_address_raw": "0xfA2958CB79b0491CC627c1557F441eF849Ca8eb1"
+  },
+  {
+    "chainType": "zkSync Lite",
+    "chain_raw": "ZKSYNC",
+    "coin": "USDC",
+    "contract_address_raw": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "USDS",
+    "contract_address_raw": "0xdC035D45d973E3EC169d2276DDab16f1e407384F"
+  },
+  {
+    "chainType": "Aptos",
+    "chain_raw": "APTOS",
+    "coin": "USDT",
+    "contract_address_raw": "0x357b0b74bc833e95a115ad22604854d6b0fca151cecd94111770e5d6ffc9dc2b"
+  },
+  {
+    "chainType": "Arbitrum One(USDT0)",
+    "chain_raw": "ARBI",
+    "coin": "USDT",
+    "contract_address_raw": "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9"
+  },
+  {
+    "chainType": "Berachain",
+    "chain_raw": "BERA",
+    "coin": "USDT",
+    "contract_address_raw": "0x779Ded0c9e1022225f8E0630b35a9b54bE713736"
+  },
+  {
+    "chainType": "BNB Smart Chain",
+    "chain_raw": "BSC",
+    "coin": "USDT",
+    "contract_address_raw": "0x55d398326f99059ff775485246999027b3197955"
+  },
+  {
+    "chainType": "CAVAX",
+    "chain_raw": "CAVAX",
+    "coin": "USDT",
+    "contract_address_raw": "0x9702230A8Ea53601f5cD2dc00fDBc13d4dF4A8c7"
+  },
+  {
+    "chainType": "CELO",
+    "chain_raw": "CELO",
+    "coin": "USDT",
+    "contract_address_raw": "0x48065fbBE25f71C9282ddf5e1cD6D6A887483D5e"
+  },
+  {
+    "chainType": "CORN",
+    "chain_raw": "CORN",
+    "coin": "USDT",
+    "contract_address_raw": "0xB8CE59FC3717ada4C02eaDF9682A9e934F625ebb"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "USDT",
+    "contract_address_raw": "0xdac17f958d2ee523a2206206994597c13d831ec7"
+  },
+  {
+    "chainType": "HyperEVM",
+    "chain_raw": "HYPEREVM",
+    "coin": "USDT",
+    "contract_address_raw": "0xB8CE59FC3717ada4C02eaDF9682A9e934F625ebb"
+  },
+  {
+    "chainType": "KAVAEVM",
+    "chain_raw": "KAVAEVM",
+    "coin": "USDT",
+    "contract_address_raw": "0x919c1c267bc06a7039e03fcc2ef738525769109c"
+  },
+  {
+    "chainType": "KAIA",
+    "chain_raw": "KLAY",
+    "coin": "USDT",
+    "contract_address_raw": "0xd077a400968890eacc75cdc901f0356c943e4fdb"
+  },
+  {
+    "chainType": "Mantle Network(USDT0)",
+    "chain_raw": "MANTLE",
+    "coin": "USDT",
+    "contract_address_raw": "0x779Ded0c9e1022225f8E0630b35a9b54bE713736"
+  },
+  {
+    "chainType": "Polygon PoS",
+    "chain_raw": "MATIC",
+    "coin": "USDT",
+    "contract_address_raw": "0xc2132d05d31c914a87c6611c10748aeb04b58e8f"
+  },
+  {
+    "chainType": "Monad",
+    "chain_raw": "MONAD",
+    "coin": "USDT",
+    "contract_address_raw": "0xe7cd86e13AC4309349F30B3435a9d337750fC82D"
+  },
+  {
+    "chainType": "OP Mainnet",
+    "chain_raw": "OP",
+    "coin": "USDT",
+    "contract_address_raw": "0x94b008aA00579c1307B0EF2c499aD98a8ce58e58"
+  },
+  {
+    "chainType": "Plasma",
+    "chain_raw": "PLASMA",
+    "coin": "USDT",
+    "contract_address_raw": "0xB8CE59FC3717ada4C02eaDF9682A9e934F625ebb"
+  },
+  {
+    "chainType": "SOL",
+    "chain_raw": "SOL",
+    "coin": "USDT",
+    "contract_address_raw": "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB"
+  },
+  {
+    "chainType": "TON",
+    "chain_raw": "TON",
+    "coin": "USDT",
+    "contract_address_raw": "EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs"
+  },
+  {
+    "chainType": "TRX",
+    "chain_raw": "TRX",
+    "coin": "USDT",
+    "contract_address_raw": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"
+  },
+  {
+    "chainType": "zkSync Lite",
+    "chain_raw": "ZKSYNC",
+    "coin": "USDT",
+    "contract_address_raw": "0xdac17f958d2ee523a2206206994597c13d831ec7"
+  },
+  {
+    "chainType": "BNB Smart Chain",
+    "chain_raw": "BSC",
+    "coin": "VELO",
+    "contract_address_raw": "0xf486ad071f3bEE968384D2E39e2D8aF0fCf6fd46"
+  },
+  {
+    "chainType": "XLM",
+    "chain_raw": "XLM",
+    "coin": "VELO",
+    "contract_address_raw": "VELO:GDM4RQUQQUVSKQA7S6EM7XBZP3FCGH4Q7CL6TABQ7B2BEJ5ERARM2M5M"
+  },
+  {
+    "chainType": "Base Mainnet",
+    "chain_raw": "BASE",
+    "coin": "VIRTUAL",
+    "contract_address_raw": "0x0b3e328455c4059EEb9e3f84b5543F74E24e7E1b"
+  },
+  {
+    "chainType": "Solana",
+    "chain_raw": "SOL",
+    "coin": "VIRTUAL",
+    "contract_address_raw": "3iQL8BFS2vE7mww4ehAqQHAsbmRNCrPxizWAT2Zfyr9y"
+  },
+  {
+    "chainType": "Base Mainnet",
+    "chain_raw": "BASE",
+    "coin": "VVV",
+    "contract_address_raw": "0xacfE6019Ed1A7Dc6f7B508C02d1b04ec88cC21bf"
+  },
+  {
+    "chainType": "SOL",
+    "chain_raw": "SOL",
+    "coin": "W",
+    "contract_address_raw": "85VBFQZC9TZkfaptBWjvUw7YbZjy52A6mjtPGjstQAmQ"
+  },
+  {
+    "chainType": "WAX",
+    "chain_raw": "WAXP",
+    "coin": "WAXP",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "Ethereum ",
+    "chain_raw": "ETH",
+    "coin": "WCT",
+    "contract_address_raw": "0xeF4461891DfB3AC8572cCf7C794664A8DD927945"
+  },
+  {
+    "chainType": "OP Mainnet",
+    "chain_raw": "OP",
+    "coin": "WCT",
+    "contract_address_raw": "0xeF4461891DfB3AC8572cCf7C794664A8DD927945"
+  },
+  {
+    "chainType": "SOL ",
+    "chain_raw": "SOL",
+    "coin": "WCT",
+    "contract_address_raw": "WCTk5xWdn5SYg56twGj32sUF3W4WFQ48ogezLBuYTBY"
+  },
+  {
+    "chainType": "Solana",
+    "chain_raw": "SOL",
+    "coin": "WET",
+    "contract_address_raw": "WETZjtprkDMCcUxPi9PfWnowMRZkiGGHDb9rABuRZ2U"
+  },
+  {
+    "chainType": "Solana",
+    "chain_raw": "SOL",
+    "coin": "WIF",
+    "contract_address_raw": "EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "WLD",
+    "contract_address_raw": "0x163f8C2467924be0ae7B5347228CABF260318753"
+  },
+  {
+    "chainType": "OP Mainnet",
+    "chain_raw": "OP",
+    "coin": "WLD",
+    "contract_address_raw": "0xdC6fF44d5d932Cbd77B52E5612Ba0529DC6226F1"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "WLFI",
+    "contract_address_raw": "0xdA5e1988097297dCdc1f90D4dFE7909e847CBeF6"
+  },
+  {
+    "chainType": "SOL",
+    "chain_raw": "SOL",
+    "coin": "WLFI",
+    "contract_address_raw": "WLFinEv6ypjkczcS83FZqFpgFZYwQXutRbxGe7oC16g"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "WOO",
+    "contract_address_raw": "0x4691937a7508860f876c9c0a2a617e7d9e945d4b"
+  },
+  {
+    "chainType": "Stellar Lumens",
+    "chain_raw": "XLM",
+    "coin": "XLM",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "Plasma",
+    "chain_raw": "PLASMA",
+    "coin": "XPL",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "XRP",
+    "chain_raw": "XRP",
+    "coin": "XRP",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "tezos",
+    "chain_raw": "XTZ",
+    "coin": "XTZ",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "YB",
+    "contract_address_raw": "0x01791F726B4103694969820be083196cC7c045fF"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "YFI",
+    "contract_address_raw": "0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "ZAMA",
+    "contract_address_raw": "0xA12CC123ba206d4031D1c7f6223D1C2Ec249f4f3"
+  },
+  {
+    "chainType": "Solana",
+    "chain_raw": "SOL",
+    "coin": "ZAMA",
+    "contract_address_raw": "4Zp52aF4hZi9fzH19xpbWKYKQvgLyCN67KFbrQDqeTKh"
+  },
+  {
+    "chainType": "Base Mainnet",
+    "chain_raw": "BASE",
+    "coin": "ZEN",
+    "contract_address_raw": "0xf43eB8De897Fbc7F2502483B2Bef7Bb9EA179229"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "ZENT",
+    "contract_address_raw": "0xdBB7a34Bf10169d6d2D0d02A6cbb436cF4381BFa"
+  },
+  {
+    "chainType": "ZetaChain",
+    "chain_raw": "ZETA",
+    "coin": "ZETA",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "ZetaChain EVM",
+    "chain_raw": "ZETAEVM",
+    "coin": "ZETA",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "ZIL",
+    "chain_raw": "ZIL",
+    "coin": "ZIL",
+    "contract_address_raw": ""
+  },
+  {
+    "chainType": "ZKsync Era",
+    "chain_raw": "ZKV2",
+    "coin": "ZK",
+    "contract_address_raw": "0x5A7d6b2F92C77FAD6CCaBd7EE0624E64907Eaf3E"
+  },
+  {
+    "chainType": "BNB Smart Chain",
+    "chain_raw": "BSC",
+    "coin": "ZKJ",
+    "contract_address_raw": "0xC71B5F631354BE6853eFe9C3Ab6b9590F8302e81"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "ZKJ",
+    "contract_address_raw": "0xC71B5F631354BE6853eFe9C3Ab6b9590F8302e81"
+  },
+  {
+    "chainType": "Base Mainnet",
+    "chain_raw": "BASE",
+    "coin": "ZORA",
+    "contract_address_raw": "0x1111111111166b7FE7bd91427724B487980aFc69"
+  },
+  {
+    "chainType": "Arbitrum One",
+    "chain_raw": "ARBI",
+    "coin": "ZRO",
+    "contract_address_raw": "0x6985884C4392D348587B19cb9eAAf157F13271cd"
+  },
+  {
+    "chainType": "Base Mainnet",
+    "chain_raw": "BASE",
+    "coin": "ZRO",
+    "contract_address_raw": "0x6985884C4392D348587B19cb9eAAf157F13271cd"
+  },
+  {
+    "chainType": "BSC (BEP20)",
+    "chain_raw": "BSC",
+    "coin": "ZRO",
+    "contract_address_raw": "0x6985884C4392D348587B19cb9eAAf157F13271cd"
+  },
+  {
+    "chainType": "AVAX-C Chain",
+    "chain_raw": "CAVAX",
+    "coin": "ZRO",
+    "contract_address_raw": "0x6985884C4392D348587B19cb9eAAf157F13271cd"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "ZRO",
+    "contract_address_raw": "0x6985884C4392D348587B19cb9eAAf157F13271cd"
+  },
+  {
+    "chainType": "Polygon PoS",
+    "chain_raw": "MATIC",
+    "coin": "ZRO",
+    "contract_address_raw": "0x6985884C4392D348587B19cb9eAAf157F13271cd"
+  },
+  {
+    "chainType": "OP Mainnet",
+    "chain_raw": "OP",
+    "coin": "ZRO",
+    "contract_address_raw": "0x6985884C4392D348587B19cb9eAAf157F13271cd"
+  },
+  {
+    "chainType": "Ethereum",
+    "chain_raw": "ETH",
+    "coin": "ZRX",
+    "contract_address_raw": "0xe41d2489571d322189246dafa5ebde1f4699f498"
+  }
+]

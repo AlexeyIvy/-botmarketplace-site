@@ -1,0 +1,3952 @@
+[
+  {
+    "base": "0G",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "0GUSDT",
+    "symbolId": 1118,
+    "symbolType": ""
+  },
+  {
+    "base": "1INCH",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "1INCHUSDT",
+    "symbolId": 104,
+    "symbolType": ""
+  },
+  {
+    "base": "2Z",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "2ZUSDT",
+    "symbolId": 1135,
+    "symbolType": ""
+  },
+  {
+    "base": "A",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "AUSDT",
+    "symbolId": 908,
+    "symbolType": ""
+  },
+  {
+    "base": "A8",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "A8USDT",
+    "symbolId": 711,
+    "symbolType": ""
+  },
+  {
+    "base": "AAPLX",
+    "primary_market_gate": false,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "AAPLXUSDT",
+    "symbolId": 1002,
+    "symbolType": "xstocks"
+  },
+  {
+    "base": "AAVE",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "AAVEUSDT",
+    "symbolId": 26,
+    "symbolType": ""
+  },
+  {
+    "base": "ACH",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "ACHUSDT",
+    "symbolId": 185,
+    "symbolType": ""
+  },
+  {
+    "base": "ACS",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "ACSUSDT",
+    "symbolId": 412,
+    "symbolType": ""
+  },
+  {
+    "base": "ADA",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "ADAUSDT",
+    "symbolId": 33,
+    "symbolType": ""
+  },
+  {
+    "base": "AEDZ",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "AEDZUSDT",
+    "symbolId": 1253,
+    "symbolType": ""
+  },
+  {
+    "base": "AERO",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "AEROUSDT",
+    "symbolId": 813,
+    "symbolType": ""
+  },
+  {
+    "base": "AEVO",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "AEVOUSDT",
+    "symbolId": 588,
+    "symbolType": ""
+  },
+  {
+    "base": "AGI",
+    "primary_market_gate": false,
+    "quote": "USDT",
+    "stTag": "1",
+    "status": "Trading",
+    "symbol": "AGIUSDT",
+    "symbolId": 431,
+    "symbolType": ""
+  },
+  {
+    "base": "AGLD",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "AGLDUSDT",
+    "symbolId": 49,
+    "symbolType": ""
+  },
+  {
+    "base": "AIOZ",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "AIOZUSDT",
+    "symbolId": 539,
+    "symbolType": ""
+  },
+  {
+    "base": "AIXBT",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "AIXBTUSDT",
+    "symbolId": 833,
+    "symbolType": ""
+  },
+  {
+    "base": "ALCH",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "ALCHUSDT",
+    "symbolId": 824,
+    "symbolType": ""
+  },
+  {
+    "base": "ALGO",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "ALGOUSDT",
+    "symbolId": 61,
+    "symbolType": ""
+  },
+  {
+    "base": "ALT",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "ALTUSDT",
+    "symbolId": 575,
+    "symbolType": ""
+  },
+  {
+    "base": "AMZNX",
+    "primary_market_gate": false,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "AMZNXUSDT",
+    "symbolId": 1006,
+    "symbolType": "xstocks"
+  },
+  {
+    "base": "ANIME",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "ANIMEUSDT",
+    "symbolId": 848,
+    "symbolType": ""
+  },
+  {
+    "base": "ANKR",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "ANKRUSDT",
+    "symbolId": 50,
+    "symbolType": ""
+  },
+  {
+    "base": "APE",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "APEUSDT",
+    "symbolId": 204,
+    "symbolType": ""
+  },
+  {
+    "base": "APEX",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "APEXUSDT",
+    "symbolId": 232,
+    "symbolType": ""
+  },
+  {
+    "base": "APT",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "APTUSDT",
+    "symbolId": 378,
+    "symbolType": ""
+  },
+  {
+    "base": "AR",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "ARUSDT",
+    "symbolId": 303,
+    "symbolType": ""
+  },
+  {
+    "base": "ARB",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "ARBUSDT",
+    "symbolId": 425,
+    "symbolType": ""
+  },
+  {
+    "base": "ARKM",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "ARKMUSDT",
+    "symbolId": 467,
+    "symbolType": ""
+  },
+  {
+    "base": "ARX",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "ARXUSDT",
+    "symbolId": 1311,
+    "symbolType": ""
+  },
+  {
+    "base": "ASTER",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "ASTERUSDT",
+    "symbolId": 1116,
+    "symbolType": ""
+  },
+  {
+    "base": "ATH",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "ATHUSDT",
+    "symbolId": 673,
+    "symbolType": ""
+  },
+  {
+    "base": "ATOM",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "ATOMUSDT",
+    "symbolId": 60,
+    "symbolType": ""
+  },
+  {
+    "base": "AURORA",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "AURORAUSDT",
+    "symbolId": 670,
+    "symbolType": ""
+  },
+  {
+    "base": "AVA",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "AVAUSDT",
+    "symbolId": 81,
+    "symbolType": ""
+  },
+  {
+    "base": "AVAIL",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "AVAILUSDT",
+    "symbolId": 714,
+    "symbolType": ""
+  },
+  {
+    "base": "AVAX",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "AVAXUSDT",
+    "symbolId": 65,
+    "symbolType": ""
+  },
+  {
+    "base": "AVL",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "AVLUSDT",
+    "symbolId": 853,
+    "symbolType": ""
+  },
+  {
+    "base": "AVNT",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "AVNTUSDT",
+    "symbolId": 1082,
+    "symbolType": ""
+  },
+  {
+    "base": "AXL",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "AXLUSDT",
+    "symbolId": 428,
+    "symbolType": ""
+  },
+  {
+    "base": "AXS",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "AXSUSDT",
+    "symbolId": 21,
+    "symbolType": ""
+  },
+  {
+    "base": "AZTEC",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "AZTECUSDT",
+    "symbolId": 1259,
+    "symbolType": ""
+  },
+  {
+    "base": "B3",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "B3USDT",
+    "symbolId": 854,
+    "symbolType": ""
+  },
+  {
+    "base": "BABY1",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "BABY1USDT",
+    "symbolId": 882,
+    "symbolType": ""
+  },
+  {
+    "base": "BABYDOGE",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "BABYDOGEUSDT",
+    "symbolId": 293,
+    "symbolType": ""
+  },
+  {
+    "base": "BAN",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "BANUSDT",
+    "symbolId": 790,
+    "symbolType": ""
+  },
+  {
+    "base": "BARD",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "BARDUSDT",
+    "symbolId": 1109,
+    "symbolType": ""
+  },
+  {
+    "base": "BASED",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "BASEDUSDT",
+    "symbolId": 1279,
+    "symbolType": ""
+  },
+  {
+    "base": "BAT",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "BATUSDT",
+    "symbolId": 46,
+    "symbolType": ""
+  },
+  {
+    "base": "BB",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "BBUSDT",
+    "symbolId": 648,
+    "symbolType": ""
+  },
+  {
+    "base": "BBSOL",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "BBSOLUSDT",
+    "symbolId": 766,
+    "symbolType": ""
+  },
+  {
+    "base": "BCH",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "BCHUSDT",
+    "symbolId": 37,
+    "symbolType": ""
+  },
+  {
+    "base": "BEAM",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "BEAMUSDT",
+    "symbolId": 504,
+    "symbolType": ""
+  },
+  {
+    "base": "BEL",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "BELUSDT",
+    "symbolId": 263,
+    "symbolType": ""
+  },
+  {
+    "base": "BERA",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "BERAUSDT",
+    "symbolId": 852,
+    "symbolType": ""
+  },
+  {
+    "base": "BICO",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "BICOUSDT",
+    "symbolId": 95,
+    "symbolType": ""
+  },
+  {
+    "base": "BILL",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "BILLUSDT",
+    "symbolId": 1300,
+    "symbolType": ""
+  },
+  {
+    "base": "BIRB",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "BIRBUSDT",
+    "symbolId": 1245,
+    "symbolType": ""
+  },
+  {
+    "base": "BLAST",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "BLASTUSDT",
+    "symbolId": 685,
+    "symbolType": ""
+  },
+  {
+    "base": "BLEND",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "BLENDUSDT",
+    "symbolId": 1292,
+    "symbolType": ""
+  },
+  {
+    "base": "BLUR",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "BLURUSDT",
+    "symbolId": 408,
+    "symbolType": ""
+  },
+  {
+    "base": "BMT",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "BMTUSDT",
+    "symbolId": 836,
+    "symbolType": ""
+  },
+  {
+    "base": "BNB",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "BNBUSDT",
+    "symbolId": 200,
+    "symbolType": ""
+  },
+  {
+    "base": "BOBA",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "BOBAUSDT",
+    "symbolId": 86,
+    "symbolType": ""
+  },
+  {
+    "base": "BOME",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "BOMEUSDT",
+    "symbolId": 593,
+    "symbolType": ""
+  },
+  {
+    "base": "BONK",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "BONKUSDT",
+    "symbolId": 399,
+    "symbolType": ""
+  },
+  {
+    "base": "BR",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "BRUSDT",
+    "symbolId": 867,
+    "symbolType": ""
+  },
+  {
+    "base": "BRETT",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "BRETTUSDT",
+    "symbolId": 627,
+    "symbolType": ""
+  },
+  {
+    "base": "BREV",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "BREVUSDT",
+    "symbolId": 1228,
+    "symbolType": ""
+  },
+  {
+    "base": "BSB",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "BSBUSDT",
+    "symbolId": 1267,
+    "symbolType": ""
+  },
+  {
+    "base": "BTC",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "BTCUSDT",
+    "symbolId": 9,
+    "symbolType": ""
+  },
+  {
+    "base": "BTT",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "BTTUSDT",
+    "symbolId": 188,
+    "symbolType": ""
+  },
+  {
+    "base": "C98",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "C98USDT",
+    "symbolId": 76,
+    "symbolType": ""
+  },
+  {
+    "base": "CAKE",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "CAKEUSDT",
+    "symbolId": 73,
+    "symbolType": ""
+  },
+  {
+    "base": "CAP",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "CAPUSDT",
+    "symbolId": 1314,
+    "symbolType": ""
+  },
+  {
+    "base": "CARV",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "CARVUSDT",
+    "symbolId": 767,
+    "symbolType": ""
+  },
+  {
+    "base": "CAT",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "CATUSDT",
+    "symbolId": 1037,
+    "symbolType": ""
+  },
+  {
+    "base": "CATI",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "CATIUSDT",
+    "symbolId": 751,
+    "symbolType": ""
+  },
+  {
+    "base": "CC",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "CCUSDT",
+    "symbolId": 1192,
+    "symbolType": ""
+  },
+  {
+    "base": "CELO",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "CELOUSDT",
+    "symbolId": 227,
+    "symbolType": ""
+  },
+  {
+    "base": "CFG",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "CFGUSDT",
+    "symbolId": 1060,
+    "symbolType": ""
+  },
+  {
+    "base": "CGPT",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "CGPTUSDT",
+    "symbolId": 429,
+    "symbolType": ""
+  },
+  {
+    "base": "CHILLGUY",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "CHILLGUYUSDT",
+    "symbolId": 800,
+    "symbolType": ""
+  },
+  {
+    "base": "CHIP",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "CHIPUSDT",
+    "symbolId": 1288,
+    "symbolType": ""
+  },
+  {
+    "base": "CHZ",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "CHZUSDT",
+    "symbolId": 20,
+    "symbolType": ""
+  },
+  {
+    "base": "CITY",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "CITYUSDT",
+    "symbolId": 318,
+    "symbolType": ""
+  },
+  {
+    "base": "CLOUD",
+    "primary_market_gate": false,
+    "quote": "USDT",
+    "stTag": "1",
+    "status": "Trading",
+    "symbol": "CLOUDUSDT",
+    "symbolId": 712,
+    "symbolType": ""
+  },
+  {
+    "base": "COINX",
+    "primary_market_gate": false,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "COINXUSDT",
+    "symbolId": 997,
+    "symbolType": "xstocks"
+  },
+  {
+    "base": "COMP",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "COMPUSDT",
+    "symbolId": 25,
+    "symbolType": ""
+  },
+  {
+    "base": "COOK",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "COOKUSDT",
+    "symbolId": 776,
+    "symbolType": ""
+  },
+  {
+    "base": "COOKIE",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "COOKIEUSDT",
+    "symbolId": 674,
+    "symbolType": ""
+  },
+  {
+    "base": "CORE",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "COREUSDT",
+    "symbolId": 406,
+    "symbolType": ""
+  },
+  {
+    "base": "CORN",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "CORNUSDT",
+    "symbolId": 874,
+    "symbolType": ""
+  },
+  {
+    "base": "CPOOL",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "CPOOLUSDT",
+    "symbolId": 580,
+    "symbolType": ""
+  },
+  {
+    "base": "CRCLX",
+    "primary_market_gate": false,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "CRCLXUSDT",
+    "symbolId": 1003,
+    "symbolType": "xstocks"
+  },
+  {
+    "base": "CRV",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "CRVUSDT",
+    "symbolId": 48,
+    "symbolType": ""
+  },
+  {
+    "base": "CSPR",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "CSPRUSDT",
+    "symbolId": 577,
+    "symbolType": ""
+  },
+  {
+    "base": "CTC",
+    "primary_market_gate": false,
+    "quote": "USDT",
+    "stTag": "1",
+    "status": "Trading",
+    "symbol": "CTCUSDT",
+    "symbolId": 234,
+    "symbolType": ""
+  },
+  {
+    "base": "CYBER",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "CYBERUSDT",
+    "symbolId": 477,
+    "symbolType": ""
+  },
+  {
+    "base": "DATA",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "DATAUSDT",
+    "symbolId": 1321,
+    "symbolType": ""
+  },
+  {
+    "base": "DBR",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "DBRUSDT",
+    "symbolId": 772,
+    "symbolType": ""
+  },
+  {
+    "base": "DEEP",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "DEEPUSDT",
+    "symbolId": 770,
+    "symbolType": ""
+  },
+  {
+    "base": "DEGEN",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "DEGENUSDT",
+    "symbolId": 607,
+    "symbolType": ""
+  },
+  {
+    "base": "DIAM",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "DIAMUSDT",
+    "symbolId": 855,
+    "symbolType": ""
+  },
+  {
+    "base": "DOGE",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "DOGEUSDT",
+    "symbolId": 18,
+    "symbolType": ""
+  },
+  {
+    "base": "DOGS",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "DOGSUSDT",
+    "symbolId": 721,
+    "symbolType": ""
+  },
+  {
+    "base": "DOLO",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "DOLOUSDT",
+    "symbolId": 889,
+    "symbolType": ""
+  },
+  {
+    "base": "DOOD",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "DOODUSDT",
+    "symbolId": 899,
+    "symbolType": ""
+  },
+  {
+    "base": "DOT",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "DOTUSDT",
+    "symbolId": 15,
+    "symbolType": ""
+  },
+  {
+    "base": "DRIFT",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "DRIFTUSDT",
+    "symbolId": 652,
+    "symbolType": ""
+  },
+  {
+    "base": "DYDX",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "DYDXUSDT",
+    "symbolId": 23,
+    "symbolType": ""
+  },
+  {
+    "base": "DYM",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "DYMUSDT",
+    "symbolId": 563,
+    "symbolType": ""
+  },
+  {
+    "base": "EDGE",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "EDGEUSDT",
+    "symbolId": 1280,
+    "symbolType": ""
+  },
+  {
+    "base": "EGLD",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "EGLDUSDT",
+    "symbolId": 128,
+    "symbolType": ""
+  },
+  {
+    "base": "EIGEN",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "EIGENUSDT",
+    "symbolId": 762,
+    "symbolType": ""
+  },
+  {
+    "base": "ELSA",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "ELSAUSDT",
+    "symbolId": 1235,
+    "symbolType": ""
+  },
+  {
+    "base": "ENA",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "ENAUSDT",
+    "symbolId": 610,
+    "symbolType": ""
+  },
+  {
+    "base": "ENJ",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "ENJUSDT",
+    "symbolId": 62,
+    "symbolType": ""
+  },
+  {
+    "base": "ENS",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "ENSUSDT",
+    "symbolId": 70,
+    "symbolType": ""
+  },
+  {
+    "base": "ENSO",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "ENSOUSDT",
+    "symbolId": 1155,
+    "symbolType": ""
+  },
+  {
+    "base": "ERA",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "ERAUSDT",
+    "symbolId": 1034,
+    "symbolType": ""
+  },
+  {
+    "base": "ESE",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "ESEUSDT",
+    "symbolId": 618,
+    "symbolType": ""
+  },
+  {
+    "base": "ETC",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "ETCUSDT",
+    "symbolId": 34,
+    "symbolType": ""
+  },
+  {
+    "base": "ETH",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "ETHUSDT",
+    "symbolId": 10,
+    "symbolType": ""
+  },
+  {
+    "base": "ETHFI",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "ETHFIUSDT",
+    "symbolId": 597,
+    "symbolType": ""
+  },
+  {
+    "base": "ETHW",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "ETHWUSDT",
+    "symbolId": 367,
+    "symbolType": ""
+  },
+  {
+    "base": "F",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "FUSDT",
+    "symbolId": 803,
+    "symbolType": ""
+  },
+  {
+    "base": "FET",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "FETUSDT",
+    "symbolId": 497,
+    "symbolType": ""
+  },
+  {
+    "base": "FF",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "FFUSDT",
+    "symbolId": 1128,
+    "symbolType": ""
+  },
+  {
+    "base": "FHE",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "FHEUSDT",
+    "symbolId": 881,
+    "symbolType": ""
+  },
+  {
+    "base": "FIDA",
+    "primary_market_gate": false,
+    "quote": "USDT",
+    "stTag": "1",
+    "status": "Trading",
+    "symbol": "FIDAUSDT",
+    "symbolId": 207,
+    "symbolType": ""
+  },
+  {
+    "base": "FIGHT",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "FIGHTUSDT",
+    "symbolId": 1239,
+    "symbolType": ""
+  },
+  {
+    "base": "FIL",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "FILUSDT",
+    "symbolId": 43,
+    "symbolType": ""
+  },
+  {
+    "base": "FLOCK",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "FLOCKUSDT",
+    "symbolId": 826,
+    "symbolType": ""
+  },
+  {
+    "base": "FLOKI",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "FLOKIUSDT",
+    "symbolId": 292,
+    "symbolType": ""
+  },
+  {
+    "base": "FLOW",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "FLOWUSDT",
+    "symbolId": 149,
+    "symbolType": ""
+  },
+  {
+    "base": "FLR",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "FLRUSDT",
+    "symbolId": 400,
+    "symbolType": ""
+  },
+  {
+    "base": "FLUID",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "FLUIDUSDT",
+    "symbolId": 819,
+    "symbolType": ""
+  },
+  {
+    "base": "FOGO",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "FOGOUSDT",
+    "symbolId": 1233,
+    "symbolType": ""
+  },
+  {
+    "base": "FORT",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "FORTUSDT",
+    "symbolId": 264,
+    "symbolType": ""
+  },
+  {
+    "base": "FRAX",
+    "primary_market_gate": false,
+    "quote": "USDT",
+    "stTag": "1",
+    "status": "Trading",
+    "symbol": "FRAXUSDT",
+    "symbolId": 1232,
+    "symbolType": ""
+  },
+  {
+    "base": "FTT",
+    "primary_market_gate": false,
+    "quote": "USDT",
+    "stTag": "1",
+    "status": "Trading",
+    "symbol": "FTTUSDT",
+    "symbolId": 67,
+    "symbolType": ""
+  },
+  {
+    "base": "G",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "GUSDT",
+    "symbolId": 717,
+    "symbolType": ""
+  },
+  {
+    "base": "GAIB",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "GAIBUSDT",
+    "symbolId": 1188,
+    "symbolType": ""
+  },
+  {
+    "base": "GALA",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "GALAUSDT",
+    "symbolId": 89,
+    "symbolType": ""
+  },
+  {
+    "base": "GLMR",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "GLMRUSDT",
+    "symbolId": 215,
+    "symbolType": ""
+  },
+  {
+    "base": "GMT",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "GMTUSDT",
+    "symbolId": 225,
+    "symbolType": ""
+  },
+  {
+    "base": "GMX",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "GMXUSDT",
+    "symbolId": 182,
+    "symbolType": ""
+  },
+  {
+    "base": "GOAT",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "GOATUSDT",
+    "symbolId": 785,
+    "symbolType": ""
+  },
+  {
+    "base": "GOOGLX",
+    "primary_market_gate": false,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "GOOGLXUSDT",
+    "symbolId": 1007,
+    "symbolType": "xstocks"
+  },
+  {
+    "base": "GPS",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "GPSUSDT",
+    "symbolId": 839,
+    "symbolType": ""
+  },
+  {
+    "base": "GRAM",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "GRAMUSDT",
+    "symbolId": 398,
+    "symbolType": ""
+  },
+  {
+    "base": "GRASS",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "GRASSUSDT",
+    "symbolId": 777,
+    "symbolType": ""
+  },
+  {
+    "base": "GROVE",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "GROVEUSDT",
+    "symbolId": 1319,
+    "symbolType": ""
+  },
+  {
+    "base": "GRT",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "GRTUSDT",
+    "symbolId": 39,
+    "symbolType": ""
+  },
+  {
+    "base": "GRVT",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "GRVTUSDT",
+    "symbolId": 1322,
+    "symbolType": ""
+  },
+  {
+    "base": "H",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "HUSDT",
+    "symbolId": 982,
+    "symbolType": ""
+  },
+  {
+    "base": "HAEDAL",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "HAEDALUSDT",
+    "symbolId": 894,
+    "symbolType": ""
+  },
+  {
+    "base": "HBAR",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "HBARUSDT",
+    "symbolId": 147,
+    "symbolType": ""
+  },
+  {
+    "base": "HFT",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "HFTUSDT",
+    "symbolId": 387,
+    "symbolType": ""
+  },
+  {
+    "base": "HMSTR",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "HMSTRUSDT",
+    "symbolId": 753,
+    "symbolType": ""
+  },
+  {
+    "base": "HNT",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "HNTUSDT",
+    "symbolId": 145,
+    "symbolType": ""
+  },
+  {
+    "base": "HOLO",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "HOLOUSDT",
+    "symbolId": 1091,
+    "symbolType": ""
+  },
+  {
+    "base": "HOME",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "HOMEUSDT",
+    "symbolId": 923,
+    "symbolType": ""
+  },
+  {
+    "base": "HOODX",
+    "primary_market_gate": false,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "HOODXUSDT",
+    "symbolId": 1005,
+    "symbolType": "xstocks"
+  },
+  {
+    "base": "HTX",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "HTXUSDT",
+    "symbolId": 576,
+    "symbolType": ""
+  },
+  {
+    "base": "HUMA",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "HUMAUSDT",
+    "symbolId": 905,
+    "symbolType": ""
+  },
+  {
+    "base": "HYPE",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "HYPEUSDT",
+    "symbolId": 1026,
+    "symbolType": ""
+  },
+  {
+    "base": "HYPER",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "HYPERUSDT",
+    "symbolId": 890,
+    "symbolType": ""
+  },
+  {
+    "base": "ICNT",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "ICNTUSDT",
+    "symbolId": 992,
+    "symbolType": ""
+  },
+  {
+    "base": "ICP",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "ICPUSDT",
+    "symbolId": 32,
+    "symbolType": ""
+  },
+  {
+    "base": "ICX",
+    "primary_market_gate": false,
+    "quote": "USDT",
+    "stTag": "1",
+    "status": "Trading",
+    "symbol": "ICXUSDT",
+    "symbolId": 143,
+    "symbolType": ""
+  },
+  {
+    "base": "ID",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "IDUSDT",
+    "symbolId": 423,
+    "symbolType": ""
+  },
+  {
+    "base": "IMX",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "IMXUSDT",
+    "symbolId": 69,
+    "symbolType": ""
+  },
+  {
+    "base": "INIT",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "INITUSDT",
+    "symbolId": 892,
+    "symbolType": ""
+  },
+  {
+    "base": "INJ",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "INJUSDT",
+    "symbolId": 368,
+    "symbolType": ""
+  },
+  {
+    "base": "IO",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "IOUSDT",
+    "symbolId": 672,
+    "symbolType": ""
+  },
+  {
+    "base": "JASMY",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "JASMYUSDT",
+    "symbolId": 88,
+    "symbolType": ""
+  },
+  {
+    "base": "JST",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "JSTUSDT",
+    "symbolId": 186,
+    "symbolType": ""
+  },
+  {
+    "base": "JTO",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "JTOUSDT",
+    "symbolId": 523,
+    "symbolType": ""
+  },
+  {
+    "base": "JUP",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "JUPUSDT",
+    "symbolId": 565,
+    "symbolType": ""
+  },
+  {
+    "base": "JUV",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "JUVUSDT",
+    "symbolId": 314,
+    "symbolType": ""
+  },
+  {
+    "base": "KAIA",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "KAIAUSDT",
+    "symbolId": 780,
+    "symbolType": ""
+  },
+  {
+    "base": "KAS",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "KASUSDT",
+    "symbolId": 494,
+    "symbolType": ""
+  },
+  {
+    "base": "KAVA",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "KAVAUSDT",
+    "symbolId": 479,
+    "symbolType": ""
+  },
+  {
+    "base": "KCS",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "KCSUSDT",
+    "symbolId": 520,
+    "symbolType": ""
+  },
+  {
+    "base": "KII",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "KIIUSDT",
+    "symbolId": 1323,
+    "symbolType": ""
+  },
+  {
+    "base": "KMNO",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "KMNOUSDT",
+    "symbolId": 638,
+    "symbolType": ""
+  },
+  {
+    "base": "KSM",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "KSMUSDT",
+    "symbolId": 31,
+    "symbolType": ""
+  },
+  {
+    "base": "KUB",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "KUBUSDT",
+    "symbolId": 518,
+    "symbolType": ""
+  },
+  {
+    "base": "LA",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "LAUSDT",
+    "symbolId": 912,
+    "symbolType": ""
+  },
+  {
+    "base": "LAVA",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "LAVAUSDT",
+    "symbolId": 829,
+    "symbolType": ""
+  },
+  {
+    "base": "LAYER",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "LAYERUSDT",
+    "symbolId": 850,
+    "symbolType": ""
+  },
+  {
+    "base": "LDO",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "LDOUSDT",
+    "symbolId": 109,
+    "symbolType": ""
+  },
+  {
+    "base": "LINEA",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "LINEAUSDT",
+    "symbolId": 1084,
+    "symbolType": ""
+  },
+  {
+    "base": "LINK",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "LINKUSDT",
+    "symbolId": 28,
+    "symbolType": ""
+  },
+  {
+    "base": "LIT",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "LITUSDT",
+    "symbolId": 1227,
+    "symbolType": ""
+  },
+  {
+    "base": "LMWR",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "LMWRUSDT",
+    "symbolId": 439,
+    "symbolType": ""
+  },
+  {
+    "base": "LRC",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "LRCUSDT",
+    "symbolId": 108,
+    "symbolType": ""
+  },
+  {
+    "base": "LTC",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "LTCUSDT",
+    "symbolId": 17,
+    "symbolType": ""
+  },
+  {
+    "base": "LUNA",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "LUNAUSDT",
+    "symbolId": 252,
+    "symbolType": ""
+  },
+  {
+    "base": "LUNC",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "LUNCUSDT",
+    "symbolId": 54,
+    "symbolType": ""
+  },
+  {
+    "base": "MAGIC",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "MAGICUSDT",
+    "symbolId": 396,
+    "symbolType": ""
+  },
+  {
+    "base": "MAJOR",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "MAJORUSDT",
+    "symbolId": 793,
+    "symbolType": ""
+  },
+  {
+    "base": "MANA",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "MANAUSDT",
+    "symbolId": 22,
+    "symbolType": ""
+  },
+  {
+    "base": "MANTA",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "MANTAUSDT",
+    "symbolId": 557,
+    "symbolType": ""
+  },
+  {
+    "base": "MANTRA",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "MANTRAUSDT",
+    "symbolId": 1268,
+    "symbolType": ""
+  },
+  {
+    "base": "MASK",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "MASKUSDT",
+    "symbolId": 384,
+    "symbolType": ""
+  },
+  {
+    "base": "MAVIA",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "MAVIAUSDT",
+    "symbolId": 570,
+    "symbolType": ""
+  },
+  {
+    "base": "MBX",
+    "primary_market_gate": false,
+    "quote": "USDT",
+    "stTag": "1",
+    "status": "Trading",
+    "symbol": "MBXUSDT",
+    "symbolId": 427,
+    "symbolType": "adventure"
+  },
+  {
+    "base": "MCDX",
+    "primary_market_gate": false,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "MCDXUSDT",
+    "symbolId": 1017,
+    "symbolType": "xstocks"
+  },
+  {
+    "base": "MCRT",
+    "primary_market_gate": false,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "MCRTUSDT",
+    "symbolId": 383,
+    "symbolType": "adventure"
+  },
+  {
+    "base": "ME",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "MEUSDT",
+    "symbolId": 810,
+    "symbolType": ""
+  },
+  {
+    "base": "MEE",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "MEEUSDT",
+    "symbolId": 397,
+    "symbolType": ""
+  },
+  {
+    "base": "MEGA",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "MEGAUSDT",
+    "symbolId": 1299,
+    "symbolType": ""
+  },
+  {
+    "base": "MEME",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "MEMEUSDT",
+    "symbolId": 508,
+    "symbolType": ""
+  },
+  {
+    "base": "MERL",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "MERLUSDT",
+    "symbolId": 629,
+    "symbolType": ""
+  },
+  {
+    "base": "MET",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "METUSDT",
+    "symbolId": 1172,
+    "symbolType": ""
+  },
+  {
+    "base": "METAX",
+    "primary_market_gate": false,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "METAXUSDT",
+    "symbolId": 1004,
+    "symbolType": "xstocks"
+  },
+  {
+    "base": "METH",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "METHUSDT",
+    "symbolId": 524,
+    "symbolType": ""
+  },
+  {
+    "base": "MEW",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "MEWUSDT",
+    "symbolId": 628,
+    "symbolType": ""
+  },
+  {
+    "base": "MINA",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "MINAUSDT",
+    "symbolId": 209,
+    "symbolType": ""
+  },
+  {
+    "base": "MMT",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "MMTUSDT",
+    "symbolId": 1189,
+    "symbolType": ""
+  },
+  {
+    "base": "MNT",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "MNTUSDT",
+    "symbolId": 462,
+    "symbolType": ""
+  },
+  {
+    "base": "MOCA",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "MOCAUSDT",
+    "symbolId": 708,
+    "symbolType": ""
+  },
+  {
+    "base": "MOG",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "MOGUSDT",
+    "symbolId": 667,
+    "symbolType": ""
+  },
+  {
+    "base": "MON",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "MONUSDT",
+    "symbolId": 1203,
+    "symbolType": ""
+  },
+  {
+    "base": "MORPHO",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "MORPHOUSDT",
+    "symbolId": 787,
+    "symbolType": ""
+  },
+  {
+    "base": "MOVE",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "MOVEUSDT",
+    "symbolId": 808,
+    "symbolType": ""
+  },
+  {
+    "base": "MOVR",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "MOVRUSDT",
+    "symbolId": 216,
+    "symbolType": ""
+  },
+  {
+    "base": "MPLX",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "MPLXUSDT",
+    "symbolId": 369,
+    "symbolType": ""
+  },
+  {
+    "base": "MX",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "MXUSDT",
+    "symbolId": 125,
+    "symbolType": ""
+  },
+  {
+    "base": "NAVX",
+    "primary_market_gate": false,
+    "quote": "USDT",
+    "stTag": "1",
+    "status": "Trading",
+    "symbol": "NAVXUSDT",
+    "symbolId": 764,
+    "symbolType": ""
+  },
+  {
+    "base": "NEAR",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "NEARUSDT",
+    "symbolId": 201,
+    "symbolType": ""
+  },
+  {
+    "base": "NEIROCTO",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "NEIROCTOUSDT",
+    "symbolId": 788,
+    "symbolType": ""
+  },
+  {
+    "base": "NEON",
+    "primary_market_gate": false,
+    "quote": "USDT",
+    "stTag": "1",
+    "status": "Trading",
+    "symbol": "NEONUSDT",
+    "symbolId": 468,
+    "symbolType": ""
+  },
+  {
+    "base": "NEWT",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "NEWTUSDT",
+    "symbolId": 983,
+    "symbolType": ""
+  },
+  {
+    "base": "NEXO",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "NEXOUSDT",
+    "symbolId": 96,
+    "symbolType": ""
+  },
+  {
+    "base": "NFT",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "NFTUSDT",
+    "symbolId": 190,
+    "symbolType": ""
+  },
+  {
+    "base": "NIGHT",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "NIGHTUSDT",
+    "symbolId": 1214,
+    "symbolType": ""
+  },
+  {
+    "base": "NOM",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "NOMUSDT",
+    "symbolId": 1136,
+    "symbolType": ""
+  },
+  {
+    "base": "NOT",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "NOTUSDT",
+    "symbolId": 650,
+    "symbolType": ""
+  },
+  {
+    "base": "NS",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "NSUSDT",
+    "symbolId": 784,
+    "symbolType": ""
+  },
+  {
+    "base": "NVDAX",
+    "primary_market_gate": false,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "NVDAXUSDT",
+    "symbolId": 996,
+    "symbolType": "xstocks"
+  },
+  {
+    "base": "NXPC",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "NXPCUSDT",
+    "symbolId": 900,
+    "symbolType": ""
+  },
+  {
+    "base": "NYM",
+    "primary_market_gate": false,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "NYMUSDT",
+    "symbolId": 461,
+    "symbolType": "adventure"
+  },
+  {
+    "base": "OBT",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "OBTUSDT",
+    "symbolId": 843,
+    "symbolType": ""
+  },
+  {
+    "base": "ONDO",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "ONDOUSDT",
+    "symbolId": 548,
+    "symbolType": ""
+  },
+  {
+    "base": "OP",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "OPUSDT",
+    "symbolId": 251,
+    "symbolType": ""
+  },
+  {
+    "base": "OPG",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "OPGUSDT",
+    "symbolId": 1287,
+    "symbolType": ""
+  },
+  {
+    "base": "OPN",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "OPNUSDT",
+    "symbolId": 1269,
+    "symbolType": ""
+  },
+  {
+    "base": "ORDER",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "ORDERUSDT",
+    "symbolId": 734,
+    "symbolType": ""
+  },
+  {
+    "base": "ORDI",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "ORDIUSDT",
+    "symbolId": 478,
+    "symbolType": ""
+  },
+  {
+    "base": "PARTI",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "PARTIUSDT",
+    "symbolId": 873,
+    "symbolType": ""
+  },
+  {
+    "base": "PENDLE",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "PENDLEUSDT",
+    "symbolId": 458,
+    "symbolType": ""
+  },
+  {
+    "base": "PENGU",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "PENGUUSDT",
+    "symbolId": 817,
+    "symbolType": ""
+  },
+  {
+    "base": "PEOPLE",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "PEOPLEUSDT",
+    "symbolId": 389,
+    "symbolType": ""
+  },
+  {
+    "base": "PEPE",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "PEPEUSDT",
+    "symbolId": 437,
+    "symbolType": ""
+  },
+  {
+    "base": "PIEVERSE",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "PIEVERSEUSDT",
+    "symbolId": 1199,
+    "symbolType": ""
+  },
+  {
+    "base": "PLUME",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "PLUMEUSDT",
+    "symbolId": 847,
+    "symbolType": ""
+  },
+  {
+    "base": "PNUT",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "PNUTUSDT",
+    "symbolId": 795,
+    "symbolType": ""
+  },
+  {
+    "base": "POL",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "POLUSDT",
+    "symbolId": 505,
+    "symbolType": ""
+  },
+  {
+    "base": "POPCAT",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "POPCATUSDT",
+    "symbolId": 679,
+    "symbolType": ""
+  },
+  {
+    "base": "PORTAL",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "PORTALUSDT",
+    "symbolId": 585,
+    "symbolType": ""
+  },
+  {
+    "base": "PRIME",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "PRIMEUSDT",
+    "symbolId": 417,
+    "symbolType": ""
+  },
+  {
+    "base": "PROVE",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "PROVEUSDT",
+    "symbolId": 1045,
+    "symbolType": ""
+  },
+  {
+    "base": "PSG",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "PSGUSDT",
+    "symbolId": 312,
+    "symbolType": ""
+  },
+  {
+    "base": "PUFFER",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "PUFFERUSDT",
+    "symbolId": 771,
+    "symbolType": ""
+  },
+  {
+    "base": "PUMP",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "PUMPUSDT",
+    "symbolId": 1032,
+    "symbolType": ""
+  },
+  {
+    "base": "PYBOBO",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "PYBOBOUSDT",
+    "symbolId": 1244,
+    "symbolType": ""
+  },
+  {
+    "base": "PYTH",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "PYTHUSDT",
+    "symbolId": 515,
+    "symbolType": ""
+  },
+  {
+    "base": "PYUSD",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "PYUSDUSDT",
+    "symbolId": 482,
+    "symbolType": ""
+  },
+  {
+    "base": "QNT",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "QNTUSDT",
+    "symbolId": 40,
+    "symbolType": ""
+  },
+  {
+    "base": "QTUM",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "QTUMUSDT",
+    "symbolId": 121,
+    "symbolType": ""
+  },
+  {
+    "base": "RATS",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "RATSUSDT",
+    "symbolId": 543,
+    "symbolType": ""
+  },
+  {
+    "base": "RECALL",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "RECALLUSDT",
+    "symbolId": 1157,
+    "symbolType": ""
+  },
+  {
+    "base": "RED",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "REDUSDT",
+    "symbolId": 863,
+    "symbolType": ""
+  },
+  {
+    "base": "RENDER",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "RENDERUSDT",
+    "symbolId": 716,
+    "symbolType": ""
+  },
+  {
+    "base": "RESOLV",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "RESOLVUSDT",
+    "symbolId": 915,
+    "symbolType": ""
+  },
+  {
+    "base": "RLUSD",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "RLUSDUSDT",
+    "symbolId": 1120,
+    "symbolType": ""
+  },
+  {
+    "base": "ROAM",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "ROAMUSDT",
+    "symbolId": 861,
+    "symbolType": ""
+  },
+  {
+    "base": "ROBO",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "ROBOUSDT",
+    "symbolId": 1265,
+    "symbolType": ""
+  },
+  {
+    "base": "ROSE",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "ROSEUSDT",
+    "symbolId": 305,
+    "symbolType": ""
+  },
+  {
+    "base": "RPL",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "RPLUSDT",
+    "symbolId": 403,
+    "symbolType": ""
+  },
+  {
+    "base": "RUNE",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "RUNEUSDT",
+    "symbolId": 130,
+    "symbolType": ""
+  },
+  {
+    "base": "RVN",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "RVNUSDT",
+    "symbolId": 127,
+    "symbolType": ""
+  },
+  {
+    "base": "S",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "SUSDT",
+    "symbolId": 835,
+    "symbolType": ""
+  },
+  {
+    "base": "SAFE",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "SAFEUSDT",
+    "symbolId": 633,
+    "symbolType": ""
+  },
+  {
+    "base": "SAHARA",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "SAHARAUSDT",
+    "symbolId": 991,
+    "symbolType": ""
+  },
+  {
+    "base": "SAND",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "SANDUSDT",
+    "symbolId": 64,
+    "symbolType": ""
+  },
+  {
+    "base": "SATS",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "SATSUSDT",
+    "symbolId": 544,
+    "symbolType": ""
+  },
+  {
+    "base": "SC",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "SCUSDT",
+    "symbolId": 208,
+    "symbolType": ""
+  },
+  {
+    "base": "SCOR",
+    "primary_market_gate": false,
+    "quote": "USDT",
+    "stTag": "1",
+    "status": "Trading",
+    "symbol": "SCORUSDT",
+    "symbolId": 1221,
+    "symbolType": ""
+  },
+  {
+    "base": "SCR",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "SCRUSDT",
+    "symbolId": 774,
+    "symbolType": ""
+  },
+  {
+    "base": "SD",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "SDUSDT",
+    "symbolId": 203,
+    "symbolType": ""
+  },
+  {
+    "base": "SEI",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "SEIUSDT",
+    "symbolId": 476,
+    "symbolType": ""
+  },
+  {
+    "base": "SENT",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "SENTUSDT",
+    "symbolId": 1240,
+    "symbolType": ""
+  },
+  {
+    "base": "SHIB",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "SHIBUSDT",
+    "symbolId": 58,
+    "symbolType": ""
+  },
+  {
+    "base": "SIGN",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "SIGNUSDT",
+    "symbolId": 893,
+    "symbolType": ""
+  },
+  {
+    "base": "SKR",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "SKRUSDT",
+    "symbolId": 1237,
+    "symbolType": ""
+  },
+  {
+    "base": "SKY",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "SKYUSDT",
+    "symbolId": 1071,
+    "symbolType": ""
+  },
+  {
+    "base": "SLX",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "SLXUSDT",
+    "symbolId": 1309,
+    "symbolType": ""
+  },
+  {
+    "base": "SNX",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "SNXUSDT",
+    "symbolId": 102,
+    "symbolType": ""
+  },
+  {
+    "base": "SOL",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "SOLUSDT",
+    "symbolId": 42,
+    "symbolType": ""
+  },
+  {
+    "base": "SOLV",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "SOLVUSDT",
+    "symbolId": 841,
+    "symbolType": ""
+  },
+  {
+    "base": "SOMI",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "SOMIUSDT",
+    "symbolId": 1068,
+    "symbolType": ""
+  },
+  {
+    "base": "SONIC",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "SONICUSDT",
+    "symbolId": 827,
+    "symbolType": ""
+  },
+  {
+    "base": "SOSO",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "SOSOUSDT",
+    "symbolId": 844,
+    "symbolType": ""
+  },
+  {
+    "base": "SPCXX",
+    "primary_market_gate": false,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "SPCXXUSDT",
+    "symbolId": 1306,
+    "symbolType": "xstocks"
+  },
+  {
+    "base": "SPK",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "SPKUSDT",
+    "symbolId": 981,
+    "symbolType": ""
+  },
+  {
+    "base": "SPX",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "SPXUSDT",
+    "symbolId": 796,
+    "symbolType": ""
+  },
+  {
+    "base": "SQD",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "SQDUSDT",
+    "symbolId": 653,
+    "symbolType": ""
+  },
+  {
+    "base": "SSV",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "SSVUSDT",
+    "symbolId": 404,
+    "symbolType": ""
+  },
+  {
+    "base": "STABLE",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "STABLEUSDT",
+    "symbolId": 1212,
+    "symbolType": ""
+  },
+  {
+    "base": "STETH",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "STETHUSDT",
+    "symbolId": 74,
+    "symbolType": ""
+  },
+  {
+    "base": "STRK",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "STRKUSDT",
+    "symbolId": 579,
+    "symbolType": ""
+  },
+  {
+    "base": "STX",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "STXUSDT",
+    "symbolId": 154,
+    "symbolType": ""
+  },
+  {
+    "base": "SUI",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "SUIUSDT",
+    "symbolId": 433,
+    "symbolType": ""
+  },
+  {
+    "base": "SUN",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "SUNUSDT",
+    "symbolId": 187,
+    "symbolType": ""
+  },
+  {
+    "base": "SUNDOG",
+    "primary_market_gate": false,
+    "quote": "USDT",
+    "stTag": "1",
+    "status": "Trading",
+    "symbol": "SUNDOGUSDT",
+    "symbolId": 750,
+    "symbolType": ""
+  },
+  {
+    "base": "SUPRA",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "SUPRAUSDT",
+    "symbolId": 801,
+    "symbolType": ""
+  },
+  {
+    "base": "SUSHI",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "SUSHIUSDT",
+    "symbolId": 29,
+    "symbolType": ""
+  },
+  {
+    "base": "SWELL",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "SWELLUSDT",
+    "symbolId": 781,
+    "symbolType": ""
+  },
+  {
+    "base": "SXT",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "SXTUSDT",
+    "symbolId": 898,
+    "symbolType": ""
+  },
+  {
+    "base": "TA",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "TAUSDT",
+    "symbolId": 1035,
+    "symbolType": ""
+  },
+  {
+    "base": "TAC",
+    "primary_market_gate": false,
+    "quote": "USDT",
+    "stTag": "1",
+    "status": "Trading",
+    "symbol": "TACUSDT",
+    "symbolId": 1030,
+    "symbolType": ""
+  },
+  {
+    "base": "TAIKO",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "TAIKOUSDT",
+    "symbolId": 668,
+    "symbolType": ""
+  },
+  {
+    "base": "TEL",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "TELUSDT",
+    "symbolId": 105,
+    "symbolType": ""
+  },
+  {
+    "base": "THETA",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "THETAUSDT",
+    "symbolId": 124,
+    "symbolType": ""
+  },
+  {
+    "base": "TIA",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "TIAUSDT",
+    "symbolId": 506,
+    "symbolType": ""
+  },
+  {
+    "base": "TNSR",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "TNSRUSDT",
+    "symbolId": 619,
+    "symbolType": ""
+  },
+  {
+    "base": "TOSHI",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "TOSHIUSDT",
+    "symbolId": 837,
+    "symbolType": ""
+  },
+  {
+    "base": "TOWNS",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "TOWNSUSDT",
+    "symbolId": 1043,
+    "symbolType": ""
+  },
+  {
+    "base": "TREE",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "TREEUSDT",
+    "symbolId": 1038,
+    "symbolType": ""
+  },
+  {
+    "base": "TRIA",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "TRIAUSDT",
+    "symbolId": 1255,
+    "symbolType": ""
+  },
+  {
+    "base": "TRUMP",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "TRUMPUSDT",
+    "symbolId": 845,
+    "symbolType": ""
+  },
+  {
+    "base": "TRX",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "TRXUSDT",
+    "symbolId": 189,
+    "symbolType": ""
+  },
+  {
+    "base": "TSLAX",
+    "primary_market_gate": false,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "TSLAXUSDT",
+    "symbolId": 1018,
+    "symbolType": "xstocks"
+  },
+  {
+    "base": "TWT",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "TWTUSDT",
+    "symbolId": 390,
+    "symbolType": ""
+  },
+  {
+    "base": "UMA",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "UMAUSDT",
+    "symbolId": 98,
+    "symbolType": ""
+  },
+  {
+    "base": "UNI",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "UNIUSDT",
+    "symbolId": 30,
+    "symbolType": ""
+  },
+  {
+    "base": "USAT",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "USATUSDT",
+    "symbolId": 1242,
+    "symbolType": ""
+  },
+  {
+    "base": "USD1",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "USD1USDT",
+    "symbolId": 1015,
+    "symbolType": ""
+  },
+  {
+    "base": "USDC",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "USDCUSDT",
+    "symbolId": 41,
+    "symbolType": ""
+  },
+  {
+    "base": "USDE",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "USDEUSDT",
+    "symbolId": 611,
+    "symbolType": ""
+  },
+  {
+    "base": "USDS",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "USDSUSDT",
+    "symbolId": 1298,
+    "symbolType": ""
+  },
+  {
+    "base": "USDTB",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "USDTBUSDT",
+    "symbolId": 860,
+    "symbolType": ""
+  },
+  {
+    "base": "USDY",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "USDYUSDT",
+    "symbolId": 555,
+    "symbolType": ""
+  },
+  {
+    "base": "USTC",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "USTCUSDT",
+    "symbolId": 199,
+    "symbolType": ""
+  },
+  {
+    "base": "VANA",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "VANAUSDT",
+    "symbolId": 815,
+    "symbolType": ""
+  },
+  {
+    "base": "VELO",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "VELOUSDT",
+    "symbolId": 448,
+    "symbolType": ""
+  },
+  {
+    "base": "VERONA",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "VERONAUSDT",
+    "symbolId": 1313,
+    "symbolType": ""
+  },
+  {
+    "base": "VET",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "VETUSDT",
+    "symbolId": 884,
+    "symbolType": ""
+  },
+  {
+    "base": "VIRTUAL",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "VIRTUALUSDT",
+    "symbolId": 792,
+    "symbolType": ""
+  },
+  {
+    "base": "VOOI",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "VOOIUSDT",
+    "symbolId": 1226,
+    "symbolType": ""
+  },
+  {
+    "base": "VTHO",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "VTHOUSDT",
+    "symbolId": 885,
+    "symbolType": ""
+  },
+  {
+    "base": "VVV",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "VVVUSDT",
+    "symbolId": 868,
+    "symbolType": ""
+  },
+  {
+    "base": "W",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "WUSDT",
+    "symbolId": 614,
+    "symbolType": ""
+  },
+  {
+    "base": "WAL",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "WALUSDT",
+    "symbolId": 871,
+    "symbolType": ""
+  },
+  {
+    "base": "WAVES",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "WAVESUSDT",
+    "symbolId": 53,
+    "symbolType": ""
+  },
+  {
+    "base": "WAXP",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "WAXPUSDT",
+    "symbolId": 302,
+    "symbolType": ""
+  },
+  {
+    "base": "WBTC",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "WBTCUSDT",
+    "symbolId": 222,
+    "symbolType": ""
+  },
+  {
+    "base": "WCT",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "WCTUSDT",
+    "symbolId": 886,
+    "symbolType": ""
+  },
+  {
+    "base": "WEMIX",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "WEMIXUSDT",
+    "symbolId": 92,
+    "symbolType": ""
+  },
+  {
+    "base": "WET",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "WETUSDT",
+    "symbolId": 1213,
+    "symbolType": ""
+  },
+  {
+    "base": "WIF",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "WIFUSDT",
+    "symbolId": 634,
+    "symbolType": ""
+  },
+  {
+    "base": "WLD",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "WLDUSDT",
+    "symbolId": 470,
+    "symbolType": ""
+  },
+  {
+    "base": "WLFI",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "WLFIUSDT",
+    "symbolId": 1065,
+    "symbolType": ""
+  },
+  {
+    "base": "WOO",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "WOOUSDT",
+    "symbolId": 66,
+    "symbolType": ""
+  },
+  {
+    "base": "XAI",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "XAIUSDT",
+    "symbolId": 547,
+    "symbolType": ""
+  },
+  {
+    "base": "XAN",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "XANUSDT",
+    "symbolId": 1119,
+    "symbolType": ""
+  },
+  {
+    "base": "XAUT",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "XAUTUSDT",
+    "symbolId": 883,
+    "symbolType": ""
+  },
+  {
+    "base": "XDC",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "XDCUSDT",
+    "symbolId": 144,
+    "symbolType": ""
+  },
+  {
+    "base": "XLM",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "XLMUSDT",
+    "symbolId": 16,
+    "symbolType": ""
+  },
+  {
+    "base": "XPL",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "XPLUSDT",
+    "symbolId": 1117,
+    "symbolType": ""
+  },
+  {
+    "base": "XRP",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "XRPUSDT",
+    "symbolId": 11,
+    "symbolType": ""
+  },
+  {
+    "base": "XTZ",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "XTZUSDT",
+    "symbolId": 36,
+    "symbolType": ""
+  },
+  {
+    "base": "XUSD",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "XUSDUSDT",
+    "symbolId": 1090,
+    "symbolType": ""
+  },
+  {
+    "base": "YB",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "YBUSDT",
+    "symbolId": 1156,
+    "symbolType": ""
+  },
+  {
+    "base": "YFI",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "YFIUSDT",
+    "symbolId": 27,
+    "symbolType": ""
+  },
+  {
+    "base": "ZAMA",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "ZAMAUSDT",
+    "symbolId": 1248,
+    "symbolType": ""
+  },
+  {
+    "base": "ZBT",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "ZBTUSDT",
+    "symbolId": 1158,
+    "symbolType": ""
+  },
+  {
+    "base": "ZEN",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "ZENUSDT",
+    "symbolId": 123,
+    "symbolType": ""
+  },
+  {
+    "base": "ZENT",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "ZENTUSDT",
+    "symbolId": 639,
+    "symbolType": ""
+  },
+  {
+    "base": "ZEREBRO",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "ZEREBROUSDT",
+    "symbolId": 811,
+    "symbolType": ""
+  },
+  {
+    "base": "ZETA",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "ZETAUSDT",
+    "symbolId": 564,
+    "symbolType": ""
+  },
+  {
+    "base": "ZIG",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "ZIGUSDT",
+    "symbolId": 527,
+    "symbolType": ""
+  },
+  {
+    "base": "ZIL",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "ZILUSDT",
+    "symbolId": 148,
+    "symbolType": ""
+  },
+  {
+    "base": "ZK",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "ZKUSDT",
+    "symbolId": 678,
+    "symbolType": ""
+  },
+  {
+    "base": "ZKC",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "ZKCUSDT",
+    "symbolId": 1106,
+    "symbolType": ""
+  },
+  {
+    "base": "ZKJ",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "ZKJUSDT",
+    "symbolId": 595,
+    "symbolType": ""
+  },
+  {
+    "base": "ZKP",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "ZKPUSDT",
+    "symbolId": 1222,
+    "symbolType": ""
+  },
+  {
+    "base": "ZORA",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "ZORAUSDT",
+    "symbolId": 891,
+    "symbolType": ""
+  },
+  {
+    "base": "ZRO",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "ZROUSDT",
+    "symbolId": 681,
+    "symbolType": ""
+  },
+  {
+    "base": "ZRX",
+    "primary_market_gate": true,
+    "quote": "USDT",
+    "stTag": "0",
+    "status": "Trading",
+    "symbol": "ZRXUSDT",
+    "symbolId": 47,
+    "symbolType": ""
+  }
+]

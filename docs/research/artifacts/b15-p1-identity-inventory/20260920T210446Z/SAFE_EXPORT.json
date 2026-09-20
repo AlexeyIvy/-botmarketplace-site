@@ -1,0 +1,18 @@
+{
+  "credentials_exported": false,
+  "files": [
+    "okx_spot_usdt_markets.json",
+    "bybit_spot_usdt_markets.json",
+    "okx_chain_identity_view.json",
+    "bybit_chain_identity_view.json",
+    "common_base_candidates.json",
+    "chain_alias_census.json",
+    "recent_bybit_new_crypto_spot_listings.json",
+    "recent_bybit_spot_delistings.json",
+    "run_manifest.json"
+  ],
+  "raw_api_responses_exported": false,
+  "source_run_id": "20260920T210446Z",
+  "source_status": "B15_P1_NONPRICE_IDENTITY_INVENTORY_PROBE_PASS",
+  "status": "SAFE_REVIEW_EXPORT_ONLY"
+}

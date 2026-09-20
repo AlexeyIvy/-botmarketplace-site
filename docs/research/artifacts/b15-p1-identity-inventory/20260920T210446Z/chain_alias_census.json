@@ -1,0 +1,3052 @@
+{
+  "bybit": [
+    {
+      "asset_count": 2,
+      "chainType": "ADA",
+      "chain_raw": "ADA",
+      "sample_assets": [
+        "ADA",
+        "NIGHT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "ALGO",
+      "chain_raw": "ALGO",
+      "sample_assets": [
+        "ALGO"
+      ]
+    },
+    {
+      "asset_count": 3,
+      "chainType": "APTOS",
+      "chain_raw": "APTOS",
+      "sample_assets": [
+        "APT",
+        "USD1",
+        "USDC"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "Aptos",
+      "chain_raw": "APTOS",
+      "sample_assets": [
+        "USDT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "AR",
+      "chain_raw": "AR",
+      "sample_assets": [
+        "AR"
+      ]
+    },
+    {
+      "asset_count": 8,
+      "chainType": "Arbitrum One",
+      "chain_raw": "ARBI",
+      "sample_assets": [
+        "ANIME",
+        "ARB",
+        "CHIP",
+        "ETH",
+        "GMX",
+        "MAGIC",
+        "USDC",
+        "ZRO"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "Arbitrum One(USDT0)",
+      "chain_raw": "ARBI",
+      "sample_assets": [
+        "USDT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "Arbitrum Nova",
+      "chain_raw": "ARBINOVA",
+      "sample_assets": [
+        "ETH"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "Arc Network",
+      "chain_raw": "ARC",
+      "sample_assets": [
+        "USDC"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "ATOM",
+      "chain_raw": "ATOM",
+      "sample_assets": [
+        "ATOM"
+      ]
+    },
+    {
+      "asset_count": 14,
+      "chainType": "Base Mainnet",
+      "chain_raw": "BASE",
+      "sample_assets": [
+        "AIXBT",
+        "AVNT",
+        "DEGEN",
+        "ETH",
+        "MORPHO",
+        "PARTI",
+        "ROBO",
+        "TOSHI",
+        "USDC",
+        "VIRTUAL",
+        "VVV",
+        "ZEN",
+        "ZORA",
+        "ZRO"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "Bitcoin Cash",
+      "chain_raw": "BCH",
+      "sample_assets": [
+        "BCH"
+      ]
+    },
+    {
+      "asset_count": 2,
+      "chainType": "Berachain",
+      "chain_raw": "BERA",
+      "sample_assets": [
+        "BERA",
+        "USDT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "BEP20",
+      "chain_raw": "BSC",
+      "sample_assets": [
+        "G"
+      ]
+    },
+    {
+      "asset_count": 18,
+      "chainType": "BNB Smart Chain",
+      "chain_raw": "BSC",
+      "sample_assets": [
+        "BABYDOGE",
+        "BNB",
+        "ETH",
+        "FLOKI",
+        "GMT",
+        "ID",
+        "NIGHT",
+        "PARTI",
+        "ROBO",
+        "SAHARA",
+        "SHIB",
+        "SLX",
+        "SPK",
+        "USD1",
+        "USDC",
+        "USDT",
+        "VELO",
+        "ZKJ"
+      ]
+    },
+    {
+      "asset_count": 3,
+      "chainType": "BNB Smart Chain ",
+      "chain_raw": "BSC",
+      "sample_assets": [
+        "ASTER",
+        "CAT",
+        "PROVE"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "BSC (BEP20)",
+      "chain_raw": "BSC",
+      "sample_assets": [
+        "ZRO"
+      ]
+    },
+    {
+      "asset_count": 3,
+      "chainType": "Bitcoin",
+      "chain_raw": "BTC",
+      "sample_assets": [
+        "BTC",
+        "ORDI",
+        "SATS"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "Canton",
+      "chain_raw": "CANTON",
+      "sample_assets": [
+        "CC"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "AVAX-C Chain",
+      "chain_raw": "CAVAX",
+      "sample_assets": [
+        "ZRO"
+      ]
+    },
+    {
+      "asset_count": 4,
+      "chainType": "CAVAX",
+      "chain_raw": "CAVAX",
+      "sample_assets": [
+        "AVAX",
+        "GMX",
+        "USDC",
+        "USDT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "Celestia",
+      "chain_raw": "CELESTIA",
+      "sample_assets": [
+        "TIA"
+      ]
+    },
+    {
+      "asset_count": 2,
+      "chainType": "CELO",
+      "chain_raw": "CELO",
+      "sample_assets": [
+        "CELO",
+        "USDT"
+      ]
+    },
+    {
+      "asset_count": 2,
+      "chainType": "Chiliz Chain",
+      "chain_raw": "CHILIZ",
+      "sample_assets": [
+        "CHZ",
+        "CITY"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "Codex",
+      "chain_raw": "CODEX",
+      "sample_assets": [
+        "USDC"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "CORE",
+      "chain_raw": "CORE",
+      "sample_assets": [
+        "CORE"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "CORN",
+      "chain_raw": "CORN",
+      "sample_assets": [
+        "USDT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "Casper",
+      "chain_raw": "CSPR",
+      "sample_assets": [
+        "CSPR"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "Dogecoin",
+      "chain_raw": "DOGE",
+      "sample_assets": [
+        "DOGE"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "Polkadot AssetHub ",
+      "chain_raw": "DOTAH",
+      "sample_assets": [
+        "DOT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "DYDX",
+      "chain_raw": "DYDX",
+      "sample_assets": [
+        "DYDX"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "EGLD",
+      "chain_raw": "EGLD",
+      "sample_assets": [
+        "EGLD"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "Enjin",
+      "chain_raw": "ENJIN",
+      "sample_assets": [
+        "ENJ"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "Vaulta",
+      "chain_raw": "EOS",
+      "sample_assets": [
+        "A"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "Ethereum Classic",
+      "chain_raw": "ETC",
+      "sample_assets": [
+        "ETC"
+      ]
+    },
+    {
+      "asset_count": 3,
+      "chainType": "ERC20",
+      "chain_raw": "ETH",
+      "sample_assets": [
+        "ANIME",
+        "GMT",
+        "MOVE"
+      ]
+    },
+    {
+      "asset_count": 78,
+      "chainType": "Ethereum",
+      "chain_raw": "ETH",
+      "sample_assets": [
+        "1INCH",
+        "AAVE",
+        "ACH",
+        "AEVO",
+        "AGLD",
+        "APE",
+        "ARKM",
+        "ATH",
+        "AXS",
+        "BARD",
+        "BASED",
+        "BAT",
+        "BICO",
+        "BLUR",
+        "BREV",
+        "CHZ",
+        "COMP",
+        "CRV",
+        "EDGE",
+        "EIGEN"
+      ]
+    },
+    {
+      "asset_count": 9,
+      "chainType": "Ethereum ",
+      "chain_raw": "ETH",
+      "sample_assets": [
+        "CFG",
+        "LINEA",
+        "PROVE",
+        "RESOLV",
+        "RLUSD",
+        "SAHARA",
+        "SPK",
+        "USD1",
+        "WCT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "ETHW",
+      "chain_raw": "ETHW",
+      "sample_assets": [
+        "ETHW"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "Filecoin",
+      "chain_raw": "FIL",
+      "sample_assets": [
+        "FIL"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "FLOW",
+      "chain_raw": "FLOW",
+      "sample_assets": [
+        "FLOW"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "FLR",
+      "chain_raw": "FLR",
+      "sample_assets": [
+        "FLR"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "FOGO",
+      "chain_raw": "FOGO",
+      "sample_assets": [
+        "FOGO"
+      ]
+    },
+    {
+      "asset_count": 2,
+      "chainType": "HBAR",
+      "chain_raw": "HBAR",
+      "sample_assets": [
+        "HBAR",
+        "USDC"
+      ]
+    },
+    {
+      "asset_count": 2,
+      "chainType": "HyperEVM",
+      "chain_raw": "HYPEREVM",
+      "sample_assets": [
+        "HYPE",
+        "USDT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "ICP",
+      "chain_raw": "ICP",
+      "sample_assets": [
+        "ICP"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "INJ",
+      "chain_raw": "INJ",
+      "sample_assets": [
+        "INJ"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "KAVAEVM",
+      "chain_raw": "KAVAEVM",
+      "sample_assets": [
+        "USDT"
+      ]
+    },
+    {
+      "asset_count": 2,
+      "chainType": "KAIA",
+      "chain_raw": "KLAY",
+      "sample_assets": [
+        "KAIA",
+        "USDT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "Kusama Asset Hub",
+      "chain_raw": "KSMAH",
+      "sample_assets": [
+        "KSM"
+      ]
+    },
+    {
+      "asset_count": 2,
+      "chainType": "LINEA",
+      "chain_raw": "LINEA",
+      "sample_assets": [
+        "ETH",
+        "LINEA"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "LTC",
+      "chain_raw": "LTC",
+      "sample_assets": [
+        "LTC"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "Terra",
+      "chain_raw": "LUNANEW",
+      "sample_assets": [
+        "LUNA"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "Mantle Mainnet",
+      "chain_raw": "MANTLE",
+      "sample_assets": [
+        "CATI"
+      ]
+    },
+    {
+      "asset_count": 4,
+      "chainType": "Mantle Network",
+      "chain_raw": "MANTLE",
+      "sample_assets": [
+        "ENA",
+        "ETH",
+        "USD1",
+        "USDC"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "Mantle Network(USDT0)",
+      "chain_raw": "MANTLE",
+      "sample_assets": [
+        "USDT"
+      ]
+    },
+    {
+      "asset_count": 5,
+      "chainType": "Polygon PoS",
+      "chain_raw": "MATIC",
+      "sample_assets": [
+        "GMT",
+        "POL",
+        "USDC",
+        "USDT",
+        "ZRO"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "Polygon(bridged)",
+      "chain_raw": "MATIC.E",
+      "sample_assets": [
+        "USDC"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "MegaETH",
+      "chain_raw": "MEGAETH",
+      "sample_assets": [
+        "MEGA"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "Merlin Chain",
+      "chain_raw": "MERLIN",
+      "sample_assets": [
+        "MERL"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "MINA",
+      "chain_raw": "MINA",
+      "sample_assets": [
+        "MINA"
+      ]
+    },
+    {
+      "asset_count": 3,
+      "chainType": "Monad",
+      "chain_raw": "MONAD",
+      "sample_assets": [
+        "MON",
+        "USDC",
+        "USDT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "Movement Network",
+      "chain_raw": "MOVE",
+      "sample_assets": [
+        "MOVE"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "NEAR",
+      "chain_raw": "NEAR",
+      "sample_assets": [
+        "NEAR"
+      ]
+    },
+    {
+      "asset_count": 7,
+      "chainType": "OP Mainnet",
+      "chain_raw": "OP",
+      "sample_assets": [
+        "ETH",
+        "OP",
+        "USDC",
+        "USDT",
+        "WCT",
+        "WLD",
+        "ZRO"
+      ]
+    },
+    {
+      "asset_count": 2,
+      "chainType": "Plasma",
+      "chain_raw": "PLASMA",
+      "sample_assets": [
+        "USDT",
+        "XPL"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "QTUM",
+      "chain_raw": "QTUM",
+      "sample_assets": [
+        "QTUM"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "RVN",
+      "chain_raw": "RVN",
+      "sample_assets": [
+        "RVN"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "Scroll",
+      "chain_raw": "SCROLL",
+      "sample_assets": [
+        "SCR"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "SEI",
+      "chain_raw": "SEI",
+      "sample_assets": [
+        "SEI"
+      ]
+    },
+    {
+      "asset_count": 2,
+      "chainType": "SEIEVM",
+      "chain_raw": "SEIEVM",
+      "sample_assets": [
+        "SEI",
+        "USDC"
+      ]
+    },
+    {
+      "asset_count": 12,
+      "chainType": "SOL",
+      "chain_raw": "SOL",
+      "sample_assets": [
+        "2Z",
+        "BONK",
+        "GMT",
+        "HUMA",
+        "PENGU",
+        "PUMP",
+        "SOL",
+        "USD1",
+        "USDC",
+        "USDT",
+        "W",
+        "WLFI"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "SOL ",
+      "chain_raw": "SOL",
+      "sample_assets": [
+        "WCT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "SOLANA",
+      "chain_raw": "SOL",
+      "sample_assets": [
+        "PNUT"
+      ]
+    },
+    {
+      "asset_count": 22,
+      "chainType": "Solana",
+      "chain_raw": "SOL",
+      "sample_assets": [
+        "BOME",
+        "DOOD",
+        "GOAT",
+        "GRASS",
+        "JTO",
+        "JUP",
+        "KMNO",
+        "LAYER",
+        "ME",
+        "MET",
+        "MEW",
+        "PYTH",
+        "PYUSD",
+        "RENDER",
+        "SLX",
+        "SONIC",
+        "TNSR",
+        "TRUMP",
+        "VIRTUAL",
+        "WET"
+      ]
+    },
+    {
+      "asset_count": 2,
+      "chainType": "Sonic",
+      "chain_raw": "SONIC",
+      "sample_assets": [
+        "S",
+        "USDC"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "Starknet",
+      "chain_raw": "STARKNET",
+      "sample_assets": [
+        "STRK"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "Data Network",
+      "chain_raw": "STORY",
+      "sample_assets": [
+        "DATA"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "Stacks",
+      "chain_raw": "STX",
+      "sample_assets": [
+        "STX"
+      ]
+    },
+    {
+      "asset_count": 3,
+      "chainType": "SUI",
+      "chain_raw": "SUI",
+      "sample_assets": [
+        "MMT",
+        "SUI",
+        "USDC"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "THETA",
+      "chain_raw": "THETA",
+      "sample_assets": [
+        "THETA"
+      ]
+    },
+    {
+      "asset_count": 5,
+      "chainType": "TON",
+      "chain_raw": "TON",
+      "sample_assets": [
+        "DOGS",
+        "GRAM",
+        "HMSTR",
+        "NOT",
+        "USDT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "Ton",
+      "chain_raw": "TON",
+      "sample_assets": [
+        "CATI"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "TRC20",
+      "chain_raw": "TRX",
+      "sample_assets": [
+        "USD1"
+      ]
+    },
+    {
+      "asset_count": 3,
+      "chainType": "TRX",
+      "chain_raw": "TRX",
+      "sample_assets": [
+        "NFT",
+        "TRX",
+        "USDT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "WAX",
+      "chain_raw": "WAXP",
+      "sample_assets": [
+        "WAXP"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "AVAX",
+      "chain_raw": "XAVAX",
+      "sample_assets": [
+        "AVAX"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "XDC",
+      "chain_raw": "XDC",
+      "sample_assets": [
+        "USDC"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "Stellar Lumens",
+      "chain_raw": "XLM",
+      "sample_assets": [
+        "XLM"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "XLM",
+      "chain_raw": "XLM",
+      "sample_assets": [
+        "VELO"
+      ]
+    },
+    {
+      "asset_count": 2,
+      "chainType": "XRP",
+      "chain_raw": "XRP",
+      "sample_assets": [
+        "RLUSD",
+        "XRP"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "tezos",
+      "chain_raw": "XTZ",
+      "sample_assets": [
+        "XTZ"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "ZetaChain",
+      "chain_raw": "ZETA",
+      "sample_assets": [
+        "ZETA"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "ZetaChain EVM",
+      "chain_raw": "ZETAEVM",
+      "sample_assets": [
+        "ZETA"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "ZIL",
+      "chain_raw": "ZIL",
+      "sample_assets": [
+        "ZIL"
+      ]
+    },
+    {
+      "asset_count": 3,
+      "chainType": "zkSync Lite",
+      "chain_raw": "ZKSYNC",
+      "sample_assets": [
+        "ETH",
+        "USDC",
+        "USDT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "ZKsync Era",
+      "chain_raw": "ZKV2",
+      "sample_assets": [
+        "ZK"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chainType": "zkSync Era",
+      "chain_raw": "ZKV2",
+      "sample_assets": [
+        "ETH"
+      ]
+    }
+  ],
+  "okx": [
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "1INCH-ERC20",
+      "sample_assets": [
+        "1INCH"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Solana",
+      "chain_raw": "2Z-Solana",
+      "sample_assets": [
+        "2Z"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Vaulta",
+      "chain_raw": "A-Vaulta",
+      "sample_assets": [
+        "A"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "AAVE-ERC20",
+      "sample_assets": [
+        "AAVE"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "ACH-ERC20",
+      "sample_assets": [
+        "ACH"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Cardano",
+      "chain_raw": "ADA-Cardano",
+      "sample_assets": [
+        "ADA"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "AEVO-ERC20",
+      "sample_assets": [
+        "AEVO"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "AGLD-ERC20",
+      "sample_assets": [
+        "AGLD"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Base",
+      "chain_raw": "AIXBT-Base",
+      "sample_assets": [
+        "AIXBT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Algorand",
+      "chain_raw": "ALGO-Algorand",
+      "sample_assets": [
+        "ALGO"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Arbitrum One",
+      "chain_raw": "ANIME-Arbitrum One",
+      "sample_assets": [
+        "ANIME"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "ANIME-ERC20",
+      "sample_assets": [
+        "ANIME"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "APE-ERC20",
+      "sample_assets": [
+        "APE"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Aptos",
+      "chain_raw": "APT-Aptos",
+      "sample_assets": [
+        "APT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Arweave",
+      "chain_raw": "AR-Arweave",
+      "sample_assets": [
+        "AR"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Arbitrum One",
+      "chain_raw": "ARB-Arbitrum One",
+      "sample_assets": [
+        "ARB"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "ARB-ERC20",
+      "sample_assets": [
+        "ARB"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "ARKM-ERC20",
+      "sample_assets": [
+        "ARKM"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "BSC",
+      "chain_raw": "ASTER-BSC",
+      "sample_assets": [
+        "ASTER"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "ATH-ERC20",
+      "sample_assets": [
+        "ATH"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Cosmos",
+      "chain_raw": "ATOM-Cosmos",
+      "sample_assets": [
+        "ATOM"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Avalanche C-Chain",
+      "chain_raw": "AVAX-Avalanche C-Chain",
+      "sample_assets": [
+        "AVAX"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Avalanche X-Chain",
+      "chain_raw": "AVAX-Avalanche X-Chain",
+      "sample_assets": [
+        "AVAX"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Base",
+      "chain_raw": "AVNT-Base",
+      "sample_assets": [
+        "AVNT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "AXS-ERC20",
+      "sample_assets": [
+        "AXS"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "BSC",
+      "chain_raw": "BABYDOGE-BSC",
+      "sample_assets": [
+        "BABYDOGE"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "OKTC",
+      "chain_raw": "BABYDOGE-OKTC",
+      "sample_assets": [
+        "BABYDOGE"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "X Layer",
+      "chain_raw": "BABYDOGE-X Layer",
+      "sample_assets": [
+        "BABYDOGE"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "BARD-ERC20",
+      "sample_assets": [
+        "BARD"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "BASED-ERC20",
+      "sample_assets": [
+        "BASED"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "BAT-ERC20",
+      "sample_assets": [
+        "BAT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "BitcoinCash",
+      "chain_raw": "BCH-BitcoinCash",
+      "sample_assets": [
+        "BCH"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "BCHK-OKTC",
+      "chain_raw": "BCHK-OKTC",
+      "sample_assets": [
+        "BCH"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Berachain",
+      "chain_raw": "BERA-Berachain",
+      "sample_assets": [
+        "BERA"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "BICO-ERC20",
+      "sample_assets": [
+        "BICO"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "BLUR-ERC20",
+      "sample_assets": [
+        "BLUR"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "BSC",
+      "chain_raw": "BNB-BSC",
+      "sample_assets": [
+        "BNB"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Solana",
+      "chain_raw": "BOME-Solana",
+      "sample_assets": [
+        "BOME"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Solana",
+      "chain_raw": "BONK-Solana",
+      "sample_assets": [
+        "BONK"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "BREV-ERC20",
+      "sample_assets": [
+        "BREV"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Aptos",
+      "chain_raw": "BTC-Aptos",
+      "sample_assets": [
+        "BTC"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Bitcoin",
+      "chain_raw": "BTC-Bitcoin",
+      "sample_assets": [
+        "BTC"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Lightning",
+      "chain_raw": "BTC-Lightning",
+      "sample_assets": [
+        "BTC"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "SUI",
+      "chain_raw": "BTC-SUI",
+      "sample_assets": [
+        "BTC"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Solana",
+      "chain_raw": "BTC-Solana",
+      "sample_assets": [
+        "BTC"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "X Layer",
+      "chain_raw": "BTC-X Layer",
+      "sample_assets": [
+        "BTC"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "BTCK-OKTC",
+      "chain_raw": "BTCK-OKTC",
+      "sample_assets": [
+        "BTC"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "BSC",
+      "chain_raw": "CAT-BSC",
+      "sample_assets": [
+        "CAT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "The Open Network (TON)",
+      "chain_raw": "CATI-The Open Network (TON)",
+      "sample_assets": [
+        "CATI"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Canton Network",
+      "chain_raw": "CC-Canton Network",
+      "sample_assets": [
+        "CC"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "CELO",
+      "chain_raw": "CELO-CELO",
+      "sample_assets": [
+        "CELO"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "CELO-TOKEN",
+      "chain_raw": "CELO-CELO-TOKEN",
+      "sample_assets": [
+        "CELO"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "CFG-ERC20",
+      "sample_assets": [
+        "CFG"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Arbitrum One",
+      "chain_raw": "CHIP-Arbitrum One",
+      "sample_assets": [
+        "CHIP"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Chiliz Chain",
+      "chain_raw": "CHZ-Chiliz Chain",
+      "sample_assets": [
+        "CHZ"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "CHZ-ERC20",
+      "sample_assets": [
+        "CHZ"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Chiliz Chain",
+      "chain_raw": "CITY-Chiliz Chain",
+      "sample_assets": [
+        "CITY"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "COMP-ERC20",
+      "sample_assets": [
+        "COMP"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "CORE",
+      "chain_raw": "CORE-CORE",
+      "sample_assets": [
+        "CORE"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "CRV-ERC20",
+      "sample_assets": [
+        "CRV"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Polygon",
+      "chain_raw": "CRV-Polygon",
+      "sample_assets": [
+        "CRV"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Casper",
+      "chain_raw": "CSPR-Casper",
+      "sample_assets": [
+        "CSPR"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Data",
+      "chain_raw": "DATA-Data",
+      "sample_assets": [
+        "DATA"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Base",
+      "chain_raw": "DEGEN-Base",
+      "sample_assets": [
+        "DEGEN"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Dogecoin",
+      "chain_raw": "DOGE-Dogecoin",
+      "sample_assets": [
+        "DOGE"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "The Open Network (TON)",
+      "chain_raw": "DOGS-The Open Network (TON)",
+      "sample_assets": [
+        "DOGS"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Solana",
+      "chain_raw": "DOOD-Solana",
+      "sample_assets": [
+        "DOOD"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "AssetHub Polkadot",
+      "chain_raw": "DOT-AssetHub Polkadot",
+      "sample_assets": [
+        "DOT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "DOTK-OKTC",
+      "chain_raw": "DOTK-OKTC",
+      "sample_assets": [
+        "DOT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "DYDX",
+      "chain_raw": "DYDX-DYDX",
+      "sample_assets": [
+        "DYDX"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "EDGE-ERC20",
+      "sample_assets": [
+        "EDGE"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Elrond",
+      "chain_raw": "EGLD-Elrond",
+      "sample_assets": [
+        "EGLD"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "EIGEN-ERC20",
+      "sample_assets": [
+        "EIGEN"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "ENA-ERC20",
+      "sample_assets": [
+        "ENA"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Enjin Relay Chain",
+      "chain_raw": "ENJ-Enjin Relay Chain",
+      "sample_assets": [
+        "ENJ"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "ENS-ERC20",
+      "sample_assets": [
+        "ENS"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Ethereum Classic",
+      "chain_raw": "ETC-Ethereum Classic",
+      "sample_assets": [
+        "ETC"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ETCK-OKTC",
+      "chain_raw": "ETCK-OKTC",
+      "sample_assets": [
+        "ETC"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Arbitrum One",
+      "chain_raw": "ETH-Arbitrum One",
+      "sample_assets": [
+        "ETH"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Base",
+      "chain_raw": "ETH-Base",
+      "sample_assets": [
+        "ETH"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "ETH-ERC20",
+      "sample_assets": [
+        "ETH"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Linea",
+      "chain_raw": "ETH-Linea",
+      "sample_assets": [
+        "ETH"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Optimism",
+      "chain_raw": "ETH-Optimism",
+      "sample_assets": [
+        "ETH"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Robinhood Chain",
+      "chain_raw": "ETH-Robinhood Chain",
+      "sample_assets": [
+        "ETH"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Starknet",
+      "chain_raw": "ETH-Starknet",
+      "sample_assets": [
+        "ETH"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Unichain",
+      "chain_raw": "ETH-Unichain",
+      "sample_assets": [
+        "ETH"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "X Layer",
+      "chain_raw": "ETH-X Layer",
+      "sample_assets": [
+        "ETH"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "X Layer (WETH)",
+      "chain_raw": "ETH-X Layer (WETH)",
+      "sample_assets": [
+        "ETH"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "zkSync Era",
+      "chain_raw": "ETH-zkSync Era",
+      "sample_assets": [
+        "ETH"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "ETHFI-ERC20",
+      "sample_assets": [
+        "ETHFI"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ETHK-OKTC",
+      "chain_raw": "ETHK-OKTC",
+      "sample_assets": [
+        "ETH"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "EthereumPoW",
+      "chain_raw": "ETHW-EthereumPoW",
+      "sample_assets": [
+        "ETHW"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "FET-ERC20",
+      "sample_assets": [
+        "FET"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "FEVM",
+      "chain_raw": "FIL-FEVM",
+      "sample_assets": [
+        "FIL"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Filecoin",
+      "chain_raw": "FIL-Filecoin",
+      "sample_assets": [
+        "FIL"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "FILK-OKTC",
+      "chain_raw": "FILK-OKTC",
+      "sample_assets": [
+        "FIL"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "BSC",
+      "chain_raw": "FLOKI-BSC",
+      "sample_assets": [
+        "FLOKI"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "FLOW",
+      "chain_raw": "FLOW-FLOW",
+      "sample_assets": [
+        "FLOW"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Flare",
+      "chain_raw": "FLR-Flare",
+      "sample_assets": [
+        "FLR"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "FLUID-ERC20",
+      "sample_assets": [
+        "FLUID"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Fogo",
+      "chain_raw": "FOGO-Fogo",
+      "sample_assets": [
+        "FOGO"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "G-ERC20",
+      "sample_assets": [
+        "G"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Gravity Alpha Mainnet",
+      "chain_raw": "G-Gravity Alpha Mainnet",
+      "sample_assets": [
+        "G"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "GALA-ERC20",
+      "sample_assets": [
+        "GALA"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Polygon",
+      "chain_raw": "GMT-Polygon",
+      "sample_assets": [
+        "GMT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Solana",
+      "chain_raw": "GMT-Solana",
+      "sample_assets": [
+        "GMT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Arbitrum One",
+      "chain_raw": "GMX-Arbitrum One",
+      "sample_assets": [
+        "GMX"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Solana",
+      "chain_raw": "GOAT-Solana",
+      "sample_assets": [
+        "GOAT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "The Open Network (TON)",
+      "chain_raw": "GRAM-The Open Network (TON)",
+      "sample_assets": [
+        "GRAM"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Solana",
+      "chain_raw": "GRASS-Solana",
+      "sample_assets": [
+        "GRASS"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "GRT-ERC20",
+      "sample_assets": [
+        "GRT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "GRVT-ERC20",
+      "sample_assets": [
+        "GRVT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Hedera",
+      "chain_raw": "HBAR-Hedera",
+      "sample_assets": [
+        "HBAR"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "The Open Network (TON)",
+      "chain_raw": "HMSTR-The Open Network (TON)",
+      "sample_assets": [
+        "HMSTR"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Solana",
+      "chain_raw": "HUMA-Solana",
+      "sample_assets": [
+        "HUMA"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "HyperEVM",
+      "chain_raw": "HYPE-HyperEVM",
+      "sample_assets": [
+        "HYPE"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Dfinity",
+      "chain_raw": "ICP-Dfinity",
+      "sample_assets": [
+        "ICP"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "ID-ERC20",
+      "sample_assets": [
+        "ID"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "IMX-ERC20",
+      "sample_assets": [
+        "IMX"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "INJ",
+      "chain_raw": "INJ-INJ",
+      "sample_assets": [
+        "INJ"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Solana",
+      "chain_raw": "JTO-Solana",
+      "sample_assets": [
+        "JTO"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Solana",
+      "chain_raw": "JUP-Solana",
+      "sample_assets": [
+        "JUP"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Klaytn",
+      "chain_raw": "KAIA-Klaytn",
+      "sample_assets": [
+        "KAIA"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Solana",
+      "chain_raw": "KMNO-Solana",
+      "sample_assets": [
+        "KMNO"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "AssetHub Kusama",
+      "chain_raw": "KSM-AssetHub Kusama",
+      "sample_assets": [
+        "KSM"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Solana",
+      "chain_raw": "LAYER-Solana",
+      "sample_assets": [
+        "LAYER"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "LDO-ERC20",
+      "sample_assets": [
+        "LDO"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Linea",
+      "chain_raw": "LINEA-Linea",
+      "sample_assets": [
+        "LINEA"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "LINK-ERC20",
+      "sample_assets": [
+        "LINK"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "LINKK-OKTC",
+      "chain_raw": "LINKK-OKTC",
+      "sample_assets": [
+        "LINK"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "LIT-ERC20",
+      "sample_assets": [
+        "LIT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "LRC-ERC20",
+      "sample_assets": [
+        "LRC"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Litecoin",
+      "chain_raw": "LTC-Litecoin",
+      "sample_assets": [
+        "LTC"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "LTCK-OKTC",
+      "chain_raw": "LTCK-OKTC",
+      "sample_assets": [
+        "LTC"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Terra",
+      "chain_raw": "LUNA-Terra",
+      "sample_assets": [
+        "LUNA"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Arbitrum One",
+      "chain_raw": "MAGIC-Arbitrum One",
+      "sample_assets": [
+        "MAGIC"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "MANA-ERC20",
+      "sample_assets": [
+        "MANA"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "MASK-ERC20",
+      "sample_assets": [
+        "MASK"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Solana",
+      "chain_raw": "ME-Solana",
+      "sample_assets": [
+        "ME"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "MegaETH",
+      "chain_raw": "MEGA-MegaETH",
+      "sample_assets": [
+        "MEGA"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "MEME-ERC20",
+      "sample_assets": [
+        "MEME"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "MERLIN Network",
+      "chain_raw": "MERL-MERLIN Network",
+      "sample_assets": [
+        "MERL"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Solana",
+      "chain_raw": "MET-Solana",
+      "sample_assets": [
+        "MET"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Solana",
+      "chain_raw": "MEW-Solana",
+      "sample_assets": [
+        "MEW"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Mina",
+      "chain_raw": "MINA-Mina",
+      "sample_assets": [
+        "MINA"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "SUI",
+      "chain_raw": "MMT-SUI",
+      "sample_assets": [
+        "MMT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Monad",
+      "chain_raw": "MON-Monad",
+      "sample_assets": [
+        "MON"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "MORPHO-ERC20",
+      "sample_assets": [
+        "MORPHO"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "MOVE-ERC20",
+      "sample_assets": [
+        "MOVE"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "NEAR",
+      "chain_raw": "NEAR-NEAR",
+      "sample_assets": [
+        "NEAR"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "TRC20",
+      "chain_raw": "NFT-TRC20",
+      "sample_assets": [
+        "NFT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Cardano",
+      "chain_raw": "NIGHT-Cardano",
+      "sample_assets": [
+        "NIGHT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "The Open Network (TON)",
+      "chain_raw": "NOT-The Open Network (TON)",
+      "sample_assets": [
+        "NOT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "ONDO-ERC20",
+      "sample_assets": [
+        "ONDO"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Optimism",
+      "chain_raw": "OP-Optimism",
+      "sample_assets": [
+        "OP"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "BRC20",
+      "chain_raw": "ORDI-BRC20",
+      "sample_assets": [
+        "ORDI"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "MERLIN Network",
+      "chain_raw": "ORDI-MERLIN Network",
+      "sample_assets": [
+        "ORDI"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "BSC",
+      "chain_raw": "PARTI-BSC",
+      "sample_assets": [
+        "PARTI"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Base",
+      "chain_raw": "PARTI-Base",
+      "sample_assets": [
+        "PARTI"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "PENDLE-ERC20",
+      "sample_assets": [
+        "PENDLE"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Solana",
+      "chain_raw": "PENGU-Solana",
+      "sample_assets": [
+        "PENGU"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "PEOPLE-ERC20",
+      "sample_assets": [
+        "PEOPLE"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "PEPE-ERC20",
+      "sample_assets": [
+        "PEPE"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Solana",
+      "chain_raw": "PNUT-Solana",
+      "sample_assets": [
+        "PNUT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "POL-ERC20",
+      "sample_assets": [
+        "POL"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Polygon",
+      "chain_raw": "POL-Polygon",
+      "sample_assets": [
+        "POL"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "PROVE-ERC20",
+      "sample_assets": [
+        "PROVE"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Solana",
+      "chain_raw": "PUMP-Solana",
+      "sample_assets": [
+        "PUMP"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Solana",
+      "chain_raw": "PYTH-Solana",
+      "sample_assets": [
+        "PYTH"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Solana",
+      "chain_raw": "PYUSD-Solana",
+      "sample_assets": [
+        "PYUSD"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "X Layer",
+      "chain_raw": "PYUSD-X Layer",
+      "sample_assets": [
+        "PYUSD"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Quantum",
+      "chain_raw": "QTUM-Quantum",
+      "sample_assets": [
+        "QTUM"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Solana",
+      "chain_raw": "RENDER-Solana",
+      "sample_assets": [
+        "RENDER"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "RESOLV-ERC20",
+      "sample_assets": [
+        "RESOLV"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "ROBO-ERC20",
+      "sample_assets": [
+        "ROBO"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "RPL-ERC20",
+      "sample_assets": [
+        "RPL"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Ravencoin",
+      "chain_raw": "RVN-Ravencoin",
+      "sample_assets": [
+        "RVN"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Sonic",
+      "chain_raw": "S-Sonic",
+      "sample_assets": [
+        "S"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "SAFE-ERC20",
+      "sample_assets": [
+        "SAFE"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "SAHARA-ERC20",
+      "sample_assets": [
+        "SAHARA"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "SAND-ERC20",
+      "sample_assets": [
+        "SAND"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "BRC20",
+      "chain_raw": "SATS-BRC20",
+      "sample_assets": [
+        "SATS"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "MERLIN Network",
+      "chain_raw": "SATS-MERLIN Network",
+      "sample_assets": [
+        "SATS"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Scroll",
+      "chain_raw": "SCR-Scroll",
+      "sample_assets": [
+        "SCR"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "SD-ERC20",
+      "sample_assets": [
+        "SD"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "SEI",
+      "chain_raw": "SEI-SEI",
+      "sample_assets": [
+        "SEI"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "SENT-ERC20",
+      "sample_assets": [
+        "SENT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "SHIB-ERC20",
+      "sample_assets": [
+        "SHIB"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "SHIBK-OKTC",
+      "chain_raw": "SHIBK-OKTC",
+      "sample_assets": [
+        "SHIB"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "SKY-ERC20",
+      "sample_assets": [
+        "SKY"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Solana",
+      "chain_raw": "SLX-Solana",
+      "sample_assets": [
+        "SLX"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "SNX-ERC20",
+      "sample_assets": [
+        "SNX"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Solana",
+      "chain_raw": "SOL-Solana",
+      "sample_assets": [
+        "SOL"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "X Layer",
+      "chain_raw": "SOL-X Layer",
+      "sample_assets": [
+        "SOL"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Solana",
+      "chain_raw": "SONIC-Solana",
+      "sample_assets": [
+        "SONIC"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "SPK-ERC20",
+      "sample_assets": [
+        "SPK"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "SSV-ERC20",
+      "sample_assets": [
+        "SSV"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "STETH-ERC20",
+      "sample_assets": [
+        "STETH"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Starknet",
+      "chain_raw": "STRK-Starknet",
+      "sample_assets": [
+        "STRK"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "l-Stacks",
+      "chain_raw": "STX-l-Stacks",
+      "sample_assets": [
+        "STX"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "SUI",
+      "chain_raw": "SUI-SUI",
+      "sample_assets": [
+        "SUI"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "SUSHI-ERC20",
+      "sample_assets": [
+        "SUSHI"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "SUSHIK-OKTC",
+      "chain_raw": "SUSHIK-OKTC",
+      "sample_assets": [
+        "SUSHI"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Theta",
+      "chain_raw": "THETA-Theta",
+      "sample_assets": [
+        "THETA"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Celestia",
+      "chain_raw": "TIA-Celestia",
+      "sample_assets": [
+        "TIA"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Solana",
+      "chain_raw": "TNSR-Solana",
+      "sample_assets": [
+        "TNSR"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Base",
+      "chain_raw": "TOSHI-Base",
+      "sample_assets": [
+        "TOSHI"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Solana",
+      "chain_raw": "TRUMP-Solana",
+      "sample_assets": [
+        "TRUMP"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "TRC20",
+      "chain_raw": "TRX-TRC20",
+      "sample_assets": [
+        "TRX"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "TRXK-OKTC",
+      "chain_raw": "TRXK-OKTC",
+      "sample_assets": [
+        "TRX"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "UMA-ERC20",
+      "sample_assets": [
+        "UMA"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "UNI-ERC20",
+      "sample_assets": [
+        "UNI"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "UNIK-OKTC",
+      "chain_raw": "UNIK-OKTC",
+      "sample_assets": [
+        "UNI"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "USAT-ERC20",
+      "sample_assets": [
+        "USAT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "USDS-ERC20",
+      "sample_assets": [
+        "USDS"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Aptos",
+      "chain_raw": "USDT-Aptos",
+      "sample_assets": [
+        "USDT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Arbitrum One",
+      "chain_raw": "USDT-Arbitrum One",
+      "sample_assets": [
+        "USDT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Avalanche C-Chain",
+      "chain_raw": "USDT-Avalanche C-Chain",
+      "sample_assets": [
+        "USDT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "BERACHAIN (USDT0)",
+      "chain_raw": "USDT-BERACHAIN (USDT0)",
+      "sample_assets": [
+        "USDT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "USDT-ERC20",
+      "sample_assets": [
+        "USDT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Monad (USDT0)",
+      "chain_raw": "USDT-Monad (USDT0)",
+      "sample_assets": [
+        "USDT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "OKTC",
+      "chain_raw": "USDT-OKTC",
+      "sample_assets": [
+        "USDT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Optimism",
+      "chain_raw": "USDT-Optimism",
+      "sample_assets": [
+        "USDT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Optimism (USDT0)",
+      "chain_raw": "USDT-Optimism (USDT0)",
+      "sample_assets": [
+        "USDT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Plasma",
+      "chain_raw": "USDT-Plasma",
+      "sample_assets": [
+        "USDT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Polygon",
+      "chain_raw": "USDT-Polygon",
+      "sample_assets": [
+        "USDT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Solana",
+      "chain_raw": "USDT-Solana",
+      "sample_assets": [
+        "USDT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "TRC20",
+      "chain_raw": "USDT-TRC20",
+      "sample_assets": [
+        "USDT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Tempo",
+      "chain_raw": "USDT-Tempo",
+      "sample_assets": [
+        "USDT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "The Open Network (TON)",
+      "chain_raw": "USDT-The Open Network (TON)",
+      "sample_assets": [
+        "USDT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Unichain (USDT0)",
+      "chain_raw": "USDT-Unichain (USDT0)",
+      "sample_assets": [
+        "USDT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "X Layer",
+      "chain_raw": "USDT-X Layer",
+      "sample_assets": [
+        "USDT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "X Layer (USDT0)",
+      "chain_raw": "USDT-X Layer (USDT0)",
+      "sample_assets": [
+        "USDT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Stellar Lumens",
+      "chain_raw": "VELO-Stellar Lumens",
+      "sample_assets": [
+        "VELO"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Base",
+      "chain_raw": "VIRTUAL-Base",
+      "sample_assets": [
+        "VIRTUAL"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Base",
+      "chain_raw": "VVV-Base",
+      "sample_assets": [
+        "VVV"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Solana",
+      "chain_raw": "W-Solana",
+      "sample_assets": [
+        "W"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Wax",
+      "chain_raw": "WAXP-Wax",
+      "sample_assets": [
+        "WAXP"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Optimism",
+      "chain_raw": "WCT-Optimism",
+      "sample_assets": [
+        "WCT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Solana",
+      "chain_raw": "WET-Solana",
+      "sample_assets": [
+        "WET"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Solana",
+      "chain_raw": "WIF-Solana",
+      "sample_assets": [
+        "WIF"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "WLD-ERC20",
+      "sample_assets": [
+        "WLD"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Optimism",
+      "chain_raw": "WLD-Optimism",
+      "sample_assets": [
+        "WLD"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "WLFI-ERC20",
+      "sample_assets": [
+        "WLFI"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Solana",
+      "chain_raw": "WLFI-Solana",
+      "sample_assets": [
+        "WLFI"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "WOO-ERC20",
+      "sample_assets": [
+        "WOO"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Stellar Lumens",
+      "chain_raw": "XLM-Stellar Lumens",
+      "sample_assets": [
+        "XLM"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Plasma",
+      "chain_raw": "XPL-Plasma",
+      "sample_assets": [
+        "XPL"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "XRP",
+      "chain_raw": "XRP-XRP",
+      "sample_assets": [
+        "XRP"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "XRPK-OKTC",
+      "chain_raw": "XRPK-OKTC",
+      "sample_assets": [
+        "XRP"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Tezos",
+      "chain_raw": "XTZ-Tezos",
+      "sample_assets": [
+        "XTZ"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "YB-ERC20",
+      "sample_assets": [
+        "YB"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "YFI-ERC20",
+      "sample_assets": [
+        "YFI"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "ZAMA-ERC20",
+      "sample_assets": [
+        "ZAMA"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Base",
+      "chain_raw": "ZEN-Base",
+      "sample_assets": [
+        "ZEN"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "ZENT-ERC20",
+      "sample_assets": [
+        "ZENT"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ZetaChain",
+      "chain_raw": "ZETA-ZetaChain",
+      "sample_assets": [
+        "ZETA"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Zilliqa",
+      "chain_raw": "ZIL-Zilliqa",
+      "sample_assets": [
+        "ZIL"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "zkSync Era",
+      "chain_raw": "ZK-zkSync Era",
+      "sample_assets": [
+        "ZK"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "BSC",
+      "chain_raw": "ZKJ-BSC",
+      "sample_assets": [
+        "ZKJ"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "ZKJ-ERC20",
+      "sample_assets": [
+        "ZKJ"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Base",
+      "chain_raw": "ZORA-Base",
+      "sample_assets": [
+        "ZORA"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "Arbitrum One",
+      "chain_raw": "ZRO-Arbitrum One",
+      "sample_assets": [
+        "ZRO"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "ZRO-ERC20",
+      "sample_assets": [
+        "ZRO"
+      ]
+    },
+    {
+      "asset_count": 1,
+      "chain_alias_without_coin_prefix": "ERC20",
+      "chain_raw": "ZRX-ERC20",
+      "sample_assets": [
+        "ZRX"
+      ]
+    }
+  ]
+}

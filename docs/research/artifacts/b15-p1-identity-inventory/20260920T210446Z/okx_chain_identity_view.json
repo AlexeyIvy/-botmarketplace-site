@@ -1,0 +1,1857 @@
+[
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "1INCH-ERC20",
+    "coin": "1INCH",
+    "contract_address_raw": "0x111111111117dc0aa78b770fa6a738034120c302",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Solana",
+    "chain_raw": "2Z-Solana",
+    "coin": "2Z",
+    "contract_address_raw": "J6pQQ3FAcJQeWPPGppWRb4nM8jU3wLyYbRrLh7feMfvd",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Vaulta",
+    "chain_raw": "A-Vaulta",
+    "coin": "A",
+    "contract_address_raw": "core.vaulta",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "AAVE-ERC20",
+    "coin": "AAVE",
+    "contract_address_raw": "0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "ACH-ERC20",
+    "coin": "ACH",
+    "contract_address_raw": "0xed04915c23f00a313a544955524eb7dbd823143d",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Cardano",
+    "chain_raw": "ADA-Cardano",
+    "coin": "ADA",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "AEVO-ERC20",
+    "coin": "AEVO",
+    "contract_address_raw": "0xb528edbef013aff855ac3c50b381f253af13b997",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "AGLD-ERC20",
+    "coin": "AGLD",
+    "contract_address_raw": "0x32353a6c91143bfd6c7d363b546e62a9a2489a20",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Base",
+    "chain_raw": "AIXBT-Base",
+    "coin": "AIXBT",
+    "contract_address_raw": "0x4f9fd6be4a90f2620860d680c0d4d5fb53d1a825",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Algorand",
+    "chain_raw": "ALGO-Algorand",
+    "coin": "ALGO",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Arbitrum One",
+    "chain_raw": "ANIME-Arbitrum One",
+    "coin": "ANIME",
+    "contract_address_raw": "0x37a645648df29205c6261289983fb04ecd70b4b3",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "ANIME-ERC20",
+    "coin": "ANIME",
+    "contract_address_raw": "0x4dc26fc5854e7648a064a4abd590bbe71724c277",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "APE-ERC20",
+    "coin": "APE",
+    "contract_address_raw": "0x4d224452801aced8b2f0aebe155379bb5d594381",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Aptos",
+    "chain_raw": "APT-Aptos",
+    "coin": "APT",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Arweave",
+    "chain_raw": "AR-Arweave",
+    "coin": "AR",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Arbitrum One",
+    "chain_raw": "ARB-Arbitrum One",
+    "coin": "ARB",
+    "contract_address_raw": "0x912CE59144191C1204E64559FE8253a0e49E6548",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "ARB-ERC20",
+    "coin": "ARB",
+    "contract_address_raw": "0xb50721bcf8d664c30412cfbc6cf7a15145234ad1",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "ARKM-ERC20",
+    "coin": "ARKM",
+    "contract_address_raw": "0x6e2a43be0b1d33b726f0ca3b8de60b3482b8b050",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "BSC",
+    "chain_raw": "ASTER-BSC",
+    "coin": "ASTER",
+    "contract_address_raw": "0x000ae314e2a2172a039b26378814c252734f556a",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "ATH-ERC20",
+    "coin": "ATH",
+    "contract_address_raw": "0xbe0ed4138121ecfc5c0e56b40517da27e6c5226b",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Cosmos",
+    "chain_raw": "ATOM-Cosmos",
+    "coin": "ATOM",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Avalanche C-Chain",
+    "chain_raw": "AVAX-Avalanche C-Chain",
+    "coin": "AVAX",
+    "contract_address_raw": "",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "Avalanche X-Chain",
+    "chain_raw": "AVAX-Avalanche X-Chain",
+    "coin": "AVAX",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Base",
+    "chain_raw": "AVNT-Base",
+    "coin": "AVNT",
+    "contract_address_raw": "0x696f9436b67233384889472cd7cd58a6fb5df4f1",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "AXS-ERC20",
+    "coin": "AXS",
+    "contract_address_raw": "0xbb0e17ef65f82ab018d8edd776e8dd940327b28b",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "BSC",
+    "chain_raw": "BABYDOGE-BSC",
+    "coin": "BABYDOGE",
+    "contract_address_raw": "0xc748673057861a797275cd8a068abb95a902e8de",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "OKTC",
+    "chain_raw": "BABYDOGE-OKTC",
+    "coin": "BABYDOGE",
+    "contract_address_raw": "0x97513e975a7fa9072c72c92d8000b0db90b163c5",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "X Layer",
+    "chain_raw": "BABYDOGE-X Layer",
+    "coin": "BABYDOGE",
+    "contract_address_raw": "0x8368e77bc6c8d20c954d8b94f8f42ebb04a35aea",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "BARD-ERC20",
+    "coin": "BARD",
+    "contract_address_raw": "0xf0db65d17e30a966c2ae6a21f6bba71cea6e9754",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "BASED-ERC20",
+    "coin": "BASED",
+    "contract_address_raw": "0x4f2b33840227ddd0e28da8d4185d6fa07adfed87",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "BAT-ERC20",
+    "coin": "BAT",
+    "contract_address_raw": "0x0d8775f648430679a709e98d2b0cb6250d2887ef",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "BitcoinCash",
+    "chain_raw": "BCH-BitcoinCash",
+    "coin": "BCH",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "BCHK-OKTC",
+    "chain_raw": "BCHK-OKTC",
+    "coin": "BCH",
+    "contract_address_raw": "0x18d103b7066aeedb6005b78a462ef9027329b1ea",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "Berachain",
+    "chain_raw": "BERA-Berachain",
+    "coin": "BERA",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "BICO-ERC20",
+    "coin": "BICO",
+    "contract_address_raw": "0xf17e65822b568b3903685a7c9f496cf7656cc6c2",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "BLUR-ERC20",
+    "coin": "BLUR",
+    "contract_address_raw": "0x5283d291dbcf85356a21ba090e6db59121208b44",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "BSC",
+    "chain_raw": "BNB-BSC",
+    "coin": "BNB",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Solana",
+    "chain_raw": "BOME-Solana",
+    "coin": "BOME",
+    "contract_address_raw": "ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Solana",
+    "chain_raw": "BONK-Solana",
+    "coin": "BONK",
+    "contract_address_raw": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "BREV-ERC20",
+    "coin": "BREV",
+    "contract_address_raw": "0x086F405146Ce90135750Bbec9A063a8B20A8bfFb",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Aptos",
+    "chain_raw": "BTC-Aptos",
+    "coin": "BTC",
+    "contract_address_raw": "0x81214a80d82035a190fcb76b6ff3c0145161c3a9f33d137f2bbaee4cfec8a387",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "Bitcoin",
+    "chain_raw": "BTC-Bitcoin",
+    "coin": "BTC",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Lightning",
+    "chain_raw": "BTC-Lightning",
+    "coin": "BTC",
+    "contract_address_raw": "",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "SUI",
+    "chain_raw": "BTC-SUI",
+    "coin": "BTC",
+    "contract_address_raw": "0x876a4b7bce8aeaef60464c11f4026903e9afacab79b9b142686158aa86560b50::xbtc::XBTC",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "Solana",
+    "chain_raw": "BTC-Solana",
+    "coin": "BTC",
+    "contract_address_raw": "CtzPWv73Sn1dMGVU3ZtLv9yWSyUAanBni19YWDaznnkn",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "X Layer",
+    "chain_raw": "BTC-X Layer",
+    "coin": "BTC",
+    "contract_address_raw": "0xb7c00000bcdeef966b20b3d884b98e64d2b06b4f",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "BTCK-OKTC",
+    "chain_raw": "BTCK-OKTC",
+    "coin": "BTC",
+    "contract_address_raw": "0x54e4622dc504176b3bb432dccaf504569699a7ff",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "BSC",
+    "chain_raw": "CAT-BSC",
+    "coin": "CAT",
+    "contract_address_raw": "0x6894cde390a3f51155ea41ed24a33a4827d3063d",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "The Open Network (TON)",
+    "chain_raw": "CATI-The Open Network (TON)",
+    "coin": "CATI",
+    "contract_address_raw": "EQD-cvR0Nz6XAyRBvbhz-abTrRC6sI5tvHvvpeQraV9UAAD7",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "Canton Network",
+    "chain_raw": "CC-Canton Network",
+    "coin": "CC",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "CELO",
+    "chain_raw": "CELO-CELO",
+    "coin": "CELO",
+    "contract_address_raw": " ",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "CELO-TOKEN",
+    "chain_raw": "CELO-CELO-TOKEN",
+    "coin": "CELO",
+    "contract_address_raw": "0x471ece3750da237f93b8e339c536989b8978a438",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "CFG-ERC20",
+    "coin": "CFG",
+    "contract_address_raw": "0xcccccccccc33d538dbc2ee4feab0a7a1ff4e8a94",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "Arbitrum One",
+    "chain_raw": "CHIP-Arbitrum One",
+    "coin": "CHIP",
+    "contract_address_raw": "0x0c1c1c109fe34733fca54b82d7b46b75cfb71f6e",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Chiliz Chain",
+    "chain_raw": "CHZ-Chiliz Chain",
+    "coin": "CHZ",
+    "contract_address_raw": "",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "CHZ-ERC20",
+    "coin": "CHZ",
+    "contract_address_raw": "0x3506424f91fd33084466f402d5d97f05f8e3b4af",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Chiliz Chain",
+    "chain_raw": "CITY-Chiliz Chain",
+    "coin": "CITY",
+    "contract_address_raw": "0x7bd6242d775faef1d50b2aa18c2fbf329bddf295",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "COMP-ERC20",
+    "coin": "COMP",
+    "contract_address_raw": "0xc00e94cb662c3520282e6f5717214004a7f26888",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "CORE",
+    "chain_raw": "CORE-CORE",
+    "coin": "CORE",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "CRV-ERC20",
+    "coin": "CRV",
+    "contract_address_raw": "0xd533a949740bb3306d119cc777fa900ba034cd52",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Polygon",
+    "chain_raw": "CRV-Polygon",
+    "coin": "CRV",
+    "contract_address_raw": "0x172370d5cd63279efa6d502dab29171933a610af",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "Casper",
+    "chain_raw": "CSPR-Casper",
+    "coin": "CSPR",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Data",
+    "chain_raw": "DATA-Data",
+    "coin": "DATA",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Base",
+    "chain_raw": "DEGEN-Base",
+    "coin": "DEGEN",
+    "contract_address_raw": "0x4ed4e862860bed51a9570b96d89af5e1b0efefed",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Dogecoin",
+    "chain_raw": "DOGE-Dogecoin",
+    "coin": "DOGE",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "The Open Network (TON)",
+    "chain_raw": "DOGS-The Open Network (TON)",
+    "coin": "DOGS",
+    "contract_address_raw": "EQCvxJy4eG8hyHBFsZ7eePxrRsUQSFE_jpptRAYBmcG_DOGS",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "Solana",
+    "chain_raw": "DOOD-Solana",
+    "coin": "DOOD",
+    "contract_address_raw": "DvjbEsdca43oQcw2h3HW1CT7N3x5vRcr3QrvTUHnXvgV",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "AssetHub Polkadot",
+    "chain_raw": "DOT-AssetHub Polkadot",
+    "coin": "DOT",
+    "contract_address_raw": "",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "DOTK-OKTC",
+    "chain_raw": "DOTK-OKTC",
+    "coin": "DOT",
+    "contract_address_raw": "0xabc732f6f69a519f6d508434481376b6221eb7d5",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "DYDX",
+    "chain_raw": "DYDX-DYDX",
+    "coin": "DYDX",
+    "contract_address_raw": "",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "EDGE-ERC20",
+    "coin": "EDGE",
+    "contract_address_raw": "0xB0076DE78Dc50581770BBa1D211dDc0aD4F2a241",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Elrond",
+    "chain_raw": "EGLD-Elrond",
+    "coin": "EGLD",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "EIGEN-ERC20",
+    "coin": "EIGEN",
+    "contract_address_raw": "0xec53bf9167f50cdeb3ae105f56099aaab9061f83",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "ENA-ERC20",
+    "coin": "ENA",
+    "contract_address_raw": "0x57e114b691db790c35207b2e685d4a43181e6061",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Enjin Relay Chain",
+    "chain_raw": "ENJ-Enjin Relay Chain",
+    "coin": "ENJ",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "ENS-ERC20",
+    "coin": "ENS",
+    "contract_address_raw": "0xc18360217d8f7ab5e7c516566761ea12ce7f9d72",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Ethereum Classic",
+    "chain_raw": "ETC-Ethereum Classic",
+    "coin": "ETC",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ETCK-OKTC",
+    "chain_raw": "ETCK-OKTC",
+    "coin": "ETC",
+    "contract_address_raw": "0x99970778e2715bbc9cf8fb83d10dcbc2d2d551a3",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "Arbitrum One",
+    "chain_raw": "ETH-Arbitrum One",
+    "coin": "ETH",
+    "contract_address_raw": "",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "Base",
+    "chain_raw": "ETH-Base",
+    "coin": "ETH",
+    "contract_address_raw": "",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "ETH-ERC20",
+    "coin": "ETH",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Linea",
+    "chain_raw": "ETH-Linea",
+    "coin": "ETH",
+    "contract_address_raw": "",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "Optimism",
+    "chain_raw": "ETH-Optimism",
+    "coin": "ETH",
+    "contract_address_raw": " ",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "Robinhood Chain",
+    "chain_raw": "ETH-Robinhood Chain",
+    "coin": "ETH",
+    "contract_address_raw": "",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "Starknet",
+    "chain_raw": "ETH-Starknet",
+    "coin": "ETH",
+    "contract_address_raw": "0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "Unichain",
+    "chain_raw": "ETH-Unichain",
+    "coin": "ETH",
+    "contract_address_raw": "",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "X Layer",
+    "chain_raw": "ETH-X Layer",
+    "coin": "ETH",
+    "contract_address_raw": "0xe7b000003a45145decf8a28fc755ad5ec5ea025a",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "X Layer (WETH)",
+    "chain_raw": "ETH-X Layer (WETH)",
+    "coin": "ETH",
+    "contract_address_raw": "0x5a77f1443d16ee5761d310e38b62f77f726bc71c",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "zkSync Era",
+    "chain_raw": "ETH-zkSync Era",
+    "coin": "ETH",
+    "contract_address_raw": "",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "ETHK-OKTC",
+    "chain_raw": "ETHK-OKTC",
+    "coin": "ETH",
+    "contract_address_raw": "0xef71ca2ee68f45b9ad6f72fbdb33d707b872315c",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "ETHFI-ERC20",
+    "coin": "ETHFI",
+    "contract_address_raw": "0xfe0c30065b384f05761f15d0cc899d4f9f9cc0eb",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "EthereumPoW",
+    "chain_raw": "ETHW-EthereumPoW",
+    "coin": "ETHW",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "FET-ERC20",
+    "coin": "FET",
+    "contract_address_raw": "0xaea46a60368a7bd060eec7df8cba43b7ef41ad85",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "FEVM",
+    "chain_raw": "FIL-FEVM",
+    "coin": "FIL",
+    "contract_address_raw": "",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "Filecoin",
+    "chain_raw": "FIL-Filecoin",
+    "coin": "FIL",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "FILK-OKTC",
+    "chain_raw": "FILK-OKTC",
+    "coin": "FIL",
+    "contract_address_raw": "0x3f8969be2fc0770dcc174968e4b4ff146e0acdaf",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "BSC",
+    "chain_raw": "FLOKI-BSC",
+    "coin": "FLOKI",
+    "contract_address_raw": "0xfb5b838b6cfeedc2873ab27866079ac55363d37e",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "FLOW",
+    "chain_raw": "FLOW-FLOW",
+    "coin": "FLOW",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Flare",
+    "chain_raw": "FLR-Flare",
+    "coin": "FLR",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "FLUID-ERC20",
+    "coin": "FLUID",
+    "contract_address_raw": "0x6f40d4a6237c257fff2db00fa0510deeecd303eb",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Fogo",
+    "chain_raw": "FOGO-Fogo",
+    "coin": "FOGO",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "G-ERC20",
+    "coin": "G",
+    "contract_address_raw": "0x9c7beba8f6ef6643abd725e45a4e8387ef260649",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Gravity Alpha Mainnet",
+    "chain_raw": "G-Gravity Alpha Mainnet",
+    "coin": "G",
+    "contract_address_raw": "",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "GALA-ERC20",
+    "coin": "GALA",
+    "contract_address_raw": "0xd1d2eb1b1e90b638588728b4130137d262c87cae",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "Polygon",
+    "chain_raw": "GMT-Polygon",
+    "coin": "GMT",
+    "contract_address_raw": "0x714db550b574b3e927af3d93e26127d15721d4c2",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "Solana",
+    "chain_raw": "GMT-Solana",
+    "coin": "GMT",
+    "contract_address_raw": "7i5KKsX2weiTkry7jA4ZwSuXGhs5eJBEjY8vVxR4pfRx",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Arbitrum One",
+    "chain_raw": "GMX-Arbitrum One",
+    "coin": "GMX",
+    "contract_address_raw": "0xfc5a1a6eb076a2c7ad06ed22c90d7e710e35ad0a",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Solana",
+    "chain_raw": "GOAT-Solana",
+    "coin": "GOAT",
+    "contract_address_raw": "CzLSujWBLFsSjncfkh59rUFqvafWcY5tzedWJSuypump",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "The Open Network (TON)",
+    "chain_raw": "GRAM-The Open Network (TON)",
+    "coin": "GRAM",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Solana",
+    "chain_raw": "GRASS-Solana",
+    "coin": "GRASS",
+    "contract_address_raw": "Grass7B4RdKfBCjTKgSqnXkqjwiGvQyFbuSCUJr3XXjs",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "GRT-ERC20",
+    "coin": "GRT",
+    "contract_address_raw": "0xc944e90c64b2c07662a292be6244bdf05cda44a7",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "GRVT-ERC20",
+    "coin": "GRVT",
+    "contract_address_raw": "0xad29f2723fcdbcf665f210f25e06f97477e417cf",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Hedera",
+    "chain_raw": "HBAR-Hedera",
+    "coin": "HBAR",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "The Open Network (TON)",
+    "chain_raw": "HMSTR-The Open Network (TON)",
+    "coin": "HMSTR",
+    "contract_address_raw": "EQAJ8uWd7EBqsmpSWaRdf_I-8R8-XHwh3gsNKhy-UrdrPcUo",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "Solana",
+    "chain_raw": "HUMA-Solana",
+    "coin": "HUMA",
+    "contract_address_raw": "HUMA1821qVDKta3u2ovmfDQeW2fSQouSKE8fkF44wvGw",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "HyperEVM",
+    "chain_raw": "HYPE-HyperEVM",
+    "coin": "HYPE",
+    "contract_address_raw": "",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "Dfinity",
+    "chain_raw": "ICP-Dfinity",
+    "coin": "ICP",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "ID-ERC20",
+    "coin": "ID",
+    "contract_address_raw": "0x2dff88a56767223a5529ea5960da7a3f5f766406",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "IMX-ERC20",
+    "coin": "IMX",
+    "contract_address_raw": "0xf57e7e7c23978c3caec3c3548e3d615c346e79ff",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "INJ",
+    "chain_raw": "INJ-INJ",
+    "coin": "INJ",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Solana",
+    "chain_raw": "JTO-Solana",
+    "coin": "JTO",
+    "contract_address_raw": "jtojtomepa8beP8AuQc6eXt5FriJwfFMwQx2v2f9mCL",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Solana",
+    "chain_raw": "JUP-Solana",
+    "coin": "JUP",
+    "contract_address_raw": "JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Klaytn",
+    "chain_raw": "KAIA-Klaytn",
+    "coin": "KAIA",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Solana",
+    "chain_raw": "KMNO-Solana",
+    "coin": "KMNO",
+    "contract_address_raw": "KMNo3nJsBXfcpJTVhZcXLW7RmTwTt4GVFE7suUBo9sS",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "AssetHub Kusama",
+    "chain_raw": "KSM-AssetHub Kusama",
+    "coin": "KSM",
+    "contract_address_raw": "",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "Solana",
+    "chain_raw": "LAYER-Solana",
+    "coin": "LAYER",
+    "contract_address_raw": "LAYER4xPpTCb3QL8S9u41EAhAX7mhBn8Q6xMTwY2Yzc",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "LDO-ERC20",
+    "coin": "LDO",
+    "contract_address_raw": "0x5a98fcbea516cf06857215779fd812ca3bef1b32",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Linea",
+    "chain_raw": "LINEA-Linea",
+    "coin": "LINEA",
+    "contract_address_raw": "0x1789e0043623282d5dcc7f213d703c6d8bafbb04",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "LINK-ERC20",
+    "coin": "LINK",
+    "contract_address_raw": "0x514910771af9ca656af840dff83e8264ecf986ca",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "LINKK-OKTC",
+    "chain_raw": "LINKK-OKTC",
+    "coin": "LINK",
+    "contract_address_raw": "0xbeb67de6cc5af652b2d9b0235750ed70f5a2cb0d",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "LIT-ERC20",
+    "coin": "LIT",
+    "contract_address_raw": "0x232ce3bd40fcd6f80f3d55a522d03f25df784ee2",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "LRC-ERC20",
+    "coin": "LRC",
+    "contract_address_raw": "0xbbbbca6a901c926f240b89eacb641d8aec7aeafd",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Litecoin",
+    "chain_raw": "LTC-Litecoin",
+    "coin": "LTC",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "LTCK-OKTC",
+    "chain_raw": "LTCK-OKTC",
+    "coin": "LTC",
+    "contract_address_raw": "0xfa520efc34c81bfc1e3dd48b7fe9ff326049f986",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "Terra",
+    "chain_raw": "LUNA-Terra",
+    "coin": "LUNA",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Arbitrum One",
+    "chain_raw": "MAGIC-Arbitrum One",
+    "coin": "MAGIC",
+    "contract_address_raw": "0x539bde0d7dbd336b79148aa742883198bbf60342",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "MANA-ERC20",
+    "coin": "MANA",
+    "contract_address_raw": "0x0f5d2fb29fb7d3cfee444a200298f468908cc942",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "MASK-ERC20",
+    "coin": "MASK",
+    "contract_address_raw": "0x69af81e73a73b40adf4f3d4223cd9b1ece623074",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Solana",
+    "chain_raw": "ME-Solana",
+    "coin": "ME",
+    "contract_address_raw": "MEFNBXixkEbait3xn9bkm8WsJzXtVsaJEn4c8Sam21u",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "MegaETH",
+    "chain_raw": "MEGA-MegaETH",
+    "coin": "MEGA",
+    "contract_address_raw": "0x28B7E77f82B25B95953825F1E3eA0E36c1c29861",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "MEME-ERC20",
+    "coin": "MEME",
+    "contract_address_raw": "0xb131f4a55907b10d1f0a50d8ab8fa09ec342cd74",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "MERLIN Network",
+    "chain_raw": "MERL-MERLIN Network",
+    "coin": "MERL",
+    "contract_address_raw": "0x5c46bFF4B38dc1EAE09C5BAc65872a1D8bc87378",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Solana",
+    "chain_raw": "MET-Solana",
+    "coin": "MET",
+    "contract_address_raw": "METvsvVRapdj9cFLzq4Tr43xK4tAjQfwX76z3n6mWQL",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "Solana",
+    "chain_raw": "MEW-Solana",
+    "coin": "MEW",
+    "contract_address_raw": "MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Mina",
+    "chain_raw": "MINA-Mina",
+    "coin": "MINA",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "SUI",
+    "chain_raw": "MMT-SUI",
+    "coin": "MMT",
+    "contract_address_raw": "0x35169bc93e1fddfcf3a82a9eae726d349689ed59e4b065369af8789fe59f8608::mmt::MMT",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Monad",
+    "chain_raw": "MON-Monad",
+    "coin": "MON",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "MORPHO-ERC20",
+    "coin": "MORPHO",
+    "contract_address_raw": "0x58d97b57bb95320f9a05dc918aef65434969c2b2",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "MOVE-ERC20",
+    "coin": "MOVE",
+    "contract_address_raw": "0x3073f7aaa4db83f95e9fff17424f71d4751a3073",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "NEAR",
+    "chain_raw": "NEAR-NEAR",
+    "coin": "NEAR",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "TRC20",
+    "chain_raw": "NFT-TRC20",
+    "coin": "NFT",
+    "contract_address_raw": "TFczxzPhnThNSqr5by8tvxsdCFRRz6cPNq",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Cardano",
+    "chain_raw": "NIGHT-Cardano",
+    "coin": "NIGHT",
+    "contract_address_raw": "4e49474854:0691b2fecca1ac4f53cb6dfb00b7013e561d1f34403b957cbb5af1fa",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "The Open Network (TON)",
+    "chain_raw": "NOT-The Open Network (TON)",
+    "coin": "NOT",
+    "contract_address_raw": "EQAvlWFDxGF2lXm67y4yzC17wYKD9A0guwPkMs1gOsM__NOT",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "ONDO-ERC20",
+    "coin": "ONDO",
+    "contract_address_raw": "0xfaba6f8e4a5e8ab82f62fe7c39859fa577269be3",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Optimism",
+    "chain_raw": "OP-Optimism",
+    "coin": "OP",
+    "contract_address_raw": "0x4200000000000000000000000000000000000042",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "BRC20",
+    "chain_raw": "ORDI-BRC20",
+    "coin": "ORDI",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "MERLIN Network",
+    "chain_raw": "ORDI-MERLIN Network",
+    "coin": "ORDI",
+    "contract_address_raw": "0x7dcb50b2180BC896Da1200D2726a88AF5D2cBB5A",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "BSC",
+    "chain_raw": "PARTI-BSC",
+    "coin": "PARTI",
+    "contract_address_raw": "0x59264f02D301281f3393e1385c0aEFd446Eb0F00",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "Base",
+    "chain_raw": "PARTI-Base",
+    "coin": "PARTI",
+    "contract_address_raw": "0x59264f02D301281f3393e1385c0aEFd446Eb0F00",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "PENDLE-ERC20",
+    "coin": "PENDLE",
+    "contract_address_raw": "0x808507121b80c02388fad14726482e061b8da827",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Solana",
+    "chain_raw": "PENGU-Solana",
+    "coin": "PENGU",
+    "contract_address_raw": "2zMMhcVQEXDtdE6vsFS7S7D5oUodfJHE8vd1gnBouauv",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "PEOPLE-ERC20",
+    "coin": "PEOPLE",
+    "contract_address_raw": "0x7a58c0be72be218b41c608b7fe7c5bb630736c71",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "PEPE-ERC20",
+    "coin": "PEPE",
+    "contract_address_raw": "0x6982508145454ce325ddbe47a25d4ec3d2311933",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Solana",
+    "chain_raw": "PNUT-Solana",
+    "coin": "PNUT",
+    "contract_address_raw": "2qEHjDLDLbuBgRYvsxhc5D6uDWAivNFZGan56P1tpump",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "POL-ERC20",
+    "coin": "POL",
+    "contract_address_raw": "0x455e53cbb86018ac2b8092fdcd39d8444affc3f6",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Polygon",
+    "chain_raw": "POL-Polygon",
+    "coin": "POL",
+    "contract_address_raw": "",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "PROVE-ERC20",
+    "coin": "PROVE",
+    "contract_address_raw": "0x6bef15d938d4e72056ac92ea4bdd0d76b1c4ad29",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Solana",
+    "chain_raw": "PUMP-Solana",
+    "coin": "PUMP",
+    "contract_address_raw": "pumpCmXqMfrsAkQ5r49WcJnRayYRqmXz6ae8H7H9Dfn",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "Solana",
+    "chain_raw": "PYTH-Solana",
+    "coin": "PYTH",
+    "contract_address_raw": "HZ1JovNiVvGrGNiiYvEozEVgZ58xaU3RKwX8eACQBCt3",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Solana",
+    "chain_raw": "PYUSD-Solana",
+    "coin": "PYUSD",
+    "contract_address_raw": "2b1kV6DkPAnxd5ixfnxCpjxmKwqjjaYmCZfHsFu24GXo",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "X Layer",
+    "chain_raw": "PYUSD-X Layer",
+    "coin": "PYUSD",
+    "contract_address_raw": "0x87b4a8176b3df6b71e26cc095edcaf4db07506b4",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "Quantum",
+    "chain_raw": "QTUM-Quantum",
+    "coin": "QTUM",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Solana",
+    "chain_raw": "RENDER-Solana",
+    "coin": "RENDER",
+    "contract_address_raw": "rndrizKT3MK1iimdxRdWabcF7Zg7AR5T4nud4EkHBof",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "RESOLV-ERC20",
+    "coin": "RESOLV",
+    "contract_address_raw": "0x259338656198ec7a76c729514d3cb45dfbf768a1",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "ROBO-ERC20",
+    "coin": "ROBO",
+    "contract_address_raw": "0x32b4d049fE4c888D2b92eEcaf729F44DF6B1F36E",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "RPL-ERC20",
+    "coin": "RPL",
+    "contract_address_raw": "0xd33526068d116ce69f19a9ee46f0bd304f21a51f",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Ravencoin",
+    "chain_raw": "RVN-Ravencoin",
+    "coin": "RVN",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Sonic",
+    "chain_raw": "S-Sonic",
+    "coin": "S",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "SAFE-ERC20",
+    "coin": "SAFE",
+    "contract_address_raw": "0x5afe3855358e112b5647b952709e6165e1c1eeee",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "SAHARA-ERC20",
+    "coin": "SAHARA",
+    "contract_address_raw": "0xFDFfB411C4A70AA7C95D5C981a6Fb4Da867e1111",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "SAND-ERC20",
+    "coin": "SAND",
+    "contract_address_raw": "0x3845badade8e6dff049820680d1f14bd3903a5d0",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "BRC20",
+    "chain_raw": "SATS-BRC20",
+    "coin": "SATS",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "MERLIN Network",
+    "chain_raw": "SATS-MERLIN Network",
+    "coin": "SATS",
+    "contract_address_raw": "0x4dbe39D987665d0CB9F921B50B2673346b87cAfA",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "Scroll",
+    "chain_raw": "SCR-Scroll",
+    "coin": "SCR",
+    "contract_address_raw": "0xd29687c813d741e2f938f4ac377128810e217b1b",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "SD-ERC20",
+    "coin": "SD",
+    "contract_address_raw": "0x30d20208d987713f46dfd34ef128bb16c404d10f",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "SEI",
+    "chain_raw": "SEI-SEI",
+    "coin": "SEI",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "SENT-ERC20",
+    "coin": "SENT",
+    "contract_address_raw": "0x56a3ba04e95d34268a19b2a4474dc979babdaf76",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "SHIB-ERC20",
+    "coin": "SHIB",
+    "contract_address_raw": "0x95ad61b0a150d79219dcf64e1e6cc01f0b64c4ce",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "SHIBK-OKTC",
+    "chain_raw": "SHIBK-OKTC",
+    "coin": "SHIB",
+    "contract_address_raw": "0xaa27badaa3c9ec9081b8f6c9cdd2bf375f143780",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "SKY-ERC20",
+    "coin": "SKY",
+    "contract_address_raw": "0x56072c95faa701256059aa122697b133aded9279",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Solana",
+    "chain_raw": "SLX-Solana",
+    "coin": "SLX",
+    "contract_address_raw": "SLXdx4BUt2v9uJQNzWqSfzTJ9UKLUDsvxHFMEEdrfgq",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "SNX-ERC20",
+    "coin": "SNX",
+    "contract_address_raw": "0xc011a73ee8576fb46f5e1c5751ca3b9fe0af2a6f",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Solana",
+    "chain_raw": "SOL-Solana",
+    "coin": "SOL",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "X Layer",
+    "chain_raw": "SOL-X Layer",
+    "coin": "SOL",
+    "contract_address_raw": "0x505000008de8748dbd4422ff4687a4fc9beba15b",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "Solana",
+    "chain_raw": "SONIC-Solana",
+    "coin": "SONIC",
+    "contract_address_raw": "SonicxvLud67EceaEzCLRnMTBqzYUUYNr93DBkBdDES",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "SPK-ERC20",
+    "coin": "SPK",
+    "contract_address_raw": "0xc20059e0317DE91738d13af027DfC4a50781b066",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "SSV-ERC20",
+    "coin": "SSV",
+    "contract_address_raw": "0x9d65ff81a3c488d585bbfb0bfe3c7707c7917f54",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "STETH-ERC20",
+    "coin": "STETH",
+    "contract_address_raw": "0xae7ab96520de3a18e5e111b5eaab095312d7fe84",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Starknet",
+    "chain_raw": "STRK-Starknet",
+    "coin": "STRK",
+    "contract_address_raw": "0x04718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "l-Stacks",
+    "chain_raw": "STX-l-Stacks",
+    "coin": "STX",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "SUI",
+    "chain_raw": "SUI-SUI",
+    "coin": "SUI",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "SUSHI-ERC20",
+    "coin": "SUSHI",
+    "contract_address_raw": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "SUSHIK-OKTC",
+    "chain_raw": "SUSHIK-OKTC",
+    "coin": "SUSHI",
+    "contract_address_raw": "0x2218e0d5e0173769f5b4939a3ae423f7e5e4eab7",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "Theta",
+    "chain_raw": "THETA-Theta",
+    "coin": "THETA",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Celestia",
+    "chain_raw": "TIA-Celestia",
+    "coin": "TIA",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Solana",
+    "chain_raw": "TNSR-Solana",
+    "coin": "TNSR",
+    "contract_address_raw": "TNSRxcUxoT9xBG3de7PiJyTDYu7kskLqcpddxnEJAS6",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Base",
+    "chain_raw": "TOSHI-Base",
+    "coin": "TOSHI",
+    "contract_address_raw": "0xac1bd2486aaf3b5c0fc3fd868558b082a531b2b4",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Solana",
+    "chain_raw": "TRUMP-Solana",
+    "coin": "TRUMP",
+    "contract_address_raw": "6p6xgHyF7AeE6TZkSmFsko444wqoP15icUSqi2jfGiPN",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "TRC20",
+    "chain_raw": "TRX-TRC20",
+    "coin": "TRX",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "TRXK-OKTC",
+    "chain_raw": "TRXK-OKTC",
+    "coin": "TRX",
+    "contract_address_raw": "0x00505505a7576d6734704fabb16f41924e3e384b",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "UMA-ERC20",
+    "coin": "UMA",
+    "contract_address_raw": "0x04fa0d235c4abf4bcf4787af4cf447de572ef828",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "UNI-ERC20",
+    "coin": "UNI",
+    "contract_address_raw": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "UNIK-OKTC",
+    "chain_raw": "UNIK-OKTC",
+    "coin": "UNI",
+    "contract_address_raw": "0x59d226bb0a4d74274d4354ebb6a0e1a1aa5175b6",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "USAT-ERC20",
+    "coin": "USAT",
+    "contract_address_raw": "0x07041776f5007ACa2A54844F50503a18A72A8b68",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "USDS-ERC20",
+    "coin": "USDS",
+    "contract_address_raw": "0xdc035d45d973e3ec169d2276ddab16f1e407384f",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Aptos",
+    "chain_raw": "USDT-Aptos",
+    "coin": "USDT",
+    "contract_address_raw": "0x357b0b74bc833e95a115ad22604854d6b0fca151cecd94111770e5d6ffc9dc2b",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "Arbitrum One",
+    "chain_raw": "USDT-Arbitrum One",
+    "coin": "USDT",
+    "contract_address_raw": "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "Avalanche C-Chain",
+    "chain_raw": "USDT-Avalanche C-Chain",
+    "coin": "USDT",
+    "contract_address_raw": "0x9702230a8ea53601f5cd2dc00fdbc13d4df4a8c7",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "BERACHAIN (USDT0)",
+    "chain_raw": "USDT-BERACHAIN (USDT0)",
+    "coin": "USDT",
+    "contract_address_raw": "0x779Ded0c9e1022225f8E0630b35a9b54bE713736",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "USDT-ERC20",
+    "coin": "USDT",
+    "contract_address_raw": "0xdac17f958d2ee523a2206206994597c13d831ec7",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "Monad (USDT0)",
+    "chain_raw": "USDT-Monad (USDT0)",
+    "coin": "USDT",
+    "contract_address_raw": "0xe7cd86e13AC4309349F30B3435a9d337750fC82D",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "OKTC",
+    "chain_raw": "USDT-OKTC",
+    "coin": "USDT",
+    "contract_address_raw": "0x382bb369d343125bfb2117af9c149795c6c65c50",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "Optimism",
+    "chain_raw": "USDT-Optimism",
+    "coin": "USDT",
+    "contract_address_raw": "0x94b008aA00579c1307B0EF2c499aD98a8ce58e58",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "Optimism (USDT0)",
+    "chain_raw": "USDT-Optimism (USDT0)",
+    "coin": "USDT",
+    "contract_address_raw": "0x01bff41798a0bcf287b996046ca68b395dbc1071",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "Plasma",
+    "chain_raw": "USDT-Plasma",
+    "coin": "USDT",
+    "contract_address_raw": "0xb8ce59fc3717ada4c02eadf9682a9e934f625ebb",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "Polygon",
+    "chain_raw": "USDT-Polygon",
+    "coin": "USDT",
+    "contract_address_raw": "0xc2132d05d31c914a87c6611c10748aeb04b58e8f",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "Solana",
+    "chain_raw": "USDT-Solana",
+    "coin": "USDT",
+    "contract_address_raw": "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "TRC20",
+    "chain_raw": "USDT-TRC20",
+    "coin": "USDT",
+    "contract_address_raw": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "Tempo",
+    "chain_raw": "USDT-Tempo",
+    "coin": "USDT",
+    "contract_address_raw": "0x20c00000000000000000000014f22ca97301eb73",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "The Open Network (TON)",
+    "chain_raw": "USDT-The Open Network (TON)",
+    "coin": "USDT",
+    "contract_address_raw": "EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "Unichain (USDT0)",
+    "chain_raw": "USDT-Unichain (USDT0)",
+    "coin": "USDT",
+    "contract_address_raw": "0x9151434b16b9763660705744891fa906f660ecc5",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "X Layer",
+    "chain_raw": "USDT-X Layer",
+    "coin": "USDT",
+    "contract_address_raw": "0x1E4a5963aBFD975d8c9021ce480b42188849D41d",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "X Layer (USDT0)",
+    "chain_raw": "USDT-X Layer (USDT0)",
+    "coin": "USDT",
+    "contract_address_raw": "0x779ded0c9e1022225f8e0630b35a9b54be713736",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "Stellar Lumens",
+    "chain_raw": "VELO-Stellar Lumens",
+    "coin": "VELO",
+    "contract_address_raw": "VELO:GDM4RQUQQUVSKQA7S6EM7XBZP3FCGH4Q7CL6TABQ7B2BEJ5ERARM2M5M",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Base",
+    "chain_raw": "VIRTUAL-Base",
+    "coin": "VIRTUAL",
+    "contract_address_raw": "0x0b3e328455c4059eeb9e3f84b5543f74e24e7e1b",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "Base",
+    "chain_raw": "VVV-Base",
+    "coin": "VVV",
+    "contract_address_raw": "0xacfe6019ed1a7dc6f7b508c02d1b04ec88cc21bf",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Solana",
+    "chain_raw": "W-Solana",
+    "coin": "W",
+    "contract_address_raw": "85VBFQZC9TZkfaptBWjvUw7YbZjy52A6mjtPGjstQAmQ",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Wax",
+    "chain_raw": "WAXP-Wax",
+    "coin": "WAXP",
+    "contract_address_raw": "eosio.token",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Optimism",
+    "chain_raw": "WCT-Optimism",
+    "coin": "WCT",
+    "contract_address_raw": "0xef4461891dfb3ac8572ccf7c794664a8dd927945",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Solana",
+    "chain_raw": "WET-Solana",
+    "coin": "WET",
+    "contract_address_raw": "WETZjtprkDMCcUxPi9PfWnowMRZkiGGHDb9rABuRZ2U",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Solana",
+    "chain_raw": "WIF-Solana",
+    "coin": "WIF",
+    "contract_address_raw": "EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "WLD-ERC20",
+    "coin": "WLD",
+    "contract_address_raw": "0x163f8c2467924be0ae7b5347228cabf260318753",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Optimism",
+    "chain_raw": "WLD-Optimism",
+    "coin": "WLD",
+    "contract_address_raw": "0xdc6ff44d5d932cbd77b52e5612ba0529dc6226f1",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "WLFI-ERC20",
+    "coin": "WLFI",
+    "contract_address_raw": "0xda5e1988097297dcdc1f90d4dfe7909e847cbef6",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "Solana",
+    "chain_raw": "WLFI-Solana",
+    "coin": "WLFI",
+    "contract_address_raw": "WLFinEv6ypjkczcS83FZqFpgFZYwQXutRbxGe7oC16g",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "WOO-ERC20",
+    "coin": "WOO",
+    "contract_address_raw": "0x4691937a7508860f876c9c0a2a617e7d9e945d4b",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Stellar Lumens",
+    "chain_raw": "XLM-Stellar Lumens",
+    "coin": "XLM",
+    "contract_address_raw": "native:GDN4U3BDFVMK74IJ46GXEN5ZDRA5QIJQF6TM3NBJIG4IQW2RDGYXSMRN",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Plasma",
+    "chain_raw": "XPL-Plasma",
+    "coin": "XPL",
+    "contract_address_raw": "",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "XRP",
+    "chain_raw": "XRP-XRP",
+    "coin": "XRP",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "XRPK-OKTC",
+    "chain_raw": "XRPK-OKTC",
+    "coin": "XRP",
+    "contract_address_raw": "0xa715f624eb32c6c960b0e044b10cde585d5f5984",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "Tezos",
+    "chain_raw": "XTZ-Tezos",
+    "coin": "XTZ",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "YB-ERC20",
+    "coin": "YB",
+    "contract_address_raw": "0x01791F726B4103694969820be083196cC7c045fF",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "YFI-ERC20",
+    "coin": "YFI",
+    "contract_address_raw": "0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "ZAMA-ERC20",
+    "coin": "ZAMA",
+    "contract_address_raw": "0xa12cc123ba206d4031d1c7f6223d1c2ec249f4f3",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "Base",
+    "chain_raw": "ZEN-Base",
+    "coin": "ZEN",
+    "contract_address_raw": "0xf43eb8de897fbc7f2502483b2bef7bb9ea179229",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "ZENT-ERC20",
+    "coin": "ZENT",
+    "contract_address_raw": "0xdbb7a34bf10169d6d2d0d02a6cbb436cf4381bfa",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ZetaChain",
+    "chain_raw": "ZETA-ZetaChain",
+    "coin": "ZETA",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Zilliqa",
+    "chain_raw": "ZIL-Zilliqa",
+    "coin": "ZIL",
+    "contract_address_raw": "",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "zkSync Era",
+    "chain_raw": "ZK-zkSync Era",
+    "coin": "ZK",
+    "contract_address_raw": "0x5a7d6b2f92c77fad6ccabd7ee0624e64907eaf3e",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "BSC",
+    "chain_raw": "ZKJ-BSC",
+    "coin": "ZKJ",
+    "contract_address_raw": "0xc71b5f631354be6853efe9c3ab6b9590f8302e81",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "ZKJ-ERC20",
+    "coin": "ZKJ",
+    "contract_address_raw": "0xc71b5f631354be6853efe9c3ab6b9590f8302e81",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Base",
+    "chain_raw": "ZORA-Base",
+    "coin": "ZORA",
+    "contract_address_raw": "0x1111111111166b7FE7bd91427724B487980aFc69",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "Arbitrum One",
+    "chain_raw": "ZRO-Arbitrum One",
+    "coin": "ZRO",
+    "contract_address_raw": "0x6985884c4392d348587b19cb9eaaf157f13271cd",
+    "mainNet": false
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "ZRO-ERC20",
+    "coin": "ZRO",
+    "contract_address_raw": "0x6985884c4392d348587b19cb9eaaf157f13271cd",
+    "mainNet": true
+  },
+  {
+    "chain_alias_without_coin_prefix": "ERC20",
+    "chain_raw": "ZRX-ERC20",
+    "coin": "ZRX",
+    "contract_address_raw": "0xe41d2489571d322189246dafa5ebde1f4699f498",
+    "mainNet": true
+  }
+]
