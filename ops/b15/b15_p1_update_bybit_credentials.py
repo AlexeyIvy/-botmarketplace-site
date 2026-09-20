@@ -5,6 +5,7 @@ import getpass
 import os
 import shlex
 from pathlib import Path
+from urllib.parse import urlparse
 
 ENV=Path("/home/botmarket/.config/sc001/b15-p1.env")
 
@@ -27,6 +28,21 @@ def load_env(path:Path)->dict[str,str]:
             fail(f"malformed value for {k}")
         out[k]=parts[0]
     return out
+
+def normalize_bybit_base(value:str)->str:
+    raw=(value or "").strip().rstrip("/")
+    if not raw:
+        raw="https://api.bybit.com"
+    parsed=urlparse(raw)
+    if parsed.scheme!="https" or not parsed.netloc:
+        fail("Bybit REST base URL must be a full https:// URL")
+    allowed={"api.bybit.com","api-demo.bybit.com","api-testnet.bybit.com"}
+    host=(parsed.hostname or "").lower()
+    if host not in allowed:
+        fail(f"unexpected Bybit API host: {host}")
+    if parsed.path not in ("","/") or parsed.query or parsed.fragment:
+        fail("Bybit REST base URL must not include a path/query/fragment")
+    return "https://"+host
 
 def ask_secret(label:str)->str:
     value=getpass.getpass(label).strip()
@@ -56,9 +72,14 @@ print()
 bybit_key=ask_secret("NEW Bybit API key: ")
 bybit_secret=ask_secret("NEW Bybit API secret: ")
 
-default_base=cfg.get("SC001_B15_BYBIT_BASE_URL","https://api.bybit.com").rstrip("/")
+stored_base=cfg.get("SC001_B15_BYBIT_BASE_URL","")
+try:
+    default_base=normalize_bybit_base(stored_base)
+except SystemExit:
+    default_base="https://api.bybit.com"
+
 raw=input(f"Bybit REST base URL [{default_base}]: ").strip()
-bybit_base=(raw or default_base).rstrip("/")
+bybit_base=normalize_bybit_base(raw or default_base)
 
 cfg["SC001_B15_BYBIT_API_KEY"]=bybit_key
 cfg["SC001_B15_BYBIT_API_SECRET"]=bybit_secret
