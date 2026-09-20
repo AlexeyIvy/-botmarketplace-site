@@ -1,0 +1,19 @@
+{
+  "stage": "SC001-B15-P1-READONLY-CAPABILITY-DIAGNOSTIC-IMPLEMENTATION-FREEZE",
+  "version": "0.3",
+  "date": "2026-09-20",
+  "status": "FROZEN_BEFORE_B15_P1_READONLY_CAPABILITY_DIAGNOSTIC_V03",
+  "protocol_path": "docs/research/sc001-b15-p1-readonly-capability-diagnostic-v0.3.md",
+  "protocol_git_blob_sha": "4401b579b9eb38924c907a4c3265fd03baf5394a",
+  "security_contract_path": "docs/research/sc001-b15-p1-read-only-credential-security-contract-v0.1.md",
+  "security_contract_git_blob_sha": "41534289c446aca751f4ffb16c969157a2c5ecc9",
+  "runner_path": "research/sc001/sc001_b15_p1_readonly_capability_preflight_v0_3.py",
+  "runner_git_blob_sha": "0c1e1bba04ec3075f1c510258ab9d28962c0ba85",
+  "credential_file": "/home/botmarket/.config/sc001/b15-p1.env",
+  "credential_file_mode": "0600",
+  "transport_family": "IPv4-only",
+  "system_wide_routing_change": false,
+  "b13c_networking_change": false,
+  "b14a_networking_change": false,
+  "next_allowed_action": "whitelist stable VPS IPv4 on both venues and run diagnostic v0.3"
+}
