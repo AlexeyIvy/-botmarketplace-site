@@ -292,6 +292,37 @@ def fetch_bybit_sources(cfg: dict[str, str]) -> tuple[dict, dict]:
     return instruments, coin_info
 
 
+def validate_okx_instrument_schema(raw: dict) -> None:
+    rows = raw.get("data") or []
+    if not rows:
+        fail("OKX public instruments returned empty data")
+    required = {
+        "instType", "instId", "baseCcy", "quoteCcy", "state",
+        "instCategory", "listTime", "contTdSwTime", "expTime",
+    }
+    bad = sum(
+        1 for row in rows
+        if not isinstance(row, dict) or not required.issubset(row)
+    )
+    if bad:
+        fail(f"OKX SPOT instrument schema drift: bad_rows={bad}")
+
+
+def validate_bybit_instrument_schema(raw: dict) -> None:
+    rows = (raw.get("result") or {}).get("list") or []
+    if not rows:
+        fail("Bybit spot instruments returned empty list")
+    required = {
+        "symbol", "baseCoin", "quoteCoin", "status", "symbolType", "stTag",
+    }
+    bad = sum(
+        1 for row in rows
+        if not isinstance(row, dict) or not required.issubset(row)
+    )
+    if bad:
+        fail(f"Bybit SPOT instrument schema drift: bad_rows={bad}")
+
+
 def fetch_bybit_announcements(
     base: str, type_key: str, tag: str | None = None
 ) -> list[dict]:
@@ -674,6 +705,8 @@ def main() -> int:
 
         okx_instruments, okx_currencies = fetch_okx_sources(cfg)
         bybit_instruments, bybit_coin_info = fetch_bybit_sources(cfg)
+        validate_okx_instrument_schema(okx_instruments)
+        validate_bybit_instrument_schema(bybit_instruments)
 
         bybit_base = cfg["SC001_B15_BYBIT_BASE_URL"].rstrip("/")
         bybit_new = fetch_bybit_announcements(
@@ -706,6 +739,14 @@ def main() -> int:
             bybit_delist,
             freeze_ms,
         )
+        if not candidates:
+            fail("common primary SPOT-USDT candidate universe is empty")
+        if not okx_chains or not bybit_chains:
+            fail("identity chain inventory is empty on one or both venues")
+        if not any(x.get("coin") == "USDT" for x in okx_chains):
+            fail("OKX USDT quote-rebalance identity rows missing")
+        if not any(x.get("coin") == "USDT" for x in bybit_chains):
+            fail("Bybit USDT quote-rebalance identity rows missing")
         alias_census = build_chain_alias_census(okx_chains, bybit_chains)
 
         raw_dir = run_dir / "raw"
