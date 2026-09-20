@@ -1,0 +1,217 @@
+{
+  "registry_version": "v0.1",
+  "source_run": "20260920T210446Z",
+  "default": "IDENTITY_REVIEW",
+  "rows": [
+    {
+      "network_uid": "bitcoin:mainnet",
+      "native_asset": "BTC",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "network_uid": "ethereum:mainnet",
+      "native_asset": "ETH",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "network_uid": "solana:mainnet",
+      "native_asset": "SOL",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "network_uid": "arbitrum:one",
+      "native_asset": "ETH",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "network_uid": "base:mainnet",
+      "native_asset": "ETH",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "network_uid": "bsc:mainnet",
+      "native_asset": "BNB",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "network_uid": "optimism:mainnet",
+      "native_asset": "ETH",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "network_uid": "polygon:pos",
+      "native_asset": "POL",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "network_uid": "tron:mainnet",
+      "native_asset": "TRX",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "network_uid": "ton:mainnet",
+      "native_asset": "TON",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "network_uid": "avalanche:c-chain",
+      "native_asset": "AVAX",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "network_uid": "aptos:mainnet",
+      "native_asset": "APT",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "network_uid": "sui:mainnet",
+      "native_asset": "SUI",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "network_uid": "linea:mainnet",
+      "native_asset": "ETH",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "network_uid": "scroll:mainnet",
+      "native_asset": "ETH",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "network_uid": "starknet:mainnet",
+      "native_asset": "STRK",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "network_uid": "zksync:era",
+      "native_asset": "ETH",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "network_uid": "chiliz:chain",
+      "native_asset": "CHZ",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "network_uid": "merlin:mainnet",
+      "native_asset": "BTC",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "network_uid": "megaeth:mainnet",
+      "native_asset": "ETH",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "network_uid": "stellar:mainnet",
+      "native_asset": "XLM",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "network_uid": "vaulta:mainnet",
+      "native_asset": "A",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "network_uid": "cardano:mainnet",
+      "native_asset": "ADA",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "network_uid": "algorand:mainnet",
+      "native_asset": "ALGO",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "network_uid": "arweave:mainnet",
+      "native_asset": "AR",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "network_uid": "cosmoshub:mainnet",
+      "native_asset": "ATOM",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "network_uid": "bitcoincash:mainnet",
+      "native_asset": "BCH",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "network_uid": "berachain:mainnet",
+      "native_asset": "BERA",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "network_uid": "core:mainnet",
+      "native_asset": "CORE",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "network_uid": "casper:mainnet",
+      "native_asset": "CSPR",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "network_uid": "dogecoin:mainnet",
+      "native_asset": "DOGE",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "network_uid": "dydx:mainnet",
+      "native_asset": "DYDX",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "network_uid": "ethereumclassic:mainnet",
+      "native_asset": "ETC",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "network_uid": "ethereum-pow:mainnet",
+      "native_asset": "ETHW",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "network_uid": "filecoin:mainnet",
+      "native_asset": "FIL",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "network_uid": "flow:mainnet",
+      "native_asset": "FLOW",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "network_uid": "injective:mainnet",
+      "native_asset": "INJ",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "network_uid": "near:mainnet",
+      "native_asset": "NEAR",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "network_uid": "sei:mainnet",
+      "native_asset": "SEI",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "network_uid": "xrp-ledger:mainnet",
+      "native_asset": "XRP",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "network_uid": "litecoin:mainnet",
+      "native_asset": "LTC",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "network_uid": "tezos:mainnet",
+      "native_asset": "XTZ",
+      "status": "EXPLICIT_V01"
+    }
+  ]
+}
