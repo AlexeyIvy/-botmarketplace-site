@@ -1,0 +1,681 @@
+{
+  "registry_version": "v0.1",
+  "status": "FROZEN_EXPLICIT_OBSERVED_NETWORK_MAPPINGS_PRIMARY_V1",
+  "source_run": "20260920T210446Z",
+  "policy": {
+    "default": "UNMAPPED_ALIAS_IDENTITY_REVIEW",
+    "fuzzy_matching": false,
+    "contract_only_network_inference": false,
+    "trim_bybit_chainType_for_validation": true,
+    "evm_contract_rule": "lowercase exact 0x40hex after canonical network equality",
+    "non_evm_contract_rule": "exact case-sensitive after canonical network equality unless network-specific rule says otherwise",
+    "empty_contract_rule": "requires explicit native registry row"
+  },
+  "networks": [
+    {
+      "network_uid": "bitcoin:mainnet",
+      "family": "bitcoin",
+      "okx_aliases": [
+        "Bitcoin"
+      ],
+      "bybit_chain_codes": [
+        "BTC"
+      ],
+      "bybit_chain_types": [
+        "Bitcoin"
+      ],
+      "contract_rule": "native_only_or_review",
+      "native_asset": "BTC"
+    },
+    {
+      "network_uid": "ethereum:mainnet",
+      "family": "evm",
+      "okx_aliases": [
+        "ERC20"
+      ],
+      "bybit_chain_codes": [
+        "ETH"
+      ],
+      "bybit_chain_types": [
+        "Ethereum",
+        "ERC20"
+      ],
+      "contract_rule": "evm_address",
+      "native_asset": "ETH"
+    },
+    {
+      "network_uid": "solana:mainnet",
+      "family": "solana",
+      "okx_aliases": [
+        "Solana"
+      ],
+      "bybit_chain_codes": [
+        "SOL"
+      ],
+      "bybit_chain_types": [
+        "Solana",
+        "SOL",
+        "SOLANA"
+      ],
+      "contract_rule": "case_sensitive_exact",
+      "native_asset": "SOL"
+    },
+    {
+      "network_uid": "arbitrum:one",
+      "family": "evm",
+      "okx_aliases": [
+        "Arbitrum One"
+      ],
+      "bybit_chain_codes": [
+        "ARBI"
+      ],
+      "bybit_chain_types": [
+        "Arbitrum One",
+        "Arbitrum One(USDT0)"
+      ],
+      "contract_rule": "evm_address",
+      "native_asset": "ETH"
+    },
+    {
+      "network_uid": "base:mainnet",
+      "family": "evm",
+      "okx_aliases": [
+        "Base"
+      ],
+      "bybit_chain_codes": [
+        "BASE"
+      ],
+      "bybit_chain_types": [
+        "Base Mainnet"
+      ],
+      "contract_rule": "evm_address",
+      "native_asset": "ETH"
+    },
+    {
+      "network_uid": "bsc:mainnet",
+      "family": "evm",
+      "okx_aliases": [
+        "BSC"
+      ],
+      "bybit_chain_codes": [
+        "BSC"
+      ],
+      "bybit_chain_types": [
+        "BNB Smart Chain",
+        "BEP20",
+        "BSC (BEP20)"
+      ],
+      "contract_rule": "evm_address",
+      "native_asset": "BNB"
+    },
+    {
+      "network_uid": "optimism:mainnet",
+      "family": "evm",
+      "okx_aliases": [
+        "Optimism"
+      ],
+      "bybit_chain_codes": [
+        "OP"
+      ],
+      "bybit_chain_types": [
+        "OP Mainnet"
+      ],
+      "contract_rule": "evm_address",
+      "native_asset": "ETH"
+    },
+    {
+      "network_uid": "polygon:pos",
+      "family": "evm",
+      "okx_aliases": [
+        "Polygon"
+      ],
+      "bybit_chain_codes": [
+        "MATIC"
+      ],
+      "bybit_chain_types": [
+        "Polygon PoS"
+      ],
+      "contract_rule": "evm_address",
+      "native_asset": "POL"
+    },
+    {
+      "network_uid": "tron:mainnet",
+      "family": "tron",
+      "okx_aliases": [
+        "TRC20"
+      ],
+      "bybit_chain_codes": [
+        "TRX"
+      ],
+      "bybit_chain_types": [
+        "TRX",
+        "TRC20"
+      ],
+      "contract_rule": "case_sensitive_exact",
+      "native_asset": "TRX"
+    },
+    {
+      "network_uid": "ton:mainnet",
+      "family": "ton",
+      "okx_aliases": [
+        "The Open Network (TON)"
+      ],
+      "bybit_chain_codes": [
+        "TON"
+      ],
+      "bybit_chain_types": [
+        "TON",
+        "Ton"
+      ],
+      "contract_rule": "case_sensitive_exact",
+      "native_asset": "TON"
+    },
+    {
+      "network_uid": "avalanche:c-chain",
+      "family": "evm",
+      "okx_aliases": [
+        "Avalanche C-Chain"
+      ],
+      "bybit_chain_codes": [
+        "CAVAX"
+      ],
+      "bybit_chain_types": [
+        "CAVAX",
+        "AVAX-C Chain"
+      ],
+      "contract_rule": "evm_address",
+      "native_asset": "AVAX"
+    },
+    {
+      "network_uid": "aptos:mainnet",
+      "family": "aptos",
+      "okx_aliases": [
+        "Aptos"
+      ],
+      "bybit_chain_codes": [
+        "APTOS"
+      ],
+      "bybit_chain_types": [
+        "APTOS",
+        "Aptos"
+      ],
+      "contract_rule": "case_sensitive_exact",
+      "native_asset": "APT"
+    },
+    {
+      "network_uid": "sui:mainnet",
+      "family": "sui",
+      "okx_aliases": [
+        "SUI"
+      ],
+      "bybit_chain_codes": [
+        "SUI"
+      ],
+      "bybit_chain_types": [
+        "SUI"
+      ],
+      "contract_rule": "case_sensitive_exact",
+      "native_asset": "SUI"
+    },
+    {
+      "network_uid": "linea:mainnet",
+      "family": "evm",
+      "okx_aliases": [
+        "Linea"
+      ],
+      "bybit_chain_codes": [
+        "LINEA"
+      ],
+      "bybit_chain_types": [
+        "LINEA"
+      ],
+      "contract_rule": "evm_address",
+      "native_asset": "ETH"
+    },
+    {
+      "network_uid": "scroll:mainnet",
+      "family": "evm",
+      "okx_aliases": [
+        "Scroll"
+      ],
+      "bybit_chain_codes": [
+        "SCROLL"
+      ],
+      "bybit_chain_types": [
+        "Scroll"
+      ],
+      "contract_rule": "evm_address",
+      "native_asset": "ETH"
+    },
+    {
+      "network_uid": "starknet:mainnet",
+      "family": "starknet",
+      "okx_aliases": [
+        "Starknet"
+      ],
+      "bybit_chain_codes": [
+        "STARKNET"
+      ],
+      "bybit_chain_types": [
+        "Starknet"
+      ],
+      "contract_rule": "case_sensitive_exact",
+      "native_asset": "STRK"
+    },
+    {
+      "network_uid": "zksync:era",
+      "family": "evm",
+      "okx_aliases": [
+        "zkSync Era"
+      ],
+      "bybit_chain_codes": [
+        "ZKV2"
+      ],
+      "bybit_chain_types": [
+        "ZKsync Era"
+      ],
+      "contract_rule": "evm_address",
+      "native_asset": "ETH"
+    },
+    {
+      "network_uid": "chiliz:chain",
+      "family": "evm",
+      "okx_aliases": [
+        "Chiliz Chain"
+      ],
+      "bybit_chain_codes": [
+        "CHILIZ"
+      ],
+      "bybit_chain_types": [
+        "Chiliz Chain"
+      ],
+      "contract_rule": "evm_address",
+      "native_asset": "CHZ"
+    },
+    {
+      "network_uid": "merlin:mainnet",
+      "family": "evm",
+      "okx_aliases": [
+        "MERLIN Network"
+      ],
+      "bybit_chain_codes": [
+        "MERLIN"
+      ],
+      "bybit_chain_types": [
+        "Merlin Chain"
+      ],
+      "contract_rule": "evm_address",
+      "native_asset": "BTC"
+    },
+    {
+      "network_uid": "megaeth:mainnet",
+      "family": "evm",
+      "okx_aliases": [
+        "MegaETH"
+      ],
+      "bybit_chain_codes": [
+        "MEGAETH"
+      ],
+      "bybit_chain_types": [
+        "MegaETH"
+      ],
+      "contract_rule": "evm_address",
+      "native_asset": "ETH"
+    },
+    {
+      "network_uid": "stellar:mainnet",
+      "family": "stellar",
+      "okx_aliases": [
+        "Stellar Lumens"
+      ],
+      "bybit_chain_codes": [
+        "XLM"
+      ],
+      "bybit_chain_types": [
+        "XLM"
+      ],
+      "contract_rule": "case_sensitive_exact",
+      "native_asset": "XLM"
+    },
+    {
+      "network_uid": "vaulta:mainnet",
+      "family": "antelope",
+      "okx_aliases": [
+        "Vaulta"
+      ],
+      "bybit_chain_codes": [
+        "EOS"
+      ],
+      "bybit_chain_types": [
+        "Vaulta"
+      ],
+      "contract_rule": "case_sensitive_exact",
+      "native_asset": "A"
+    },
+    {
+      "network_uid": "cardano:mainnet",
+      "family": "cardano",
+      "okx_aliases": [
+        "Cardano"
+      ],
+      "bybit_chain_codes": [
+        "ADA"
+      ],
+      "bybit_chain_types": [
+        "ADA"
+      ],
+      "contract_rule": "native_only_or_review",
+      "native_asset": "ADA"
+    },
+    {
+      "network_uid": "algorand:mainnet",
+      "family": "algorand",
+      "okx_aliases": [
+        "Algorand"
+      ],
+      "bybit_chain_codes": [
+        "ALGO"
+      ],
+      "bybit_chain_types": [
+        "ALGO"
+      ],
+      "contract_rule": "native_only_or_review",
+      "native_asset": "ALGO"
+    },
+    {
+      "network_uid": "arweave:mainnet",
+      "family": "arweave",
+      "okx_aliases": [
+        "Arweave"
+      ],
+      "bybit_chain_codes": [
+        "AR"
+      ],
+      "bybit_chain_types": [
+        "AR"
+      ],
+      "contract_rule": "native_only_or_review",
+      "native_asset": "AR"
+    },
+    {
+      "network_uid": "cosmoshub:mainnet",
+      "family": "cosmos",
+      "okx_aliases": [
+        "Cosmos"
+      ],
+      "bybit_chain_codes": [
+        "ATOM"
+      ],
+      "bybit_chain_types": [
+        "ATOM"
+      ],
+      "contract_rule": "native_only_or_review",
+      "native_asset": "ATOM"
+    },
+    {
+      "network_uid": "bitcoincash:mainnet",
+      "family": "bitcoin-cash",
+      "okx_aliases": [
+        "BitcoinCash"
+      ],
+      "bybit_chain_codes": [
+        "BCH"
+      ],
+      "bybit_chain_types": [
+        "Bitcoin Cash"
+      ],
+      "contract_rule": "native_only_or_review",
+      "native_asset": "BCH"
+    },
+    {
+      "network_uid": "berachain:mainnet",
+      "family": "evm",
+      "okx_aliases": [
+        "Berachain"
+      ],
+      "bybit_chain_codes": [
+        "BERA"
+      ],
+      "bybit_chain_types": [
+        "Berachain"
+      ],
+      "contract_rule": "evm_address_or_native",
+      "native_asset": "BERA"
+    },
+    {
+      "network_uid": "core:mainnet",
+      "family": "evm",
+      "okx_aliases": [
+        "CORE"
+      ],
+      "bybit_chain_codes": [
+        "CORE"
+      ],
+      "bybit_chain_types": [
+        "CORE"
+      ],
+      "contract_rule": "evm_address_or_native",
+      "native_asset": "CORE"
+    },
+    {
+      "network_uid": "casper:mainnet",
+      "family": "casper",
+      "okx_aliases": [
+        "Casper"
+      ],
+      "bybit_chain_codes": [
+        "CSPR"
+      ],
+      "bybit_chain_types": [
+        "Casper"
+      ],
+      "contract_rule": "native_only_or_review",
+      "native_asset": "CSPR"
+    },
+    {
+      "network_uid": "dogecoin:mainnet",
+      "family": "dogecoin",
+      "okx_aliases": [
+        "Dogecoin"
+      ],
+      "bybit_chain_codes": [
+        "DOGE"
+      ],
+      "bybit_chain_types": [
+        "Dogecoin"
+      ],
+      "contract_rule": "native_only_or_review",
+      "native_asset": "DOGE"
+    },
+    {
+      "network_uid": "dydx:mainnet",
+      "family": "cosmos",
+      "okx_aliases": [
+        "DYDX"
+      ],
+      "bybit_chain_codes": [
+        "DYDX"
+      ],
+      "bybit_chain_types": [
+        "DYDX"
+      ],
+      "contract_rule": "native_only_or_review",
+      "native_asset": "DYDX"
+    },
+    {
+      "network_uid": "ethereumclassic:mainnet",
+      "family": "evm",
+      "okx_aliases": [
+        "Ethereum Classic"
+      ],
+      "bybit_chain_codes": [
+        "ETC"
+      ],
+      "bybit_chain_types": [
+        "Ethereum Classic"
+      ],
+      "contract_rule": "native_only_or_review",
+      "native_asset": "ETC"
+    },
+    {
+      "network_uid": "ethereum-pow:mainnet",
+      "family": "evm",
+      "okx_aliases": [
+        "EthereumPoW"
+      ],
+      "bybit_chain_codes": [
+        "ETHW"
+      ],
+      "bybit_chain_types": [
+        "ETHW"
+      ],
+      "contract_rule": "native_only_or_review",
+      "native_asset": "ETHW"
+    },
+    {
+      "network_uid": "filecoin:mainnet",
+      "family": "filecoin",
+      "okx_aliases": [
+        "Filecoin"
+      ],
+      "bybit_chain_codes": [
+        "FIL"
+      ],
+      "bybit_chain_types": [
+        "Filecoin"
+      ],
+      "contract_rule": "native_only_or_review",
+      "native_asset": "FIL"
+    },
+    {
+      "network_uid": "flow:mainnet",
+      "family": "flow",
+      "okx_aliases": [
+        "FLOW"
+      ],
+      "bybit_chain_codes": [
+        "FLOW"
+      ],
+      "bybit_chain_types": [
+        "FLOW"
+      ],
+      "contract_rule": "native_only_or_review",
+      "native_asset": "FLOW"
+    },
+    {
+      "network_uid": "injective:mainnet",
+      "family": "cosmos",
+      "okx_aliases": [
+        "INJ"
+      ],
+      "bybit_chain_codes": [
+        "INJ"
+      ],
+      "bybit_chain_types": [
+        "INJ"
+      ],
+      "contract_rule": "native_only_or_review",
+      "native_asset": "INJ"
+    },
+    {
+      "network_uid": "near:mainnet",
+      "family": "near",
+      "okx_aliases": [
+        "NEAR"
+      ],
+      "bybit_chain_codes": [
+        "NEAR"
+      ],
+      "bybit_chain_types": [
+        "NEAR"
+      ],
+      "contract_rule": "native_only_or_review",
+      "native_asset": "NEAR"
+    },
+    {
+      "network_uid": "sei:mainnet",
+      "family": "cosmos",
+      "okx_aliases": [
+        "SEI"
+      ],
+      "bybit_chain_codes": [
+        "SEI"
+      ],
+      "bybit_chain_types": [
+        "SEI"
+      ],
+      "contract_rule": "native_only_or_review",
+      "native_asset": "SEI"
+    },
+    {
+      "network_uid": "xrp-ledger:mainnet",
+      "family": "xrpl",
+      "okx_aliases": [
+        "XRP"
+      ],
+      "bybit_chain_codes": [
+        "XRP"
+      ],
+      "bybit_chain_types": [
+        "XRP"
+      ],
+      "contract_rule": "native_only_or_review",
+      "native_asset": "XRP"
+    },
+    {
+      "network_uid": "litecoin:mainnet",
+      "family": "litecoin",
+      "okx_aliases": [
+        "Litecoin"
+      ],
+      "bybit_chain_codes": [
+        "LTC"
+      ],
+      "bybit_chain_types": [
+        "LTC"
+      ],
+      "contract_rule": "native_only_or_review",
+      "native_asset": "LTC"
+    },
+    {
+      "network_uid": "tezos:mainnet",
+      "family": "tezos",
+      "okx_aliases": [
+        "Tezos"
+      ],
+      "bybit_chain_codes": [
+        "XTZ"
+      ],
+      "bybit_chain_types": [
+        "tezos"
+      ],
+      "contract_rule": "native_only_or_review",
+      "native_asset": "XTZ"
+    }
+  ],
+  "explicitly_not_mapped_v01": [
+    "OKTC and *K-OKTC aliases",
+    "Lightning",
+    "BRC20",
+    "Avalanche X-Chain",
+    "FEVM",
+    "Robinhood Chain",
+    "Unichain variants",
+    "X Layer variants",
+    "USDT0 aliases unless exact representation semantics are separately frozen",
+    "Bybit ARBINOVA",
+    "Bybit ARC",
+    "Bybit CODEX",
+    "Bybit CORN",
+    "Bybit KAVAEVM",
+    "Bybit MANTLE",
+    "Bybit MATIC.E",
+    "Bybit MOVE",
+    "Bybit SEIEVM",
+    "Bybit STORY",
+    "Bybit XAVAX",
+    "Bybit XDC",
+    "Bybit ZKSYNC",
+    "Bybit ZETAEVM"
+  ]
+}
