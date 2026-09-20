@@ -5,7 +5,7 @@
   "protocol_path": "docs/research/sc001-b15-p1-canonical-route-universe-identity-freeze-protocol-v0.1.md",
   "protocol_git_blob_sha": "bdc102c2bda8009d4a76ab1f4d2e55fda159a7ff",
   "runner_path": "research/sc001/sc001_b15_p1_nonprice_identity_inventory_probe_v0_1.py",
-  "runner_git_blob_sha": "03549714a182fb29486b8b892890bebe77fd85d8",
+  "runner_git_blob_sha": "112b34157c31d122887a94301dab037025dd618f",
   "security_contract_path": "docs/research/sc001-b15-p1-read-only-credential-security-contract-v0.1.md",
   "security_contract_git_blob_sha": "41534289c446aca751f4ffb16c969157a2c5ecc9",
   "capability_pass_path": "docs/research/sc001-b15-p1-readonly-capability-pass-v0.1.md",
@@ -31,5 +31,8 @@
   "withdraw_endpoints_authorized": false,
   "current_transfer_status_allowed_for_universe_selection": false,
   "fuzzy_network_mapping_allowed": false,
-  "next_allowed_action": "run frozen non-price identity inventory probe on VPS; then review exact observed network aliases and native/token identity before final canonical universe builder"
+  "next_allowed_action": "run frozen non-price identity inventory probe on VPS; then review exact observed network aliases and native/token identity before final canonical universe builder",
+  "fail_closed_schema_validation": true,
+  "empty_common_universe_is_review": true,
+  "quote_rebalance_usdt_identity_rows_required": true
 }
