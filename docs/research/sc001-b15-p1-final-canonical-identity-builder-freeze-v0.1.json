@@ -1,0 +1,16 @@
+{
+  "stage": "SC001-B15-P1-FINAL-CANONICAL-IDENTITY-BUILDER-V0.1",
+  "status": "FROZEN_BEFORE_FINAL_CANONICAL_IDENTITY_BUILDER_V01",
+  "source_run": "20260920T210446Z",
+  "runner_path": "research/sc001/sc001_b15_p1_final_canonical_identity_builder_v0_1.py",
+  "runner_git_blob_sha": "ea76fc3bb2c07adcb9bd270fa323bf05fe8fce2e",
+  "network_registry_path": "docs/research/sc001-b15-p1-canonical-network-registry-v0.1.json",
+  "network_registry_git_blob_sha": "a327f332cf3e0d34c9ecec7cde63aa41617ede47",
+  "native_registry_path": "docs/research/sc001-b15-p1-native-asset-registry-v0.1.json",
+  "native_registry_git_blob_sha": "65b38fe71ccb1ca91a04ad393b78d969c7e67697",
+  "price_data_authorized": false,
+  "transfer_status_allowed_for_selection": false,
+  "fuzzy_mapping_allowed": false,
+  "pass_requires_zero_identity_review_assets": true,
+  "pass_requires_quote_graph_complete": true
+}
