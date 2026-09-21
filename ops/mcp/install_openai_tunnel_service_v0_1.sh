@@ -35,11 +35,6 @@ sudo systemctl stop botmarket-openai-tunnel.service 2>/dev/null || true
 sudo systemctl reset-failed botmarket-openai-tunnel.service 2>/dev/null || true
 echo "PASS: stale service stopped/reset"
 
-echo
-echo "=== 0. STOP ANY STALE TUNNEL SERVICE ==="
-sudo systemctl stop botmarket-openai-tunnel.service 2>/dev/null || true
-sudo systemctl reset-failed botmarket-openai-tunnel.service 2>/dev/null || true
-echo "PASS: stale tunnel service stopped/reset"
 test -f "$UNIT_SRC"
 test -f "$READY_SRC"
 echo
@@ -103,6 +98,10 @@ if sudo grep -Eq '^[[:space:]]*(show_details:|cloudflared:|admin_ui:)' "$PROFILE
 else
   echo "PASS: profile contains no unsupported v0.0.14 fields"
 fi
+
+echo
+echo "=== 2C. EFFECTIVE v0.0.14 RUNTIME PROFILE ==="
+sudo sed -n '1,220p' "$PROFILE" | sed '/api_key:/s#file:.*#file:[REDACTED]#'
 
 echo
 echo "=== 3. PROFILE DOCTOR ==="
