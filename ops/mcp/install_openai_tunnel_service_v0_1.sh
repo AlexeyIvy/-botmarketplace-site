@@ -16,8 +16,8 @@ echo
 echo "=== 1. PRECONDITIONS ==="
 test -x "${BIN_DIR}/tunnel-client"
 test -x "${BIN_DIR}/tunnel-client-runtime"
-test -r "$ID_FILE"
-test -r "$KEY_FILE"
+sudo test -r "$ID_FILE"
+sudo test -r "$KEY_FILE"
 sudo systemctl is-active --quiet botmarket-reader-mcp.service
 sudo -u botmarket-mcp /opt/botmarket-research/venv/bin/python /opt/botmarket-research/app/reader_readiness.py
 echo "PASS: Reader MCP ready"
