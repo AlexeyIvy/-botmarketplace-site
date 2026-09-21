@@ -30,6 +30,12 @@ echo "========== OPENAI SECURE MCP TUNNEL — SERVICE INSTALL =========="
 echo "script_dir = ${SCRIPT_DIR}"
 
 echo
+echo "=== 0. STOP STALE SERVICE / RESTART LOOP ==="
+sudo systemctl stop botmarket-openai-tunnel.service 2>/dev/null || true
+sudo systemctl reset-failed botmarket-openai-tunnel.service 2>/dev/null || true
+echo "PASS: stale service stopped/reset"
+
+echo
 echo "=== 0. STOP ANY STALE TUNNEL SERVICE ==="
 sudo systemctl stop botmarket-openai-tunnel.service 2>/dev/null || true
 sudo systemctl reset-failed botmarket-openai-tunnel.service 2>/dev/null || true
@@ -75,7 +81,6 @@ log:
 health:
   listen_addr: 127.0.0.1:8080
   url_file: /run/botmarket-tunnel/health-url
-  show_details: true
 process:
   pid_file: /run/botmarket-tunnel/tunnel-client.pid
 mcp:
@@ -88,6 +93,17 @@ mcp:
 EOF
 sudo install -o root -g botmarket-tunnel -m 0440 "$TMP_PROFILE" "$PROFILE"
 echo "PASS: runtime profile installed"
+
+echo
+echo "=== 2B. VERIFY v0.0.14 PROFILE SCHEMA ==="
+if sudo grep -Eq '^[[:space:]]*(show_details:|cloudflared:|admin_ui:)' "$PROFILE"; then
+  echo "FAIL: unsupported v0.0.14 profile field detected"
+  sudo sed -n '1,220p' "$PROFILE" | sed '/api_key:/s#file:.*#file:[REDACTED]#'
+  exit 124
+else
+  echo "PASS: profile contains no unsupported v0.0.14 fields"
+fi
+
 echo
 echo "=== 3. PROFILE DOCTOR ==="
 sudo -u botmarket-tunnel "${BIN_DIR}/tunnel-client" doctor --profile-file "$PROFILE" --explain
