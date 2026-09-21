@@ -23,8 +23,8 @@ async def main() -> None:
     server = mod.mcp
 
     async with Client(server) as client:
-        tools = await client.list_tools()
-        names = sorted(t.name for t in tools)
+        tools_result = await client.list_tools()
+        names = sorted(t.name for t in tools_result.tools)
         expected = ["list_files", "list_roots", "read_text"]
         if names != expected:
             raise RuntimeError(f"unexpected tools: {names}")
