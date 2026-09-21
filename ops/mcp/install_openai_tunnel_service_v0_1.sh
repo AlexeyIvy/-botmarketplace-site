@@ -8,6 +8,24 @@ PROFILE="${CFG_DIR}/runtime.yaml"
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
 UNIT_SRC="${SCRIPT_DIR}/botmarket-openai-tunnel.service"
 READY_SRC="${SCRIPT_DIR}/tunnel_readiness_v0_1.sh"
+
+on_error() {
+  rc=$?
+  line=$1
+  echo
+  echo "===== TUNNEL INSTALL FAILURE rc=$rc line=$line =====" >&2
+  sudo systemctl status botmarket-openai-tunnel.service --no-pager -l 2>/dev/null || true
+  sudo journalctl -u botmarket-openai-tunnel.service -n 120 --no-pager 2>/dev/null || true
+  echo "--- local health ---" >&2
+  curl -sS --max-time 2 http://127.0.0.1:8080/healthz 2>/dev/null || true
+  echo >&2
+  curl -sS --max-time 2 'http://127.0.0.1:8080/health?details=true' 2>/dev/null || true
+  echo >&2
+  curl -sS --max-time 2 http://127.0.0.1:8080/readyz 2>/dev/null || true
+  echo >&2
+  exit "$rc"
+}
+trap 'on_error $LINENO' ERR
 echo "========== OPENAI SECURE MCP TUNNEL — SERVICE INSTALL =========="
 echo "script_dir = ${SCRIPT_DIR}"
 test -f "$UNIT_SRC"
@@ -51,9 +69,7 @@ log:
 health:
   listen_addr: 127.0.0.1:8080
   url_file: /run/botmarket-tunnel/health-url
-admin_ui:
-  open_browser: false
-  log_buffer_events: 500
+  show_details: true
 process:
   pid_file: /run/botmarket-tunnel/tunnel-client.pid
 mcp:
@@ -63,8 +79,6 @@ mcp:
   startup_wait_timeout: 30s
   connection_max_ttl: 10m
   max_concurrent_requests: 2
-cloudflared:
-  managed: false
 EOF
 sudo install -o root -g botmarket-tunnel -m 0440 "$TMP_PROFILE" "$PROFILE"
 echo "PASS: runtime profile installed"
