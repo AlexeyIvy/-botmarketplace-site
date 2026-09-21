@@ -13,6 +13,7 @@ WorkingDirectory=/opt/botmarket-research/app
 Environment=PYTHONDONTWRITEBYTECODE=1
 Environment=PYTHONUNBUFFERED=1
 ExecStart=/opt/botmarket-research/venv/bin/python /opt/botmarket-research/app/reader_server.py
+ExecStartPost=/opt/botmarket-research/venv/bin/python /opt/botmarket-research/app/reader_readiness.py
 Restart=on-failure
 RestartSec=3
 TimeoutStartSec=30
