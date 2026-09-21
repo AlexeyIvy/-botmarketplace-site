@@ -4,8 +4,8 @@ Documentation=https://github.com/openai/tunnel-client
 After=network-online.target botmarket-reader-mcp.service
 Wants=network-online.target
 Requires=botmarket-reader-mcp.service
-StartLimitIntervalSec=120
-StartLimitBurst=5
+StartLimitIntervalSec=300
+StartLimitBurst=3
 
 [Service]
 Type=simple
