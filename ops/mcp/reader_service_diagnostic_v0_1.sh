@@ -65,7 +65,7 @@ tail -40 "$APP" || true
 
 echo
 echo "=== H. UNIT EFFECTIVE CONTENT ==="
-sudo systemctl cat "$SERVICE" || true
+sudo systemctl cat "$SERVICE" --no-pager || true
 
 echo
 echo "=== I. BARE USER LOOPBACK BIND TEST (PORT 8766) ==="
@@ -112,14 +112,19 @@ sudo -u botmarket-mcp env \
   timeout 8s "$PY" "$APP" >"$DIRECT_LOG" 2>&1 &
 DIRECT_WRAPPER_PID=$!
 
-sleep 2
+DIRECT_LISTEN=FAIL
+for _ in $(seq 1 40); do
+    if ss -lnt 2>/dev/null | grep -Eq "127\.0\.0\.1:$PORT([[:space:]]|$)"; then
+        DIRECT_LISTEN=PASS
+        break
+    fi
+    sleep 0.25
+done
 
-if ss -lnt 2>/dev/null | grep -Eq "127\.0\.0\.1:$PORT([[:space:]]|$)"; then
+if [ "$DIRECT_LISTEN" = "PASS" ]; then
     echo "PASS_DIRECT_MCP_LISTENER_$PORT"
-    DIRECT_LISTEN=PASS
 else
     echo "FAIL_DIRECT_MCP_NO_LISTENER_$PORT"
-    DIRECT_LISTEN=FAIL
 fi
 
 echo "--- direct MCP output ---"
