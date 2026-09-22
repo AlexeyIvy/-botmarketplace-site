@@ -175,3 +175,44 @@ Required order:
 - No hidden changes to universe, data, costs, risk, or stop-rules.
 - Preserve fail-closed handling for ambiguous identity cases.
 - Use Runner/Reader path rather than manual Termux execution.
+
+
+## Progress recorded in the 2026-09-23 continuation
+
+Canonical v0.1 counts were revalidated from the GitHub mirror of the canonical safe export:
+
+- ADMITTED = 146
+- IDENTITY_REVIEW = 46
+- EXCLUDED = 9
+- directed routes = 310
+- USDT quote routes = 9
+- quote_review = true
+
+The 46 review cases split exactly into:
+- 16 `UNRESOLVED_OBSERVED_ROUTE_OR_IDENTITY`
+- 30 `NO_PROVEN_COMMON_REPRESENTATION`
+
+New binding review:
+- `docs/research/sc001-b15-p1-identity-review-static-integrity-audit-v0.1.md`
+
+New v0.2 design candidate:
+- `docs/research/sc001-b15-p1-representation-disposition-builder-v0.2-design.md`
+
+Current roadmap:
+- `docs/research/sc001-current-roadmap-and-stop-rules-v5.40.md`
+
+Important new integrity finding:
+the next action is NOT blind alias expansion. v0.1 must first be corrected to use row-first representation disposition, distinguish known one-sided support from unresolved identity, normalize contract whitespace, and use network-specific identity rules where required.
+
+Special unresolved cases identified:
+- GRAM / TON empty token identity
+- NIGHT / Cardano reversed policy-id + asset-name formatting
+- ORDI and SATS / BRC-20 identity semantics
+- WAXP / WAX native-token metadata
+- XLM / Stellar native marker and chainType mismatch
+- ETH / metadata discrepancies including Optimism whitespace and zkSync chainType/native representation
+
+Runner application permission is confirmed as `Allow all actions`, but current conversation calls to Production Runner return:
+`FORBIDDEN: This conversation does not support developer MCPs`.
+
+This is a conversation/tool-routing limitation. Do not use manual Termux as fallback and do not bypass the immutable bundle approval gate.
