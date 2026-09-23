@@ -1,8 +1,9 @@
 {
   "schema": "sc001.b15.v0.2.1_checkpoint_plan.v1",
   "date": "2026-09-23",
-  "status": "CHECKPOINT_SCRIPT_READY_RUN_PENDING",
+  "status": "GITHUB_RESTORE_VERIFY_SEALED_RUN_PENDING",
   "freeze_commit": "a59cb2e2042579dfe12384c2fe6a4115d75b6790",
+  "checkpoint_tooling_commit": "0187cd7223298c006b6fb0692c21ea7fd1026116",
   "freeze_record": {
     "path": "docs/research/sc001-b15-p1-identity-route-v0.2.1-snapshot-freeze-v0.1.json",
     "sha256": "7818ec383728e8501decb1b133e0c1d766345f88df28021feb49a7a2a803bac6"
@@ -17,9 +18,20 @@
   },
   "checkpoint_script": "scripts/backup/create-b15-v021-checkpoint.sh",
   "runbook": "docs/infrastructure/b15-v021-checkpoint-backup-v1.0.md",
-  "normal_archive_secrets_allowed": false,
-  "restore_verification_required": true,
-  "success_status": "CHECKPOINT_BACKUP_RESTORE_VERIFY_PASS",
+  "github_restore_verification": {
+    "bundle_id": "bundle_20260923T202203Z_94f614f4",
+    "bundle_sha256": "f2a34a00fdfd60556e74476b9bf9eec3df514b5c241485d0e9357caef67ba7f1",
+    "approval_code": "BM-F2A34A00FDFD",
+    "state": "SEALED_RUN_PENDING",
+    "expected_pass_status": "B15_P1_V021_GITHUB_CHECKPOINT_RESTORE_VERIFY_PASS",
+    "host_archive_substitution": false
+  },
+  "host_checkpoint": {
+    "normal_archive_secrets_allowed": false,
+    "restore_verification_required": true,
+    "success_status": "CHECKPOINT_BACKUP_RESTORE_VERIFY_PASS",
+    "state": "RUN_PENDING"
+  },
   "research_gates_after_checkpoint": {
     "terminal_final_route_universe_pass_claimed": false,
     "collector_authorized": false,
@@ -28,5 +40,6 @@
   "remaining_holds": {
     "assets": ["GRAM", "QTUM", "STX", "XLM"],
     "quote_rows": ["BYBIT:CORN", "OKX:Tempo"]
-  }
+  },
+  "next_state": "RUN_GITHUB_CHECKPOINT_RESTORE_VERIFY_AFTER_USER_APPROVAL"
 }
