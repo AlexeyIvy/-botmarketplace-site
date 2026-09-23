@@ -1,0 +1,33 @@
+{
+  "schema": "sc001.b15.v0.2.2_exact_patch_preflight_bundle_seal.v0.1",
+  "date": "2026-09-24",
+  "state": "SEALED_RUN_PENDING",
+  "bundle_id": "bundle_20260923T212525Z_b06e6111",
+  "bundle_sha256": "5045217c1eed825e941b709763d8620647b20386dc63bc4247c0421936216dee",
+  "approval_code": "BM-5045217C1EED",
+  "entrypoint": "sc001_b15_p1_v0_2_2_exact_patch_preflight.py",
+  "entrypoint_sha256": "6388cfebded71fe04f6d67f5f982ece3c8b6c5edb708ead081e38ad602e9a893",
+  "source_patch_plan_sha256": "6d1504397e9d480b14ec97820af0e8b894548560260f4e018b3aba63b8f1493a",
+  "upstream_evidence_correction_manifest_sha256": "b5ee9a25d6a02e0ca2503b30059468c9edde039b7ef79b49d2a231e8f13f2822",
+  "expected": {
+    "candidate_network_rows": 80,
+    "candidate_native_identity_rows": 74,
+    "alias_collisions": 0,
+    "known_one_sided_quote_rows": 2,
+    "new_quote_cross_venue_routes": 0,
+    "special_oracle_rows": 10,
+    "special_identity_overrides": 3
+  },
+  "safety": {
+    "candidate_only": true,
+    "replay_performed": false,
+    "freeze_performed": false,
+    "price_data_used": false,
+    "pnl_data_used": false,
+    "transfer_status_used_for_selection": false,
+    "runtime_mutated": false,
+    "registry_mutated": false,
+    "final_zero_review_pass_claimed": false
+  },
+  "next_state": "RUN_V022_EXACT_PATCH_PREFLIGHT_AFTER_USER_APPROVAL"
+}
