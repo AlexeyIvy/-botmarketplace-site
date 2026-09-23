@@ -38,6 +38,9 @@ cleanup() {
   rc=$?
   [[ -n "${VERIFY_DIR:-}" && -d "$VERIFY_DIR" ]] && rm -rf -- "$VERIFY_DIR"
   [[ -d "${WORK:-}" ]] && rm -rf -- "$WORK"
+  if (( rc != 0 )) && [[ -n "${ARCHIVE:-}" ]]; then
+    rm -f -- "$ARCHIVE" "${ARCHIVE_SHA:-}" "${ARCHIVE}.restore-verify.txt"
+  fi
   exit "$rc"
 }
 trap cleanup EXIT
@@ -221,7 +224,10 @@ tar -C "$VERIFY_DIR" -xzf "$ARCHIVE"
   cd "$VERIFY_DIR"
   sha256sum -c MANIFEST.sha256 >/dev/null
 )
-git bundle verify "$VERIFY_DIR/repo/repository.bundle" >/dev/null
+git bundle list-heads "$VERIFY_DIR/repo/repository.bundle" >/dev/null
+mkdir -p "$VERIFY_DIR/bundle-verify-repo"
+git -C "$VERIFY_DIR/bundle-verify-repo" init -q
+git -C "$VERIFY_DIR/bundle-verify-repo" bundle verify "$VERIFY_DIR/repo/repository.bundle" >/dev/null
 tar -tzf "$VERIFY_DIR/runner/botmarket-runner-state.tar.gz" >/dev/null
 
 mkdir -p "$VERIFY_DIR/restored-repo"
