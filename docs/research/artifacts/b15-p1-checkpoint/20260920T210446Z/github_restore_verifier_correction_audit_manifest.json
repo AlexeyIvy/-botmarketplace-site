@@ -1,0 +1,41 @@
+{
+  "checks": {
+    "all_critical_prior_checks_true": true,
+    "all_other_prior_checks_true": true,
+    "all_prior_sha_checks_true": true,
+    "corrected_source_nonprice_readonly": true,
+    "exact_permission_key_present": true,
+    "failed_manifest_sha_exact": true,
+    "incorrect_permission_key_absent": true,
+    "prior_error_exactly_one": true,
+    "prior_failed_check_exactly_one": true,
+    "prior_sha_checks_present": true,
+    "prior_status_exact": true,
+    "source_manifest_sha_exact": true,
+    "source_probe_status_pass": true,
+    "source_run_exact": true
+  },
+  "correction": {
+    "correct_source_key": "bybit_readOnly",
+    "incorrect_key_in_prior_verifier": "bybitReadOnly",
+    "input_research_artifacts_changed": false,
+    "prior_non_permission_checks_all_passed": true,
+    "research_logic_changed": false
+  },
+  "errors": [],
+  "failed_checks": [],
+  "host_level_checkpoint_status": "RUN_PENDING",
+  "host_level_vps_archive_verified": false,
+  "next_state": "RUN_HOST_CHECKPOINT_SCRIPT_AND_CAPTURE_PASS_RECORD",
+  "pnl_data_used": false,
+  "price_data_used": false,
+  "prior_job": "job_20260923T203019Z_5100d22b",
+  "prior_manifest_sha256": "d9aa04b555ddc919d4bf1e373239577b42256f147b27fde7b0bdf618b56c762f",
+  "registry_mutated": false,
+  "research_state_restore_verified_after_checker_correction": true,
+  "runtime_source_modified": false,
+  "schema": "sc001.b15.v0.2.1_github_restore_verifier_correction_audit.v1",
+  "source_manifest_sha256": "65839e2a663d1a515e4c22d69804c4498219d1757a7720a53325cd48b5c7203b",
+  "status": "B15_P1_V021_GITHUB_CHECKPOINT_RESTORE_VERIFY_PASS_AFTER_CHECKER_CORRECTION",
+  "universe_mutated": false
+}

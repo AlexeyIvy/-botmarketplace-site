@@ -1,7 +1,7 @@
 {
   "schema": "sc001.b15.v0.2.1_checkpoint_plan.v1",
   "date": "2026-09-23",
-  "status": "GITHUB_RESTORE_VERIFY_TECHNICAL_FALSE_NEGATIVE_CORRECTION_SEALED",
+  "status": "GITHUB_RESEARCH_STATE_RESTORE_VERIFIED_HOST_CHECKPOINT_PENDING",
   "freeze_commit": "a59cb2e2042579dfe12384c2fe6a4115d75b6790",
   "checkpoint_tooling_commit": "0187cd7223298c006b6fb0692c21ea7fd1026116",
   "freeze_record": {
@@ -25,18 +25,18 @@
     "original_manifest_sha256": "d9aa04b555ddc919d4bf1e373239577b42256f147b27fde7b0bdf618b56c762f",
     "original_status": "B15_P1_V021_GITHUB_CHECKPOINT_RESTORE_VERIFY_FAIL",
     "technical_false_negative": true,
-    "failed_checks": ["source_nonprice_readonly"],
     "root_cause": "verifier referenced bybitReadOnly while immutable source manifest key is bybit_readOnly",
     "all_other_prior_checks_passed": true,
-    "all_prior_sha_checks_passed": true,
-    "host_archive_substitution": false
+    "all_prior_sha_checks_passed": true
   },
   "correction_audit": {
     "bundle_id": "bundle_20260923T203154Z_95c98996",
     "bundle_sha256": "d5bf680d7d0bb29eddbb8255577f956edbb212ca9c0822ad151a8ac949beec15",
-    "approval_code": "BM-D5BF680D7D0B",
-    "state": "SEALED_RUN_PENDING",
-    "expected_pass_status": "B15_P1_V021_GITHUB_CHECKPOINT_RESTORE_VERIFY_PASS_AFTER_CHECKER_CORRECTION",
+    "job_id": "job_20260923T203506Z_2cca7a49",
+    "manifest_path": "docs/research/artifacts/b15-p1-checkpoint/20260920T210446Z/github_restore_verifier_correction_audit_manifest.json",
+    "manifest_sha256": "620321ac8e788990f6e40bbb3c2cb962ee85359c8d911c8665cd34fdea621f8b",
+    "status": "B15_P1_V021_GITHUB_CHECKPOINT_RESTORE_VERIFY_PASS_AFTER_CHECKER_CORRECTION",
+    "research_state_restore_verified": true,
     "research_logic_changed": false,
     "research_inputs_changed": false
   },
@@ -44,7 +44,8 @@
     "normal_archive_secrets_allowed": false,
     "restore_verification_required": true,
     "success_status": "CHECKPOINT_BACKUP_RESTORE_VERIFY_PASS",
-    "state": "RUN_PENDING"
+    "state": "RUN_PENDING",
+    "required_command": "sudo bash /var/lib/botmarket-github-control/repo/scripts/backup/create-b15-v021-checkpoint.sh"
   },
   "research_gates": {
     "terminal_final_route_universe_pass_claimed": false,
@@ -55,5 +56,5 @@
     "assets": ["GRAM", "QTUM", "STX", "XLM"],
     "quote_rows": ["BYBIT:CORN", "OKX:Tempo"]
   },
-  "next_state": "RUN_GITHUB_RESTORE_VERIFIER_CORRECTION_AUDIT_AFTER_USER_APPROVAL"
+  "next_state": "RUN_HOST_CHECKPOINT_SCRIPT_AND_CAPTURE_PASS_RECORD"
 }
