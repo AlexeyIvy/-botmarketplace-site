@@ -1,0 +1,86 @@
+[
+  {
+    "asset": "GRAM",
+    "network_uid": "ton:mainnet",
+    "raw_chainType": "TON",
+    "raw_contract": "",
+    "raw_network": "TON",
+    "reason": "EMPTY_WITHOUT_NATIVE_REGISTRY",
+    "status": "UNRESOLVED_IDENTITY",
+    "venue": "BYBIT"
+  },
+  {
+    "asset": "QTUM",
+    "raw_chainType": "QTUM",
+    "raw_contract": "",
+    "raw_network": "QTUM",
+    "reason": "BYBIT_CHAIN_CODE_NOT_IN_FROZEN_REGISTRY",
+    "status": "UNRESOLVED_ALIAS",
+    "venue": "BYBIT"
+  },
+  {
+    "asset": "STX",
+    "raw_chainType": "Stacks",
+    "raw_contract": "",
+    "raw_network": "STX",
+    "reason": "BYBIT_CHAIN_CODE_NOT_IN_FROZEN_REGISTRY",
+    "status": "UNRESOLVED_ALIAS",
+    "venue": "BYBIT"
+  },
+  {
+    "asset": "USDT",
+    "raw_chainType": "CORN",
+    "raw_contract": "0xB8CE59FC3717ada4C02eaDF9682A9e934F625ebb",
+    "raw_network": "CORN",
+    "reason": "BYBIT_CHAIN_CODE_NOT_IN_FROZEN_REGISTRY",
+    "status": "UNRESOLVED_ALIAS",
+    "venue": "BYBIT"
+  },
+  {
+    "asset": "XLM",
+    "network_uid": "stellar:mainnet",
+    "raw_chainType": "Stellar Lumens",
+    "raw_contract": "",
+    "raw_network": "XLM",
+    "reason": "BYBIT_CHAINTYPE_NOT_ALLOWED_FOR_MAPPED_CODE",
+    "status": "UNRESOLVED_IDENTITY",
+    "venue": "BYBIT"
+  },
+  {
+    "asset": "GRAM",
+    "network_uid": "ton:mainnet",
+    "raw_chainType": "",
+    "raw_contract": "",
+    "raw_network": "The Open Network (TON)",
+    "reason": "EMPTY_WITHOUT_NATIVE_REGISTRY",
+    "status": "UNRESOLVED_IDENTITY",
+    "venue": "OKX"
+  },
+  {
+    "asset": "QTUM",
+    "raw_chainType": "",
+    "raw_contract": "",
+    "raw_network": "Quantum",
+    "reason": "OKX_ALIAS_NOT_IN_FROZEN_REGISTRY",
+    "status": "UNRESOLVED_ALIAS",
+    "venue": "OKX"
+  },
+  {
+    "asset": "STX",
+    "raw_chainType": "",
+    "raw_contract": "",
+    "raw_network": "l-Stacks",
+    "reason": "OKX_ALIAS_NOT_IN_FROZEN_REGISTRY",
+    "status": "UNRESOLVED_ALIAS",
+    "venue": "OKX"
+  },
+  {
+    "asset": "USDT",
+    "raw_chainType": "",
+    "raw_contract": "0x20c00000000000000000000014f22ca97301eb73",
+    "raw_network": "Tempo",
+    "reason": "OKX_ALIAS_NOT_IN_FROZEN_REGISTRY",
+    "status": "UNRESOLVED_ALIAS",
+    "venue": "OKX"
+  }
+]
