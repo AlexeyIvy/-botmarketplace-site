@@ -1,0 +1,94 @@
+{
+  "schema": "sc001.b15.identity_route_snapshot_freeze_record.v0.2.1",
+  "date": "2026-09-23",
+  "status": "B15_P1_IDENTITY_ROUTE_V021_SNAPSHOT_FROZEN_WITH_QUARANTINE",
+  "source_run": "20260920T210446Z",
+  "scope": "IDENTITY_ROUTE_SNAPSHOT_V0.2.1_WITH_EXPLICIT_QUARANTINE",
+  "source_exact_replay": {
+    "bundle_id": "bundle_20260923T193413Z_733e8dda",
+    "bundle_sha256": "430bc2adcbf35f64f80a82ccbd92535d1a23aa371947049555c32842e6244ece",
+    "job_id": "job_20260923T194025Z_8f4da99e",
+    "status": "B15_P1_INTEGRATED_CANONICAL_REGISTRY_V021_EXACT_REPLAY_PASS",
+    "manifest_sha256": "6a0b39aea071b88fed9b957286a428ffcd98f60d7d9ef1e95c45f7381e21e856"
+  },
+  "freeze_preflight": {
+    "bundle_id": "bundle_20260923T194658Z_c19d9497",
+    "bundle_sha256": "f660a6e0cadf4e1ccf4e8a35534131a6de3a33827b9898e4682a83c885f3ed2f",
+    "job_id": "job_20260923T200352Z_e656f035",
+    "status": "B15_P1_IDENTITY_ROUTE_V021_SNAPSHOT_FREEZE_PREFLIGHT_PASS_WITH_QUARANTINE",
+    "preflight_manifest_sha256": "ad653f8fb9254e0f830320fb8a9cb654c9515c9a692b728654bd55036352f85d",
+    "freeze_candidate_manifest_sha256": "63393e97573b9d64980f671f08e14071473d624682e4f8d67a2d21236ef0307d",
+    "freeze_file_map_sha256": "4f269e2759edfb525439e7b367bbdf032e78787a158d2f01b48d80b7a33e3406"
+  },
+  "composite_snapshot": {
+    "total_assets": 201,
+    "admitted_assets": 188,
+    "review_assets": 4,
+    "excluded_assets": 9,
+    "canonical_representations": 203,
+    "directed_edges": 406,
+    "quote_common_representations": 12,
+    "quote_review": true
+  },
+  "overlay_v0.2.1": {
+    "newly_closed_assets": 42,
+    "common_representations": 48,
+    "directed_edges": 96,
+    "new_quote_common_representations": 3,
+    "new_quote_keys": [
+      "USDT|berachain:mainnet|0x779ded0c9e1022225f8e0630b35a9b54be713736",
+      "USDT|monad:mainnet|0xe7cd86e13ac4309349f30b3435a9d337750fc82d",
+      "USDT|plasma:mainnet|0xb8ce59fc3717ada4c02eadf9682a9e934f625ebb"
+    ]
+  },
+  "quarantine": {
+    "assets": ["GRAM", "QTUM", "STX", "XLM"],
+    "remaining_unresolved_rows": 9,
+    "remaining_quote_hold_rows": 2,
+    "unresolved_counts_by_asset": {
+      "GRAM": 2,
+      "QTUM": 2,
+      "STX": 2,
+      "USDT": 2,
+      "XLM": 1
+    }
+  },
+  "registries": {
+    "network_rows": 76,
+    "native_identity_rows": 71,
+    "identity_only_native_rows": 5,
+    "alias_collisions": 0,
+    "disposition_mismatches": 0,
+    "special_oracle_hits": 10
+  },
+  "artifact_hashes": {
+    "canonical_network_registry_v0.2.1_replay_candidate.json": "375b9ba6f3708fd278d68d24abdf88157442f05e1dc084ce91a7eb5f4b43a97f",
+    "native_identity_registry_v0.2.1_replay_candidate.json": "414325de81f0547ec76a340273f9d7d81603ba80d7b8a8d11dbf6e7a9a723f9b",
+    "identity_route_v0.2.1_overlay_candidate.json": "772129d8cc3828d4b78b6d4322965b741e189a66efc1b71e106d51290d4343ce",
+    "identity_route_v0.2.1_quote_overlay_candidate.json": "6b6a253d5d055f4ac0beea3f899e20302e64c10f1bee80b468acd37503255166",
+    "identity_route_v0.2.1_quarantine_candidate.json": "81f8c8cea7da84319b35d9a4a955df9f7bd76f5cb57fbe01d43b167967627339",
+    "identity_route_v0.2.1_composition_candidate.json": "1e644f8e520393c7dbcba05ab08451834cb6e4787f2fa88b1b6fc19bfd10c060"
+  },
+  "safety": {
+    "terminal_final_route_universe_pass_claimed": false,
+    "collector_authorized": false,
+    "price_economic_research_authorized": false,
+    "transfer_status_used_for_selection": false,
+    "price_data_used": false,
+    "pnl_data_used": false,
+    "fuzzy_matching_allowed": false,
+    "identity_only_native_rows_create_routes": false,
+    "gravity_alpha_automatic_route_enablement": false
+  },
+  "gravity_alpha_lifecycle": {
+    "before_2026_11_01": "REVALIDATION_REQUIRED_BEFORE_RUNTIME_ROUTE",
+    "on_or_after_2026_11_01": "ROUTE_DISABLED_DEPRECATED"
+  },
+  "backup_gate": {
+    "required": true,
+    "state": "CHECKPOINT_BACKUP_PENDING",
+    "require_restore_verification": true,
+    "price_stage_blocked_until_backup_and_future_versioned_gate": true
+  },
+  "next_state": "CHECKPOINT_BACKUP_AFTER_IDENTITY_ROUTE_V021_SNAPSHOT_FREEZE"
+}

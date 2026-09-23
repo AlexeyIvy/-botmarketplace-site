@@ -1,0 +1,69 @@
+{
+  "base_v0.1": {
+    "admitted_sha256": "4125dd9577a3493b0242b9f79db5da1db780d45bd9dd90acad5dffa78bc90bc5",
+    "directed_route_graph_sha256": "ea5dfaae0f317ab22a6044c9b467c50ece10e25f4abfec6be89650d9e5ad7b29",
+    "excluded_sha256": "4c6090570b4aeb5337786c1be67f8e4a05997fd9c4f89d146f0745ca9c8ac7f7",
+    "final_builder_manifest_sha256": "2e669645dc89f8b5a30acb82f27b82dcbcd8588f3b8e1b26ea8871b99e40e7f2",
+    "identity_review_sha256": "66f34084a17e275bfbd8700eb500303028e5678516ce446d1da9f5015efa51ad",
+    "quote_graph_sha256": "2c60e9e0e93b4b07fbd34dd97fecccffc17a0a1423930645b63b6543483dbad4"
+  },
+  "composite_counts": {
+    "admitted_assets": 188,
+    "canonical_representations": 203,
+    "directed_edges": 406,
+    "excluded_assets": 9,
+    "quote_common_representations": 12,
+    "quote_review": true,
+    "review_assets": 4,
+    "total_assets": 201
+  },
+  "freeze_scope": "IDENTITY_ROUTE_SNAPSHOT_V0.2.1_WITH_EXPLICIT_QUARANTINE",
+  "next_required_actions": [
+    "WRITE_IDENTITY_ROUTE_V021_SNAPSHOT_FREEZE_RECORD",
+    "CHECKPOINT_BACKUP_AFTER_IDENTITY_ROUTE_V021_SNAPSHOT_FREEZE_AND_RESTORE_VERIFY",
+    "RESOLVE_REMAINING_GRAM_QTUM_STX_XLM_AND_USDT_HOLDS",
+    "REQUIRE_NEW_VERSIONED_PREFLIGHT_BEFORE_ANY_FINAL_ZERO_REVIEW_PASS_OR_PRICE_STAGE"
+  ],
+  "protocol_version": "sc001-b15-p1-canonical-route-universe-identity-freeze-protocol-v0.1",
+  "quarantine": {
+    "assets": [
+      "GRAM",
+      "QTUM",
+      "STX",
+      "XLM"
+    ],
+    "quote_hold_rows": 2,
+    "unresolved_rows": 9
+  },
+  "safety": {
+    "checkpoint_backup_required_after_snapshot_freeze": true,
+    "collector_authorized": false,
+    "current_transfer_status_used_for_selection": false,
+    "fuzzy_matching_allowed": false,
+    "identity_only_native_rows_create_routes": false,
+    "price_economic_research_authorized": false,
+    "terminal_final_route_universe_pass_claimed": false
+  },
+  "schema": "sc001.b15.identity_route_snapshot_freeze_candidate.v0.2.1",
+  "source_exact_replay": {
+    "bundle_id": "bundle_20260923T193413Z_733e8dda",
+    "bundle_sha256": "430bc2adcbf35f64f80a82ccbd92535d1a23aa371947049555c32842e6244ece",
+    "job_id": "job_20260923T194025Z_8f4da99e",
+    "manifest_sha256": "6a0b39aea071b88fed9b957286a428ffcd98f60d7d9ef1e95c45f7381e21e856"
+  },
+  "source_run": "20260920T210446Z",
+  "status": "IDENTITY_ROUTE_V021_SNAPSHOT_FREEZE_CANDIDATE_READY_WITH_QUARANTINE",
+  "v0.2.1": {
+    "asset_dispositions_sha256": "622ffe2feef11149e5b79f7e756396f4149d73d2414f2012bae351f5f6fc8233",
+    "composition_sha256": "1e644f8e520393c7dbcba05ab08451834cb6e4787f2fa88b1b6fc19bfd10c060",
+    "freeze_file_map_sha256": "4f269e2759edfb525439e7b367bbdf032e78787a158d2f01b48d80b7a33e3406",
+    "native_identity_registry_sha256": "414325de81f0547ec76a340273f9d7d81603ba80d7b8a8d11dbf6e7a9a723f9b",
+    "network_registry_sha256": "375b9ba6f3708fd278d68d24abdf88157442f05e1dc084ce91a7eb5f4b43a97f",
+    "overlay_sha256": "772129d8cc3828d4b78b6d4322965b741e189a66efc1b71e106d51290d4343ce",
+    "quarantine_sha256": "81f8c8cea7da84319b35d9a4a955df9f7bd76f5cb57fbe01d43b167967627339",
+    "quote_disposition_sha256": "dcfdaf53134cb97ff5bb648debbfb7e402284f84b0dbef49ac083a9d09c2a520",
+    "quote_overlay_sha256": "6b6a253d5d055f4ac0beea3f899e20302e64c10f1bee80b468acd37503255166",
+    "resolved_rows_sha256": "d3c0784ad93d8c9f7d2294be75e0f084df7357187b94caa6818d4a08c0e54b4e",
+    "unresolved_rows_sha256": "12fb5e19eea791ef6e00c2c72ec8d2b3ce809a4aa16fbabc0e0577a3688bc78c"
+  }
+}

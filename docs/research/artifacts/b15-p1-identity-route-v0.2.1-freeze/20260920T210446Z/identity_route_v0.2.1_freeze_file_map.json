@@ -1,0 +1,38 @@
+{
+  "entrypoint_sha256": "8cf7f065043d66d2f892c5d0889eb48edf7f411e4d9651341c4c56442e5ef5f1",
+  "freeze_preflight_spec_sha256": "ef7857b75953d94c6a132f3e6852c875d8fec30010b97a122e1e5bb68a7a7f32",
+  "generated_candidate_sha256": {
+    "identity_route_v0.2.1_composition_candidate.json": "1e644f8e520393c7dbcba05ab08451834cb6e4787f2fa88b1b6fc19bfd10c060",
+    "identity_route_v0.2.1_overlay_candidate.json": "772129d8cc3828d4b78b6d4322965b741e189a66efc1b71e106d51290d4343ce",
+    "identity_route_v0.2.1_quarantine_candidate.json": "81f8c8cea7da84319b35d9a4a955df9f7bd76f5cb57fbe01d43b167967627339",
+    "identity_route_v0.2.1_quote_overlay_candidate.json": "6b6a253d5d055f4ac0beea3f899e20302e64c10f1bee80b468acd37503255166"
+  },
+  "input_sha256": {
+    "base_v0.1_ADMITTED.json": "4125dd9577a3493b0242b9f79db5da1db780d45bd9dd90acad5dffa78bc90bc5",
+    "base_v0.1_EXCLUDED.json": "4c6090570b4aeb5337786c1be67f8e4a05997fd9c4f89d146f0745ca9c8ac7f7",
+    "base_v0.1_IDENTITY_REVIEW.json": "66f34084a17e275bfbd8700eb500303028e5678516ce446d1da9f5015efa51ad",
+    "base_v0.1_directed_route_graph.json": "ea5dfaae0f317ab22a6044c9b467c50ece10e25f4abfec6be89650d9e5ad7b29",
+    "base_v0.1_final_builder_manifest.json": "2e669645dc89f8b5a30acb82f27b82dcbcd8588f3b8e1b26ea8871b99e40e7f2",
+    "base_v0.1_usdt_quote_rebalance_graph.json": "2c60e9e0e93b4b07fbd34dd97fecccffc17a0a1423930645b63b6543483dbad4",
+    "canonical_network_registry_v0.2.1_replay_candidate.json": "375b9ba6f3708fd278d68d24abdf88157442f05e1dc084ce91a7eb5f4b43a97f",
+    "canonical_route_universe_identity_freeze_protocol_v0.1.md": "53ac8e9778a408f10c617e581bb4f819cb227d7efd256fb941113d5beae8cb2d",
+    "dialog_handoff_2026_09_23_v6.1.md": "13bd8382604b2a1807cbab77697b8a7795dec1736629d83552bc61384c235f36",
+    "integrated_replay_alias_collisions_v0.2.1.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "integrated_replay_asset_dispositions_v0.2.1.json": "622ffe2feef11149e5b79f7e756396f4149d73d2414f2012bae351f5f6fc8233",
+    "integrated_replay_disposition_mismatches_v0.2.1.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "integrated_replay_manifest_v0.2.1.json": "6a0b39aea071b88fed9b957286a428ffcd98f60d7d9ef1e95c45f7381e21e856",
+    "integrated_replay_quote_disposition_v0.2.1.json": "dcfdaf53134cb97ff5bb648debbfb7e402284f84b0dbef49ac083a9d09c2a520",
+    "integrated_replay_remaining_unresolved_rows_v0.2.1.json": "12fb5e19eea791ef6e00c2c72ec8d2b3ce809a4aa16fbabc0e0577a3688bc78c",
+    "integrated_replay_resolved_rows_v0.2.1.json": "d3c0784ad93d8c9f7d2294be75e0f084df7357187b94caa6818d4a08c0e54b4e",
+    "native_identity_registry_v0.2.1_replay_candidate.json": "414325de81f0547ec76a340273f9d7d81603ba80d7b8a8d11dbf6e7a9a723f9b",
+    "representation_disposition_builder_v0.2_design.md": "1dabb59303a9e3b5fb601eb36a387581b7e1cca616503bb9d1771830e72069d5",
+    "source_run_manifest.json": "65839e2a663d1a515e4c22d69804c4498219d1757a7720a53325cd48b5c7203b"
+  },
+  "schema": "sc001.b15.identity_route_v0.2.1_freeze_file_map.v0.1",
+  "source_exact_replay": {
+    "bundle_id": "bundle_20260923T193413Z_733e8dda",
+    "bundle_sha256": "430bc2adcbf35f64f80a82ccbd92535d1a23aa371947049555c32842e6244ece",
+    "job_id": "job_20260923T194025Z_8f4da99e"
+  },
+  "source_run": "20260920T210446Z"
+}

@@ -1,0 +1,247 @@
+{
+  "base_common_representation_count": 9,
+  "final_common_representation_count": 12,
+  "new_common_representation_count": 3,
+  "new_common_representations": [
+    {
+      "asset": "USDT",
+      "bybit_observations": [
+        {
+          "identity_kind": "token",
+          "raw_chainType": "Berachain",
+          "raw_contract": "0x779Ded0c9e1022225f8E0630b35a9b54bE713736",
+          "raw_network": "BERA",
+          "source_rule": "CANONICAL_CONTRACT"
+        }
+      ],
+      "canonical_representation_key": "USDT|berachain:mainnet|0x779ded0c9e1022225f8e0630b35a9b54be713736",
+      "disposition": "COMMON_PROVEN",
+      "network_uid": "berachain:mainnet",
+      "okx_observations": [
+        {
+          "identity_kind": "token",
+          "raw_chainType": "",
+          "raw_contract": "0x779Ded0c9e1022225f8E0630b35a9b54bE713736",
+          "raw_network": "BERACHAIN (USDT0)",
+          "source_rule": "CANONICAL_CONTRACT"
+        }
+      ],
+      "representation_identity": "0x779ded0c9e1022225f8e0630b35a9b54be713736",
+      "source_scope": "V0.2.1_QUOTE_OVERLAY"
+    },
+    {
+      "asset": "USDT",
+      "bybit_observations": [
+        {
+          "identity_kind": "token",
+          "raw_chainType": "Monad",
+          "raw_contract": "0xe7cd86e13AC4309349F30B3435a9d337750fC82D",
+          "raw_network": "MONAD",
+          "source_rule": "CANONICAL_CONTRACT"
+        }
+      ],
+      "canonical_representation_key": "USDT|monad:mainnet|0xe7cd86e13ac4309349f30b3435a9d337750fc82d",
+      "disposition": "COMMON_PROVEN",
+      "network_uid": "monad:mainnet",
+      "okx_observations": [
+        {
+          "identity_kind": "token",
+          "raw_chainType": "",
+          "raw_contract": "0xe7cd86e13AC4309349F30B3435a9d337750fC82D",
+          "raw_network": "Monad (USDT0)",
+          "source_rule": "CANONICAL_CONTRACT"
+        }
+      ],
+      "representation_identity": "0xe7cd86e13ac4309349f30b3435a9d337750fc82d",
+      "source_scope": "V0.2.1_QUOTE_OVERLAY"
+    },
+    {
+      "asset": "USDT",
+      "bybit_observations": [
+        {
+          "identity_kind": "token",
+          "raw_chainType": "Plasma",
+          "raw_contract": "0xB8CE59FC3717ada4C02eaDF9682A9e934F625ebb",
+          "raw_network": "PLASMA",
+          "source_rule": "CANONICAL_CONTRACT"
+        }
+      ],
+      "canonical_representation_key": "USDT|plasma:mainnet|0xb8ce59fc3717ada4c02eadf9682a9e934f625ebb",
+      "disposition": "COMMON_PROVEN",
+      "network_uid": "plasma:mainnet",
+      "okx_observations": [
+        {
+          "identity_kind": "token",
+          "raw_chainType": "",
+          "raw_contract": "0xb8ce59fc3717ada4c02eadf9682a9e934f625ebb",
+          "raw_network": "Plasma",
+          "source_rule": "CANONICAL_CONTRACT"
+        }
+      ],
+      "representation_identity": "0xb8ce59fc3717ada4c02eadf9682a9e934f625ebb",
+      "source_scope": "V0.2.1_QUOTE_OVERLAY"
+    }
+  ],
+  "new_directed_identity_edges": [
+    {
+      "asset": "USDT",
+      "bybit_observations": [
+        {
+          "identity_kind": "token",
+          "raw_chainType": "Berachain",
+          "raw_contract": "0x779Ded0c9e1022225f8E0630b35a9b54bE713736",
+          "raw_network": "BERA",
+          "source_rule": "CANONICAL_CONTRACT"
+        }
+      ],
+      "canonical_representation_key": "USDT|berachain:mainnet|0x779ded0c9e1022225f8e0630b35a9b54be713736",
+      "direction": "OKX_TO_BYBIT",
+      "network_uid": "berachain:mainnet",
+      "okx_observations": [
+        {
+          "identity_kind": "token",
+          "raw_chainType": "",
+          "raw_contract": "0x779Ded0c9e1022225f8E0630b35a9b54bE713736",
+          "raw_network": "BERACHAIN (USDT0)",
+          "source_rule": "CANONICAL_CONTRACT"
+        }
+      ],
+      "representation_identity": "0x779ded0c9e1022225f8e0630b35a9b54be713736",
+      "source_scope": "V0.2.1_QUOTE_OVERLAY"
+    },
+    {
+      "asset": "USDT",
+      "bybit_observations": [
+        {
+          "identity_kind": "token",
+          "raw_chainType": "Berachain",
+          "raw_contract": "0x779Ded0c9e1022225f8E0630b35a9b54bE713736",
+          "raw_network": "BERA",
+          "source_rule": "CANONICAL_CONTRACT"
+        }
+      ],
+      "canonical_representation_key": "USDT|berachain:mainnet|0x779ded0c9e1022225f8e0630b35a9b54be713736",
+      "direction": "BYBIT_TO_OKX",
+      "network_uid": "berachain:mainnet",
+      "okx_observations": [
+        {
+          "identity_kind": "token",
+          "raw_chainType": "",
+          "raw_contract": "0x779Ded0c9e1022225f8E0630b35a9b54bE713736",
+          "raw_network": "BERACHAIN (USDT0)",
+          "source_rule": "CANONICAL_CONTRACT"
+        }
+      ],
+      "representation_identity": "0x779ded0c9e1022225f8e0630b35a9b54be713736",
+      "source_scope": "V0.2.1_QUOTE_OVERLAY"
+    },
+    {
+      "asset": "USDT",
+      "bybit_observations": [
+        {
+          "identity_kind": "token",
+          "raw_chainType": "Monad",
+          "raw_contract": "0xe7cd86e13AC4309349F30B3435a9d337750fC82D",
+          "raw_network": "MONAD",
+          "source_rule": "CANONICAL_CONTRACT"
+        }
+      ],
+      "canonical_representation_key": "USDT|monad:mainnet|0xe7cd86e13ac4309349f30b3435a9d337750fc82d",
+      "direction": "OKX_TO_BYBIT",
+      "network_uid": "monad:mainnet",
+      "okx_observations": [
+        {
+          "identity_kind": "token",
+          "raw_chainType": "",
+          "raw_contract": "0xe7cd86e13AC4309349F30B3435a9d337750fC82D",
+          "raw_network": "Monad (USDT0)",
+          "source_rule": "CANONICAL_CONTRACT"
+        }
+      ],
+      "representation_identity": "0xe7cd86e13ac4309349f30b3435a9d337750fc82d",
+      "source_scope": "V0.2.1_QUOTE_OVERLAY"
+    },
+    {
+      "asset": "USDT",
+      "bybit_observations": [
+        {
+          "identity_kind": "token",
+          "raw_chainType": "Monad",
+          "raw_contract": "0xe7cd86e13AC4309349F30B3435a9d337750fC82D",
+          "raw_network": "MONAD",
+          "source_rule": "CANONICAL_CONTRACT"
+        }
+      ],
+      "canonical_representation_key": "USDT|monad:mainnet|0xe7cd86e13ac4309349f30b3435a9d337750fc82d",
+      "direction": "BYBIT_TO_OKX",
+      "network_uid": "monad:mainnet",
+      "okx_observations": [
+        {
+          "identity_kind": "token",
+          "raw_chainType": "",
+          "raw_contract": "0xe7cd86e13AC4309349F30B3435a9d337750fC82D",
+          "raw_network": "Monad (USDT0)",
+          "source_rule": "CANONICAL_CONTRACT"
+        }
+      ],
+      "representation_identity": "0xe7cd86e13ac4309349f30b3435a9d337750fc82d",
+      "source_scope": "V0.2.1_QUOTE_OVERLAY"
+    },
+    {
+      "asset": "USDT",
+      "bybit_observations": [
+        {
+          "identity_kind": "token",
+          "raw_chainType": "Plasma",
+          "raw_contract": "0xB8CE59FC3717ada4C02eaDF9682A9e934F625ebb",
+          "raw_network": "PLASMA",
+          "source_rule": "CANONICAL_CONTRACT"
+        }
+      ],
+      "canonical_representation_key": "USDT|plasma:mainnet|0xb8ce59fc3717ada4c02eadf9682a9e934f625ebb",
+      "direction": "OKX_TO_BYBIT",
+      "network_uid": "plasma:mainnet",
+      "okx_observations": [
+        {
+          "identity_kind": "token",
+          "raw_chainType": "",
+          "raw_contract": "0xb8ce59fc3717ada4c02eadf9682a9e934f625ebb",
+          "raw_network": "Plasma",
+          "source_rule": "CANONICAL_CONTRACT"
+        }
+      ],
+      "representation_identity": "0xb8ce59fc3717ada4c02eadf9682a9e934f625ebb",
+      "source_scope": "V0.2.1_QUOTE_OVERLAY"
+    },
+    {
+      "asset": "USDT",
+      "bybit_observations": [
+        {
+          "identity_kind": "token",
+          "raw_chainType": "Plasma",
+          "raw_contract": "0xB8CE59FC3717ada4C02eaDF9682A9e934F625ebb",
+          "raw_network": "PLASMA",
+          "source_rule": "CANONICAL_CONTRACT"
+        }
+      ],
+      "canonical_representation_key": "USDT|plasma:mainnet|0xb8ce59fc3717ada4c02eadf9682a9e934f625ebb",
+      "direction": "BYBIT_TO_OKX",
+      "network_uid": "plasma:mainnet",
+      "okx_observations": [
+        {
+          "identity_kind": "token",
+          "raw_chainType": "",
+          "raw_contract": "0xb8ce59fc3717ada4c02eadf9682a9e934f625ebb",
+          "raw_network": "Plasma",
+          "source_rule": "CANONICAL_CONTRACT"
+        }
+      ],
+      "representation_identity": "0xb8ce59fc3717ada4c02eadf9682a9e934f625ebb",
+      "source_scope": "V0.2.1_QUOTE_OVERLAY"
+    }
+  ],
+  "quote_review_remains": true,
+  "schema": "sc001.b15.quote_route_overlay.v0.2.1",
+  "source_run": "20260920T210446Z",
+  "status": "CANDIDATE_PREFLIGHT_REQUIRED"
+}

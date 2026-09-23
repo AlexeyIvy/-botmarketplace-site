@@ -1,0 +1,34 @@
+{
+  "base_v0.1": {
+    "admitted_assets": 146,
+    "canonical_representations": 155,
+    "directed_edges": 310,
+    "excluded_assets": 9,
+    "quote_common_representations": 9,
+    "review_assets": 46
+  },
+  "composite_snapshot": {
+    "admitted_assets": 188,
+    "canonical_representations": 203,
+    "directed_edges": 406,
+    "excluded_assets": 9,
+    "quote_common_representations": 12,
+    "quote_review": true,
+    "review_assets": 4,
+    "total_assets": 201
+  },
+  "overlay_v0.2.1": {
+    "canonical_representations": 48,
+    "directed_edges": 96,
+    "new_quote_common_representations": 3,
+    "newly_closed_assets": 42,
+    "remaining_review_assets": [
+      "GRAM",
+      "QTUM",
+      "STX",
+      "XLM"
+    ]
+  },
+  "schema": "sc001.b15.identity_route_snapshot_composition.v0.2.1",
+  "source_run": "20260920T210446Z"
+}
