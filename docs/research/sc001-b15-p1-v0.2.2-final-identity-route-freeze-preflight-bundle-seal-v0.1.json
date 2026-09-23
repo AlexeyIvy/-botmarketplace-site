@@ -1,0 +1,33 @@
+{
+  "schema": "sc001.b15.v0.2.2_final_identity_route_freeze_preflight_bundle_seal.v0.1",
+  "date": "2026-09-24",
+  "state": "SEALED_RUN_PENDING",
+  "bundle_id": "bundle_20260923T214432Z_1d5f1a1b",
+  "bundle_sha256": "79974e03250cc36f6516e721a1a2d9a94cbccda3c17c2543458cd6213b260fe2",
+  "approval_code": "BM-79974E03250C",
+  "entrypoint": "sc001_b15_p1_v0_2_2_final_identity_route_freeze_preflight.py",
+  "entrypoint_sha256": "8c8de58777ea2d6b1dfdfe6af61009c1b56c0218c12de20a1e5d3a047a98d4bc",
+  "source_exact_replay_job": "job_20260923T214214Z_b1901454",
+  "source_exact_replay_manifest_sha256": "ad842a5f7be42c7c4cae6ce13b91846de7e17e17cb06cf1152aa4f69538c1f7b",
+  "expected_final_state": {
+    "admitted_assets": 192,
+    "review_assets": 0,
+    "excluded_assets": 9,
+    "total_assets": 201,
+    "canonical_representations": 207,
+    "directed_edges": 414,
+    "quote_common_representations": 12,
+    "quote_review": false,
+    "remaining_unresolved_rows": 0,
+    "alias_collisions": 0,
+    "disposition_mismatches": 0
+  },
+  "safety": {
+    "final_freeze_performed": false,
+    "terminal_final_route_universe_pass_claimed": false,
+    "collector_authorized": false,
+    "price_economic_research_authorized": false,
+    "post_freeze_checkpoint_required": true
+  },
+  "next_state": "RUN_V022_FINAL_IDENTITY_ROUTE_FREEZE_PREFLIGHT_AFTER_USER_APPROVAL"
+}
