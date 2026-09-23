@@ -1,0 +1,86 @@
+{
+  "alias_collisions": [],
+  "candidate_only": true,
+  "exact_special_overrides": [
+    {
+      "condition": {
+        "all_fields_exact": true,
+        "asset": "XLM",
+        "network_uid": "stellar:mainnet",
+        "raw_contract": "native:GDN4U3BDFVMK74IJ46GXEN5ZDRA5QIJQF6TM3NBJIG4IQW2RDGYXSMRN",
+        "raw_network": "Stellar Lumens",
+        "venue": "OKX"
+      },
+      "generic_native_prefix_rule": false,
+      "output": {
+        "identity_kind": "native_exchange_marker",
+        "representation_identity": "native:XLM"
+      },
+      "source_rule": "STELLAR_XLM_OKX_NATIVE_MARKER_EXACT"
+    }
+  ],
+  "known_one_sided_quote_representations": [
+    {
+      "asset": "USDT",
+      "disposition": "KNOWN_ONE_SIDED",
+      "network_uid": "corn:mainnet",
+      "representation_identity": "0xb8ce59fc3717ada4c02eadf9682a9e934f625ebb",
+      "route_eligible": false,
+      "venue": "BYBIT"
+    },
+    {
+      "asset": "USDT",
+      "disposition": "KNOWN_ONE_SIDED",
+      "network_uid": "tempo:mainnet",
+      "representation_identity": "0x20c00000000000000000000014f22ca97301eb73",
+      "route_eligible": false,
+      "venue": "OKX"
+    }
+  ],
+  "native_additions": [
+    {
+      "native_asset": "GRAM",
+      "network_uid": "ton:mainnet",
+      "status": "V022_EXACT_REBRAND_NATIVE_ALIAS"
+    },
+    {
+      "native_asset": "QTUM",
+      "network_uid": "qtum:mainnet",
+      "status": "V022_EXACT_NATIVE_IDENTITY"
+    },
+    {
+      "native_asset": "STX",
+      "network_uid": "stacks:mainnet",
+      "status": "V022_EXACT_NATIVE_IDENTITY"
+    }
+  ],
+  "native_rows_after": 74,
+  "native_rows_before": 71,
+  "network_modifications": [
+    {
+      "add_bybit_chain_types": [
+        "Stellar Lumens"
+      ],
+      "exact_only": true,
+      "network_uid": "stellar:mainnet"
+    },
+    {
+      "add_native_asset_aliases": [
+        "GRAM"
+      ],
+      "exact_only": true,
+      "network_uid": "ton:mainnet",
+      "preserve_existing_native_asset": "TON"
+    }
+  ],
+  "network_rows_after": 80,
+  "network_rows_before": 76,
+  "new_network_uids": [
+    "qtum:mainnet",
+    "stacks:mainnet",
+    "corn:mainnet",
+    "tempo:mainnet"
+  ],
+  "route_admission_from_one_sided": false,
+  "schema": "sc001.b15.v0.2.2_exact_patch_application_report.v0.1"
+}
