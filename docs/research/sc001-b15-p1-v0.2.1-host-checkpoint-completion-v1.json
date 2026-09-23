@@ -1,0 +1,34 @@
+{
+  "schema": "sc001.b15.v0.2.1_host_checkpoint_completion.v1",
+  "date": "2026-09-24",
+  "status": "CHECKPOINT_BACKUP_RESTORE_VERIFY_PASS",
+  "checkpoint_id": "botmarketplace-sc001-b15-v021-checkpoint-20260923T210415Z",
+  "archive": "/var/backups/botmarketplace/botmarketplace-sc001-b15-v021-checkpoint-20260923T210415Z.tar.gz",
+  "archive_sha256": "030de5fff7687ab0de068a3e4fbdbb76bca3057b5f880c6ac89ec116f6b55828",
+  "verify_record": "/var/backups/botmarketplace/botmarketplace-sc001-b15-v021-checkpoint-20260923T210415Z.tar.gz.restore-verify.txt",
+  "repository_bundle_verify": "PASS",
+  "checkpoint_script_commit": "daf738b26b431f0345d1467aaeb27511ce81506b",
+  "freeze_commit": "a59cb2e2042579dfe12384c2fe6a4115d75b6790",
+  "freeze_record_sha256": "7818ec383728e8501decb1b133e0c1d766345f88df28021feb49a7a2a803bac6",
+  "replay_manifest_sha256": "6a0b39aea071b88fed9b957286a428ffcd98f60d7d9ef1e95c45f7381e21e856",
+  "freeze_candidate_manifest_sha256": "63393e97573b9d64980f671f08e14071473d624682e4f8d67a2d21236ef0307d",
+  "secrets_policy": {
+    "plaintext_secrets_in_normal_archive": false,
+    "separate_encrypted_secrets_archive_required_for_full_disaster_recovery": true
+  },
+  "evidence": {
+    "source": "USER_PROVIDED_TERMINAL_OUTPUT",
+    "observed_terminal_lines": [
+      "repository.bundle is okay",
+      "CHECKPOINT_BACKUP_RESTORE_VERIFY_PASS"
+    ],
+    "vps_reader_backup_root_exposed": false
+  },
+  "effect": {
+    "post_freeze_checkpoint_gate_satisfied": true,
+    "terminal_final_route_universe_pass_claimed": false,
+    "collector_authorized": false,
+    "price_economic_research_authorized": false
+  },
+  "next_state": "PREPARE_B15_P1_V022_REMAINING_HOLD_EVIDENCE_AUDIT"
+}
