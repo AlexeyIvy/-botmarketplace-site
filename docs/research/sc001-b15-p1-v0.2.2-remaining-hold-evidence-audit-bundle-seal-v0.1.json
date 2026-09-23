@@ -1,0 +1,40 @@
+{
+  "schema": "sc001.b15.v0.2.2_remaining_hold_evidence_audit_bundle_seal.v0.1",
+  "date": "2026-09-24",
+  "state": "SEALED_RUN_PENDING",
+  "bundle_id": "bundle_20260923T211340Z_95636469",
+  "bundle_sha256": "0e5c34cbb93e01c9099d1f860bb7e6b9b1cb96b75e1eb74681456953beaad566",
+  "approval_code": "BM-0E5C34CBB93E",
+  "entrypoint": "sc001_b15_p1_v0_2_2_remaining_hold_evidence_audit.py",
+  "entrypoint_sha256": "66fc57027f1438aff7492c79736194cb93c7d63d45395d01287bab0e6c4306cc",
+  "evidence_matrix_sha256": "6e50af3d27a9831d293d5ea4848305ad8a459f8a3eaa9672d368320a0a5fab72",
+  "design_sha256": "abdd0312799a8c2d0ebe65c9d3b66fd715811d3d7007da7233b5560440905d8f",
+  "source_run": "20260920T210446Z",
+  "expected_candidate_only_targets": {
+    "remaining_unresolved_rows": 0,
+    "remaining_review_assets": [],
+    "closed_old_review_assets": 46,
+    "asset_common_representations": 52,
+    "quote_common_representations": 12,
+    "quote_known_one_sided_new": 2,
+    "new_quote_cross_venue_routes": 0,
+    "candidate_network_rows": 80,
+    "candidate_native_identity_rows": 74,
+    "composite_admitted_assets": 192,
+    "composite_review_assets": 0,
+    "composite_excluded_assets": 9,
+    "composite_total_assets": 201,
+    "composite_canonical_representations": 207,
+    "composite_directed_asset_identity_edges": 414
+  },
+  "safety": {
+    "candidate_only": true,
+    "price_data_used": false,
+    "pnl_data_used": false,
+    "transfer_status_used_for_selection": false,
+    "runtime_mutated": false,
+    "frozen_v0.2.1_modified_in_place": false,
+    "final_zero_review_pass_claimed": false
+  },
+  "next_state": "RUN_V022_REMAINING_HOLD_EVIDENCE_AUDIT_AFTER_USER_APPROVAL"
+}
