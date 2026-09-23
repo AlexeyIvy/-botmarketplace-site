@@ -216,3 +216,52 @@ Runner application permission is confirmed as `Allow all actions`, but current c
 `FORBIDDEN: This conversation does not support developer MCPs`.
 
 This is a conversation/tool-routing limitation. Do not use manual Termux as fallback and do not bypass the immutable bundle approval gate.
+
+
+## B15-P1 v0.2 audit bundle preparation — 2026-09-23
+
+The v0.2 diagnostic audit has now been prepared and frozen without execution.
+
+Current roadmap:
+- `docs/research/sc001-current-roadmap-and-stop-rules-v5.41.md`
+
+Audit code:
+- `research/sc001/sc001_b15_p1_identity_audit_v0_2.py`
+- git blob: `cce4dc1d9acd24ec1d5e92bac204fa0931bdf6cf`
+
+Bundle policy:
+- `docs/research/sc001-b15-p1-identity-audit-v0.2-bundle-policy.json`
+- git blob: `0e8fe49a362137887fda94f98f1453e5c127ef27`
+
+Content freeze:
+- `docs/research/sc001-b15-p1-identity-audit-v0.2-freeze.json`
+
+Exact bundle map:
+- `docs/research/sc001-b15-p1-identity-audit-v0.2-bundle-file-map.json`
+- 8 files
+- 144603 total text bytes
+- self-contained safe non-price snapshot
+- no Runner input-root copy required
+
+Static dry-preflight on the exact safe snapshots:
+- 46/46 assets remain IDENTITY_REVIEW
+- COMMON_PROVEN representation rows = 40
+- KNOWN_ONE_SIDED = 13
+- UNRESOLVED_ALIAS = 83
+- UNRESOLVED_METADATA_VARIANT = 1
+- UNRESOLVED_IDENTITY = 7
+- USDT common proven networks = 9
+- quote status remains IDENTITY_REVIEW
+
+This is intentionally fail-closed. The audit does not mutate registry or auto-admit anything.
+
+Current exact state:
+
+`B15_P1_IDENTITY_AUDIT_V02_CONTENT_FROZEN_RUNNER_SEAL_PENDING`
+
+The BotMarketplace Runner Probe app is still installed and its app-specific permission is `Allow all actions`, but in this conversation the Runner methods are not exposed in the available tool set. Therefore no fake/local seal was substituted and no GitHub execution fallback was used.
+
+Next action once the Runner tool is exposed:
+`begin_bundle -> put_text_file x8 -> seal_bundle -> STOP`
+
+Do not call `run_bundle` without new explicit user approval.
