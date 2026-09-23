@@ -1,0 +1,584 @@
+{
+  "base_registry_sha256": "9767ee786aee98b65bb5b23af640f1dc412068cde6e930a5a601456c50e6d8ca",
+  "base_registry_version": "v0.1",
+  "candidate_additions": [
+    {
+      "native_asset": "AVAX",
+      "network_uid": "avalanche:x-chain",
+      "source_key": "AVAX|avalanche:x-chain|native:AVAX",
+      "status": "CANDIDATE_V02_FROM_COMMON_REPRESENTATION"
+    },
+    {
+      "native_asset": "CC",
+      "network_uid": "canton:mainnet",
+      "source_key": "CC|canton:mainnet|native:CC",
+      "status": "CANDIDATE_V02_FROM_COMMON_REPRESENTATION"
+    },
+    {
+      "native_asset": "TIA",
+      "network_uid": "celestia:mainnet",
+      "source_key": "TIA|celestia:mainnet|native:TIA",
+      "status": "CANDIDATE_V02_FROM_COMMON_REPRESENTATION"
+    },
+    {
+      "native_asset": "CELO",
+      "network_uid": "celo:mainnet",
+      "source_key": "CELO|celo:mainnet|native:CELO",
+      "status": "CANDIDATE_V02_FROM_COMMON_REPRESENTATION"
+    },
+    {
+      "native_asset": "ENJ",
+      "network_uid": "enjin:relaychain",
+      "source_key": "ENJ|enjin:relaychain|native:ENJ",
+      "status": "CANDIDATE_V02_FROM_COMMON_REPRESENTATION"
+    },
+    {
+      "native_asset": "FLR",
+      "network_uid": "flare:mainnet",
+      "source_key": "FLR|flare:mainnet|native:FLR",
+      "status": "CANDIDATE_V02_FROM_COMMON_REPRESENTATION"
+    },
+    {
+      "native_asset": "FOGO",
+      "network_uid": "fogo:mainnet",
+      "source_key": "FOGO|fogo:mainnet|native:FOGO",
+      "status": "CANDIDATE_V02_FROM_COMMON_REPRESENTATION"
+    },
+    {
+      "native_asset": "HBAR",
+      "network_uid": "hedera:mainnet",
+      "source_key": "HBAR|hedera:mainnet|native:HBAR",
+      "status": "CANDIDATE_V02_FROM_COMMON_REPRESENTATION"
+    },
+    {
+      "native_asset": "HYPE",
+      "network_uid": "hyperliquid:evm",
+      "source_key": "HYPE|hyperliquid:evm|native:HYPE",
+      "status": "CANDIDATE_V02_FROM_COMMON_REPRESENTATION"
+    },
+    {
+      "native_asset": "ICP",
+      "network_uid": "internet-computer:mainnet",
+      "source_key": "ICP|internet-computer:mainnet|native:ICP",
+      "status": "CANDIDATE_V02_FROM_COMMON_REPRESENTATION"
+    },
+    {
+      "native_asset": "KAIA",
+      "network_uid": "kaia:mainnet",
+      "source_key": "KAIA|kaia:mainnet|native:KAIA",
+      "status": "CANDIDATE_V02_FROM_COMMON_REPRESENTATION"
+    },
+    {
+      "native_asset": "KSM",
+      "network_uid": "kusama:asset-hub",
+      "source_key": "KSM|kusama:asset-hub|native:KSM",
+      "status": "CANDIDATE_V02_FROM_COMMON_REPRESENTATION"
+    },
+    {
+      "native_asset": "MINA",
+      "network_uid": "mina:mainnet",
+      "source_key": "MINA|mina:mainnet|native:MINA",
+      "status": "CANDIDATE_V02_FROM_COMMON_REPRESENTATION"
+    },
+    {
+      "native_asset": "MON",
+      "network_uid": "monad:mainnet",
+      "source_key": "MON|monad:mainnet|native:MON",
+      "status": "CANDIDATE_V02_FROM_COMMON_REPRESENTATION"
+    },
+    {
+      "native_asset": "EGLD",
+      "network_uid": "multiversx:mainnet",
+      "source_key": "EGLD|multiversx:mainnet|native:EGLD",
+      "status": "CANDIDATE_V02_FROM_COMMON_REPRESENTATION"
+    },
+    {
+      "native_asset": "XPL",
+      "network_uid": "plasma:mainnet",
+      "source_key": "XPL|plasma:mainnet|native:XPL",
+      "status": "CANDIDATE_V02_FROM_COMMON_REPRESENTATION"
+    },
+    {
+      "native_asset": "DOT",
+      "network_uid": "polkadot:asset-hub",
+      "source_key": "DOT|polkadot:asset-hub|native:DOT",
+      "status": "CANDIDATE_V02_FROM_COMMON_REPRESENTATION"
+    },
+    {
+      "native_asset": "RVN",
+      "network_uid": "ravencoin:mainnet",
+      "source_key": "RVN|ravencoin:mainnet|native:RVN",
+      "status": "CANDIDATE_V02_FROM_COMMON_REPRESENTATION"
+    },
+    {
+      "native_asset": "S",
+      "network_uid": "sonic:mainnet",
+      "source_key": "S|sonic:mainnet|native:S",
+      "status": "CANDIDATE_V02_FROM_COMMON_REPRESENTATION"
+    },
+    {
+      "native_asset": "LUNA",
+      "network_uid": "terra:mainnet",
+      "source_key": "LUNA|terra:mainnet|native:LUNA",
+      "status": "CANDIDATE_V02_FROM_COMMON_REPRESENTATION"
+    },
+    {
+      "native_asset": "THETA",
+      "network_uid": "theta:mainnet",
+      "source_key": "THETA|theta:mainnet|native:THETA",
+      "status": "CANDIDATE_V02_FROM_COMMON_REPRESENTATION"
+    },
+    {
+      "native_asset": "WAXP",
+      "network_uid": "wax:mainnet",
+      "source_key": "WAXP|wax:mainnet|native:WAXP",
+      "status": "CANDIDATE_V02_FROM_COMMON_REPRESENTATION"
+    },
+    {
+      "native_asset": "ZETA",
+      "network_uid": "zetachain:mainnet",
+      "source_key": "ZETA|zetachain:mainnet|native:ZETA",
+      "status": "CANDIDATE_V02_FROM_COMMON_REPRESENTATION"
+    },
+    {
+      "native_asset": "ZIL",
+      "network_uid": "zilliqa:mainnet",
+      "source_key": "ZIL|zilliqa:mainnet|native:ZIL",
+      "status": "CANDIDATE_V02_FROM_COMMON_REPRESENTATION"
+    }
+  ],
+  "candidate_semantics": {
+    "base_rows_are_not_overwritten": true,
+    "explicit_native_identity_may_be_common_or_known_one_sided": true,
+    "hold_rows_do_not_create_native_rows": true,
+    "identity_registry_membership_does_not_grant_route_eligibility": true,
+    "route_admission_requires_common_proven_representation": true,
+    "this_file_is_not_yet_a_frozen_runtime_registry": true
+  },
+  "default": "IDENTITY_REVIEW",
+  "identity_route_separation": {
+    "common_route_admission_unchanged": true,
+    "identity_only_rows_added": 5,
+    "identity_registry_membership_does_not_grant_route_eligibility": true
+  },
+  "registry_version": "v0.2.2-candidate-replay",
+  "rows": [
+    {
+      "native_asset": "ALGO",
+      "network_uid": "algorand:mainnet",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "native_asset": "APT",
+      "network_uid": "aptos:mainnet",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "native_asset": "ETH",
+      "network_uid": "arbitrum:nova",
+      "reason": "EXPLICIT_NATIVE_IDENTITY_REQUIRED_FOR_EMPTY_CONTRACT; DOES_NOT_CREATE_COMMON_ROUTE",
+      "route_eligible": false,
+      "source": "NETWORK_METADATA_SOURCE_EVIDENCE_V0.1",
+      "status": "CANDIDATE_V021_IDENTITY_ONLY_KNOWN_ONE_SIDED"
+    },
+    {
+      "native_asset": "ETH",
+      "network_uid": "arbitrum:one",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "native_asset": "AR",
+      "network_uid": "arweave:mainnet",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "native_asset": "AVAX",
+      "network_uid": "avalanche:c-chain",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "native_asset": "AVAX",
+      "network_uid": "avalanche:x-chain",
+      "source_key": "AVAX|avalanche:x-chain|native:AVAX",
+      "status": "CANDIDATE_V02_FROM_COMMON_REPRESENTATION"
+    },
+    {
+      "native_asset": "ETH",
+      "network_uid": "base:mainnet",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "native_asset": "BERA",
+      "network_uid": "berachain:mainnet",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "native_asset": "BTC",
+      "network_uid": "bitcoin:lightning",
+      "reason": "EXPLICIT_NATIVE_IDENTITY_REQUIRED_FOR_EMPTY_CONTRACT; DOES_NOT_CREATE_COMMON_ROUTE",
+      "route_eligible": false,
+      "source": "NETWORK_METADATA_SOURCE_EVIDENCE_V0.1",
+      "status": "CANDIDATE_V021_IDENTITY_ONLY_KNOWN_ONE_SIDED"
+    },
+    {
+      "native_asset": "BTC",
+      "network_uid": "bitcoin:mainnet",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "native_asset": "BCH",
+      "network_uid": "bitcoincash:mainnet",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "native_asset": "BNB",
+      "network_uid": "bsc:mainnet",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "native_asset": "CC",
+      "network_uid": "canton:mainnet",
+      "source_key": "CC|canton:mainnet|native:CC",
+      "status": "CANDIDATE_V02_FROM_COMMON_REPRESENTATION"
+    },
+    {
+      "native_asset": "ADA",
+      "network_uid": "cardano:mainnet",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "native_asset": "CSPR",
+      "network_uid": "casper:mainnet",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "native_asset": "TIA",
+      "network_uid": "celestia:mainnet",
+      "source_key": "TIA|celestia:mainnet|native:TIA",
+      "status": "CANDIDATE_V02_FROM_COMMON_REPRESENTATION"
+    },
+    {
+      "native_asset": "CELO",
+      "network_uid": "celo:mainnet",
+      "source_key": "CELO|celo:mainnet|native:CELO",
+      "status": "CANDIDATE_V02_FROM_COMMON_REPRESENTATION"
+    },
+    {
+      "native_asset": "CHZ",
+      "network_uid": "chiliz:chain",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "native_asset": "CORE",
+      "network_uid": "core:mainnet",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "native_asset": "ATOM",
+      "network_uid": "cosmoshub:mainnet",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "native_asset": "DOGE",
+      "network_uid": "dogecoin:mainnet",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "native_asset": "DYDX",
+      "network_uid": "dydx:mainnet",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "native_asset": "ENJ",
+      "network_uid": "enjin:relaychain",
+      "source_key": "ENJ|enjin:relaychain|native:ENJ",
+      "status": "CANDIDATE_V02_FROM_COMMON_REPRESENTATION"
+    },
+    {
+      "native_asset": "ETHW",
+      "network_uid": "ethereum-pow:mainnet",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "native_asset": "ETH",
+      "network_uid": "ethereum:mainnet",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "native_asset": "ETC",
+      "network_uid": "ethereumclassic:mainnet",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "native_asset": "FIL",
+      "network_uid": "filecoin:mainnet",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "native_asset": "FLR",
+      "network_uid": "flare:mainnet",
+      "source_key": "FLR|flare:mainnet|native:FLR",
+      "status": "CANDIDATE_V02_FROM_COMMON_REPRESENTATION"
+    },
+    {
+      "native_asset": "FLOW",
+      "network_uid": "flow:mainnet",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "native_asset": "FOGO",
+      "network_uid": "fogo:mainnet",
+      "source_key": "FOGO|fogo:mainnet|native:FOGO",
+      "status": "CANDIDATE_V02_FROM_COMMON_REPRESENTATION"
+    },
+    {
+      "native_asset": "G",
+      "network_uid": "gravity:alpha",
+      "reason": "EXPLICIT_NATIVE_IDENTITY_REQUIRED_FOR_EMPTY_CONTRACT; DOES_NOT_CREATE_COMMON_ROUTE",
+      "route_eligible": false,
+      "source": "NETWORK_METADATA_SOURCE_EVIDENCE_V0.1",
+      "status": "CANDIDATE_V021_IDENTITY_ONLY_KNOWN_ONE_SIDED"
+    },
+    {
+      "native_asset": "HBAR",
+      "network_uid": "hedera:mainnet",
+      "source_key": "HBAR|hedera:mainnet|native:HBAR",
+      "status": "CANDIDATE_V02_FROM_COMMON_REPRESENTATION"
+    },
+    {
+      "native_asset": "HYPE",
+      "network_uid": "hyperliquid:evm",
+      "source_key": "HYPE|hyperliquid:evm|native:HYPE",
+      "status": "CANDIDATE_V02_FROM_COMMON_REPRESENTATION"
+    },
+    {
+      "native_asset": "INJ",
+      "network_uid": "injective:mainnet",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "native_asset": "ICP",
+      "network_uid": "internet-computer:mainnet",
+      "source_key": "ICP|internet-computer:mainnet|native:ICP",
+      "status": "CANDIDATE_V02_FROM_COMMON_REPRESENTATION"
+    },
+    {
+      "native_asset": "KAIA",
+      "network_uid": "kaia:mainnet",
+      "source_key": "KAIA|kaia:mainnet|native:KAIA",
+      "status": "CANDIDATE_V02_FROM_COMMON_REPRESENTATION"
+    },
+    {
+      "native_asset": "KSM",
+      "network_uid": "kusama:asset-hub",
+      "source_key": "KSM|kusama:asset-hub|native:KSM",
+      "status": "CANDIDATE_V02_FROM_COMMON_REPRESENTATION"
+    },
+    {
+      "native_asset": "ETH",
+      "network_uid": "linea:mainnet",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "native_asset": "LTC",
+      "network_uid": "litecoin:mainnet",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "native_asset": "ETH",
+      "network_uid": "megaeth:mainnet",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "native_asset": "BTC",
+      "network_uid": "merlin:mainnet",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "native_asset": "MINA",
+      "network_uid": "mina:mainnet",
+      "source_key": "MINA|mina:mainnet|native:MINA",
+      "status": "CANDIDATE_V02_FROM_COMMON_REPRESENTATION"
+    },
+    {
+      "native_asset": "MON",
+      "network_uid": "monad:mainnet",
+      "source_key": "MON|monad:mainnet|native:MON",
+      "status": "CANDIDATE_V02_FROM_COMMON_REPRESENTATION"
+    },
+    {
+      "native_asset": "EGLD",
+      "network_uid": "multiversx:mainnet",
+      "source_key": "EGLD|multiversx:mainnet|native:EGLD",
+      "status": "CANDIDATE_V02_FROM_COMMON_REPRESENTATION"
+    },
+    {
+      "native_asset": "NEAR",
+      "network_uid": "near:mainnet",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "native_asset": "ETH",
+      "network_uid": "optimism:mainnet",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "native_asset": "XPL",
+      "network_uid": "plasma:mainnet",
+      "source_key": "XPL|plasma:mainnet|native:XPL",
+      "status": "CANDIDATE_V02_FROM_COMMON_REPRESENTATION"
+    },
+    {
+      "native_asset": "DOT",
+      "network_uid": "polkadot:asset-hub",
+      "source_key": "DOT|polkadot:asset-hub|native:DOT",
+      "status": "CANDIDATE_V02_FROM_COMMON_REPRESENTATION"
+    },
+    {
+      "native_asset": "POL",
+      "network_uid": "polygon:pos",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "native_asset": "RVN",
+      "network_uid": "ravencoin:mainnet",
+      "source_key": "RVN|ravencoin:mainnet|native:RVN",
+      "status": "CANDIDATE_V02_FROM_COMMON_REPRESENTATION"
+    },
+    {
+      "native_asset": "ETH",
+      "network_uid": "robinhood:mainnet",
+      "reason": "EXPLICIT_NATIVE_IDENTITY_REQUIRED_FOR_EMPTY_CONTRACT; DOES_NOT_CREATE_COMMON_ROUTE",
+      "route_eligible": false,
+      "source": "NETWORK_METADATA_SOURCE_EVIDENCE_V0.1",
+      "status": "CANDIDATE_V021_IDENTITY_ONLY_KNOWN_ONE_SIDED"
+    },
+    {
+      "native_asset": "ETH",
+      "network_uid": "scroll:mainnet",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "native_asset": "SEI",
+      "network_uid": "sei:mainnet",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "native_asset": "SOL",
+      "network_uid": "solana:mainnet",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "native_asset": "S",
+      "network_uid": "sonic:mainnet",
+      "source_key": "S|sonic:mainnet|native:S",
+      "status": "CANDIDATE_V02_FROM_COMMON_REPRESENTATION"
+    },
+    {
+      "native_asset": "STRK",
+      "network_uid": "starknet:mainnet",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "native_asset": "XLM",
+      "network_uid": "stellar:mainnet",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "native_asset": "SUI",
+      "network_uid": "sui:mainnet",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "native_asset": "LUNA",
+      "network_uid": "terra:mainnet",
+      "source_key": "LUNA|terra:mainnet|native:LUNA",
+      "status": "CANDIDATE_V02_FROM_COMMON_REPRESENTATION"
+    },
+    {
+      "native_asset": "XTZ",
+      "network_uid": "tezos:mainnet",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "native_asset": "THETA",
+      "network_uid": "theta:mainnet",
+      "source_key": "THETA|theta:mainnet|native:THETA",
+      "status": "CANDIDATE_V02_FROM_COMMON_REPRESENTATION"
+    },
+    {
+      "native_asset": "TON",
+      "network_uid": "ton:mainnet",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "native_asset": "TRX",
+      "network_uid": "tron:mainnet",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "native_asset": "ETH",
+      "network_uid": "unichain:mainnet",
+      "reason": "EXPLICIT_NATIVE_IDENTITY_REQUIRED_FOR_EMPTY_CONTRACT; DOES_NOT_CREATE_COMMON_ROUTE",
+      "route_eligible": false,
+      "source": "NETWORK_METADATA_SOURCE_EVIDENCE_V0.1",
+      "status": "CANDIDATE_V021_IDENTITY_ONLY_KNOWN_ONE_SIDED"
+    },
+    {
+      "native_asset": "A",
+      "network_uid": "vaulta:mainnet",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "native_asset": "WAXP",
+      "network_uid": "wax:mainnet",
+      "source_key": "WAXP|wax:mainnet|native:WAXP",
+      "status": "CANDIDATE_V02_FROM_COMMON_REPRESENTATION"
+    },
+    {
+      "native_asset": "XRP",
+      "network_uid": "xrp-ledger:mainnet",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "native_asset": "ZETA",
+      "network_uid": "zetachain:mainnet",
+      "source_key": "ZETA|zetachain:mainnet|native:ZETA",
+      "status": "CANDIDATE_V02_FROM_COMMON_REPRESENTATION"
+    },
+    {
+      "native_asset": "ZIL",
+      "network_uid": "zilliqa:mainnet",
+      "source_key": "ZIL|zilliqa:mainnet|native:ZIL",
+      "status": "CANDIDATE_V02_FROM_COMMON_REPRESENTATION"
+    },
+    {
+      "native_asset": "ETH",
+      "network_uid": "zksync:era",
+      "status": "EXPLICIT_V01"
+    },
+    {
+      "native_asset": "GRAM",
+      "network_uid": "ton:mainnet",
+      "status": "V022_EXACT_REBRAND_NATIVE_ALIAS"
+    },
+    {
+      "native_asset": "QTUM",
+      "network_uid": "qtum:mainnet",
+      "status": "V022_EXACT_NATIVE_IDENTITY"
+    },
+    {
+      "native_asset": "STX",
+      "network_uid": "stacks:mainnet",
+      "status": "V022_EXACT_NATIVE_IDENTITY"
+    }
+  ],
+  "schema": "sc001.b15.native_identity_registry.candidate.v0.2.2.replay",
+  "source_run": "20260920T210446Z",
+  "status": "CANDIDATE_EXACT_REPLAY_PASS",
+  "v0.2.2_patch_contract": {
+    "additive_only": true,
+    "base_rows_preserved": true,
+    "identity_registry_membership_does_not_grant_route_eligibility": true
+  }
+}

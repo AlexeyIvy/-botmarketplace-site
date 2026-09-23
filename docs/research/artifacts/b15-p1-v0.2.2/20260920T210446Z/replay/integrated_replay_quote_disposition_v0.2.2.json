@@ -1,0 +1,42 @@
+{
+  "candidate_status": "CANDIDATE_IDENTITY_CLOSED_WITH_COMMON",
+  "common_keys": [
+    "USDT|aptos:mainnet|0x357b0b74bc833e95a115ad22604854d6b0fca151cecd94111770e5d6ffc9dc2b",
+    "USDT|arbitrum:one|0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9",
+    "USDT|avalanche:c-chain|0x9702230a8ea53601f5cd2dc00fdbc13d4df4a8c7",
+    "USDT|berachain:mainnet|0x779ded0c9e1022225f8e0630b35a9b54be713736",
+    "USDT|ethereum:mainnet|0xdac17f958d2ee523a2206206994597c13d831ec7",
+    "USDT|monad:mainnet|0xe7cd86e13ac4309349f30b3435a9d337750fc82d",
+    "USDT|optimism:mainnet|0x94b008aa00579c1307b0ef2c499ad98a8ce58e58",
+    "USDT|plasma:mainnet|0xb8ce59fc3717ada4c02eadf9682a9e934f625ebb",
+    "USDT|polygon:pos|0xc2132d05d31c914a87c6611c10748aeb04b58e8f",
+    "USDT|solana:mainnet|Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB",
+    "USDT|ton:mainnet|EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs",
+    "USDT|tron:mainnet|TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"
+  ],
+  "known_one_sided_bybit_keys": [
+    "USDT|bsc:mainnet|0x55d398326f99059ff775485246999027b3197955",
+    "USDT|celo:mainnet|0x48065fbbe25f71c9282ddf5e1cd6d6a887483d5e",
+    "USDT|corn:mainnet|0xb8ce59fc3717ada4c02eadf9682a9e934f625ebb",
+    "USDT|hyperliquid:evm|0xb8ce59fc3717ada4c02eadf9682a9e934f625ebb",
+    "USDT|kaia:mainnet|0xd077a400968890eacc75cdc901f0356c943e4fdb",
+    "USDT|kava:evm|0x919c1c267bc06a7039e03fcc2ef738525769109c",
+    "USDT|mantle:mainnet|0x779ded0c9e1022225f8e0630b35a9b54be713736",
+    "USDT|zksync:lite|0xdac17f958d2ee523a2206206994597c13d831ec7"
+  ],
+  "known_one_sided_okx_keys": [
+    "USDT|oktc:mainnet|0x382bb369d343125bfb2117af9c149795c6c65c50",
+    "USDT|optimism:mainnet|0x01bff41798a0bcf287b996046ca68b395dbc1071",
+    "USDT|tempo:mainnet|0x20c00000000000000000000014f22ca97301eb73",
+    "USDT|unichain:mainnet|0x9151434b16b9763660705744891fa906f660ecc5",
+    "USDT|xlayer:mainnet|0x1e4a5963abfd975d8c9021ce480b42188849d41d",
+    "USDT|xlayer:mainnet|0x779ded0c9e1022225f8e0630b35a9b54be713736"
+  ],
+  "new_cross_venue_routes_from_v0.2.2": 0,
+  "new_known_one_sided_keys": [
+    "USDT|corn:mainnet|0xb8ce59fc3717ada4c02eadf9682a9e934f625ebb",
+    "USDT|tempo:mainnet|0x20c00000000000000000000014f22ca97301eb73"
+  ],
+  "remaining_unresolved_rows": 0,
+  "total_common": 12
+}

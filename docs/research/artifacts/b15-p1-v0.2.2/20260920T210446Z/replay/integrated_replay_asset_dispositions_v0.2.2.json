@@ -1,0 +1,422 @@
+[
+  {
+    "asset": "AVAX",
+    "candidate_status": "CANDIDATE_IDENTITY_CLOSED_WITH_COMMON",
+    "common_keys": [
+      "AVAX|avalanche:c-chain|native:AVAX",
+      "AVAX|avalanche:x-chain|native:AVAX"
+    ],
+    "common_representation_count": 2,
+    "remaining_unresolved_rows": 0
+  },
+  {
+    "asset": "BABYDOGE",
+    "candidate_status": "CANDIDATE_IDENTITY_CLOSED_WITH_COMMON",
+    "common_keys": [
+      "BABYDOGE|bsc:mainnet|0xc748673057861a797275cd8a068abb95a902e8de"
+    ],
+    "common_representation_count": 1,
+    "remaining_unresolved_rows": 0
+  },
+  {
+    "asset": "BCH",
+    "candidate_status": "CANDIDATE_IDENTITY_CLOSED_WITH_COMMON",
+    "common_keys": [
+      "BCH|bitcoincash:mainnet|native:BCH"
+    ],
+    "common_representation_count": 1,
+    "remaining_unresolved_rows": 0
+  },
+  {
+    "asset": "BTC",
+    "candidate_status": "CANDIDATE_IDENTITY_CLOSED_WITH_COMMON",
+    "common_keys": [
+      "BTC|bitcoin:mainnet|native:BTC"
+    ],
+    "common_representation_count": 1,
+    "remaining_unresolved_rows": 0
+  },
+  {
+    "asset": "CC",
+    "candidate_status": "CANDIDATE_IDENTITY_CLOSED_WITH_COMMON",
+    "common_keys": [
+      "CC|canton:mainnet|native:CC"
+    ],
+    "common_representation_count": 1,
+    "remaining_unresolved_rows": 0
+  },
+  {
+    "asset": "CELO",
+    "candidate_status": "CANDIDATE_IDENTITY_CLOSED_WITH_COMMON",
+    "common_keys": [
+      "CELO|celo:mainnet|native:CELO"
+    ],
+    "common_representation_count": 1,
+    "remaining_unresolved_rows": 0
+  },
+  {
+    "asset": "DOT",
+    "candidate_status": "CANDIDATE_IDENTITY_CLOSED_WITH_COMMON",
+    "common_keys": [
+      "DOT|polkadot:asset-hub|native:DOT"
+    ],
+    "common_representation_count": 1,
+    "remaining_unresolved_rows": 0
+  },
+  {
+    "asset": "EGLD",
+    "candidate_status": "CANDIDATE_IDENTITY_CLOSED_WITH_COMMON",
+    "common_keys": [
+      "EGLD|multiversx:mainnet|native:EGLD"
+    ],
+    "common_representation_count": 1,
+    "remaining_unresolved_rows": 0
+  },
+  {
+    "asset": "ENJ",
+    "candidate_status": "CANDIDATE_IDENTITY_CLOSED_WITH_COMMON",
+    "common_keys": [
+      "ENJ|enjin:relaychain|native:ENJ"
+    ],
+    "common_representation_count": 1,
+    "remaining_unresolved_rows": 0
+  },
+  {
+    "asset": "ETC",
+    "candidate_status": "CANDIDATE_IDENTITY_CLOSED_WITH_COMMON",
+    "common_keys": [
+      "ETC|ethereumclassic:mainnet|native:ETC"
+    ],
+    "common_representation_count": 1,
+    "remaining_unresolved_rows": 0
+  },
+  {
+    "asset": "ETH",
+    "candidate_status": "CANDIDATE_IDENTITY_CLOSED_WITH_COMMON",
+    "common_keys": [
+      "ETH|arbitrum:one|native:ETH",
+      "ETH|base:mainnet|native:ETH",
+      "ETH|ethereum:mainnet|native:ETH",
+      "ETH|linea:mainnet|native:ETH",
+      "ETH|optimism:mainnet|native:ETH",
+      "ETH|zksync:era|native:ETH"
+    ],
+    "common_representation_count": 6,
+    "remaining_unresolved_rows": 0
+  },
+  {
+    "asset": "FIL",
+    "candidate_status": "CANDIDATE_IDENTITY_CLOSED_WITH_COMMON",
+    "common_keys": [
+      "FIL|filecoin:mainnet|native:FIL"
+    ],
+    "common_representation_count": 1,
+    "remaining_unresolved_rows": 0
+  },
+  {
+    "asset": "FLR",
+    "candidate_status": "CANDIDATE_IDENTITY_CLOSED_WITH_COMMON",
+    "common_keys": [
+      "FLR|flare:mainnet|native:FLR"
+    ],
+    "common_representation_count": 1,
+    "remaining_unresolved_rows": 0
+  },
+  {
+    "asset": "FOGO",
+    "candidate_status": "CANDIDATE_IDENTITY_CLOSED_WITH_COMMON",
+    "common_keys": [
+      "FOGO|fogo:mainnet|native:FOGO"
+    ],
+    "common_representation_count": 1,
+    "remaining_unresolved_rows": 0
+  },
+  {
+    "asset": "G",
+    "candidate_status": "CANDIDATE_IDENTITY_CLOSED_WITH_COMMON",
+    "common_keys": [
+      "G|ethereum:mainnet|0x9c7beba8f6ef6643abd725e45a4e8387ef260649"
+    ],
+    "common_representation_count": 1,
+    "remaining_unresolved_rows": 0
+  },
+  {
+    "asset": "GRAM",
+    "candidate_status": "CANDIDATE_IDENTITY_CLOSED_WITH_COMMON",
+    "common_keys": [
+      "GRAM|ton:mainnet|native:GRAM"
+    ],
+    "common_representation_count": 1,
+    "remaining_unresolved_rows": 0
+  },
+  {
+    "asset": "HBAR",
+    "candidate_status": "CANDIDATE_IDENTITY_CLOSED_WITH_COMMON",
+    "common_keys": [
+      "HBAR|hedera:mainnet|native:HBAR"
+    ],
+    "common_representation_count": 1,
+    "remaining_unresolved_rows": 0
+  },
+  {
+    "asset": "HYPE",
+    "candidate_status": "CANDIDATE_IDENTITY_CLOSED_WITH_COMMON",
+    "common_keys": [
+      "HYPE|hyperliquid:evm|native:HYPE"
+    ],
+    "common_representation_count": 1,
+    "remaining_unresolved_rows": 0
+  },
+  {
+    "asset": "ICP",
+    "candidate_status": "CANDIDATE_IDENTITY_CLOSED_WITH_COMMON",
+    "common_keys": [
+      "ICP|internet-computer:mainnet|native:ICP"
+    ],
+    "common_representation_count": 1,
+    "remaining_unresolved_rows": 0
+  },
+  {
+    "asset": "KAIA",
+    "candidate_status": "CANDIDATE_IDENTITY_CLOSED_WITH_COMMON",
+    "common_keys": [
+      "KAIA|kaia:mainnet|native:KAIA"
+    ],
+    "common_representation_count": 1,
+    "remaining_unresolved_rows": 0
+  },
+  {
+    "asset": "KSM",
+    "candidate_status": "CANDIDATE_IDENTITY_CLOSED_WITH_COMMON",
+    "common_keys": [
+      "KSM|kusama:asset-hub|native:KSM"
+    ],
+    "common_representation_count": 1,
+    "remaining_unresolved_rows": 0
+  },
+  {
+    "asset": "LINK",
+    "candidate_status": "CANDIDATE_IDENTITY_CLOSED_WITH_COMMON",
+    "common_keys": [
+      "LINK|ethereum:mainnet|0x514910771af9ca656af840dff83e8264ecf986ca"
+    ],
+    "common_representation_count": 1,
+    "remaining_unresolved_rows": 0
+  },
+  {
+    "asset": "LTC",
+    "candidate_status": "CANDIDATE_IDENTITY_CLOSED_WITH_COMMON",
+    "common_keys": [
+      "LTC|litecoin:mainnet|native:LTC"
+    ],
+    "common_representation_count": 1,
+    "remaining_unresolved_rows": 0
+  },
+  {
+    "asset": "LUNA",
+    "candidate_status": "CANDIDATE_IDENTITY_CLOSED_WITH_COMMON",
+    "common_keys": [
+      "LUNA|terra:mainnet|native:LUNA"
+    ],
+    "common_representation_count": 1,
+    "remaining_unresolved_rows": 0
+  },
+  {
+    "asset": "MINA",
+    "candidate_status": "CANDIDATE_IDENTITY_CLOSED_WITH_COMMON",
+    "common_keys": [
+      "MINA|mina:mainnet|native:MINA"
+    ],
+    "common_representation_count": 1,
+    "remaining_unresolved_rows": 0
+  },
+  {
+    "asset": "MON",
+    "candidate_status": "CANDIDATE_IDENTITY_CLOSED_WITH_COMMON",
+    "common_keys": [
+      "MON|monad:mainnet|native:MON"
+    ],
+    "common_representation_count": 1,
+    "remaining_unresolved_rows": 0
+  },
+  {
+    "asset": "NIGHT",
+    "candidate_status": "CANDIDATE_IDENTITY_CLOSED_WITH_COMMON",
+    "common_keys": [
+      "NIGHT|cardano:mainnet|cardano:0691b2fecca1ac4f53cb6dfb00b7013e561d1f34403b957cbb5af1fa:4e49474854"
+    ],
+    "common_representation_count": 1,
+    "remaining_unresolved_rows": 0
+  },
+  {
+    "asset": "ORDI",
+    "candidate_status": "CANDIDATE_IDENTITY_CLOSED_WITH_COMMON",
+    "common_keys": [
+      "ORDI|bitcoin:mainnet|brc20:ordi"
+    ],
+    "common_representation_count": 1,
+    "remaining_unresolved_rows": 0
+  },
+  {
+    "asset": "QTUM",
+    "candidate_status": "CANDIDATE_IDENTITY_CLOSED_WITH_COMMON",
+    "common_keys": [
+      "QTUM|qtum:mainnet|native:QTUM"
+    ],
+    "common_representation_count": 1,
+    "remaining_unresolved_rows": 0
+  },
+  {
+    "asset": "RVN",
+    "candidate_status": "CANDIDATE_IDENTITY_CLOSED_WITH_COMMON",
+    "common_keys": [
+      "RVN|ravencoin:mainnet|native:RVN"
+    ],
+    "common_representation_count": 1,
+    "remaining_unresolved_rows": 0
+  },
+  {
+    "asset": "S",
+    "candidate_status": "CANDIDATE_IDENTITY_CLOSED_WITH_COMMON",
+    "common_keys": [
+      "S|sonic:mainnet|native:S"
+    ],
+    "common_representation_count": 1,
+    "remaining_unresolved_rows": 0
+  },
+  {
+    "asset": "SATS",
+    "candidate_status": "CANDIDATE_IDENTITY_CLOSED_WITH_COMMON",
+    "common_keys": [
+      "SATS|bitcoin:mainnet|brc20:sats"
+    ],
+    "common_representation_count": 1,
+    "remaining_unresolved_rows": 0
+  },
+  {
+    "asset": "SHIB",
+    "candidate_status": "CANDIDATE_IDENTITY_CLOSED_WITH_COMMON",
+    "common_keys": [
+      "SHIB|ethereum:mainnet|0x95ad61b0a150d79219dcf64e1e6cc01f0b64c4ce"
+    ],
+    "common_representation_count": 1,
+    "remaining_unresolved_rows": 0
+  },
+  {
+    "asset": "SOL",
+    "candidate_status": "CANDIDATE_IDENTITY_CLOSED_WITH_COMMON",
+    "common_keys": [
+      "SOL|solana:mainnet|native:SOL"
+    ],
+    "common_representation_count": 1,
+    "remaining_unresolved_rows": 0
+  },
+  {
+    "asset": "STX",
+    "candidate_status": "CANDIDATE_IDENTITY_CLOSED_WITH_COMMON",
+    "common_keys": [
+      "STX|stacks:mainnet|native:STX"
+    ],
+    "common_representation_count": 1,
+    "remaining_unresolved_rows": 0
+  },
+  {
+    "asset": "SUSHI",
+    "candidate_status": "CANDIDATE_IDENTITY_CLOSED_WITH_COMMON",
+    "common_keys": [
+      "SUSHI|ethereum:mainnet|0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+    ],
+    "common_representation_count": 1,
+    "remaining_unresolved_rows": 0
+  },
+  {
+    "asset": "THETA",
+    "candidate_status": "CANDIDATE_IDENTITY_CLOSED_WITH_COMMON",
+    "common_keys": [
+      "THETA|theta:mainnet|native:THETA"
+    ],
+    "common_representation_count": 1,
+    "remaining_unresolved_rows": 0
+  },
+  {
+    "asset": "TIA",
+    "candidate_status": "CANDIDATE_IDENTITY_CLOSED_WITH_COMMON",
+    "common_keys": [
+      "TIA|celestia:mainnet|native:TIA"
+    ],
+    "common_representation_count": 1,
+    "remaining_unresolved_rows": 0
+  },
+  {
+    "asset": "TRX",
+    "candidate_status": "CANDIDATE_IDENTITY_CLOSED_WITH_COMMON",
+    "common_keys": [
+      "TRX|tron:mainnet|native:TRX"
+    ],
+    "common_representation_count": 1,
+    "remaining_unresolved_rows": 0
+  },
+  {
+    "asset": "UNI",
+    "candidate_status": "CANDIDATE_IDENTITY_CLOSED_WITH_COMMON",
+    "common_keys": [
+      "UNI|ethereum:mainnet|0x1f9840a85d5af5bf1d1762f925bdaddc4201f984"
+    ],
+    "common_representation_count": 1,
+    "remaining_unresolved_rows": 0
+  },
+  {
+    "asset": "WAXP",
+    "candidate_status": "CANDIDATE_IDENTITY_CLOSED_WITH_COMMON",
+    "common_keys": [
+      "WAXP|wax:mainnet|native:WAXP"
+    ],
+    "common_representation_count": 1,
+    "remaining_unresolved_rows": 0
+  },
+  {
+    "asset": "XLM",
+    "candidate_status": "CANDIDATE_IDENTITY_CLOSED_WITH_COMMON",
+    "common_keys": [
+      "XLM|stellar:mainnet|native:XLM"
+    ],
+    "common_representation_count": 1,
+    "remaining_unresolved_rows": 0
+  },
+  {
+    "asset": "XPL",
+    "candidate_status": "CANDIDATE_IDENTITY_CLOSED_WITH_COMMON",
+    "common_keys": [
+      "XPL|plasma:mainnet|native:XPL"
+    ],
+    "common_representation_count": 1,
+    "remaining_unresolved_rows": 0
+  },
+  {
+    "asset": "XRP",
+    "candidate_status": "CANDIDATE_IDENTITY_CLOSED_WITH_COMMON",
+    "common_keys": [
+      "XRP|xrp-ledger:mainnet|native:XRP"
+    ],
+    "common_representation_count": 1,
+    "remaining_unresolved_rows": 0
+  },
+  {
+    "asset": "ZETA",
+    "candidate_status": "CANDIDATE_IDENTITY_CLOSED_WITH_COMMON",
+    "common_keys": [
+      "ZETA|zetachain:mainnet|native:ZETA"
+    ],
+    "common_representation_count": 1,
+    "remaining_unresolved_rows": 0
+  },
+  {
+    "asset": "ZIL",
+    "candidate_status": "CANDIDATE_IDENTITY_CLOSED_WITH_COMMON",
+    "common_keys": [
+      "ZIL|zilliqa:mainnet|native:ZIL"
+    ],
+    "common_representation_count": 1,
+    "remaining_unresolved_rows": 0
+  }
+]
