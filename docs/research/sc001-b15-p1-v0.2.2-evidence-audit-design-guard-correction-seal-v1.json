@@ -1,0 +1,31 @@
+{
+  "schema": "sc001.b15.v0.2.2_evidence_audit_design_guard_correction_seal.v1",
+  "date": "2026-09-24",
+  "prior_job_id": "job_20260923T211900Z_46eb3e80",
+  "prior_manifest_sha256": "3e5145068b13bcf5c77da0c8a9e5c6c69da04632af460261c1ce437ea1d74c85",
+  "prior_status": "B15_P1_V022_REMAINING_HOLD_EVIDENCE_AUDIT_FAIL",
+  "technical_false_negative": true,
+  "failed_checks": ["design_guard_2"],
+  "root_cause": "literal checker phrase did not match semantically equivalent immutable design wording",
+  "all_other_prior_checks_passed": true,
+  "substantive_candidate_state": {
+    "remaining_unresolved_rows": 0,
+    "remaining_review_assets": [],
+    "candidate_network_rows": 80,
+    "candidate_native_identity_rows": 74,
+    "asset_common_representations": 52,
+    "quote_common_representations": 12,
+    "new_quote_cross_venue_routes": 0
+  },
+  "correction_bundle": {
+    "bundle_id": "bundle_20260923T212036Z_f8764827",
+    "bundle_sha256": "00c113533e5312c573803f4b28201ceeef924cb3682539012120c194a0386514",
+    "approval_code": "BM-00C113533E53",
+    "entrypoint_sha256": "b812097c50c7af661091dbdebb60745dfb352cac4c126ae5512f4df592c41615",
+    "state": "SEALED_RUN_PENDING"
+  },
+  "research_inputs_changed": false,
+  "research_logic_changed": false,
+  "candidate_decisions_changed": false,
+  "next_state": "RUN_V022_EVIDENCE_AUDIT_DESIGN_GUARD_CORRECTION_AFTER_USER_APPROVAL"
+}
