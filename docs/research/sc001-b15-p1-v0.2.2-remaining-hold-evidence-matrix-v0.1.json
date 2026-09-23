@@ -1,0 +1,232 @@
+{
+  "schema": "sc001.b15.v0.2.2_remaining_hold_evidence_matrix.v0.1",
+  "retrieved_utc_date": "2026-09-24",
+  "source_run": "20260920T210446Z",
+  "policy": {
+    "official_or_primary_evidence_only": true,
+    "price_data_used": false,
+    "pnl_data_used": false,
+    "transfer_status_used_for_selection": false,
+    "fuzzy_matching": false,
+    "route_admission_from_one_sided_identity": false
+  },
+  "cases": [
+    {
+      "case_id": "GRAM_TON_NATIVE_REBRAND",
+      "targets": [
+        {"venue":"BYBIT","asset":"GRAM","raw_network":"TON","raw_chainType":"TON","raw_contract":""},
+        {"venue":"OKX","asset":"GRAM","raw_network":"The Open Network (TON)","raw_chainType":"","raw_contract":""}
+      ],
+      "candidate_action": {
+        "network_uid": "ton:mainnet",
+        "identity_kind": "native_rebrand_alias",
+        "representation_identity": "native:GRAM",
+        "native_asset_alias": "GRAM",
+        "route_effect": "COMMON_PROVEN_IF_BOTH_EXACT_ROWS_RESOLVE"
+      },
+      "evidence": [
+        {
+          "source_class":"OFFICIAL_VENUE_ANNOUNCEMENT",
+          "publisher":"Bybit",
+          "url":"https://announcements.bybit.com/en/article/bybit-toncoin-ton-gram-gram--blt617f4bf48950ab77/",
+          "fact":"Bybit announced Toncoin (TON) rebranding to Gram (GRAM), with ticker changing from TON to GRAM."
+        },
+        {
+          "source_class":"OFFICIAL_VENUE_EDUCATION",
+          "publisher":"OKX",
+          "url":"https://www.okx.com/ru/learn/chto-takoe-gram",
+          "fact":"OKX describes GRAM as the native token of The Open Network and states the 2026 change was a Toncoin-to-Gram rebrand/ticker change."
+        }
+      ],
+      "evidence_sufficiency_candidate":"SUFFICIENT"
+    },
+    {
+      "case_id":"QTUM_MAINNET_EXACT_ALIAS",
+      "targets":[
+        {"venue":"BYBIT","asset":"QTUM","raw_network":"QTUM","raw_chainType":"QTUM","raw_contract":""},
+        {"venue":"OKX","asset":"QTUM","raw_network":"Quantum","raw_chainType":"","raw_contract":""}
+      ],
+      "candidate_action":{
+        "network_uid":"qtum:mainnet",
+        "bybit_chain_codes":["QTUM"],
+        "bybit_chain_types":["QTUM"],
+        "okx_aliases":["Quantum"],
+        "native_asset":"QTUM",
+        "identity_kind":"native",
+        "representation_identity":"native:QTUM"
+      },
+      "evidence":[
+        {
+          "source_class":"OFFICIAL_PROJECT_EXPLORER",
+          "publisher":"Qtum",
+          "url":"https://qtum.info/",
+          "fact":"Qtum's official explorer identifies the production mainnet and accounts for supply, rewards and fees in QTUM."
+        },
+        {
+          "source_class":"OFFICIAL_PROJECT",
+          "publisher":"Qtum",
+          "url":"https://qtum.org/download",
+          "fact":"Qtum's official wallet page describes native QTUM transfer support and Qtum Core participation in network consensus."
+        }
+      ],
+      "evidence_sufficiency_candidate":"SUFFICIENT_WITH_FROZEN_VENUE_ROW_AS_EXACT_ALIAS_BINDING"
+    },
+    {
+      "case_id":"STX_MAINNET_EXACT_ALIAS",
+      "targets":[
+        {"venue":"BYBIT","asset":"STX","raw_network":"STX","raw_chainType":"Stacks","raw_contract":""},
+        {"venue":"OKX","asset":"STX","raw_network":"l-Stacks","raw_chainType":"","raw_contract":""}
+      ],
+      "candidate_action":{
+        "network_uid":"stacks:mainnet",
+        "bybit_chain_codes":["STX"],
+        "bybit_chain_types":["Stacks"],
+        "okx_aliases":["l-Stacks"],
+        "native_asset":"STX",
+        "identity_kind":"native",
+        "representation_identity":"native:STX"
+      },
+      "evidence":[
+        {
+          "source_class":"OFFICIAL_PROJECT_DOCS",
+          "publisher":"Stacks",
+          "url":"https://docs.stacks.co/learn/network-fundamentals/network-basics",
+          "fact":"Stacks documentation states STX is the native token of the Stacks network."
+        },
+        {
+          "source_class":"OFFICIAL_VENUE_ANNOUNCEMENT",
+          "publisher":"Bybit",
+          "url":"https://announcements.bybit.com/en/article/bybit-to-support-stacks-stx-v4-0-1-network-upgrade--artd1728bb0773a/",
+          "fact":"Bybit refers to deposits and withdrawals via Stacks (STX) for the STX network upgrade."
+        }
+      ],
+      "evidence_sufficiency_candidate":"SUFFICIENT_WITH_FROZEN_VENUE_ROW_AS_EXACT_ALIAS_BINDING"
+    },
+    {
+      "case_id":"XLM_STELLAR_NATIVE_MARKER_EXACT_OVERRIDE",
+      "targets":[
+        {"venue":"BYBIT","asset":"XLM","raw_network":"XLM","raw_chainType":"Stellar Lumens","raw_contract":""},
+        {"venue":"OKX","asset":"XLM","raw_network":"Stellar Lumens","raw_chainType":"","raw_contract":"native:GDN4U3BDFVMK74IJ46GXEN5ZDRA5QIJQF6TM3NBJIG4IQW2RDGYXSMRN"}
+      ],
+      "candidate_action":{
+        "network_uid":"stellar:mainnet",
+        "add_bybit_chain_type_exact":"Stellar Lumens",
+        "okx_exact_override":{
+          "match_all_fields":true,
+          "identity_kind":"native_exchange_marker",
+          "representation_identity":"native:XLM",
+          "generic_native_prefix_rule":false
+        }
+      },
+      "evidence":[
+        {
+          "source_class":"OFFICIAL_PROJECT_DOCS",
+          "publisher":"Stellar",
+          "url":"https://developers.stellar.org/docs/learn/fundamentals/lumens",
+          "fact":"Stellar documentation states XLM is the network's native currency and is the only token that does not require an issuer or trustline."
+        },
+        {
+          "source_class":"OFFICIAL_VENUE_EDUCATION",
+          "publisher":"OKX",
+          "url":"https://www.okx.com/en-gb/learn/what-is-stellar-xlm-exploring-the-blockchain-network-and-its-powerful-native-token",
+          "fact":"OKX describes XLM as the native token/digital currency of the Stellar network."
+        },
+        {
+          "source_class":"OFFICIAL_VENUE_API_DOCS",
+          "publisher":"OKX",
+          "url":"https://www.okx.com/docs-v5",
+          "fact":"OKX Get currencies documentation defines ctAddr as the contract-address field; therefore the frozen nonstandard native:... value must be handled only by an exact row-specific override, not a generic contract rule."
+        }
+      ],
+      "evidence_sufficiency_candidate":"SUFFICIENT_FOR_EXACT_ROW_ONLY_OVERRIDE"
+    },
+    {
+      "case_id":"USDT_CORN_KNOWN_ONE_SIDED",
+      "targets":[
+        {"venue":"BYBIT","asset":"USDT","raw_network":"CORN","raw_chainType":"CORN","raw_contract":"0xB8CE59FC3717ada4C02eaDF9682A9e934F625ebb"}
+      ],
+      "candidate_action":{
+        "network_uid":"corn:mainnet",
+        "family":"evm",
+        "bybit_chain_codes":["CORN"],
+        "bybit_chain_types":["CORN"],
+        "contract_rule":"evm_address",
+        "representation_identity":"0xb8ce59fc3717ada4c02eadf9682a9e934f625ebb",
+        "disposition":"KNOWN_ONE_SIDED",
+        "route_effect":"NONE"
+      },
+      "evidence":[
+        {
+          "source_class":"PRIMARY_TOKEN_SYSTEM",
+          "publisher":"USDT0",
+          "url":"https://blog.usdt0.to/%40tetherzero/gmbtcfi-protocol-corn-integrates-usdt0-as-its-native-stablecoin",
+          "fact":"USDT0 announced deployment/integration of USDT0 on Corn."
+        },
+        {
+          "source_class":"NETWORK_EXPLORER",
+          "publisher":"Corn Explorer / Routescan",
+          "url":"https://cornscan.io/token/0xb8ce59fc3717ada4c02eadf9682a9e934f625ebb",
+          "fact":"Corn Explorer identifies chain Corn (21000000) and the exact frozen address as the USDT0 token contract."
+        },
+        {
+          "source_class":"OFFICIAL_TETHER_DEVELOPER_DOCS",
+          "publisher":"Tether WDK",
+          "url":"https://docs.wdk.tether.io/sdk/bridge-modules/bridge-usdt0-evm/guides/get-started/",
+          "fact":"Tether WDK lists Corn as a supported EVM source chain with chain ID 21000000."
+        }
+      ],
+      "evidence_sufficiency_candidate":"SUFFICIENT_FOR_KNOWN_ONE_SIDED"
+    },
+    {
+      "case_id":"USDT_TEMPO_KNOWN_ONE_SIDED",
+      "targets":[
+        {"venue":"OKX","asset":"USDT","raw_network":"Tempo","raw_chainType":"","raw_contract":"0x20c00000000000000000000014f22ca97301eb73"}
+      ],
+      "candidate_action":{
+        "network_uid":"tempo:mainnet",
+        "family":"tempo_evm_compatible",
+        "okx_aliases":["Tempo"],
+        "representation_identity":"0x20c00000000000000000000014f22ca97301eb73",
+        "identity_kind":"tip20_native_token",
+        "disposition":"KNOWN_ONE_SIDED",
+        "route_effect":"NONE"
+      },
+      "evidence":[
+        {
+          "source_class":"OFFICIAL_NETWORK_DOCS",
+          "publisher":"Tempo",
+          "url":"https://docs.tempo.xyz/",
+          "fact":"Tempo documentation identifies Tempo as a live general-purpose blockchain optimized for payments."
+        },
+        {
+          "source_class":"PRIMARY_TOKEN_SYSTEM",
+          "publisher":"USDT0",
+          "url":"https://usdt0.to/ecosystem/tempo",
+          "fact":"USDT0 identifies the exact frozen address 0x20C00000000000000000000014f22CA97301EB73 as USDT on Tempo."
+        },
+        {
+          "source_class":"OFFICIAL_NETWORK_EXPLORER",
+          "publisher":"Tempo",
+          "url":"https://explore.mainnet.tempo.xyz/address/0x20C00000000000000000000014f22CA97301EB73?tab=token",
+          "fact":"Tempo mainnet explorer identifies the exact address as USDT0 and a TIP-20 native token."
+        }
+      ],
+      "evidence_sufficiency_candidate":"SUFFICIENT_FOR_KNOWN_ONE_SIDED"
+    }
+  ],
+  "candidate_dry_run_targets": {
+    "remaining_unresolved_rows": 0,
+    "remaining_review_assets": [],
+    "closed_old_review_assets": 46,
+    "asset_common_representations": 52,
+    "quote_common_representations": 12,
+    "quote_known_one_sided_new": 2,
+    "new_quote_cross_venue_routes": 0,
+    "composite_admitted_assets": 192,
+    "composite_review_assets": 0,
+    "composite_excluded_assets": 9,
+    "composite_total_assets": 201,
+    "composite_canonical_representations": 207,
+    "composite_directed_asset_identity_edges": 414
+  }
+}
