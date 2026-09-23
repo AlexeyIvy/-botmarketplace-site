@@ -27,6 +27,13 @@ VERIFY_DIR=""
 die() { echo "ERROR: $*" >&2; exit 1; }
 note() { printf '%s\n' "$*"; }
 
+# GitHub Control owns this dedicated clone under a service account. The
+# checkpoint itself must run as root to read host state, so scope Git's
+# safe.directory exception to this repository and this process only.
+git_repo() {
+  git -c "safe.directory=$REPO" -C "$REPO" "$@"
+}
+
 cleanup() {
   rc=$?
   [[ -n "${VERIFY_DIR:-}" && -d "$VERIFY_DIR" ]] && rm -rf -- "$VERIFY_DIR"
@@ -47,11 +54,11 @@ mkdir -p "$BACKUP_ROOT"
 rm -rf -- "$WORK"
 mkdir -p "$WORK"/{repo,runner,mcp,system,configs,manifests,verification}
 
-git -C "$REPO" rev-parse --verify "${FREEZE_COMMIT}^{commit}" >/dev/null \
+git_repo rev-parse --verify "${FREEZE_COMMIT}^{commit}" >/dev/null \
   || die "Freeze commit missing from repository"
-git -C "$REPO" merge-base --is-ancestor "$FREEZE_COMMIT" HEAD \
+git_repo merge-base --is-ancestor "$FREEZE_COMMIT" HEAD \
   || die "Current HEAD is not a descendant of freeze commit"
-[[ -z "$(git -C "$REPO" status --porcelain=v1 --untracked-files=all)" ]] \
+[[ -z "$(git_repo status --porcelain=v1 --untracked-files=all)" ]] \
   || die "Repository worktree is not clean"
 
 actual_freeze_sha="$(sha256sum "$REPO/$FREEZE_RECORD_REL" | awk '{print $1}')"
@@ -64,12 +71,12 @@ actual_candidate_sha="$(sha256sum "$REPO/$FREEZE_MANIFEST_REL" | awk '{print $1}
 [[ "$actual_candidate_sha" == "$FREEZE_MANIFEST_SHA256" ]] \
   || die "Freeze candidate manifest SHA mismatch: $actual_candidate_sha"
 
-git -C "$REPO" rev-parse HEAD > "$WORK/repo/HEAD.txt"
-git -C "$REPO" branch --show-current > "$WORK/repo/BRANCH.txt"
-git -C "$REPO" remote -v > "$WORK/repo/remotes.txt"
-git -C "$REPO" status --porcelain=v1 --untracked-files=all > "$WORK/repo/status.txt"
-git -C "$REPO" bundle create "$WORK/repo/repository.bundle" --all
-git -C "$REPO" archive --format=tar HEAD -o "$WORK/repo/repository-head.tar"
+git_repo rev-parse HEAD > "$WORK/repo/HEAD.txt"
+git_repo branch --show-current > "$WORK/repo/BRANCH.txt"
+git_repo remote -v > "$WORK/repo/remotes.txt"
+git_repo status --porcelain=v1 --untracked-files=all > "$WORK/repo/status.txt"
+git_repo bundle create "$WORK/repo/repository.bundle" --all
+git_repo archive --format=tar HEAD -o "$WORK/repo/repository-head.tar"
 
 cat > "$WORK/repo/freeze-anchor.txt" <<EOF
 freeze_commit=$FREEZE_COMMIT
@@ -79,7 +86,7 @@ replay_manifest=$REPLAY_MANIFEST_REL
 replay_manifest_sha256=$REPLAY_MANIFEST_SHA256
 freeze_candidate_manifest=$FREEZE_MANIFEST_REL
 freeze_candidate_manifest_sha256=$FREEZE_MANIFEST_SHA256
-checkpoint_source_head=$(git -C "$REPO" rev-parse HEAD)
+checkpoint_source_head=$(git_repo rev-parse HEAD)
 EOF
 
 tar -C "$(dirname "$RUNNER_STATE")" -czf "$WORK/runner/botmarket-runner-state.tar.gz" \
@@ -232,7 +239,7 @@ status=CHECKPOINT_BACKUP_RESTORE_VERIFY_PASS
 checkpoint_id=$NAME
 archive=$ARCHIVE
 archive_sha256=$(sha256sum "$ARCHIVE" | awk '{print $1}')
-source_head=$(git -C "$REPO" rev-parse HEAD)
+source_head=$(git_repo rev-parse HEAD)
 freeze_commit=$FREEZE_COMMIT
 freeze_record_sha256=$FREEZE_RECORD_SHA256
 replay_manifest_sha256=$REPLAY_MANIFEST_SHA256
