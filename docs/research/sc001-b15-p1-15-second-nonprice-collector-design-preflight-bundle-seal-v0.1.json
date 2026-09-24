@@ -1,0 +1,44 @@
+{
+  "schema": "sc001.b15.p1_15_second_nonprice_collector_design_preflight_bundle_seal.v0.1",
+  "date": "2026-09-24",
+  "state": "SEALED_RUN_PENDING",
+  "bundle_id": "bundle_20260924T101653Z_04b3927c",
+  "bundle_sha256": "abd2de854537e8d886e472a46fcf5bb97eee0c4407b15cf406e3733b54a154d0",
+  "approval_code": "BM-ABD2DE854537",
+  "entrypoint": "sc001_b15_p1_15s_nonprice_collector_design_preflight_v0_1.py",
+  "entrypoint_sha256": "0865e70dfd31643d7c02759e101a95a5756f443a17e196d9056a50430887978f",
+  "binding_inputs": {
+    "collector_protocol_sha256": "2d4f65c1ddd13ee0fbafb76734ce266fb933404ad24394ac707b246613613563",
+    "collector_design_candidate_sha256": "ea42cbd5a2f14061d3bd66aafbda7ccf79f6afa85a5c90c3defe8c2ba952889e",
+    "collector_preflight_spec_sha256": "cb56417ab12fe1e46b5202eca550fee505755b6df759ffd9349ffaef6d4cc0bc",
+    "rate_limit_evidence_sha256": "80ff38757742b8ffded028533d190be6a7f84de82fa7fcf9fb335007965a8613",
+    "stage_c_preflight_manifest_sha256": "49dab8adc79fac3b2c96cd5523b12aa1a84bd6e8c9083e36bfb61841bb25ff16",
+    "source_semantics_v0.3_sha256": "93afbca707c98e35d38073b163c79561282f5a9a664142acf7995ddc20627190"
+  },
+  "expected": {
+    "fast_cadence_seconds": 15,
+    "request_deadline_seconds": 12,
+    "fee_refresh_seconds": 21600,
+    "fee_stale_after_seconds": 28800,
+    "heartbeat_seconds_max": 30,
+    "restart_backoff_seconds": 15,
+    "first_source_only_review_days": 7,
+    "bybit_rate_limit_safety_factor": 75,
+    "okx_rate_limit_safety_factor": 90,
+    "scheduler_unit_tests": 3,
+    "route_state_unit_tests": 6,
+    "fee_staleness_unit_tests": 3,
+    "storage_guard_unit_tests": 4,
+    "poll_hash_chain_unit_tests": 1
+  },
+  "safety": {
+    "exchange_calls_performed": false,
+    "collector_launch_authorized": false,
+    "price_data_used": false,
+    "pnl_data_used": false,
+    "live_execution_authorized": false
+  },
+  "pass_status": "B15_P1_15_SECOND_NONPRICE_COLLECTOR_DESIGN_PREFLIGHT_PASS",
+  "next_state_on_pass": "PREPARE_B15P1_COLLECTOR_IMPLEMENTATION_SELF_TEST",
+  "next_state": "RUN_B15P1_15_SECOND_NONPRICE_COLLECTOR_DESIGN_PREFLIGHT_AFTER_USER_APPROVAL"
+}
