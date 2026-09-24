@@ -1,0 +1,44 @@
+{
+  "schema": "sc001.b15.p1_nonprice_collector_implementation_v0.1.2_self_test_bundle_seal.v0.1",
+  "date": "2026-09-24",
+  "state": "SEALED_RUN_PENDING",
+  "implementation_commit": "3b757308eaf1904c7e1b4845a003e28097348231",
+  "failed_v0.1.1_reference": {
+    "bundle_id": "bundle_20260924T112109Z_0d20dff8",
+    "bundle_sha256": "eb0e9ee92d2a0fc64a620206b103fc11ecd64dc4c858039af1855fc4776b6006",
+    "job_id": "job_20260924T113440Z_6ed95905",
+    "compile_runner_pass": true,
+    "compile_library_pass": true,
+    "eof_guard_pass": true,
+    "failure": "CollectorError: unexpected websocket endpoint in non-price REST collector",
+    "root_cause": "self-referential static guard matched its own literal wss:// marker",
+    "exchange_calls_performed": false,
+    "collector_launch_performed": false,
+    "price_data_used": false
+  },
+  "bundle_id": "bundle_20260924T113941Z_3d1a43a4",
+  "bundle_sha256": "6c88c578e38f1f7580befc1573a2fcb0206990a6d570e9ee647ba52c4c7f36c7",
+  "approval_code": "BM-6C88C578E38F",
+  "entrypoint": "research/sc001/sc001_b15p1_nonprice_collector_selftest_harness_v0_1_2.py",
+  "compile_harness_sha256": "31d5a71c39818679a50a94f9aaf75e8811bf467469d56cd92e0b7b0dba6335f9",
+  "runner_sha256": "157b1e7e77a9d4299c06ac60ce56e1544335d7435d9f25a6212d7f417b312b3d",
+  "library_sha256": "007a97f817f04c50655ad6339b7eb9eb15aacfa8b0c851be97b7976c69308088",
+  "implementation_freeze_sha256": "fc4d7496870896ff7b8036ce9c17a3d5059142be2e18dd2c21eb646f8c32fabf",
+  "self_test_spec_sha256": "c309b4dbabe2c4e8ed59d25852313ad57184d4fbd87b64052ca4f4f8cbcd266e",
+  "expected_tokens": [
+    "B15P1_NONPRICE_COLLECTOR_V012_SELF_TEST_PASS",
+    "B15P1_NONPRICE_COLLECTOR_V012_COMPILE_AND_SELFTEST_PASS"
+  ],
+  "offline_guards": {
+    "py_compile_runner_library": true,
+    "eof_main_guard": true,
+    "exchange_calls_performed": false,
+    "credentials_required": false,
+    "capability_snapshot_required": false,
+    "launch_authorization_required": false,
+    "collector_launch_authorized": false,
+    "price_data_authorized": false,
+    "pnl_data_authorized": false
+  },
+  "next_state": "RUN_B15P1_NONPRICE_COLLECTOR_IMPLEMENTATION_V012_SELF_TEST_AFTER_USER_APPROVAL"
+}
