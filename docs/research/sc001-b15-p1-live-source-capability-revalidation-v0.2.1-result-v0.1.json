@@ -1,0 +1,50 @@
+{
+  "schema": "sc001.b15.p1_live_source_capability_revalidation_result.v0.1",
+  "date": "2026-09-24",
+  "status": "B15P1_NONPRICE_SOURCE_CAPABILITY_REVALIDATION_COMMAND_V021_PASS",
+  "evidence_source": "user-supplied terminal screenshots of the safe-staging wrapper run",
+  "wrapper": {
+    "path": "scripts/research/run-b15p1-nonprice-source-capability-revalidation-v0.2.sh",
+    "sha256": "0bc379933be07fb7b31e2efe4a2f06b4b7b99ad2fdc4db403dbffbe63ebc556e",
+    "offline_combined_prerequisite": "PASS"
+  },
+  "probe_status": "B15P1_NONPRICE_SOURCE_CAPABILITY_REVALIDATION_PASS",
+  "snapshot": {
+    "path": "/home/botmarket/sc001_data/SC001_B15P1_TRANSFERABILITY/source_capability_snapshot.json",
+    "sha256": "14341c153649455459f18998be90d65a3010c009893bf76b359dc0b5b74387fc"
+  },
+  "permissions": {
+    "bybit_readOnly": 1,
+    "bybit_withdraw_token_present": false,
+    "bybit_ip_bound": true,
+    "okx_permission": "read_only",
+    "okx_ip_bound": true
+  },
+  "source_schema": {
+    "bybit_chain_rows": 1036,
+    "okx_chain_rows": 591
+  },
+  "pair_coverage": {
+    "frozen_admitted_assets": 192,
+    "qualified_bybit_count": 192,
+    "qualified_okx_count": 192,
+    "qualified_both_venues_count": 192
+  },
+  "fee_probe_asset": "BTC",
+  "security": {
+    "price_endpoints_called": false,
+    "order_transfer_withdraw_endpoints_called": false,
+    "collector_launch_authorized": false,
+    "price_data_used": false,
+    "pnl_data_used": false,
+    "live_execution_authorized": false,
+    "security_firewall": "PASS"
+  },
+  "safe_summary_path": "/home/botmarket/sc001_data/SC001_B15P1_TRANSFERABILITY/source_capability_safe_summary.json",
+  "log_path": "/home/botmarket/sc001_data/SC001_B15P1_TRANSFERABILITY/source_capability_revalidation_v0.2.1_run.log",
+  "staging_root": "/home/botmarket/.local/share/botmarket/b15p1-capability-revalidation-v0.2.1-stage",
+  "terminal_returned_to_shell_prompt": true,
+  "collector_started": false,
+  "research_semantics_changed": false,
+  "next_state": "PREPARE_B15P1_COLLECTOR_SYSTEMD_AND_LAUNCH_READINESS_PREFLIGHT"
+}
