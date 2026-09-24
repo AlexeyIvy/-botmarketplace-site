@@ -1,0 +1,1553 @@
+[
+  {
+    "asset": "1INCH",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "1INCH|ethereum:mainnet|0x111111111117dc0aa78b770fa6a738034120c302"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "2Z",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "2Z|solana:mainnet|J6pQQ3FAcJQeWPPGppWRb4nM8jU3wLyYbRrLh7feMfvd"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "A",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "A|vaulta:mainnet|core.vaulta"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "AAVE",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "AAVE|ethereum:mainnet|0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "ACH",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "ACH|ethereum:mainnet|0xed04915c23f00a313a544955524eb7dbd823143d"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "ADA",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "ADA|cardano:mainnet|native:ADA"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "AEVO",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "AEVO|ethereum:mainnet|0xb528edbef013aff855ac3c50b381f253af13b997"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "AGLD",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "AGLD|ethereum:mainnet|0x32353a6c91143bfd6c7d363b546e62a9a2489a20"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "AIXBT",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "AIXBT|base:mainnet|0x4f9fd6be4a90f2620860d680c0d4d5fb53d1a825"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "ALGO",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "ALGO|algorand:mainnet|native:ALGO"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "ANIME",
+    "canonical_representation_count": 2,
+    "canonical_representation_keys": [
+      "ANIME|arbitrum:one|0x37a645648df29205c6261289983fb04ecd70b4b3",
+      "ANIME|ethereum:mainnet|0x4dc26fc5854e7648a064a4abd590bbe71724c277"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "APE",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "APE|ethereum:mainnet|0x4d224452801aced8b2f0aebe155379bb5d594381"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "APT",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "APT|aptos:mainnet|native:APT"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "AR",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "AR|arweave:mainnet|native:AR"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "ARB",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "ARB|arbitrum:one|0x912ce59144191c1204e64559fe8253a0e49e6548"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "ARKM",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "ARKM|ethereum:mainnet|0x6e2a43be0b1d33b726f0ca3b8de60b3482b8b050"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "ASTER",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "ASTER|bsc:mainnet|0x000ae314e2a2172a039b26378814c252734f556a"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "ATH",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "ATH|ethereum:mainnet|0xbe0ed4138121ecfc5c0e56b40517da27e6c5226b"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "ATOM",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "ATOM|cosmoshub:mainnet|native:ATOM"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "AVAX",
+    "canonical_representation_count": 2,
+    "canonical_representation_keys": [
+      "AVAX|avalanche:c-chain|native:AVAX",
+      "AVAX|avalanche:x-chain|native:AVAX"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "AVNT",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "AVNT|base:mainnet|0x696f9436b67233384889472cd7cd58a6fb5df4f1"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "AXS",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "AXS|ethereum:mainnet|0xbb0e17ef65f82ab018d8edd776e8dd940327b28b"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "BABYDOGE",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "BABYDOGE|bsc:mainnet|0xc748673057861a797275cd8a068abb95a902e8de"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "BARD",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "BARD|ethereum:mainnet|0xf0db65d17e30a966c2ae6a21f6bba71cea6e9754"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "BASED",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "BASED|ethereum:mainnet|0x4f2b33840227ddd0e28da8d4185d6fa07adfed87"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "BAT",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "BAT|ethereum:mainnet|0x0d8775f648430679a709e98d2b0cb6250d2887ef"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "BCH",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "BCH|bitcoincash:mainnet|native:BCH"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "BERA",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "BERA|berachain:mainnet|native:BERA"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "BICO",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "BICO|ethereum:mainnet|0xf17e65822b568b3903685a7c9f496cf7656cc6c2"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "BLUR",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "BLUR|ethereum:mainnet|0x5283d291dbcf85356a21ba090e6db59121208b44"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "BNB",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "BNB|bsc:mainnet|native:BNB"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "BOME",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "BOME|solana:mainnet|ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "BONK",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "BONK|solana:mainnet|DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "BREV",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "BREV|ethereum:mainnet|0x086f405146ce90135750bbec9a063a8b20a8bffb"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "BTC",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "BTC|bitcoin:mainnet|native:BTC"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "CAT",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "CAT|bsc:mainnet|0x6894cde390a3f51155ea41ed24a33a4827d3063d"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "CATI",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "CATI|ton:mainnet|EQD-cvR0Nz6XAyRBvbhz-abTrRC6sI5tvHvvpeQraV9UAAD7"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "CC",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "CC|canton:mainnet|native:CC"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "CELO",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "CELO|celo:mainnet|native:CELO"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "CFG",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "CFG|ethereum:mainnet|0xcccccccccc33d538dbc2ee4feab0a7a1ff4e8a94"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "CHIP",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "CHIP|arbitrum:one|0x0c1c1c109fe34733fca54b82d7b46b75cfb71f6e"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "CHZ",
+    "canonical_representation_count": 2,
+    "canonical_representation_keys": [
+      "CHZ|chiliz:chain|native:CHZ",
+      "CHZ|ethereum:mainnet|0x3506424f91fd33084466f402d5d97f05f8e3b4af"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "CITY",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "CITY|chiliz:chain|0x7bd6242d775faef1d50b2aa18c2fbf329bddf295"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "COMP",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "COMP|ethereum:mainnet|0xc00e94cb662c3520282e6f5717214004a7f26888"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "CORE",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "CORE|core:mainnet|native:CORE"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "CRV",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "CRV|ethereum:mainnet|0xd533a949740bb3306d119cc777fa900ba034cd52"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "CSPR",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "CSPR|casper:mainnet|native:CSPR"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "DEGEN",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "DEGEN|base:mainnet|0x4ed4e862860bed51a9570b96d89af5e1b0efefed"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "DOGE",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "DOGE|dogecoin:mainnet|native:DOGE"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "DOGS",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "DOGS|ton:mainnet|EQCvxJy4eG8hyHBFsZ7eePxrRsUQSFE_jpptRAYBmcG_DOGS"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "DOOD",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "DOOD|solana:mainnet|DvjbEsdca43oQcw2h3HW1CT7N3x5vRcr3QrvTUHnXvgV"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "DOT",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "DOT|polkadot:asset-hub|native:DOT"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "DYDX",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "DYDX|dydx:mainnet|native:DYDX"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "EDGE",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "EDGE|ethereum:mainnet|0xb0076de78dc50581770bba1d211ddc0ad4f2a241"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "EGLD",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "EGLD|multiversx:mainnet|native:EGLD"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "EIGEN",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "EIGEN|ethereum:mainnet|0xec53bf9167f50cdeb3ae105f56099aaab9061f83"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "ENA",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "ENA|ethereum:mainnet|0x57e114b691db790c35207b2e685d4a43181e6061"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "ENJ",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "ENJ|enjin:relaychain|native:ENJ"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "ENS",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "ENS|ethereum:mainnet|0xc18360217d8f7ab5e7c516566761ea12ce7f9d72"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "ETC",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "ETC|ethereumclassic:mainnet|native:ETC"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "ETH",
+    "canonical_representation_count": 6,
+    "canonical_representation_keys": [
+      "ETH|arbitrum:one|native:ETH",
+      "ETH|base:mainnet|native:ETH",
+      "ETH|ethereum:mainnet|native:ETH",
+      "ETH|linea:mainnet|native:ETH",
+      "ETH|optimism:mainnet|native:ETH",
+      "ETH|zksync:era|native:ETH"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "ETHFI",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "ETHFI|ethereum:mainnet|0xfe0c30065b384f05761f15d0cc899d4f9f9cc0eb"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "ETHW",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "ETHW|ethereum-pow:mainnet|native:ETHW"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "FET",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "FET|ethereum:mainnet|0xaea46a60368a7bd060eec7df8cba43b7ef41ad85"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "FIL",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "FIL|filecoin:mainnet|native:FIL"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "FLOKI",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "FLOKI|bsc:mainnet|0xfb5b838b6cfeedc2873ab27866079ac55363d37e"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "FLOW",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "FLOW|flow:mainnet|native:FLOW"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "FLR",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "FLR|flare:mainnet|native:FLR"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "FLUID",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "FLUID|ethereum:mainnet|0x6f40d4a6237c257fff2db00fa0510deeecd303eb"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "FOGO",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "FOGO|fogo:mainnet|native:FOGO"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "G",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "G|ethereum:mainnet|0x9c7beba8f6ef6643abd725e45a4e8387ef260649"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "GALA",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "GALA|ethereum:mainnet|0xd1d2eb1b1e90b638588728b4130137d262c87cae"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "GMT",
+    "canonical_representation_count": 2,
+    "canonical_representation_keys": [
+      "GMT|polygon:pos|0x714db550b574b3e927af3d93e26127d15721d4c2",
+      "GMT|solana:mainnet|7i5KKsX2weiTkry7jA4ZwSuXGhs5eJBEjY8vVxR4pfRx"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "GMX",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "GMX|arbitrum:one|0xfc5a1a6eb076a2c7ad06ed22c90d7e710e35ad0a"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "GOAT",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "GOAT|solana:mainnet|CzLSujWBLFsSjncfkh59rUFqvafWcY5tzedWJSuypump"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "GRAM",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "GRAM|ton:mainnet|native:GRAM"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "GRASS",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "GRASS|solana:mainnet|Grass7B4RdKfBCjTKgSqnXkqjwiGvQyFbuSCUJr3XXjs"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "GRT",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "GRT|ethereum:mainnet|0xc944e90c64b2c07662a292be6244bdf05cda44a7"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "HBAR",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "HBAR|hedera:mainnet|native:HBAR"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "HMSTR",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "HMSTR|ton:mainnet|EQAJ8uWd7EBqsmpSWaRdf_I-8R8-XHwh3gsNKhy-UrdrPcUo"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "HUMA",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "HUMA|solana:mainnet|HUMA1821qVDKta3u2ovmfDQeW2fSQouSKE8fkF44wvGw"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "HYPE",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "HYPE|hyperliquid:evm|native:HYPE"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "ICP",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "ICP|internet-computer:mainnet|native:ICP"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "ID",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "ID|ethereum:mainnet|0x2dff88a56767223a5529ea5960da7a3f5f766406"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "IMX",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "IMX|ethereum:mainnet|0xf57e7e7c23978c3caec3c3548e3d615c346e79ff"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "INJ",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "INJ|injective:mainnet|native:INJ"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "JTO",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "JTO|solana:mainnet|jtojtomepa8beP8AuQc6eXt5FriJwfFMwQx2v2f9mCL"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "JUP",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "JUP|solana:mainnet|JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "KAIA",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "KAIA|kaia:mainnet|native:KAIA"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "KMNO",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "KMNO|solana:mainnet|KMNo3nJsBXfcpJTVhZcXLW7RmTwTt4GVFE7suUBo9sS"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "KSM",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "KSM|kusama:asset-hub|native:KSM"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "LAYER",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "LAYER|solana:mainnet|LAYER4xPpTCb3QL8S9u41EAhAX7mhBn8Q6xMTwY2Yzc"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "LDO",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "LDO|ethereum:mainnet|0x5a98fcbea516cf06857215779fd812ca3bef1b32"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "LINEA",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "LINEA|linea:mainnet|0x1789e0043623282d5dcc7f213d703c6d8bafbb04"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "LINK",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "LINK|ethereum:mainnet|0x514910771af9ca656af840dff83e8264ecf986ca"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "LIT",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "LIT|ethereum:mainnet|0x232ce3bd40fcd6f80f3d55a522d03f25df784ee2"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "LRC",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "LRC|ethereum:mainnet|0xbbbbca6a901c926f240b89eacb641d8aec7aeafd"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "LTC",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "LTC|litecoin:mainnet|native:LTC"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "LUNA",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "LUNA|terra:mainnet|native:LUNA"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "MAGIC",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "MAGIC|arbitrum:one|0x539bde0d7dbd336b79148aa742883198bbf60342"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "MANA",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "MANA|ethereum:mainnet|0x0f5d2fb29fb7d3cfee444a200298f468908cc942"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "MASK",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "MASK|ethereum:mainnet|0x69af81e73a73b40adf4f3d4223cd9b1ece623074"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "ME",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "ME|solana:mainnet|MEFNBXixkEbait3xn9bkm8WsJzXtVsaJEn4c8Sam21u"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "MEGA",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "MEGA|megaeth:mainnet|0x28b7e77f82b25b95953825f1e3ea0e36c1c29861"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "MEME",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "MEME|ethereum:mainnet|0xb131f4a55907b10d1f0a50d8ab8fa09ec342cd74"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "MERL",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "MERL|merlin:mainnet|0x5c46bff4b38dc1eae09c5bac65872a1d8bc87378"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "MET",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "MET|solana:mainnet|METvsvVRapdj9cFLzq4Tr43xK4tAjQfwX76z3n6mWQL"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "MEW",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "MEW|solana:mainnet|MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "MINA",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "MINA|mina:mainnet|native:MINA"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "MMT",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "MMT|sui:mainnet|0x35169bc93e1fddfcf3a82a9eae726d349689ed59e4b065369af8789fe59f8608::mmt::MMT"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "MON",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "MON|monad:mainnet|native:MON"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "MORPHO",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "MORPHO|ethereum:mainnet|0x58d97b57bb95320f9a05dc918aef65434969c2b2"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "MOVE",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "MOVE|ethereum:mainnet|0x3073f7aaa4db83f95e9fff17424f71d4751a3073"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "NEAR",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "NEAR|near:mainnet|native:NEAR"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "NFT",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "NFT|tron:mainnet|TFczxzPhnThNSqr5by8tvxsdCFRRz6cPNq"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "NIGHT",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "NIGHT|cardano:mainnet|cardano:0691b2fecca1ac4f53cb6dfb00b7013e561d1f34403b957cbb5af1fa:4e49474854"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "NOT",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "NOT|ton:mainnet|EQAvlWFDxGF2lXm67y4yzC17wYKD9A0guwPkMs1gOsM__NOT"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "ONDO",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "ONDO|ethereum:mainnet|0xfaba6f8e4a5e8ab82f62fe7c39859fa577269be3"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "OP",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "OP|optimism:mainnet|0x4200000000000000000000000000000000000042"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "ORDI",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "ORDI|bitcoin:mainnet|brc20:ordi"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "PARTI",
+    "canonical_representation_count": 2,
+    "canonical_representation_keys": [
+      "PARTI|base:mainnet|0x59264f02d301281f3393e1385c0aefd446eb0f00",
+      "PARTI|bsc:mainnet|0x59264f02d301281f3393e1385c0aefd446eb0f00"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "PENDLE",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "PENDLE|ethereum:mainnet|0x808507121b80c02388fad14726482e061b8da827"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "PENGU",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "PENGU|solana:mainnet|2zMMhcVQEXDtdE6vsFS7S7D5oUodfJHE8vd1gnBouauv"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "PEOPLE",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "PEOPLE|ethereum:mainnet|0x7a58c0be72be218b41c608b7fe7c5bb630736c71"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "PEPE",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "PEPE|ethereum:mainnet|0x6982508145454ce325ddbe47a25d4ec3d2311933"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "PNUT",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "PNUT|solana:mainnet|2qEHjDLDLbuBgRYvsxhc5D6uDWAivNFZGan56P1tpump"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "POL",
+    "canonical_representation_count": 2,
+    "canonical_representation_keys": [
+      "POL|ethereum:mainnet|0x455e53cbb86018ac2b8092fdcd39d8444affc3f6",
+      "POL|polygon:pos|native:POL"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "PROVE",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "PROVE|ethereum:mainnet|0x6bef15d938d4e72056ac92ea4bdd0d76b1c4ad29"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "PUMP",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "PUMP|solana:mainnet|pumpCmXqMfrsAkQ5r49WcJnRayYRqmXz6ae8H7H9Dfn"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "PYTH",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "PYTH|solana:mainnet|HZ1JovNiVvGrGNiiYvEozEVgZ58xaU3RKwX8eACQBCt3"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "QTUM",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "QTUM|qtum:mainnet|native:QTUM"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "RENDER",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "RENDER|solana:mainnet|rndrizKT3MK1iimdxRdWabcF7Zg7AR5T4nud4EkHBof"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "RESOLV",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "RESOLV|ethereum:mainnet|0x259338656198ec7a76c729514d3cb45dfbf768a1"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "ROBO",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "ROBO|ethereum:mainnet|0x32b4d049fe4c888d2b92eecaf729f44df6b1f36e"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "RPL",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "RPL|ethereum:mainnet|0xd33526068d116ce69f19a9ee46f0bd304f21a51f"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "RVN",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "RVN|ravencoin:mainnet|native:RVN"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "S",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "S|sonic:mainnet|native:S"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "SAFE",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "SAFE|ethereum:mainnet|0x5afe3855358e112b5647b952709e6165e1c1eeee"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "SAHARA",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "SAHARA|ethereum:mainnet|0xfdffb411c4a70aa7c95d5c981a6fb4da867e1111"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "SAND",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "SAND|ethereum:mainnet|0x3845badade8e6dff049820680d1f14bd3903a5d0"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "SATS",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "SATS|bitcoin:mainnet|brc20:sats"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "SCR",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "SCR|scroll:mainnet|0xd29687c813d741e2f938f4ac377128810e217b1b"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "SD",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "SD|ethereum:mainnet|0x30d20208d987713f46dfd34ef128bb16c404d10f"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "SEI",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "SEI|sei:mainnet|native:SEI"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "SENT",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "SENT|ethereum:mainnet|0x56a3ba04e95d34268a19b2a4474dc979babdaf76"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "SHIB",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "SHIB|ethereum:mainnet|0x95ad61b0a150d79219dcf64e1e6cc01f0b64c4ce"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "SKY",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "SKY|ethereum:mainnet|0x56072c95faa701256059aa122697b133aded9279"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "SNX",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "SNX|ethereum:mainnet|0xc011a73ee8576fb46f5e1c5751ca3b9fe0af2a6f"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "SOL",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "SOL|solana:mainnet|native:SOL"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "SONIC",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "SONIC|solana:mainnet|SonicxvLud67EceaEzCLRnMTBqzYUUYNr93DBkBdDES"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "SPK",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "SPK|ethereum:mainnet|0xc20059e0317de91738d13af027dfc4a50781b066"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "SSV",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "SSV|ethereum:mainnet|0x9d65ff81a3c488d585bbfb0bfe3c7707c7917f54"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "STETH",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "STETH|ethereum:mainnet|0xae7ab96520de3a18e5e111b5eaab095312d7fe84"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "STRK",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "STRK|starknet:mainnet|0x04718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "STX",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "STX|stacks:mainnet|native:STX"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "SUI",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "SUI|sui:mainnet|native:SUI"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "SUSHI",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "SUSHI|ethereum:mainnet|0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "THETA",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "THETA|theta:mainnet|native:THETA"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "TIA",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "TIA|celestia:mainnet|native:TIA"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "TNSR",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "TNSR|solana:mainnet|TNSRxcUxoT9xBG3de7PiJyTDYu7kskLqcpddxnEJAS6"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "TOSHI",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "TOSHI|base:mainnet|0xac1bd2486aaf3b5c0fc3fd868558b082a531b2b4"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "TRUMP",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "TRUMP|solana:mainnet|6p6xgHyF7AeE6TZkSmFsko444wqoP15icUSqi2jfGiPN"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "TRX",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "TRX|tron:mainnet|native:TRX"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "UMA",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "UMA|ethereum:mainnet|0x04fa0d235c4abf4bcf4787af4cf447de572ef828"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "UNI",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "UNI|ethereum:mainnet|0x1f9840a85d5af5bf1d1762f925bdaddc4201f984"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "USAT",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "USAT|ethereum:mainnet|0x07041776f5007aca2a54844f50503a18a72a8b68"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "VELO",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "VELO|stellar:mainnet|VELO:GDM4RQUQQUVSKQA7S6EM7XBZP3FCGH4Q7CL6TABQ7B2BEJ5ERARM2M5M"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "VIRTUAL",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "VIRTUAL|base:mainnet|0x0b3e328455c4059eeb9e3f84b5543f74e24e7e1b"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "W",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "W|solana:mainnet|85VBFQZC9TZkfaptBWjvUw7YbZjy52A6mjtPGjstQAmQ"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "WAXP",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "WAXP|wax:mainnet|native:WAXP"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "WCT",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "WCT|optimism:mainnet|0xef4461891dfb3ac8572ccf7c794664a8dd927945"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "WET",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "WET|solana:mainnet|WETZjtprkDMCcUxPi9PfWnowMRZkiGGHDb9rABuRZ2U"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "WIF",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "WIF|solana:mainnet|EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "WLD",
+    "canonical_representation_count": 2,
+    "canonical_representation_keys": [
+      "WLD|ethereum:mainnet|0x163f8c2467924be0ae7b5347228cabf260318753",
+      "WLD|optimism:mainnet|0xdc6ff44d5d932cbd77b52e5612ba0529dc6226f1"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "WLFI",
+    "canonical_representation_count": 2,
+    "canonical_representation_keys": [
+      "WLFI|ethereum:mainnet|0xda5e1988097297dcdc1f90d4dfe7909e847cbef6",
+      "WLFI|solana:mainnet|WLFinEv6ypjkczcS83FZqFpgFZYwQXutRbxGe7oC16g"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "WOO",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "WOO|ethereum:mainnet|0x4691937a7508860f876c9c0a2a617e7d9e945d4b"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "XLM",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "XLM|stellar:mainnet|native:XLM"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "XPL",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "XPL|plasma:mainnet|native:XPL"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "XRP",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "XRP|xrp-ledger:mainnet|native:XRP"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "XTZ",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "XTZ|tezos:mainnet|native:XTZ"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "YB",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "YB|ethereum:mainnet|0x01791f726b4103694969820be083196cc7c045ff"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "YFI",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "YFI|ethereum:mainnet|0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "ZAMA",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "ZAMA|ethereum:mainnet|0xa12cc123ba206d4031d1c7f6223d1c2ec249f4f3"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "ZEN",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "ZEN|base:mainnet|0xf43eb8de897fbc7f2502483b2bef7bb9ea179229"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "ZENT",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "ZENT|ethereum:mainnet|0xdbb7a34bf10169d6d2d0d02a6cbb436cf4381bfa"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "ZETA",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "ZETA|zetachain:mainnet|native:ZETA"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "ZIL",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "ZIL|zilliqa:mainnet|native:ZIL"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "ZK",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "ZK|zksync:era|0x5a7d6b2f92c77fad6ccabd7ee0624e64907eaf3e"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "ZKJ",
+    "canonical_representation_count": 2,
+    "canonical_representation_keys": [
+      "ZKJ|bsc:mainnet|0xc71b5f631354be6853efe9c3ab6b9590f8302e81",
+      "ZKJ|ethereum:mainnet|0xc71b5f631354be6853efe9c3ab6b9590f8302e81"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "ZORA",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "ZORA|base:mainnet|0x1111111111166b7fe7bd91427724b487980afc69"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "ZRO",
+    "canonical_representation_count": 2,
+    "canonical_representation_keys": [
+      "ZRO|arbitrum:one|0x6985884c4392d348587b19cb9eaaf157f13271cd",
+      "ZRO|ethereum:mainnet|0x6985884c4392d348587b19cb9eaaf157f13271cd"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  },
+  {
+    "asset": "ZRX",
+    "canonical_representation_count": 1,
+    "canonical_representation_keys": [
+      "ZRX|ethereum:mainnet|0xe41d2489571d322189246dafa5ebde1f4699f498"
+    ],
+    "source_scope": "BASE_V0.1_ADMITTED"
+  }
+]

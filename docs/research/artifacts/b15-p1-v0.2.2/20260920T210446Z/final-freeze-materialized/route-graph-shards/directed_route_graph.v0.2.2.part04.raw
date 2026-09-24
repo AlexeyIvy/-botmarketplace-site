@@ -1,0 +1,2406 @@
+twork": "ZKJ-ERC20"
+      }
+    ],
+    "representation_identity": "0xc71b5f631354be6853efe9c3ab6b9590f8302e81",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "ZKJ",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ethereum",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "ZKJ-ERC20"
+      }
+    ],
+    "representation_identity": "0xc71b5f631354be6853efe9c3ab6b9590f8302e81",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "ZORA",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Base Mainnet",
+        "raw_contract": "",
+        "raw_network": "BASE"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "base:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "ZORA-Base"
+      }
+    ],
+    "representation_identity": "0x1111111111166b7fe7bd91427724b487980afc69",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "ZORA",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Base Mainnet",
+        "raw_contract": "",
+        "raw_network": "BASE"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "base:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "ZORA-Base"
+      }
+    ],
+    "representation_identity": "0x1111111111166b7fe7bd91427724b487980afc69",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "ZRO",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Arbitrum One",
+        "raw_contract": "",
+        "raw_network": "ARBI"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "arbitrum:one",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "ZRO-Arbitrum One"
+      }
+    ],
+    "representation_identity": "0x6985884c4392d348587b19cb9eaaf157f13271cd",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "ZRO",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Arbitrum One",
+        "raw_contract": "",
+        "raw_network": "ARBI"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "arbitrum:one",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "ZRO-Arbitrum One"
+      }
+    ],
+    "representation_identity": "0x6985884c4392d348587b19cb9eaaf157f13271cd",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "ZRO",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ethereum",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "ZRO-ERC20"
+      }
+    ],
+    "representation_identity": "0x6985884c4392d348587b19cb9eaaf157f13271cd",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "ZRO",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ethereum",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "ZRO-ERC20"
+      }
+    ],
+    "representation_identity": "0x6985884c4392d348587b19cb9eaaf157f13271cd",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "ZRX",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ethereum",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "ZRX-ERC20"
+      }
+    ],
+    "representation_identity": "0xe41d2489571d322189246dafa5ebde1f4699f498",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "ZRX",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ethereum",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "ZRX-ERC20"
+      }
+    ],
+    "representation_identity": "0xe41d2489571d322189246dafa5ebde1f4699f498",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "AVAX",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "CAVAX",
+        "raw_contract": "",
+        "raw_network": "CAVAX",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "avalanche:c-chain",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "Avalanche C-Chain",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:AVAX",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "AVAX",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "CAVAX",
+        "raw_contract": "",
+        "raw_network": "CAVAX",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "avalanche:c-chain",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "Avalanche C-Chain",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:AVAX",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "AVAX",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "AVAX",
+        "raw_contract": "",
+        "raw_network": "XAVAX",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "avalanche:x-chain",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "Avalanche X-Chain",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:AVAX",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "AVAX",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "AVAX",
+        "raw_contract": "",
+        "raw_network": "XAVAX",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "avalanche:x-chain",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "Avalanche X-Chain",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:AVAX",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "BABYDOGE",
+    "bybit_observations": [
+      {
+        "identity_kind": "token",
+        "raw_chainType": "BNB Smart Chain",
+        "raw_contract": "0xc748673057861a797275cd8a068abb95a902e8de",
+        "raw_network": "BSC",
+        "source_rule": "CANONICAL_CONTRACT"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "bsc:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "token",
+        "raw_chainType": "",
+        "raw_contract": "0xc748673057861a797275cd8a068abb95a902e8de",
+        "raw_network": "BSC",
+        "source_rule": "CANONICAL_CONTRACT"
+      }
+    ],
+    "representation_identity": "0xc748673057861a797275cd8a068abb95a902e8de",
+    "source_rules": [
+      "CANONICAL_CONTRACT"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "BABYDOGE",
+    "bybit_observations": [
+      {
+        "identity_kind": "token",
+        "raw_chainType": "BNB Smart Chain",
+        "raw_contract": "0xc748673057861a797275cd8a068abb95a902e8de",
+        "raw_network": "BSC",
+        "source_rule": "CANONICAL_CONTRACT"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "bsc:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "token",
+        "raw_chainType": "",
+        "raw_contract": "0xc748673057861a797275cd8a068abb95a902e8de",
+        "raw_network": "BSC",
+        "source_rule": "CANONICAL_CONTRACT"
+      }
+    ],
+    "representation_identity": "0xc748673057861a797275cd8a068abb95a902e8de",
+    "source_rules": [
+      "CANONICAL_CONTRACT"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "BCH",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "Bitcoin Cash",
+        "raw_contract": "",
+        "raw_network": "BCH",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "bitcoincash:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "BitcoinCash",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:BCH",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "BCH",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "Bitcoin Cash",
+        "raw_contract": "",
+        "raw_network": "BCH",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "bitcoincash:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "BitcoinCash",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:BCH",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "BTC",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "Bitcoin",
+        "raw_contract": "",
+        "raw_network": "BTC",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "bitcoin:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "Bitcoin",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:BTC",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "BTC",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "Bitcoin",
+        "raw_contract": "",
+        "raw_network": "BTC",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "bitcoin:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "Bitcoin",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:BTC",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "CC",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "Canton",
+        "raw_contract": "",
+        "raw_network": "CANTON",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "canton:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "Canton Network",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:CC",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "CC",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "Canton",
+        "raw_contract": "",
+        "raw_network": "CANTON",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "canton:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "Canton Network",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:CC",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "CELO",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "CELO",
+        "raw_contract": "",
+        "raw_network": "CELO",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "native",
+      "native_erc20_interface"
+    ],
+    "network_uid": "celo:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "CELO",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      },
+      {
+        "identity_kind": "native_erc20_interface",
+        "raw_chainType": "",
+        "raw_contract": "0x471ece3750da237f93b8e339c536989b8978a438",
+        "raw_network": "CELO-TOKEN",
+        "source_rule": "CELO_GOLDTOKEN_NATIVE_INTERFACE"
+      }
+    ],
+    "representation_identity": "native:CELO",
+    "source_rules": [
+      "CELO_GOLDTOKEN_NATIVE_INTERFACE",
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "CELO",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "CELO",
+        "raw_contract": "",
+        "raw_network": "CELO",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "native",
+      "native_erc20_interface"
+    ],
+    "network_uid": "celo:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "CELO",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      },
+      {
+        "identity_kind": "native_erc20_interface",
+        "raw_chainType": "",
+        "raw_contract": "0x471ece3750da237f93b8e339c536989b8978a438",
+        "raw_network": "CELO-TOKEN",
+        "source_rule": "CELO_GOLDTOKEN_NATIVE_INTERFACE"
+      }
+    ],
+    "representation_identity": "native:CELO",
+    "source_rules": [
+      "CELO_GOLDTOKEN_NATIVE_INTERFACE",
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "DOT",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "Polkadot AssetHub",
+        "raw_contract": "",
+        "raw_network": "DOTAH",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "polkadot:asset-hub",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "AssetHub Polkadot",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:DOT",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "DOT",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "Polkadot AssetHub",
+        "raw_contract": "",
+        "raw_network": "DOTAH",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "polkadot:asset-hub",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "AssetHub Polkadot",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:DOT",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "EGLD",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "EGLD",
+        "raw_contract": "",
+        "raw_network": "EGLD",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "multiversx:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "Elrond",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:EGLD",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "EGLD",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "EGLD",
+        "raw_contract": "",
+        "raw_network": "EGLD",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "multiversx:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "Elrond",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:EGLD",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "ENJ",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "Enjin",
+        "raw_contract": "",
+        "raw_network": "ENJIN",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "enjin:relaychain",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "Enjin Relay Chain",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:ENJ",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "ENJ",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "Enjin",
+        "raw_contract": "",
+        "raw_network": "ENJIN",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "enjin:relaychain",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "Enjin Relay Chain",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:ENJ",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "ETC",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "Ethereum Classic",
+        "raw_contract": "",
+        "raw_network": "ETC",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "ethereumclassic:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "Ethereum Classic",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:ETC",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "ETC",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "Ethereum Classic",
+        "raw_contract": "",
+        "raw_network": "ETC",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "ethereumclassic:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "Ethereum Classic",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:ETC",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "ETH",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "Arbitrum One",
+        "raw_contract": "",
+        "raw_network": "ARBI",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "arbitrum:one",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "Arbitrum One",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:ETH",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "ETH",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "Arbitrum One",
+        "raw_contract": "",
+        "raw_network": "ARBI",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "arbitrum:one",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "Arbitrum One",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:ETH",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "ETH",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "Base Mainnet",
+        "raw_contract": "",
+        "raw_network": "BASE",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "base:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "Base",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:ETH",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "ETH",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "Base Mainnet",
+        "raw_contract": "",
+        "raw_network": "BASE",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "base:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "Base",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:ETH",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "ETH",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "Ethereum",
+        "raw_contract": "",
+        "raw_network": "ETH",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "ERC20",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:ETH",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "ETH",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "Ethereum",
+        "raw_contract": "",
+        "raw_network": "ETH",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "ERC20",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:ETH",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "ETH",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "LINEA",
+        "raw_contract": "",
+        "raw_network": "LINEA",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "linea:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "Linea",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:ETH",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "ETH",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "LINEA",
+        "raw_contract": "",
+        "raw_network": "LINEA",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "linea:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "Linea",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:ETH",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "ETH",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "OP Mainnet",
+        "raw_contract": "",
+        "raw_network": "OP",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "optimism:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "Optimism",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:ETH",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "ETH",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "OP Mainnet",
+        "raw_contract": "",
+        "raw_network": "OP",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "optimism:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "Optimism",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:ETH",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "ETH",
+    "bybit_observations": [
+      {
+        "identity_kind": "native_system_token",
+        "raw_chainType": "zkSync Era",
+        "raw_contract": "0x000000000000000000000000000000000000800a",
+        "raw_network": "ZKV2",
+        "source_rule": "ZKSYNC_ERA_ETH_SYSTEM_BASE_TOKEN"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "native",
+      "native_system_token"
+    ],
+    "network_uid": "zksync:era",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "zkSync Era",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:ETH",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY",
+      "ZKSYNC_ERA_ETH_SYSTEM_BASE_TOKEN"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "ETH",
+    "bybit_observations": [
+      {
+        "identity_kind": "native_system_token",
+        "raw_chainType": "zkSync Era",
+        "raw_contract": "0x000000000000000000000000000000000000800a",
+        "raw_network": "ZKV2",
+        "source_rule": "ZKSYNC_ERA_ETH_SYSTEM_BASE_TOKEN"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "native",
+      "native_system_token"
+    ],
+    "network_uid": "zksync:era",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "zkSync Era",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:ETH",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY",
+      "ZKSYNC_ERA_ETH_SYSTEM_BASE_TOKEN"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "FIL",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "Filecoin",
+        "raw_contract": "",
+        "raw_network": "FIL",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "filecoin:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "FEVM",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      },
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "Filecoin",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:FIL",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "FIL",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "Filecoin",
+        "raw_contract": "",
+        "raw_network": "FIL",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "filecoin:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "FEVM",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      },
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "Filecoin",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:FIL",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "FLR",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "FLR",
+        "raw_contract": "",
+        "raw_network": "FLR",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "flare:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "Flare",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:FLR",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "FLR",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "FLR",
+        "raw_contract": "",
+        "raw_network": "FLR",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "flare:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "Flare",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:FLR",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "FOGO",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "FOGO",
+        "raw_contract": "",
+        "raw_network": "FOGO",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "fogo:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "Fogo",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:FOGO",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "FOGO",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "FOGO",
+        "raw_contract": "",
+        "raw_network": "FOGO",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "fogo:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "Fogo",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:FOGO",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "GRAM",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "TON",
+        "raw_contract": "",
+        "raw_network": "TON",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "ton:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "The Open Network (TON)",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:GRAM",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "GRAM",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "TON",
+        "raw_contract": "",
+        "raw_network": "TON",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "ton:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "The Open Network (TON)",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:GRAM",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "G",
+    "bybit_observations": [
+      {
+        "identity_kind": "token",
+        "raw_chainType": "Ethereum",
+        "raw_contract": "0x9C7BEBa8F6eF6643aBd725e45a4E8387eF260649",
+        "raw_network": "ETH",
+        "source_rule": "CANONICAL_CONTRACT"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "token",
+        "raw_chainType": "",
+        "raw_contract": "0x9c7beba8f6ef6643abd725e45a4e8387ef260649",
+        "raw_network": "ERC20",
+        "source_rule": "CANONICAL_CONTRACT"
+      }
+    ],
+    "representation_identity": "0x9c7beba8f6ef6643abd725e45a4e8387ef260649",
+    "source_rules": [
+      "CANONICAL_CONTRACT"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "G",
+    "bybit_observations": [
+      {
+        "identity_kind": "token",
+        "raw_chainType": "Ethereum",
+        "raw_contract": "0x9C7BEBa8F6eF6643aBd725e45a4E8387eF260649",
+        "raw_network": "ETH",
+        "source_rule": "CANONICAL_CONTRACT"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "token",
+        "raw_chainType": "",
+        "raw_contract": "0x9c7beba8f6ef6643abd725e45a4e8387ef260649",
+        "raw_network": "ERC20",
+        "source_rule": "CANONICAL_CONTRACT"
+      }
+    ],
+    "representation_identity": "0x9c7beba8f6ef6643abd725e45a4e8387ef260649",
+    "source_rules": [
+      "CANONICAL_CONTRACT"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "HBAR",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "HBAR",
+        "raw_contract": "",
+        "raw_network": "HBAR",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "hedera:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "Hedera",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:HBAR",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "HBAR",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "HBAR",
+        "raw_contract": "",
+        "raw_network": "HBAR",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "hedera:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "Hedera",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:HBAR",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "HYPE",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "HyperEVM",
+        "raw_contract": "",
+        "raw_network": "HYPEREVM",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "hyperliquid:evm",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "HyperEVM",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:HYPE",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "HYPE",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "HyperEVM",
+        "raw_contract": "",
+        "raw_network": "HYPEREVM",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "hyperliquid:evm",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "HyperEVM",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:HYPE",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "ICP",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "ICP",
+        "raw_contract": "",
+        "raw_network": "ICP",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "internet-computer:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "Dfinity",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:ICP",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "ICP",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "ICP",
+        "raw_contract": "",
+        "raw_network": "ICP",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "internet-computer:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "Dfinity",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:ICP",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "KAIA",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "KAIA",
+        "raw_contract": "",
+        "raw_network": "KLAY",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "kaia:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "Klaytn",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:KAIA",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "KAIA",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "KAIA",
+        "raw_contract": "",
+        "raw_network": "KLAY",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "kaia:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "Klaytn",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:KAIA",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "KSM",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "Kusama Asset Hub",
+        "raw_contract": "",
+        "raw_network": "KSMAH",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "kusama:asset-hub",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "AssetHub Kusama",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:KSM",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "KSM",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "Kusama Asset Hub",
+        "raw_contract": "",
+        "raw_network": "KSMAH",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "kusama:asset-hub",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "AssetHub Kusama",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:KSM",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "LINK",
+    "bybit_observations": [
+      {
+        "identity_kind": "token",
+        "raw_chainType": "Ethereum",
+        "raw_contract": "0x514910771af9ca656af840dff83e8264ecf986ca",
+        "raw_network": "ETH",
+        "source_rule": "CANONICAL_CONTRACT"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "token",
+        "raw_chainType": "",
+        "raw_contract": "0x514910771af9ca656af840dff83e8264ecf986ca",
+        "raw_network": "ERC20",
+        "source_rule": "CANONICAL_CONTRACT"
+      }
+    ],
+    "representation_identity": "0x514910771af9ca656af840dff83e8264ecf986ca",
+    "source_rules": [
+      "CANONICAL_CONTRACT"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "LINK",
+    "bybit_observations": [
+      {
+        "identity_kind": "token",
+        "raw_chainType": "Ethereum",
+        "raw_contract": "0x514910771af9ca656af840dff83e8264ecf986ca",
+        "raw_network": "ETH",
+        "source_rule": "CANONICAL_CONTRACT"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "token",
+        "raw_chainType": "",
+        "raw_contract": "0x514910771af9ca656af840dff83e8264ecf986ca",
+        "raw_network": "ERC20",
+        "source_rule": "CANONICAL_CONTRACT"
+      }
+    ],
+    "representation_identity": "0x514910771af9ca656af840dff83e8264ecf986ca",
+    "source_rules": [
+      "CANONICAL_CONTRACT"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "LTC",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "LTC",
+        "raw_contract": "",
+        "raw_network": "LTC",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "litecoin:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "Litecoin",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:LTC",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "LTC",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "LTC",
+        "raw_contract": "",
+        "raw_network": "LTC",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "litecoin:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "Litecoin",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:LTC",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "LUNA",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "Terra",
+        "raw_contract": "",
+        "raw_network": "LUNANEW",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "terra:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "Terra",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:LUNA",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "LUNA",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "Terra",
+        "raw_contract": "",
+        "raw_network": "LUNANEW",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "terra:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "Terra",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:LUNA",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "MINA",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "MINA",
+        "raw_contract": "",
+        "raw_network": "MINA",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "mina:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "Mina",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:MINA",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "MINA",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "MINA",
+        "raw_contract": "",
+        "raw_network": "MINA",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "mina:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "Mina",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:MINA",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "MON",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "Monad",
+        "raw_contract": "",
+        "raw_network": "MONAD",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "monad:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "Monad",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:MON",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "MON",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "Monad",
+        "raw_contract": "",
+        "raw_network": "MONAD",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "monad:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "Monad",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+      }
+    ],
+    "representation_identity": "native:MON",
+    "source_rules": [
+      "EXPLICIT_NATIVE_REGISTRY"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "NIGHT",
+    "bybit_observations": [
+      {
+        "identity_kind": "cardano_native_asset",
+        "raw_chainType": "ADA",
+        "raw_contract": "0691b2fecca1ac4f53cb6dfb00b7013e561d1f34403b957cbb5af1fa:4e49474854",
+        "raw_network": "ADA",
+        "source_rule": "CARDANO_POLICY_ASSET_ORDER_NORMALIZATION"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "cardano_native_asset"
+    ],
+    "network_uid": "cardano:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "cardano_native_asset",
+        "raw_chainType": "",
+        "raw_contract": "4e49474854:0691b2fecca1ac4f53cb6dfb00b7013e561d1f34403b957cbb5af1fa",
+        "raw_network": "Cardano",
+        "source_rule": "CARDANO_POLICY_ASSET_ORDER_NORMALIZATION"
+      }
+    ],
+    "representation_identity": "cardano:0691b2fecca1ac4f53cb6dfb00b7013e561d1f34403b957cbb5af1fa:4e49474854",
+    "source_rules": [
+      "CARDANO_POLICY_ASSET_ORDER_NORMALIZATION"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "NIGHT",
+    "bybit_observations": [
+      {
+        "identity_kind": "cardano_native_asset",
+        "raw_chainType": "ADA",
+        "raw_contract": "0691b2fecca1ac4f53cb6dfb00b7013e561d1f34403b957cbb5af1fa:4e49474854",
+        "raw_network": "ADA",
+        "source_rule": "CARDANO_POLICY_ASSET_ORDER_NORMALIZATION"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "cardano_native_asset"
+    ],
+    "network_uid": "cardano:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "cardano_native_asset",
+        "raw_chainType": "",
+        "raw_contract": "4e49474854:0691b2fecca1ac4f53cb6dfb00b7013e561d1f34403b957cbb5af1fa",
+        "raw_network": "Cardano",
+        "source_rule": "CARDANO_POLICY_ASSET_ORDER_NORMALIZATION"
+      }
+    ],
+    "representation_identity": "cardano:0691b2fecca1ac4f53cb6dfb00b7013e561d1f34403b957cbb5af1fa:4e49474854",
+    "source_rules": [
+      "CARDANO_POLICY_ASSET_ORDER_NORMALIZATION"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "ORDI",
+    "bybit_observations": [
+      {
+        "identity_kind": "brc20_ticker",
+        "raw_chainType": "Bitcoin",
+        "raw_contract": "ordi",
+        "raw_network": "BTC",
+        "source_rule": "BRC20_TICKER_NORMALIZATION"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "brc20_ticker"
+    ],
+    "network_uid": "bitcoin:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "brc20_ticker",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "BRC20",
+        "source_rule": "BRC20_TICKER_NORMALIZATION"
+      }
+    ],
+    "representation_identity": "brc20:ordi",
+    "source_rules": [
+      "BRC20_TICKER_NORMALIZATION"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "ORDI",
+    "bybit_observations": [
+      {
+        "identity_kind": "brc20_ticker",
+        "raw_chainType": "Bitcoin",
+        "raw_contract": "ordi",
+        "raw_network": "BTC",
+        "source_rule": "BRC20_TICKER_NORMALIZATION"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "brc20_ticker"
+    ],
+    "network_uid": "bitcoin:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "brc20_ticker",
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "BRC20",
+        "source_rule": "BRC20_TICKER_NORMALIZATION"
+      }
+    ],
+    "representation_identity": "brc20:ordi",
+    "source_rules": [
+      "BRC20_TICKER_NORMALIZATION"
+    ],
+    "source_scope": "V0.2.2_REVIEW_RESOLUTION"
+  },
+  {
+    "asset": "QTUM",
+    "bybit_observations": [
+      {
+        "identity_kind": "native",
+        "raw_chainType": "QTUM",
+        "raw_contract": "",
+        "raw_network": "QTUM",
+        "source_rule": "EXPLICIT_NATIVE_REGISTRY"
+    

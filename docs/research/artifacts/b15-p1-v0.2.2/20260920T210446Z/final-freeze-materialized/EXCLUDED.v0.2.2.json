@@ -1,0 +1,56 @@
+[
+  {
+    "asset": "DATA",
+    "reasons": [
+      "OKX_LT_90D_MATURE"
+    ]
+  },
+  {
+    "asset": "GRVT",
+    "reasons": [
+      "OKX_LT_90D_MATURE"
+    ]
+  },
+  {
+    "asset": "PYUSD",
+    "reasons": [
+      "STABLECOIN_OR_FIATLIKE_BASE"
+    ]
+  },
+  {
+    "asset": "RLUSD",
+    "reasons": [
+      "STABLECOIN_OR_FIATLIKE_BASE"
+    ]
+  },
+  {
+    "asset": "SLX",
+    "reasons": [
+      "OKX_LT_90D_MATURE"
+    ]
+  },
+  {
+    "asset": "USD1",
+    "reasons": [
+      "STABLECOIN_OR_FIATLIKE_BASE"
+    ]
+  },
+  {
+    "asset": "USDC",
+    "reasons": [
+      "STABLECOIN_OR_FIATLIKE_BASE"
+    ]
+  },
+  {
+    "asset": "USDS",
+    "reasons": [
+      "STABLECOIN_OR_FIATLIKE_BASE"
+    ]
+  },
+  {
+    "asset": "VVV",
+    "reasons": [
+      "OKX_LT_90D_MATURE"
+    ]
+  }
+]

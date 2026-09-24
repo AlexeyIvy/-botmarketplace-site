@@ -1,0 +1,45 @@
+{
+  "schema": "sc001.b15.directed_route_graph_shard_index.v0.2.2",
+  "logical_artifact": "directed_route_graph.v0.2.2.json",
+  "logical_size_bytes": 268465,
+  "logical_sha256": "06a9edd309a002aa5dc8408d992cff7b774604fc1cfb04f90fd7f56333f27928",
+  "encoding": "utf-8",
+  "reassembly": "CONCATENATE_RAW_PARTS_IN_ORDER_WITH_NO_SEPARATOR",
+  "parts": [
+    {
+      "path": "route-graph-shards/directed_route_graph.v0.2.2.part01.raw",
+      "offset_bytes": 0,
+      "size_bytes": 60000,
+      "sha256": "64838baf3f07b29dacf45b4c226da9a06175f54e6bf2d5023071ac865cfcffb7"
+    },
+    {
+      "path": "route-graph-shards/directed_route_graph.v0.2.2.part02.raw",
+      "offset_bytes": 60000,
+      "size_bytes": 60000,
+      "sha256": "1cf9b14994905e3f5930add8fc0e1ae6c92672818c9ee929f439575be2705b6d"
+    },
+    {
+      "path": "route-graph-shards/directed_route_graph.v0.2.2.part03.raw",
+      "offset_bytes": 120000,
+      "size_bytes": 60000,
+      "sha256": "0a911e0ad69b2b96f05f1dcca626e0dbbb61b9369ac7678053ee804b9c43e417"
+    },
+    {
+      "path": "route-graph-shards/directed_route_graph.v0.2.2.part04.raw",
+      "offset_bytes": 180000,
+      "size_bytes": 60000,
+      "sha256": "664d98b1bbcd1ac4235504f2fb84c58f77d1a08b049144cbd5ee0a04da1b4f19"
+    },
+    {
+      "path": "route-graph-shards/directed_route_graph.v0.2.2.part05.raw",
+      "offset_bytes": 240000,
+      "size_bytes": 28465,
+      "sha256": "d1ec81d5b4eeab80a69989d45b7ec0c4b3a4933b70976ef8c772c450bacb8de9"
+    }
+  ],
+  "verification": {
+    "github_reassembly_verified": true,
+    "reassembled_size_bytes": 268465,
+    "reassembled_sha256": "06a9edd309a002aa5dc8408d992cff7b774604fc1cfb04f90fd7f56333f27928"
+  }
+}

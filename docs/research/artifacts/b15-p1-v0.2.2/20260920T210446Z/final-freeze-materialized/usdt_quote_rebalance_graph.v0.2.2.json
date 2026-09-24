@@ -1,0 +1,350 @@
+[
+  {
+    "asset": "USDT",
+    "bybit_observations": [
+      {
+        "identity_kind": "token",
+        "raw_chainType": "Aptos",
+        "raw_contract": "0x357b0b74bc833e95a115ad22604854d6b0fca151cecd94111770e5d6ffc9dc2b",
+        "raw_network": "APTOS",
+        "source_rule": "CANONICAL_CONTRACT"
+      }
+    ],
+    "canonical_representation_key": "USDT|aptos:mainnet|0x357b0b74bc833e95a115ad22604854d6b0fca151cecd94111770e5d6ffc9dc2b",
+    "directions": [
+      "OKX_TO_BYBIT",
+      "BYBIT_TO_OKX"
+    ],
+    "network_uid": "aptos:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "token",
+        "raw_chainType": "",
+        "raw_contract": "0x357b0b74bc833e95a115ad22604854d6b0fca151cecd94111770e5d6ffc9dc2b",
+        "raw_network": "Aptos",
+        "source_rule": "CANONICAL_CONTRACT"
+      }
+    ],
+    "representation_identity": "0x357b0b74bc833e95a115ad22604854d6b0fca151cecd94111770e5d6ffc9dc2b",
+    "source_scope": "V0.2.2_FINAL_COMMON_QUOTE"
+  },
+  {
+    "asset": "USDT",
+    "bybit_observations": [
+      {
+        "identity_kind": "token",
+        "raw_chainType": "Arbitrum One(USDT0)",
+        "raw_contract": "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9",
+        "raw_network": "ARBI",
+        "source_rule": "CANONICAL_CONTRACT"
+      }
+    ],
+    "canonical_representation_key": "USDT|arbitrum:one|0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9",
+    "directions": [
+      "OKX_TO_BYBIT",
+      "BYBIT_TO_OKX"
+    ],
+    "network_uid": "arbitrum:one",
+    "okx_observations": [
+      {
+        "identity_kind": "token",
+        "raw_chainType": "",
+        "raw_contract": "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9",
+        "raw_network": "Arbitrum One",
+        "source_rule": "CANONICAL_CONTRACT"
+      }
+    ],
+    "representation_identity": "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9",
+    "source_scope": "V0.2.2_FINAL_COMMON_QUOTE"
+  },
+  {
+    "asset": "USDT",
+    "bybit_observations": [
+      {
+        "identity_kind": "token",
+        "raw_chainType": "CAVAX",
+        "raw_contract": "0x9702230A8Ea53601f5cD2dc00fDBc13d4dF4A8c7",
+        "raw_network": "CAVAX",
+        "source_rule": "CANONICAL_CONTRACT"
+      }
+    ],
+    "canonical_representation_key": "USDT|avalanche:c-chain|0x9702230a8ea53601f5cd2dc00fdbc13d4df4a8c7",
+    "directions": [
+      "OKX_TO_BYBIT",
+      "BYBIT_TO_OKX"
+    ],
+    "network_uid": "avalanche:c-chain",
+    "okx_observations": [
+      {
+        "identity_kind": "token",
+        "raw_chainType": "",
+        "raw_contract": "0x9702230a8ea53601f5cd2dc00fdbc13d4df4a8c7",
+        "raw_network": "Avalanche C-Chain",
+        "source_rule": "CANONICAL_CONTRACT"
+      }
+    ],
+    "representation_identity": "0x9702230a8ea53601f5cd2dc00fdbc13d4df4a8c7",
+    "source_scope": "V0.2.2_FINAL_COMMON_QUOTE"
+  },
+  {
+    "asset": "USDT",
+    "bybit_observations": [
+      {
+        "identity_kind": "token",
+        "raw_chainType": "Berachain",
+        "raw_contract": "0x779Ded0c9e1022225f8E0630b35a9b54bE713736",
+        "raw_network": "BERA",
+        "source_rule": "CANONICAL_CONTRACT"
+      }
+    ],
+    "canonical_representation_key": "USDT|berachain:mainnet|0x779ded0c9e1022225f8e0630b35a9b54be713736",
+    "directions": [
+      "OKX_TO_BYBIT",
+      "BYBIT_TO_OKX"
+    ],
+    "network_uid": "berachain:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "token",
+        "raw_chainType": "",
+        "raw_contract": "0x779Ded0c9e1022225f8E0630b35a9b54bE713736",
+        "raw_network": "BERACHAIN (USDT0)",
+        "source_rule": "CANONICAL_CONTRACT"
+      }
+    ],
+    "representation_identity": "0x779ded0c9e1022225f8e0630b35a9b54be713736",
+    "source_scope": "V0.2.2_FINAL_COMMON_QUOTE"
+  },
+  {
+    "asset": "USDT",
+    "bybit_observations": [
+      {
+        "identity_kind": "token",
+        "raw_chainType": "Ethereum",
+        "raw_contract": "0xdac17f958d2ee523a2206206994597c13d831ec7",
+        "raw_network": "ETH",
+        "source_rule": "CANONICAL_CONTRACT"
+      }
+    ],
+    "canonical_representation_key": "USDT|ethereum:mainnet|0xdac17f958d2ee523a2206206994597c13d831ec7",
+    "directions": [
+      "OKX_TO_BYBIT",
+      "BYBIT_TO_OKX"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "token",
+        "raw_chainType": "",
+        "raw_contract": "0xdac17f958d2ee523a2206206994597c13d831ec7",
+        "raw_network": "ERC20",
+        "source_rule": "CANONICAL_CONTRACT"
+      }
+    ],
+    "representation_identity": "0xdac17f958d2ee523a2206206994597c13d831ec7",
+    "source_scope": "V0.2.2_FINAL_COMMON_QUOTE"
+  },
+  {
+    "asset": "USDT",
+    "bybit_observations": [
+      {
+        "identity_kind": "token",
+        "raw_chainType": "Monad",
+        "raw_contract": "0xe7cd86e13AC4309349F30B3435a9d337750fC82D",
+        "raw_network": "MONAD",
+        "source_rule": "CANONICAL_CONTRACT"
+      }
+    ],
+    "canonical_representation_key": "USDT|monad:mainnet|0xe7cd86e13ac4309349f30b3435a9d337750fc82d",
+    "directions": [
+      "OKX_TO_BYBIT",
+      "BYBIT_TO_OKX"
+    ],
+    "network_uid": "monad:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "token",
+        "raw_chainType": "",
+        "raw_contract": "0xe7cd86e13AC4309349F30B3435a9d337750fC82D",
+        "raw_network": "Monad (USDT0)",
+        "source_rule": "CANONICAL_CONTRACT"
+      }
+    ],
+    "representation_identity": "0xe7cd86e13ac4309349f30b3435a9d337750fc82d",
+    "source_scope": "V0.2.2_FINAL_COMMON_QUOTE"
+  },
+  {
+    "asset": "USDT",
+    "bybit_observations": [
+      {
+        "identity_kind": "token",
+        "raw_chainType": "OP Mainnet",
+        "raw_contract": "0x94b008aA00579c1307B0EF2c499aD98a8ce58e58",
+        "raw_network": "OP",
+        "source_rule": "CANONICAL_CONTRACT"
+      }
+    ],
+    "canonical_representation_key": "USDT|optimism:mainnet|0x94b008aa00579c1307b0ef2c499ad98a8ce58e58",
+    "directions": [
+      "OKX_TO_BYBIT",
+      "BYBIT_TO_OKX"
+    ],
+    "network_uid": "optimism:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "token",
+        "raw_chainType": "",
+        "raw_contract": "0x94b008aA00579c1307B0EF2c499aD98a8ce58e58",
+        "raw_network": "Optimism",
+        "source_rule": "CANONICAL_CONTRACT"
+      }
+    ],
+    "representation_identity": "0x94b008aa00579c1307b0ef2c499ad98a8ce58e58",
+    "source_scope": "V0.2.2_FINAL_COMMON_QUOTE"
+  },
+  {
+    "asset": "USDT",
+    "bybit_observations": [
+      {
+        "identity_kind": "token",
+        "raw_chainType": "Plasma",
+        "raw_contract": "0xB8CE59FC3717ada4C02eaDF9682A9e934F625ebb",
+        "raw_network": "PLASMA",
+        "source_rule": "CANONICAL_CONTRACT"
+      }
+    ],
+    "canonical_representation_key": "USDT|plasma:mainnet|0xb8ce59fc3717ada4c02eadf9682a9e934f625ebb",
+    "directions": [
+      "OKX_TO_BYBIT",
+      "BYBIT_TO_OKX"
+    ],
+    "network_uid": "plasma:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "token",
+        "raw_chainType": "",
+        "raw_contract": "0xb8ce59fc3717ada4c02eadf9682a9e934f625ebb",
+        "raw_network": "Plasma",
+        "source_rule": "CANONICAL_CONTRACT"
+      }
+    ],
+    "representation_identity": "0xb8ce59fc3717ada4c02eadf9682a9e934f625ebb",
+    "source_scope": "V0.2.2_FINAL_COMMON_QUOTE"
+  },
+  {
+    "asset": "USDT",
+    "bybit_observations": [
+      {
+        "identity_kind": "token",
+        "raw_chainType": "Polygon PoS",
+        "raw_contract": "0xc2132d05d31c914a87c6611c10748aeb04b58e8f",
+        "raw_network": "MATIC",
+        "source_rule": "CANONICAL_CONTRACT"
+      }
+    ],
+    "canonical_representation_key": "USDT|polygon:pos|0xc2132d05d31c914a87c6611c10748aeb04b58e8f",
+    "directions": [
+      "OKX_TO_BYBIT",
+      "BYBIT_TO_OKX"
+    ],
+    "network_uid": "polygon:pos",
+    "okx_observations": [
+      {
+        "identity_kind": "token",
+        "raw_chainType": "",
+        "raw_contract": "0xc2132d05d31c914a87c6611c10748aeb04b58e8f",
+        "raw_network": "Polygon",
+        "source_rule": "CANONICAL_CONTRACT"
+      }
+    ],
+    "representation_identity": "0xc2132d05d31c914a87c6611c10748aeb04b58e8f",
+    "source_scope": "V0.2.2_FINAL_COMMON_QUOTE"
+  },
+  {
+    "asset": "USDT",
+    "bybit_observations": [
+      {
+        "identity_kind": "token",
+        "raw_chainType": "SOL",
+        "raw_contract": "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB",
+        "raw_network": "SOL",
+        "source_rule": "CANONICAL_CONTRACT"
+      }
+    ],
+    "canonical_representation_key": "USDT|solana:mainnet|Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB",
+    "directions": [
+      "OKX_TO_BYBIT",
+      "BYBIT_TO_OKX"
+    ],
+    "network_uid": "solana:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "token",
+        "raw_chainType": "",
+        "raw_contract": "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB",
+        "raw_network": "Solana",
+        "source_rule": "CANONICAL_CONTRACT"
+      }
+    ],
+    "representation_identity": "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB",
+    "source_scope": "V0.2.2_FINAL_COMMON_QUOTE"
+  },
+  {
+    "asset": "USDT",
+    "bybit_observations": [
+      {
+        "identity_kind": "token",
+        "raw_chainType": "TON",
+        "raw_contract": "EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs",
+        "raw_network": "TON",
+        "source_rule": "CANONICAL_CONTRACT"
+      }
+    ],
+    "canonical_representation_key": "USDT|ton:mainnet|EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs",
+    "directions": [
+      "OKX_TO_BYBIT",
+      "BYBIT_TO_OKX"
+    ],
+    "network_uid": "ton:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "token",
+        "raw_chainType": "",
+        "raw_contract": "EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs",
+        "raw_network": "The Open Network (TON)",
+        "source_rule": "CANONICAL_CONTRACT"
+      }
+    ],
+    "representation_identity": "EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs",
+    "source_scope": "V0.2.2_FINAL_COMMON_QUOTE"
+  },
+  {
+    "asset": "USDT",
+    "bybit_observations": [
+      {
+        "identity_kind": "token",
+        "raw_chainType": "TRX",
+        "raw_contract": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "raw_network": "TRX",
+        "source_rule": "CANONICAL_CONTRACT"
+      }
+    ],
+    "canonical_representation_key": "USDT|tron:mainnet|TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+    "directions": [
+      "OKX_TO_BYBIT",
+      "BYBIT_TO_OKX"
+    ],
+    "network_uid": "tron:mainnet",
+    "okx_observations": [
+      {
+        "identity_kind": "token",
+        "raw_chainType": "",
+        "raw_contract": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "raw_network": "TRC20",
+        "source_rule": "CANONICAL_CONTRACT"
+      }
+    ],
+    "representation_identity": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+    "source_scope": "V0.2.2_FINAL_COMMON_QUOTE"
+  }
+]

@@ -1,0 +1,2723 @@
+[
+  {
+    "asset": "1INCH",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ethereum",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "1INCH-ERC20"
+      }
+    ],
+    "representation_identity": "0x111111111117dc0aa78b770fa6a738034120c302",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "1INCH",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ethereum",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "1INCH-ERC20"
+      }
+    ],
+    "representation_identity": "0x111111111117dc0aa78b770fa6a738034120c302",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "2Z",
+    "bybit_observations": [
+      {
+        "raw_chainType": "SOL",
+        "raw_contract": "",
+        "raw_network": "SOL"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "solana:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "2Z-Solana"
+      }
+    ],
+    "representation_identity": "J6pQQ3FAcJQeWPPGppWRb4nM8jU3wLyYbRrLh7feMfvd",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "2Z",
+    "bybit_observations": [
+      {
+        "raw_chainType": "SOL",
+        "raw_contract": "",
+        "raw_network": "SOL"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "solana:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "2Z-Solana"
+      }
+    ],
+    "representation_identity": "J6pQQ3FAcJQeWPPGppWRb4nM8jU3wLyYbRrLh7feMfvd",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "A",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Vaulta",
+        "raw_contract": "",
+        "raw_network": "EOS"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "vaulta:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "A-Vaulta"
+      }
+    ],
+    "representation_identity": "core.vaulta",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "A",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Vaulta",
+        "raw_contract": "",
+        "raw_network": "EOS"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "vaulta:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "A-Vaulta"
+      }
+    ],
+    "representation_identity": "core.vaulta",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "AAVE",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ethereum",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "AAVE-ERC20"
+      }
+    ],
+    "representation_identity": "0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "AAVE",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ethereum",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "AAVE-ERC20"
+      }
+    ],
+    "representation_identity": "0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "ACH",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ethereum",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "ACH-ERC20"
+      }
+    ],
+    "representation_identity": "0xed04915c23f00a313a544955524eb7dbd823143d",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "ACH",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ethereum",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "ACH-ERC20"
+      }
+    ],
+    "representation_identity": "0xed04915c23f00a313a544955524eb7dbd823143d",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "ADA",
+    "bybit_observations": [
+      {
+        "raw_chainType": "ADA",
+        "raw_contract": "",
+        "raw_network": "ADA"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "cardano:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "ADA-Cardano"
+      }
+    ],
+    "representation_identity": "native:ADA",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "ADA",
+    "bybit_observations": [
+      {
+        "raw_chainType": "ADA",
+        "raw_contract": "",
+        "raw_network": "ADA"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "cardano:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "ADA-Cardano"
+      }
+    ],
+    "representation_identity": "native:ADA",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "AEVO",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ethereum",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "AEVO-ERC20"
+      }
+    ],
+    "representation_identity": "0xb528edbef013aff855ac3c50b381f253af13b997",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "AEVO",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ethereum",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "AEVO-ERC20"
+      }
+    ],
+    "representation_identity": "0xb528edbef013aff855ac3c50b381f253af13b997",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "AGLD",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ethereum",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "AGLD-ERC20"
+      }
+    ],
+    "representation_identity": "0x32353a6c91143bfd6c7d363b546e62a9a2489a20",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "AGLD",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ethereum",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "AGLD-ERC20"
+      }
+    ],
+    "representation_identity": "0x32353a6c91143bfd6c7d363b546e62a9a2489a20",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "AIXBT",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Base Mainnet",
+        "raw_contract": "",
+        "raw_network": "BASE"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "base:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "AIXBT-Base"
+      }
+    ],
+    "representation_identity": "0x4f9fd6be4a90f2620860d680c0d4d5fb53d1a825",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "AIXBT",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Base Mainnet",
+        "raw_contract": "",
+        "raw_network": "BASE"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "base:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "AIXBT-Base"
+      }
+    ],
+    "representation_identity": "0x4f9fd6be4a90f2620860d680c0d4d5fb53d1a825",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "ALGO",
+    "bybit_observations": [
+      {
+        "raw_chainType": "ALGO",
+        "raw_contract": "",
+        "raw_network": "ALGO"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "algorand:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "ALGO-Algorand"
+      }
+    ],
+    "representation_identity": "native:ALGO",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "ALGO",
+    "bybit_observations": [
+      {
+        "raw_chainType": "ALGO",
+        "raw_contract": "",
+        "raw_network": "ALGO"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "algorand:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "ALGO-Algorand"
+      }
+    ],
+    "representation_identity": "native:ALGO",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "ANIME",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Arbitrum One",
+        "raw_contract": "",
+        "raw_network": "ARBI"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "arbitrum:one",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "ANIME-Arbitrum One"
+      }
+    ],
+    "representation_identity": "0x37a645648df29205c6261289983fb04ecd70b4b3",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "ANIME",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Arbitrum One",
+        "raw_contract": "",
+        "raw_network": "ARBI"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "arbitrum:one",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "ANIME-Arbitrum One"
+      }
+    ],
+    "representation_identity": "0x37a645648df29205c6261289983fb04ecd70b4b3",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "ANIME",
+    "bybit_observations": [
+      {
+        "raw_chainType": "ERC20",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "ANIME-ERC20"
+      }
+    ],
+    "representation_identity": "0x4dc26fc5854e7648a064a4abd590bbe71724c277",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "ANIME",
+    "bybit_observations": [
+      {
+        "raw_chainType": "ERC20",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "ANIME-ERC20"
+      }
+    ],
+    "representation_identity": "0x4dc26fc5854e7648a064a4abd590bbe71724c277",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "APE",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ethereum",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "APE-ERC20"
+      }
+    ],
+    "representation_identity": "0x4d224452801aced8b2f0aebe155379bb5d594381",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "APE",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ethereum",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "APE-ERC20"
+      }
+    ],
+    "representation_identity": "0x4d224452801aced8b2f0aebe155379bb5d594381",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "APT",
+    "bybit_observations": [
+      {
+        "raw_chainType": "APTOS",
+        "raw_contract": "",
+        "raw_network": "APTOS"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "aptos:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "APT-Aptos"
+      }
+    ],
+    "representation_identity": "native:APT",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "APT",
+    "bybit_observations": [
+      {
+        "raw_chainType": "APTOS",
+        "raw_contract": "",
+        "raw_network": "APTOS"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "aptos:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "APT-Aptos"
+      }
+    ],
+    "representation_identity": "native:APT",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "AR",
+    "bybit_observations": [
+      {
+        "raw_chainType": "AR",
+        "raw_contract": "",
+        "raw_network": "AR"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "arweave:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "AR-Arweave"
+      }
+    ],
+    "representation_identity": "native:AR",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "AR",
+    "bybit_observations": [
+      {
+        "raw_chainType": "AR",
+        "raw_contract": "",
+        "raw_network": "AR"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "arweave:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "AR-Arweave"
+      }
+    ],
+    "representation_identity": "native:AR",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "ARB",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Arbitrum One",
+        "raw_contract": "",
+        "raw_network": "ARBI"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "arbitrum:one",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "ARB-Arbitrum One"
+      }
+    ],
+    "representation_identity": "0x912ce59144191c1204e64559fe8253a0e49e6548",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "ARB",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Arbitrum One",
+        "raw_contract": "",
+        "raw_network": "ARBI"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "arbitrum:one",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "ARB-Arbitrum One"
+      }
+    ],
+    "representation_identity": "0x912ce59144191c1204e64559fe8253a0e49e6548",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "ARKM",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ethereum",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "ARKM-ERC20"
+      }
+    ],
+    "representation_identity": "0x6e2a43be0b1d33b726f0ca3b8de60b3482b8b050",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "ARKM",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ethereum",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "ARKM-ERC20"
+      }
+    ],
+    "representation_identity": "0x6e2a43be0b1d33b726f0ca3b8de60b3482b8b050",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "ASTER",
+    "bybit_observations": [
+      {
+        "raw_chainType": "BNB Smart Chain ",
+        "raw_contract": "",
+        "raw_network": "BSC"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "bsc:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "ASTER-BSC"
+      }
+    ],
+    "representation_identity": "0x000ae314e2a2172a039b26378814c252734f556a",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "ASTER",
+    "bybit_observations": [
+      {
+        "raw_chainType": "BNB Smart Chain ",
+        "raw_contract": "",
+        "raw_network": "BSC"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "bsc:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "ASTER-BSC"
+      }
+    ],
+    "representation_identity": "0x000ae314e2a2172a039b26378814c252734f556a",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "ATH",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ethereum",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "ATH-ERC20"
+      }
+    ],
+    "representation_identity": "0xbe0ed4138121ecfc5c0e56b40517da27e6c5226b",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "ATH",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ethereum",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "ATH-ERC20"
+      }
+    ],
+    "representation_identity": "0xbe0ed4138121ecfc5c0e56b40517da27e6c5226b",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "ATOM",
+    "bybit_observations": [
+      {
+        "raw_chainType": "ATOM",
+        "raw_contract": "",
+        "raw_network": "ATOM"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "cosmoshub:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "ATOM-Cosmos"
+      }
+    ],
+    "representation_identity": "native:ATOM",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "ATOM",
+    "bybit_observations": [
+      {
+        "raw_chainType": "ATOM",
+        "raw_contract": "",
+        "raw_network": "ATOM"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "cosmoshub:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "ATOM-Cosmos"
+      }
+    ],
+    "representation_identity": "native:ATOM",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "AVNT",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Base Mainnet",
+        "raw_contract": "",
+        "raw_network": "BASE"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "base:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "AVNT-Base"
+      }
+    ],
+    "representation_identity": "0x696f9436b67233384889472cd7cd58a6fb5df4f1",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "AVNT",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Base Mainnet",
+        "raw_contract": "",
+        "raw_network": "BASE"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "base:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "AVNT-Base"
+      }
+    ],
+    "representation_identity": "0x696f9436b67233384889472cd7cd58a6fb5df4f1",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "AXS",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ethereum",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "AXS-ERC20"
+      }
+    ],
+    "representation_identity": "0xbb0e17ef65f82ab018d8edd776e8dd940327b28b",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "AXS",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ethereum",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "AXS-ERC20"
+      }
+    ],
+    "representation_identity": "0xbb0e17ef65f82ab018d8edd776e8dd940327b28b",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "BARD",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ethereum",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "BARD-ERC20"
+      }
+    ],
+    "representation_identity": "0xf0db65d17e30a966c2ae6a21f6bba71cea6e9754",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "BARD",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ethereum",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "BARD-ERC20"
+      }
+    ],
+    "representation_identity": "0xf0db65d17e30a966c2ae6a21f6bba71cea6e9754",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "BASED",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ethereum",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "BASED-ERC20"
+      }
+    ],
+    "representation_identity": "0x4f2b33840227ddd0e28da8d4185d6fa07adfed87",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "BASED",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ethereum",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "BASED-ERC20"
+      }
+    ],
+    "representation_identity": "0x4f2b33840227ddd0e28da8d4185d6fa07adfed87",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "BAT",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ethereum",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "BAT-ERC20"
+      }
+    ],
+    "representation_identity": "0x0d8775f648430679a709e98d2b0cb6250d2887ef",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "BAT",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ethereum",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "BAT-ERC20"
+      }
+    ],
+    "representation_identity": "0x0d8775f648430679a709e98d2b0cb6250d2887ef",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "BERA",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Berachain",
+        "raw_contract": "",
+        "raw_network": "BERA"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "berachain:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "BERA-Berachain"
+      }
+    ],
+    "representation_identity": "native:BERA",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "BERA",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Berachain",
+        "raw_contract": "",
+        "raw_network": "BERA"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "berachain:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "BERA-Berachain"
+      }
+    ],
+    "representation_identity": "native:BERA",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "BICO",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ethereum",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "BICO-ERC20"
+      }
+    ],
+    "representation_identity": "0xf17e65822b568b3903685a7c9f496cf7656cc6c2",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "BICO",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ethereum",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "BICO-ERC20"
+      }
+    ],
+    "representation_identity": "0xf17e65822b568b3903685a7c9f496cf7656cc6c2",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "BLUR",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ethereum",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "BLUR-ERC20"
+      }
+    ],
+    "representation_identity": "0x5283d291dbcf85356a21ba090e6db59121208b44",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "BLUR",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ethereum",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "BLUR-ERC20"
+      }
+    ],
+    "representation_identity": "0x5283d291dbcf85356a21ba090e6db59121208b44",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "BNB",
+    "bybit_observations": [
+      {
+        "raw_chainType": "BNB Smart Chain",
+        "raw_contract": "",
+        "raw_network": "BSC"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "bsc:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "BNB-BSC"
+      }
+    ],
+    "representation_identity": "native:BNB",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "BNB",
+    "bybit_observations": [
+      {
+        "raw_chainType": "BNB Smart Chain",
+        "raw_contract": "",
+        "raw_network": "BSC"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "bsc:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "BNB-BSC"
+      }
+    ],
+    "representation_identity": "native:BNB",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "BOME",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Solana",
+        "raw_contract": "",
+        "raw_network": "SOL"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "solana:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "BOME-Solana"
+      }
+    ],
+    "representation_identity": "ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "BOME",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Solana",
+        "raw_contract": "",
+        "raw_network": "SOL"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "solana:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "BOME-Solana"
+      }
+    ],
+    "representation_identity": "ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "BONK",
+    "bybit_observations": [
+      {
+        "raw_chainType": "SOL",
+        "raw_contract": "",
+        "raw_network": "SOL"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "solana:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "BONK-Solana"
+      }
+    ],
+    "representation_identity": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "BONK",
+    "bybit_observations": [
+      {
+        "raw_chainType": "SOL",
+        "raw_contract": "",
+        "raw_network": "SOL"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "solana:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "BONK-Solana"
+      }
+    ],
+    "representation_identity": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "BREV",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ethereum",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "BREV-ERC20"
+      }
+    ],
+    "representation_identity": "0x086f405146ce90135750bbec9a063a8b20a8bffb",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "BREV",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ethereum",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "BREV-ERC20"
+      }
+    ],
+    "representation_identity": "0x086f405146ce90135750bbec9a063a8b20a8bffb",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "CAT",
+    "bybit_observations": [
+      {
+        "raw_chainType": "BNB Smart Chain ",
+        "raw_contract": "",
+        "raw_network": "BSC"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "bsc:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "CAT-BSC"
+      }
+    ],
+    "representation_identity": "0x6894cde390a3f51155ea41ed24a33a4827d3063d",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "CAT",
+    "bybit_observations": [
+      {
+        "raw_chainType": "BNB Smart Chain ",
+        "raw_contract": "",
+        "raw_network": "BSC"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "bsc:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "CAT-BSC"
+      }
+    ],
+    "representation_identity": "0x6894cde390a3f51155ea41ed24a33a4827d3063d",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "CATI",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ton",
+        "raw_contract": "",
+        "raw_network": "TON"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ton:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "CATI-The Open Network (TON)"
+      }
+    ],
+    "representation_identity": "EQD-cvR0Nz6XAyRBvbhz-abTrRC6sI5tvHvvpeQraV9UAAD7",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "CATI",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ton",
+        "raw_contract": "",
+        "raw_network": "TON"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ton:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "CATI-The Open Network (TON)"
+      }
+    ],
+    "representation_identity": "EQD-cvR0Nz6XAyRBvbhz-abTrRC6sI5tvHvvpeQraV9UAAD7",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "CFG",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ethereum ",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "CFG-ERC20"
+      }
+    ],
+    "representation_identity": "0xcccccccccc33d538dbc2ee4feab0a7a1ff4e8a94",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "CFG",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ethereum ",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "CFG-ERC20"
+      }
+    ],
+    "representation_identity": "0xcccccccccc33d538dbc2ee4feab0a7a1ff4e8a94",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "CHIP",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Arbitrum One",
+        "raw_contract": "",
+        "raw_network": "ARBI"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "arbitrum:one",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "CHIP-Arbitrum One"
+      }
+    ],
+    "representation_identity": "0x0c1c1c109fe34733fca54b82d7b46b75cfb71f6e",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "CHIP",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Arbitrum One",
+        "raw_contract": "",
+        "raw_network": "ARBI"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "arbitrum:one",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "CHIP-Arbitrum One"
+      }
+    ],
+    "representation_identity": "0x0c1c1c109fe34733fca54b82d7b46b75cfb71f6e",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "CHZ",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Chiliz Chain",
+        "raw_contract": "",
+        "raw_network": "CHILIZ"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "chiliz:chain",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "CHZ-Chiliz Chain"
+      }
+    ],
+    "representation_identity": "native:CHZ",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "CHZ",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Chiliz Chain",
+        "raw_contract": "",
+        "raw_network": "CHILIZ"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "chiliz:chain",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "CHZ-Chiliz Chain"
+      }
+    ],
+    "representation_identity": "native:CHZ",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "CHZ",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ethereum",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "CHZ-ERC20"
+      }
+    ],
+    "representation_identity": "0x3506424f91fd33084466f402d5d97f05f8e3b4af",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "CHZ",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ethereum",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "CHZ-ERC20"
+      }
+    ],
+    "representation_identity": "0x3506424f91fd33084466f402d5d97f05f8e3b4af",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "CITY",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Chiliz Chain",
+        "raw_contract": "",
+        "raw_network": "CHILIZ"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "chiliz:chain",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "CITY-Chiliz Chain"
+      }
+    ],
+    "representation_identity": "0x7bd6242d775faef1d50b2aa18c2fbf329bddf295",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "CITY",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Chiliz Chain",
+        "raw_contract": "",
+        "raw_network": "CHILIZ"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "chiliz:chain",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "CITY-Chiliz Chain"
+      }
+    ],
+    "representation_identity": "0x7bd6242d775faef1d50b2aa18c2fbf329bddf295",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "COMP",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ethereum",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "COMP-ERC20"
+      }
+    ],
+    "representation_identity": "0xc00e94cb662c3520282e6f5717214004a7f26888",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "COMP",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ethereum",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "COMP-ERC20"
+      }
+    ],
+    "representation_identity": "0xc00e94cb662c3520282e6f5717214004a7f26888",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "CORE",
+    "bybit_observations": [
+      {
+        "raw_chainType": "CORE",
+        "raw_contract": "",
+        "raw_network": "CORE"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "core:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "CORE-CORE"
+      }
+    ],
+    "representation_identity": "native:CORE",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "CORE",
+    "bybit_observations": [
+      {
+        "raw_chainType": "CORE",
+        "raw_contract": "",
+        "raw_network": "CORE"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "core:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "CORE-CORE"
+      }
+    ],
+    "representation_identity": "native:CORE",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "CRV",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ethereum",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "CRV-ERC20"
+      }
+    ],
+    "representation_identity": "0xd533a949740bb3306d119cc777fa900ba034cd52",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "CRV",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ethereum",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "CRV-ERC20"
+      }
+    ],
+    "representation_identity": "0xd533a949740bb3306d119cc777fa900ba034cd52",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "CSPR",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Casper",
+        "raw_contract": "",
+        "raw_network": "CSPR"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "casper:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "CSPR-Casper"
+      }
+    ],
+    "representation_identity": "native:CSPR",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "CSPR",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Casper",
+        "raw_contract": "",
+        "raw_network": "CSPR"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "casper:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "CSPR-Casper"
+      }
+    ],
+    "representation_identity": "native:CSPR",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "DEGEN",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Base Mainnet",
+        "raw_contract": "",
+        "raw_network": "BASE"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "base:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "DEGEN-Base"
+      }
+    ],
+    "representation_identity": "0x4ed4e862860bed51a9570b96d89af5e1b0efefed",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "DEGEN",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Base Mainnet",
+        "raw_contract": "",
+        "raw_network": "BASE"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "base:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "DEGEN-Base"
+      }
+    ],
+    "representation_identity": "0x4ed4e862860bed51a9570b96d89af5e1b0efefed",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "DOGE",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Dogecoin",
+        "raw_contract": "",
+        "raw_network": "DOGE"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "dogecoin:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "DOGE-Dogecoin"
+      }
+    ],
+    "representation_identity": "native:DOGE",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "DOGE",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Dogecoin",
+        "raw_contract": "",
+        "raw_network": "DOGE"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "dogecoin:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "DOGE-Dogecoin"
+      }
+    ],
+    "representation_identity": "native:DOGE",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "DOGS",
+    "bybit_observations": [
+      {
+        "raw_chainType": "TON",
+        "raw_contract": "",
+        "raw_network": "TON"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ton:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "DOGS-The Open Network (TON)"
+      }
+    ],
+    "representation_identity": "EQCvxJy4eG8hyHBFsZ7eePxrRsUQSFE_jpptRAYBmcG_DOGS",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "DOGS",
+    "bybit_observations": [
+      {
+        "raw_chainType": "TON",
+        "raw_contract": "",
+        "raw_network": "TON"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ton:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "DOGS-The Open Network (TON)"
+      }
+    ],
+    "representation_identity": "EQCvxJy4eG8hyHBFsZ7eePxrRsUQSFE_jpptRAYBmcG_DOGS",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "DOOD",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Solana",
+        "raw_contract": "",
+        "raw_network": "SOL"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "solana:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "DOOD-Solana"
+      }
+    ],
+    "representation_identity": "DvjbEsdca43oQcw2h3HW1CT7N3x5vRcr3QrvTUHnXvgV",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "DOOD",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Solana",
+        "raw_contract": "",
+        "raw_network": "SOL"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "solana:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "DOOD-Solana"
+      }
+    ],
+    "representation_identity": "DvjbEsdca43oQcw2h3HW1CT7N3x5vRcr3QrvTUHnXvgV",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "DYDX",
+    "bybit_observations": [
+      {
+        "raw_chainType": "DYDX",
+        "raw_contract": "",
+        "raw_network": "DYDX"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "dydx:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "DYDX-DYDX"
+      }
+    ],
+    "representation_identity": "native:DYDX",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "DYDX",
+    "bybit_observations": [
+      {
+        "raw_chainType": "DYDX",
+        "raw_contract": "",
+        "raw_network": "DYDX"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "native"
+    ],
+    "network_uid": "dydx:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "DYDX-DYDX"
+      }
+    ],
+    "representation_identity": "native:DYDX",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "EDGE",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ethereum",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "EDGE-ERC20"
+      }
+    ],
+    "representation_identity": "0xb0076de78dc50581770bba1d211ddc0ad4f2a241",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "EDGE",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ethereum",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "EDGE-ERC20"
+      }
+    ],
+    "representation_identity": "0xb0076de78dc50581770bba1d211ddc0ad4f2a241",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "EIGEN",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ethereum",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "EIGEN-ERC20"
+      }
+    ],
+    "representation_identity": "0xec53bf9167f50cdeb3ae105f56099aaab9061f83",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "EIGEN",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ethereum",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "BYBIT_TO_OKX",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "EIGEN-ERC20"
+      }
+    ],
+    "representation_identity": "0xec53bf9167f50cdeb3ae105f56099aaab9061f83",
+    "source_rules": [
+      "BASE_V0.1_FROZEN_GRAPH"
+    ],
+    "source_scope": "BASE_V0.1"
+  },
+  {
+    "asset": "ENA",
+    "bybit_observations": [
+      {
+        "raw_chainType": "Ethereum",
+        "raw_contract": "",
+        "raw_network": "ETH"
+      }
+    ],
+    "direction": "OKX_TO_BYBIT",
+    "identity_kinds": [
+      "token"
+    ],
+    "network_uid": "ethereum:mainnet",
+    "okx_observations": [
+      {
+        "raw_chainType": "",
+        "raw_contract": "",
+        "raw_network": "ENA-ERC20"
+      }
+    ],
+    "representation_identity": "0x57e114b691db790

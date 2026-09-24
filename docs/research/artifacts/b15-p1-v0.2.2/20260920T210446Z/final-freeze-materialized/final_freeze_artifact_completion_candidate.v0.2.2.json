@@ -1,0 +1,14 @@
+{
+  "artifact_manifest_sha256": "a1a813244dc8cd81c2002e54650b8202c318ee9589f443301a9e624c46bb7b79",
+  "asset_universe_sha256": "fa9f97ab1e70b30bdb196fd6f4d49a8cbc7462d13424644ddb7b88cdd9f431b0",
+  "excluded_sha256": "4c6090570b4aeb5337786c1be67f8e4a05997fd9c4f89d146f0745ca9c8ac7f7",
+  "freeze_record_sha256": "dfa7466e6133ba8adef99d64114d5651199c0f6432a14a5b76434a200b5b937b",
+  "identity_review_sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+  "post_completion_checkpoint_required": true,
+  "protocol_artifact_hash_requirements_satisfied": true,
+  "quote_rebalance_graph_sha256": "1c5a225e35c0e346819608ecca652c3c4005e57422fda44db0ed68f1db5593f5",
+  "route_graph_sha256": "06a9edd309a002aa5dc8408d992cff7b774604fc1cfb04f90fd7f56333f27928",
+  "schema": "sc001.b15.final_freeze_artifact_completion_candidate.v0.2.2",
+  "semantic_state_changed": false,
+  "status": "FINAL_FREEZE_ARTIFACT_SET_COMPLETE_CANDIDATE"
+}
