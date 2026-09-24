@@ -1,0 +1,88 @@
+{
+  "schema": "sc001.b15.p1_collector_prelaunch_readiness_spec.v0.1",
+  "date": "2026-09-24",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "purpose": "Offline fail-closed verification of collector v0.1.3 systemd semantics, live capability binding, launch-authorization boundary, frozen dependency integrity and price/PnL firewall before any host deployment or collector start.",
+  "prerequisites": {
+    "combined_offline_result": {
+      "path": "docs/research/sc001-b15-p1-adapter-combined-offline-validation-result-v0.1.1.json",
+      "sha256": "c9b2a2dfa193a596939627284a7221541452434cbab363b92dece4477c3d913a",
+      "required_status": "B15P1_ADAPTER_COMBINED_OFFLINE_VALIDATION_PASS"
+    },
+    "live_wrapper_preflight_result": {
+      "path": "docs/research/sc001-b15-p1-source-capability-live-wrapper-v0.2-offline-preflight-result-v0.1.json",
+      "sha256": "d7f6d35376b583d12f8ebe78441984ed833e9055307afbe8033ffa0f1db65fd4",
+      "required_status": "B15P1_SOURCE_CAPABILITY_LIVE_WRAPPER_V02_OFFLINE_PREFLIGHT_PASS"
+    },
+    "live_capability_result": {
+      "path": "docs/research/sc001-b15-p1-live-source-capability-revalidation-v0.2.1-result-v0.1.json",
+      "sha256": "61fb470c4d0c795adf31a36fff8da34157caa86824efeb8521373a5bf1584ff1",
+      "required_status": "B15P1_NONPRICE_SOURCE_CAPABILITY_REVALIDATION_COMMAND_V021_PASS",
+      "snapshot_sha256": "14341c153649455459f18998be90d65a3010c009893bf76b359dc0b5b74387fc",
+      "required_both_venue_assets": 192
+    }
+  },
+  "collector": {
+    "runner_path": "research/sc001/sc001_b15p1_nonprice_transferability_collector_v0_1_3.py",
+    "runner_sha256": "f8181c4f25d6fc842d13c1faf8e259756883fcbb0bbcf08c23b3e60c9ed7bce0",
+    "library_path": "research/sc001/sc001_b15p1_nonprice_transferability_lib_v0_1_3.py",
+    "library_sha256": "f4e27edff5acb38fb1c9ee840490179d1c3ebe13fd258d8875de768acc4078b5",
+    "implementation_freeze_path": "docs/research/sc001-b15-p1-nonprice-collector-implementation-freeze-v0.1.3.json",
+    "implementation_freeze_sha256": "cdc6654ce5bbf265ce5cc5af2e448806ba306292d29fb986c7eb78bb1379df96",
+    "contract_path": "docs/research/sc001-b15-p1-nonprice-collector-implementation-contract-v0.1.3.json",
+    "contract_sha256": "e584f07e024aa972cb9fe49881b016931b2e0e51acaa56fece3440cef869357f",
+    "protocol_path": "docs/research/sc001-b15-p1-15-second-nonprice-collector-protocol-v0.1.md",
+    "protocol_sha256": "2d4f65c1ddd13ee0fbafb76734ce266fb933404ad24394ac707b246613613563",
+    "service_candidate_path": "ops/systemd/sc001-b15p1-transferability-v0.1.3.service",
+    "service_candidate_sha256": "b59d61f25b4e643f6c9f27389d9829f7e4ea91cfbbb8dffeb48a91b55d755bf8",
+    "status_helper_path": "ops/systemd/sc001_b15p1_transferability_status.sh",
+    "status_helper_sha256": "e26c6707ac38ae2d4bd61e2e31b9197d492f6d43e01d0436e301a284279b1702"
+  },
+  "runtime_contract": {
+    "stable_unit_name": "sc001-b15p1-transferability.service",
+    "runtime_unit_path": "/etc/systemd/system/sc001-b15p1-transferability.service",
+    "versioned_candidate_unit": "sc001-b15p1-transferability-v0.1.3.service",
+    "deployment_root": "/home/botmarket/botmarketplace-site",
+    "runtime_user": "botmarket",
+    "environment_file": "/home/botmarket/.config/sc001/b15-p1.env",
+    "data_root": "/home/botmarket/sc001_data",
+    "capability_snapshot_path": "/home/botmarket/sc001_data/SC001_B15P1_TRANSFERABILITY/source_capability_snapshot.json",
+    "launch_authorization_path": "/home/botmarket/sc001_data/SC001_B15P1_TRANSFERABILITY/collector_launch_authorization.json",
+    "systemd_log_path": "/home/botmarket/sc001_data/SC001_B15P1_TRANSFERABILITY/systemd.log"
+  },
+  "launch_authorization_candidate": {
+    "path": "docs/research/sc001-b15-p1-collector-launch-authorization-candidate-v0.1.json",
+    "sha256": "70fe8764adcc3aa9f0d2ef8826c2edabe9eaeaf7fa40192782bbea624d5681cd",
+    "top_level_status_must_be": "CANDIDATE_NOT_ACTIVE",
+    "runtime_install_authorized": false,
+    "proposed_payload_status": "B15P1_NONPRICE_COLLECTOR_LAUNCH_AUTHORIZED",
+    "proposed_launch_pass_token": "B15P1_NONPRICE_COLLECTOR_LAUNCH_PASS"
+  },
+  "required_prelaunch_checks": {
+    "collector_full_freeze_handshake": true,
+    "frozen_mapping_invariants": true,
+    "live_capability_result_binding": true,
+    "systemd_candidate_static_contract": true,
+    "stable_runtime_unit_name_matches_status_helper": true,
+    "launch_candidate_rejected_as_top_level_runtime_authorization": true,
+    "nested_runtime_payload_accepted_by_collector_validator": true,
+    "wrong_status_token_anchor_and_firewall_mutations_fail_closed": true,
+    "authorization_check_precedes_credentials_and_network_setup": true,
+    "capability_check_precedes_launch_authorization": true,
+    "no_price_endpoint_static_guard": true,
+    "collector_start_or_enable_performed": false,
+    "runtime_authorization_created": false
+  },
+  "offline_firewall": {
+    "credentials_available": false,
+    "exchange_calls_allowed": false,
+    "collector_start_allowed": false,
+    "systemd_mutation_allowed": false,
+    "runtime_authorization_creation_allowed": false,
+    "price_data_allowed": false,
+    "pnl_data_allowed": false,
+    "live_execution_allowed": false
+  },
+  "expected_pass_status": "B15P1_COLLECTOR_PRELAUNCH_READINESS_OFFLINE_PASS",
+  "next_state_on_pass": "PREPARE_B15P1_COLLECTOR_HOST_SYSTEMD_DEPLOYMENT_READINESS_WRAPPER"
+}
