@@ -1,0 +1,40 @@
+{
+  "schema": "sc001.b15.p1_adapter_combined_offline_validation_result.v0.1.1",
+  "date": "2026-09-24",
+  "status": "B15P1_ADAPTER_COMBINED_OFFLINE_VALIDATION_PASS",
+  "bundle_id": "bundle_20260924T163807Z_a5599568",
+  "bundle_sha256": "0c69039ab5ff04e420633796c06c4b344bc972bd135ecdb5fcb9116664317b66",
+  "job_id": "job_20260924T170906Z_810905df",
+  "package_integrity_ok": true,
+  "exit_code": 0,
+  "combined_manifest_sha256": "508d64df980701c9892668adc9a964a7cd6da8d250acd36139c683892499c40e",
+  "collector": {
+    "status": "B15P1_NONPRICE_COLLECTOR_V013_COMPILE_AND_SELFTEST_PASS",
+    "selftest_status": "B15P1_NONPRICE_COLLECTOR_V013_SELF_TEST_PASS",
+    "mandatory_tests_passed": 28,
+    "extra_tests_passed": 8,
+    "compile_manifest_sha256": "001abde73824bdc0c7b8ec9adaf43498669e8389369d809d6031b6a513c8f04b",
+    "selftest_manifest_sha256": "321109e754f0cade9634ad9125c1a27638adc47b86cf2a311d49a7f682ec2bf2"
+  },
+  "capability": {
+    "version": "v0.2.1",
+    "status": "B15P1_NONPRICE_SOURCE_CAPABILITY_V021_COMPILE_AND_SELFTEST_PASS",
+    "selftest_status": "B15P1_NONPRICE_SOURCE_CAPABILITY_REVALIDATION_V021_SELF_TEST_PASS",
+    "compile_manifest_sha256": "d914b1136b3bc3c475be7291af50fc8e57f5add3e056a13a921b58cf2c4d3afa",
+    "selftest_manifest_sha256": "1ef68c27c39778725498472253b3e188ec2e8f508241ce440190558c9961e57c",
+    "bybit_spot_pagination_guard_scoped": true
+  },
+  "safety": {
+    "credentials_used": false,
+    "exchange_calls_performed": false,
+    "capability_snapshot_written": false,
+    "collector_launch_authorized": false,
+    "price_data_used": false,
+    "pnl_data_used": false,
+    "live_execution_authorized": false
+  },
+  "research_semantics_changed": false,
+  "collector_cadence_changed": false,
+  "stage_c_cost_model_changed": false,
+  "next_state": "PREPARE_B15P1_SOURCE_CAPABILITY_LIVE_RETRY_V021"
+}

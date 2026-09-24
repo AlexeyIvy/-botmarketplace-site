@@ -1,0 +1,61 @@
+{
+  "schema": "sc001.b15.p1_source_capability_live_wrapper_preflight_spec.v0.1",
+  "date": "2026-09-24",
+  "status": "FROZEN_BEFORE_OFFLINE_PREFLIGHT",
+  "purpose": "Offline static and syntax validation of the safe-staging live read-only capability wrapper before any live exchange call.",
+  "wrapper": {
+    "path": "scripts/research/run-b15p1-nonprice-source-capability-revalidation-v0.2.sh",
+    "sha256": "0bc379933be07fb7b31e2efe4a2f06b4b7b99ad2fdc4db403dbffbe63ebc556e",
+    "target_capability_version": "v0.2.1"
+  },
+  "offline_prerequisite": {
+    "result_path": "docs/research/sc001-b15-p1-adapter-combined-offline-validation-result-v0.1.1.json",
+    "result_sha256": "c9b2a2dfa193a596939627284a7221541452434cbab363b92dece4477c3d913a",
+    "required_status": "B15P1_ADAPTER_COMBINED_OFFLINE_VALIDATION_PASS",
+    "job_id": "job_20260924T170906Z_810905df"
+  },
+  "staged_dependencies": [
+    {"path":"research/sc001/sc001_b15p1_nonprice_source_capability_revalidation_v0_2_1.py","sha256":"dacaacd8563ec80d7f9f3006cc846795aa7e5e017518a817c962ee1dc7c1f1fe"},
+    {"path":"docs/research/sc001-b15-p1-nonprice-source-capability-revalidation-freeze-v0.2.1.json","sha256":"943a10a5da9ca4334366c2266df26e672bbc76eb30ebcf976e6fa8b1a8b6d73c"},
+    {"path":"docs/research/sc001-b15-p1-nonprice-source-capability-revalidation-v0.2.md","sha256":"ee0ea97aa848f6d8acac6b574f9b7a4cb5c2f4ed49bea04d96d7f52b96c49394"},
+    {"path":"docs/research/sc001-b15-p1-nonprice-source-capability-revalidation-spec-v0.2.1.json","sha256":"9811fe0c10b9b4178376b7ce244936e9d00027ab4d6d234b9c8581cca75a00ef"},
+    {"path":"research/sc001/sc001_b15p1_nonprice_transferability_collector_v0_1_3.py","sha256":"f8181c4f25d6fc842d13c1faf8e259756883fcbb0bbcf08c23b3e60c9ed7bce0"},
+    {"path":"docs/research/sc001-b15-p1-nonprice-collector-implementation-freeze-v0.1.3.json","sha256":"cdc6654ce5bbf265ce5cc5af2e448806ba306292d29fb986c7eb78bb1379df96"},
+    {"path":"ops/systemd/sc001-b15p1-transferability-v0.1.3.service","sha256":"b59d61f25b4e643f6c9f27389d9829f7e4ea91cfbbb8dffeb48a91b55d755bf8"},
+    {"path":"docs/research/artifacts/b15-p1-v0.2.2/20260920T210446Z/final-freeze-materialized/directed_route_graph.v0.2.2.shard-index.json","sha256":"001c89a7d4e973ed33ab072ec43746f6f7b6c0105912a24ae0483955ac93a50a"},
+    {"path":"docs/research/artifacts/b15-p1-v0.2.2/20260920T210446Z/final-freeze-materialized/ADMITTED.v0.2.2.json","sha256":"fa9f97ab1e70b30bdb196fd6f4d49a8cbc7462d13424644ddb7b88cdd9f431b0"},
+    {"path":"docs/research/sc001-b15-p1-adapter-combined-offline-validation-result-v0.1.1.json","sha256":"c9b2a2dfa193a596939627284a7221541452434cbab363b92dece4477c3d913a"}
+  ],
+  "required_static_properties": {
+    "bash_strict_mode": true,
+    "umask_027": true,
+    "root_gate": true,
+    "credential_file_mode_0600_gate": true,
+    "credential_readability_as_botmarket_gate": true,
+    "source_and_staged_sha_recheck": true,
+    "staging_symlink_rejection": true,
+    "staging_exact_file_count": 10,
+    "offline_pass_prerequisite_rechecked": true,
+    "probe_runs_as_botmarket": true,
+    "probe_mode_run_count": 1,
+    "stale_snapshot_removed_before_run": true,
+    "post_run_snapshot_security_assertions": true,
+    "github_control_clone_permissions_unchanged": true
+  },
+  "forbidden_wrapper_behavior": {
+    "direct_http_client_command": true,
+    "systemd_service_start_or_enable": true,
+    "collector_launch_authorization_creation": true,
+    "repo_chmod_or_chown": true,
+    "plaintext_exchange_secret_variable_names": true
+  },
+  "offline_firewall": {
+    "credentials_available": false,
+    "exchange_calls_allowed": false,
+    "collector_launch_allowed": false,
+    "price_data_allowed": false,
+    "pnl_data_allowed": false,
+    "live_execution_allowed": false
+  },
+  "expected_pass_status": "B15P1_SOURCE_CAPABILITY_LIVE_WRAPPER_V02_OFFLINE_PREFLIGHT_PASS"
+}

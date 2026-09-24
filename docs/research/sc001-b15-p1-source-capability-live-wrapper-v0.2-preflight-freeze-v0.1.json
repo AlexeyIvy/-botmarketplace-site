@@ -1,0 +1,19 @@
+{
+  "schema": "sc001.b15.p1_source_capability_live_wrapper_preflight_freeze.v0.1",
+  "date": "2026-09-24",
+  "status": "FROZEN_BEFORE_B15P1_SOURCE_CAPABILITY_LIVE_WRAPPER_V02_OFFLINE_PREFLIGHT",
+  "wrapper_sha256": "0bc379933be07fb7b31e2efe4a2f06b4b7b99ad2fdc4db403dbffbe63ebc556e",
+  "preflight_harness_sha256": "5e8886fe3e4d96f6d8c2279dfe9f29730445ea0061c66370571573abad359674",
+  "spec_sha256": "3e457fe433de6ccbe5b3ac7b43e9f5b4fa19cf704994ebf151f7de0268b0f0bf",
+  "offline_result_sha256": "c9b2a2dfa193a596939627284a7221541452434cbab363b92dece4477c3d913a",
+  "capability_probe_sha256": "dacaacd8563ec80d7f9f3006cc846795aa7e5e017518a817c962ee1dc7c1f1fe",
+  "capability_freeze_sha256": "943a10a5da9ca4334366c2266df26e672bbc76eb30ebcf976e6fa8b1a8b6d73c",
+  "credentials_available": false,
+  "exchange_calls_allowed": false,
+  "collector_launch_allowed": false,
+  "price_data_allowed": false,
+  "pnl_data_allowed": false,
+  "live_execution_allowed": false,
+  "research_semantics_changed": false,
+  "next_state": "RUN_B15P1_SOURCE_CAPABILITY_LIVE_WRAPPER_V02_OFFLINE_PREFLIGHT_AFTER_USER_APPROVAL"
+}
