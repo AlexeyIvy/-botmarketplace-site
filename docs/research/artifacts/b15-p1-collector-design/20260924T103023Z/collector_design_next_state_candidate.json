@@ -1,0 +1,9 @@
+{
+  "collector_launch_authorized": false,
+  "design_preflight_status": "B15_P1_15_SECOND_NONPRICE_COLLECTOR_DESIGN_PREFLIGHT_PASS",
+  "live_execution_authorized": false,
+  "next_state": "PREPARE_B15P1_COLLECTOR_IMPLEMENTATION_SELF_TEST",
+  "price_economic_research_authorized": false,
+  "schema": "sc001.b15.p1_nonprice_collector_design_next_state.candidate.v0.1",
+  "status": "CANDIDATE_ONLY"
+}

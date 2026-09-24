@@ -1,0 +1,43 @@
+{
+  "collector_launch_authorized": false,
+  "data_root_default": "~/sc001_data/SC001_B15P1_TRANSFERABILITY/",
+  "design_hashes": {
+    "design_candidate_sha256": "ea42cbd5a2f14061d3bd66aafbda7ccf79f6afa85a5c90c3defe8c2ba952889e",
+    "preflight_spec_sha256": "cb56417ab12fe1e46b5202eca550fee505755b6df759ffd9349ffaef6d4cc0bc",
+    "protocol_sha256": "2d4f65c1ddd13ee0fbafb76734ce266fb933404ad24394ac707b246613613563",
+    "rate_limit_evidence_sha256": "80ff38757742b8ffded028533d190be6a7f84de82fa7fcf9fb335007965a8613"
+  },
+  "launch_pass_token": "B15P1_NONPRICE_COLLECTOR_LAUNCH_PASS",
+  "live_capability_pass_token": "B15P1_NONPRICE_SOURCE_CAPABILITY_REVALIDATION_PASS",
+  "live_capability_review_token": "B15P1_NONPRICE_SOURCE_CAPABILITY_REVALIDATION_REVIEW",
+  "live_source_calls_authorized_in_implementation_self_test": false,
+  "mandatory_offline_self_tests": [
+    "FROZEN_HASH_HANDSHAKE",
+    "SCHEDULER_PHASE_FIXTURES",
+    "NO_CATCHUP_FIXTURE",
+    "NO_OVERLAP_FIXTURE",
+    "BYBIT_RESPONSE_PARSER_FIXTURE",
+    "OKX_RESPONSE_PARSER_FIXTURE",
+    "ROUTE_STATE_MACHINE_FIXTURES",
+    "EVENT_TRANSITION_FIXTURES",
+    "SOURCE_GAP_FIXTURES",
+    "FEE_STALENESS_FIXTURES",
+    "STORAGE_PRESSURE_FIXTURES",
+    "APPEND_ONLY_WRITE_FIXTURE",
+    "ATOMIC_STATE_RESTART_FIXTURE",
+    "SECRET_REDACTION_FIXTURE",
+    "NO_PRICE_ENDPOINT_STATIC_GUARD"
+  ],
+  "modes": [
+    "self-test",
+    "run",
+    "status"
+  ],
+  "price_data_authorized": false,
+  "runner_path": "research/sc001/sc001_b15p1_nonprice_transferability_collector_v0_1.py",
+  "schema": "sc001.b15.p1_nonprice_collector_implementation_contract.candidate.v0.1",
+  "self_test_pass_token": "B15P1_NONPRICE_COLLECTOR_V01_SELF_TEST_PASS",
+  "self_test_review_token": "B15P1_NONPRICE_COLLECTOR_V01_SELF_TEST_REVIEW",
+  "service_name": "sc001-b15p1-transferability.service",
+  "status": "COLLECTOR_IMPLEMENTATION_CONTRACT_READY"
+}

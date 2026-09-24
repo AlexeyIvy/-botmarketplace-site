@@ -1,0 +1,26 @@
+{
+  "results": [
+    {
+      "actual_next_slot_ms": 45000,
+      "case": "NORMAL_PHASE",
+      "expected_next_slot_ms": 45000,
+      "now_ms": 31000,
+      "passed": true
+    },
+    {
+      "actual_next_slot_ms": 60000,
+      "case": "MISSED_SLOT_NO_CATCHUP",
+      "expected_next_slot_ms": 60000,
+      "now_ms": 47000,
+      "passed": true
+    },
+    {
+      "actual_next_slot_ms": 75000,
+      "case": "EXACT_PHASE_ADVANCE",
+      "expected_next_slot_ms": 75000,
+      "now_ms": 60000,
+      "passed": true
+    }
+  ],
+  "schema": "sc001.b15.p1_collector_scheduler_tests.v0.1"
+}

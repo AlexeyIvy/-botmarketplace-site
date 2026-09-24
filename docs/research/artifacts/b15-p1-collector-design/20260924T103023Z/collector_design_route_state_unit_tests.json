@@ -1,0 +1,65 @@
+{
+  "results": [
+    {
+      "actual": "ACTIVE",
+      "dest_deposit": true,
+      "dest_valid": true,
+      "expected": "ACTIVE",
+      "metadata_valid": true,
+      "passed": true,
+      "source_valid": true,
+      "source_withdraw": true
+    },
+    {
+      "actual": "BLOCKED_SOURCE_WITHDRAWAL",
+      "dest_deposit": true,
+      "dest_valid": true,
+      "expected": "BLOCKED_SOURCE_WITHDRAWAL",
+      "metadata_valid": true,
+      "passed": true,
+      "source_valid": true,
+      "source_withdraw": false
+    },
+    {
+      "actual": "BLOCKED_DESTINATION_DEPOSIT",
+      "dest_deposit": false,
+      "dest_valid": true,
+      "expected": "BLOCKED_DESTINATION_DEPOSIT",
+      "metadata_valid": true,
+      "passed": true,
+      "source_valid": true,
+      "source_withdraw": true
+    },
+    {
+      "actual": "BLOCKED_BOTH",
+      "dest_deposit": false,
+      "dest_valid": true,
+      "expected": "BLOCKED_BOTH",
+      "metadata_valid": true,
+      "passed": true,
+      "source_valid": true,
+      "source_withdraw": false
+    },
+    {
+      "actual": "SOURCE_UNKNOWN",
+      "dest_deposit": true,
+      "dest_valid": true,
+      "expected": "SOURCE_UNKNOWN",
+      "metadata_valid": true,
+      "passed": true,
+      "source_valid": false,
+      "source_withdraw": true
+    },
+    {
+      "actual": "METADATA_INVALID",
+      "dest_deposit": true,
+      "dest_valid": true,
+      "expected": "METADATA_INVALID",
+      "metadata_valid": false,
+      "passed": true,
+      "source_valid": true,
+      "source_withdraw": true
+    }
+  ],
+  "schema": "sc001.b15.p1_collector_route_state_tests.v0.1"
+}

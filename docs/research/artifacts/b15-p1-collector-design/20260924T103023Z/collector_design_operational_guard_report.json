@@ -1,0 +1,21 @@
+{
+  "bybit_rate_limit_safety_factor": "75.0000000000000000000000000000000000000000000000000000000000",
+  "fast_rate_requests_per_second": "0.0666666666666666666666666666666666666666666666666666666666667",
+  "fee_refresh_seconds": 21600,
+  "fee_stale_after_seconds": 28800,
+  "first_source_only_review_days": 7,
+  "heartbeat_seconds_max": 30,
+  "okx_rate_limit_safety_factor": "90.0000000000000000000000000000000000000000000000000000000000",
+  "request_deadline_seconds": 12,
+  "restart_backoff_seconds": 15,
+  "schema": "sc001.b15.p1_nonprice_collector_design_operational_guard_report.v0.1",
+  "storage_guard": {
+    "automatic_protected_evidence_deletion_allowed": false,
+    "check_interval_seconds": 300,
+    "stop_if_free_bytes_lt": 10737418240,
+    "stop_if_free_percent_lt": 15,
+    "stop_status": "STORAGE_PRESSURE_REVIEW",
+    "warning_if_free_bytes_lt": 21474836480,
+    "warning_if_free_percent_lt": 25
+  }
+}
