@@ -1,0 +1,44 @@
+{
+  "schema": "sc001.b15.v0.2.2_final_freeze_host_checkpoint_completion.v1",
+  "date": "2026-09-24",
+  "status": "CHECKPOINT_BACKUP_RESTORE_VERIFY_PASS",
+  "checkpoint_id": "botmarketplace-sc001-b15-v022-final-checkpoint-20260924T084413Z",
+  "archive": "/var/backups/botmarketplace/botmarketplace-sc001-b15-v022-final-checkpoint-20260924T084413Z.tar.gz",
+  "archive_sha256": "523e8b51e95f4140819a92f9466c49719726584432d1785a6350765e41f88a72",
+  "verify_record": "/var/backups/botmarketplace/botmarketplace-sc001-b15-v022-final-checkpoint-20260924T084413Z.tar.gz.restore-verify.txt",
+  "repository_bundle_verify": "PASS",
+  "freeze_commit": "7fdaf8c8e3053e2bbf266ec7d89c3abc90c3661f",
+  "checkpoint_tooling_commit": "b898f7e019d1a9bae1c514cabbc8156e75abb1d3",
+  "freeze_record": {
+    "path": "docs/research/sc001-b15-p1-final-identity-route-v0.2.2-freeze-v1.json",
+    "sha256": "dfa7466e6133ba8adef99d64114d5651199c0f6432a14a5b76434a200b5b937b"
+  },
+  "exact_replay_manifest": {
+    "path": "docs/research/artifacts/b15-p1-v0.2.2/20260920T210446Z/replay/integrated_replay_manifest_v0.2.2.json",
+    "sha256": "ad842a5f7be42c7c4cae6ce13b91846de7e17e17cb06cf1152aa4f69538c1f7b"
+  },
+  "freeze_candidate_manifest": {
+    "path": "docs/research/artifacts/b15-p1-v0.2.2/20260920T210446Z/final-freeze-preflight/identity_route_v0.2.2_final_freeze_candidate_manifest.json",
+    "sha256": "1519940e2580fc246d745e11cb06dda564b83f6b7cb689583eb2d1c386c8fabd"
+  },
+  "secrets_policy": {
+    "plaintext_secrets_in_normal_archive": false,
+    "separate_encrypted_secrets_archive_required_for_full_disaster_recovery": true
+  },
+  "evidence": {
+    "source": "USER_PROVIDED_TERMINAL_OUTPUT",
+    "observed_terminal_lines": [
+      "repository.bundle is okay",
+      "CHECKPOINT_BACKUP_RESTORE_VERIFY_PASS"
+    ],
+    "vps_reader_backup_root_exposed": false
+  },
+  "effect": {
+    "post_final_freeze_checkpoint_gate_satisfied": true,
+    "final_identity_route_freeze_preserved": true,
+    "collector_authorized": false,
+    "collector_launch_authorized": false,
+    "price_economic_research_authorized": false
+  },
+  "next_state": "PREPARE_POST_IDENTITY_FREEZE_NEXT_STAGE_AUTHORIZATION"
+}

@@ -1,7 +1,7 @@
 {
   "schema": "sc001.b15.v0.2.2_final_freeze_checkpoint_plan.v1",
   "date": "2026-09-24",
-  "status": "CHECKPOINT_SCRIPT_READY_RUN_PENDING",
+  "status": "CHECKPOINT_BACKUP_RESTORE_VERIFY_PASS",
   "freeze_commit": "7fdaf8c8e3053e2bbf266ec7d89c3abc90c3661f",
   "freeze_record": {
     "path": "docs/research/sc001-b15-p1-final-identity-route-v0.2.2-freeze-v1.json",
@@ -18,13 +18,22 @@
   "checkpoint_script": "scripts/backup/create-b15-v022-final-freeze-checkpoint.sh",
   "checkpoint_script_sha256": "19f8b76fbaec676050ad84c29f7f5e6e4c89c4d37d24094f561c84c29265908f",
   "runbook": "docs/infrastructure/b15-v022-final-freeze-checkpoint-backup-v1.0.md",
+  "host_checkpoint": {
+    "state": "PASS",
+    "checkpoint_id": "botmarketplace-sc001-b15-v022-final-checkpoint-20260924T084413Z",
+    "archive": "/var/backups/botmarketplace/botmarketplace-sc001-b15-v022-final-checkpoint-20260924T084413Z.tar.gz",
+    "archive_sha256": "523e8b51e95f4140819a92f9466c49719726584432d1785a6350765e41f88a72",
+    "verify_record": "/var/backups/botmarketplace/botmarketplace-sc001-b15-v022-final-checkpoint-20260924T084413Z.tar.gz.restore-verify.txt",
+    "repository_bundle_verify": "PASS",
+    "restore_verification_required": true,
+    "success_status": "CHECKPOINT_BACKUP_RESTORE_VERIFY_PASS",
+    "evidence_source": "USER_PROVIDED_TERMINAL_OUTPUT"
+  },
   "normal_archive_secrets_allowed": false,
-  "restore_verification_required": true,
-  "success_status": "CHECKPOINT_BACKUP_RESTORE_VERIFY_PASS",
   "authorization_after_checkpoint": {
     "collector_authorized": false,
     "collector_launch_authorized": false,
     "price_economic_research_authorized": false
   },
-  "next_state": "RUN_V022_FINAL_FREEZE_HOST_CHECKPOINT_AND_CAPTURE_PASS_RECORD"
+  "next_state": "PREPARE_POST_IDENTITY_FREEZE_NEXT_STAGE_AUTHORIZATION"
 }
