@@ -1,0 +1,38 @@
+{
+  "schema": "sc001.b15.p1_nonprice_collector_implementation_self_test_spec.v0.1.2",
+  "date": "2026-09-24",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "implementation": {
+    "runner_path": "research/sc001/sc001_b15p1_nonprice_transferability_collector_v0_1_2.py",
+    "runner_sha256": "157b1e7e77a9d4299c06ac60ce56e1544335d7435d9f25a6212d7f417b312b3d",
+    "library_path": "research/sc001/sc001_b15p1_nonprice_transferability_lib_v0_1_2.py",
+    "library_sha256": "007a97f817f04c50655ad6339b7eb9eb15aacfa8b0c851be97b7976c69308088",
+    "service_candidate_path": "ops/systemd/sc001-b15p1-transferability-v0.1.2.service",
+    "service_candidate_sha256": "c71818e0b53cb087c5023361a50a19fbce918d87272f712178e92355bb184544",
+    "compile_harness_path": "research/sc001/sc001_b15p1_nonprice_collector_selftest_harness_v0_1_2.py",
+    "compile_harness_sha256": "31d5a71c39818679a50a94f9aaf75e8811bf467469d56cd92e0b7b0dba6335f9",
+    "status_helper_sha256": "e26c6707ac38ae2d4bd61e2e31b9197d492f6d43e01d0436e301a284279b1702"
+  },
+  "expected_frozen_mapping": {
+    "base_assets": 146,
+    "overlay_assets": 46,
+    "asset_common_representations": 207,
+    "quote_common_representations": 12,
+    "quote_one_sided_bybit": 8,
+    "quote_one_sided_okx": 6,
+    "v0.2.2_exact_source_matchers": 182
+  },
+  "self_test": {
+    "compile_guard_required": true,
+    "exchange_calls_allowed": false,
+    "credentials_required": false,
+    "capability_snapshot_required": false,
+    "launch_authorization_required": false,
+    "price_data_allowed": false,
+    "pnl_allowed": false
+  },
+  "expected_runner_pass_token": "B15P1_NONPRICE_COLLECTOR_V012_SELF_TEST_PASS",
+  "expected_harness_pass_token": "B15P1_NONPRICE_COLLECTOR_V012_COMPILE_AND_SELFTEST_PASS",
+  "pass_state": "B15P1_NONPRICE_COLLECTOR_IMPLEMENTATION_V012_SELF_TEST_PASS",
+  "next_state_on_pass": "PREPARE_B15P1_LIVE_READ_ONLY_SOURCE_CAPABILITY_REVALIDATION"
+}

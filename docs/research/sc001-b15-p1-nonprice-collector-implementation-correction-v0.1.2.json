@@ -1,0 +1,47 @@
+{
+  "schema": "sc001.b15.p1_nonprice_collector_implementation_correction.v0.1.2",
+  "date": "2026-09-24",
+  "status": "TECHNICAL_SELF_TEST_GUARD_CORRECTION_READY",
+  "failed_implementation": {
+    "version": "v0.1.1",
+    "implementation_commit": "3125e1f72605b803ab7f73228bc2199b96828245",
+    "self_test_bundle_id": "bundle_20260924T112109Z_0d20dff8",
+    "self_test_bundle_sha256": "eb0e9ee92d2a0fc64a620206b103fc11ecd64dc4c858039af1855fc4776b6006",
+    "self_test_job_id": "job_20260924T113440Z_6ed95905",
+    "package_integrity_ok": true,
+    "compile_runner_pass": true,
+    "compile_library_pass": true,
+    "eof_guard_pass": true,
+    "self_test_entered": true,
+    "exit_code": 2,
+    "failure_class": "STATIC_GUARD_FALSE_POSITIVE",
+    "observed_error": "CollectorError: unexpected websocket endpoint in non-price REST collector",
+    "root_cause": "The no-price static guard scanned the library source and matched its own literal wss:// check. No websocket endpoint existed elsewhere.",
+    "exchange_calls_performed": false,
+    "collector_launch_performed": false,
+    "price_data_used": false,
+    "pnl_data_used": false
+  },
+  "corrected_implementation": {
+    "version": "v0.1.2",
+    "runner_path": "research/sc001/sc001_b15p1_nonprice_transferability_collector_v0_1_2.py",
+    "runner_sha256": "157b1e7e77a9d4299c06ac60ce56e1544335d7435d9f25a6212d7f417b312b3d",
+    "library_path": "research/sc001/sc001_b15p1_nonprice_transferability_lib_v0_1_2.py",
+    "library_sha256": "007a97f817f04c50655ad6339b7eb9eb15aacfa8b0c851be97b7976c69308088",
+    "service_candidate_path": "ops/systemd/sc001-b15p1-transferability-v0.1.2.service",
+    "service_candidate_sha256": "c71818e0b53cb087c5023361a50a19fbce918d87272f712178e92355bb184544",
+    "compile_harness_path": "research/sc001/sc001_b15p1_nonprice_collector_selftest_harness_v0_1_2.py",
+    "compile_harness_sha256": "31d5a71c39818679a50a94f9aaf75e8811bf467469d56cd92e0b7b0dba6335f9"
+  },
+  "correction_scope": {
+    "static_websocket_guard_constructs_forbidden_marker_without_literal_self_match": true,
+    "runner_behavior_changed": false,
+    "collector_cadence_changed": false,
+    "endpoint_set_changed": false,
+    "research_logic_changed": false,
+    "identity_route_semantics_changed": false,
+    "cost_model_changed": false,
+    "price_firewall_weakened": false
+  },
+  "next_state": "FREEZE_AND_SELF_TEST_B15P1_NONPRICE_COLLECTOR_V012"
+}

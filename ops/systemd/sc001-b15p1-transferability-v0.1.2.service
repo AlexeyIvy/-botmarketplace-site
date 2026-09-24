@@ -1,0 +1,30 @@
+[Unit]
+Description=SC001 B15-P1 Non-Price Transferability Collector v0.1.2
+Wants=network-online.target time-sync.target
+After=network-online.target time-sync.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+User=botmarket
+WorkingDirectory=/home/botmarket/botmarketplace-site
+Environment=SC001_DATA_ROOT=/home/botmarket/sc001_data
+Environment=B15P1_CAPABILITY_SNAPSHOT=/home/botmarket/sc001_data/SC001_B15P1_TRANSFERABILITY/source_capability_snapshot.json
+Environment=B15P1_LAUNCH_AUTHORIZATION=/home/botmarket/sc001_data/SC001_B15P1_TRANSFERABILITY/collector_launch_authorization.json
+Environment=PYTHONUNBUFFERED=1
+EnvironmentFile=/home/botmarket/.config/sc001/b15-p1.env
+ExecStartPre=/usr/bin/mkdir -p /home/botmarket/sc001_data/SC001_B15P1_TRANSFERABILITY
+ExecStart=/usr/bin/python3 -u /home/botmarket/botmarketplace-site/research/sc001/sc001_b15p1_nonprice_transferability_collector_v0_1_2.py --mode run
+Restart=on-failure
+RestartSec=15s
+KillSignal=SIGTERM
+TimeoutStopSec=30s
+NoNewPrivileges=true
+PrivateTmp=true
+UMask=0027
+LimitNOFILE=65536
+StandardOutput=append:/home/botmarket/sc001_data/SC001_B15P1_TRANSFERABILITY/systemd.log
+StandardError=append:/home/botmarket/sc001_data/SC001_B15P1_TRANSFERABILITY/systemd.log
+
+[Install]
+WantedBy=multi-user.target
