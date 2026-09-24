@@ -1,0 +1,43 @@
+{
+  "schema": "sc001.b15.p1_full_cycle_edge_to_fill_structural_preflight_bundle_seal.v0.1",
+  "date": "2026-09-24",
+  "state": "SEALED_RUN_PENDING",
+  "bundle_id": "bundle_20260924T095623Z_f2990716",
+  "bundle_sha256": "ef26b125797a70cb20cf2f9d2253279125077b8fddc9076fb295565d4779c98f",
+  "approval_code": "BM-EF26B125797A",
+  "entrypoint": "sc001_b15_p1_full_cycle_edge_to_fill_structural_preflight_v0_1.py",
+  "entrypoint_sha256": "643417556f44fdb410805454ca579cc75ea0c7da47c400694953d173f384b688",
+  "binding_inputs": {
+    "artifact_complete_checkpoint_completion_sha256": "539c1070afcb3e9d105a9c7126902306f54b36c6146c63c07f28f1a1def25a12",
+    "final_freeze_artifact_supplement_sha256": "6241a66f93dfcbd74d2ea8c3ac164c746f87236d653895b8cbf01ce348913997",
+    "full_cycle_cost_model_sha256": "0cf95139f5413354658d04ed12078ca5a27cd7f4d1693c04d8fd491746d627ee",
+    "source_semantics_v0.3_sha256": "93afbca707c98e35d38073b163c79561282f5a9a664142acf7995ddc20627190",
+    "preflight_protocol_v0.2_sha256": "5859539511b58fe8ae6a3db4e6ffacee94e887ce16e5a1108abd080b493e0c06",
+    "preflight_spec_v0.1_sha256": "48a39abb97f2de46c644ce633263ebd2ae94202a096eb769bd3b75464ec6166b"
+  },
+  "expected": {
+    "minimum_nontransfer_structural_burden_bps": 61,
+    "minimum_hurdle_before_transfer_costs_bps": 71,
+    "reference_notional_usdt": 10000,
+    "opening_market_fills": 2,
+    "per_fill_fee_floor_bps": 10,
+    "transfer_fee_uncertainty_multiplier": 1.25,
+    "bybit_fee_unit_tests": 3,
+    "trading_fee_unit_tests": 5,
+    "route_selection_unit_tests": 4,
+    "okx_fail_closed_unit_tests": 3
+  },
+  "safety": {
+    "price_data_used": false,
+    "pnl_data_used": false,
+    "collector_authorized": false,
+    "collector_launch_authorized": false,
+    "live_execution_authorized": false,
+    "runtime_mutated": false,
+    "registry_mutated": false,
+    "universe_mutated": false
+  },
+  "pass_status": "B15_P1_FULL_CYCLE_EDGE_TO_FILL_STRUCTURAL_PREFLIGHT_PASS",
+  "next_state_on_pass": "PREPARE_15_SECOND_NONPRICE_COLLECTOR_DESIGN",
+  "next_state": "RUN_B15_P1_FULL_CYCLE_EDGE_TO_FILL_STRUCTURAL_PREFLIGHT_AFTER_USER_APPROVAL"
+}
