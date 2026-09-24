@@ -48,7 +48,7 @@
       "target_receive": "100",
       "fixed_fee": "1",
       "percentage_fee": "0.01",
-      "expected_handling_fee_decimal": "2.0101010101010101010101010101010101010101010101010"
+      "expected_handling_fee_decimal": "2.01010101010101010101010101010101010101010101010101010101010"
     },
     {
       "case": "INVALID_PERCENTAGE",

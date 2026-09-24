@@ -18,6 +18,8 @@ Allowed:
 - source-field requirements for the later collector;
 - offline structural preflight.
 
+Price/PnL remains forbidden.
+
 Still forbidden:
 
 - B15 price feed;
