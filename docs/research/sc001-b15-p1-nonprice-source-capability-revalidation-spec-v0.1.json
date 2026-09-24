@@ -1,0 +1,62 @@
+{
+  "schema": "sc001.b15.p1_nonprice_source_capability_revalidation_spec.v0.1",
+  "date": "2026-09-24",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "implementation_anchors": {
+    "runner_sha256": "157b1e7e77a9d4299c06ac60ce56e1544335d7435d9f25a6212d7f417b312b3d",
+    "implementation_freeze_sha256": "fc4d7496870896ff7b8036ce9c17a3d5059142be2e18dd2c21eb646f8c32fabf",
+    "route_graph_sha256": "06a9edd309a002aa5dc8408d992cff7b774604fc1cfb04f90fd7f56333f27928",
+    "service_file_sha256": "c71818e0b53cb087c5023361a50a19fbce918d87272f712178e92355bb184544",
+    "offline_self_test_manifest_sha256": "d54b4ee0711dfe39ae1b606ae2f7caa25115d70106f405960cfddab87b85f0ef",
+    "admitted_universe_sha256": "fa9f97ab1e70b30bdb196fd6f4d49a8cbc7462d13424644ddb7b88cdd9f431b0"
+  },
+  "expected": {
+    "frozen_admitted_assets": 192,
+    "bybit_readOnly": 1,
+    "bybit_withdraw_token_present": false,
+    "bybit_ip_bound": true,
+    "okx_permission": "read_only",
+    "okx_ip_bound": true,
+    "source_endpoints_pass": true,
+    "fee_probe_each_venue": true,
+    "qualified_common_pair_count_min": 1,
+    "clock_skew_abs_max_ms": 10000,
+    "transport_family": "IPv4-only"
+  },
+  "allowed_endpoint_families": [
+    "BYBIT_PUBLIC_TIME",
+    "BYBIT_PUBLIC_SPOT_INSTRUMENT_METADATA",
+    "BYBIT_QUERY_API_PERMISSION",
+    "BYBIT_COIN_INFO",
+    "BYBIT_ACCOUNT_FEE_RATE_ONE_PAIR",
+    "OKX_PUBLIC_TIME",
+    "OKX_PUBLIC_SPOT_INSTRUMENT_METADATA",
+    "OKX_ACCOUNT_CONFIG",
+    "OKX_CURRENCIES",
+    "OKX_ACCOUNT_TRADE_FEE_ONE_PAIR"
+  ],
+  "forbidden_endpoint_families": [
+    "PRICE_TICKER",
+    "ORDERBOOK",
+    "CANDLES",
+    "ORDER_PLACEMENT",
+    "ORDER_CANCEL",
+    "ORDER_MODIFY",
+    "TRANSFER",
+    "WITHDRAWAL"
+  ],
+  "self_test": {
+    "exchange_calls_allowed": false,
+    "credentials_required": false,
+    "output_snapshot_written": false
+  },
+  "live_run": {
+    "authenticated_read_only_calls_allowed": true,
+    "price_calls_allowed": false,
+    "collector_launch_allowed": false
+  },
+  "pass_status": "B15P1_NONPRICE_SOURCE_CAPABILITY_REVALIDATION_PASS",
+  "review_status": "B15P1_NONPRICE_SOURCE_CAPABILITY_REVALIDATION_REVIEW",
+  "self_test_pass_status": "B15P1_NONPRICE_SOURCE_CAPABILITY_REVALIDATION_SELF_TEST_PASS",
+  "next_state_on_pass": "PREPARE_B15P1_SYSTEMD_UNIT_VERIFICATION_AND_LAUNCH_AUTHORIZATION"
+}
