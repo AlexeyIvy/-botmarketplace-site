@@ -1,0 +1,31 @@
+{
+  "schema": "sc001.b15.v0.2.2_final_freeze_artifact_materialization_bundle_seal.v0.1",
+  "date": "2026-09-24",
+  "state": "SEALED_RUN_PENDING",
+  "bundle_id": "bundle_20260924T090023Z_3b6b55ac",
+  "bundle_sha256": "71da6c5679779f985567e70a3331d9a2acb05a3e381bd8dfa542242d0c254fad",
+  "approval_code": "BM-71DA6C567977",
+  "entrypoint": "sc001_b15_p1_v0_2_2_final_freeze_artifact_materialization.py",
+  "entrypoint_sha256": "153c01e802546999109a4c5e0692793292d6f588c4a295ed2238d1d5d63e0471",
+  "source_freeze_record_sha256": "dfa7466e6133ba8adef99d64114d5651199c0f6432a14a5b76434a200b5b937b",
+  "expected": {
+    "admitted_assets": 192,
+    "review_assets": 0,
+    "excluded_assets": 9,
+    "total_assets": 201,
+    "canonical_representations": 207,
+    "directed_asset_route_edges": 414,
+    "quote_common_representations": 12,
+    "quote_directed_capabilities": 24,
+    "semantic_state_changed": false
+  },
+  "safety": {
+    "price_data_used": false,
+    "pnl_data_used": false,
+    "transfer_status_used_for_selection": false,
+    "runtime_mutated": false,
+    "registry_mutated": false,
+    "universe_semantics_mutated": false
+  },
+  "next_state": "RUN_V022_FINAL_FREEZE_ARTIFACT_MATERIALIZATION_AFTER_USER_APPROVAL"
+}
