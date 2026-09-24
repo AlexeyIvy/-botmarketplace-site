@@ -1,0 +1,37 @@
+{
+  "schema": "sc001.b15.p1_nonprice_collector_implementation_self_test_bundle_seal.v0.1",
+  "date": "2026-09-24",
+  "state": "SEALED_RUN_PENDING",
+  "implementation_commit": "124e8473777834f8aee7fbcf08a3e3da1045a62f",
+  "bundle_id": "bundle_20260924T105813Z_5a03098a",
+  "bundle_sha256": "d8aa8f3698ffa43650b2c68177a8086ab45353cc3d547c4c66f15f5282b6cdde",
+  "approval_code": "BM-D8AA8F3698FF",
+  "entrypoint": "research/sc001/sc001_b15p1_nonprice_transferability_collector_v0_1.py",
+  "runner_sha256": "f4fd8d2672f726623eced6f4fa9d3bd0023b21b46f9037998803b7c5ee172db7",
+  "library_sha256": "e03fdf1fd99b71ded3c4bbbd981d117b8ffbc89769e1c607776079cc280cb525",
+  "implementation_freeze_sha256": "773fd3d2308ddf1b7a48a339db70db16ee1ff1add789f8a96887449a7eed4632",
+  "self_test_spec_sha256": "bdd3d9e6ccb9058062227528bc432f37788d524773abd84e19c6328c7f5376b0",
+  "expected_pass_token": "B15P1_NONPRICE_COLLECTOR_V01_SELF_TEST_PASS",
+  "expected_pass_state": "B15P1_NONPRICE_COLLECTOR_IMPLEMENTATION_SELF_TEST_PASS",
+  "offline_guards": {
+    "exchange_calls_performed": false,
+    "credentials_required": false,
+    "capability_snapshot_required": false,
+    "launch_authorization_required": false,
+    "price_data_authorized": false,
+    "pnl_data_authorized": false
+  },
+  "implementation_features_frozen": {
+    "fast_cadence_seconds": 15,
+    "request_deadline_seconds": 12,
+    "no_catchup": true,
+    "no_overlap": true,
+    "content_addressed_raw_storage": true,
+    "daily_hash_manifest": true,
+    "outside_frozen_graph_event_tracking": true,
+    "slow_fee_lane_incremental_queue": true,
+    "systemd_candidate_frozen": true,
+    "explicit_launch_authorization_required_for_run": true
+  },
+  "next_state": "RUN_B15P1_NONPRICE_COLLECTOR_IMPLEMENTATION_SELF_TEST_AFTER_USER_APPROVAL"
+}
