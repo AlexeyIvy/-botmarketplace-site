@@ -1,0 +1,143 @@
+{
+  "schema": "sc001.b15.p1_15_second_nonprice_collector_design_preflight_spec.v0.1",
+  "date": "2026-09-24",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "expected": {
+    "fast_cadence_seconds": 15,
+    "fee_refresh_seconds": 21600,
+    "fee_stale_after_seconds": 28800,
+    "heartbeat_seconds_max": 30,
+    "systemd_restart_backoff_seconds": 15,
+    "first_source_only_review_days": 7,
+    "admitted_assets": 192,
+    "directed_asset_edges": 414,
+    "quote_common_representations": 12,
+    "quote_known_one_sided_representations": 14,
+    "request_deadline_seconds": 12,
+    "storage_check_interval_seconds": 300,
+    "storage_warning_free_bytes_lt": 21474836480,
+    "storage_warning_free_percent_lt": 25,
+    "storage_stop_free_bytes_lt": 10737418240,
+    "storage_stop_free_percent_lt": 15
+  },
+  "fast_lane_rate_safety": {
+    "requests_per_fast_poll_bybit": 1,
+    "requests_per_fast_poll_okx": 1,
+    "implied_requests_per_second_per_venue": "0.0666666666666666666666666666666666667",
+    "bybit_documented_endpoint_limit_req_per_sec": 5,
+    "okx_documented_endpoint_limit_req_per_sec": 6,
+    "minimum_safety_factor_vs_limit": 75
+  },
+  "required_route_state_enum": [
+    "ACTIVE",
+    "BLOCKED_SOURCE_WITHDRAWAL",
+    "BLOCKED_DESTINATION_DEPOSIT",
+    "BLOCKED_BOTH",
+    "SOURCE_UNKNOWN",
+    "METADATA_INVALID"
+  ],
+  "required_fail_closed_behaviors": [
+    "NO_CARRY_FORWARD_ACROSS_FAILED_POLL",
+    "NO_BACKFILL_MISSED_POLL",
+    "OUTSIDE_FROZEN_ROUTE_GRAPH_NOT_ADMITTED",
+    "ONE_SIDED_QUOTE_NOT_ROUTE_ELIGIBLE",
+    "SOURCE_GAPS_EXPLICIT",
+    "SECRETS_NEVER_LOGGED",
+    "FEE_RATE_UNKNOWN_IF_STALE_OR_MISSING",
+    "NO_OVERLAPPING_FAST_REQUESTS",
+    "FAST_LANE_PRIORITY_OVER_SLOW_LANE",
+    "STORAGE_PRESSURE_REVIEW_ON_STOP_THRESHOLD",
+    "NO_AUTOMATIC_PROTECTED_EVIDENCE_DELETION"
+  ],
+  "price_firewall": {
+    "market_price_endpoint_allowed": false,
+    "price_data_allowed": false,
+    "pnl_allowed": false,
+    "spread_calculation_allowed": false,
+    "collector_launch_authorized": false
+  },
+  "pass_status": "B15_P1_15_SECOND_NONPRICE_COLLECTOR_DESIGN_PREFLIGHT_PASS",
+  "fail_status": "B15_P1_15_SECOND_NONPRICE_COLLECTOR_DESIGN_PREFLIGHT_FAIL",
+  "next_state_on_pass": "PREPARE_B15P1_COLLECTOR_IMPLEMENTATION_SELF_TEST",
+  "scheduler_unit_tests": [
+    {
+      "case": "NORMAL_PHASE",
+      "now_ms": 31000,
+      "expected_next_slot_ms": 45000
+    },
+    {
+      "case": "MISSED_SLOT_NO_CATCHUP",
+      "now_ms": 47000,
+      "expected_next_slot_ms": 60000
+    },
+    {
+      "case": "EXACT_PHASE_ADVANCE",
+      "now_ms": 60000,
+      "expected_next_slot_ms": 75000
+    }
+  ],
+  "route_state_unit_tests": [
+    {
+      "source_withdraw": true,
+      "dest_deposit": true,
+      "source_valid": true,
+      "dest_valid": true,
+      "metadata_valid": true,
+      "expected": "ACTIVE"
+    },
+    {
+      "source_withdraw": false,
+      "dest_deposit": true,
+      "source_valid": true,
+      "dest_valid": true,
+      "metadata_valid": true,
+      "expected": "BLOCKED_SOURCE_WITHDRAWAL"
+    },
+    {
+      "source_withdraw": true,
+      "dest_deposit": false,
+      "source_valid": true,
+      "dest_valid": true,
+      "metadata_valid": true,
+      "expected": "BLOCKED_DESTINATION_DEPOSIT"
+    },
+    {
+      "source_withdraw": false,
+      "dest_deposit": false,
+      "source_valid": true,
+      "dest_valid": true,
+      "metadata_valid": true,
+      "expected": "BLOCKED_BOTH"
+    },
+    {
+      "source_withdraw": true,
+      "dest_deposit": true,
+      "source_valid": false,
+      "dest_valid": true,
+      "metadata_valid": true,
+      "expected": "SOURCE_UNKNOWN"
+    },
+    {
+      "source_withdraw": true,
+      "dest_deposit": true,
+      "source_valid": true,
+      "dest_valid": true,
+      "metadata_valid": false,
+      "expected": "METADATA_INVALID"
+    }
+  ],
+  "fee_staleness_unit_tests": [
+    {
+      "age_seconds": 25200,
+      "expected": "FRESH"
+    },
+    {
+      "age_seconds": 28800,
+      "expected": "FRESH"
+    },
+    {
+      "age_seconds": 28801,
+      "expected": "FEE_SNAPSHOT_STALE"
+    }
+  ]
+}

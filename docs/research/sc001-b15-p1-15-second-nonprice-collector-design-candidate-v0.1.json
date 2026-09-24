@@ -1,0 +1,121 @@
+{
+  "schema": "sc001.b15.p1_15_second_nonprice_collector_design_candidate.v0.1",
+  "date": "2026-09-24",
+  "status": "DESIGN_PREFLIGHT_REQUIRED",
+  "collector_launch_authorized": false,
+  "price_economic_research_authorized": false,
+  "live_execution_authorized": false,
+  "source_pair": [
+    "BYBIT",
+    "OKX"
+  ],
+  "fast_lane": {
+    "cadence_seconds": 15,
+    "phase_alignment": "UTC_EPOCH_MULTIPLES_OF_15_SECONDS",
+    "catch_up_burst_allowed": false,
+    "bybit_endpoint": "/v5/asset/coin/query-info",
+    "okx_endpoint": "/api/v5/asset/currencies",
+    "source_calls_concurrent": true,
+    "carry_forward_across_failed_poll_allowed": false,
+    "request_deadline_seconds": 12,
+    "overlapping_fast_requests_allowed": false,
+    "scheduler_overrun_status": "SCHEDULER_OVERRUN",
+    "fast_lane_priority_over_slow_lane": true
+  },
+  "slow_fee_lane": {
+    "refresh_seconds": 21600,
+    "stale_after_seconds": 28800,
+    "max_requests_per_second_per_venue": 1,
+    "bybit_endpoint": "/v5/account/fee-rate",
+    "okx_endpoint": "/api/v5/account/trade-fee",
+    "exact_pair_binding_required": true,
+    "fast_lane_may_be_blocked": false
+  },
+  "foundation": {
+    "asset_universe_sha256": "fa9f97ab1e70b30bdb196fd6f4d49a8cbc7462d13424644ddb7b88cdd9f431b0",
+    "route_graph_sha256": "06a9edd309a002aa5dc8408d992cff7b774604fc1cfb04f90fd7f56333f27928",
+    "quote_graph_sha256": "1c5a225e35c0e346819608ecca652c3c4005e57422fda44db0ed68f1db5593f5",
+    "admitted_assets": 192,
+    "directed_asset_edges": 414,
+    "quote_common_representations": 12,
+    "quote_known_one_sided_representations": 14
+  },
+  "route_state_enum": [
+    "ACTIVE",
+    "BLOCKED_SOURCE_WITHDRAWAL",
+    "BLOCKED_DESTINATION_DEPOSIT",
+    "BLOCKED_BOTH",
+    "SOURCE_UNKNOWN",
+    "METADATA_INVALID"
+  ],
+  "source_event_taxonomy": [
+    "DEP_OFF",
+    "DEP_ON",
+    "WD_OFF",
+    "WD_ON",
+    "CHAIN_APPEARED",
+    "CHAIN_DISAPPEARED",
+    "SOURCE_INVALID",
+    "SOURCE_RECOVERED"
+  ],
+  "route_event_taxonomy": [
+    "ROUTE_ACTIVE_TO_BLOCKED",
+    "ROUTE_BLOCKED_TO_ACTIVE",
+    "ROUTE_TO_UNKNOWN",
+    "ROUTE_UNKNOWN_TO_OBSERVED"
+  ],
+  "metadata_event_taxonomy": [
+    "WITHDRAW_FIXED_FEE_CHANGED",
+    "WITHDRAW_PERCENTAGE_FEE_CHANGED",
+    "MIN_WITHDRAW_CHANGED",
+    "MIN_DEPOSIT_CHANGED",
+    "MAX_WITHDRAW_CHANGED",
+    "FEE_CURRENCY_CHANGED",
+    "CONFIRMATION_METADATA_CHANGED"
+  ],
+  "causal_time": {
+    "exact_exchange_internal_transition_time_assumed": false,
+    "transition_interval": "(LAST_RECEIVE_OLD, FIRST_RECEIVE_NEW]",
+    "source_gap_makes_interval_gap_flagged": true
+  },
+  "persistence": {
+    "raw_append_only": true,
+    "normalized_append_only": true,
+    "atomic_state_file": true,
+    "heartbeat_seconds_max": 30,
+    "daily_utc_rotation": true,
+    "poll_hash_chain": true,
+    "daily_file_hash_manifest": true
+  },
+  "restart": {
+    "systemd_required_before_launch": true,
+    "restart_on_failure": true,
+    "restart_backoff_seconds": 15,
+    "process_restart_gap_required": true,
+    "backfill_missed_polls": false
+  },
+  "protected_collection": {
+    "mode": "OPEN_ENDED_BACKGROUND_COLLECTION",
+    "first_source_only_review_after_complete_utc_days": 7,
+    "price_data_allowed": false,
+    "pnl_allowed": false
+  },
+  "required_prelaunch_gates": [
+    "COLLECTOR_DESIGN_PREFLIGHT_PASS",
+    "IMPLEMENTATION_CODE_FREEZE",
+    "OFFLINE_SELF_TEST_PASS",
+    "LIVE_READ_ONLY_SOURCE_CAPABILITY_REVALIDATION_PASS",
+    "SYSTEMD_UNIT_VERIFICATION_PASS",
+    "EXPLICIT_COLLECTOR_LAUNCH_AUTHORIZATION"
+  ],
+  "next_state_on_design_preflight_pass": "PREPARE_B15P1_COLLECTOR_IMPLEMENTATION_SELF_TEST",
+  "storage_guard": {
+    "check_interval_seconds": 300,
+    "warning_if_free_bytes_lt": 21474836480,
+    "warning_if_free_percent_lt": 25,
+    "stop_if_free_bytes_lt": 10737418240,
+    "stop_if_free_percent_lt": 15,
+    "stop_status": "STORAGE_PRESSURE_REVIEW",
+    "automatic_protected_evidence_deletion_allowed": false
+  }
+}

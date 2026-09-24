@@ -1,0 +1,28 @@
+{
+  "schema": "sc001.b15.p1_nonprice_collector_rate_limit_evidence.v0.1",
+  "retrieved_date": "2026-09-24",
+  "status": "OFFICIAL_RATE_LIMIT_REFERENCE",
+  "sources": [
+    {
+      "venue": "BYBIT",
+      "endpoint": "/v5/asset/coin/query-info",
+      "official_url": "https://bybit-exchange.github.io/docs/v5/rate-limit",
+      "documented_limit": "5 requests/second",
+      "designed_fast_lane_rate": "1 request / 15 seconds",
+      "designed_requests_per_second": "0.0666666666666666666666666666666666667",
+      "safety_factor_vs_documented_limit": "75"
+    },
+    {
+      "venue": "OKX",
+      "endpoint": "/api/v5/asset/currencies",
+      "official_url": "https://www.okx.com/docs-v5/en/",
+      "documented_limit": "6 requests/second",
+      "designed_fast_lane_rate": "1 request / 15 seconds",
+      "designed_requests_per_second": "0.0666666666666666666666666666666666667",
+      "safety_factor_vs_documented_limit": "90"
+    }
+  ],
+  "slow_fee_lane_max_requests_per_second_per_venue": 1,
+  "fast_lane_priority": true,
+  "adaptive_rate_from_price_outcomes_allowed": false
+}
