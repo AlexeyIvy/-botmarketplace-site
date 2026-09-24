@@ -1,0 +1,131 @@
+{
+  "schema": "sc001.b15.p1_stage_c_source_semantics_evidence.v0.1",
+  "retrieved_date": "2026-09-24",
+  "status": "OFFICIAL_SOURCE_SEMANTICS_BOUND_FOR_STRUCTURAL_PREFLIGHT",
+  "price_data_used": false,
+  "pnl_data_used": false,
+  "sources": {
+    "bybit": {
+      "spot_fee_endpoint": {
+        "method": "GET",
+        "path": "/v5/account/fee-rate",
+        "official_url": "https://bybit-exchange.github.io/docs/v5/account/fee-rate",
+        "authenticated": true,
+        "relevant_response_fields": ["symbol", "takerFeeRate", "makerFeeRate"],
+        "structural_rule": "USE_CAUSALLY_KNOWN_SPOT_TAKER_RATE_IF_HIGHER_THAN_10_BPS_FLOOR"
+      },
+      "coin_info_endpoint": {
+        "method": "GET",
+        "path": "/v5/asset/coin/query-info",
+        "official_url": "https://bybit-exchange.github.io/docs/api-explorer/v5/asset/coin-info",
+        "authenticated": true,
+        "previously_audited_fields": [
+          "coin",
+          "chain",
+          "chainType",
+          "contractAddress",
+          "chainDeposit",
+          "chainWithdraw",
+          "withdrawFee",
+          "withdrawPercentageFee",
+          "depositMin",
+          "withdrawMin",
+          "confirmation"
+        ],
+        "source_audit": "docs/research/sc001-b15-p1-transferability-shock-source-access-semantic-feasibility-audit-v0.1.md"
+      },
+      "withdrawal_formula": {
+        "official_url": "https://bybit-exchange.github.io/docs/v5/asset/withdraw",
+        "fee_type_for_restoration_model": 0,
+        "meaning": "INPUT_AMOUNT_IS_TARGET_AMOUNT_RECEIVED; GROSS-UP HANDLING FEE IS ADDED",
+        "if_percentage_nonzero": "HANDLING_FEE = TARGET_RECEIVE_AMOUNT / (1 - WITHDRAW_PERCENTAGE_FEE) * WITHDRAW_PERCENTAGE_FEE + WITHDRAW_FIXED_FEE",
+        "if_percentage_zero": "HANDLING_FEE = WITHDRAW_FIXED_FEE",
+        "invalid_if_percentage_ge_1": true
+      },
+      "base_spot_fee_reference": {
+        "official_url": "https://www.bybit.com/en/help-center/article/Trading-Fee-Structure",
+        "vip0_crypto_spot_taker": "0.1000%",
+        "region_account_caveat": true
+      }
+    },
+    "okx": {
+      "spot_fee_endpoint": {
+        "method": "GET",
+        "path": "/api/v5/account/trade-fee",
+        "official_url": "https://www.okx.com/docs-v5/en/",
+        "authenticated": true,
+        "request_binding": "instType=SPOT AND instId=EXACT_PAIR",
+        "relevant_response_fields": ["feeGroup", "taker", "maker", "groupId"],
+        "sign_convention": "NEGATIVE_MEANS_COMMISSION_POSITIVE_MEANS_REBATE",
+        "structural_rule": "USE_ABSOLUTE_COMMISSION_RATE_IF_HIGHER_THAN_10_BPS_FLOOR; FLOOR_PREVENTS_DOWNWARD_ZERO_FEE_BIAS"
+      },
+      "currencies_endpoint": {
+        "method": "GET",
+        "path": "/api/v5/asset/currencies",
+        "official_url": "https://www.okx.com/docs-v5/en/",
+        "authenticated": true,
+        "relevant_response_fields": [
+          "ccy",
+          "chain",
+          "canDep",
+          "canWd",
+          "minDep",
+          "minWd",
+          "maxWd",
+          "fee",
+          "feeCcy",
+          "burningFeeRate",
+          "wdTickSz",
+          "wdQuota",
+          "usedWdQuota",
+          "mainNet",
+          "depEstOpenTime",
+          "wdEstOpenTime"
+        ],
+        "fixed_fee_semantics": "WITHDRAWAL_FEE_NOT_INCLUDED_IN_WITHDRAWAL_AMOUNT",
+        "percentage_fee_semantics": "BURNING_FEE_RATE_APPLIES_TO_WITHDRAWAL_QUANTITY_EXCLUDING_GAS_FEE"
+      },
+      "fee_currency_guard": {
+        "same_as_transferred_asset": "DIRECT_ASSET_UNIT_COST",
+        "usdt": "DIRECT_USDT_COST",
+        "other": "FEE_CCY_CONVERSION_REQUIRED_AND_PRIMARY_HEADROOM_BLOCKED_UNTIL_LATER_CAUSAL_PRICE_PROTOCOL_DEFINES_CONVERSION"
+      }
+    }
+  },
+  "collector_field_requirements": {
+    "trade_fee_snapshot": [
+      "venue",
+      "instrument",
+      "account_fee_level_or_group",
+      "taker_fee_rate",
+      "source_timestamp_or_receive_interval",
+      "raw_response_hash"
+    ],
+    "route_fee_snapshot": [
+      "venue",
+      "asset",
+      "network_uid",
+      "venue_chain_code",
+      "deposit_state",
+      "withdraw_state",
+      "fixed_withdraw_fee",
+      "percentage_withdraw_fee_if_any",
+      "fee_currency",
+      "min_withdrawal",
+      "min_deposit",
+      "max_withdrawal_if_available",
+      "withdrawal_precision",
+      "confirmation_metadata",
+      "source_timestamp_or_receive_interval",
+      "raw_response_hash"
+    ]
+  },
+  "fail_closed_statuses": [
+    "FEE_RATE_UNKNOWN",
+    "BASE_REBALANCE_COST_UNKNOWN",
+    "QUOTE_REBALANCE_COST_UNKNOWN",
+    "FEE_CCY_CONVERSION_REQUIRED",
+    "NOTIONAL_NOT_RESTORABLE",
+    "SOURCE_INVALID"
+  ]
+}
