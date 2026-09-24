@@ -1,0 +1,33 @@
+{
+  "schema": "sc001.b15.p1_source_capability_live_wrapper_offline_preflight_result.v0.1",
+  "date": "2026-09-24",
+  "status": "B15P1_SOURCE_CAPABILITY_LIVE_WRAPPER_V02_OFFLINE_PREFLIGHT_PASS",
+  "bundle_id": "bundle_20260924T171540Z_9f83d965",
+  "bundle_sha256": "188ea1ddde3fb5e3633881e1e030077b5482c48ef78e99ed74106115bcd03787",
+  "job_id": "job_20260924T172500Z_45b04565",
+  "package_integrity_ok": true,
+  "exit_code": 0,
+  "manifest_sha256": "192df55653161fe88d27e49eed03b7238dc617917f2074407e659a8a8ff66f70",
+  "wrapper_sha256": "0bc379933be07fb7b31e2efe4a2f06b4b7b99ad2fdc4db403dbffbe63ebc556e",
+  "checks": {
+    "bash_syntax_returncode": 0,
+    "embedded_python_block_count": 2,
+    "embedded_python_compile": true,
+    "staged_dependency_count": 10,
+    "probe_mode_run_count": 1,
+    "direct_network_command_hits": [],
+    "service_mutation_hits": [],
+    "forbidden_token_hits": [],
+    "github_control_permission_mutation_hits": [],
+    "rm_rf_scoped_to_stage_only": true
+  },
+  "safety": {
+    "credentials_available": false,
+    "exchange_calls_performed": false,
+    "collector_launch_performed": false,
+    "price_data_used": false,
+    "pnl_data_used": false,
+    "live_execution_performed": false
+  },
+  "next_state": "AWAIT_EXPLICIT_APPROVAL_FOR_B15P1_LIVE_READ_ONLY_CAPABILITY_REVALIDATION_V021"
+}
