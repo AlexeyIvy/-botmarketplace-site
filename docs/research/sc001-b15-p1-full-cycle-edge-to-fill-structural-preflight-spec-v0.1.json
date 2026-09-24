@@ -1,0 +1,162 @@
+{
+  "schema": "sc001.b15.p1_full_cycle_edge_to_fill_structural_preflight_spec.v0.1",
+  "date": "2026-09-24",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "foundation_expected": {
+    "freeze_status": "B15_P1_CANONICAL_ROUTE_UNIVERSE_IDENTITY_FREEZE_PASS",
+    "artifact_set_status": "B15_P1_V022_FINAL_FREEZE_ARTIFACT_SET_COMPLETE",
+    "checkpoint_status": "CHECKPOINT_BACKUP_RESTORE_VERIFY_PASS",
+    "admitted_assets": 192,
+    "review_assets": 0,
+    "excluded_assets": 9,
+    "total_assets": 201,
+    "canonical_representations": 207,
+    "directed_asset_route_edges": 414,
+    "quote_common_representations": 12,
+    "quote_known_one_sided_representations": 14,
+    "unresolved_identity_rows": 0,
+    "route_graph_sha256": "06a9edd309a002aa5dc8408d992cff7b774604fc1cfb04f90fd7f56333f27928"
+  },
+  "cost_model_expected": {
+    "reference_notional_usdt": 10000,
+    "opening_market_fills": 2,
+    "per_fill_fee_floor_bps": 10,
+    "opening_two_fill_floor_bps": 20,
+    "legging_latency_model_bps": 10,
+    "venue_counterparty_inventory_bps": 10,
+    "capital_lock_per_started_24h_bps": 3,
+    "capital_lock_min_days": 7,
+    "capital_lock_minimum_bps": 21,
+    "minimum_nontransfer_structural_burden_bps": 61,
+    "minimum_economic_headroom_bps": 10,
+    "minimum_hurdle_before_transfer_costs_bps": 71,
+    "transfer_fee_uncertainty_multiplier": 1.25,
+    "base_direction": "CHEAP_TO_RICH",
+    "quote_direction": "RICH_TO_CHEAP",
+    "one_sided_quote_route_eligible": false
+  },
+  "bybit_fee_unit_tests": [
+    {
+      "case": "FIXED_ONLY",
+      "target_receive": "100",
+      "fixed_fee": "1",
+      "percentage_fee": "0",
+      "expected_handling_fee": "1"
+    },
+    {
+      "case": "FIXED_PLUS_PERCENTAGE",
+      "target_receive": "100",
+      "fixed_fee": "1",
+      "percentage_fee": "0.01",
+      "expected_handling_fee_decimal": "2.0101010101010101010101010101010101010101010101010"
+    },
+    {
+      "case": "INVALID_PERCENTAGE",
+      "target_receive": "100",
+      "fixed_fee": "1",
+      "percentage_fee": "1",
+      "expected_status": "INVALID_PERCENTAGE_FEE"
+    }
+  ],
+  "trading_fee_unit_tests": [
+    {
+      "venue": "BYBIT",
+      "raw_rate": "0.0008",
+      "expected_applied_bps": "10"
+    },
+    {
+      "venue": "BYBIT",
+      "raw_rate": "0.0012",
+      "expected_applied_bps": "12"
+    },
+    {
+      "venue": "OKX",
+      "raw_rate": "-0.001",
+      "expected_applied_bps": "10"
+    },
+    {
+      "venue": "OKX",
+      "raw_rate": "-0.0015",
+      "expected_applied_bps": "15"
+    },
+    {
+      "venue": "OKX",
+      "raw_rate": "0.002",
+      "expected_applied_bps": "10"
+    }
+  ],
+  "route_selection_unit_tests": [
+    {
+      "case": "AMOUNT_AWARE_SMALL",
+      "transfer_amount": "100",
+      "candidates": [
+        {"network_uid":"a:mainnet","active":true,"common":true,"fixed_fee":"1","percentage_fee":"0"},
+        {"network_uid":"b:mainnet","active":true,"common":true,"fixed_fee":"0.1","percentage_fee":"0.002"}
+      ],
+      "expected_selected_network_uid": "b:mainnet"
+    },
+    {
+      "case": "AMOUNT_AWARE_LARGE",
+      "transfer_amount": "1000",
+      "candidates": [
+        {"network_uid":"a:mainnet","active":true,"common":true,"fixed_fee":"1","percentage_fee":"0"},
+        {"network_uid":"b:mainnet","active":true,"common":true,"fixed_fee":"0.1","percentage_fee":"0.002"}
+      ],
+      "expected_selected_network_uid": "a:mainnet"
+    },
+    {
+      "case": "TIEBREAK",
+      "transfer_amount": "100",
+      "candidates": [
+        {"network_uid":"z:mainnet","active":true,"common":true,"fixed_fee":"1","percentage_fee":"0"},
+        {"network_uid":"a:mainnet","active":true,"common":true,"fixed_fee":"1","percentage_fee":"0"}
+      ],
+      "expected_selected_network_uid": "a:mainnet"
+    },
+    {
+      "case": "ONE_SIDED_EXCLUDED",
+      "transfer_amount": "100",
+      "candidates": [
+        {"network_uid":"one:mainnet","active":true,"common":false,"fixed_fee":"0","percentage_fee":"0"},
+        {"network_uid":"common:mainnet","active":true,"common":true,"fixed_fee":"1","percentage_fee":"0"}
+      ],
+      "expected_selected_network_uid": "common:mainnet"
+    }
+  ],
+  "okx_fail_closed_unit_tests": [
+    {
+      "burning_fee_rate": "0",
+      "fee_currency_mode": "SAME_AS_ASSET",
+      "expected_status": "SUPPORTED"
+    },
+    {
+      "burning_fee_rate": "0.01",
+      "fee_currency_mode": "SAME_AS_ASSET",
+      "expected_status": "OKX_BURNING_FEE_FORMULA_REVIEW"
+    },
+    {
+      "burning_fee_rate": "0",
+      "fee_currency_mode": "OTHER",
+      "expected_status": "FEE_CCY_CONVERSION_REQUIRED"
+    }
+  ],
+  "required_fail_closed_statuses": [
+    "FEE_RATE_UNKNOWN",
+    "BASE_REBALANCE_COST_UNKNOWN",
+    "QUOTE_REBALANCE_COST_UNKNOWN",
+    "FEE_CCY_CONVERSION_REQUIRED",
+    "OKX_BURNING_FEE_FORMULA_REVIEW",
+    "NOTIONAL_NOT_RESTORABLE",
+    "SOURCE_INVALID"
+  ],
+  "price_firewall": {
+    "price_data_used": false,
+    "pnl_data_used": false,
+    "collector_authorized": false,
+    "collector_launch_authorized": false,
+    "live_execution_authorized": false
+  },
+  "pass_status": "B15_P1_FULL_CYCLE_EDGE_TO_FILL_STRUCTURAL_PREFLIGHT_PASS",
+  "fail_status": "B15_P1_FULL_CYCLE_EDGE_TO_FILL_STRUCTURAL_PREFLIGHT_FAIL",
+  "next_state_on_pass": "PREPARE_15_SECOND_NONPRICE_COLLECTOR_DESIGN"
+}
