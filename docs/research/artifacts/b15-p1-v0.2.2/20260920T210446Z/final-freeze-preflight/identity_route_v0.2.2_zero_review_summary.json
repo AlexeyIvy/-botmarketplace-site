@@ -1,0 +1,11 @@
+{
+  "alias_collisions": 0,
+  "disposition_mismatches": 0,
+  "eligible_for_final_identity_route_freeze": true,
+  "identity_review_assets": [],
+  "quote_review": false,
+  "quote_unresolved_rows": 0,
+  "schema": "sc001.b15.zero_review_summary.candidate.v0.2.2",
+  "status": "CANDIDATE_FINAL_FREEZE_PREFLIGHT_REQUIRED",
+  "unresolved_identity_rows": 0
+}

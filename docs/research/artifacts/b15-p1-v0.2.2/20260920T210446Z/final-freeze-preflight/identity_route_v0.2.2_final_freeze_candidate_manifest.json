@@ -1,0 +1,67 @@
+{
+  "candidate_artifacts": {
+    "identity_route_v0.2.2_delta_from_v0.2.1.json": "38fd5da43f929a460b9d2ef2f50db88c05d6e1f9c60732d8416b8539e4a7e500",
+    "identity_route_v0.2.2_final_freeze_file_map.json": "ce20255a4d94464b34f3e778f723d4ebf080faaadb1fd8489790692692f769c9",
+    "identity_route_v0.2.2_final_quote_classification.json": "ad8434a8b1f2c00b4eae3f690427ac05431cc9aab04631d9438b4a238d483520",
+    "identity_route_v0.2.2_zero_review_summary.json": "9d2ef3e33e3f5b7d414ac2467fa441e6e44b9b18df199f33d4b9778d05b6d84a"
+  },
+  "candidate_registries": {
+    "native_identity_registry_sha256": "61a421ecb7884ab149a1982a23eaec3596bd1e84a200c8b4ed7be2f1d9803a36",
+    "native_identity_rows": 74,
+    "network_registry_sha256": "868f3d2528c4f5eed0bf65bb7cf8ca18a38caccd1cc8261ecda225e91b8ce587",
+    "network_rows": 80
+  },
+  "exact_replay": {
+    "bundle_id": "bundle_20260923T213214Z_c876cafb",
+    "bundle_sha256": "7eaec6bf2a98a0d2ac042358c5482aab681e83c77e1471f50af35db75b360ff7",
+    "job_id": "job_20260923T214214Z_b1901454",
+    "manifest_sha256": "ad842a5f7be42c7c4cae6ce13b91846de7e17e17cb06cf1152aa4f69538c1f7b",
+    "status": "B15_P1_V022_EXACT_REPLAY_PASS"
+  },
+  "final_composition": {
+    "admitted_assets": 192,
+    "canonical_representations": 207,
+    "directed_edges": 414,
+    "excluded_assets": 9,
+    "quote_common_representations": 12,
+    "quote_review": false,
+    "review_assets": 0,
+    "total_assets": 201
+  },
+  "final_identity_state": {
+    "alias_collisions": 0,
+    "asset_common_representations": 52,
+    "disposition_mismatches": 0,
+    "identity_review_assets": [],
+    "quote_common_representations": 12,
+    "quote_known_one_sided_representations": 14,
+    "quote_review": false,
+    "remaining_unresolved_rows": 0
+  },
+  "next_required_actions": [
+    "WRITE_V022_FINAL_IDENTITY_ROUTE_FREEZE_RECORD",
+    "CHECKPOINT_BACKUP_AFTER_V022_FINAL_IDENTITY_ROUTE_FREEZE_AND_RESTORE_VERIFY",
+    "REQUIRE_SEPARATE_COLLECTOR_AND_PRICE_STAGE_AUTHORIZATION"
+  ],
+  "prior_frozen_anchor": {
+    "v0.2.1_freeze_record_sha256": "7818ec383728e8501decb1b133e0c1d766345f88df28021feb49a7a2a803bac6",
+    "v0.2.1_host_checkpoint_sha256": "00dc2530f80477616a0eb66cfff1669e1c525684f74f90fc9e2b0852e3a20d36"
+  },
+  "safety": {
+    "collector_authorized": false,
+    "collector_launch_authorized": false,
+    "final_freeze_performed": false,
+    "pnl_data_used": false,
+    "post_freeze_checkpoint_required": true,
+    "price_data_used": false,
+    "price_economic_research_authorized": false,
+    "registry_mutated": false,
+    "runtime_mutated": false,
+    "terminal_final_route_universe_pass_claimed": false,
+    "transfer_status_used_for_selection": false,
+    "universe_mutated": false
+  },
+  "schema": "sc001.b15.final_identity_route_freeze_candidate.v0.2.2",
+  "source_run": "20260920T210446Z",
+  "status": "FINAL_IDENTITY_ROUTE_V022_FREEZE_CANDIDATE_READY"
+}

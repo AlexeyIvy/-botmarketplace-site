@@ -1,0 +1,102 @@
+{
+  "schema": "sc001.b15.final_identity_route_freeze_record.v0.2.2",
+  "date": "2026-09-24",
+  "status": "B15_P1_CANONICAL_ROUTE_UNIVERSE_IDENTITY_FREEZE_PASS",
+  "source_run": "20260920T210446Z",
+  "freeze_scope": "FINAL_ZERO_REVIEW_IDENTITY_ROUTE_V0.2.2",
+  "exact_replay": {
+    "bundle_id": "bundle_20260923T213214Z_c876cafb",
+    "bundle_sha256": "7eaec6bf2a98a0d2ac042358c5482aab681e83c77e1471f50af35db75b360ff7",
+    "job_id": "job_20260923T214214Z_b1901454",
+    "status": "B15_P1_V022_EXACT_REPLAY_PASS",
+    "manifest_sha256": "ad842a5f7be42c7c4cae6ce13b91846de7e17e17cb06cf1152aa4f69538c1f7b"
+  },
+  "freeze_preflight": {
+    "bundle_id": "bundle_20260923T214432Z_1d5f1a1b",
+    "bundle_sha256": "79974e03250cc36f6516e721a1a2d9a94cbccda3c17c2543458cd6213b260fe2",
+    "job_id": "job_20260924T074028Z_af838b48",
+    "status": "B15_P1_V022_FINAL_IDENTITY_ROUTE_FREEZE_PREFLIGHT_PASS",
+    "preflight_manifest_sha256": "95ca3832143b20aca293a6c908ac5a72e58d2077d6987f2641506ecaa14bfe0f",
+    "freeze_candidate_manifest_sha256": "1519940e2580fc246d745e11cb06dda564b83f6b7cb689583eb2d1c386c8fabd",
+    "freeze_file_map_sha256": "ce20255a4d94464b34f3e778f723d4ebf080faaadb1fd8489790692692f769c9"
+  },
+  "registries": {
+    "canonical_network_registry_sha256": "868f3d2528c4f5eed0bf65bb7cf8ca18a38caccd1cc8261ecda225e91b8ce587",
+    "native_identity_registry_sha256": "61a421ecb7884ab149a1982a23eaec3596bd1e84a200c8b4ed7be2f1d9803a36",
+    "network_rows": 80,
+    "native_identity_rows": 74
+  },
+  "final_composition": {
+    "total_assets": 201,
+    "admitted_assets": 192,
+    "review_assets": 0,
+    "excluded_assets": 9,
+    "canonical_representations": 207,
+    "directed_identity_edges": 414,
+    "quote_common_representations": 12,
+    "quote_review": false
+  },
+  "final_identity_state": {
+    "identity_review_assets": [],
+    "remaining_unresolved_rows": 0,
+    "asset_common_representations": 52,
+    "alias_collisions": 0,
+    "disposition_mismatches": 0,
+    "special_oracle_hits": 10,
+    "xlm_exact_override_hits": 1
+  },
+  "final_quote_state": {
+    "common_route_count": 12,
+    "known_one_sided_representations": 14,
+    "one_sided_routes_admitted": 0,
+    "new_v0.2.2_known_one_sided": [
+      "USDT|corn:mainnet|0xb8ce59fc3717ada4c02eadf9682a9e934f625ebb",
+      "USDT|tempo:mainnet|0x20c00000000000000000000014f22ca97301eb73"
+    ]
+  },
+  "delta_from_v0.2.1": {
+    "admitted_assets": 4,
+    "review_assets": -4,
+    "excluded_assets": 0,
+    "total_assets": 0,
+    "canonical_representations": 4,
+    "directed_identity_edges": 8,
+    "quote_common_representations": 0,
+    "resolved_prior_hold_rows": 9,
+    "newly_admitted_assets": ["GRAM", "QTUM", "STX", "XLM"]
+  },
+  "special_semantics": {
+    "BRC20_TICKER_NORMALIZATION": "PRESERVED",
+    "CARDANO_POLICY_ASSET_ORDER_NORMALIZATION": "PRESERVED",
+    "CELO_GOLDTOKEN_NATIVE_INTERFACE": "PRESERVED",
+    "WAXP_EOSIO_TOKEN_NATIVE_INTERFACE": "PRESERVED",
+    "ZKSYNC_ERA_ETH_SYSTEM_BASE_TOKEN": "PRESERVED",
+    "STELLAR_XLM_OKX_NATIVE_MARKER_EXACT": "ADDED_EXACT_ROW_ONLY"
+  },
+  "gravity_alpha_lifecycle": {
+    "before_2026_11_01": "REVALIDATION_REQUIRED_BEFORE_RUNTIME_ROUTE",
+    "on_or_after_2026_11_01": "ROUTE_DISABLED_DEPRECATED",
+    "automatic_route_enablement": false
+  },
+  "safety": {
+    "price_data_used": false,
+    "pnl_data_used": false,
+    "transfer_status_used_for_selection": false,
+    "fuzzy_matching_allowed": false,
+    "runtime_mutated": false,
+    "collector_authorized": false,
+    "collector_launch_authorized": false,
+    "price_economic_research_authorized": false,
+    "post_freeze_checkpoint_required": true
+  },
+  "prior_preservation_anchor": {
+    "v0.2.1_freeze_record_sha256": "7818ec383728e8501decb1b133e0c1d766345f88df28021feb49a7a2a803bac6",
+    "v0.2.1_host_checkpoint_completion_sha256": "00dc2530f80477616a0eb66cfff1669e1c525684f74f90fc9e2b0852e3a20d36"
+  },
+  "post_freeze_checkpoint": {
+    "required": true,
+    "state": "RUN_PENDING",
+    "restore_verification_required": true
+  },
+  "next_state": "CHECKPOINT_BACKUP_AFTER_V022_FINAL_IDENTITY_ROUTE_FREEZE"
+}

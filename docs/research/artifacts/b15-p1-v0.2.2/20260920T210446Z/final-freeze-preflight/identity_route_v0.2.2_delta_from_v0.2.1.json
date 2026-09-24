@@ -1,0 +1,45 @@
+{
+  "candidate_final_state": {
+    "admitted_assets": 192,
+    "canonical_representations": 207,
+    "directed_edges": 414,
+    "excluded_assets": 9,
+    "quote_common_representations": 12,
+    "quote_review": false,
+    "review_assets": 0,
+    "total_assets": 201
+  },
+  "delta": {
+    "admitted_assets": 4,
+    "canonical_representations": 4,
+    "directed_edges": 8,
+    "excluded_assets": 0,
+    "quote_common_representations": 0,
+    "review_assets": -4,
+    "total_assets": 0
+  },
+  "new_quote_common_routes": 0,
+  "new_quote_known_one_sided": [
+    "USDT|corn:mainnet|0xb8ce59fc3717ada4c02eadf9682a9e934f625ebb",
+    "USDT|tempo:mainnet|0x20c00000000000000000000014f22ca97301eb73"
+  ],
+  "newly_admitted_assets": [
+    "GRAM",
+    "QTUM",
+    "STX",
+    "XLM"
+  ],
+  "prior_frozen_state": {
+    "admitted_assets": 188,
+    "canonical_representations": 203,
+    "directed_edges": 406,
+    "excluded_assets": 9,
+    "quote_common_representations": 12,
+    "quote_review": true,
+    "review_assets": 4,
+    "total_assets": 201
+  },
+  "resolved_prior_hold_rows": 9,
+  "schema": "sc001.b15.identity_route_delta.v0.2.1_to_v0.2.2",
+  "status": "CANDIDATE_FINAL_FREEZE_PREFLIGHT_REQUIRED"
+}
