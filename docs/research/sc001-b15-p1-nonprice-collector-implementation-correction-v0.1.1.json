@@ -1,0 +1,48 @@
+{
+  "schema": "sc001.b15.p1_nonprice_collector_implementation_correction.v0.1.1",
+  "date": "2026-09-24",
+  "status": "TECHNICAL_IMPLEMENTATION_CORRECTION_READY",
+  "failed_implementation": {
+    "version": "v0.1",
+    "implementation_commit": "124e8473777834f8aee7fbcf08a3e3da1045a62f",
+    "self_test_bundle_id": "bundle_20260924T105813Z_5a03098a",
+    "self_test_bundle_sha256": "d8aa8f3698ffa43650b2c68177a8086ab45353cc3d547c4c66f15f5282b6cdde",
+    "self_test_job_id": "job_20260924T110817Z_2d8e094b",
+    "package_integrity_ok": true,
+    "exit_code": 1,
+    "failure_class": "PYTHON_SYNTAX_ERROR",
+    "failure_location": "runner line 1826",
+    "observed_error": "SyntaxError: unterminated string literal",
+    "root_cause": "Large runner was truncated during an earlier bounded read/edit cycle; the file ended mid-key at \"ambigu\" and lost the final poll ledger/shutdown/status/main tail.",
+    "self_test_logic_entered": false,
+    "exchange_calls_performed": false,
+    "collector_launch_performed": false,
+    "price_data_used": false,
+    "pnl_data_used": false
+  },
+  "corrected_implementation": {
+    "version": "v0.1.1",
+    "runner_path": "research/sc001/sc001_b15p1_nonprice_transferability_collector_v0_1_1.py",
+    "runner_sha256": "698835eda4a17e76b9127586bff72d95c9fb1e721b30708755a9198e43ca3211",
+    "library_path": "research/sc001/sc001_b15p1_nonprice_transferability_lib_v0_1_1.py",
+    "library_sha256": "99f1f2b28d415b1574c2c998a7a7ba6e73317bd09825d9f760b0faf5417fcfc7",
+    "service_candidate_path": "ops/systemd/sc001-b15p1-transferability-v0.1.1.service",
+    "service_candidate_sha256": "04f4cd0acc748b14770879e3a034e8774d9e81ad14e51cf64a0fa6f38e9f8f03",
+    "compile_harness_path": "research/sc001/sc001_b15p1_nonprice_collector_selftest_harness_v0_1_1.py",
+    "compile_harness_sha256": "3b7d15873e0f948b99e21820d72bf1f3550b88a991a352e3eabd9fcfdfadccb1"
+  },
+  "correction_scope": {
+    "restored_missing_runner_tail": true,
+    "added_eof_main_completeness_guard": true,
+    "added_py_compile_runner_library_guard": true,
+    "added_fast_request_start_receive_timestamps": true,
+    "added_source_server_timestamp_when_supplied": true,
+    "research_logic_changed": false,
+    "identity_route_semantics_changed": false,
+    "cost_model_changed": false,
+    "collector_design_cadence_changed": false,
+    "rate_limit_assumptions_changed": false,
+    "price_firewall_changed": false
+  },
+  "next_state": "FREEZE_AND_SELF_TEST_B15P1_NONPRICE_COLLECTOR_V011"
+}

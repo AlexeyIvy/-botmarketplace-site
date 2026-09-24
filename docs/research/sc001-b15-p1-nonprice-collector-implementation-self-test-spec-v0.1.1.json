@@ -1,0 +1,43 @@
+{
+  "schema": "sc001.b15.p1_nonprice_collector_implementation_self_test_spec.v0.1.1",
+  "date": "2026-09-24",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "implementation": {
+    "runner_path": "research/sc001/sc001_b15p1_nonprice_transferability_collector_v0_1_1.py",
+    "runner_sha256": "698835eda4a17e76b9127586bff72d95c9fb1e721b30708755a9198e43ca3211",
+    "library_path": "research/sc001/sc001_b15p1_nonprice_transferability_lib_v0_1_1.py",
+    "library_sha256": "99f1f2b28d415b1574c2c998a7a7ba6e73317bd09825d9f760b0faf5417fcfc7",
+    "service_candidate_path": "ops/systemd/sc001-b15p1-transferability-v0.1.1.service",
+    "service_candidate_sha256": "04f4cd0acc748b14770879e3a034e8774d9e81ad14e51cf64a0fa6f38e9f8f03",
+    "compile_harness_path": "research/sc001/sc001_b15p1_nonprice_collector_selftest_harness_v0_1_1.py",
+    "compile_harness_sha256": "3b7d15873e0f948b99e21820d72bf1f3550b88a991a352e3eabd9fcfdfadccb1",
+    "status_helper_sha256": "e26c6707ac38ae2d4bd61e2e31b9197d492f6d43e01d0436e301a284279b1702"
+  },
+  "expected_frozen_mapping": {
+    "base_assets": 146,
+    "overlay_assets": 46,
+    "asset_common_representations": 207,
+    "quote_common_representations": 12,
+    "quote_one_sided_bybit": 8,
+    "quote_one_sided_okx": 6,
+    "v0.2.2_exact_source_matchers": 182
+  },
+  "timing_ledger_requirements": {
+    "request_start_ms": true,
+    "receive_ms": true,
+    "source_server_timestamp_when_supplied": true
+  },
+  "self_test": {
+    "compile_guard_required": true,
+    "exchange_calls_allowed": false,
+    "credentials_required": false,
+    "capability_snapshot_required": false,
+    "launch_authorization_required": false,
+    "price_data_allowed": false,
+    "pnl_allowed": false
+  },
+  "expected_runner_pass_token": "B15P1_NONPRICE_COLLECTOR_V011_SELF_TEST_PASS",
+  "expected_harness_pass_token": "B15P1_NONPRICE_COLLECTOR_V011_COMPILE_AND_SELFTEST_PASS",
+  "pass_state": "B15P1_NONPRICE_COLLECTOR_IMPLEMENTATION_V011_SELF_TEST_PASS",
+  "next_state_on_pass": "PREPARE_B15P1_LIVE_READ_ONLY_SOURCE_CAPABILITY_REVALIDATION"
+}

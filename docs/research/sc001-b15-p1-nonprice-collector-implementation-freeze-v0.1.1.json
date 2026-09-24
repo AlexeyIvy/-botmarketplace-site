@@ -1,0 +1,51 @@
+{
+  "schema": "sc001.b15.p1_nonprice_collector_implementation_freeze.v0.1.1",
+  "date": "2026-09-24",
+  "status": "FROZEN_BEFORE_B15P1_NONPRICE_COLLECTOR_SELF_TEST_V011",
+  "supersedes_failed_implementation_freeze": "docs/research/sc001-b15-p1-nonprice-collector-implementation-freeze-v0.1.json",
+  "correction_record_sha256": "a2d58f88a413f8facd96d29f1e6d8a6b533f10d28ffb5ff80de02c45428df6af",
+  "runner_sha256": "698835eda4a17e76b9127586bff72d95c9fb1e721b30708755a9198e43ca3211",
+  "library_sha256": "99f1f2b28d415b1574c2c998a7a7ba6e73317bd09825d9f760b0faf5417fcfc7",
+  "compile_harness_sha256": "3b7d15873e0f948b99e21820d72bf1f3550b88a991a352e3eabd9fcfdfadccb1",
+  "protocol_sha256": "2d4f65c1ddd13ee0fbafb76734ce266fb933404ad24394ac707b246613613563",
+  "design_candidate_sha256": "ea42cbd5a2f14061d3bd66aafbda7ccf79f6afa85a5c90c3defe8c2ba952889e",
+  "design_preflight_spec_sha256": "cb56417ab12fe1e46b5202eca550fee505755b6df759ffd9349ffaef6d4cc0bc",
+  "rate_limit_evidence_sha256": "80ff38757742b8ffded028533d190be6a7f84de82fa7fcf9fb335007965a8613",
+  "design_preflight_manifest_sha256": "5066d1e91e6b8e122ef1289a35b1747f18a2e68cc3692d8e4c999692db8a03a9",
+  "implementation_semantics_sha256": "c4d5bf25ff9886a0a16f1571606e2b313c52c25b6f2e74dba8f7077a0e3ae2e7",
+  "raw_storage_amendment_sha256": "24a650478914c13e8c6afdd3780cac2ec3da5965a4b48a9ea7f2546299593f4d",
+  "implementation_contract_sha256": "c48f56a25b5b966d5e34954add9146c7ad672170beeb7a384d4e1a344e21169f",
+  "self_test_spec_sha256": "ef9a5137857a2dad471fe1917e9ae4a8e4f3ae12a6b199b9ad7afb0efd6a39e1",
+  "base_admitted_sha256": "4125dd9577a3493b0242b9f79db5da1db780d45bd9dd90acad5dffa78bc90bc5",
+  "final_resolved_rows_sha256": "58fed2f8a317b72bad2680c70e51c83a6c1a70f93064930cd7857cb014979d6c",
+  "final_asset_dispositions_sha256": "b8bdb5df6ce388b67d8f2f48a8ef430d205c0cec88fb28b1b25a287d2bb99dc2",
+  "final_quote_classification_sha256": "ad8434a8b1f2c00b4eae3f690427ac05431cc9aab04631d9438b4a238d483520",
+  "freeze_artifact_supplement_sha256": "6241a66f93dfcbd74d2ea8c3ac164c746f87236d653895b8cbf01ce348913997",
+  "route_shard_index_sha256": "001c89a7d4e973ed33ab072ec43746f6f7b6c0105912a24ae0483955ac93a50a",
+  "route_graph_logical_sha256": "06a9edd309a002aa5dc8408d992cff7b774604fc1cfb04f90fd7f56333f27928",
+  "service_file_sha256": "04f4cd0acc748b14770879e3a034e8774d9e81ad14e51cf64a0fa6f38e9f8f03",
+  "status_helper_sha256": "e26c6707ac38ae2d4bd61e2e31b9197d492f6d43e01d0436e301a284279b1702",
+  "runner_completeness": {
+    "size_bytes": 71319,
+    "line_count": 1899,
+    "eof_main_guard": true,
+    "restored_missing_tail": true
+  },
+  "timing_ledger": {
+    "request_start_ms_required": true,
+    "receive_ms_required": true,
+    "source_server_timestamp_when_supplied_required": true
+  },
+  "collector_launch_authorized": false,
+  "live_source_calls_authorized_in_self_test": false,
+  "price_data_authorized": false,
+  "pnl_data_authorized": false,
+  "live_execution_authorized": false,
+  "required_future_gates": [
+    "IMPLEMENTATION_V011_SELF_TEST_PASS",
+    "LIVE_READ_ONLY_SOURCE_CAPABILITY_REVALIDATION_PASS",
+    "SYSTEMD_UNIT_VERIFICATION_PASS",
+    "EXPLICIT_COLLECTOR_LAUNCH_AUTHORIZATION"
+  ],
+  "next_state": "RUN_B15P1_NONPRICE_COLLECTOR_IMPLEMENTATION_V011_SELF_TEST_AFTER_USER_APPROVAL"
+}
