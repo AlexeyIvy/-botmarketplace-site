@@ -1,0 +1,33 @@
+{
+  "schema": "sc001.b15.p1_nonprice_source_capability_revalidation_self_test_bundle_seal.v0.1",
+  "date": "2026-09-24",
+  "state": "SEALED_RUN_PENDING",
+  "capability_probe_commit": "ab4f9060a1f4b01d7a6491e8e3a099159ce77464",
+  "bundle_id": "bundle_20260924T121552Z_a91e518e",
+  "bundle_sha256": "b3342137e7d258fab5ae7b0bddf9cd926cf53b9da2c759027e7e71d69dbe6d70",
+  "approval_code": "BM-B3342137E7D2",
+  "entrypoint": "research/sc001/sc001_b15p1_nonprice_source_capability_selftest_harness_v0_1.py",
+  "probe_sha256": "489e769665abcefd56bba9937d4179e932083e4545b3d1cac85638adf2b4bf1a",
+  "harness_sha256": "754e89a83464dc65fb02576b8de3393e1949413e39f26d3a8411f9b64fbbffd9",
+  "capability_freeze_sha256": "d0332d69208de8cdb4f8fdf9e521ff31b9db02717edbb1b2fae688931af4b4c3",
+  "binding_implementation": {
+    "collector_runner_sha256": "157b1e7e77a9d4299c06ac60ce56e1544335d7435d9f25a6212d7f417b312b3d",
+    "collector_implementation_freeze_sha256": "fc4d7496870896ff7b8036ce9c17a3d5059142be2e18dd2c21eb646f8c32fabf",
+    "route_graph_sha256": "06a9edd309a002aa5dc8408d992cff7b774604fc1cfb04f90fd7f56333f27928",
+    "admitted_universe_sha256": "fa9f97ab1e70b30bdb196fd6f4d49a8cbc7462d13424644ddb7b88cdd9f431b0",
+    "collector_self_test_manifest_sha256": "d54b4ee0711dfe39ae1b606ae2f7caa25115d70106f405960cfddab87b85f0ef"
+  },
+  "expected_pass_tokens": [
+    "B15P1_NONPRICE_SOURCE_CAPABILITY_REVALIDATION_SELF_TEST_PASS",
+    "B15P1_NONPRICE_SOURCE_CAPABILITY_COMPILE_AND_SELFTEST_PASS"
+  ],
+  "offline_guards": {
+    "credentials_required": false,
+    "exchange_calls_performed": false,
+    "output_snapshot_written": false,
+    "collector_launch_authorized": false,
+    "price_data_used": false,
+    "pnl_data_used": false
+  },
+  "next_state": "RUN_B15P1_NONPRICE_SOURCE_CAPABILITY_REVALIDATION_OFFLINE_SELF_TEST_AFTER_USER_APPROVAL"
+}
