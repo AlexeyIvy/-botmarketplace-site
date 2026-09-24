@@ -1,0 +1,34 @@
+{
+  "schema": "sc001.b15.p1_nonprice_source_capability_live_attempt_diagnostic.v0.1",
+  "date": "2026-09-24",
+  "status": "LIVE_ATTEMPT_BLOCKED_BEFORE_PROBE_EXECUTION_PERMISSION_DENIED",
+  "observed": {
+    "python_error": "Permission denied opening probe under /var/lib/botmarket-github-control/repo",
+    "probe_exit_code": 2,
+    "collector_launch_authorized": false
+  },
+  "root_cause": {
+    "github_control_clone_owner": "botmarket-github:botmarket-github",
+    "github_control_state_mode": "0750",
+    "probe_runtime_user": "botmarket",
+    "classification": "EXPECTED_ISOLATION_BOUNDARY_COLLISION"
+  },
+  "safety": {
+    "exchange_calls_performed": false,
+    "credentials_used_by_probe": false,
+    "capability_snapshot_written": false,
+    "collector_launch_performed": false,
+    "price_data_used": false,
+    "pnl_data_used": false,
+    "github_control_permissions_weakened": false
+  },
+  "correction": {
+    "strategy": "COPY_EXACT_NONSECRET_PROBE_DEPENDENCIES_TO_BOTMARKET_STAGING_ROOT",
+    "staging_root": "/home/botmarket/.local/share/botmarket/b15p1-capability-revalidation-v0.1-stage",
+    "source_probe_sha256": "489e769665abcefd56bba9937d4179e932083e4545b3d1cac85638adf2b4bf1a",
+    "source_freeze_sha256": "d0332d69208de8cdb4f8fdf9e521ff31b9db02717edbb1b2fae688931af4b4c3",
+    "wrapper_sha256": "286804edd60e889fd8a5b4f11d41cb38a73a97cd9214cdf7dfaf9cecca1a9592",
+    "github_control_clone_permissions_changed": false
+  },
+  "next_state": "RETRY_B15P1_LIVE_READ_ONLY_SOURCE_CAPABILITY_REVALIDATION"
+}

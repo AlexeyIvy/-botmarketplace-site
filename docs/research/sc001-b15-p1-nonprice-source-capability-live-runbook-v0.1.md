@@ -78,3 +78,38 @@ The wrapper does not:
 - place orders/transfers/withdrawals.
 
 Collector launch remains a separate explicit gate.
+
+
+## Permission correction — v0.1.1 wrapper
+
+Observed live attempt:
+
+- wrapper started correctly under sudo;
+- probe itself did not start;
+- Python returned `Permission denied` for the probe path inside
+  `/var/lib/botmarket-github-control/repo`;
+- no exchange call occurred.
+
+Root cause:
+
+The GitHub Control clone is intentionally isolated:
+
+- owner/group: `botmarket-github:botmarket-github`;
+- state directory mode: `0750`.
+
+The live probe runs as `botmarket`, so direct execution/read from the isolated clone is intentionally denied.
+
+Do **not** fix this with broad chmod/chown or by adding `botmarket` to the GitHub Control group.
+
+Corrected wrapper behavior:
+
+1. root verifies source probe/freeze SHA in the isolated clone;
+2. root recreates a clean staging root under
+   `/home/botmarket/.local/share/botmarket/b15p1-capability-revalidation-v0.1-stage`;
+3. only the exact non-secret files required by the frozen probe are copied;
+4. staged files are owned by `botmarket:botmarket` and mode 0640;
+5. staged probe/freeze SHA are checked again;
+6. readability as `botmarket` is checked before any exchange call;
+7. probe runs as `botmarket` with `B15P1_REPO_ROOT` pointing to the staging root.
+
+The GitHub Control clone permissions remain unchanged.

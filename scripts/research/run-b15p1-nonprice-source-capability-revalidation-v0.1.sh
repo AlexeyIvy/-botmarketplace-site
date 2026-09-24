@@ -2,8 +2,13 @@
 set -euo pipefail
 
 REPO="/var/lib/botmarket-github-control/repo"
-PROBE="$REPO/research/sc001/sc001_b15p1_nonprice_source_capability_revalidation_v0_1.py"
-FREEZE="$REPO/docs/research/sc001-b15-p1-nonprice-source-capability-revalidation-freeze-v0.1.json"
+STAGE="/home/botmarket/.local/share/botmarket/b15p1-capability-revalidation-v0.1-stage"
+PROBE_REL="research/sc001/sc001_b15p1_nonprice_source_capability_revalidation_v0_1.py"
+FREEZE_REL="docs/research/sc001-b15-p1-nonprice-source-capability-revalidation-freeze-v0.1.json"
+PROBE="$REPO/$PROBE_REL"
+FREEZE="$REPO/$FREEZE_REL"
+STAGED_PROBE="$STAGE/$PROBE_REL"
+STAGED_FREEZE="$STAGE/$FREEZE_REL"
 ENV_FILE="/home/botmarket/.config/sc001/b15-p1.env"
 OUT_DIR="/home/botmarket/sc001_data/SC001_B15P1_TRANSFERABILITY"
 SNAPSHOT="$OUT_DIR/source_capability_snapshot.json"
@@ -31,6 +36,45 @@ freeze_sha="$(sha256sum "$FREEZE" | awk '{print $1}')"
 env_mode="$(stat -c '%a' "$ENV_FILE")"
 [[ "$env_mode" == "600" ]] || die "credential_env_mode_not_0600"
 
+# GitHub Control clone is intentionally private to botmarket-github.
+# Never relax /var/lib/botmarket-github-control permissions for this probe.
+# Stage only the exact non-secret files required by the frozen capability probe.
+STAGE_FILES=(
+  "$PROBE_REL"
+  "$FREEZE_REL"
+  "docs/research/sc001-b15-p1-nonprice-source-capability-revalidation-v0.1.md"
+  "docs/research/sc001-b15-p1-nonprice-source-capability-revalidation-spec-v0.1.json"
+  "research/sc001/sc001_b15p1_nonprice_transferability_collector_v0_1_2.py"
+  "docs/research/sc001-b15-p1-nonprice-collector-implementation-freeze-v0.1.2.json"
+  "ops/systemd/sc001-b15p1-transferability-v0.1.2.service"
+  "docs/research/artifacts/b15-p1-v0.2.2/20260920T210446Z/final-freeze-materialized/directed_route_graph.v0.2.2.shard-index.json"
+  "docs/research/artifacts/b15-p1-v0.2.2/20260920T210446Z/final-freeze-materialized/ADMITTED.v0.2.2.json"
+  "docs/research/artifacts/b15-p1-collector-implementation-v0.1.2/20260924T120400Z/implementation_self_test_manifest.json"
+)
+
+rm -rf "$STAGE"
+install -d -m 0750 -o botmarket -g botmarket "$STAGE"
+
+for rel in "${STAGE_FILES[@]}"; do
+  src="$REPO/$rel"
+  dst="$STAGE/$rel"
+  [[ -f "$src" ]] || die "stage_source_missing:$rel"
+  install -d -m 0750 -o botmarket -g botmarket "$(dirname "$dst")"
+  install -m 0640 -o botmarket -g botmarket "$src" "$dst"
+done
+
+[[ -r "$STAGED_PROBE" ]] || die "staged_probe_missing"
+[[ -r "$STAGED_FREEZE" ]] || die "staged_freeze_missing"
+
+staged_probe_sha="$(sha256sum "$STAGED_PROBE" | awk '{print $1}')"
+staged_freeze_sha="$(sha256sum "$STAGED_FREEZE" | awk '{print $1}')"
+[[ "$staged_probe_sha" == "$EXPECTED_PROBE_SHA" ]] || die "staged_probe_sha_mismatch"
+[[ "$staged_freeze_sha" == "$EXPECTED_FREEZE_SHA" ]] || die "staged_freeze_sha_mismatch"
+
+# Verify botmarket can traverse/read the staged root before any exchange call.
+sudo -u botmarket -H test -r "$STAGED_PROBE" || die "staged_probe_not_readable_by_botmarket"
+sudo -u botmarket -H test -r "$STAGED_FREEZE" || die "staged_freeze_not_readable_by_botmarket"
+
 install -d -m 0750 -o botmarket -g botmarket "$OUT_DIR"
 
 rm -f "$SNAPSHOT" "$SAFE_SUMMARY"
@@ -41,9 +85,9 @@ chmod 0640 "$LOG"
 set +e
 sudo -u botmarket -H \
   env \
-    B15P1_REPO_ROOT="$REPO" \
+    B15P1_REPO_ROOT="$STAGE" \
     B15P1_CAPABILITY_SNAPSHOT="$SNAPSHOT" \
-    /usr/bin/python3 "$PROBE" --mode run \
+    /usr/bin/python3 "$STAGED_PROBE" --mode run \
   2>&1 | tee "$LOG"
 rc="${PIPESTATUS[0]}"
 set -e
@@ -91,5 +135,6 @@ echo "B15P1_NONPRICE_SOURCE_CAPABILITY_REVALIDATION_COMMAND_PASS"
 echo "snapshot=$SNAPSHOT"
 echo "safe_summary=$SAFE_SUMMARY"
 echo "log=$LOG"
+echo "staging_root=$STAGE"
 echo "collector_launch_authorized=False"
 echo "price_data_used=False"
