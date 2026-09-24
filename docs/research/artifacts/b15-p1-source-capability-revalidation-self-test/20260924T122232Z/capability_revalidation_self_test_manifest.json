@@ -1,0 +1,11 @@
+{
+  "collector_launch_authorized": false,
+  "credentials_required": false,
+  "error": null,
+  "exchange_calls_performed": false,
+  "output_snapshot_written": false,
+  "pnl_data_used": false,
+  "price_data_used": false,
+  "schema": "sc001.b15.p1_nonprice_source_capability_revalidation_self_test.v0.1",
+  "status": "B15P1_NONPRICE_SOURCE_CAPABILITY_REVALIDATION_SELF_TEST_PASS"
+}

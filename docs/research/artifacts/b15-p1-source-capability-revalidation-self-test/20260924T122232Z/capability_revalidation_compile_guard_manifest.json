@@ -1,0 +1,17 @@
+{
+  "checks": {
+    "eof_main_guard": true,
+    "probe_compile": true,
+    "run_mode_present": true,
+    "snapshot_contract_present": true
+  },
+  "collector_launch_authorized": false,
+  "credentials_required": false,
+  "exchange_calls_performed": false,
+  "expected_token": "B15P1_NONPRICE_SOURCE_CAPABILITY_REVALIDATION_SELF_TEST_PASS",
+  "price_data_used": false,
+  "probe_returncode": 0,
+  "schema": "sc001.b15.p1_nonprice_source_capability_compile_guard.v0.1",
+  "selftest_manifest_present": true,
+  "status": "B15P1_NONPRICE_SOURCE_CAPABILITY_COMPILE_AND_SELFTEST_PASS"
+}
