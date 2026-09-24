@@ -1,0 +1,38 @@
+{
+  "schema": "sc001.b15.p1_nonprice_collector_implementation_v0.1.1_self_test_bundle_seal.v0.1",
+  "date": "2026-09-24",
+  "state": "SEALED_RUN_PENDING",
+  "implementation_commit": "3125e1f72605b803ab7f73228bc2199b96828245",
+  "failed_v0.1_reference": {
+    "bundle_id": "bundle_20260924T105813Z_5a03098a",
+    "bundle_sha256": "d8aa8f3698ffa43650b2c68177a8086ab45353cc3d547c4c66f15f5282b6cdde",
+    "job_id": "job_20260924T110817Z_2d8e094b",
+    "failure": "SyntaxError: unterminated string literal at truncated runner tail",
+    "research_logic_changed": false
+  },
+  "bundle_id": "bundle_20260924T112109Z_0d20dff8",
+  "bundle_sha256": "eb0e9ee92d2a0fc64a620206b103fc11ecd64dc4c858039af1855fc4776b6006",
+  "approval_code": "BM-EB0E9EE92D2A",
+  "entrypoint": "research/sc001/sc001_b15p1_nonprice_collector_selftest_harness_v0_1_1.py",
+  "compile_harness_sha256": "3b7d15873e0f948b99e21820d72bf1f3550b88a991a352e3eabd9fcfdfadccb1",
+  "runner_sha256": "698835eda4a17e76b9127586bff72d95c9fb1e721b30708755a9198e43ca3211",
+  "library_sha256": "99f1f2b28d415b1574c2c998a7a7ba6e73317bd09825d9f760b0faf5417fcfc7",
+  "implementation_freeze_sha256": "df826ff11da7fddf91fcc247fc70a32dff3ee79f88f0b4b9ed11304b64946caa",
+  "self_test_spec_sha256": "ef9a5137857a2dad471fe1917e9ae4a8e4f3ae12a6b199b9ad7afb0efd6a39e1",
+  "expected_tokens": [
+    "B15P1_NONPRICE_COLLECTOR_V011_SELF_TEST_PASS",
+    "B15P1_NONPRICE_COLLECTOR_V011_COMPILE_AND_SELFTEST_PASS"
+  ],
+  "offline_guards": {
+    "py_compile_runner_library": true,
+    "eof_main_guard": true,
+    "exchange_calls_performed": false,
+    "credentials_required": false,
+    "capability_snapshot_required": false,
+    "launch_authorization_required": false,
+    "collector_launch_authorized": false,
+    "price_data_authorized": false,
+    "pnl_data_authorized": false
+  },
+  "next_state": "RUN_B15P1_NONPRICE_COLLECTOR_IMPLEMENTATION_V011_SELF_TEST_AFTER_USER_APPROVAL"
+}
