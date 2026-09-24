@@ -1,0 +1,65 @@
+{
+  "schema": "sc001.b15.p1_stage_c_source_semantics_evidence.v0.4",
+  "date": "2026-09-24",
+  "status": "OFFICIAL_SOURCE_SEMANTICS_HARDENED_AFTER_LIVE_SCHEMA_AUDIT",
+  "supersedes": "sc001-b15-p1-stage-c-source-semantics-evidence-v0.3.json",
+  "price_data_used": false,
+  "pnl_data_used": false,
+  "okx_get_currencies": {
+    "endpoint": "/api/v5/asset/currencies",
+    "core_required_every_row": [
+      "ccy",
+      "chain",
+      "ctAddr",
+      "canDep",
+      "canWd"
+    ],
+    "economic_fields_profiled_per_row": [
+      "fee",
+      "burningFeeRate",
+      "minDep",
+      "minWd",
+      "maxWd",
+      "wdTickSz",
+      "minDepArrivalConfirm",
+      "minWdUnlockConfirm"
+    ],
+    "feeCcy": {
+      "mandatory": false,
+      "current_standard_response_documented": false,
+      "if_present": "HONOR_EXPLICIT_FEE_CCY",
+      "if_absent": "FIXED_WITHDRAWAL_FEE_DENOMINATED_IN_WITHDRAWN_CCY_FOR_THIS_ENDPOINT_ADAPTER"
+    },
+    "burningFeeRate": {
+      "key_absent": "METADATA_INCOMPLETE_FAIL_CLOSED",
+      "key_present_empty": "ZERO_PERCENTAGE_BURNING_FEE",
+      "key_present_nonzero": "OKX_BURNING_FEE_FORMULA_REVIEW"
+    },
+    "partial_economic_metadata": {
+      "entire_endpoint_rejected": false,
+      "affected_row_economic_metadata_complete": false,
+      "affected_route_primary_economic_admission": "FAIL_CLOSED"
+    }
+  },
+  "okx_trade_fee": {
+    "endpoint": "/api/v5/account/trade-fee",
+    "current_primary_schema": "feeGroup[]",
+    "instrument_group_source": "/api/v5/public/instruments?instType=SPOT",
+    "fee_group_fields": ["groupId","taker","maker"],
+    "exact_instrument_request_supported": true,
+    "deprecated_top_level_taker_maker": "SUPPORTED_ONLY_AS_EXPLICIT_COMPATIBILITY_FALLBACK",
+    "ambiguity": "FAIL_CLOSED"
+  },
+  "bybit_spot_instruments": {
+    "endpoint": "/v5/market/instruments-info?category=spot",
+    "spot_pagination_supported": false,
+    "cursor_limit_parameters_for_spot": "DO_NOT_USE",
+    "qualification": "quoteCoin=USDT AND status=Trading"
+  },
+  "adapter_safety": {
+    "missing_optional_field_defaults_to_zero": false,
+    "identity_inference_from_missing_contract_field": false,
+    "price_endpoint_required": false,
+    "outcome_driven_fallback": false
+  }
+}

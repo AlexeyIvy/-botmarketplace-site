@@ -1,0 +1,33 @@
+{
+  "schema": "sc001.b15.p1_nonprice_collector_implementation_correction.v0.1.3",
+  "date": "2026-09-24",
+  "status": "API_ADAPTER_COMPATIBILITY_CORRECTION_READY",
+  "trigger": {
+    "live_capability_attempt_status": "B15P1_NONPRICE_SOURCE_CAPABILITY_REVALIDATION_REVIEW",
+    "observed_error": "OKX currencies schema missing required fields in 591 rows",
+    "exchange_calls_performed_before_failure": true,
+    "collector_launch_performed": false,
+    "price_data_used": false,
+    "pnl_data_used": false
+  },
+  "root_cause": {
+    "immediate": "feeCcy was incorrectly required on every OKX Get currencies row",
+    "preventive_findings": [
+      "OKX current fee-rate schema uses feeGroup[]/groupId and top-level maker/taker are deprecated",
+      "Bybit Spot instruments do not support pagination",
+      "missing burningFeeRate must not silently default to zero",
+      "maxWd is optional for Stage C source completeness"
+    ]
+  },
+  "corrected_implementation": {
+    "version": "v0.1.3",
+    "runner_sha256": "f8181c4f25d6fc842d13c1faf8e259756883fcbb0bbcf08c23b3e60c9ed7bce0",
+    "library_sha256": "f4e27edff5acb38fb1c9ee840490179d1c3ebe13fd258d8875de768acc4078b5",
+    "selftest_harness_sha256": "6090f6f4346b4917c6f6464175acc7e9cf98aa2680a708b5ef333f6f1a0f44d1",
+    "service_candidate_sha256": "b59d61f25b4e643f6c9f27389d9829f7e4ea91cfbbb8dffeb48a91b55d755bf8"
+  },
+  "research_semantics_changed": false,
+  "collector_cadence_changed": false,
+  "endpoint_price_firewall_changed": false,
+  "next_state": "COMBINED_OFFLINE_VALIDATE_COLLECTOR_V013_AND_CAPABILITY_V02"
+}
