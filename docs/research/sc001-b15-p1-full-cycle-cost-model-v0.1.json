@@ -1,0 +1,82 @@
+{
+  "schema": "sc001.b15.p1_full_cycle_edge_to_fill_cost_model.v0.1",
+  "date": "2026-09-24",
+  "status": "CANDIDATE_PREFLIGHT_REQUIRED",
+  "mechanism": "B15_P1_INVENTORY_BACKED_EFFECTIVE_TRANSFERABILITY_SEGMENTATION",
+  "price_outcomes_used": false,
+  "pnl_outcomes_used": false,
+  "transfer_status_used_for_universe_selection": false,
+  "reference_notional_usdt": 10000,
+  "opening_architecture": {
+    "market_fills": 2,
+    "rich_venue_leg": "SELL_BASE_TAKER",
+    "cheap_venue_leg": "BUY_BASE_TAKER",
+    "maker_rebate_assumed": false,
+    "borrow_assumed": false,
+    "derivative_hedge_assumed": false
+  },
+  "trading_fee_policy": {
+    "per_fill_floor_bps": 10,
+    "opening_two_fill_floor_bps": 20,
+    "applied_rule": "MAX_OF_10_BPS_AND_CAUSALLY_KNOWN_ACCOUNT_PAIR_TAKER_RATE",
+    "unknown_fee_status": "FEE_RATE_UNKNOWN",
+    "downward_override_allowed": false
+  },
+  "execution_price_policy": {
+    "primary": "SIMULTANEOUS_NOTIONAL_AWARE_EXECUTABLE_VWAP",
+    "top_of_book_primary_pass_allowed": false,
+    "spread_depth_double_count_allowed": false
+  },
+  "reserves_bps": {
+    "legging_latency_model": 10,
+    "venue_counterparty_inventory": 10,
+    "capital_lock_per_started_24h": 3,
+    "capital_lock_min_days": 7,
+    "capital_lock_minimum": 21,
+    "minimum_economic_headroom": 10
+  },
+  "minimum_nontransfer_structural_burden_bps": 61,
+  "minimum_headroom_before_transfer_costs_bps": 71,
+  "transfer_fee_policy": {
+    "uncertainty_multiplier": 1.25,
+    "base_direction": "CHEAP_TO_RICH",
+    "quote_direction": "RICH_TO_CHEAP",
+    "route_selection": "MIN_NONPRICE_FEE_AMONG_ACTIVE_FROZEN_COMMON_ROUTES_WITH_VALID_METADATA_THEN_NETWORK_UID_TIEBREAK",
+    "one_sided_quote_route_eligible": false,
+    "base_unknown_status": "BASE_REBALANCE_COST_UNKNOWN",
+    "quote_unknown_status": "QUOTE_REBALANCE_COST_UNKNOWN",
+    "actual_higher_cost_adjustment": "UPWARD_MANDATORY"
+  },
+  "capital_lock_policy": {
+    "clock_start": "BOTH_OPENING_FILLS_COMPLETE",
+    "clock_end": "BASE_AND_QUOTE_INVENTORY_RESTORATION_COMPLETE",
+    "realized_bps_formula": "MAX_21_BPS_OR_3_BPS_TIMES_CEIL_REALIZED_LOCK_HOURS_DIV_24"
+  },
+  "price_stage_conversion_formula": {
+    "base_transfer_bps": "10000 * BUFFERED_BASE_FEE_UNITS * CAUSAL_OPENING_BASE_REFERENCE_PRICE / REFERENCE_NOTIONAL_USDT",
+    "quote_transfer_bps": "10000 * BUFFERED_QUOTE_FEE_USDT / REFERENCE_NOTIONAL_USDT",
+    "base_reference_price_rule": "MUST_BE_FROZEN_IN_LATER_PRICE_PROTOCOL_BEFORE_ANY_B15_PRICE_OUTCOME"
+  },
+  "full_cycle_hurdle_formula": "OPENING_FEE_BPS + 10 + 10 + MAX_21_OR_REALIZED_LOCK_BPS + BASE_TRANSFER_BPS + QUOTE_TRANSFER_BPS + 10_ECONOMIC_HEADROOM_BPS + UPWARD_FEE_ADJUSTMENTS",
+  "netting_benefit_assumed": false,
+  "source_metadata_required": [
+    "DEPOSIT_STATE",
+    "WITHDRAW_STATE",
+    "WITHDRAWAL_FIXED_FEE",
+    "WITHDRAWAL_PERCENTAGE_FEE_IF_ANY",
+    "MIN_WITHDRAWAL",
+    "MIN_DEPOSIT",
+    "CONFIRMATION_METADATA",
+    "SOURCE_TIMESTAMPS",
+    "NORMALIZED_ROUTE_STATE"
+  ],
+  "hard_stops": [
+    "FEE_RATE_UNKNOWN",
+    "BASE_REBALANCE_COST_UNKNOWN",
+    "QUOTE_REBALANCE_COST_UNKNOWN",
+    "NOTIONAL_NOT_RESTORABLE",
+    "SOURCE_INVALID",
+    "ROUTE_SET_REVIEW"
+  ],
+  "classification": "UNKNOWN_NEEDS_NON_ALPHA_DATA_SOURCE_COLLECTOR_ELIGIBLE_IF_PREFLIGHT_PASS"
+}

@@ -1,0 +1,27 @@
+{
+  "schema": "sc001.b15.p1_spot_fee_source_evidence.v0.1",
+  "retrieved_date": "2026-09-24",
+  "status": "NON_PRICE_REFERENCE_EVIDENCE",
+  "sources": [
+    {
+      "publisher": "Bybit",
+      "url": "https://www.bybit.com/en/help-center/article/Trading-Fee-Structure",
+      "observed_fact": "Base VIP-0 crypto spot taker fee shown as 0.1000%; page warns actual rates may vary by region/account.",
+      "structural_use": "Supports 10 bps per-fill minimum floor; actual account/pair fee can only override upward."
+    },
+    {
+      "publisher": "OKX",
+      "url": "https://www.okx.com/en-gb/help/advance-notice-spot-and-futures-trading-fee-adjustment",
+      "observed_fact": "Standard spot schedule shows Regular taker fee 0.1000%; jurisdiction/account schedule may differ.",
+      "structural_use": "Supports 10 bps per-fill minimum floor; actual account/pair fee can only override upward."
+    }
+  ],
+  "fee_floor_policy": {
+    "per_fill_floor_bps": 10,
+    "downward_override_allowed": false,
+    "upward_override_required_if_actual_account_pair_fee_is_higher": true,
+    "unknown_actual_fee_status": "FEE_RATE_UNKNOWN"
+  },
+  "price_data_used": false,
+  "pnl_data_used": false
+}
