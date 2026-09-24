@@ -1,0 +1,40 @@
+{
+  "schema": "sc001.b15.p1_adapter_combined_offline_validation_attempt_diagnostic.v0.1",
+  "date": "2026-09-24",
+  "status": "TECHNICAL_STATIC_GUARD_FALSE_POSITIVE",
+  "bundle_id": "bundle_20260924T154611Z_653834a4",
+  "bundle_sha256": "7b70dddf96af871f1c8b974ebc41ae27c032035de475b6ea0f065683a1337d59",
+  "approval_code": "BM-7B70DDDF96AF",
+  "job_id": "job_20260924T162915Z_80dc0899",
+  "package_integrity_ok": true,
+  "exit_code": 2,
+  "collector": {
+    "status": "B15P1_NONPRICE_COLLECTOR_V013_COMPILE_AND_SELFTEST_PASS",
+    "mandatory_tests_passed": 28,
+    "extra_tests_passed": 8,
+    "exchange_calls_performed": false,
+    "collector_launch_authorized": false,
+    "price_data_authorized": false,
+    "pnl_data_authorized": false
+  },
+  "capability": {
+    "status": "B15P1_NONPRICE_SOURCE_CAPABILITY_REVALIDATION_V02_SELF_TEST_REVIEW",
+    "observed_error": "CapabilityError: Bybit Spot pagination logic unexpectedly present",
+    "failure_class": "SELF_REFERENTIAL_STATIC_GUARD_FALSE_POSITIVE",
+    "root_cause": "The v0.2 self-test scanned the entire capability source for the literal nextPageCursor and therefore matched that literal inside its own guard expression. The actual bybit_live_usdt_spot_pairs implementation contains category=spot only and no cursor, limit=1000, pagination loop, or nextPageCursor handling."
+  },
+  "combined_status": "B15P1_ADAPTER_COMBINED_OFFLINE_VALIDATION_REVIEW",
+  "safety": {
+    "credentials_used": false,
+    "exchange_calls_performed": false,
+    "capability_snapshot_written": false,
+    "collector_launch_authorized": false,
+    "price_data_used": false,
+    "pnl_data_used": false,
+    "live_execution_authorized": false
+  },
+  "research_semantics_changed": false,
+  "collector_cadence_changed": false,
+  "stage_c_cost_floor_changed": false,
+  "next_state": "PREPARE_CAPABILITY_V021_STATIC_GUARD_CORRECTION_AND_REPEAT_COMBINED_OFFLINE_VALIDATION"
+}

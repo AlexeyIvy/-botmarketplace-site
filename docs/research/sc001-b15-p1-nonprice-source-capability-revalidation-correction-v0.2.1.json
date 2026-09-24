@@ -1,0 +1,38 @@
+{
+  "schema": "sc001.b15.p1_nonprice_source_capability_revalidation_correction.v0.2.1",
+  "date": "2026-09-24",
+  "status": "TECHNICAL_SELF_TEST_GUARD_CORRECTION_READY",
+  "failed_capability": {
+    "version": "v0.2",
+    "probe_sha256": "29a2f2c19573512e09b2b2175527f584c4f6dbe73d59fba457507d8771c3576a",
+    "combined_bundle_id": "bundle_20260924T154611Z_653834a4",
+    "combined_bundle_sha256": "7b70dddf96af871f1c8b974ebc41ae27c032035de475b6ea0f065683a1337d59",
+    "combined_job_id": "job_20260924T162915Z_80dc0899",
+    "attempt_diagnostic_sha256": "08f9624cf4b01b1de8ea13162a15338ff3ceefc40d8961564245b8287d5fd3b4",
+    "package_integrity_ok": true,
+    "failure_class": "SELF_REFERENTIAL_STATIC_GUARD_FALSE_POSITIVE",
+    "observed_error": "CapabilityError: Bybit Spot pagination logic unexpectedly present"
+  },
+  "corrected_capability": {
+    "version": "v0.2.1",
+    "probe_path": "research/sc001/sc001_b15p1_nonprice_source_capability_revalidation_v0_2_1.py",
+    "probe_sha256": "dacaacd8563ec80d7f9f3006cc846795aa7e5e017518a817c962ee1dc7c1f1fe",
+    "selftest_harness_path": "research/sc001/sc001_b15p1_nonprice_source_capability_selftest_harness_v0_2_1.py",
+    "selftest_harness_sha256": "25e53b08c69fb85da1ec05e79263b33016412b7647ebdb7d14580d6ad2ba8057",
+    "spec_path": "docs/research/sc001-b15-p1-nonprice-source-capability-revalidation-spec-v0.2.1.json",
+    "spec_sha256": "9811fe0c10b9b4178376b7ce244936e9d00027ab4d6d234b9c8581cca75a00ef"
+  },
+  "correction_scope": {
+    "bybit_spot_function_source_scoped_guard": true,
+    "guard_markers_are_outside_scanned_function": true,
+    "actual_bybit_request_parameters_changed": false,
+    "okx_adapter_changed": false,
+    "collector_changed": false,
+    "collector_cadence_changed": false,
+    "identity_route_semantics_changed": false,
+    "stage_c_cost_model_changed": false,
+    "price_firewall_weakened": false,
+    "live_execution_authorization_changed": false
+  },
+  "next_state": "FREEZE_CAPABILITY_V021_AND_REPEAT_COMBINED_OFFLINE_VALIDATION"
+}

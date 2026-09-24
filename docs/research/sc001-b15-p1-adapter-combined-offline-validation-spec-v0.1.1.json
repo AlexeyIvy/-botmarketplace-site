@@ -1,0 +1,63 @@
+{
+  "schema": "sc001.b15.p1_adapter_combined_offline_validation_spec.v0.1.1",
+  "date": "2026-09-24",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "supersedes": "docs/research/sc001-b15-p1-adapter-combined-offline-validation-spec-v0.1.json",
+  "purpose": "Repeat the atomic offline validation after correcting the capability v0.2 self-referential Bybit pagination static guard. Collector v0.1.3 and all research semantics remain unchanged.",
+  "prior_attempt": {
+    "bundle_id": "bundle_20260924T154611Z_653834a4",
+    "bundle_sha256": "7b70dddf96af871f1c8b974ebc41ae27c032035de475b6ea0f065683a1337d59",
+    "job_id": "job_20260924T162915Z_80dc0899",
+    "diagnostic_sha256": "08f9624cf4b01b1de8ea13162a15338ff3ceefc40d8961564245b8287d5fd3b4",
+    "failure_class": "SELF_REFERENTIAL_STATIC_GUARD_FALSE_POSITIVE"
+  },
+  "collector": {
+    "runner_sha256": "f8181c4f25d6fc842d13c1faf8e259756883fcbb0bbcf08c23b3e60c9ed7bce0",
+    "library_sha256": "f4e27edff5acb38fb1c9ee840490179d1c3ebe13fd258d8875de768acc4078b5",
+    "selftest_harness_sha256": "6090f6f4346b4917c6f6464175acc7e9cf98aa2680a708b5ef333f6f1a0f44d1",
+    "freeze_sha256": "cdc6654ce5bbf265ce5cc5af2e448806ba306292d29fb986c7eb78bb1379df96",
+    "expected_runner_pass_token": "B15P1_NONPRICE_COLLECTOR_V013_SELF_TEST_PASS",
+    "expected_harness_pass_token": "B15P1_NONPRICE_COLLECTOR_V013_COMPILE_AND_SELFTEST_PASS",
+    "mandatory_offline_test_count": 28
+  },
+  "capability": {
+    "version": "v0.2.1",
+    "probe_sha256": "dacaacd8563ec80d7f9f3006cc846795aa7e5e017518a817c962ee1dc7c1f1fe",
+    "selftest_harness_sha256": "25e53b08c69fb85da1ec05e79263b33016412b7647ebdb7d14580d6ad2ba8057",
+    "freeze_sha256": "943a10a5da9ca4334366c2266df26e672bbc76eb30ebcf976e6fa8b1a8b6d73c",
+    "technical_correction_sha256": "3cacad0a4f735401941794ae901112ecba65d674d3b001cc736d61b443fb72b3",
+    "expected_probe_pass_token": "B15P1_NONPRICE_SOURCE_CAPABILITY_REVALIDATION_V021_SELF_TEST_PASS",
+    "expected_harness_pass_token": "B15P1_NONPRICE_SOURCE_CAPABILITY_V021_COMPILE_AND_SELFTEST_PASS"
+  },
+  "adapter_hardening": {
+    "okx_get_currencies_feeCcy_optional": true,
+    "okx_missing_burningFeeRate_fail_closed": true,
+    "okx_maxWd_optional": true,
+    "okx_feeGroup_primary": true,
+    "okx_groupId_disambiguation": true,
+    "okx_deprecated_top_level_fee_fallback": true,
+    "okx_multi_group_without_groupId_fail_closed": true,
+    "bybit_spot_instruments_pagination_disabled": true,
+    "bybit_pagination_guard_self_reference_safe": true
+  },
+  "foundation_unchanged": {
+    "frozen_admitted_assets": 192,
+    "canonical_representations": 207,
+    "directed_asset_edges": 414,
+    "route_graph_sha256": "06a9edd309a002aa5dc8408d992cff7b774604fc1cfb04f90fd7f56333f27928",
+    "stage_c_minimum_nontransfer_bps": 61,
+    "stage_c_minimum_hurdle_before_transfer_bps": 71
+  },
+  "offline_firewall": {
+    "exchange_calls_authorized": false,
+    "credentials_authorized": false,
+    "capability_snapshot_written": false,
+    "collector_launch_authorized": false,
+    "price_data_authorized": false,
+    "pnl_data_authorized": false,
+    "live_execution_authorized": false
+  },
+  "combined_harness_sha256": "a7d313e1e00925e87adf6a05bf58c656a746b2820c02931abc3a80b246deca86",
+  "expected_pass_status": "B15P1_ADAPTER_COMBINED_OFFLINE_VALIDATION_PASS",
+  "next_state_on_pass": "PREPARE_B15P1_SOURCE_CAPABILITY_LIVE_RETRY_V021"
+}

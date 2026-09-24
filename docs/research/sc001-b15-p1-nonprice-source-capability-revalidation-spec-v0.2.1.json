@@ -1,0 +1,67 @@
+{
+  "schema": "sc001.b15.p1_nonprice_source_capability_revalidation_spec.v0.2.1",
+  "date": "2026-09-24",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "supersedes": "docs/research/sc001-b15-p1-nonprice-source-capability-revalidation-spec-v0.2.json",
+  "technical_correction": {
+    "failure_class": "SELF_REFERENTIAL_STATIC_GUARD_FALSE_POSITIVE",
+    "prior_attempt_diagnostic_sha256": "08f9624cf4b01b1de8ea13162a15338ff3ceefc40d8961564245b8287d5fd3b4",
+    "bybit_pagination_guard_scope": "bybit_live_usdt_spot_pairs function source only",
+    "guard_markers_constructed_outside_scanned_function": true,
+    "adapter_behavior_changed": false,
+    "research_semantics_changed": false
+  },
+  "collector": {
+    "runner_sha256": "f8181c4f25d6fc842d13c1faf8e259756883fcbb0bbcf08c23b3e60c9ed7bce0",
+    "implementation_freeze_sha256": "cdc6654ce5bbf265ce5cc5af2e448806ba306292d29fb986c7eb78bb1379df96",
+    "service_file_sha256": "b59d61f25b4e643f6c9f27389d9829f7e4ea91cfbbb8dffeb48a91b55d755bf8"
+  },
+  "foundation": {
+    "route_graph_sha256": "06a9edd309a002aa5dc8408d992cff7b774604fc1cfb04f90fd7f56333f27928",
+    "admitted_universe_sha256": "fa9f97ab1e70b30bdb196fd6f4d49a8cbc7462d13424644ddb7b88cdd9f431b0",
+    "frozen_admitted_assets": 192
+  },
+  "okx_currencies": {
+    "core_required_every_row": ["ccy","chain","ctAddr","canDep","canWd"],
+    "profiled_fields": [
+      "fee","feeCcy","burningFeeRate","minDep","minWd","maxWd",
+      "wdTickSz","minDepArrivalConfirm","minWdUnlockConfirm"
+    ],
+    "feeCcy_mandatory": false,
+    "economic_complete_rows_min": 1
+  },
+  "okx_trade_fee": {
+    "primary_schema": "feeGroup[]",
+    "group_id_source": "public instruments groupId",
+    "deprecated_top_level_fallback": true,
+    "ambiguous_multi_group_without_groupId": "REVIEW"
+  },
+  "bybit_spot_instruments": {
+    "pagination": false,
+    "quoteCoin": "USDT",
+    "status": "Trading"
+  },
+  "permissions": {
+    "bybit_readOnly": 1,
+    "bybit_withdraw_token_present": false,
+    "bybit_ip_bound": true,
+    "okx_permission": "read_only",
+    "okx_ip_bound": true
+  },
+  "clock_skew_abs_max_ms": 10000,
+  "transport_family": "IPv4-only",
+  "offline_self_test": {
+    "exchange_calls_allowed": false,
+    "credentials_required": false,
+    "collector_launch_allowed": false,
+    "price_data_allowed": false
+  },
+  "live_run": {
+    "authenticated_read_only_calls_allowed": true,
+    "collector_launch_allowed": false,
+    "price_calls_allowed": false
+  },
+  "offline_pass_token": "B15P1_NONPRICE_SOURCE_CAPABILITY_REVALIDATION_V021_SELF_TEST_PASS",
+  "offline_harness_pass_token": "B15P1_NONPRICE_SOURCE_CAPABILITY_V021_COMPILE_AND_SELFTEST_PASS",
+  "live_pass_token": "B15P1_NONPRICE_SOURCE_CAPABILITY_REVALIDATION_PASS"
+}
