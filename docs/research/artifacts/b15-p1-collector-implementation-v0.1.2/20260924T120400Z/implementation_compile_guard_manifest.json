@@ -1,0 +1,28 @@
+{
+  "collector_launch_authorized": false,
+  "collector_returncode": 0,
+  "compile_checks": {
+    "library": {
+      "compiled": true,
+      "pyc_created": true,
+      "source": "research/sc001/sc001_b15p1_nonprice_transferability_lib_v0_1_2.py"
+    },
+    "runner": {
+      "compiled": true,
+      "pyc_created": true,
+      "source": "research/sc001/sc001_b15p1_nonprice_transferability_collector_v0_1_2.py"
+    },
+    "runner_eof_guard": {
+      "passed": true
+    },
+    "runner_main_guard": {
+      "passed": true
+    }
+  },
+  "exchange_calls_performed": false,
+  "expected_token": "B15P1_NONPRICE_COLLECTOR_V012_SELF_TEST_PASS",
+  "price_data_authorized": false,
+  "schema": "sc001.b15.p1_nonprice_collector_compile_guard.v0.1.2",
+  "selftest_manifest_present": true,
+  "status": "B15P1_NONPRICE_COLLECTOR_V012_COMPILE_AND_SELFTEST_PASS"
+}
