@@ -1,0 +1,37 @@
+{
+  "schema": "sc001.b15.v0.2.2_artifact_complete_host_checkpoint_completion.v1",
+  "date": "2026-09-24",
+  "status": "CHECKPOINT_BACKUP_RESTORE_VERIFY_PASS",
+  "checkpoint_id": "botmarketplace-sc001-b15-v022-artifact-complete-checkpoint-20260924T095050Z",
+  "archive": "/var/backups/botmarketplace/botmarketplace-sc001-b15-v022-artifact-complete-checkpoint-20260924T095050Z.tar.gz",
+  "archive_sha256": "36401bcb50b1042e6fc2df91fac28998647a03d75d280fa9feb323c54acb1279",
+  "verify_record": "/var/backups/botmarketplace/botmarketplace-sc001-b15-v022-artifact-complete-checkpoint-20260924T095050Z.tar.gz.restore-verify.txt",
+  "repository_bundle_verify": "PASS",
+  "artifact_completion_commit": "f0b069efdd382d6f35d9a2b3e9668f35b8a48235",
+  "checkpoint_tooling_commit": "9f85f1a2c77b36417efe97dc62e69ab1e280a7a1",
+  "original_final_freeze_commit": "7fdaf8c8e3053e2bbf266ec7d89c3abc90c3661f",
+  "anchors": {
+    "freeze_record_sha256": "dfa7466e6133ba8adef99d64114d5651199c0f6432a14a5b76434a200b5b937b",
+    "artifact_supplement_sha256": "6241a66f93dfcbd74d2ea8c3ac164c746f87236d653895b8cbf01ce348913997",
+    "artifact_manifest_sha256": "a1a813244dc8cd81c2002e54650b8202c318ee9589f443301a9e624c46bb7b79",
+    "route_shard_index_sha256": "001c89a7d4e973ed33ab072ec43746f6f7b6c0105912a24ae0483955ac93a50a",
+    "route_graph_logical_sha256": "06a9edd309a002aa5dc8408d992cff7b774604fc1cfb04f90fd7f56333f27928"
+  },
+  "evidence": {
+    "source": "USER_PROVIDED_TERMINAL_OUTPUT",
+    "observed_terminal_lines": [
+      "repository.bundle is okay",
+      "CHECKPOINT_BACKUP_RESTORE_VERIFY_PASS"
+    ],
+    "vps_reader_backup_root_exposed": false
+  },
+  "effect": {
+    "artifact_complete_preservation_gate_satisfied": true,
+    "final_identity_route_state_preserved": true,
+    "full_route_graph_restore_verified": true,
+    "collector_authorized": false,
+    "collector_launch_authorized": false,
+    "price_economic_research_authorized": false
+  },
+  "next_state": "RUN_B15_P1_FULL_CYCLE_EDGE_TO_FILL_STRUCTURAL_PREFLIGHT"
+}
