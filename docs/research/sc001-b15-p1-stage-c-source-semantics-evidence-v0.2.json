@@ -1,0 +1,132 @@
+{
+  "schema": "sc001.b15.p1_stage_c_source_semantics_evidence.v0.2",
+  "date": "2026-09-24",
+  "status": "OFFICIAL_SOURCE_SEMANTICS_BOUND_FOR_STRUCTURAL_PREFLIGHT",
+  "supersedes": "sc001-b15-p1-stage-c-source-semantics-evidence-v0.1.json",
+  "price_data_used": false,
+  "pnl_data_used": false,
+  "sources": {
+    "bybit": {
+      "spot_fee_endpoint": {
+        "method": "GET",
+        "path": "/v5/account/fee-rate",
+        "official_url": "https://bybit-exchange.github.io/docs/v5/account/fee-rate",
+        "authenticated": true,
+        "relevant_response_fields": ["symbol", "takerFeeRate", "makerFeeRate"],
+        "commission_sign": "POSITIVE_RATE_IS_COMMISSION",
+        "structural_rule": "APPLIED_TAKER_BPS = MAX(10, TAKER_FEE_RATE * 10000)"
+      },
+      "coin_info_endpoint": {
+        "method": "GET",
+        "path": "/v5/asset/coin/query-info",
+        "official_url": "https://bybit-exchange.github.io/docs/api-explorer/v5/asset/coin-info",
+        "authenticated": true,
+        "previously_audited_fields": [
+          "coin",
+          "chain",
+          "chainType",
+          "contractAddress",
+          "chainDeposit",
+          "chainWithdraw",
+          "withdrawFee",
+          "withdrawPercentageFee",
+          "depositMin",
+          "withdrawMin",
+          "confirmation"
+        ]
+      },
+      "withdrawal_model": {
+        "official_url": "https://bybit-exchange.github.io/docs/v5/asset/withdraw",
+        "fee_type": 0,
+        "target_receive_semantics": true,
+        "fixed_only_formula": "HANDLING_FEE = FIXED_FEE",
+        "percentage_formula": "HANDLING_FEE = TARGET_RECEIVE / (1 - PERCENTAGE_FEE) * PERCENTAGE_FEE + FIXED_FEE",
+        "invalid_if_percentage_fee_gte_1": true,
+        "prospective_buffer_multiplier": 1.25
+      }
+    },
+    "okx": {
+      "spot_fee_endpoint": {
+        "method": "GET",
+        "path": "/api/v5/account/trade-fee",
+        "official_url": "https://www.okx.com/docs-v5/en/",
+        "authenticated": true,
+        "request_binding": "instType=SPOT AND instId=EXACT_PAIR",
+        "relevant_response_fields": ["feeGroup", "taker", "maker", "groupId"],
+        "sign_convention": "NEGATIVE_MEANS_COMMISSION_POSITIVE_MEANS_REBATE",
+        "structural_rule": "COMMISSION_BPS = MAX(0, -TAKER_RATE * 10000); APPLIED_TAKER_BPS = MAX(10, COMMISSION_BPS)"
+      },
+      "currencies_endpoint": {
+        "method": "GET",
+        "path": "/api/v5/asset/currencies",
+        "official_url": "https://www.okx.com/docs-v5/en/",
+        "authenticated": true,
+        "relevant_response_fields": [
+          "ccy",
+          "chain",
+          "canDep",
+          "canWd",
+          "minDep",
+          "minWd",
+          "maxWd",
+          "fee",
+          "feeCcy",
+          "burningFeeRate",
+          "wdTickSz",
+          "wdQuota",
+          "usedWdQuota",
+          "mainNet",
+          "depEstOpenTime",
+          "wdEstOpenTime"
+        ]
+      },
+      "withdrawal_model_v0.1": {
+        "fixed_fee_supported": true,
+        "fee_currency_same_as_asset_supported": true,
+        "fee_currency_usdt_supported": true,
+        "fee_currency_other_status": "FEE_CCY_CONVERSION_REQUIRED",
+        "burning_fee_rate_zero_or_empty_supported": true,
+        "burning_fee_rate_nonzero_status": "OKX_BURNING_FEE_FORMULA_REVIEW",
+        "burning_fee_rate_nonzero_primary_route_eligible": false,
+        "reason": "EXACT_TARGET_RECEIVE_GROSS_UP_SEMANTICS_NOT_FROZEN_IN_STAGE_C_V0.1"
+      }
+    }
+  },
+  "collector_field_requirements": {
+    "trade_fee_snapshot": [
+      "venue",
+      "instrument",
+      "account_fee_level_or_group",
+      "taker_fee_rate",
+      "source_timestamp_or_receive_interval",
+      "raw_response_hash"
+    ],
+    "route_fee_snapshot": [
+      "venue",
+      "asset",
+      "network_uid",
+      "venue_chain_code",
+      "deposit_state",
+      "withdraw_state",
+      "fixed_withdraw_fee",
+      "percentage_withdraw_fee_if_any",
+      "fee_currency",
+      "min_withdrawal",
+      "min_deposit",
+      "max_withdrawal_if_available",
+      "withdrawal_precision",
+      "confirmation_metadata",
+      "source_timestamp_or_receive_interval",
+      "raw_response_hash"
+    ]
+  },
+  "fail_closed_statuses": [
+    "FEE_RATE_UNKNOWN",
+    "BASE_REBALANCE_COST_UNKNOWN",
+    "QUOTE_REBALANCE_COST_UNKNOWN",
+    "FEE_CCY_CONVERSION_REQUIRED",
+    "OKX_BURNING_FEE_FORMULA_REVIEW",
+    "NOTIONAL_NOT_RESTORABLE",
+    "SOURCE_INVALID"
+  ]
+}
