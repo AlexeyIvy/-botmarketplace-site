@@ -1,0 +1,16 @@
+{
+  "additional_required_gates": [
+    "COLLECTOR_DESIGN_FREEZE",
+    "COLLECTOR_IMPLEMENTATION_SELF_TEST",
+    "READ_ONLY_SOURCE_CAPABILITY_REVALIDATION",
+    "PROSPECTIVE_SOURCE_COLLECTION",
+    "LATER_PRICE_HEADROOM_PROTOCOL_FREEZE"
+  ],
+  "authorized_if_preflight_pass": "PREPARE_15_SECOND_NONPRICE_COLLECTOR_DESIGN",
+  "collector_launch_authorized": false,
+  "live_execution_authorized": false,
+  "price_economic_research_authorized": false,
+  "schema": "sc001.b15.p1_stage_c_next_state_authorization_candidate.v0.1",
+  "stage_c_preflight_status": "B15_P1_FULL_CYCLE_EDGE_TO_FILL_STRUCTURAL_PREFLIGHT_PASS",
+  "status": "CANDIDATE_ONLY"
+}

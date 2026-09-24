@@ -1,0 +1,65 @@
+{
+  "results": [
+    {
+      "case": "AMOUNT_AWARE_SMALL",
+      "expected_selected_network_uid": "b:mainnet",
+      "passed": true,
+      "ranking": [
+        {
+          "burden": "0.300400801603206412825651302605210420841683366733466933867736",
+          "network_uid": "b:mainnet"
+        },
+        {
+          "burden": "1",
+          "network_uid": "a:mainnet"
+        }
+      ],
+      "selected_network_uid": "b:mainnet"
+    },
+    {
+      "case": "AMOUNT_AWARE_LARGE",
+      "expected_selected_network_uid": "a:mainnet",
+      "passed": true,
+      "ranking": [
+        {
+          "burden": "1",
+          "network_uid": "a:mainnet"
+        },
+        {
+          "burden": "2.10400801603206412825651302605210420841683366733466933867736",
+          "network_uid": "b:mainnet"
+        }
+      ],
+      "selected_network_uid": "a:mainnet"
+    },
+    {
+      "case": "TIEBREAK",
+      "expected_selected_network_uid": "a:mainnet",
+      "passed": true,
+      "ranking": [
+        {
+          "burden": "1",
+          "network_uid": "a:mainnet"
+        },
+        {
+          "burden": "1",
+          "network_uid": "z:mainnet"
+        }
+      ],
+      "selected_network_uid": "a:mainnet"
+    },
+    {
+      "case": "ONE_SIDED_EXCLUDED",
+      "expected_selected_network_uid": "common:mainnet",
+      "passed": true,
+      "ranking": [
+        {
+          "burden": "1",
+          "network_uid": "common:mainnet"
+        }
+      ],
+      "selected_network_uid": "common:mainnet"
+    }
+  ],
+  "schema": "sc001.b15.p1_stage_c_route_selection_unit_tests.v0.1"
+}

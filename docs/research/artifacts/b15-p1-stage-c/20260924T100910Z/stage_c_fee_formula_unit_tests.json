@@ -1,0 +1,86 @@
+{
+  "bybit_withdrawal": [
+    {
+      "buffered_handling_fee": "1.25",
+      "case": "FIXED_ONLY",
+      "handling_fee": "1",
+      "passed": true,
+      "status": "OK"
+    },
+    {
+      "buffered_handling_fee": "2.51262626262626262626262626262626262626262626262626262626262",
+      "case": "FIXED_PLUS_PERCENTAGE",
+      "handling_fee": "2.01010101010101010101010101010101010101010101010101010101010",
+      "passed": true,
+      "status": "OK"
+    },
+    {
+      "buffered_handling_fee": "",
+      "case": "INVALID_PERCENTAGE",
+      "handling_fee": "",
+      "passed": true,
+      "status": "INVALID_PERCENTAGE_FEE"
+    }
+  ],
+  "okx_fail_closed": [
+    {
+      "actual_status": "SUPPORTED",
+      "burning_fee_rate": "0",
+      "expected_status": "SUPPORTED",
+      "fee_currency_mode": "SAME_AS_ASSET",
+      "passed": true
+    },
+    {
+      "actual_status": "OKX_BURNING_FEE_FORMULA_REVIEW",
+      "burning_fee_rate": "0.01",
+      "expected_status": "OKX_BURNING_FEE_FORMULA_REVIEW",
+      "fee_currency_mode": "SAME_AS_ASSET",
+      "passed": true
+    },
+    {
+      "actual_status": "FEE_CCY_CONVERSION_REQUIRED",
+      "burning_fee_rate": "0",
+      "expected_status": "FEE_CCY_CONVERSION_REQUIRED",
+      "fee_currency_mode": "OTHER",
+      "passed": true
+    }
+  ],
+  "schema": "sc001.b15.p1_stage_c_fee_formula_unit_tests.v0.1",
+  "trading_fee": [
+    {
+      "applied_bps": "10",
+      "expected_applied_bps": "10",
+      "passed": true,
+      "raw_rate": "0.0008",
+      "venue": "BYBIT"
+    },
+    {
+      "applied_bps": "12.0000",
+      "expected_applied_bps": "12",
+      "passed": true,
+      "raw_rate": "0.0012",
+      "venue": "BYBIT"
+    },
+    {
+      "applied_bps": "10",
+      "expected_applied_bps": "10",
+      "passed": true,
+      "raw_rate": "-0.001",
+      "venue": "OKX"
+    },
+    {
+      "applied_bps": "15.0000",
+      "expected_applied_bps": "15",
+      "passed": true,
+      "raw_rate": "-0.0015",
+      "venue": "OKX"
+    },
+    {
+      "applied_bps": "10",
+      "expected_applied_bps": "10",
+      "passed": true,
+      "raw_rate": "0.002",
+      "venue": "OKX"
+    }
+  ]
+}

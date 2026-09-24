@@ -1,0 +1,86 @@
+{
+  "bybit_coin_info_fields": [
+    "chain",
+    "chainDeposit",
+    "chainType",
+    "chainWithdraw",
+    "coin",
+    "confirmation",
+    "contractAddress",
+    "depositMin",
+    "minAccuracy",
+    "safeConfirmNumber",
+    "withdrawFee",
+    "withdrawMax",
+    "withdrawMin",
+    "withdrawPercentageFee"
+  ],
+  "coverage_map": {
+    "BYBIT_CONFIRMATION": [
+      "confirmation",
+      "safeConfirmNumber"
+    ],
+    "BYBIT_DEPOSIT_STATE": "chainDeposit",
+    "BYBIT_FIXED_FEE": "withdrawFee",
+    "BYBIT_MAX_WITHDRAW": "withdrawMax",
+    "BYBIT_MIN_DEPOSIT": "depositMin",
+    "BYBIT_MIN_WITHDRAW": "withdrawMin",
+    "BYBIT_PERCENTAGE_FEE": "withdrawPercentageFee",
+    "BYBIT_PRECISION": "minAccuracy",
+    "BYBIT_WITHDRAW_STATE": "chainWithdraw",
+    "OKX_CONFIRMATION": [
+      "minDepArrivalConfirm",
+      "minWdUnlockConfirm"
+    ],
+    "OKX_DEPOSIT_STATE": "canDep",
+    "OKX_FEE_CURRENCY": "feeCcy",
+    "OKX_FIXED_FEE": "fee",
+    "OKX_MAX_WITHDRAW": "maxWd",
+    "OKX_MIN_DEPOSIT": "minDep",
+    "OKX_MIN_WITHDRAW": "minWd",
+    "OKX_PERCENTAGE_FEE": "burningFeeRate",
+    "OKX_PRECISION": "wdTickSz",
+    "OKX_WITHDRAW_STATE": "canWd"
+  },
+  "okx_currencies_fields": [
+    "burningFeeRate",
+    "canDep",
+    "canWd",
+    "ccy",
+    "chain",
+    "depEstOpenTime",
+    "fee",
+    "feeCcy",
+    "mainNet",
+    "maxWd",
+    "minDep",
+    "minDepArrivalConfirm",
+    "minWd",
+    "minWdUnlockConfirm",
+    "usedWdQuota",
+    "wdEstOpenTime",
+    "wdQuota",
+    "wdTickSz"
+  ],
+  "required_model_metadata": [
+    "CONFIRMATION_METADATA",
+    "DEPOSIT_STATE",
+    "MIN_DEPOSIT",
+    "MIN_WITHDRAWAL",
+    "NORMALIZED_ROUTE_STATE",
+    "SOURCE_TIMESTAMPS",
+    "WITHDRAWAL_FIXED_FEE",
+    "WITHDRAWAL_PERCENTAGE_FEE_IF_ANY",
+    "WITHDRAW_STATE"
+  ],
+  "route_fee_sources": {
+    "BYBIT": "/v5/asset/coin/query-info",
+    "OKX": "/api/v5/asset/currencies"
+  },
+  "schema": "sc001.b15.p1_stage_c_source_field_coverage_report.v0.1",
+  "status": "PASS",
+  "trade_fee_sources": {
+    "BYBIT": "/v5/account/fee-rate",
+    "OKX": "/api/v5/account/trade-fee"
+  }
+}

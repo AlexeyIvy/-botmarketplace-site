@@ -1,0 +1,55 @@
+{
+  "components": [
+    {
+      "can_decrease_below_floor": false,
+      "component": "OPENING_TWO_TAKER_FILLS",
+      "minimum_bps": 20,
+      "source": "FROZEN_FLOOR_PLUS_UPWARD_ACCOUNT_PAIR_OVERRIDE"
+    },
+    {
+      "can_decrease_from_outcomes": false,
+      "component": "LEGGING_LATENCY_MODEL_RESERVE",
+      "minimum_bps": 10,
+      "source": "FROZEN_RESERVE"
+    },
+    {
+      "can_decrease_from_outcomes": false,
+      "component": "VENUE_COUNTERPARTY_INVENTORY_RESERVE",
+      "minimum_bps": 10,
+      "source": "FROZEN_RESERVE"
+    },
+    {
+      "component": "CAPITAL_LOCK_RESERVE",
+      "minimum_bps": 21,
+      "realized_adjustment": "UPWARD_ONLY_IF_LOCK_LONGER",
+      "source": "3_BPS_PER_STARTED_24H_MINIMUM_7_DAYS"
+    },
+    {
+      "component": "BASE_RESTORATION_TRANSFER_COST",
+      "minimum_bps": null,
+      "missing_status": "BASE_REBALANCE_COST_UNKNOWN",
+      "silent_zero_allowed": false,
+      "source": "CAUSAL_ROUTE_FEE_METADATA_LATER_CONVERTED_BY_FROZEN_PRICE_PROTOCOL"
+    },
+    {
+      "component": "QUOTE_RESTORATION_TRANSFER_COST",
+      "minimum_bps": null,
+      "missing_status": "QUOTE_REBALANCE_COST_UNKNOWN",
+      "silent_zero_allowed": false,
+      "source": "CAUSAL_USDT_ROUTE_FEE_METADATA"
+    },
+    {
+      "can_decrease_from_outcomes": false,
+      "component": "ECONOMIC_HEADROOM_RESERVE",
+      "minimum_bps": 10,
+      "source": "FROZEN_RESERVE"
+    }
+  ],
+  "minimum_hurdle_before_transfer_costs_bps": "71",
+  "minimum_nontransfer_structural_burden_bps": "61",
+  "reference_notional_usdt": 10000,
+  "schema": "sc001.b15.p1_full_cycle_cost_component_ledger.v0.1",
+  "status": "STRUCTURAL_PREFLIGHT_CANDIDATE",
+  "transfer_costs_assumed_zero": false,
+  "transfer_costs_deferred_until_causal_metadata_and_later_price_conversion": true
+}
