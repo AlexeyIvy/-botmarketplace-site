@@ -1,0 +1,30 @@
+{
+  "schema": "sc001.b15.v0.2.2_final_freeze_checkpoint_plan.v1",
+  "date": "2026-09-24",
+  "status": "CHECKPOINT_SCRIPT_READY_RUN_PENDING",
+  "freeze_commit": "7fdaf8c8e3053e2bbf266ec7d89c3abc90c3661f",
+  "freeze_record": {
+    "path": "docs/research/sc001-b15-p1-final-identity-route-v0.2.2-freeze-v1.json",
+    "sha256": "dfa7466e6133ba8adef99d64114d5651199c0f6432a14a5b76434a200b5b937b"
+  },
+  "exact_replay_manifest": {
+    "path": "docs/research/artifacts/b15-p1-v0.2.2/20260920T210446Z/replay/integrated_replay_manifest_v0.2.2.json",
+    "sha256": "ad842a5f7be42c7c4cae6ce13b91846de7e17e17cb06cf1152aa4f69538c1f7b"
+  },
+  "freeze_candidate_manifest": {
+    "path": "docs/research/artifacts/b15-p1-v0.2.2/20260920T210446Z/final-freeze-preflight/identity_route_v0.2.2_final_freeze_candidate_manifest.json",
+    "sha256": "1519940e2580fc246d745e11cb06dda564b83f6b7cb689583eb2d1c386c8fabd"
+  },
+  "checkpoint_script": "scripts/backup/create-b15-v022-final-freeze-checkpoint.sh",
+  "checkpoint_script_sha256": "19f8b76fbaec676050ad84c29f7f5e6e4c89c4d37d24094f561c84c29265908f",
+  "runbook": "docs/infrastructure/b15-v022-final-freeze-checkpoint-backup-v1.0.md",
+  "normal_archive_secrets_allowed": false,
+  "restore_verification_required": true,
+  "success_status": "CHECKPOINT_BACKUP_RESTORE_VERIFY_PASS",
+  "authorization_after_checkpoint": {
+    "collector_authorized": false,
+    "collector_launch_authorized": false,
+    "price_economic_research_authorized": false
+  },
+  "next_state": "RUN_V022_FINAL_FREEZE_HOST_CHECKPOINT_AND_CAPTURE_PASS_RECORD"
+}
