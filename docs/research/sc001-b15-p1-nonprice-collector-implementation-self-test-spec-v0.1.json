@@ -1,0 +1,62 @@
+{
+  "schema": "sc001.b15.p1_nonprice_collector_implementation_self_test_spec.v0.1",
+  "date": "2026-09-24",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "implementation": {
+    "runner_path": "research/sc001/sc001_b15p1_nonprice_transferability_collector_v0_1.py",
+    "runner_sha256": "f4fd8d2672f726623eced6f4fa9d3bd0023b21b46f9037998803b7c5ee172db7",
+    "library_path": "research/sc001/sc001_b15p1_nonprice_transferability_lib_v0_1.py",
+    "library_sha256": "e03fdf1fd99b71ded3c4bbbd981d117b8ffbc89769e1c607776079cc280cb525",
+    "service_path": "ops/systemd/sc001-b15p1-transferability.service",
+    "service_sha256": "01b5c0ef177642ec65472624f4fd1a300018540c75025323cbf90c8d9e7e20bd",
+    "status_helper_sha256": "e26c6707ac38ae2d4bd61e2e31b9197d492f6d43e01d0436e301a284279b1702"
+  },
+  "expected_frozen_mapping": {
+    "base_assets": 146,
+    "overlay_assets": 46,
+    "asset_common_representations": 207,
+    "quote_common_representations": 12,
+    "quote_one_sided_bybit": 8,
+    "quote_one_sided_okx": 6,
+    "v0.2.2_exact_source_matchers": 182
+  },
+  "mandatory_offline_self_tests": [
+    "FROZEN_HASH_HANDSHAKE",
+    "SCHEDULER_PHASE_FIXTURES",
+    "NO_CATCHUP_FIXTURE",
+    "NO_OVERLAP_FIXTURE",
+    "BYBIT_RESPONSE_PARSER_FIXTURE",
+    "OKX_RESPONSE_PARSER_FIXTURE",
+    "ROUTE_STATE_MACHINE_FIXTURES",
+    "EVENT_TRANSITION_FIXTURES",
+    "SOURCE_GAP_FIXTURES",
+    "FEE_STALENESS_FIXTURES",
+    "STORAGE_PRESSURE_FIXTURES",
+    "APPEND_ONLY_WRITE_FIXTURE",
+    "ATOMIC_STATE_RESTART_FIXTURE",
+    "SECRET_REDACTION_FIXTURE",
+    "NO_PRICE_ENDPOINT_STATIC_GUARD"
+  ],
+  "extra_required_checks": [
+    "FROZEN_MAPPING_COUNTS",
+    "BASE_AND_EXACT_MATCHER_FIXTURES",
+    "ALIAS_CONFLICT_FAIL_CLOSED",
+    "RAW_OBJECT_CONTENT_ADDRESSING",
+    "RAW_OBJECT_CORRUPTION_FAIL_CLOSED",
+    "LAUNCH_AUTHORIZATION_FAIL_CLOSED",
+    "POLL_HASH_CHAIN_TAMPER",
+    "SYSTEMD_CANDIDATE_STATIC_GUARD"
+  ],
+  "self_test": {
+    "exchange_calls_allowed": false,
+    "credentials_required": false,
+    "capability_snapshot_required": false,
+    "launch_authorization_required": false,
+    "price_data_allowed": false,
+    "pnl_allowed": false
+  },
+  "expected_pass_token": "B15P1_NONPRICE_COLLECTOR_V01_SELF_TEST_PASS",
+  "expected_review_token": "B15P1_NONPRICE_COLLECTOR_V01_SELF_TEST_REVIEW",
+  "pass_state": "B15P1_NONPRICE_COLLECTOR_IMPLEMENTATION_SELF_TEST_PASS",
+  "next_state_on_pass": "PREPARE_B15P1_LIVE_READ_ONLY_SOURCE_CAPABILITY_REVALIDATION"
+}
