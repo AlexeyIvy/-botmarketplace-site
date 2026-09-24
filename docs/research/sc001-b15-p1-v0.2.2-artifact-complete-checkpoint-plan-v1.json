@@ -1,0 +1,23 @@
+{
+  "schema": "sc001.b15.v0.2.2_artifact_complete_checkpoint_plan.v1",
+  "date": "2026-09-24",
+  "status": "CHECKPOINT_SCRIPT_READY_RUN_PENDING",
+  "artifact_completion_commit": "f0b069efdd382d6f35d9a2b3e9668f35b8a48235",
+  "original_final_freeze_commit": "7fdaf8c8e3053e2bbf266ec7d89c3abc90c3661f",
+  "freeze_record_sha256": "dfa7466e6133ba8adef99d64114d5651199c0f6432a14a5b76434a200b5b937b",
+  "artifact_supplement_sha256": "6241a66f93dfcbd74d2ea8c3ac164c746f87236d653895b8cbf01ce348913997",
+  "artifact_manifest_sha256": "a1a813244dc8cd81c2002e54650b8202c318ee9589f443301a9e624c46bb7b79",
+  "route_shard_index_sha256": "001c89a7d4e973ed33ab072ec43746f6f7b6c0105912a24ae0483955ac93a50a",
+  "route_graph_logical_sha256": "06a9edd309a002aa5dc8408d992cff7b774604fc1cfb04f90fd7f56333f27928",
+  "checkpoint_script": "scripts/backup/create-b15-v022-artifact-complete-checkpoint.sh",
+  "checkpoint_script_sha256": "3e0a717ed8367f17256458a58a3794f689abd30e9125784d62a888633c5cbc53",
+  "runbook": "docs/infrastructure/b15-v022-artifact-complete-checkpoint-backup-v1.0.md",
+  "normal_archive_secrets_allowed": false,
+  "restore_verification_required": true,
+  "route_graph_reassembly_verification_required": true,
+  "success_status": "CHECKPOINT_BACKUP_RESTORE_VERIFY_PASS",
+  "next_after_pass": "RUN_B15_P1_FULL_CYCLE_EDGE_TO_FILL_STRUCTURAL_PREFLIGHT",
+  "collector_authorized": false,
+  "price_economic_research_authorized": false,
+  "next_state": "RUN_V022_ARTIFACT_COMPLETE_HOST_CHECKPOINT_AND_CAPTURE_PASS_RECORD"
+}
