@@ -1,0 +1,15 @@
+{
+  "schema": "sc001.b15.p1_final_launch_v01_failure_recovery_wrapper_offline_preflight_bundle_seal.v0.1",
+  "date": "2026-09-25",
+  "status": "SEALED_AWAITING_USER_APPROVAL",
+  "source_commit": "0ae1ef050862dd7c7cb2384bd7097a05c38e8a71",
+  "bundle_id": "bundle_20260925T163125Z_2331de78",
+  "bundle_sha256": "a31a6d0a9bb4f2ac62e5c6f9e94b8ca6f320e2575d6f5da5c3a989cf0e8e73aa",
+  "approval_code": "BM-A31A6D0A9BB4",
+  "total_bytes": 22204,
+  "file_count": 5,
+  "runtime_profile": "offline-research-v1",
+  "inputs": [],
+  "run_performed": false,
+  "next_state": "RUN_B15P1_FINAL_LAUNCH_V01_FAILURE_RECOVERY_WRAPPER_OFFLINE_PREFLIGHT_AFTER_USER_APPROVAL"
+}
