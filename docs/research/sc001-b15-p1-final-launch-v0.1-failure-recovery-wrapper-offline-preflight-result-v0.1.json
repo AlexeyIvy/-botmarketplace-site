@@ -1,0 +1,42 @@
+{
+  "schema": "sc001.b15.p1_final_launch_v01_failure_recovery_wrapper_offline_preflight_result.v0.1",
+  "date": "2026-09-25",
+  "status": "B15P1_FINAL_LAUNCH_V01_FAILURE_RECOVERY_WRAPPER_OFFLINE_PREFLIGHT_PASS",
+  "bundle_id": "bundle_20260925T163125Z_2331de78",
+  "bundle_sha256": "a31a6d0a9bb4f2ac62e5c6f9e94b8ca6f320e2575d6f5da5c3a989cf0e8e73aa",
+  "job_id": "job_20260925T163702Z_51227679",
+  "package_integrity_ok": true,
+  "exit_code": 0,
+  "manifest_sha256": "923ee7e05a61a22db293be021b43b79397930b6e58ff008e4386aa72eda81266",
+  "wrapper_sha256": "9ef7d1631d5e1b54d01b33c27b30050837e1914051784d2e114f7ed7efe903bb",
+  "checks": {
+    "bash_syntax_returncode": 0,
+    "embedded_python_compile": true,
+    "required_marker_count": 24,
+    "protected_evidence_mutation_hits": [],
+    "forbidden_start": false,
+    "forbidden_enable": false,
+    "forbidden_restart": false,
+    "forbidden_collector_run": false,
+    "forbidden_snapshot_delete": false,
+    "systemctl_subcommands": [
+      "stop",
+      "disable",
+      "is-active",
+      "is-active",
+      "is-enabled",
+      "daemon-reload",
+      "is-active",
+      "is-enabled"
+    ]
+  },
+  "safety": {
+    "credentials_available": false,
+    "exchange_calls_performed": false,
+    "collector_start_performed": false,
+    "price_data_used": false,
+    "pnl_data_used": false,
+    "live_execution_performed": false
+  },
+  "next_state": "AWAIT_EXPLICIT_APPROVAL_FOR_FAILURE_RECOVERY_HOST_WRAPPER"
+}
