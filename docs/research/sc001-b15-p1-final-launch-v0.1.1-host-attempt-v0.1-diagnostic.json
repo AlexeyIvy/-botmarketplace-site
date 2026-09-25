@@ -1,0 +1,42 @@
+{
+  "schema": "sc001.b15.p1_final_launch_v011_host_attempt_diagnostic.v0.1",
+  "date": "2026-09-25",
+  "status": "SOURCE_VALIDITY_TIMEOUT_AFTER_CONTROL_FLOW_FIX",
+  "evidence_source": "user-supplied terminal screenshot from real v0.1.1 host retry",
+  "wrapper": {
+    "path": "scripts/research/run-b15p1-final-collector-deployment-launch-v0.1.1.sh",
+    "sha256": "fe7c93187f0e8a84f550fd37240c3a80e7aa6a21c4d296a5042677b15ae0b6b0"
+  },
+  "observed": {
+    "not_ready_reason_repeated": "valid_poll_count:0",
+    "terminal_status": "B15P1_FINAL_COLLECTOR_DEPLOYMENT_LAUNCH_V011_REVIEW",
+    "reason": "collector_initial_readiness_timeout",
+    "rollback_incomplete": 0,
+    "collector_may_have_failure_evidence": true,
+    "price_pnl_authorized": false,
+    "systemd_log_tail": [
+      "B15P1_NONPRICE_COLLECTION_RUNNING",
+      "fast_cadence_seconds = 15",
+      "price/PnL = CLOSED"
+    ]
+  },
+  "interpretation": {
+    "v011_not_ready_control_flow_worked": true,
+    "prior_err_trap_bug_recurred": false,
+    "collector_started": true,
+    "collector_reached_running_state": true,
+    "valid_fast_poll_observed": false,
+    "rollback_completed": true,
+    "next_question": "Which venue and exact saved poll error made every poll invalid?"
+  },
+  "do_not_infer_yet": [
+    "Bybit failure",
+    "OKX failure",
+    "schema drift",
+    "rate limit",
+    "transport timeout",
+    "credential failure"
+  ],
+  "retry_authorized": false,
+  "next_state": "READ_ONLY_ANALYZE_SAVED_POLL_GAP_RAW_AND_LOG_EVIDENCE"
+}
