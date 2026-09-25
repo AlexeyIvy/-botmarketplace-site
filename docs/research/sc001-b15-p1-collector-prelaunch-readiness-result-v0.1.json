@@ -1,0 +1,52 @@
+{
+  "schema": "sc001.b15.p1_collector_prelaunch_readiness_result.v0.1",
+  "date": "2026-09-25",
+  "status": "B15P1_COLLECTOR_PRELAUNCH_READINESS_OFFLINE_PASS",
+  "bundle_id": "bundle_20260924T180410Z_997301cb",
+  "bundle_sha256": "e287545e7911aa160a12b0c0df89d84fb2f00fe15961704785e92291c3ebd370",
+  "job_id": "job_20260925T075008Z_6317d13c",
+  "package_integrity_ok": true,
+  "exit_code": 0,
+  "manifest_sha256": "532f9cc7b1af9495e42e4c23f2ce633794e7b1c58c56d7320c0a06cf3d5218de",
+  "live_snapshot_sha256": "14341c153649455459f18998be90d65a3010c009893bf76b359dc0b5b74387fc",
+  "checks": {
+    "collector_full_freeze_handshake": true,
+    "collector_freeze_status": "FROZEN_BEFORE_B15P1_NONPRICE_COLLECTOR_SELF_TEST_V013",
+    "implementation_contract_mandatory_tests": 28,
+    "asset_common_representations": 207,
+    "base_assets": 146,
+    "overlay_assets": 46,
+    "quote_common_representations": 12,
+    "quote_one_sided_representations": 14,
+    "no_price_endpoint_static_guard": true,
+    "service_required_fragment_count": 20,
+    "service_exec_start_count": 1,
+    "stable_runtime_unit_name": "sc001-b15p1-transferability.service",
+    "status_helper_unit_name_match": true,
+    "authorization_precedes_credentials_network_and_writes": true,
+    "launch_candidate_top_level_rejected": true,
+    "nested_runtime_payload_accepted": true,
+    "failed_closed_mutation_count": 8,
+    "failed_closed_mutations": [
+      "status",
+      "token",
+      "anchor:runner_sha256",
+      "anchor:implementation_freeze_sha256",
+      "anchor:capability_snapshot_sha256",
+      "anchor:service_file_sha256",
+      "price_firewall",
+      "execution_firewall"
+    ]
+  },
+  "safety": {
+    "credentials_available": false,
+    "exchange_calls_performed": false,
+    "collector_start_performed": false,
+    "systemd_mutation_performed": false,
+    "runtime_authorization_created": false,
+    "price_data_used": false,
+    "pnl_data_used": false,
+    "live_execution_performed": false
+  },
+  "next_state": "PREPARE_B15P1_COLLECTOR_HOST_SYSTEMD_DEPLOYMENT_READINESS_WRAPPER"
+}
