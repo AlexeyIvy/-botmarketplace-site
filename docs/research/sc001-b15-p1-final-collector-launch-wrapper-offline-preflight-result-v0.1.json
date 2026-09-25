@@ -1,0 +1,38 @@
+{
+  "schema": "sc001.b15.p1_final_collector_launch_wrapper_offline_preflight_result.v0.1",
+  "date": "2026-09-25",
+  "status": "B15P1_FINAL_COLLECTOR_DEPLOYMENT_LAUNCH_WRAPPER_OFFLINE_PREFLIGHT_PASS",
+  "bundle_id": "bundle_20260925T154521Z_ed76febb",
+  "bundle_sha256": "d308a48b55efd181e41eeb86b46c98bdc602db4c5f56f283ec759f1d8b154aec",
+  "job_id": "job_20260925T160937Z_b7b5e415",
+  "package_integrity_ok": true,
+  "exit_code": 0,
+  "manifest_sha256": "fe10257934670c41ea49953a1a7e0985fbd1ba99594c85eb050994a079b22a3c",
+  "wrapper_sha256": "de9f13f36ad8e5492ca3a6bb3181cf3c0d4617542253cec6f39bdfea6dfe8d17",
+  "checks": {
+    "anchor_count": 8,
+    "source_dependency_count": 22,
+    "runtime_deploy_dependency_count": 19,
+    "embedded_python_block_count": 5,
+    "embedded_python_compile": true,
+    "collector_selftest_mode_count": 1,
+    "direct_collector_run_mode_count": 0,
+    "rollback_marker_count": 8,
+    "runtime_verification_marker_count": 12,
+    "canonical_runtime_authorization_sha256": "fd5b9a6c683bd15df2dfc26c4ba6497d8e8e152d9b70ed1dc1edeab5107f13be",
+    "prelaunch_result_pass": true,
+    "post_reboot_host_result_pass": true,
+    "staging_rm_rf_scoped": true
+  },
+  "safety": {
+    "credentials_available": false,
+    "exchange_calls_performed": false,
+    "systemd_mutation_performed": false,
+    "runtime_authorization_created": false,
+    "collector_start_performed": false,
+    "price_data_used": false,
+    "pnl_data_used": false,
+    "live_execution_performed": false
+  },
+  "next_state": "AWAIT_EXPLICIT_APPROVAL_FOR_FINAL_B15P1_COLLECTOR_DEPLOYMENT_AND_START"
+}
