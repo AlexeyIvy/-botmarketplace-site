@@ -1,0 +1,61 @@
+{
+  "schema": "sc001.b15.p1_final_launch_v011_technical_correction.v0.1",
+  "date": "2026-09-25",
+  "status": "TECHNICAL_RETRY_CANDIDATE_READY_FOR_OFFLINE_PREFLIGHT",
+  "supersedes_wrapper": {
+    "path": "scripts/research/run-b15p1-final-collector-deployment-launch-v0.1.sh",
+    "sha256": "de9f13f36ad8e5492ca3a6bb3181cf3c0d4617542253cec6f39bdfea6dfe8d17",
+    "failure_diagnostic_sha256": "03bead41d3c92851db47259429a1d0ee0b538116c01203ebfe83c581ca18c04a"
+  },
+  "recovery": {
+    "status": "B15P1_FINAL_LAUNCH_V01_FAILURE_RECOVERY_PASS",
+    "host_result_sha256": "cf5743e65f577e346df21bfcc03cecd9ae428cea3c1ff338e254e09a476f79fe",
+    "recovery_report_sha256": "59d77abb773e482c3fc804878ac17214b516bc72807635f52efa881507741a25",
+    "archived_file_count": 7
+  },
+  "corrected_wrapper": {
+    "path": "scripts/research/run-b15p1-final-collector-deployment-launch-v0.1.1.sh",
+    "sha256": "fe7c93187f0e8a84f550fd37240c3a80e7aa6a21c4d296a5042677b15ae0b6b0"
+  },
+  "changes": {
+    "expected_not_ready_exit_code": 10,
+    "hard_fail_exit_code": 20,
+    "post_start_verifier_runs_inside_bash_if_condition": true,
+    "staged_selftest_runs_inside_bash_if_condition": true,
+    "set_plus_e_outside_rollback": false,
+    "not_ready_retry_attempts": 45,
+    "single_instance_flock": true,
+    "signal_traps": ["HUP","INT","TERM","EXIT"],
+    "atomic_per_file_runtime_deploy": true,
+    "runtime_rollback_ledger": true,
+    "restore_preexisting_runtime_files_on_failure": true,
+    "remove_new_runtime_files_only_on_exact_expected_sha": true,
+    "atomic_unit_install": true,
+    "atomic_authorization_install": true,
+    "recovery_archive_rehashed_before_retry": true,
+    "runtime_parent_symlink_guard": true,
+    "prelaunch_storage_pressure_guard": true,
+    "poll_jsonl_reconciliation": true,
+    "poll_chain_reconciliation": true,
+    "valid_poll_reconciliation": true,
+    "raw_object_sha_revalidation": true,
+    "process_epoch_must_be_one": true,
+    "process_restart_count_must_be_zero": true,
+    "systemd_nrestarts_must_be_zero": true,
+    "systemd_main_pid_must_be_positive": true,
+    "systemd_substate_must_be_running": true
+  },
+  "unchanged_research_contract": {
+    "collector_runner_sha256": "f8181c4f25d6fc842d13c1faf8e259756883fcbb0bbcf08c23b3e60c9ed7bce0",
+    "collector_library_sha256": "f4e27edff5acb38fb1c9ee840490179d1c3ebe13fd258d8875de768acc4078b5",
+    "implementation_freeze_sha256": "cdc6654ce5bbf265ce5cc5af2e448806ba306292d29fb986c7eb78bb1379df96",
+    "service_sha256": "b59d61f25b4e643f6c9f27389d9829f7e4ea91cfbbb8dffeb48a91b55d755bf8",
+    "live_snapshot_sha256": "14341c153649455459f18998be90d65a3010c009893bf76b359dc0b5b74387fc",
+    "runtime_authorization_sha256": "fd5b9a6c683bd15df2dfc26c4ba6497d8e8e152d9b70ed1dc1edeab5107f13be",
+    "collector_cadence_seconds": 15,
+    "price_pnl_authorized": false,
+    "live_execution_authorized": false
+  },
+  "retry_authorized": false,
+  "next_state": "BUILD_AND_RUN_FINAL_LAUNCH_V011_OFFLINE_PREFLIGHT_BEFORE_ANY_HOST_RETRY"
+}

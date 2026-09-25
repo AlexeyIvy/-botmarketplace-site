@@ -1,0 +1,22 @@
+{
+  "schema": "sc001.b15.p1_final_launch_v01_failure_recovery_host_result.v0.1",
+  "date": "2026-09-25",
+  "status": "B15P1_FINAL_LAUNCH_V01_FAILURE_RECOVERY_PASS",
+  "evidence_source": "user-supplied terminal screenshot from the recovery wrapper run",
+  "recovery_wrapper_sha256": "9ef7d1631d5e1b54d01b33c27b30050837e1914051784d2e114f7ed7efe903bb",
+  "recovery_report_sha256": "59d77abb773e482c3fc804878ac17214b516bc72807635f52efa881507741a25",
+  "archived_file_count": 7,
+  "archive_dir": "/home/botmarket/sc001_data/SC001_B15P1_TRANSFERABILITY/launch_attempts/20260925T165825Z_final_launch_v0.1_failed",
+  "host_state": {
+    "service_active": "inactive",
+    "service_enabled": "not-found",
+    "runtime_unit": "ABSENT",
+    "runtime_authorization": "ABSENT",
+    "active_state": "ABSENT",
+    "active_manifest": "ABSENT"
+  },
+  "collector_start_authorized": false,
+  "price_pnl_authorized": false,
+  "retry_authorized": false,
+  "next_state": "PREPARE_FINAL_LAUNCH_V011_WITH_NOT_READY_AWARE_VERIFIER_AND_FULL_RUNTIME_ROLLBACK"
+}
