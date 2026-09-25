@@ -1,0 +1,54 @@
+{
+  "schema": "sc001.b15.p1_v014_capability_v022_stack_offline_preflight_spec.v0.1",
+  "date": "2026-09-25",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "purpose": "Single offline gate for capability v0.2.2 plus live wrapper v0.3 before any VPS authenticated read-only revalidation.",
+  "capability": {
+    "probe_path": "research/sc001/sc001_b15p1_nonprice_source_capability_revalidation_v0_2_2.py",
+    "probe_sha256": "76f6ebd17ed2ad5a1fb8c3fad153c51fdcbaa6eab791cba37dcf3706b5820e12",
+    "harness_path": "research/sc001/sc001_b15p1_nonprice_source_capability_selftest_harness_v0_2_2.py",
+    "harness_sha256": "dfbd0550f2904f4485e250badb3e0c925d9b2cd8f22fef3f85aee7648432dfab",
+    "freeze_path": "docs/research/sc001-b15-p1-nonprice-source-capability-revalidation-freeze-v0.2.2.json",
+    "freeze_sha256": "a783bbf7e7598846f20a04b555e8c40e3c9cc15a3afc949a2f11cddb4a9341b6",
+    "spec_path": "docs/research/sc001-b15-p1-nonprice-source-capability-revalidation-spec-v0.2.2.json",
+    "spec_sha256": "22920f915837d56ab5c8808badd5b94b3bdea77e018f633395950fd44e4ef062",
+    "expected_selftest_status": "B15P1_NONPRICE_SOURCE_CAPABILITY_REVALIDATION_V022_SELF_TEST_PASS",
+    "expected_harness_status": "B15P1_NONPRICE_SOURCE_CAPABILITY_V022_COMPILE_AND_SELFTEST_PASS"
+  },
+  "collector_v014": {
+    "runner_sha256": "280253b060f65517548054b3d8c33c315013d724ef2b836e9b8fef14628be213",
+    "library_sha256": "eaa925b71a7f33ec59de69f32dd0fb06f85bac67e89101b6f2ad50c1d792fd3f",
+    "implementation_freeze_sha256": "80928b0a11dac333b7844aa15bcdf399fd4db8739a4845e6118ebb576153b38c",
+    "service_sha256": "7a0f1742481b92f4d2590f09defcc5b287baaf1a9ba50f0da27488f8f5272f9d",
+    "offline_result_sha256": "7cb9aa17fc820fe5bd88507614d273b52e442435de1e191b559053422b8c0c2c",
+    "mandatory_tests": 32
+  },
+  "live_wrapper": {
+    "path": "scripts/research/run-b15p1-nonprice-source-capability-revalidation-v0.3.sh",
+    "sha256": "3e8f453f54951f8bb125fda533214b05f949fa5d2500eaa20d9881f5e8e4e928",
+    "expected_staged_dependency_count": 15,
+    "expected_embedded_python_block_count": 2,
+    "expected_selftest_mode_count": 1,
+    "expected_run_mode_count": 1,
+    "selftest_must_precede_live_run": true,
+    "direct_network_helpers_allowed": false,
+    "systemd_mutation_allowed": false,
+    "collector_start_allowed": false,
+    "runtime_authorization_creation_allowed": false
+  },
+  "bybit_parser_proof": {
+    "collector_parser_version": "0.1.4",
+    "withdrawMax_minus_one_semantics": "UNLIMITED",
+    "live_raw_minus_one_count_must_equal_normalized_unlimited_count": true
+  },
+  "security": {
+    "credential_security_contract_sha256": "a670dab6dedd4dcf65e47f03b4fa2dcd38ca977954e8c5b18242fee31a6e2432",
+    "credentials_available": false,
+    "exchange_calls_allowed": false,
+    "price_data_allowed": false,
+    "pnl_data_allowed": false,
+    "live_execution_allowed": false
+  },
+  "expected_pass_status": "B15P1_V014_CAPABILITY_V022_STACK_OFFLINE_PREFLIGHT_PASS",
+  "next_state_on_pass": "PREPARE_V014_BOUND_LIVE_READ_ONLY_CAPABILITY_REVALIDATION_ON_VPS"
+}

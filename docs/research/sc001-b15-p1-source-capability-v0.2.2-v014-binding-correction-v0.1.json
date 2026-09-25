@@ -1,0 +1,28 @@
+{
+  "schema": "sc001.b15.p1_source_capability_v022_v014_binding_correction.v0.1",
+  "date": "2026-09-25",
+  "status": "V014_BOUND_CAPABILITY_REVALIDATION_REQUIRED",
+  "source_invalid_diagnostic_sha256": "66ed3abc5257eb8c1d378ed448be66f4600175c56efcc3ebbf8d9c880386a27b",
+  "collector_v014_offline_result_sha256": "7cb9aa17fc820fe5bd88507614d273b52e442435de1e191b559053422b8c0c2c",
+  "reason": {
+    "old_snapshot_bound_to_v013": true,
+    "collector_runtime_parser_changed": true,
+    "old_snapshot_reuse_allowed": false,
+    "live_parser_compatibility_must_be_reproven": true
+  },
+  "required_v022_behavior": {
+    "bind_runner_v014_sha": true,
+    "bind_library_v014_sha": true,
+    "bind_implementation_freeze_v014_sha": true,
+    "bind_service_v014_sha": true,
+    "call_actual_v014_bybit_parser_on_live_coin_info": true,
+    "record_raw_withdrawMax_minus_one_count": true,
+    "record_normalized_unlimited_count": true,
+    "require_counts_equal": true,
+    "price_pnl_closed": true,
+    "collector_launch_authorized": false
+  },
+  "research_semantics_changed": false,
+  "collector_cadence_changed": false,
+  "next_state": "OFFLINE_VALIDATE_CAPABILITY_V022_AND_LIVE_WRAPPER"
+}
