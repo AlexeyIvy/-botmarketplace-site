@@ -1,0 +1,44 @@
+{
+  "schema": "sc001.b15.p1_collector_host_deployment_readiness_post_reboot_result.v0.1",
+  "date": "2026-09-25",
+  "status": "B15P1_COLLECTOR_HOST_DEPLOYMENT_READINESS_POST_REBOOT_PASS",
+  "evidence_source": "user-supplied terminal screenshot after VPS reboot and rerun of the verified host-readiness wrapper",
+  "wrapper": {
+    "path": "scripts/research/run-b15p1-collector-host-deployment-readiness-v0.1.sh",
+    "sha256": "a962e3f1e071106228202e94af964e6c52faf1a13ca4b00c0b8ddaab6baedbdb"
+  },
+  "collector_selftest_status": "B15P1_NONPRICE_COLLECTOR_V013_SELF_TEST_PASS",
+  "freeze_sha256": "cdc6654ce5bbf265ce5cc5af2e448806ba306292d29fb986c7eb78bb1379df96",
+  "runner_sha256": "f8181c4f25d6fc842d13c1faf8e259756883fcbb0bbcf08c23b3e60c9ed7bce0",
+  "library_sha256": "f4e27edff5acb38fb1c9ee840490179d1c3ebe13fd258d8875de768acc4078b5",
+  "mapping_counts": {
+    "base_assets": 146,
+    "overlay_assets": 46,
+    "asset_common_representations": 207,
+    "quote_common_representations": 12,
+    "quote_one_sided_representations": 14
+  },
+  "snapshot": {
+    "contract": "PASS",
+    "sha256": "14341c153649455459f18998be90d65a3010c009893bf76b359dc0b5b74387fc"
+  },
+  "staged_collector_selftest": "PASS",
+  "host_report_sha256": "e249f824a4b10f19a81aa6e01f1f5d7beee5088997880b146378f73f676d7aee",
+  "host_state": {
+    "stable_service_active": "inactive",
+    "stable_service_enabled": "not-found",
+    "runtime_unit_sha256_or_absent": "ABSENT",
+    "runtime_launch_authorization_present": false,
+    "collector_started": false
+  },
+  "safety": {
+    "exchange_calls_performed_by_selftest": false,
+    "collector_launch_authorized": false,
+    "price_data_authorized": false,
+    "collector_start_performed": false,
+    "systemd_start_enable_performed": false,
+    "runtime_authorization_created": false
+  },
+  "reboot_hold_cleared": true,
+  "next_state": "PREPARE_FINAL_COLLECTOR_DEPLOYMENT_AUTHORIZATION_AND_START_GATE"
+}
