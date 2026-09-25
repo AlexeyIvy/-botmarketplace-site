@@ -1,0 +1,47 @@
+{
+  "schema": "sc001.b15.p1_final_launch_attempt_technical_failure_diagnostic.v0.1",
+  "date": "2026-09-25",
+  "status": "TECHNICAL_WRAPPER_CONTROL_FLOW_FAILURE",
+  "evidence_source": "user-supplied terminal screenshot from first real final launch attempt",
+  "wrapper": {
+    "path": "scripts/research/run-b15p1-final-collector-deployment-launch-v0.1.sh",
+    "sha256": "de9f13f36ad8e5492ca3a6bb3181cf3c0d4617542253cec6f39bdfea6dfe8d17"
+  },
+  "observed_sequence": [
+    "B15P1_NONPRICE_COLLECTOR_V013_SELF_TEST_PASS",
+    "staged_launch_authorization_validator = PASS",
+    "final_launch_prerequisites = PASS",
+    "runtime_prestart_freeze_capability_authorization = PASS",
+    "systemctl enable created the stable service symlink",
+    "post-start verification Python raised AssertionError",
+    "B15P1_FINAL_COLLECTOR_DEPLOYMENT_LAUNCH_REVIEW",
+    "reason=unexpected_shell_error:line=529:rc=1"
+  ],
+  "exact_failure": {
+    "shell_line": 529,
+    "embedded_python_line": 31,
+    "assertion": "poll_count >= 2",
+    "failure_class": "EXPECTED_NOT_READY_STATE_TRIGGERED_GLOBAL_ERR_TRAP",
+    "meaning": "The first post-start check occurred before two 15-second polls had completed. This was expected transient NOT_READY state, but the global Bash ERR trap treated the Python rc=1 as an immediate hard failure before the retry loop could wait and re-check."
+  },
+  "not_evidence_of": [
+    "collector parser failure",
+    "Bybit or OKX capability failure",
+    "credential permission failure",
+    "price/PnL firewall failure",
+    "launch authorization validation failure",
+    "runtime freeze mismatch"
+  ],
+  "rollback_expected_from_wrapper": {
+    "stop_service": true,
+    "disable_service": true,
+    "remove_exact_created_runtime_authorization": true,
+    "remove_exact_installed_unit_if_absent_before": true,
+    "preserve_failure_state_manifest_logs": true
+  },
+  "rollback_verified_on_host": false,
+  "collector_may_have_failure_evidence": true,
+  "price_pnl_authorized": false,
+  "retry_authorized": false,
+  "next_state": "PREPARE_FAIL_CLOSED_RECOVERY_AUDIT_AND_FINAL_LAUNCH_V011_CORRECTION"
+}

@@ -1,0 +1,71 @@
+{
+  "schema": "sc001.b15.p1_final_launch_v01_failure_recovery_wrapper_preflight_spec.v0.1",
+  "date": "2026-09-25",
+  "status": "FROZEN_BEFORE_OFFLINE_PREFLIGHT",
+  "wrapper": {
+    "path": "scripts/research/run-b15p1-final-launch-v0.1-failure-recovery-v0.1.sh",
+    "sha256": "9ef7d1631d5e1b54d01b33c27b30050837e1914051784d2e114f7ed7efe903bb"
+  },
+  "failure_diagnostic": {
+    "path": "docs/research/sc001-b15-p1-final-launch-attempt-v0.1-technical-failure-diagnostic.json",
+    "sha256": "03bead41d3c92851db47259429a1d0ee0b538116c01203ebfe83c581ca18c04a",
+    "required_status": "TECHNICAL_WRAPPER_CONTROL_FLOW_FAILURE",
+    "required_failure_class": "EXPECTED_NOT_READY_STATE_TRIGGERED_GLOBAL_ERR_TRAP"
+  },
+  "anchors": {
+    "live_snapshot_sha256": "14341c153649455459f18998be90d65a3010c009893bf76b359dc0b5b74387fc",
+    "service_sha256": "b59d61f25b4e643f6c9f27389d9829f7e4ea91cfbbb8dffeb48a91b55d755bf8",
+    "runtime_authorization_sha256": "fd5b9a6c683bd15df2dfc26c4ba6497d8e8e152d9b70ed1dc1edeab5107f13be"
+  },
+  "required_behavior": {
+    "root_gate": true,
+    "diagnostic_sha_gate": true,
+    "snapshot_sha_gate": true,
+    "stop_service": true,
+    "disable_service": true,
+    "wait_until_not_running": true,
+    "collector_process_absence_gate": true,
+    "archive_exact_authorization_if_present": true,
+    "archive_and_remove_exact_runtime_unit_if_present": true,
+    "daemon_reload_after_unit_remove": true,
+    "archive_state_manifest_systemd_log": true,
+    "archive_data_directories": true,
+    "recursive_archive_hash_manifest": true,
+    "final_runtime_unit_absent": true,
+    "final_runtime_authorization_absent": true,
+    "final_active_state_manifest_absent": true
+  },
+  "protected_files_must_remain_active": [
+    "source_capability_snapshot.json",
+    "source_capability_safe_summary.json",
+    "source_capability_revalidation_v0.2.1_run.log",
+    "host_deployment_readiness_manifest.json"
+  ],
+  "allowed_systemctl_subcommands": [
+    "stop",
+    "disable",
+    "is-active",
+    "is-enabled",
+    "daemon-reload"
+  ],
+  "forbidden_behavior": {
+    "systemctl_start": true,
+    "systemctl_enable": true,
+    "systemctl_restart": true,
+    "systemctl_mask_unmask": true,
+    "collector_mode_run": true,
+    "direct_exchange_network_commands": true,
+    "delete_snapshot": true,
+    "delete_host_readiness_report": true,
+    "delete_failure_state_without_archive": true
+  },
+  "expected_pass_status": "B15P1_FINAL_LAUNCH_V01_FAILURE_RECOVERY_WRAPPER_OFFLINE_PREFLIGHT_PASS",
+  "offline_firewall": {
+    "credentials_available": false,
+    "exchange_calls_allowed": false,
+    "collector_start_allowed": false,
+    "price_data_allowed": false,
+    "pnl_data_allowed": false,
+    "live_execution_allowed": false
+  }
+}

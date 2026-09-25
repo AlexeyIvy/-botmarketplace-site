@@ -1,0 +1,16 @@
+{
+  "schema": "sc001.b15.p1_final_launch_v01_failure_recovery_wrapper_preflight_freeze.v0.1",
+  "date": "2026-09-25",
+  "status": "FROZEN_BEFORE_B15P1_FINAL_LAUNCH_V01_FAILURE_RECOVERY_WRAPPER_OFFLINE_PREFLIGHT",
+  "harness_sha256": "c5f4b43f7af656f1ed793fd2fa074b3a857950e59e4c7c19b16f46e0ed04a0a0",
+  "wrapper_sha256": "9ef7d1631d5e1b54d01b33c27b30050837e1914051784d2e114f7ed7efe903bb",
+  "spec_sha256": "8be60fc7624a3adcbc66eab9f1e0937abfc4597222ea5e6a8ac9514e9f47aefc",
+  "diagnostic_sha256": "03bead41d3c92851db47259429a1d0ee0b538116c01203ebfe83c581ca18c04a",
+  "credentials_available": false,
+  "exchange_calls_allowed": false,
+  "collector_start_allowed": false,
+  "price_data_allowed": false,
+  "pnl_data_allowed": false,
+  "live_execution_allowed": false,
+  "next_state": "RUN_B15P1_FINAL_LAUNCH_V01_FAILURE_RECOVERY_WRAPPER_OFFLINE_PREFLIGHT_AFTER_USER_APPROVAL"
+}
