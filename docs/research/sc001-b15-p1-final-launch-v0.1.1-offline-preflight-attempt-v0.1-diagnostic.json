@@ -1,0 +1,40 @@
+{
+  "schema": "sc001.b15.p1_final_launch_v011_offline_preflight_attempt_diagnostic.v0.1",
+  "date": "2026-09-25",
+  "status": "TECHNICAL_PREFLIGHT_HARNESS_SYNTAX_FAILURE",
+  "bundle_id": "bundle_20260925T172458Z_c1e406a4",
+  "bundle_sha256": "46eb3ed89605eb40b526f0ff03b2a3ffd7f6869958b082509ee0bd2196697f65",
+  "approval_code": "BM-46EB3ED89605",
+  "job_id": "job_20260925T173412Z_3406a130",
+  "package_integrity_ok": true,
+  "exit_code": 1,
+  "artifacts_created": 0,
+  "stderr": {
+    "exception": "SyntaxError",
+    "file": "research/sc001/sc001_b15p1_final_launch_v011_wrapper_offline_preflight_v0_1.py",
+    "line": 543,
+    "message": "unexpected character after line continuation character"
+  },
+  "root_cause": {
+    "failure_class": "PYTHON_STRING_QUOTING_COLLISION_IN_PREFLIGHT_HARNESS",
+    "failing_marker_intent": "Match Bash rollback marker: while IFS=$'\\t' read -r rel existed expected",
+    "technical_cause": "A Python single-quoted string contained the Bash ANSI-C single-quoted token $'\\t', terminating the Python string early.",
+    "final_launch_wrapper_executed": false,
+    "vps_touched": false,
+    "systemd_mutation_performed": false,
+    "runtime_authorization_created": false,
+    "collector_start_performed": false,
+    "exchange_calls_performed": false,
+    "price_pnl_used": false
+  },
+  "correction": {
+    "corrected_harness_path": "research/sc001/sc001_b15p1_final_launch_v011_wrapper_offline_preflight_v0_1_1.py",
+    "corrected_harness_sha256": "133f8ccc8e515727feee11fddf8718964a18bda754fe22a74aaceb6509869108",
+    "syntax_fix": "Use a double-quoted Python string around the Bash marker containing $'\\t'.",
+    "bootstrap_compile_gate_required": true
+  },
+  "research_contract_changed": false,
+  "final_launch_wrapper_changed": false,
+  "retry_authorized": false,
+  "next_state": "PREPARE_V011_PREFLIGHT_BOOTSTRAP_AND_RESEAL"
+}
