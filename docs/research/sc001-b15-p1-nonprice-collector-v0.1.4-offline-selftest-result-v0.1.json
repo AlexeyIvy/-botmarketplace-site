@@ -1,0 +1,32 @@
+{
+  "schema": "sc001.b15.p1_nonprice_collector_v014_offline_selftest_result.v0.1",
+  "date": "2026-09-25",
+  "status": "B15P1_NONPRICE_COLLECTOR_V014_COMPILE_AND_SELFTEST_PASS",
+  "bundle_id": "bundle_20260925T185135Z_6c28a359",
+  "bundle_sha256": "cec279cbdb2768003f35ae9d1388d883caff6e3b8472ed4d6fc09bc8b3242e17",
+  "job_id": "job_20260925T191249Z_2ab861e9",
+  "package_integrity_ok": true,
+  "exit_code": 0,
+  "compile_manifest_sha256": "af676061a954e8ee0328f96ed15ee06d5be925a595559a172a0c6283dd3a642b",
+  "selftest_manifest_sha256": "3822334fa2faad8eec3fb8a963c5ba26ee03d1ba2c77a9beeb2b213364f88b37",
+  "runner_sha256": "280253b060f65517548054b3d8c33c315013d724ef2b836e9b8fef14628be213",
+  "library_sha256": "eaa925b71a7f33ec59de69f32dd0fb06f85bac67e89101b6f2ad50c1d792fd3f",
+  "implementation_freeze_sha256": "80928b0a11dac333b7844aa15bcdf399fd4db8739a4845e6118ebb576153b38c",
+  "mandatory_test_count": 32,
+  "all_mandatory_tests_passed": true,
+  "bybit_withdraw_max_sentinel_guard": true,
+  "new_v014_tests": {
+    "BYBIT_WITHDRAW_MAX_UNLIMITED_SENTINEL": true,
+    "BYBIT_WITHDRAW_MAX_OTHER_NEGATIVE_FAIL_CLOSED": true,
+    "BYBIT_NONMAX_NEGATIVE_FAIL_CLOSED": true,
+    "BYBIT_MAX_WITHDRAW_TRANSITION_FIXTURE": true
+  },
+  "safety": {
+    "exchange_calls_performed": false,
+    "collector_launch_authorized": false,
+    "price_data_authorized": false,
+    "pnl_data_authorized": false,
+    "live_execution_authorized": false
+  },
+  "next_state": "PREPARE_V014_BOUND_READ_ONLY_CAPABILITY_REVALIDATION"
+}
