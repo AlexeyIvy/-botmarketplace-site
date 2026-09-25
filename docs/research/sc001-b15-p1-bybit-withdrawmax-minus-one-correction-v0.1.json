@@ -1,0 +1,52 @@
+{
+  "schema": "sc001.b15.p1_bybit_withdrawmax_minus_one_correction.v0.1",
+  "date": "2026-09-25",
+  "status": "FIELD_SCOPED_ADAPTER_CORRECTION_READY_FOR_OFFLINE_SELFTEST",
+  "source_diagnostic": {
+    "path": "docs/research/sc001-b15-p1-final-launch-v0.1.1-host-attempt-v0.1-diagnostic.json",
+    "sha256": "66ed3abc5257eb8c1d378ed448be66f4600175c56efcc3ebbf8d9c880386a27b",
+    "poll_count": 10,
+    "invalid_poll_count": 10,
+    "valid_poll_count": 0,
+    "bybit_http_200_count": 10,
+    "bybit_error": "ValueError: invalid nonnegative decimal '-1'",
+    "okx_ok_count": 8,
+    "okx_request_deadline_count": 2
+  },
+  "official_bybit_semantics": {
+    "endpoint": "GET /v5/asset/coin/query-info",
+    "field": "withdrawMax",
+    "sentinel": "-1",
+    "meaning": "NO_LIMIT",
+    "source": "Bybit V5 API Get Coin Info documentation"
+  },
+  "root_cause": {
+    "library_v013_behavior": "withdrawMax was passed to generic decimal_text(), which rejects every negative number",
+    "failure_scope": "One legal Bybit withdrawMax=-1 sentinel invalidated the entire Bybit fast-source response",
+    "transport_failure": false,
+    "credential_failure": false,
+    "http_failure": false,
+    "research_logic_failure": false
+  },
+  "correction": {
+    "new_collector_version": "0.1.4",
+    "generic_decimal_text_changed": false,
+    "field_specific_helper": "bybit_withdraw_max_text",
+    "withdrawMax_minus_one_normalized_to": "UNLIMITED",
+    "withdrawMax_other_negative_values": "FAIL_CLOSED",
+    "withdrawFee_negative_values": "FAIL_CLOSED",
+    "withdrawMin_negative_values": "FAIL_CLOSED",
+    "depositMin_negative_values": "FAIL_CLOSED",
+    "max_withdraw_transition_semantics_preserved": true
+  },
+  "unchanged": {
+    "fast_cadence_seconds": 15,
+    "request_deadline_seconds": 12,
+    "route_state_logic": true,
+    "frozen_identity_route_graph": true,
+    "price_data_authorized": false,
+    "pnl_data_authorized": false,
+    "live_execution_authorized": false
+  },
+  "next_state": "RUN_COLLECTOR_V014_OFFLINE_COMPILE_AND_SELFTEST"
+}

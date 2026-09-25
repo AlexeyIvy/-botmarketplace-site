@@ -1,0 +1,35 @@
+{
+  "schema": "sc001.b15.p1_nonprice_collector_implementation_self_test_spec.v0.1.4",
+  "date": "2026-09-25",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "supersedes": "docs/research/sc001-b15-p1-nonprice-collector-implementation-self-test-spec-v0.1.3.json",
+  "implementation": {
+    "runner_sha256": "280253b060f65517548054b3d8c33c315013d724ef2b836e9b8fef14628be213",
+    "library_sha256": "eaa925b71a7f33ec59de69f32dd0fb06f85bac67e89101b6f2ad50c1d792fd3f",
+    "selftest_harness_sha256": "e8b0879496b8c6f3c0a7d1d09b195b42a886ef64d60b6e06f94dd438bfe38e65",
+    "service_candidate_sha256": "7a0f1742481b92f4d2590f09defcc5b287baaf1a9ba50f0da27488f8f5272f9d"
+  },
+  "bybit_withdraw_max_correction": {
+    "documented_sentinel": "-1",
+    "normalized_value": "UNLIMITED",
+    "field_scope": "withdrawMax_only",
+    "generic_decimal_parser_changed": false,
+    "other_negative_values_fail_closed": true
+  },
+  "new_adapter_fixtures": [
+    "BYBIT_WITHDRAW_MAX_UNLIMITED_SENTINEL",
+    "BYBIT_WITHDRAW_MAX_OTHER_NEGATIVE_FAIL_CLOSED",
+    "BYBIT_NONMAX_NEGATIVE_FAIL_CLOSED",
+    "BYBIT_MAX_WITHDRAW_TRANSITION_FIXTURE"
+  ],
+  "existing_mandatory_offline_tests_remain_required": true,
+  "exchange_calls_allowed": false,
+  "credentials_required": false,
+  "collector_launch_authorized": false,
+  "price_data_allowed": false,
+  "pnl_data_allowed": false,
+  "expected_runner_pass_token": "B15P1_NONPRICE_COLLECTOR_V014_SELF_TEST_PASS",
+  "expected_harness_pass_token": "B15P1_NONPRICE_COLLECTOR_V014_COMPILE_AND_SELFTEST_PASS",
+  "next_state_on_pass": "PREPARE_CAPABILITY_REVALIDATION_BINDING_FOR_COLLECTOR_V014",
+  "expected_mandatory_test_count": 32
+}
