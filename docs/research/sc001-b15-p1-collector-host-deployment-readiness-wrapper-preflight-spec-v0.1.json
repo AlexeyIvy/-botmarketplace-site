@@ -1,0 +1,82 @@
+{
+  "schema": "sc001.b15.p1_collector_host_deployment_readiness_wrapper_preflight_spec.v0.1",
+  "date": "2026-09-25",
+  "status": "FROZEN_BEFORE_OFFLINE_PREFLIGHT",
+  "purpose": "Offline syntax/static/dependency validation of the host deployment-readiness wrapper before it is run on the VPS.",
+  "wrapper": {
+    "path": "scripts/research/run-b15p1-collector-host-deployment-readiness-v0.1.sh",
+    "sha256": "a962e3f1e071106228202e94af964e6c52faf1a13ca4b00c0b8ddaab6baedbdb"
+  },
+  "prerequisites": {
+    "prelaunch_result": {
+      "path": "docs/research/sc001-b15-p1-collector-prelaunch-readiness-result-v0.1.json",
+      "sha256": "0396aedc678a6094fb73a675ba9a1446c501cb2871f220a03387d0df38d653bd",
+      "required_status": "B15P1_COLLECTOR_PRELAUNCH_READINESS_OFFLINE_PASS"
+    },
+    "live_capability_result": {
+      "path": "docs/research/sc001-b15-p1-live-source-capability-revalidation-v0.2.1-result-v0.1.json",
+      "sha256": "61fb470c4d0c795adf31a36fff8da34157caa86824efeb8521373a5bf1584ff1",
+      "required_status": "B15P1_NONPRICE_SOURCE_CAPABILITY_REVALIDATION_COMMAND_V021_PASS",
+      "live_snapshot_sha256": "14341c153649455459f18998be90d65a3010c009893bf76b359dc0b5b74387fc"
+    }
+  },
+  "staged_dependencies": [
+    {"path":"research/sc001/sc001_b15p1_nonprice_transferability_collector_v0_1_3.py","sha256":"f8181c4f25d6fc842d13c1faf8e259756883fcbb0bbcf08c23b3e60c9ed7bce0"},
+    {"path":"research/sc001/sc001_b15p1_nonprice_transferability_lib_v0_1_3.py","sha256":"f4e27edff5acb38fb1c9ee840490179d1c3ebe13fd258d8875de768acc4078b5"},
+    {"path":"docs/research/sc001-b15-p1-nonprice-collector-implementation-freeze-v0.1.3.json","sha256":"cdc6654ce5bbf265ce5cc5af2e448806ba306292d29fb986c7eb78bb1379df96"},
+    {"path":"docs/research/sc001-b15-p1-nonprice-collector-implementation-contract-v0.1.3.json","sha256":"e584f07e024aa972cb9fe49881b016931b2e0e51acaa56fece3440cef869357f"},
+    {"path":"docs/research/sc001-b15-p1-15-second-nonprice-collector-protocol-v0.1.md","sha256":"2d4f65c1ddd13ee0fbafb76734ce266fb933404ad24394ac707b246613613563"},
+    {"path":"docs/research/sc001-b15-p1-15-second-nonprice-collector-design-candidate-v0.1.json","sha256":"ea42cbd5a2f14061d3bd66aafbda7ccf79f6afa85a5c90c3defe8c2ba952889e"},
+    {"path":"docs/research/sc001-b15-p1-15-second-nonprice-collector-design-preflight-spec-v0.1.json","sha256":"cb56417ab12fe1e46b5202eca550fee505755b6df759ffd9349ffaef6d4cc0bc"},
+    {"path":"docs/research/sc001-b15-p1-nonprice-collector-rate-limit-evidence-v0.1.json","sha256":"80ff38757742b8ffded028533d190be6a7f84de82fa7fcf9fb335007965a8613"},
+    {"path":"docs/research/artifacts/b15-p1-collector-design/20260924T103023Z/collector_design_preflight_manifest.json","sha256":"5066d1e91e6b8e122ef1289a35b1747f18a2e68cc3692d8e4c999692db8a03a9"},
+    {"path":"docs/research/sc001-b15-p1-nonprice-collector-implementation-semantics-v0.2.md","sha256":"b260ce101624edacad74badc2d9a4158dc4c074550e8603b06b88ff676af5b70"},
+    {"path":"docs/research/sc001-b15-p1-collector-raw-storage-amendment-v0.1.md","sha256":"24a650478914c13e8c6afdd3780cac2ec3da5965a4b48a9ea7f2546299593f4d"},
+    {"path":"docs/research/artifacts/b15-p1-canonical-freeze/20260920T210446Z/ADMITTED.json","sha256":"4125dd9577a3493b0242b9f79db5da1db780d45bd9dd90acad5dffa78bc90bc5"},
+    {"path":"docs/research/artifacts/b15-p1-v0.2.2/20260920T210446Z/replay/integrated_replay_resolved_rows_v0.2.2.json","sha256":"58fed2f8a317b72bad2680c70e51c83a6c1a70f93064930cd7857cb014979d6c"},
+    {"path":"docs/research/artifacts/b15-p1-v0.2.2/20260920T210446Z/replay/integrated_replay_asset_dispositions_v0.2.2.json","sha256":"b8bdb5df6ce388b67d8f2f48a8ef430d205c0cec88fb28b1b25a287d2bb99dc2"},
+    {"path":"docs/research/artifacts/b15-p1-v0.2.2/20260920T210446Z/final-freeze-preflight/identity_route_v0.2.2_final_quote_classification.json","sha256":"ad8434a8b1f2c00b4eae3f690427ac05431cc9aab04631d9438b4a238d483520"},
+    {"path":"docs/research/sc001-b15-p1-v0.2.2-final-freeze-artifact-supplement-v1.json","sha256":"6241a66f93dfcbd74d2ea8c3ac164c746f87236d653895b8cbf01ce348913997"},
+    {"path":"docs/research/artifacts/b15-p1-v0.2.2/20260920T210446Z/final-freeze-materialized/directed_route_graph.v0.2.2.shard-index.json","sha256":"001c89a7d4e973ed33ab072ec43746f6f7b6c0105912a24ae0483955ac93a50a"},
+    {"path":"ops/systemd/sc001-b15p1-transferability-v0.1.3.service","sha256":"b59d61f25b4e643f6c9f27389d9829f7e4ea91cfbbb8dffeb48a91b55d755bf8"},
+    {"path":"ops/systemd/sc001_b15p1_transferability_status.sh","sha256":"e26c6707ac38ae2d4bd61e2e31b9197d492f6d43e01d0436e301a284279b1702"},
+    {"path":"docs/research/sc001-b15-p1-collector-prelaunch-readiness-result-v0.1.json","sha256":"0396aedc678a6094fb73a675ba9a1446c501cb2871f220a03387d0df38d653bd"},
+    {"path":"docs/research/sc001-b15-p1-live-source-capability-revalidation-v0.2.1-result-v0.1.json","sha256":"61fb470c4d0c795adf31a36fff8da34157caa86824efeb8521373a5bf1584ff1"}
+  ],
+  "required_static_properties": {
+    "bash_strict_mode": true,
+    "umask_027": true,
+    "root_gate": true,
+    "live_snapshot_exact_sha_gate": true,
+    "credential_mode_and_owner_gate": true,
+    "runtime_authorization_absence_gate": true,
+    "collector_state_and_manifest_absence_gate": true,
+    "collector_process_absence_gate": true,
+    "stable_service_inactive_gate": true,
+    "stable_service_not_enabled_gate": true,
+    "runtime_unit_absent_or_exact_sha_gate": true,
+    "dropin_absence_gate": true,
+    "source_and_staged_sha_recheck": true,
+    "staging_symlink_rejection": true,
+    "staging_exact_file_count": 21,
+    "versioned_service_only": true,
+    "staged_stable_unit_exact_sha": true,
+    "systemd_analyze_verify": true,
+    "collector_py_compile": true,
+    "collector_selftest_env_i": true,
+    "collector_selftest_mode_count": 1,
+    "collector_run_mode_count": 0,
+    "host_report_written": true
+  },
+  "allowed_systemctl_subcommands": ["is-active","is-enabled","show"],
+  "forbidden_host_behavior": {
+    "systemctl_start_enable_restart_daemon_reload": true,
+    "runtime_unit_install": true,
+    "runtime_launch_authorization_creation": true,
+    "production_repo_mutation": true,
+    "exchange_calls_from_wrapper": true,
+    "collector_run_mode": true,
+    "price_pnl_usage": true
+  },
+  "expected_pass_status": "B15P1_COLLECTOR_HOST_DEPLOYMENT_READINESS_WRAPPER_OFFLINE_PREFLIGHT_PASS"
+}

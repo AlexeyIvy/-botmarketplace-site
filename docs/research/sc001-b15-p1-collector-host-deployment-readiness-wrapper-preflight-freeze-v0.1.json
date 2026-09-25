@@ -1,0 +1,21 @@
+{
+  "schema": "sc001.b15.p1_collector_host_deployment_readiness_wrapper_preflight_freeze.v0.1",
+  "date": "2026-09-25",
+  "status": "FROZEN_BEFORE_B15P1_COLLECTOR_HOST_DEPLOYMENT_READINESS_WRAPPER_OFFLINE_PREFLIGHT",
+  "harness_sha256": "a755a25acbb0d2b640a2640f5a7aa28221d0fe474fbe3ff1d7b1b76cc28de4a6",
+  "wrapper_sha256": "a962e3f1e071106228202e94af964e6c52faf1a13ca4b00c0b8ddaab6baedbdb",
+  "spec_sha256": "389c925dd73d3fedf33f418c1c8a3f0966e92e72f1dfe8d0a3a00d0b0535a660",
+  "prelaunch_result_sha256": "0396aedc678a6094fb73a675ba9a1446c501cb2871f220a03387d0df38d653bd",
+  "live_result_sha256": "61fb470c4d0c795adf31a36fff8da34157caa86824efeb8521373a5bf1584ff1",
+  "live_snapshot_sha256": "14341c153649455459f18998be90d65a3010c009893bf76b359dc0b5b74387fc",
+  "credentials_available": false,
+  "exchange_calls_allowed": false,
+  "collector_start_allowed": false,
+  "systemd_mutation_allowed": false,
+  "runtime_authorization_creation_allowed": false,
+  "production_repo_mutation_allowed": false,
+  "price_data_allowed": false,
+  "pnl_data_allowed": false,
+  "live_execution_allowed": false,
+  "next_state": "RUN_B15P1_COLLECTOR_HOST_DEPLOYMENT_READINESS_WRAPPER_OFFLINE_PREFLIGHT_AFTER_USER_APPROVAL"
+}
