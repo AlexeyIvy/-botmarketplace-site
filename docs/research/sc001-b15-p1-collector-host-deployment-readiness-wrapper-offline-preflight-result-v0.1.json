@@ -1,0 +1,38 @@
+{
+  "schema": "sc001.b15.p1_collector_host_deployment_readiness_wrapper_offline_preflight_result.v0.1",
+  "date": "2026-09-25",
+  "status": "B15P1_COLLECTOR_HOST_DEPLOYMENT_READINESS_WRAPPER_OFFLINE_PREFLIGHT_PASS",
+  "bundle_id": "bundle_20260925T104044Z_27791ca1",
+  "bundle_sha256": "d603b30daf2c7b65bba9406fc96247a8b5cada96a314ad18c87a53e1a393bf58",
+  "job_id": "job_20260925T114543Z_33d8f905",
+  "package_integrity_ok": true,
+  "exit_code": 0,
+  "manifest_sha256": "4adb5fd031e05ed5e39892a67d10b6d1bef0b4b3e751445efad00124965e225f",
+  "wrapper_sha256": "a962e3f1e071106228202e94af964e6c52faf1a13ca4b00c0b8ddaab6baedbdb",
+  "checks": {
+    "bash_syntax_returncode": 0,
+    "embedded_python_block_count": 1,
+    "embedded_python_compile": true,
+    "staged_dependency_count": 21,
+    "systemctl_subcommands": ["is-active","is-enabled","show"],
+    "collector_selftest_mode_count": 1,
+    "collector_run_mode_count": 0,
+    "versioned_service_only": true,
+    "forbidden_behavior_hits_all_false": true,
+    "rm_rf_scoped_to_stage_only": true,
+    "prelaunch_result_pass": true,
+    "live_capability_result_pass": true
+  },
+  "safety": {
+    "credentials_available": false,
+    "exchange_calls_performed": false,
+    "collector_start_performed": false,
+    "systemd_mutation_performed": false,
+    "runtime_authorization_created": false,
+    "production_repo_mutation_performed": false,
+    "price_data_used": false,
+    "pnl_data_used": false,
+    "live_execution_performed": false
+  },
+  "next_state": "AWAIT_EXPLICIT_APPROVAL_FOR_HOST_DEPLOYMENT_READINESS_WRAPPER"
+}
