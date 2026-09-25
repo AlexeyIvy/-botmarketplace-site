@@ -1,0 +1,53 @@
+{
+  "schema": "sc001.b15.p1_final_launch_v011_wrapper_offline_preflight_result.v0.1",
+  "date": "2026-09-25",
+  "status": "B15P1_FINAL_LAUNCH_V011_WRAPPER_OFFLINE_PREFLIGHT_PASS",
+  "bundle_id": "bundle_20260925T174309Z_c07a9fa9",
+  "bundle_sha256": "29415541c9f162d9bcfba8515c94f34f6693f0c5b970dc8138fc81c751fbe30f",
+  "job_id": "job_20260925T175052Z_259ef10b",
+  "package_integrity_ok": true,
+  "exit_code": 0,
+  "bootstrap_manifest_sha256": "4bbf7065d105a7dd80c819a88ef0b61bbd4e688a72aa39a0e0afcc3e104d2208",
+  "preflight_manifest_sha256": "d6ba0843d2d53736273d43d3b816554e9760499a89449d71a2d60349c5641417",
+  "bootstrap": {
+    "status": "B15P1_FINAL_LAUNCH_V011_PREFLIGHT_BOOTSTRAP_PASS",
+    "harness_compile": true,
+    "harness_returncode": 0,
+    "harness_manifest_status": "B15P1_FINAL_LAUNCH_V011_WRAPPER_OFFLINE_PREFLIGHT_PASS"
+  },
+  "wrapper": {
+    "path": "scripts/research/run-b15p1-final-collector-deployment-launch-v0.1.1.sh",
+    "sha256": "fe7c93187f0e8a84f550fd37240c3a80e7aa6a21c4d296a5042677b15ae0b6b0"
+  },
+  "checks": {
+    "source_dependency_count": 24,
+    "runtime_deploy_dependency_count": 19,
+    "embedded_python_block_count": 6,
+    "embedded_python_compile": true,
+    "bash_syntax_returncode": 0,
+    "bash_err_trap_if_condition_fixture": true,
+    "set_plus_e_count": 1,
+    "set_plus_e_only_in_rollback": true,
+    "required_marker_count": 19,
+    "rollback_marker_count": 8,
+    "tri_state_fixtures": {
+      "poll_count_zero_rc": 10,
+      "no_valid_poll_rc": 10,
+      "pass_rc": 0,
+      "price_firewall_rc": 20,
+      "restart_rc": 20,
+      "raw_integrity_rc": 20
+    }
+  },
+  "safety": {
+    "credentials_available": false,
+    "exchange_calls_performed": false,
+    "systemd_mutation_performed": false,
+    "runtime_authorization_created": false,
+    "collector_start_performed": false,
+    "price_data_used": false,
+    "pnl_data_used": false,
+    "live_execution_performed": false
+  },
+  "next_state": "AWAIT_EXPLICIT_APPROVAL_FOR_REAL_FINAL_LAUNCH_V011_HOST_RETRY"
+}
