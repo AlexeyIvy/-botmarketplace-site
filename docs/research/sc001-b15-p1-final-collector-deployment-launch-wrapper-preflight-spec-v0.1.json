@@ -1,0 +1,109 @@
+{
+  "schema": "sc001.b15.p1_final_collector_deployment_launch_wrapper_preflight_spec.v0.1",
+  "date": "2026-09-25",
+  "status": "FROZEN_BEFORE_OFFLINE_PREFLIGHT",
+  "purpose": "Offline syntax/static/dependency/order/rollback validation of the final B15-P1 deployment + runtime launch authorization + systemd start wrapper before any collector launch.",
+  "wrapper": {
+    "path": "scripts/research/run-b15p1-final-collector-deployment-launch-v0.1.sh",
+    "sha256": "de9f13f36ad8e5492ca3a6bb3181cf3c0d4617542253cec6f39bdfea6dfe8d17"
+  },
+  "prerequisites": {
+    "prelaunch_result": {
+      "path": "docs/research/sc001-b15-p1-collector-prelaunch-readiness-result-v0.1.json",
+      "sha256": "0396aedc678a6094fb73a675ba9a1446c501cb2871f220a03387d0df38d653bd",
+      "required_status": "B15P1_COLLECTOR_PRELAUNCH_READINESS_OFFLINE_PASS"
+    },
+    "post_reboot_host_result": {
+      "path": "docs/research/sc001-b15-p1-collector-host-deployment-readiness-post-reboot-result-v0.1.json",
+      "sha256": "155c98d7fc021ac15eef0b23f0129ecc436bcc2a91a75b817ad2363be6815d73",
+      "required_status": "B15P1_COLLECTOR_HOST_DEPLOYMENT_READINESS_POST_REBOOT_PASS",
+      "host_report_sha256": "e249f824a4b10f19a81aa6e01f1f5d7beee5088997880b146378f73f676d7aee"
+    }
+  },
+  "anchors": {
+    "collector_runner_sha256": "f8181c4f25d6fc842d13c1faf8e259756883fcbb0bbcf08c23b3e60c9ed7bce0",
+    "collector_library_sha256": "f4e27edff5acb38fb1c9ee840490179d1c3ebe13fd258d8875de768acc4078b5",
+    "implementation_freeze_sha256": "cdc6654ce5bbf265ce5cc5af2e448806ba306292d29fb986c7eb78bb1379df96",
+    "live_snapshot_sha256": "14341c153649455459f18998be90d65a3010c009893bf76b359dc0b5b74387fc",
+    "service_candidate_sha256": "b59d61f25b4e643f6c9f27389d9829f7e4ea91cfbbb8dffeb48a91b55d755bf8",
+    "launch_candidate_sha256": "70fe8764adcc3aa9f0d2ef8826c2edabe9eaeaf7fa40192782bbea624d5681cd",
+    "runtime_launch_authorization_sha256": "fd5b9a6c683bd15df2dfc26c4ba6497d8e8e152d9b70ed1dc1edeab5107f13be",
+    "route_graph_sha256": "06a9edd309a002aa5dc8408d992cff7b774604fc1cfb04f90fd7f56333f27928"
+  },
+  "source_file_count": 22,
+  "runtime_deploy_file_count": 19,
+  "required_order": [
+    "host_preconditions",
+    "source_hash_validation",
+    "isolated_staging",
+    "staged_collector_selftest",
+    "staged_launch_authorization_validation",
+    "frozen_prerequisite_validation",
+    "mutation_boundary",
+    "runtime_exact_file_deploy",
+    "stable_unit_install",
+    "systemd_analyze_verify",
+    "daemon_reload",
+    "runtime_authorization_install",
+    "runtime_prestart_validator",
+    "systemctl_enable",
+    "systemctl_start",
+    "initial_poll_heartbeat_validation",
+    "launch_report_write",
+    "terminal_pass"
+  ],
+  "rollback_requirements": {
+    "stop_started_service": true,
+    "disable_enabled_service": true,
+    "remove_only_exact_created_authorization": true,
+    "remove_exact_installed_unit_if_absent_before": true,
+    "daemon_reload_after_unit_rollback": true,
+    "preserve_failure_state_manifest_logs": true
+  },
+  "required_runtime_verification": {
+    "service_active": "active",
+    "service_enabled": "enabled",
+    "minimum_poll_count": 2,
+    "minimum_valid_poll_count": 1,
+    "maximum_heartbeat_age_ms": 60000,
+    "poll_chain_hash_nonzero": true,
+    "fast_cadence_seconds": 15,
+    "request_deadline_seconds": 12,
+    "fee_refresh_seconds": 21600,
+    "fee_stale_after_seconds": 28800,
+    "price_data_closed": true,
+    "pnl_closed": true
+  },
+  "allowed_systemctl_subcommands": [
+    "is-active",
+    "is-enabled",
+    "show",
+    "daemon-reload",
+    "enable",
+    "start",
+    "stop",
+    "disable"
+  ],
+  "forbidden_behavior": {
+    "systemctl_restart": true,
+    "systemctl_mask_unmask": true,
+    "legacy_stable_repo_unit_reference": true,
+    "direct_collector_mode_run": true,
+    "direct_curl_wget_nc_socat": true,
+    "price_endpoint_literal": true,
+    "runtime_authorization_before_unit_verification": true,
+    "collector_start_before_runtime_prestart_validator": true,
+    "delete_failure_state_manifest_logs": true
+  },
+  "expected_pass_status": "B15P1_FINAL_COLLECTOR_DEPLOYMENT_LAUNCH_WRAPPER_OFFLINE_PREFLIGHT_PASS",
+  "offline_firewall": {
+    "credentials_available": false,
+    "exchange_calls_allowed": false,
+    "systemd_mutation_allowed": false,
+    "runtime_authorization_creation_allowed": false,
+    "collector_start_allowed": false,
+    "price_data_allowed": false,
+    "pnl_data_allowed": false,
+    "live_execution_allowed": false
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "schema": "sc001.b15.p1_final_collector_deployment_launch_wrapper_preflight_freeze.v0.1",
+  "date": "2026-09-25",
+  "status": "FROZEN_BEFORE_B15P1_FINAL_COLLECTOR_DEPLOYMENT_LAUNCH_WRAPPER_OFFLINE_PREFLIGHT",
+  "harness_sha256": "2438102b3c865d7a876d3d3c5c26fa49a6fa7a4de9f0747ad946f5152af26a02",
+  "wrapper_sha256": "de9f13f36ad8e5492ca3a6bb3181cf3c0d4617542253cec6f39bdfea6dfe8d17",
+  "spec_sha256": "2ea3055d261691a6f643096c031a31d356ae085e60b4a5bb01b5c28332ade96f",
+  "prelaunch_result_sha256": "0396aedc678a6094fb73a675ba9a1446c501cb2871f220a03387d0df38d653bd",
+  "post_reboot_result_sha256": "155c98d7fc021ac15eef0b23f0129ecc436bcc2a91a75b817ad2363be6815d73",
+  "launch_candidate_sha256": "70fe8764adcc3aa9f0d2ef8826c2edabe9eaeaf7fa40192782bbea624d5681cd",
+  "runtime_launch_authorization_sha256": "fd5b9a6c683bd15df2dfc26c4ba6497d8e8e152d9b70ed1dc1edeab5107f13be",
+  "live_snapshot_sha256": "14341c153649455459f18998be90d65a3010c009893bf76b359dc0b5b74387fc",
+  "credentials_available": false,
+  "exchange_calls_allowed": false,
+  "systemd_mutation_allowed": false,
+  "runtime_authorization_creation_allowed": false,
+  "collector_start_allowed": false,
+  "price_data_allowed": false,
+  "pnl_data_allowed": false,
+  "live_execution_allowed": false,
+  "next_state": "RUN_FINAL_B15P1_COLLECTOR_LAUNCH_WRAPPER_OFFLINE_PREFLIGHT_AFTER_USER_APPROVAL"
+}
