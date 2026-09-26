@@ -1,0 +1,74 @@
+{
+  "schema": "sc001.b14a_p0_headroom_readout_contract.v0.1",
+  "date": "2026-09-26",
+  "status": "FROZEN_POST_EVENT_READOUT_IMPLEMENTATION_CANDIDATE",
+  "parent_protocol": {
+    "path": "docs/research/sc001-b14a-p0-prospective-2026-09-25-headroom-protocol-v0.1.md",
+    "git_blob_sha": "791e29158e7154bf154cceaf3badfac61e464d56"
+  },
+  "collector_freeze": {
+    "path": "docs/research/sc001-b14a-p0-collector-implementation-freeze-v0.3.json",
+    "git_blob_sha": "db0c22cf8d884cc03b745c6a70ed35994613960d"
+  },
+  "analyzer": {
+    "path": "research/sc001/sc001_b14a_p0_headroom_readout_v0_1.py",
+    "sha256": "919c0d75e3459c0039f63915fd55347eb09590d22b29a10d4070bdcad5622279"
+  },
+  "event": {
+    "expiry_utc": "2026-09-25T08:00:00Z",
+    "t0_utc": "2026-09-25T07:30:00Z",
+    "futures": [
+      "BTC-USD-260925",
+      "ETH-USD-260925"
+    ],
+    "hedges": [
+      "BTC-USD-SWAP",
+      "ETH-USD-SWAP"
+    ],
+    "frozen_coactive_seconds": 5,
+    "representation": "STRICT_COACTIVE_1S_NO_CARRY_FORWARD",
+    "within_selected_second": "CHRONOLOGICALLY_LAST_CAPTURED_TRADE_PER_LEG",
+    "headroom_hurdle_bps": 50
+  },
+  "data_validity": {
+    "collector_status_required": "B14A_P0_COLLECTION_COMPLETE",
+    "subscription_ack_required": true,
+    "critical_integrity_window_ms": [
+      1790321399000,
+      1790321406000
+    ],
+    "connection_gap_intersection_invalidates": true,
+    "process_restart_gap_intersection_invalidates": true,
+    "coactive_bucket_required_each_family": true,
+    "no_outcome_calculation_if_state_or_gap_gate_fails": true
+  },
+  "classifications": [
+    "B14A_P0_STRONG_HEADROOM_2_OF_2",
+    "B14A_P0_MIXED_HEADROOM_1_OF_2",
+    "B14A_P0_WEAK_HEADROOM_0_OF_2",
+    "B14A_P0_DEFER_DATA"
+  ],
+  "hard_boundaries": {
+    "alternative_expiry_search": false,
+    "alternative_t0_search": false,
+    "alternative_window_search": false,
+    "threshold_tuning": false,
+    "carry_forward": false,
+    "interpolation": false,
+    "convergence_after_t0": false,
+    "settlement_price_analysis": false,
+    "execution_model": false,
+    "pnl": false,
+    "candidate_id_assignment": false,
+    "promotional_claim": false
+  },
+  "real_input_root": "sc001_data",
+  "real_input_dir": "SC001_B14A_P0_20260925",
+  "real_inputs": [
+    "collector_state.json",
+    "raw_trades.jsonl",
+    "connection_events.jsonl"
+  ],
+  "selftest_pass_token": "B14A_P0_READOUT_V01_SELF_TEST_PASS",
+  "next_after_selftest_pass": "BUILD_EXACT_READ_ONLY_B14A_P0_REAL_DATA_READOUT_BUNDLE"
+}
