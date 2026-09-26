@@ -1,0 +1,31 @@
+{
+  "schema": "sc001.b13c_source_quality_state_census_contract.v0.1",
+  "date": "2026-09-26",
+  "status": "READY",
+  "entrypoint": "research/sc001/sc001_b13c_source_quality_state_census_v0_1.py",
+  "entrypoint_sha256": "11e7b33f3abadcf1368523de788c02fca2421e3ecf18e4a63859504c4de89f0c",
+  "input_root": "sc001_data",
+  "input": "SC001_B13C_PROSPECTIVE_LIQUIDATIONS/collector_state.json",
+  "purpose": "Measure source/data sufficiency and operational integrity only before any B13-C outcome protocol is frozen.",
+  "allowed_outputs": [
+    "collector status",
+    "qualified symbol count",
+    "observation duration",
+    "total raw message count",
+    "total normalized event count",
+    "invalid event count",
+    "reconnect count",
+    "aggregate connection/process gap duration"
+  ],
+  "forbidden": [
+    "PER_SYMBOL_FREQUENCY",
+    "LIQUIDATION_SIZE_DISTRIBUTION",
+    "LONG_SHORT_PREDICTIVE_BEHAVIOR",
+    "PRE_EVENT_RETURNS",
+    "POST_EVENT_RETURNS",
+    "THRESHOLD_SELECTION",
+    "EXECUTION_MODEL",
+    "PNL"
+  ],
+  "expected_pass": "B13C_SOURCE_QUALITY_STATE_CENSUS_PASS"
+}

@@ -1,0 +1,19 @@
+{
+  "schema": "sc001.b14a_p0_connection_ledger_diagnostic_contract.v0.1",
+  "date": "2026-09-26",
+  "status": "READY",
+  "entrypoint": "research/sc001/sc001_b14a_p0_connection_ledger_diagnostic_v0_1.py",
+  "entrypoint_sha256": "2e746dd29ea850510798a30bd5ab47e5f08af98f48af0e8f5493293086f91284",
+  "input_root": "sc001_data",
+  "input": "SC001_B14A_P0_20260925/connection_events.jsonl",
+  "purpose": "Identify transport/subscription failure mode from connection ledger only.",
+  "forbidden": [
+    "RAW_TRADES",
+    "PRICE_DATA",
+    "HEADROOM",
+    "ALTERNATIVE_WINDOW_SEARCH",
+    "COLLECTOR_MUTATION",
+    "NETWORK_CALLS"
+  ],
+  "expected_pass": "B14A_P0_CONNECTION_LEDGER_DIAGNOSTIC_PASS"
+}
