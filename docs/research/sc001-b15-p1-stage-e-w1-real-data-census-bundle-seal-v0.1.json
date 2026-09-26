@@ -1,0 +1,36 @@
+{
+  "schema": "sc001.b15.p1_stage_e_w1_real_data_census_bundle_seal.v0.1",
+  "date": "2026-09-26",
+  "status": "SEALED_FUTURE_RUN_NOT_BEFORE_2026_10_04T00_00Z",
+  "bundle_id": "bundle_20260926T175529Z_93fa9025",
+  "bundle_sha256": "1308ce4c140161618dc465672564bdc3f2409e62cf219dc6932bc7edf1891495",
+  "approval_code": "BM-1308CE4C1401",
+  "runtime_profile": "offline-research-v1",
+  "files": 6,
+  "total_bytes": 48883,
+  "declared_runtime_inputs": 17,
+  "entrypoint": "research/sc001/sc001_b15p1_stage_e_w1_real_data_census_bootstrap_v0_1.py",
+  "entrypoint_sha256": "8473e8da24dadf0f272cf41421b7106d0e6ad50eae7af05b99017bb30ddb0f88",
+  "census_sha256": "5386182a73eb6e0561eb3670223168d3e1ebe7d11640ee9d67ce753569de4aaf",
+  "not_before_utc": "2026-10-04T00:00:00Z",
+  "window_days": [
+    "2026-09-27",
+    "2026-09-28",
+    "2026-09-29",
+    "2026-09-30",
+    "2026-10-01",
+    "2026-10-02",
+    "2026-10-03"
+  ],
+  "boundaries": {
+    "source_only": true,
+    "network_calls_allowed": false,
+    "credentials_allowed": false,
+    "collector_mutation_allowed": false,
+    "collector_restart_allowed": false,
+    "price_data_allowed": false,
+    "pnl_data_allowed": false,
+    "formal_opportunity_rate_inference_allowed": false
+  },
+  "next_state": "WAIT_FOR_W1_WINDOW_COMPLETION_AND_FRESH_EXPLICIT_RUNNER_APPROVAL"
+}
