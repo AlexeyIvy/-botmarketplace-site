@@ -1,0 +1,58 @@
+{
+  "schema": "sc001.b15.p1_final_launch_v020_offline_preflight_result.v0.1",
+  "date": "2026-09-26",
+  "status": "B15P1_FINAL_LAUNCH_V020_OFFLINE_PREFLIGHT_PASS",
+  "runner_job": {
+    "job_id": "job_20260926T125951Z_ec46c508",
+    "bundle_id": "bundle_20260926T122142Z_bf51bc5e",
+    "bundle_sha256": "b334eb37fc66bc6f97a85313a6b53a4b156c1e882a014c593b3ea501021b005c",
+    "run_key": "B15P1_FINAL_LAUNCH_V020_OFFLINE_PREFLIGHT_01",
+    "exit_code": 0,
+    "package_integrity_ok": true
+  },
+  "artifacts": {
+    "bootstrap_manifest": {
+      "path": "final_launch_v020_offline_preflight_bootstrap_manifest.json",
+      "sha256": "afbbe59f2d50baf4c4ef7b73bc714bb8b8f0b77fad8695e624c9def1f338620d",
+      "status": "B15P1_FINAL_LAUNCH_V020_OFFLINE_PREFLIGHT_BOOTSTRAP_PASS"
+    },
+    "preflight_manifest": {
+      "path": "final_launch_v020_offline_preflight_manifest.json",
+      "sha256": "6034381c60515aa2cff1d11360790db55507e0ba489ec8884613e7f1fc577cbd",
+      "status": "B15P1_FINAL_LAUNCH_V020_OFFLINE_PREFLIGHT_PASS"
+    }
+  },
+  "verified": {
+    "wrapper_sha256": "25387c527fcd77b59bac96a1c88316029e093edc99848e60842e6436d90424ad",
+    "canonical_runtime_authorization_sha256": "7c6a0296dc47f91a47d4747a0d29174338599a805b797427f19aa2e0c9d3b01c",
+    "capability_snapshot_sha256": "01cfa63b6001ec972c4ed87daba5bbd9fba932233b9e8323a49a6a5355e89647",
+    "source_dependency_count": 23,
+    "runtime_deploy_dependency_count": 19,
+    "embedded_python_block_count": 6,
+    "bash_syntax_returncode": 0,
+    "embedded_python_compile": true,
+    "collector_v014_authorization_validator_pass": true,
+    "bash_err_trap_if_condition_fixture": true,
+    "set_plus_e_only_in_rollback": true,
+    "tri_state_fixtures": {
+      "pass_rc": 0,
+      "no_valid_poll_rc": 10,
+      "poll_count_zero_rc": 10,
+      "price_firewall_rc": 20,
+      "raw_integrity_rc": 20,
+      "restart_rc": 20
+    }
+  },
+  "safety_boundaries": {
+    "credentials_available": false,
+    "exchange_calls_performed": false,
+    "collector_start_performed": false,
+    "systemd_mutation_performed": false,
+    "runtime_authorization_created": false,
+    "price_data_used": false,
+    "pnl_data_used": false,
+    "live_execution_performed": false
+  },
+  "stderr_empty": true,
+  "next_state": "AWAIT_REAL_FINAL_LAUNCH_V020_ON_VPS"
+}
