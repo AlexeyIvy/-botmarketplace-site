@@ -1,0 +1,28 @@
+{
+  "schema": "sc001.b14a_p0_real_data_readout_materialization_failure_diagnostic.v0.1",
+  "date": "2026-09-26",
+  "status": "RUNNER_INPUT_MATERIALIZATION_REJECT_BEFORE_ENTRYPOINT",
+  "attempted_bundle_id": "bundle_20260926T201527Z_e2422a4a",
+  "attempted_bundle_sha256": "c4a04547462b2ca0eb92ae205d005ed5e7287e23a1cc620e5dfab229ad774a73",
+  "attempted_run_key": "B14A_P0_REALDATA_READOUT_01",
+  "runner_job_id": "job_20260926T201857Z_e1963e30",
+  "observed": {
+    "run_bundle_error": "INVALID_ARGUMENT",
+    "systemd_result": "success",
+    "systemd_active_state": "inactive",
+    "systemd_sub_state": "dead",
+    "effective_status": null,
+    "stdout_bytes": 0,
+    "stderr_bytes": 0,
+    "artifacts": 0
+  },
+  "interpretation": "Failure occurred before Python entrypoint/result finalization. Research outcome was not opened. Exact input-level cause remains unresolved.",
+  "confirmed_service_data_root": "/home/botmarket/sc001_data",
+  "candidate_causes": [
+    "one or more declared runtime input files absent",
+    "one or more declared runtime input files rejected by Runner input constraints such as size/materialization limits"
+  ],
+  "next_action": "Run a separate immutable state-only diagnostic bundle using only SC001_B14A_P0_20260925/collector_state.json.",
+  "b14a_outcome_opened": false,
+  "threshold_or_protocol_changed": false
+}

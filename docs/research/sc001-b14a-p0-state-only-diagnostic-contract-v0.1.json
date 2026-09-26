@@ -1,0 +1,34 @@
+{
+  "schema": "sc001.b14a_p0_state_only_diagnostic_contract.v0.1",
+  "date": "2026-09-26",
+  "status": "STATE_ONLY_DIAGNOSTIC_READY",
+  "purpose": "Determine whether B14-A P0 collector_state exists and whether the collector completed/captured rows, without reading raw trade prices.",
+  "entrypoint": "research/sc001/sc001_b14a_p0_state_only_diagnostic_v0_1.py",
+  "entrypoint_sha256": "cef2e96f5b5dea8b61c3a5b9e8743a9a63bb5555cb9169a31a210aa3f97c3bcd",
+  "runtime": "offline-research-v1",
+  "input_root": "sc001_data",
+  "input": {
+    "path": "SC001_B14A_P0_20260925/collector_state.json",
+    "dest": "b14astate/collector_state.json"
+  },
+  "output_fields": [
+    "collector status",
+    "subscription_ack",
+    "raw_trade_messages",
+    "normalized_trade_rows",
+    "invalid_trade_rows",
+    "reconnect_count",
+    "process_restart_count",
+    "connection/restart gap counts",
+    "finished timestamp",
+    "basis/convergence/PnL flags"
+  ],
+  "boundaries": {
+    "raw_trade_data_read": false,
+    "price_data_read": false,
+    "outcome_calculated": false,
+    "collector_mutation": false,
+    "network_calls": false
+  },
+  "expected_pass": "B14A_P0_STATE_ONLY_DIAGNOSTIC_PASS"
+}
