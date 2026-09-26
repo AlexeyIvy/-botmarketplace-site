@@ -1,0 +1,100 @@
+{
+  "schema": "sc001.b15.p1_final_launch_v020_offline_preflight_spec.v0.1",
+  "date": "2026-09-26",
+  "status": "FROZEN_BEFORE_OFFLINE_PREFLIGHT",
+  "wrapper": {
+    "path": "scripts/research/run-b15p1-final-collector-deployment-launch-v0.2.0.sh",
+    "sha256": "25387c527fcd77b59bac96a1c88316029e093edc99848e60842e6436d90424ad"
+  },
+  "authorization_candidate": {
+    "path": "docs/research/sc001-b15-p1-collector-launch-authorization-candidate-v0.2.json",
+    "sha256": "894457159a89ea9d701b8962c52aecd87e7805fc23d95a86ad74d9291d4ef437",
+    "canonical_runtime_payload_sha256": "7c6a0296dc47f91a47d4747a0d29174338599a805b797427f19aa2e0c9d3b01c"
+  },
+  "collector_v014": {
+    "runner_sha256": "280253b060f65517548054b3d8c33c315013d724ef2b836e9b8fef14628be213",
+    "library_sha256": "eaa925b71a7f33ec59de69f32dd0fb06f85bac67e89101b6f2ad50c1d792fd3f",
+    "implementation_freeze_sha256": "80928b0a11dac333b7844aa15bcdf399fd4db8739a4845e6118ebb576153b38c",
+    "service_sha256": "7a0f1742481b92f4d2590f09defcc5b287baaf1a9ba50f0da27488f8f5272f9d",
+    "offline_result_sha256": "7cb9aa17fc820fe5bd88507614d273b52e442435de1e191b559053422b8c0c2c"
+  },
+  "capability_v022": {
+    "snapshot_sha256": "01cfa63b6001ec972c4ed87daba5bbd9fba932233b9e8323a49a6a5355e89647",
+    "current_live_result_sha256": "e1c770dec6c19e24922127839445646872498cab084478a60d085f96bafaa497",
+    "expected_bybit_minus_one_rows": 1007,
+    "expected_bybit_unlimited_rows": 1007,
+    "qualified_bybit_count": 192,
+    "qualified_okx_count": 192,
+    "qualified_both_count": 192
+  },
+  "recovery_v012": {
+    "host_result_sha256": "47f465c5f1afc5bb07ef422eda3e7fa9321aed7a00ed21f03ca53c6aeca13e7d",
+    "runtime_report_sha256": "553a89d82dba67ee80166ccff32841b51ecbc25a9d8b47f5d84f6f6dd769e89b",
+    "archived_file_count": 134,
+    "required_status": "B15P1_V011_SOURCE_INVALID_RECOVERY_V012_PASS"
+  },
+  "source_file_count": 23,
+  "runtime_deploy_file_count": 19,
+  "embedded_python_block_count": 6,
+  "required_control_flow": {
+    "single_instance_flock": true,
+    "signal_and_exit_rollback_traps": true,
+    "set_plus_e_only_in_rollback": true,
+    "staged_selftest_before_mutation": true,
+    "staged_authorization_validation_before_mutation": true,
+    "full_prerequisite_and_archive_rehash_before_mutation": true,
+    "transactional_runtime_file_ledger": true,
+    "atomic_runtime_file_replace": true,
+    "atomic_service_unit_replace": true,
+    "atomic_authorization_replace": true,
+    "runtime_prestart_before_enable": true,
+    "enable_before_start": true,
+    "tri_state_initial_verifier": true,
+    "zero_restart_first_start_contract": true,
+    "final_launch_report": true
+  },
+  "dynamic_fixtures": {
+    "authorization_candidate_canonical_sha": true,
+    "not_ready_poll_count_zero": 10,
+    "not_ready_no_valid_poll": 10,
+    "full_valid_two_poll_pass": 0,
+    "price_firewall_hard_fail": 20,
+    "process_restart_hard_fail": 20,
+    "raw_object_corruption_hard_fail": 20
+  },
+  "allowed_systemctl_subcommands": [
+    "stop",
+    "disable",
+    "daemon-reload",
+    "is-active",
+    "is-enabled",
+    "show",
+    "enable",
+    "start"
+  ],
+  "forbidden_behavior": {
+    "systemctl_restart": true,
+    "mask_unmask": true,
+    "direct_collector_mode_run": true,
+    "legacy_v013_runtime_path": true,
+    "delete_failure_state_manifest_log": true,
+    "price_pnl_authorization": true
+  },
+  "offline_firewall": {
+    "credentials_available": false,
+    "exchange_calls_allowed": false,
+    "systemd_mutation_allowed": false,
+    "runtime_authorization_creation_allowed": false,
+    "collector_start_allowed": false,
+    "price_data_allowed": false,
+    "pnl_data_allowed": false,
+    "live_execution_allowed": false
+  },
+  "expected_pass_status": "B15P1_FINAL_LAUNCH_V020_OFFLINE_PREFLIGHT_PASS",
+  "bootstrap": {
+    "path": "research/sc001/sc001_b15p1_final_launch_v020_offline_preflight_bootstrap_v0_1.py",
+    "sha256": "7cf92fc22d54cf57ce42b5dfb1ecbd0ceacd16aa89b02d10558b376b6dc92203",
+    "compile_gate_before_harness_execution": true,
+    "requires_harness_manifest": true
+  }
+}

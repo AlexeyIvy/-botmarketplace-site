@@ -1,0 +1,35 @@
+{
+  "schema": "sc001.b15.p1_nonprice_source_capability_v022_current_live_result.v0.2",
+  "date": "2026-09-26",
+  "status": "B15P1_NONPRICE_SOURCE_CAPABILITY_REVALIDATION_COMMAND_V022_PASS",
+  "evidence_source": "user-supplied terminal screenshot plus recovery v0.1.2 pre/post semantic validation",
+  "snapshot_sha256": "01cfa63b6001ec972c4ed87daba5bbd9fba932233b9e8323a49a6a5355e89647",
+  "collector": {
+    "runner_sha256": "280253b060f65517548054b3d8c33c315013d724ef2b836e9b8fef14628be213",
+    "library_sha256": "eaa925b71a7f33ec59de69f32dd0fb06f85bac67e89101b6f2ad50c1d792fd3f",
+    "implementation_freeze_sha256": "80928b0a11dac333b7844aa15bcdf399fd4db8739a4845e6118ebb576153b38c",
+    "service_sha256": "7a0f1742481b92f4d2590f09defcc5b287baaf1a9ba50f0da27488f8f5272f9d"
+  },
+  "coverage": {
+    "qualified_bybit_count": 192,
+    "qualified_okx_count": 192,
+    "qualified_both_venues_count": 192
+  },
+  "bybit_adapter": {
+    "collector_parser_version": "0.1.4",
+    "parser_compatible": true,
+    "raw_withdrawMax_minus_one_rows": 1007,
+    "normalized_unlimited_rows": 1007
+  },
+  "security": {
+    "read_only_permissions": true,
+    "price_endpoints_called": false,
+    "order_transfer_withdraw_endpoints_called": false,
+    "collector_launch_authorized": false,
+    "price_data_used": false,
+    "pnl_data_used": false,
+    "live_execution_authorized": false
+  },
+  "recovery_v012_preserved_same_snapshot": true,
+  "next_state": "PREPARE_V014_CONTROLLED_LAUNCH_AUTHORIZATION"
+}

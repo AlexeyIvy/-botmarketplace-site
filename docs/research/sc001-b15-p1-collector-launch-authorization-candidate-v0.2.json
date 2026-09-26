@@ -1,0 +1,30 @@
+{
+  "schema": "sc001.b15.p1_nonprice_collector_launch_authorization_candidate.v0.2",
+  "date": "2026-09-26",
+  "status": "CANDIDATE_NOT_ACTIVE",
+  "runtime_install_authorized": false,
+  "collector_start_authorized": false,
+  "proposed_runtime_path": "/home/botmarket/sc001_data/SC001_B15P1_TRANSFERABILITY/collector_launch_authorization.json",
+  "proposed_runtime_payload": {
+    "schema": "sc001.b15.p1_nonprice_collector_launch_authorization.v0.2",
+    "status": "B15P1_NONPRICE_COLLECTOR_LAUNCH_AUTHORIZED",
+    "launch_pass_token": "B15P1_NONPRICE_COLLECTOR_LAUNCH_PASS",
+    "anchors": {
+      "runner_sha256": "280253b060f65517548054b3d8c33c315013d724ef2b836e9b8fef14628be213",
+      "implementation_freeze_sha256": "80928b0a11dac333b7844aa15bcdf399fd4db8739a4845e6118ebb576153b38c",
+      "capability_snapshot_sha256": "01cfa63b6001ec972c4ed87daba5bbd9fba932233b9e8323a49a6a5355e89647",
+      "service_file_sha256": "7a0f1742481b92f4d2590f09defcc5b287baaf1a9ba50f0da27488f8f5272f9d"
+    },
+    "price_economic_research_authorized": false,
+    "live_execution_authorized": false
+  },
+  "canonical_runtime_payload_sha256": "7c6a0296dc47f91a47d4747a0d29174338599a805b797427f19aa2e0c9d3b01c",
+  "safety": {
+    "candidate_file_must_not_be_used_as_runtime_authorization": true,
+    "top_level_status_is_intentionally_non_authorizing": true,
+    "runtime_materialization_requires_separate_explicit_user_approval": true,
+    "collector_must_remain_stopped_before_runtime_authorization": true,
+    "price_pnl_remain_closed": true
+  },
+  "next_state": "OFFLINE_VALIDATE_V014_FINAL_LAUNCH_WRAPPER"
+}
