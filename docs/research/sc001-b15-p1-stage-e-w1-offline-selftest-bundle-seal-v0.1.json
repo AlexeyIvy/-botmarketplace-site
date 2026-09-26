@@ -1,0 +1,35 @@
+{
+  "schema": "sc001.b15.p1_stage_e_w1_offline_selftest_bundle_seal.v0.1",
+  "date": "2026-09-26",
+  "status": "SEALED_AWAITING_EXPLICIT_RUNNER_APPROVAL",
+  "bundle_id": "bundle_20260926T174651Z_681d463a",
+  "bundle_sha256": "9a06452b4ef5b924cdb21fa48a66a0602632167ce4bbae97f51342d4e690d6eb",
+  "approval_code": "BM-9A06452B4EF5",
+  "runtime_profile": "offline-research-v1",
+  "inputs": [],
+  "files": 7,
+  "total_bytes": 77216,
+  "entrypoint": "research/sc001/sc001_b15p1_stage_e_w1_offline_selftest_harness_v0_1.py",
+  "entrypoint_sha256": "061ebfa96db2728e44c71473cc70ede06c0c764c59533fadba0fce8ac59358bc",
+  "components": {
+    "census_sha256": "5386182a73eb6e0561eb3670223168d3e1ebe7d11640ee9d67ce753569de4aaf",
+    "analyzer_sha256": "da4a218e7b624775e44e8403a1acf6ee1bff581ec1a7ddaa59eb42fd0f2330ce",
+    "protocol_sha256": "a91e09d453515f85feb98d5a636eede0c66efa323d2ca7a9765855acf46edde2"
+  },
+  "expected_pass_tokens": [
+    "B15P1_STAGE_E_W1_INPUT_CENSUS_V01_SELF_TEST_PASS",
+    "B15P1_STAGE_E_W1_SOURCE_ONLY_ANALYZER_V01_SELF_TEST_PASS",
+    "B15P1_STAGE_E_W1_OFFLINE_SELFTEST_PASS"
+  ],
+  "boundaries": {
+    "real_sc001_data_used": false,
+    "network_calls_allowed": false,
+    "credentials_allowed": false,
+    "collector_mutation_allowed": false,
+    "collector_restart_allowed": false,
+    "price_data_allowed": false,
+    "pnl_data_allowed": false,
+    "formal_opportunity_rate_inference_allowed": false
+  },
+  "next_state": "RUN_EXACT_W1_OFFLINE_SELFTEST_AFTER_EXPLICIT_APPROVAL"
+}
