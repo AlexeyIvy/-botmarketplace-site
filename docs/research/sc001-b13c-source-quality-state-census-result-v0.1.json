@@ -1,0 +1,35 @@
+{
+  "schema": "sc001.b13c_source_quality_state_census_result.v0.1",
+  "date": "2026-09-26",
+  "status": "B13C_SOURCE_QUALITY_STATE_CENSUS_PASS",
+  "runner_job": {
+    "job_id": "job_20260926T210536Z_8b1eda0f",
+    "bundle_id": "bundle_20260926T205127Z_f8f0abd7",
+    "bundle_sha256": "f04ed4da6fcc77cbe026eb1a601c135933b07dadac066774d9cd62a056af9627",
+    "exit_code": 0,
+    "package_integrity_ok": true
+  },
+  "collector": {
+    "status": "B13C_COLLECTION_RUNNING",
+    "connection_status": "CONNECTED",
+    "source_qualified_symbols": 12,
+    "collector_start_utc": "2026-09-19T06:47:38.969000+00:00",
+    "census_cutoff_utc": "2026-09-26T21:05:32.973000+00:00",
+    "observation_elapsed_days": 7.595763935185185,
+    "total_raw_messages": 19227,
+    "total_normalized_events": 32381,
+    "invalid_event_count": 0,
+    "reconnect_count": 13,
+    "cumulative_connection_gap_ms": 271106,
+    "process_restart_count": 1,
+    "cumulative_process_gap_ms": 18183
+  },
+  "derived_source_diagnostics": {
+    "events_per_observed_day_for_sufficiency_only": 4263.034011629082,
+    "invalid_event_fraction": 0,
+    "connection_gap_fraction": 0.00041309879463090847,
+    "process_gap_fraction": 0.000027706415139369135
+  },
+  "protected_outcomes_opened": false,
+  "interpretation": "Protected prospective event stream has ample aggregate sample for a pre-outcome sentinel design. Event clustering and price outcome rules must be frozen before reading returns."
+}

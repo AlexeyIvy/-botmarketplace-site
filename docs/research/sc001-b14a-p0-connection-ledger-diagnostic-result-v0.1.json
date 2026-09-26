@@ -1,0 +1,29 @@
+{
+  "schema": "sc001.b14a_p0_connection_ledger_diagnostic_result.v0.1",
+  "date": "2026-09-26",
+  "status": "B14A_P0_CONNECTION_LEDGER_DIAGNOSTIC_PASS",
+  "runner_job": {
+    "job_id": "job_20260926T210535Z_bf97c67d",
+    "bundle_id": "bundle_20260926T205125Z_3a22df35",
+    "bundle_sha256": "8480906ff9fff7a7ff6d25ac92218c1cacafe4f6a2765387a40f1655f003aa80",
+    "exit_code": 0,
+    "package_integrity_ok": true
+  },
+  "rows": 204,
+  "event_counts": {
+    "CONNECT_ATTEMPT": 68,
+    "CONNECTED": 68,
+    "DISCONNECTED": 68
+  },
+  "transport_error_class": {
+    "okx_code": "60033",
+    "message": "Parameter id error",
+    "collector_request_id": "b14ap0-sub",
+    "interpretation": "WebSocket connection succeeded, but subscribe request was rejected before ACK/trade capture."
+  },
+  "price_data_read": false,
+  "raw_trade_data_read": false,
+  "headroom_calculated": false,
+  "binding_p0_disposition": "B14A_P0_DEFER_DATA",
+  "repair_scope": "Future prospective event only; transport repair must not retroactively reconstruct Sep25 P0."
+}
