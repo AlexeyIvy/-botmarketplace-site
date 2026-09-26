@@ -1,0 +1,28 @@
+{
+  "schema": "sc001.b15.p1_v011_source_invalid_recovery_before_v014_offline_preflight_result.v0.1",
+  "date": "2026-09-26",
+  "status": "B15P1_V011_SOURCE_INVALID_RECOVERY_WRAPPER_OFFLINE_PREFLIGHT_PASS",
+  "bundle_id": "bundle_20260926T092023Z_1873afa0",
+  "bundle_sha256": "a984f53f174cedef664e01f6d40e99b5a3e698779b6521cf9a7702ca2f15bc06",
+  "job_id": "job_20260926T094525Z_7cd54910",
+  "package_integrity_ok": true,
+  "exit_code": 0,
+  "manifest_sha256": "d249b8376510d629ec3d14cd01be043f5c7f3ff6d595e7d45b044666f80a8e63",
+  "checks": {
+    "bash_syntax_returncode": 0,
+    "embedded_python_compile": true,
+    "forbidden_start": false,
+    "forbidden_enable": false,
+    "forbidden_restart": false,
+    "forbidden_collector_run": false,
+    "snapshot_move": false,
+    "snapshot_delete": false,
+    "safe_summary_move": false,
+    "capability_log_move": false
+  },
+  "safety": {
+    "collector_start_performed": false,
+    "exchange_calls_performed": false
+  },
+  "next_state": "RUN_SOURCE_INVALID_RECOVERY_ON_VPS"
+}
