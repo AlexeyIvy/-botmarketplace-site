@@ -1,0 +1,29 @@
+{
+  "schema": "sc001.b15.p1_stage_e_pipeline_smoke_offline_selftest_spec.v0.1",
+  "date": "2026-09-26",
+  "status": "OFFLINE_SELFTEST_SPEC_READY",
+  "entrypoint": "research/sc001/sc001_b15p1_stage_e_pipeline_smoke_v0_1.py",
+  "entrypoint_sha256": "9cdbe1e33f6c3d9ad90f11c494690adadd0ec9d0fab05ec32b59c73db7bdb69e",
+  "inputs": [],
+  "runtime": "offline-research-v1",
+  "network_required": false,
+  "test_mode": "self-test",
+  "required_stdout_token": "B15P1_STAGE_E_PIPELINE_SMOKE_V01_SELF_TEST_PASS",
+  "required_exit_code": 0,
+  "fixtures": [
+    "SYNTHETIC_RUNNING_COLLECTOR_STATE_AND_MANIFEST",
+    "TWO_VALID_15_SECOND_POLL_ROWS",
+    "POLL_CHAIN_RECOMPUTATION_AND_CONTINUITY",
+    "NO_PRICE_PNL_FIREWALL"
+  ],
+  "forbidden": [
+    "EXCHANGE_CALLS",
+    "CREDENTIALS",
+    "COLLECTOR_MUTATION",
+    "COLLECTOR_RESTART",
+    "PRICE_DATA",
+    "PNL",
+    "OPPORTUNITY_RATE_INFERENCE"
+  ],
+  "pass_next_state": "PREPARE_W0_REAL_DATA_PIPELINE_SMOKE"
+}
