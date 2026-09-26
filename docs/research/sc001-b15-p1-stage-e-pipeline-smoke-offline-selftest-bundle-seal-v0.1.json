@@ -1,0 +1,16 @@
+{
+  "schema": "sc001.b15.p1_stage_e_pipeline_smoke_offline_selftest_bundle_seal.v0.1",
+  "date": "2026-09-26",
+  "status": "SEALED_AWAITING_EXPLICIT_RUNNER_APPROVAL",
+  "bundle_id": "bundle_20260926T134907Z_ab6df192",
+  "bundle_sha256": "3ada7e59d80e54931e0f21366805c7f796d6a5becd3f5713b02877af165b2a80",
+  "approval_code": "BM-3ADA7E59D80E",
+  "total_bytes": 21515,
+  "file_count": 4,
+  "runtime_profile": "offline-research-v1",
+  "inputs": [],
+  "entrypoint": "research/sc001/sc001_b15p1_stage_e_pipeline_smoke_v0_1.py",
+  "entrypoint_sha256": "9cdbe1e33f6c3d9ad90f11c494690adadd0ec9d0fab05ec32b59c73db7bdb69e",
+  "purpose": "Synthetic offline self-test only; no real collector data, credentials, network, price/PnL, collector mutation or opportunity-rate inference.",
+  "next_state": "RUN_EXACT_BUNDLE_AFTER_EXPLICIT_APPROVAL"
+}
