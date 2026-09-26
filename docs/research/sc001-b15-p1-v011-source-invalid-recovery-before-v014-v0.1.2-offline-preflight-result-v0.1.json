@@ -1,0 +1,35 @@
+{
+  "schema": "sc001.b15.p1_v011_source_invalid_recovery_before_v014_v012_offline_preflight_result.v0.1",
+  "date": "2026-09-26",
+  "status": "B15P1_V011_SOURCE_INVALID_RECOVERY_WRAPPER_OFFLINE_PREFLIGHT_V012_PASS",
+  "bundle_id": "bundle_20260926T115009Z_9a599660",
+  "bundle_sha256": "6ec32292acaccf905cc25c0dc6f15e126cb1067fc5463e9257ab7f0f82c8c707",
+  "job_id": "job_20260926T120049Z_1f2263c6",
+  "package_integrity_ok": true,
+  "exit_code": 0,
+  "main_manifest_sha256": "54b5d35284f69099cfd15d02b5f606ad9622906ae47e606933567b4211d85e36",
+  "bootstrap_manifest_sha256": "fa2d5d69be100a3bb92444484cddb061b27158de5f253901d1f8895c3527da23",
+  "wrapper_sha256": "04d6f49a38882e94928ae7fef0b1068670dfb536361cd72c77659aefc17bac20",
+  "checks": {
+    "freeze_chain_pass": true,
+    "dynamic_snapshot_sha_fixture_a_pass": true,
+    "dynamic_snapshot_sha_fixture_b_pass": true,
+    "safe_summary_sha_mismatch_fail_closed": true,
+    "realistic_probe_log_fixture_pass": true,
+    "missing_probe_pass_token_fail_closed": true,
+    "bash_syntax_returncode": 0,
+    "embedded_python_block_count": 2,
+    "embedded_python_compile": true,
+    "forbidden_start": false,
+    "forbidden_enable": false,
+    "forbidden_restart": false,
+    "forbidden_collector_run": false
+  },
+  "safety": {
+    "exchange_calls_performed": false,
+    "collector_start_performed": false,
+    "systemd_start_enable_performed": false,
+    "price_pnl_used": false
+  },
+  "next_state": "RUN_V011_SOURCE_INVALID_RECOVERY_V012_ON_VPS"
+}
