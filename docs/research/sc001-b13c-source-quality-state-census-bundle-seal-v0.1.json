@@ -1,0 +1,15 @@
+{
+  "schema": "sc001.b13c_source_quality_state_census_bundle_seal.v0.1",
+  "date": "2026-09-26",
+  "status": "SEALED_AWAITING_EXPLICIT_RUNNER_APPROVAL",
+  "bundle_id": "bundle_20260926T205127Z_f8f0abd7",
+  "bundle_sha256": "f04ed4da6fcc77cbe026eb1a601c135933b07dadac066774d9cd62a056af9627",
+  "approval_code": "BM-F04ED4DA6FCC",
+  "runtime_profile": "offline-research-v1",
+  "input": "SC001_B13C_PROSPECTIVE_LIQUIDATIONS/collector_state.json",
+  "package_files": 4,
+  "total_bytes": 14468,
+  "entrypoint_sha256": "11e7b33f3abadcf1368523de788c02fca2421e3ecf18e4a63859504c4de89f0c",
+  "expected_pass": "B13C_SOURCE_QUALITY_STATE_CENSUS_PASS",
+  "protected_outcomes_opened": false
+}

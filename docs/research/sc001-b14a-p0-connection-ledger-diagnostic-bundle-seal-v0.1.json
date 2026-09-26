@@ -1,0 +1,15 @@
+{
+  "schema": "sc001.b14a_p0_connection_ledger_diagnostic_bundle_seal.v0.1",
+  "date": "2026-09-26",
+  "status": "SEALED_AWAITING_EXPLICIT_RUNNER_APPROVAL",
+  "bundle_id": "bundle_20260926T205125Z_3a22df35",
+  "bundle_sha256": "8480906ff9fff7a7ff6d25ac92218c1cacafe4f6a2765387a40f1655f003aa80",
+  "approval_code": "BM-8480906FF9FF",
+  "runtime_profile": "offline-research-v1",
+  "input": "SC001_B14A_P0_20260925/connection_events.jsonl",
+  "package_files": 3,
+  "total_bytes": 6274,
+  "entrypoint_sha256": "2e746dd29ea850510798a30bd5ab47e5f08af98f48af0e8f5493293086f91284",
+  "expected_pass": "B14A_P0_CONNECTION_LEDGER_DIAGNOSTIC_PASS",
+  "price_or_outcome_data_read": false
+}
