@@ -1,0 +1,17 @@
+{
+  "schema": "sc001.b14a_p0_headroom_readout_offline_selftest_result.v0.1",
+  "date": "2026-09-26",
+  "status": "B14A_P0_READOUT_V01_SELF_TEST_PASS",
+  "runner_job": {
+    "job_id": "job_20260926T201402Z_d6253469",
+    "bundle_id": "bundle_20260926T200825Z_9958f82d",
+    "bundle_sha256": "d56c76d45e793dd28b14818241379c3ee6fd86fe79e083d7aca5d39ccfed33a5",
+    "exit_code": 0,
+    "package_integrity_ok": true
+  },
+  "stdout_token": "B14A_P0_READOUT_V01_SELF_TEST_PASS",
+  "stderr_empty": true,
+  "artifacts": [],
+  "real_b14a_data_used": false,
+  "next_state": "PREPARE_EXACT_READ_ONLY_B14A_P0_REAL_DATA_READOUT_BUNDLE"
+}
