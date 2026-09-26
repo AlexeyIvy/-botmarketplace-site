@@ -1,0 +1,42 @@
+{
+  "schema": "sc001.b15.p1_post_launch_fast_lane_stability_result.v0.1",
+  "date": "2026-09-26",
+  "status": "B15P1_COLLECTOR_V014_FAST_LANE_STABILITY_PASS_FEE_REFRESH_PENDING",
+  "evidence_source": "user-supplied terminal screenshot from read-only status helper",
+  "collector": {
+    "stage": "SC001-B15P1-NONPRICE-TRANSFERABILITY-COLLECTOR-V0.1.4",
+    "version": "0.1.4",
+    "status": "B15P1_NONPRICE_COLLECTION_RUNNING",
+    "service_active": "active",
+    "service_enabled": "enabled",
+    "state_present": true,
+    "manifest_present": true,
+    "capability_present": true,
+    "launch_authorization_present": true,
+    "process_epoch": 1,
+    "poll_count": 26,
+    "invalid_poll_count": 0,
+    "missed_poll_slots": 0,
+    "source_gap_count": 0,
+    "process_restart_count": 0,
+    "last_heartbeat_ms": 1790428425740,
+    "last_scheduled_slot_ms": 1790428425000,
+    "last_fee_refresh_completed_ms": null,
+    "price_data_collected": false,
+    "pnl_calculated": false
+  },
+  "code_review": {
+    "fee_refresh_starts_when_last_fee_is_null": true,
+    "fee_refresh_runs_in_background": true,
+    "fee_refresh_is_deliberately_paced_between_instruments": true,
+    "fast_lane_is_not_blocked_by_fee_refresh": true,
+    "null_completion_marker_immediately_after_launch_is_compatible_with_in_progress_initial_refresh": true,
+    "code_change_required": false
+  },
+  "decision": {
+    "fast_lane_stability_accepted": true,
+    "collector_rewrite_or_retune": false,
+    "full_operational_freeze_pending_only_first_fee_refresh_completion_marker": true
+  },
+  "next_state": "WAIT_FOR_FIRST_FEE_REFRESH_COMPLETION_THEN_CONFIRM_OPERATIONAL_FREEZE"
+}
