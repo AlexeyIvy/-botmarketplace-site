@@ -1,0 +1,28 @@
+{
+  "schema": "sc001.b14a_p0_real_data_readout_bundle_seal.v0.1",
+  "date": "2026-09-26",
+  "status": "SEALED_AWAITING_EXPLICIT_RUNNER_APPROVAL",
+  "bundle_id": "bundle_20260926T201527Z_e2422a4a",
+  "bundle_sha256": "c4a04547462b2ca0eb92ae205d005ed5e7287e23a1cc620e5dfab229ad774a73",
+  "approval_code": "BM-C4A04547462B",
+  "runtime_profile": "offline-research-v1",
+  "package_files": 7,
+  "total_bytes": 29151,
+  "runtime_inputs": [
+    "SC001_B14A_P0_20260925/collector_state.json",
+    "SC001_B14A_P0_20260925/raw_trades.jsonl",
+    "SC001_B14A_P0_20260925/connection_events.jsonl"
+  ],
+  "entrypoint": "research/sc001/sc001_b14a_p0_real_data_readout_bootstrap_v0_1.py",
+  "entrypoint_sha256": "99e508d3db6eeb486a19f9b11306eb172891e7f3334e1552079e3a48739dc3b3",
+  "analyzer_sha256": "919c0d75e3459c0039f63915fd55347eb09590d22b29a10d4070bdcad5622279",
+  "frozen_hurdle_bps": 50,
+  "frozen_t0_utc": "2026-09-25T07:30:00Z",
+  "allowed_classifications": [
+    "B14A_P0_STRONG_HEADROOM_2_OF_2",
+    "B14A_P0_MIXED_HEADROOM_1_OF_2",
+    "B14A_P0_WEAK_HEADROOM_0_OF_2",
+    "B14A_P0_DEFER_DATA"
+  ],
+  "next_state": "RUN_EXACT_REAL_DATA_READOUT_AFTER_EXPLICIT_APPROVAL"
+}
