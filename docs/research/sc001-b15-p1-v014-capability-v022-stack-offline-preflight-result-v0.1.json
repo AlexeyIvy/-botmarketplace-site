@@ -1,0 +1,45 @@
+{
+  "schema": "sc001.b15.p1_v014_capability_v022_stack_offline_preflight_result.v0.1",
+  "date": "2026-09-26",
+  "status": "B15P1_V014_CAPABILITY_V022_STACK_OFFLINE_PREFLIGHT_PASS",
+  "bundle_id": "bundle_20260926T084231Z_2c0e59c2",
+  "bundle_sha256": "37b560ba6f9ce85ad67c79ca47d7ba1d8b66aaa9eeb7a8196d697310d87f9fca",
+  "job_id": "job_20260926T085440Z_102db938",
+  "package_integrity_ok": true,
+  "exit_code": 0,
+  "artifacts": {
+    "capability_compile_manifest_sha256": "81ec7cb0b4b55b8017324b04e3a77d0c38e52d18c86020a2027c32058af1a7e2",
+    "capability_selftest_manifest_sha256": "3ab81bc9607efaa5a94bda2d3ce51c26dc39dc1f4ca01d6b586fd25e1d775b09",
+    "stack_manifest_sha256": "075cf2196389158523dc6aad3d9f42261a7200744c0a2e2d50af0d9430e3089a",
+    "bootstrap_manifest_sha256": "ca2f7b8f75aab5c6da877ae4eb932f798e594ddd47b24f7b4f4021a60f32b1ef"
+  },
+  "checks": {
+    "capability_probe_compile": true,
+    "collector_v014_binding_present": true,
+    "bybit_v014_parser_proof_present": true,
+    "snapshot_contract_present": true,
+    "capability_v022_selftest_pass": true,
+    "capability_v022_compile_and_selftest_pass": true,
+    "stack_preflight_pass": true,
+    "stack_bootstrap_pass": true,
+    "live_wrapper_bash_syntax_returncode": 0,
+    "live_wrapper_embedded_python_block_count": 2,
+    "live_wrapper_embedded_python_compile": true,
+    "live_wrapper_staged_dependency_count": 15,
+    "live_wrapper_selftest_mode_count": 1,
+    "live_wrapper_run_mode_count": 1,
+    "live_wrapper_selftest_precedes_live_run": true,
+    "forbidden_behavior_hits_all_false": true
+  },
+  "safety": {
+    "credentials_available": false,
+    "exchange_calls_performed": false,
+    "systemd_mutation_performed": false,
+    "collector_start_performed": false,
+    "runtime_authorization_created": false,
+    "price_data_used": false,
+    "pnl_data_used": false,
+    "live_execution_performed": false
+  },
+  "next_state": "RUN_V014_BOUND_AUTHENTICATED_READ_ONLY_CAPABILITY_REVALIDATION_ON_VPS"
+}
