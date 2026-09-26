@@ -1,0 +1,72 @@
+{
+  "schema": "sc001.b15.p1_v011_source_invalid_recovery_before_v014_preflight_spec.v0.1.1",
+  "date": "2026-09-26",
+  "status": "FROZEN_BEFORE_OFFLINE_PREFLIGHT",
+  "supersedes": "docs/research/sc001-b15-p1-v011-source-invalid-recovery-before-v014-preflight-spec-v0.1.json",
+  "wrapper": {
+    "path": "scripts/research/run-b15p1-v011-source-invalid-recovery-before-v014-v0.1.1.sh",
+    "sha256": "2a14da8e599feb0f2e075144bd64b269de44c916715790152e71ae5cc67eb2a7"
+  },
+  "snapshot_policy": {
+    "hardcoded_snapshot_sha_allowed": false,
+    "schema": "sc001.b15.p1_nonprice_source_capability_snapshot.v0.2.2",
+    "status": "B15P1_NONPRICE_SOURCE_CAPABILITY_REVALIDATION_PASS",
+    "must_validate_v014_anchor_hashes": true,
+    "must_validate_192_192_192_coverage": true,
+    "must_validate_bybit_v014_parser": true,
+    "must_require_raw_minus_one_equals_unlimited": true,
+    "must_validate_security_firewall": true,
+    "must_validate_safe_summary_snapshot_sha": true,
+    "must_validate_v022_run_log_pass_tokens": true,
+    "must_preserve_snapshot_sha_through_recovery": true
+  },
+  "expected_v014_anchors": {
+    "runner_sha256": "280253b060f65517548054b3d8c33c315013d724ef2b836e9b8fef14628be213",
+    "library_sha256": "eaa925b71a7f33ec59de69f32dd0fb06f85bac67e89101b6f2ad50c1d792fd3f",
+    "implementation_freeze_sha256": "80928b0a11dac333b7844aa15bcdf399fd4db8739a4845e6118ebb576153b38c",
+    "service_sha256": "7a0f1742481b92f4d2590f09defcc5b287baaf1a9ba50f0da27488f8f5272f9d",
+    "route_graph_sha256": "06a9edd309a002aa5dc8408d992cff7b774604fc1cfb04f90fd7f56333f27928",
+    "admitted_sha256": "fa9f97ab1e70b30bdb196fd6f4d49a8cbc7462d13424644ddb7b88cdd9f431b0",
+    "capability_probe_sha256": "76f6ebd17ed2ad5a1fb8c3fad153c51fdcbaa6eab791cba37dcf3706b5820e12",
+    "capability_freeze_sha256": "a783bbf7e7598846f20a04b555e8c40e3c9cc15a3afc949a2f11cddb4a9341b6"
+  },
+  "required_behavior": {
+    "single_instance_lock": true,
+    "stop_disable_only": true,
+    "archive_collector_state_manifest_log_and_data_dirs": true,
+    "preserve_v022_snapshot": true,
+    "preserve_v022_safe_summary": true,
+    "preserve_v022_run_log": true,
+    "archive_diagnostic_copy_only": true,
+    "exact_old_auth_sha_guard": true,
+    "exact_old_unit_sha_guard": true,
+    "final_active_state_absent": true,
+    "final_runtime_unit_absent": true,
+    "final_runtime_authorization_absent": true
+  },
+  "allowed_systemctl_subcommands": [
+    "stop",
+    "disable",
+    "is-active",
+    "is-enabled",
+    "daemon-reload"
+  ],
+  "forbidden_behavior": {
+    "systemctl_start": true,
+    "systemctl_enable": true,
+    "systemctl_restart": true,
+    "collector_run": true,
+    "exchange_calls": true,
+    "snapshot_delete_or_move": true,
+    "safe_summary_delete_or_move": true,
+    "capability_log_delete_or_move": true
+  },
+  "expected_embedded_python_block_count": 2,
+  "expected_pass_status": "B15P1_V011_SOURCE_INVALID_RECOVERY_WRAPPER_OFFLINE_PREFLIGHT_V011_PASS",
+  "bootstrap": {
+    "path": "research/sc001/sc001_b15p1_v011_source_invalid_recovery_before_v014_offline_preflight_bootstrap_v0_1_1.py",
+    "sha256": "94106a7257fe1d359c4865323db527e34a2a95eb7d6eadc74e40d3d70af030bf",
+    "compile_gate_before_harness_execution": true,
+    "requires_harness_manifest": true
+  }
+}

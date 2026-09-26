@@ -1,0 +1,27 @@
+{
+  "schema": "sc001.b15.p1_v011_source_invalid_recovery_before_v014_preflight_freeze.v0.1.1",
+  "date": "2026-09-26",
+  "status": "FROZEN_BEFORE_OFFLINE_PREFLIGHT",
+  "supersedes": "docs/research/sc001-b15-p1-v011-source-invalid-recovery-before-v014-preflight-freeze-v0.1.json",
+  "wrapper_sha256": "2a14da8e599feb0f2e075144bd64b269de44c916715790152e71ae5cc67eb2a7",
+  "harness_sha256": "e115c2606f2ed25b0f17dbd6d33d4aa1f4c0aa6f608c0c29b793975529b42297",
+  "bootstrap_sha256": "94106a7257fe1d359c4865323db527e34a2a95eb7d6eadc74e40d3d70af030bf",
+  "spec_sha256": "c5b4052d93c372fc05de36212a7c59bf9190b24ef559990ec05eb95920ff10b8",
+  "snapshot_policy": "SEMANTIC_V022_CONTRACT_PLUS_PRE_POST_SHA_IDENTITY",
+  "hardcoded_live_snapshot_sha_allowed": false,
+  "expected_v014_anchors": {
+    "runner_sha256": "280253b060f65517548054b3d8c33c315013d724ef2b836e9b8fef14628be213",
+    "library_sha256": "eaa925b71a7f33ec59de69f32dd0fb06f85bac67e89101b6f2ad50c1d792fd3f",
+    "implementation_freeze_sha256": "80928b0a11dac333b7844aa15bcdf399fd4db8739a4845e6118ebb576153b38c",
+    "service_sha256": "7a0f1742481b92f4d2590f09defcc5b287baaf1a9ba50f0da27488f8f5272f9d",
+    "route_graph_sha256": "06a9edd309a002aa5dc8408d992cff7b774604fc1cfb04f90fd7f56333f27928",
+    "admitted_sha256": "fa9f97ab1e70b30bdb196fd6f4d49a8cbc7462d13424644ddb7b88cdd9f431b0",
+    "capability_probe_sha256": "76f6ebd17ed2ad5a1fb8c3fad153c51fdcbaa6eab791cba37dcf3706b5820e12",
+    "capability_freeze_sha256": "a783bbf7e7598846f20a04b555e8c40e3c9cc15a3afc949a2f11cddb4a9341b6"
+  },
+  "exchange_calls_allowed": false,
+  "collector_start_allowed": false,
+  "systemd_start_enable_allowed": false,
+  "price_pnl_allowed": false,
+  "next_state": "RUN_RECOVERY_V011_OFFLINE_PREFLIGHT_AFTER_APPROVAL"
+}
