@@ -1,0 +1,66 @@
+{
+  "schema": "sc001.b15.p1_stage_e_w0_real_data_smoke_result.v0.1",
+  "date": "2026-09-26",
+  "status": "B15P1_STAGE_E_W0_REAL_DATA_SMOKE_PASS",
+  "runner_job": {
+    "job_id": "job_20260926T172841Z_50087abd",
+    "bundle_id": "bundle_20260926T171912Z_bea3fa42",
+    "bundle_sha256": "2fbdec62031aa51c3ed64b769dbf26548fc8adfc03802183ee26adf26659fc64",
+    "exit_code": 0,
+    "package_integrity_ok": true
+  },
+  "pass_tokens": [
+    "B15P1_STAGE_E_REAL_DATA_PIPELINE_SMOKE_PASS",
+    "B15P1_STAGE_E_W0_REAL_DATA_SMOKE_BOOTSTRAP_PASS"
+  ],
+  "stderr_empty": true,
+  "artifacts": {
+    "analyzer_manifest": {
+      "sha256": "c24f555c2a1ea74b3551351fae41acc24193f7919f75337677c89de09364407e",
+      "size_bytes": 1548
+    },
+    "bootstrap_manifest": {
+      "sha256": "c9dd30c33823f050bf8a26fed3b7d1aec2073abcf313f3e230c11dbb5f899389",
+      "size_bytes": 2714
+    }
+  },
+  "collector_snapshot": {
+    "status": "B15P1_NONPRICE_COLLECTION_RUNNING",
+    "process_epoch": 1,
+    "process_restart_count": 0,
+    "poll_count": 1045,
+    "invalid_poll_count": 0,
+    "missed_poll_slots": 0,
+    "source_gap_count": 0,
+    "last_fee_refresh_completed_ms": 1790428549768
+  },
+  "w0_observed": {
+    "scheduled_poll_rows": 1045,
+    "both_venue_valid_rows": 1045,
+    "events_rows_parsed": 0,
+    "route_event_rows_parsed": 0,
+    "fee_rows": 384,
+    "successful_fee_rows": 384,
+    "successful_bybit_instruments": 192,
+    "successful_okx_instruments": 192
+  },
+  "input_snapshot_sha256": {
+    "collector_manifest.json": "628140b7bc64fbca0614007119ae85115a296521f65b8fd31b48cadc8fd6fac2",
+    "collector_state.json": "d9b436408a992f47831baa3bb3fbb36fa33dff414933388bb1b7f6bf7f04954a",
+    "fees/bybit/2026-09-26.jsonl": "4505a4f9a839bf203cfa4a1d584cb3b3ab3402fdcb5d4e648aec688014bd485f",
+    "fees/okx/2026-09-26.jsonl": "d92f4299fa42243f6622214ed0b1d7fbfedb9e725a6e7fd83dca3c5ef2de19d1",
+    "polls/2026-09-26.jsonl": "ac7483cf4320e5663a890455f70391835fa6dc1db555978750171b5b27db53b9"
+  },
+  "boundaries": {
+    "partial_day_pipeline_smoke_only": true,
+    "opportunity_rate_inference_performed": false,
+    "price_data_used": false,
+    "pnl_data_used": false,
+    "collector_mutation_performed": false,
+    "collector_restart_performed": false,
+    "network_calls_performed": false,
+    "credentials_available": false
+  },
+  "interpretation": "Real collector-to-sc001_data-to-Runner-to-analyzer path is validated. Zero events in W0 is not an opportunity-rate conclusion.",
+  "next_state": "ACCUMULATE_TO_W1_7_COMPLETE_UTC_DAYS_AND_PREPARE_W1_ANALYZER"
+}

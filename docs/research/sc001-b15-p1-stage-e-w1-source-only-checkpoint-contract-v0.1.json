@@ -1,0 +1,102 @@
+{
+  "schema": "sc001.b15.p1_stage_e_w1_source_only_checkpoint_contract.v0.1",
+  "date": "2026-09-26",
+  "status": "W1_SOURCE_ONLY_CHECKPOINT_IMPLEMENTATION_READY_FOR_OFFLINE_SELFTEST",
+  "protocol": {
+    "path": "docs/research/sc001-b15-p1-source-only-opportunity-rate-analysis-protocol-v0.1.md",
+    "sha256": "a91e09d453515f85feb98d5a636eede0c66efa323d2ca7a9765855acf46edde2"
+  },
+  "window": {
+    "label": "W1_7_COMPLETE_UTC_DAYS",
+    "days": [
+      "2026-09-27",
+      "2026-09-28",
+      "2026-09-29",
+      "2026-09-30",
+      "2026-10-01",
+      "2026-10-02",
+      "2026-10-03"
+    ],
+    "earliest_real_data_census_after_utc": "2026-10-04T00:00:00Z",
+    "prewindow_day_for_route_baseline_and_fee_freshness": "2026-09-26"
+  },
+  "implementations": {
+    "input_census": {
+      "path": "research/sc001/sc001_b15p1_stage_e_w1_input_census_v0_1.py",
+      "sha256": "5386182a73eb6e0561eb3670223168d3e1ebe7d11640ee9d67ce753569de4aaf",
+      "role": "Validate exact 7-day integrity/coverage, poll-chain continuity and enumerate only the actual source-only files needed for W1 analysis."
+    },
+    "analyzer": {
+      "path": "research/sc001/sc001_b15p1_stage_e_w1_source_only_analyzer_v0_1.py",
+      "sha256": "da4a218e7b624775e44e8403a1acf6ee1bff581ec1a7ddaa59eb42fd0f2330ce",
+      "role": "Reconstruct effective transferability from frozen route baseline plus route events, form clean episodes/clusters and report source-only diagnostics."
+    },
+    "offline_selftest_harness": {
+      "path": "research/sc001/sc001_b15p1_stage_e_w1_offline_selftest_harness_v0_1.py",
+      "sha256": "061ebfa96db2728e44c71473cc70ede06c0c764c59533fadba0fce8ac59358bc"
+    }
+  },
+  "quality_gate": {
+    "expected_slots_per_complete_utc_day": 5760,
+    "minimum_poll_coverage_fraction": 0.99,
+    "minimum_both_venue_valid_fraction": 0.99,
+    "poll_hash_recomputation_required": true,
+    "within_and_cross_day_poll_chain_continuity_required": true,
+    "daily_manifest_sha_and_row_count_binding_required": true
+  },
+  "effective_transferability": {
+    "active": "AT_LEAST_ONE_FROZEN_COMMON_REPRESENTATION_ACTIVE",
+    "blocked": "ALL_FROZEN_COMMON_REPRESENTATIONS_OBSERVED_BLOCKED",
+    "unknown": "OTHERWISE",
+    "ticker_only_mapping_allowed": false,
+    "one_sided_quote_route_eligible": false
+  },
+  "episode_semantics": {
+    "clean_start": "EFFECTIVE_ACTIVE_TO_BLOCKED",
+    "clean_end": "EFFECTIVE_BLOCKED_TO_ACTIVE",
+    "blocked_to_unknown": "CENSOR_EPISODE",
+    "unknown_to_blocked": "NOT_A_CLEAN_INCIDENT_START",
+    "left_blocked_at_window_start": "LEFT_CENSORED_NOT_NEW_INCIDENT"
+  },
+  "cluster_semantics": {
+    "primary_unit": "VENUE_LEVEL_EFFECTIVE_TRANSFERABILITY_OUTAGE_CLUSTER",
+    "join_window_seconds": 600,
+    "shared_blocker_component_required": true,
+    "interval_overlap_also_joins": true,
+    "transitive": true,
+    "intent": "CONSERVATIVE_UNDERCOUNT_OF_INDEPENDENCE"
+  },
+  "fee_diagnostic": {
+    "freshness_max_hours": 8,
+    "source": "LATEST_SUCCESSFUL_AUTHENTICATED_ACCOUNT_PAIR_SNAPSHOT_CAUSALLY_AVAILABLE_AT_EPISODE_START",
+    "missing_or_stale_does_not_default_to_10bps": true
+  },
+  "cause_classification": "CAUSE_UNCLASSIFIED_UNTIL_SEPARATE_OFFICIAL_SOURCE_ANNOTATION",
+  "scheduled_unscheduled_split_available": false,
+  "w1_outputs": [
+    "DATA_QUALITY_AND_COVERAGE",
+    "SOURCE_GAP_SUMMARY",
+    "CLEAN_EPISODE_COUNT",
+    "COMPLETED_AND_CENSORED_EPISODES",
+    "DURATION_DIAGNOSTICS",
+    "INDEPENDENT_OUTAGE_CLUSTER_COUNT",
+    "AFFECTED_ASSET_BREADTH",
+    "BLOCKER_COMPONENT_CONCENTRATION",
+    "OPPOSITE_DIRECTION_USDT_STATE_AT_EPISODE_START",
+    "BOTH_VENUE_FEE_SNAPSHOT_FRESHNESS_AT_EPISODE_START"
+  ],
+  "boundaries": {
+    "opportunity_rate_inference_performed": false,
+    "formal_w2_opportunity_rate_authorized": false,
+    "price_data_allowed": false,
+    "pnl_data_allowed": false,
+    "network_calls_allowed": false,
+    "credentials_allowed": false,
+    "collector_mutation_allowed": false,
+    "collector_restart_allowed": false,
+    "asset_or_network_promotion_from_event_frequency_allowed": false
+  },
+  "w1_pass_status": "B15P1_STAGE_E_W1_SEVEN_DAY_OPERATIONAL_CHECKPOINT_PASS",
+  "offline_selftest_pass_status": "B15P1_STAGE_E_W1_OFFLINE_SELFTEST_PASS",
+  "next_after_w1_pass": "CONTINUE_COLLECTION_TO_W2_30_COMPLETE_UTC_DAYS"
+}

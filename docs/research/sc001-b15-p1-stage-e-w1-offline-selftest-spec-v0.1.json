@@ -1,0 +1,50 @@
+{
+  "schema": "sc001.b15.p1_stage_e_w1_offline_selftest_spec.v0.1",
+  "date": "2026-09-26",
+  "status": "W1_OFFLINE_SELFTEST_SPEC_READY",
+  "entrypoint": "research/sc001/sc001_b15p1_stage_e_w1_offline_selftest_harness_v0_1.py",
+  "entrypoint_sha256": "061ebfa96db2728e44c71473cc70ede06c0c764c59533fadba0fce8ac59358bc",
+  "runtime": "offline-research-v1",
+  "inputs": [],
+  "embedded_components": [
+    {
+      "path": "research/sc001/sc001_b15p1_stage_e_w1_input_census_v0_1.py",
+      "sha256": "5386182a73eb6e0561eb3670223168d3e1ebe7d11640ee9d67ce753569de4aaf",
+      "required_stdout_token": "B15P1_STAGE_E_W1_INPUT_CENSUS_V01_SELF_TEST_PASS"
+    },
+    {
+      "path": "research/sc001/sc001_b15p1_stage_e_w1_source_only_analyzer_v0_1.py",
+      "sha256": "da4a218e7b624775e44e8403a1acf6ee1bff581ec1a7ddaa59eb42fd0f2330ce",
+      "required_stdout_token": "B15P1_STAGE_E_W1_SOURCE_ONLY_ANALYZER_V01_SELF_TEST_PASS"
+    }
+  ],
+  "required_stdout_token": "B15P1_STAGE_E_W1_OFFLINE_SELFTEST_PASS",
+  "required_exit_code": 0,
+  "synthetic_fixtures_cover": [
+    "RUNNER_LAUNCHER_POSITIONAL_CONTRACT",
+    "SEVEN_DAY_WINDOW_BINDING_COMPONENTS",
+    "PREWINDOW_ROUTE_BASELINE",
+    "PREWINDOW_FEE_FRESHNESS_INPUT",
+    "DAILY_MANIFEST_BINDING",
+    "POLL_HASH_RECOMPUTATION",
+    "WITHIN_AND_CROSS_DAY_CHAIN_CONTINUITY",
+    "FULL_DAY_QUALITY_GATE",
+    "MULTI_ROUTE_EFFECTIVE_STATE",
+    "ACTIVE_TO_BLOCKED_EPISODE_START_ONLY_AFTER_ALL_ROUTES_BLOCKED",
+    "BLOCKED_TO_ACTIVE_EPISODE_CLOSE",
+    "SHARED_BLOCKER_CLUSTER_COLLAPSE",
+    "FEE_FRESHNESS_AT_EPISODE_START",
+    "PRICE_PNL_FIREWALL"
+  ],
+  "forbidden": [
+    "REAL_SC001_DATA",
+    "EXCHANGE_CALLS",
+    "CREDENTIALS",
+    "COLLECTOR_MUTATION",
+    "COLLECTOR_RESTART",
+    "PRICE_DATA",
+    "PNL",
+    "FORMAL_OPPORTUNITY_RATE_INFERENCE"
+  ],
+  "pass_next_state": "PREPARE_W1_INPUT_CENSUS_REAL_DATA_BUNDLE_FOR_AFTER_2026_10_04T00_00Z"
+}
