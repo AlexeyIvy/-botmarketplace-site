@@ -1,0 +1,57 @@
+{
+  "schema": "sc001.b15.p1_stage_e_w0_real_data_smoke_bundle_seal.v0.1",
+  "date": "2026-09-26",
+  "status": "SEALED_AWAITING_EXPLICIT_RUNNER_APPROVAL",
+  "bundle_id": "bundle_20260926T171912Z_bea3fa42",
+  "bundle_sha256": "2fbdec62031aa51c3ed64b769dbf26548fc8adfc03802183ee26adf26659fc64",
+  "approval_code": "BM-2FBDEC62031A",
+  "total_bytes": 31239,
+  "file_count": 6,
+  "runtime_profile": "offline-research-v1",
+  "entrypoint": "research/sc001/sc001_b15p1_stage_e_w0_real_data_smoke_bootstrap_v0_1.py",
+  "entrypoint_sha256": "53e80cafad3d3b6fbd4e93befd5cc5c0450eeff5e511ed8582bf7c3d3fd4ce95",
+  "analyzer_sha256": "c077503ec29a691fd808cfbf0f7d93b5a7f39137e21b39892efad12f2a2e9df4",
+  "inputs": [
+    {
+      "root": "sc001_data",
+      "path": "SC001_B15P1_TRANSFERABILITY/collector_state.json",
+      "dest": "b15w0/collector_state.json"
+    },
+    {
+      "root": "sc001_data",
+      "path": "SC001_B15P1_TRANSFERABILITY/collector_manifest.json",
+      "dest": "b15w0/collector_manifest.json"
+    },
+    {
+      "root": "sc001_data",
+      "path": "SC001_B15P1_TRANSFERABILITY/polls/2026-09-26.jsonl",
+      "dest": "b15w0/polls/2026-09-26.jsonl"
+    },
+    {
+      "root": "sc001_data",
+      "path": "SC001_B15P1_TRANSFERABILITY/fees/bybit/2026-09-26.jsonl",
+      "dest": "b15w0/fees/bybit/2026-09-26.jsonl"
+    },
+    {
+      "root": "sc001_data",
+      "path": "SC001_B15P1_TRANSFERABILITY/fees/okx/2026-09-26.jsonl",
+      "dest": "b15w0/fees/okx/2026-09-26.jsonl"
+    }
+  ],
+  "boundaries": {
+    "source_only": true,
+    "run_time_read_only_snapshot": true,
+    "opportunity_rate_inference_allowed": false,
+    "collector_mutation_allowed": false,
+    "collector_restart_allowed": false,
+    "network_calls_allowed": false,
+    "credentials_allowed": false,
+    "price_data_allowed": false,
+    "pnl_data_allowed": false
+  },
+  "expected_pass_tokens": [
+    "B15P1_STAGE_E_REAL_DATA_PIPELINE_SMOKE_PASS",
+    "B15P1_STAGE_E_W0_REAL_DATA_SMOKE_BOOTSTRAP_PASS"
+  ],
+  "next_state": "RUN_EXACT_W0_REAL_DATA_SMOKE_AFTER_EXPLICIT_APPROVAL"
+}
