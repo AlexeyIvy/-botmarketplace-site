@@ -1,0 +1,27 @@
+{
+  "schema": "sc001.b15.p1_stage_e_w0_pipeline_smoke_v01_runner_failure_diagnostic.v0.1",
+  "date": "2026-09-26",
+  "status": "RUNNER_LAUNCHER_POSITIONAL_ARGUMENT_CONTRACT_MISMATCH",
+  "failed_job": {
+    "job_id": "job_20260926T165638Z_8bd1dc56",
+    "bundle_id": "bundle_20260926T134907Z_ab6df192",
+    "bundle_sha256": "3ada7e59d80e54931e0f21366805c7f796d6a5becd3f5713b02877af165b2a80",
+    "package_integrity_ok": true,
+    "exit_code": 2,
+    "artifacts_created": 0
+  },
+  "observed_stderr": "argparse rejected Runner-supplied positional package_root and entrypoint arguments",
+  "root_cause": "Runner v1.0.5 launcher supplies two positional arguments to Python entrypoints. The v0.1 Stage E analyzer used strict argparse without declaring these launcher arguments.",
+  "research_logic_defect": false,
+  "data_defect": false,
+  "collector_affected": false,
+  "exchange_calls_performed": false,
+  "credentials_used": false,
+  "price_or_pnl_used": false,
+  "correction": {
+    "new_analyzer_path": "research/sc001/sc001_b15p1_stage_e_pipeline_smoke_v0_1_1.py",
+    "new_analyzer_sha256": "c077503ec29a691fd808cfbf0f7d93b5a7f39137e21b39892efad12f2a2e9df4",
+    "approach": "Explicitly declare exactly two optional Runner positional arguments and fail closed unless entrypoint equals current script and package root is an ancestor. Do not use parse_known_args."
+  },
+  "next_state": "PREPARE_V011_IMMUTABLE_OFFLINE_SELFTEST_BUNDLE"
+}

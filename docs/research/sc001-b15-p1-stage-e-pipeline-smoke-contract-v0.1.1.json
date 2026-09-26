@@ -1,0 +1,44 @@
+{
+  "schema": "sc001.b15.p1_stage_e_pipeline_smoke_contract.v0.1.1",
+  "date": "2026-09-26",
+  "status": "STAGE_E_W0_PIPELINE_SMOKE_IMPLEMENTATION_READY_AFTER_RUNNER_LAUNCHER_FIX",
+  "supersedes": "docs/research/sc001-b15-p1-stage-e-pipeline-smoke-contract-v0.1.json",
+  "protocol_path": "docs/research/sc001-b15-p1-source-only-opportunity-rate-analysis-protocol-v0.1.md",
+  "protocol_sha256": "a91e09d453515f85feb98d5a636eede0c66efa323d2ca7a9765855acf46edde2",
+  "analyzer_path": "research/sc001/sc001_b15p1_stage_e_pipeline_smoke_v0_1_1.py",
+  "analyzer_sha256": "c077503ec29a691fd808cfbf0f7d93b5a7f39137e21b39892efad12f2a2e9df4",
+  "launcher_contract": {
+    "positional_args": [
+      "runner_package_root",
+      "runner_entrypoint"
+    ],
+    "optional_for_standalone_local_execution": true,
+    "exact_entrypoint_match_required_when_present": true,
+    "package_root_ancestor_required_when_present": true,
+    "parse_unknown_args_allowed": false
+  },
+  "collector_required_stage": "SC001-B15P1-NONPRICE-TRANSFERABILITY-COLLECTOR-V0.1.4",
+  "collector_required_status": "B15P1_NONPRICE_COLLECTION_RUNNING",
+  "collector_mutation_allowed": false,
+  "network_calls_allowed": false,
+  "credentials_allowed": false,
+  "price_data_allowed": false,
+  "pnl_data_allowed": false,
+  "opportunity_rate_inference_allowed": false,
+  "required_checks": [
+    "STATE_MANIFEST_PRESENT_AND_IDENTITY_MATCH",
+    "PRICE_PNL_FIREWALL_CLOSED",
+    "FAST_CADENCE_15_SECONDS",
+    "LATEST_POLL_JSONL_PARSE",
+    "POLL_HASH_RECOMPUTE",
+    "POLL_CHAIN_CONTINUITY",
+    "SCHEDULED_SLOTS_STRICTLY_INCREASING",
+    "EVENT_JSONL_PARSE",
+    "FEE_JSONL_PARSE",
+    "FEE_COMPLETION_MARKER_HAS_SUCCESSFUL_BOTH_VENUE_ROWS",
+    "RUNNER_LAUNCHER_POSITIONAL_CONTRACT"
+  ],
+  "self_test_pass_token": "B15P1_STAGE_E_PIPELINE_SMOKE_V011_SELF_TEST_PASS",
+  "real_data_pass_token": "B15P1_STAGE_E_REAL_DATA_PIPELINE_SMOKE_PASS",
+  "next_after_offline_selftest_pass": "PREPARE_IMMUTABLE_W0_REAL_DATA_SMOKE_BUNDLE_WITH_READ_ONLY_SC001_DATA_INPUT"
+}
