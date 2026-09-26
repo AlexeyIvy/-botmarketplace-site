@@ -1,0 +1,18 @@
+{
+  "schema": "sc001.b13c_s0_source_only_cluster_census_offline_selftest_bundle_seal.v0.1",
+  "date": "2026-09-26",
+  "status": "SEALED_AWAITING_EXPLICIT_RUNNER_APPROVAL",
+  "bundle_id": "bundle_20260926T214337Z_a25b8bff",
+  "bundle_sha256": "f6500de6a30e2d97430a29ec047ea85552c284d46f7e7917a794e198f4f2361e",
+  "approval_code": "BM-F6500DE6A30E",
+  "runtime_profile": "offline-research-v1",
+  "inputs": [],
+  "package_files": 5,
+  "total_bytes": 29732,
+  "entrypoint": "research/sc001/sc001_b13c_s0_source_only_cluster_census_v0_1.py",
+  "entrypoint_sha256": "601252728e8fa7caf2d9c467d99e61296268a78879a42323725b67bac223db5b",
+  "expected_pass_token": "B13C_S0_SOURCE_ONLY_CLUSTER_CENSUS_V01_SELF_TEST_PASS",
+  "real_liquidation_data_used": false,
+  "price_data_used": false,
+  "next_state": "RUN_EXACT_OFFLINE_SELFTEST_AFTER_EXPLICIT_APPROVAL"
+}
