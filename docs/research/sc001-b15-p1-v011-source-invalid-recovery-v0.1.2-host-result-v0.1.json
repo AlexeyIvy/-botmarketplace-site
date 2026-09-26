@@ -1,0 +1,29 @@
+{
+  "schema": "sc001.b15.p1_v011_source_invalid_recovery_v012_host_result.v0.1",
+  "date": "2026-09-26",
+  "status": "B15P1_V011_SOURCE_INVALID_RECOVERY_V012_PASS",
+  "evidence_source": "user-supplied terminal screenshot",
+  "wrapper": {
+    "path": "scripts/research/run-b15p1-v011-source-invalid-recovery-before-v014-v0.1.2.sh",
+    "sha256": "04d6f49a38882e94928ae7fef0b1068670dfb536361cd72c77659aefc17bac20"
+  },
+  "v022_snapshot_sha256": "01cfa63b6001ec972c4ed87daba5bbd9fba932233b9e8323a49a6a5355e89647",
+  "bybit_adapter": {
+    "withdrawMax_minus_one_rows": 1007,
+    "normalized_unlimited_rows": 1007
+  },
+  "recovery_report_sha256": "553a89d82dba67ee80166ccff32841b51ecbc25a9d8b47f5d84f6f6dd769e89b",
+  "archived_file_count": 134,
+  "archive_dir": "/home/botmarket/sc001_data/SC001_B15P1_TRANSFERABILITY/launch_attempts/20260926T120327Z_final_launch_v0.1.1_source_invalid_failed",
+  "host_state": {
+    "service_active": "inactive",
+    "service_enabled": "not-found",
+    "runtime_unit": "ABSENT",
+    "runtime_authorization": "ABSENT",
+    "active_state": "ABSENT",
+    "active_manifest": "ABSENT"
+  },
+  "collector_start_authorized": false,
+  "price_pnl_authorized": false,
+  "next_state": "PREPARE_CONTROLLED_COLLECTOR_V014_LAUNCH_GATE"
+}
