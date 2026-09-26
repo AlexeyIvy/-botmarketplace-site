@@ -1,0 +1,23 @@
+{
+  "schema": "sc001.b15.p1_v011_source_invalid_recovery_before_v014_v011_offline_preflight_bundle_seal.v0.1",
+  "date": "2026-09-26",
+  "status": "SEALED_AWAITING_USER_APPROVAL",
+  "source_commit": "f9fcac4d244d3913d36f62e3372bf3a2f4d99c8c",
+  "bundle_id": "bundle_20260926T101521Z_09b874f8",
+  "bundle_sha256": "c6aed1d393ed470a18c674e45ae9ad5b36ad612cde5a140d99f475fe80bebe72",
+  "approval_code": "BM-C6AED1D393ED",
+  "total_bytes": 35110,
+  "file_count": 5,
+  "entrypoint": "research/sc001/sc001_b15p1_v011_source_invalid_recovery_before_v014_offline_preflight_bootstrap_v0_1_1.py",
+  "runtime_profile": "offline-research-v1",
+  "inputs": [],
+  "wrapper_sha256": "2a14da8e599feb0f2e075144bd64b269de44c916715790152e71ae5cc67eb2a7",
+  "snapshot_policy": "SEMANTIC_V022_CONTRACT_PLUS_PRE_POST_SHA_IDENTITY",
+  "hardcoded_live_snapshot_sha": false,
+  "exchange_calls_allowed": false,
+  "collector_start_allowed": false,
+  "systemd_start_enable_allowed": false,
+  "price_pnl_allowed": false,
+  "run_performed": false,
+  "next_state": "RUN_RECOVERY_V011_OFFLINE_PREFLIGHT_AFTER_EXPLICIT_APPROVAL"
+}
