@@ -1,0 +1,49 @@
+{
+  "schema": "sc001.b15.p1_collector_v014_operational_freeze_result.v0.1",
+  "date": "2026-09-26",
+  "status": "B15P1_COLLECTOR_V014_OPERATIONAL_FREEZE",
+  "evidence_source": "user-supplied terminal screenshot from deployed runtime status helper",
+  "collector": {
+    "stage": "SC001-B15P1-NONPRICE-TRANSFERABILITY-COLLECTOR-V0.1.4",
+    "version": "0.1.4",
+    "status": "B15P1_NONPRICE_COLLECTION_RUNNING",
+    "service_active": "active",
+    "service_enabled": "enabled",
+    "state_present": true,
+    "manifest_present": true,
+    "capability_present": true,
+    "launch_authorization_present": true,
+    "process_epoch": 1,
+    "poll_count": 40,
+    "invalid_poll_count": 0,
+    "missed_poll_slots": 0,
+    "source_gap_count": 0,
+    "process_restart_count": 0,
+    "last_heartbeat_ms": 1790428635983,
+    "last_scheduled_slot_ms": 1790428635000,
+    "last_fee_refresh_completed_ms": 1790428549768,
+    "price_data_collected": false,
+    "pnl_calculated": false
+  },
+  "acceptance": {
+    "fast_lane_continuity_pass": true,
+    "first_background_fee_refresh_completed": true,
+    "zero_invalid_fast_polls": true,
+    "zero_missed_poll_slots": true,
+    "zero_source_gaps": true,
+    "zero_process_restarts": true,
+    "price_pnl_firewall_closed": true
+  },
+  "decision": {
+    "collector_infrastructure_frozen": true,
+    "no_further_optimization_without_demonstrated_defect": true,
+    "allowed_change_reasons": [
+      "correctness defect",
+      "data-integrity defect",
+      "source or API compatibility break",
+      "safety or security defect",
+      "operational failure preventing valid data accumulation"
+    ]
+  },
+  "next_state": "ACCUMULATE_B15P1_DATA_AND_RETURN_PRIMARY_FOCUS_TO_SC001_RESEARCH"
+}
