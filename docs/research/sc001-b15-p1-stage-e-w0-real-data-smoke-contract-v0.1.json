@@ -1,0 +1,48 @@
+{
+  "schema": "sc001.b15.p1_stage_e_w0_real_data_smoke_contract.v0.1",
+  "date": "2026-09-26",
+  "status": "W0_REAL_DATA_SMOKE_IMPLEMENTATION_READY",
+  "protocol_path": "docs/research/sc001-b15-p1-source-only-opportunity-rate-analysis-protocol-v0.1.md",
+  "protocol_sha256": "a91e09d453515f85feb98d5a636eede0c66efa323d2ca7a9765855acf46edde2",
+  "analyzer_path": "research/sc001/sc001_b15p1_stage_e_pipeline_smoke_v0_1_1.py",
+  "analyzer_sha256": "c077503ec29a691fd808cfbf0f7d93b5a7f39137e21b39892efad12f2a2e9df4",
+  "bootstrap_path": "research/sc001/sc001_b15p1_stage_e_w0_real_data_smoke_bootstrap_v0_1.py",
+  "bootstrap_sha256": "53e80cafad3d3b6fbd4e93befd5cc5c0450eeff5e511ed8582bf7c3d3fd4ce95",
+  "input_root": "sc001_data",
+  "source_root_relative": "SC001_B15P1_TRANSFERABILITY",
+  "materialized_root": "/work/run/input/b15w0",
+  "required_inputs": [
+    "collector_state.json",
+    "collector_manifest.json",
+    "polls/2026-09-26.jsonl",
+    "fees/bybit/2026-09-26.jsonl",
+    "fees/okx/2026-09-26.jsonl"
+  ],
+  "semantics": {
+    "observation_window": "W0_PARTIAL_DAY_PIPELINE_SMOKE_ONLY",
+    "opportunity_rate_inference_allowed": false,
+    "source_only": true,
+    "collector_mutation_allowed": false,
+    "collector_restart_allowed": false,
+    "network_calls_allowed": false,
+    "credentials_allowed": false,
+    "price_data_allowed": false,
+    "pnl_data_allowed": false
+  },
+  "required_acceptance": [
+    "MATERIALIZED_INPUTS_PRESENT_NONEMPTY_REGULAR_FILES",
+    "ANALYZER_SHA_MATCH_AND_COMPILE",
+    "COLLECTOR_STATE_MANIFEST_FIREWALL_PASS",
+    "POLL_JSONL_PARSE",
+    "POLL_CHAIN_HASH_RECOMPUTE",
+    "POLL_CHAIN_CONTINUITY",
+    "AT_LEAST_TWO_SCHEDULED_POLL_ROWS",
+    "AT_LEAST_ONE_FULLY_VALID_BYBIT_OKX_POLL",
+    "SUCCESSFUL_FEE_ROW_AT_LEAST_ONE_INSTRUMENT_EACH_VENUE",
+    "NO_PRICE_PNL_OPPORTUNITY_RATE_INFERENCE",
+    "NO_COLLECTOR_MUTATION_RESTART_NETWORK_OR_CREDENTIALS"
+  ],
+  "analyzer_pass_token": "B15P1_STAGE_E_REAL_DATA_PIPELINE_SMOKE_PASS",
+  "bootstrap_pass_token": "B15P1_STAGE_E_W0_REAL_DATA_SMOKE_BOOTSTRAP_PASS",
+  "next_after_pass": "WAIT_FOR_W1_SEVEN_COMPLETE_UTC_DAYS_WHILE_COLLECTOR_CONTINUES"
+}

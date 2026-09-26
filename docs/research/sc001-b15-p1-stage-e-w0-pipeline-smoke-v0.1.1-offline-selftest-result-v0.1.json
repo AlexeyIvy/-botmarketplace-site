@@ -1,0 +1,27 @@
+{
+  "schema": "sc001.b15.p1_stage_e_w0_pipeline_smoke_v011_offline_selftest_result.v0.1",
+  "date": "2026-09-26",
+  "status": "B15P1_STAGE_E_PIPELINE_SMOKE_V011_SELF_TEST_PASS",
+  "runner_job": {
+    "job_id": "job_20260926T171533Z_f889d71b",
+    "bundle_id": "bundle_20260926T170027Z_667fd89e",
+    "bundle_sha256": "87b96848501d4e362533e5866c8f7f3fa57f03af7844b068a5582c7a37a45679",
+    "exit_code": 0,
+    "package_integrity_ok": true
+  },
+  "stdout_token": "B15P1_STAGE_E_PIPELINE_SMOKE_V011_SELF_TEST_PASS",
+  "stderr_empty": true,
+  "artifacts": [],
+  "boundaries": {
+    "inputs": [],
+    "exchange_calls_performed": false,
+    "credentials_used": false,
+    "collector_mutation_performed": false,
+    "collector_restart_performed": false,
+    "price_data_used": false,
+    "pnl_data_used": false,
+    "opportunity_rate_inference_performed": false
+  },
+  "interpretation": "Runner launcher positional contract correction is validated. Stage E W0 analyzer synthetic path is ready for a separate read-only real-data smoke bundle.",
+  "next_state": "PREPARE_W0_REAL_DATA_PIPELINE_SMOKE_BUNDLE"
+}
