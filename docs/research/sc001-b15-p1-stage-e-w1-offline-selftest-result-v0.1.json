@@ -1,0 +1,47 @@
+{
+  "schema": "sc001.b15.p1_stage_e_w1_offline_selftest_result_record.v0.1",
+  "date": "2026-09-26",
+  "status": "B15P1_STAGE_E_W1_OFFLINE_SELFTEST_PASS",
+  "runner_job": {
+    "job_id": "job_20260926T175240Z_d1ad40f6",
+    "bundle_id": "bundle_20260926T174651Z_681d463a",
+    "bundle_sha256": "9a06452b4ef5b924cdb21fa48a66a0602632167ce4bbae97f51342d4e690d6eb",
+    "exit_code": 0,
+    "package_integrity_ok": true
+  },
+  "pass_tokens": [
+    "B15P1_STAGE_E_W1_INPUT_CENSUS_V01_SELF_TEST_PASS",
+    "B15P1_STAGE_E_W1_SOURCE_ONLY_ANALYZER_V01_SELF_TEST_PASS",
+    "B15P1_STAGE_E_W1_OFFLINE_SELFTEST_PASS"
+  ],
+  "artifact": {
+    "path": "stage_e_w1_offline_selftest_manifest.json",
+    "sha256": "07081497bbbf3107bddab060c4806921596964fea119bde4f15365c10f06edfa",
+    "size_bytes": 1190
+  },
+  "stderr_empty": true,
+  "components": {
+    "census_sha256": "5386182a73eb6e0561eb3670223168d3e1ebe7d11640ee9d67ce753569de4aaf",
+    "analyzer_sha256": "da4a218e7b624775e44e8403a1acf6ee1bff581ec1a7ddaa59eb42fd0f2330ce"
+  },
+  "window_days": [
+    "2026-09-27",
+    "2026-09-28",
+    "2026-09-29",
+    "2026-09-30",
+    "2026-10-01",
+    "2026-10-02",
+    "2026-10-03"
+  ],
+  "boundaries": {
+    "real_sc001_data_used": false,
+    "network_calls_performed": false,
+    "credentials_available": false,
+    "collector_mutation_performed": false,
+    "collector_restart_performed": false,
+    "price_data_used": false,
+    "pnl_data_used": false,
+    "opportunity_rate_inference_performed": false
+  },
+  "next_state": "PREPARE_W1_INPUT_CENSUS_REAL_DATA_BUNDLE_FOR_AFTER_2026_10_04T00_00Z"
+}

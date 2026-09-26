@@ -1,0 +1,62 @@
+{
+  "schema": "sc001.b15.p1_stage_e_w1_real_data_census_contract.v0.1",
+  "date": "2026-09-26",
+  "status": "W1_REAL_DATA_CENSUS_FUTURE_BUNDLE_READY_FOR_SEAL",
+  "protocol_path": "docs/research/sc001-b15-p1-source-only-opportunity-rate-analysis-protocol-v0.1.md",
+  "w1_window_days": [
+    "2026-09-27",
+    "2026-09-28",
+    "2026-09-29",
+    "2026-09-30",
+    "2026-10-01",
+    "2026-10-02",
+    "2026-10-03"
+  ],
+  "not_before_utc": "2026-10-04T00:00:00Z",
+  "input_census_path": "research/sc001/sc001_b15p1_stage_e_w1_input_census_v0_1.py",
+  "input_census_sha256": "5386182a73eb6e0561eb3670223168d3e1ebe7d11640ee9d67ce753569de4aaf",
+  "bootstrap_path": "research/sc001/sc001_b15p1_stage_e_w1_real_data_census_bootstrap_v0_1.py",
+  "bootstrap_sha256": "8473e8da24dadf0f272cf41421b7106d0e6ad50eae7af05b99017bb30ddb0f88",
+  "runner_input_root": "sc001_data",
+  "materialized_root": "/work/run/input/b15w1",
+  "required_inputs": [
+    "collector_state.json",
+    "collector_manifest.json",
+    "daily_manifests/2026-09-26.json",
+    "daily_manifests/2026-09-27.json",
+    "daily_manifests/2026-09-28.json",
+    "daily_manifests/2026-09-29.json",
+    "daily_manifests/2026-09-30.json",
+    "daily_manifests/2026-10-01.json",
+    "daily_manifests/2026-10-02.json",
+    "daily_manifests/2026-10-03.json",
+    "polls/2026-09-27.jsonl",
+    "polls/2026-09-28.jsonl",
+    "polls/2026-09-29.jsonl",
+    "polls/2026-09-30.jsonl",
+    "polls/2026-10-01.jsonl",
+    "polls/2026-10-02.jsonl",
+    "polls/2026-10-03.jsonl"
+  ],
+  "quality_gate": {
+    "minimum_poll_coverage_fraction": 0.99,
+    "minimum_both_venue_valid_fraction": 0.99,
+    "daily_manifest_binding_required": true,
+    "poll_hash_recomputation_required": true,
+    "cross_day_chain_continuity_required": true
+  },
+  "output_purpose": "Enumerate the exact source-only event/fee/gap/baseline files needed by the second-stage W1 analyzer after validating the seven-day dataset.",
+  "boundaries": {
+    "source_only": true,
+    "formal_opportunity_rate_inference_allowed": false,
+    "price_data_allowed": false,
+    "pnl_data_allowed": false,
+    "network_calls_allowed": false,
+    "credentials_allowed": false,
+    "collector_mutation_allowed": false,
+    "collector_restart_allowed": false
+  },
+  "expected_census_pass": "B15P1_STAGE_E_W1_INPUT_CENSUS_PASS",
+  "expected_bootstrap_pass": "B15P1_STAGE_E_W1_REAL_DATA_CENSUS_BOOTSTRAP_PASS",
+  "next_after_pass": "BUILD_EXACT_W1_SOURCE_ONLY_ANALYSIS_BUNDLE_FROM_CENSUS_MANIFEST"
+}
