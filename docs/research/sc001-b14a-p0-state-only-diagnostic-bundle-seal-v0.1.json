@@ -1,0 +1,21 @@
+{
+  "schema": "sc001.b14a_p0_state_only_diagnostic_bundle_seal.v0.1",
+  "date": "2026-09-26",
+  "status": "SEALED_AWAITING_EXPLICIT_RUNNER_APPROVAL",
+  "bundle_id": "bundle_20260926T202330Z_d853d3a6",
+  "bundle_sha256": "25a1327b0438b4964501d051188ac5ace0806323abb6b17e31f4c5f7104f5c52",
+  "approval_code": "BM-25A1327B0438",
+  "runtime_profile": "offline-research-v1",
+  "package_files": 3,
+  "total_bytes": 6537,
+  "runtime_inputs": [
+    "SC001_B14A_P0_20260925/collector_state.json"
+  ],
+  "entrypoint": "research/sc001/sc001_b14a_p0_state_only_diagnostic_v0_1.py",
+  "entrypoint_sha256": "cef2e96f5b5dea8b61c3a5b9e8743a9a63bb5555cb9169a31a210aa3f97c3bcd",
+  "expected_pass_token": "B14A_P0_STATE_ONLY_DIAGNOSTIC_PASS",
+  "raw_trade_data_read": false,
+  "price_data_read": false,
+  "outcome_calculated": false,
+  "next_state": "RUN_EXACT_STATE_ONLY_DIAGNOSTIC_AFTER_EXPLICIT_APPROVAL"
+}
