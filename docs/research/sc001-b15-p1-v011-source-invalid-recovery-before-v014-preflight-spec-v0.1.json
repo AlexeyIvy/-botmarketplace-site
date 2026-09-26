@@ -1,0 +1,36 @@
+{
+  "schema": "sc001.b15.p1_v011_source_invalid_recovery_before_v014_preflight_spec.v0.1",
+  "date": "2026-09-26",
+  "status": "FROZEN_BEFORE_OFFLINE_PREFLIGHT",
+  "wrapper": {
+    "path": "scripts/research/run-b15p1-v011-source-invalid-recovery-before-v014-v0.1.sh",
+    "sha256": "466782f5c00d878ea37aa4eff7c29ae7b064015f689c27947a7977e1d1c79ce3"
+  },
+  "v022_snapshot_sha256": "fc1b4537290451241596e67342a9ab8fa6acd827afd4aeb70b70cee1e24e8e47",
+  "required_behavior": {
+    "single_instance_lock": true,
+    "stop_disable_only": true,
+    "archive_collector_state_manifest_log_and_data_dirs": true,
+    "preserve_v022_snapshot": true,
+    "preserve_v022_safe_summary": true,
+    "preserve_v022_run_log": true,
+    "archive_diagnostic_copy_only": true,
+    "exact_old_auth_sha_guard": true,
+    "exact_old_unit_sha_guard": true,
+    "final_active_state_absent": true,
+    "final_runtime_unit_absent": true,
+    "final_runtime_authorization_absent": true
+  },
+  "allowed_systemctl_subcommands": ["stop","disable","is-active","is-enabled","daemon-reload"],
+  "forbidden_behavior": {
+    "systemctl_start": true,
+    "systemctl_enable": true,
+    "systemctl_restart": true,
+    "collector_run": true,
+    "exchange_calls": true,
+    "snapshot_delete_or_move": true,
+    "safe_summary_delete_or_move": true,
+    "capability_log_delete_or_move": true
+  },
+  "expected_pass_status": "B15P1_V011_SOURCE_INVALID_RECOVERY_WRAPPER_OFFLINE_PREFLIGHT_PASS"
+}

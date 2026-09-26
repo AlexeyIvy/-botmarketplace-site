@@ -1,0 +1,14 @@
+{
+  "schema": "sc001.b15.p1_v011_source_invalid_recovery_before_v014_preflight_freeze.v0.1",
+  "date": "2026-09-26",
+  "status": "FROZEN_BEFORE_OFFLINE_PREFLIGHT",
+  "wrapper_sha256": "466782f5c00d878ea37aa4eff7c29ae7b064015f689c27947a7977e1d1c79ce3",
+  "harness_sha256": "a8cf94b6f3b4356900d972dee22fbd17b37277f7dd80fedd0fd953464588bd6b",
+  "spec_sha256": "41952c79b17cc1a0f229890f019a67ea290d5173db3be5ad2c5d045aa6d186dc",
+  "v022_snapshot_sha256": "fc1b4537290451241596e67342a9ab8fa6acd827afd4aeb70b70cee1e24e8e47",
+  "exchange_calls_allowed": false,
+  "collector_start_allowed": false,
+  "systemd_start_enable_allowed": false,
+  "price_pnl_allowed": false,
+  "next_state": "RUN_RECOVERY_WRAPPER_OFFLINE_PREFLIGHT_AFTER_APPROVAL"
+}
