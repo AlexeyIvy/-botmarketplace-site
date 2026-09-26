@@ -1,0 +1,50 @@
+{
+  "schema": "sc001.b13c_s0_source_only_cluster_census_contract.v0.1",
+  "date": "2026-09-26",
+  "status": "READY_FOR_OFFLINE_SELFTEST",
+  "protocol_path": "docs/research/sc001-b13c-s0-simple-post-liquidation-reversal-sentinel-protocol-v0.1.md",
+  "ingestion_amendment_path": "docs/research/sc001-b13c-s0-source-ingestion-amendment-v0.1.md",
+  "entrypoint": "research/sc001/sc001_b13c_s0_source_only_cluster_census_v0_1.py",
+  "entrypoint_sha256": "601252728e8fa7caf2d9c467d99e61296268a78879a42323725b67bac223db5b",
+  "runtime": "offline-research-v1",
+  "frozen_interval": {
+    "start_ms": 1789800458969,
+    "end_ms": 1790456732973
+  },
+  "runtime_inputs": [
+    "SC001_B13C_PROSPECTIVE_LIQUIDATIONS/collector_state.json",
+    "SC001_B13C_PROSPECTIVE_LIQUIDATIONS/connection/connection_events.jsonl",
+    "SC001_B13C_PROSPECTIVE_LIQUIDATIONS/events/2026-09-19.jsonl",
+    "SC001_B13C_PROSPECTIVE_LIQUIDATIONS/events/2026-09-20.jsonl",
+    "SC001_B13C_PROSPECTIVE_LIQUIDATIONS/events/2026-09-21.jsonl",
+    "SC001_B13C_PROSPECTIVE_LIQUIDATIONS/events/2026-09-22.jsonl",
+    "SC001_B13C_PROSPECTIVE_LIQUIDATIONS/events/2026-09-23.jsonl",
+    "SC001_B13C_PROSPECTIVE_LIQUIDATIONS/events/2026-09-24.jsonl",
+    "SC001_B13C_PROSPECTIVE_LIQUIDATIONS/events/2026-09-25.jsonl",
+    "SC001_B13C_PROSPECTIVE_LIQUIDATIONS/events/2026-09-26.jsonl"
+  ],
+  "frozen_cluster_rule": {
+    "inter_event_gap_ms": 5000,
+    "minimum_distinct_events": 3,
+    "pure_side_required": true,
+    "source_gap_padding_ms": 5000,
+    "duplicate_fingerprint_policy": "KEEP_EARLIEST_RECEIVED_COPY"
+  },
+  "allowed_outputs": [
+    "aggregate unique event count",
+    "aggregate eligible cluster count",
+    "aggregate exclusion/censor counts",
+    "sample gate >=100",
+    "exact required symbol-date price archive identities"
+  ],
+  "forbidden": [
+    "PRICE_BODY_ACCESS",
+    "RETURNS",
+    "PER_SYMBOL_PERFORMANCE_RANKING",
+    "LIQUIDATION_SIZE_DISTRIBUTION",
+    "THRESHOLD_TUNING",
+    "PNL"
+  ],
+  "selftest_pass": "B13C_S0_SOURCE_ONLY_CLUSTER_CENSUS_V01_SELF_TEST_PASS",
+  "real_census_pass": "B13C_S0_SOURCE_ONLY_CLUSTER_CENSUS_PASS"
+}
