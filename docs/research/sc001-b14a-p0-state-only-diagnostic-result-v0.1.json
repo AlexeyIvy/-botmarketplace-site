@@ -1,0 +1,42 @@
+{
+  "schema": "sc001.b14a_p0_state_only_diagnostic_result_record.v0.1",
+  "date": "2026-09-26",
+  "status": "B14A_P0_DEFER_DATA",
+  "diagnostic_job": {
+    "job_id": "job_20260926T204826Z_b3ce516d",
+    "bundle_id": "bundle_20260926T202330Z_d853d3a6",
+    "bundle_sha256": "25a1327b0438b4964501d051188ac5ace0806323abb6b17e31f4c5f7104f5c52",
+    "exit_code": 0,
+    "package_integrity_ok": true
+  },
+  "diagnostic_pass_token": "B14A_P0_STATE_ONLY_DIAGNOSTIC_PASS",
+  "collector_state": {
+    "stage": "SC001-B14A-P0-PROSPECTIVE-TRADE-COLLECTOR-V0.3",
+    "version": "0.3",
+    "status": "B14A_P0_COLLECTION_COMPLETE",
+    "subscription_ack": false,
+    "raw_trade_messages": 0,
+    "normalized_trade_rows": 0,
+    "invalid_trade_rows": 0,
+    "reconnect_count": 67,
+    "connection_gap_count": 67,
+    "process_restart_count": 0,
+    "process_restart_gap_count": 0,
+    "finished_utc": "2026-09-25T08:02:06.779000+00:00",
+    "basis_calculated": false,
+    "convergence_calculated": false,
+    "pnl_calculated": false
+  },
+  "binding_protocol_consequence": "B14A_P0_DEFER_DATA",
+  "reason": [
+    "subscription ACK required by frozen P0 data-validity rule was false",
+    "no accepted raw trade messages were captured",
+    "no normalized trade rows were captured"
+  ],
+  "price_outcome_opened": false,
+  "headroom_basis_calculated": false,
+  "economic_reject": false,
+  "alpha_reject": false,
+  "interpretation": "P0 pilot is source/collector-invalid and cannot support STRONG/MIXED/WEAK headroom classification. No rescue tuning or alternate-window inspection is permitted.",
+  "next_state": "DIAGNOSE_CONNECTION_LEDGER_NONPRICE_THEN_PREPARE_NEXT_PROSPECTIVE_B14A_EVENT_WITH_UNCHANGED_RESEARCH_RULES_OR_FORMALLY_VERSIONED_NEW_PROTOCOL"
+}
