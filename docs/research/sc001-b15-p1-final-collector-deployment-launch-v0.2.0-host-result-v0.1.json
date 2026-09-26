@@ -1,0 +1,48 @@
+{
+  "schema": "sc001.b15.p1_final_collector_deployment_launch_v020_host_result.v0.1",
+  "date": "2026-09-26",
+  "status": "B15P1_FINAL_COLLECTOR_DEPLOYMENT_LAUNCH_V020_PASS",
+  "evidence_source": "user-supplied terminal screenshots from real VPS execution",
+  "wrapper": {
+    "path": "scripts/research/run-b15p1-final-collector-deployment-launch-v0.2.0.sh",
+    "sha256": "25387c527fcd77b59bac96a1c88316029e093edc99848e60842e6436d90424ad"
+  },
+  "preflight": {
+    "runtime_path_and_storage_preflight": "PASS",
+    "free_bytes": 67589185536,
+    "free_percent": 82.34,
+    "collector_v014_self_test": "PASS",
+    "staged_launch_authorization_validator": "PASS",
+    "final_launch_v020_prerequisites": "PASS",
+    "runtime_prestart_v020_freeze_capability_authorization": "PASS",
+    "recovery_archived_files": 134
+  },
+  "launch_acceptance": {
+    "ready_observed": true,
+    "poll_count": 2,
+    "valid_poll_count": 2,
+    "invalid_poll_count": 0,
+    "process_epoch": 1,
+    "process_restart_count": 0,
+    "service_active": "active",
+    "service_enabled": "enabled"
+  },
+  "bindings": {
+    "capability_snapshot_sha256": "01cfa63b6001ec972c4ed87daba5bbd9fba932233b9e8323a49a6a5355e89647",
+    "runtime_launch_authorization_sha256": "7c6a0296dc47f91a47d4747a0d29174338599a805b797427f19aa2e0c9d3b01c",
+    "launch_report_path": "/home/botmarket/sc001_data/SC001_B15P1_TRANSFERABILITY/collector_launch_verification_manifest.json"
+  },
+  "firewalls": {
+    "price_data_authorized": false,
+    "pnl_authorized": false,
+    "live_execution_authorized": false
+  },
+  "interpretation": {
+    "real_vps_launch_passed": true,
+    "collector_v014_operational": true,
+    "initial_two_polls_fully_valid": true,
+    "zero_restart_first_start_contract_satisfied": true,
+    "collector_infrastructure_should_now_be_frozen_except_demonstrated_correctness_data_integrity_or_safety_defects": true
+  },
+  "next_state": "SHORT_READ_ONLY_STABILITY_CHECK_THEN_ACCUMULATE_B15P1_DATA"
+}
