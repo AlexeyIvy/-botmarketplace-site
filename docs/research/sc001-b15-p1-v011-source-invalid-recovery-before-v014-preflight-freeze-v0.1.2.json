@@ -1,0 +1,30 @@
+{
+  "schema": "sc001.b15.p1_v011_source_invalid_recovery_before_v014_preflight_freeze.v0.1.2",
+  "date": "2026-09-26",
+  "status": "FROZEN_BEFORE_OFFLINE_PREFLIGHT",
+  "supersedes": "docs/research/sc001-b15-p1-v011-source-invalid-recovery-before-v014-preflight-freeze-v0.1.1.json",
+  "failure_diagnostic_sha256": "ae7e1399ae7cb1b295473edc84754ed9718c0cfa75a63dc42f55b059ecf5b6c0",
+  "wrapper_sha256": "04d6f49a38882e94928ae7fef0b1068670dfb536361cd72c77659aefc17bac20",
+  "harness_sha256": "ad0a5ec06920cb77844e1cf6b18e757d75bb4376777d5cec6250ff4767eeedbf",
+  "bootstrap_sha256": "98e6a187cbe3df3fab6e2366e889e16acc31371b497b4181e975d9ae6f8639e3",
+  "spec_sha256": "9e339d9257b39610889edf1b08adb321b6132e8ad96f712efdaa81aa3556b7d6",
+  "snapshot_policy": "SEMANTIC_V022_CONTRACT_PLUS_PRE_POST_SHA_IDENTITY",
+  "log_policy": "PROBE_TEE_LOG_ONLY",
+  "wrapper_level_tokens_required_in_probe_log": false,
+  "hardcoded_live_snapshot_sha_allowed": false,
+  "expected_v014_anchors": {
+    "runner_sha256": "280253b060f65517548054b3d8c33c315013d724ef2b836e9b8fef14628be213",
+    "library_sha256": "eaa925b71a7f33ec59de69f32dd0fb06f85bac67e89101b6f2ad50c1d792fd3f",
+    "implementation_freeze_sha256": "80928b0a11dac333b7844aa15bcdf399fd4db8739a4845e6118ebb576153b38c",
+    "service_sha256": "7a0f1742481b92f4d2590f09defcc5b287baaf1a9ba50f0da27488f8f5272f9d",
+    "route_graph_sha256": "06a9edd309a002aa5dc8408d992cff7b774604fc1cfb04f90fd7f56333f27928",
+    "admitted_sha256": "fa9f97ab1e70b30bdb196fd6f4d49a8cbc7462d13424644ddb7b88cdd9f431b0",
+    "capability_probe_sha256": "76f6ebd17ed2ad5a1fb8c3fad153c51fdcbaa6eab791cba37dcf3706b5820e12",
+    "capability_freeze_sha256": "a783bbf7e7598846f20a04b555e8c40e3c9cc15a3afc949a2f11cddb4a9341b6"
+  },
+  "exchange_calls_allowed": false,
+  "collector_start_allowed": false,
+  "systemd_start_enable_allowed": false,
+  "price_pnl_allowed": false,
+  "next_state": "RUN_RECOVERY_V012_OFFLINE_PREFLIGHT_AFTER_APPROVAL"
+}

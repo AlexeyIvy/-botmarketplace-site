@@ -1,0 +1,54 @@
+{
+  "schema": "sc001.b15.p1_v011_source_invalid_recovery_before_v014_preflight_spec.v0.1.2",
+  "date": "2026-09-26",
+  "status": "FROZEN_BEFORE_OFFLINE_PREFLIGHT",
+  "supersedes": "docs/research/sc001-b15-p1-v011-source-invalid-recovery-before-v014-preflight-spec-v0.1.1.json",
+  "failure_diagnostic_sha256": "ae7e1399ae7cb1b295473edc84754ed9718c0cfa75a63dc42f55b059ecf5b6c0",
+  "wrapper": {
+    "path": "scripts/research/run-b15p1-v011-source-invalid-recovery-before-v014-v0.1.2.sh",
+    "sha256": "04d6f49a38882e94928ae7fef0b1068670dfb536361cd72c77659aefc17bac20"
+  },
+  "snapshot_policy": "SEMANTIC_V022_CONTRACT_PLUS_PRE_POST_SHA_IDENTITY",
+  "log_policy": {
+    "source": "live probe stdout captured by tee",
+    "require_probe_pass_token": true,
+    "forbid_probe_review_token": true,
+    "require_probe_parser_compatible_token": true,
+    "require_probe_price_closed_token": true,
+    "require_probe_order_transfer_withdraw_closed_token": true,
+    "require_probe_collector_launch_closed_token": true,
+    "wrapper_level_command_pass_token_in_log_required": false,
+    "wrapper_level_security_firewall_token_in_log_required": false
+  },
+  "dynamic_fixtures": {
+    "two_different_valid_snapshot_sha_values_pass": true,
+    "safe_summary_sha_mismatch_fails_closed": true,
+    "realistic_probe_log_passes": true,
+    "missing_probe_pass_token_fails_closed": true
+  },
+  "allowed_systemctl_subcommands": [
+    "stop",
+    "disable",
+    "is-active",
+    "is-enabled",
+    "daemon-reload"
+  ],
+  "expected_embedded_python_block_count": 2,
+  "expected_pass_status": "B15P1_V011_SOURCE_INVALID_RECOVERY_WRAPPER_OFFLINE_PREFLIGHT_V012_PASS",
+  "expected_v014_anchors": {
+    "runner_sha256": "280253b060f65517548054b3d8c33c315013d724ef2b836e9b8fef14628be213",
+    "library_sha256": "eaa925b71a7f33ec59de69f32dd0fb06f85bac67e89101b6f2ad50c1d792fd3f",
+    "implementation_freeze_sha256": "80928b0a11dac333b7844aa15bcdf399fd4db8739a4845e6118ebb576153b38c",
+    "service_sha256": "7a0f1742481b92f4d2590f09defcc5b287baaf1a9ba50f0da27488f8f5272f9d",
+    "route_graph_sha256": "06a9edd309a002aa5dc8408d992cff7b774604fc1cfb04f90fd7f56333f27928",
+    "admitted_sha256": "fa9f97ab1e70b30bdb196fd6f4d49a8cbc7462d13424644ddb7b88cdd9f431b0",
+    "capability_probe_sha256": "76f6ebd17ed2ad5a1fb8c3fad153c51fdcbaa6eab791cba37dcf3706b5820e12",
+    "capability_freeze_sha256": "a783bbf7e7598846f20a04b555e8c40e3c9cc15a3afc949a2f11cddb4a9341b6"
+  },
+  "bootstrap": {
+    "path": "research/sc001/sc001_b15p1_v011_source_invalid_recovery_before_v014_offline_preflight_bootstrap_v0_1_2.py",
+    "sha256": "98e6a187cbe3df3fab6e2366e889e16acc31371b497b4181e975d9ae6f8639e3",
+    "compile_gate_before_harness_execution": true,
+    "requires_harness_manifest": true
+  }
+}

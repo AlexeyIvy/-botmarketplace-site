@@ -1,0 +1,40 @@
+{
+  "schema": "sc001.b15.p1_v011_source_invalid_recovery_v011_host_failure_diagnostic.v0.1",
+  "date": "2026-09-26",
+  "status": "TECHNICAL_RECOVERY_LOG_CONTRACT_FAILURE",
+  "evidence_source": "user-supplied terminal screenshot",
+  "wrapper": {
+    "path": "scripts/research/run-b15p1-v011-source-invalid-recovery-before-v014-v0.1.1.sh",
+    "sha256": "2a14da8e599feb0f2e075144bd64b269de44c916715790152e71ae5cc67eb2a7"
+  },
+  "observed": {
+    "attempts": 2,
+    "embedded_python_line": 112,
+    "exception": "AssertionError",
+    "archive_started": false
+  },
+  "exact_failing_assertion": "B15P1_NONPRICE_SOURCE_CAPABILITY_REVALIDATION_COMMAND_V022_PASS in cap_log",
+  "root_cause": {
+    "failure_class": "WRAPPER_LEVEL_TOKEN_CHECKED_INSIDE_PROBE_TEE_LOG",
+    "capability_live_wrapper_behavior": "source_capability_revalidation_v0.2.2_run.log is written only by tee around the live probe process",
+    "wrapper_level_pass_token_location": "printed after tee completes",
+    "therefore_token_cannot_exist_in_log": true
+  },
+  "important_evidence": {
+    "snapshot_semantic_contract_checks_before_line_112_passed": true,
+    "safe_summary_checks_before_line_112_passed": true,
+    "collector_v014_anchor_checks_passed": true,
+    "coverage_192_192_192_checks_passed": true,
+    "bybit_parser_v014_checks_passed": true,
+    "recovery_mutation_started": false
+  },
+  "correction": {
+    "new_version": "0.1.2",
+    "validate_probe_level_log_tokens_only": true,
+    "wrapper_level_pass_is_proven_by_snapshot_and_safe_summary": true,
+    "semantic_snapshot_policy_unchanged": true
+  },
+  "collector_start_authorized": false,
+  "retry_authorized": false,
+  "next_state": "PREPARE_RECOVERY_V012_OFFLINE_PREFLIGHT"
+}
