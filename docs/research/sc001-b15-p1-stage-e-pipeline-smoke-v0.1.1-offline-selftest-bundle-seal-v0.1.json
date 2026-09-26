@@ -1,0 +1,16 @@
+{
+  "schema": "sc001.b15.p1_stage_e_pipeline_smoke_v011_offline_selftest_bundle_seal.v0.1",
+  "date": "2026-09-26",
+  "status": "SEALED_AWAITING_EXPLICIT_RUNNER_APPROVAL",
+  "bundle_id": "bundle_20260926T170027Z_667fd89e",
+  "bundle_sha256": "87b96848501d4e362533e5866c8f7f3fa57f03af7844b068a5582c7a37a45679",
+  "approval_code": "BM-87B96848501D",
+  "total_bytes": 24263,
+  "file_count": 5,
+  "runtime_profile": "offline-research-v1",
+  "inputs": [],
+  "entrypoint": "research/sc001/sc001_b15p1_stage_e_pipeline_smoke_v0_1_1.py",
+  "entrypoint_sha256": "c077503ec29a691fd808cfbf0f7d93b5a7f39137e21b39892efad12f2a2e9df4",
+  "correction_scope": "Runner launcher positional-argument compatibility only; Stage E research semantics unchanged.",
+  "next_state": "RUN_EXACT_V011_BUNDLE_AFTER_EXPLICIT_APPROVAL"
+}
