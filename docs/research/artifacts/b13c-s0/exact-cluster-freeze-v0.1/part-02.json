@@ -1,0 +1,4010 @@
+{
+  "schema": "sc001.b13c_s0_exact_cluster_freeze_part.v0.1",
+  "parent_runner_artifact_sha256": "1138d6a034eb4a7269b8649272e375e5056e2f5b2d361bad3ea6ba54ddc7861c",
+  "part_index": 2,
+  "cluster_ordinal_start": 201,
+  "cluster_ordinal_end": 400,
+  "cluster_count": 200,
+  "eligible_clusters": [
+    {
+      "cluster_id": "S0C000201",
+      "end_ms": 1790000551607,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790000553607,
+        "start_ms": 1790000552607
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790000583607,
+        "start_ms": 1790000582607
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790000548262,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000202",
+      "end_ms": 1790000591595,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790000593595,
+        "start_ms": 1790000592595
+      },
+      "event_count": 10,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790000623595,
+        "start_ms": 1790000622595
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790000587089,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000203",
+      "end_ms": 1790001212921,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790001214921,
+        "start_ms": 1790001213921
+      },
+      "event_count": 76,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790001244921,
+        "start_ms": 1790001243921
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790001200979,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000204",
+      "end_ms": 1790001272631,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790001274631,
+        "start_ms": 1790001273631
+      },
+      "event_count": 41,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790001304631,
+        "start_ms": 1790001303631
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790001266514,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000205",
+      "end_ms": 1790001303661,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790001305661,
+        "start_ms": 1790001304661
+      },
+      "event_count": 11,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790001335661,
+        "start_ms": 1790001334661
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790001294810,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000206",
+      "end_ms": 1790001615919,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790001617919,
+        "start_ms": 1790001616919
+      },
+      "event_count": 10,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790001647919,
+        "start_ms": 1790001646919
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790001609422,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000207",
+      "end_ms": 1790002221836,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790002223836,
+        "start_ms": 1790002222836
+      },
+      "event_count": 128,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790002253836,
+        "start_ms": 1790002252836
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790002215071,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000208",
+      "end_ms": 1790002373827,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790002375827,
+        "start_ms": 1790002374827
+      },
+      "event_count": 9,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790002405827,
+        "start_ms": 1790002404827
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790002373139,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000209",
+      "end_ms": 1790002722637,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790002724637,
+        "start_ms": 1790002723637
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790002754637,
+        "start_ms": 1790002753637
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790002718302,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000210",
+      "end_ms": 1790003291788,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790003293788,
+        "start_ms": 1790003292788
+      },
+      "event_count": 135,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790003323788,
+        "start_ms": 1790003322788
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790003269833,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000211",
+      "end_ms": 1790003305436,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790003307436,
+        "start_ms": 1790003306436
+      },
+      "event_count": 49,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790003337436,
+        "start_ms": 1790003336436
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790003297067,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000212",
+      "end_ms": 1790003321822,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790003323822,
+        "start_ms": 1790003322822
+      },
+      "event_count": 29,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790003353822,
+        "start_ms": 1790003352822
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790003316962,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000213",
+      "end_ms": 1790004248970,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790004250970,
+        "start_ms": 1790004249970
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790004280970,
+        "start_ms": 1790004279970
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790004241801,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000214",
+      "end_ms": 1790005857349,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790005859349,
+        "start_ms": 1790005858349
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790005889349,
+        "start_ms": 1790005888349
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790005854310,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000215",
+      "end_ms": 1790006695774,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790006697774,
+        "start_ms": 1790006696774
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790006727774,
+        "start_ms": 1790006726774
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790006695139,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000216",
+      "end_ms": 1790008726305,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790008728305,
+        "start_ms": 1790008727305
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790008758305,
+        "start_ms": 1790008757305
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790008724551,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000217",
+      "end_ms": 1790008766206,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790008768206,
+        "start_ms": 1790008767206
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790008798206,
+        "start_ms": 1790008797206
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790008760085,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000218",
+      "end_ms": 1790008807407,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790008809407,
+        "start_ms": 1790008808407
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790008839407,
+        "start_ms": 1790008838407
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790008805395,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000219",
+      "end_ms": 1790009407083,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790009409083,
+        "start_ms": 1790009408083
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790009439083,
+        "start_ms": 1790009438083
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790009404139,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000220",
+      "end_ms": 1790009706387,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790009708387,
+        "start_ms": 1790009707387
+      },
+      "event_count": 7,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790009738387,
+        "start_ms": 1790009737387
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790009701886,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000221",
+      "end_ms": 1790018229125,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790018231125,
+        "start_ms": 1790018230125
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790018261125,
+        "start_ms": 1790018260125
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790018228374,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000222",
+      "end_ms": 1790018249234,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790018251234,
+        "start_ms": 1790018250234
+      },
+      "event_count": 11,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790018281234,
+        "start_ms": 1790018280234
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790018244901,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000223",
+      "end_ms": 1790018259062,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790018261062,
+        "start_ms": 1790018260062
+      },
+      "event_count": 6,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790018291062,
+        "start_ms": 1790018290062
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790018258145,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000224",
+      "end_ms": 1790018308531,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790018310531,
+        "start_ms": 1790018309531
+      },
+      "event_count": 6,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790018340531,
+        "start_ms": 1790018339531
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790018301847,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000225",
+      "end_ms": 1790018354785,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790018356785,
+        "start_ms": 1790018355785
+      },
+      "event_count": 12,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790018386785,
+        "start_ms": 1790018385785
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790018351865,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000226",
+      "end_ms": 1790018399821,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790018401821,
+        "start_ms": 1790018400821
+      },
+      "event_count": 7,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790018431821,
+        "start_ms": 1790018430821
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790018394400,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000227",
+      "end_ms": 1790018416853,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790018418853,
+        "start_ms": 1790018417853
+      },
+      "event_count": 79,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790018448853,
+        "start_ms": 1790018447853
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790018405921,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000228",
+      "end_ms": 1790019152269,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790019154269,
+        "start_ms": 1790019153269
+      },
+      "event_count": 68,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790019184269,
+        "start_ms": 1790019183269
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790019136211,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000229",
+      "end_ms": 1790019202969,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790019204969,
+        "start_ms": 1790019203969
+      },
+      "event_count": 216,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790019234969,
+        "start_ms": 1790019233969
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790019188875,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000230",
+      "end_ms": 1790019261892,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790019263892,
+        "start_ms": 1790019262892
+      },
+      "event_count": 32,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790019293892,
+        "start_ms": 1790019292892
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790019257147,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000231",
+      "end_ms": 1790019279327,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790019281327,
+        "start_ms": 1790019280327
+      },
+      "event_count": 175,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790019311327,
+        "start_ms": 1790019310327
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790019267842,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000232",
+      "end_ms": 1790019308528,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790019310528,
+        "start_ms": 1790019309528
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790019340528,
+        "start_ms": 1790019339528
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790019307079,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000233",
+      "end_ms": 1790021917004,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790021919004,
+        "start_ms": 1790021918004
+      },
+      "event_count": 12,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790021949004,
+        "start_ms": 1790021948004
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790021908099,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000234",
+      "end_ms": 1790021931926,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790021933926,
+        "start_ms": 1790021932926
+      },
+      "event_count": 84,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790021963926,
+        "start_ms": 1790021962926
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790021923913,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000235",
+      "end_ms": 1790021947382,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790021949382,
+        "start_ms": 1790021948382
+      },
+      "event_count": 30,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790021979382,
+        "start_ms": 1790021978382
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790021941183,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000236",
+      "end_ms": 1790021960688,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790021962688,
+        "start_ms": 1790021961688
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790021992688,
+        "start_ms": 1790021991688
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790021960132,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000237",
+      "end_ms": 1790022009843,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790022011843,
+        "start_ms": 1790022010843
+      },
+      "event_count": 8,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790022041843,
+        "start_ms": 1790022040843
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790022008918,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000238",
+      "end_ms": 1790022090229,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790022092229,
+        "start_ms": 1790022091229
+      },
+      "event_count": 6,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790022122229,
+        "start_ms": 1790022121229
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790022087970,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000239",
+      "end_ms": 1790022215671,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790022217671,
+        "start_ms": 1790022216671
+      },
+      "event_count": 6,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790022247671,
+        "start_ms": 1790022246671
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790022215103,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000240",
+      "end_ms": 1790022396755,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790022398755,
+        "start_ms": 1790022397755
+      },
+      "event_count": 331,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790022428755,
+        "start_ms": 1790022427755
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790022391939,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000241",
+      "end_ms": 1790022413097,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790022415097,
+        "start_ms": 1790022414097
+      },
+      "event_count": 38,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790022445097,
+        "start_ms": 1790022444097
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790022412120,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000242",
+      "end_ms": 1790022450806,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790022452806,
+        "start_ms": 1790022451806
+      },
+      "event_count": 10,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790022482806,
+        "start_ms": 1790022481806
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790022450039,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000243",
+      "end_ms": 1790022524502,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790022526502,
+        "start_ms": 1790022525502
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790022556502,
+        "start_ms": 1790022555502
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790022522903,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000244",
+      "end_ms": 1790022656261,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790022658261,
+        "start_ms": 1790022657261
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790022688261,
+        "start_ms": 1790022687261
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790022656136,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000245",
+      "end_ms": 1790024589723,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790024591723,
+        "start_ms": 1790024590723
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790024621723,
+        "start_ms": 1790024620723
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790024587032,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000246",
+      "end_ms": 1790024708636,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790024710636,
+        "start_ms": 1790024709636
+      },
+      "event_count": 14,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790024740636,
+        "start_ms": 1790024739636
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790024703358,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000247",
+      "end_ms": 1790024879730,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790024881730,
+        "start_ms": 1790024880730
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790024911730,
+        "start_ms": 1790024910730
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790024879098,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000248",
+      "end_ms": 1790025003817,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790025005817,
+        "start_ms": 1790025004817
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790025035817,
+        "start_ms": 1790025034817
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790025002168,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000249",
+      "end_ms": 1790029636743,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790029638743,
+        "start_ms": 1790029637743
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790029668743,
+        "start_ms": 1790029667743
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790029634147,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000250",
+      "end_ms": 1790029713948,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790029715948,
+        "start_ms": 1790029714948
+      },
+      "event_count": 11,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790029745948,
+        "start_ms": 1790029744948
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790029706070,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000251",
+      "end_ms": 1790030944510,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790030946510,
+        "start_ms": 1790030945510
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790030976510,
+        "start_ms": 1790030975510
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790030943973,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000252",
+      "end_ms": 1790030961037,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790030963037,
+        "start_ms": 1790030962037
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790030993037,
+        "start_ms": 1790030992037
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790030959164,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000253",
+      "end_ms": 1790037594871,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790037596871,
+        "start_ms": 1790037595871
+      },
+      "event_count": 6,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790037626871,
+        "start_ms": 1790037625871
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790037591019,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000254",
+      "end_ms": 1790037634135,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790037636135,
+        "start_ms": 1790037635135
+      },
+      "event_count": 22,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790037666135,
+        "start_ms": 1790037665135
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790037627164,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000255",
+      "end_ms": 1790038268644,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790038270644,
+        "start_ms": 1790038269644
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790038300644,
+        "start_ms": 1790038299644
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790038267814,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000256",
+      "end_ms": 1790038394560,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790038396560,
+        "start_ms": 1790038395560
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790038426560,
+        "start_ms": 1790038425560
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790038386248,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000257",
+      "end_ms": 1790038537513,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790038539513,
+        "start_ms": 1790038538513
+      },
+      "event_count": 11,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790038569513,
+        "start_ms": 1790038568513
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790038531460,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000258",
+      "end_ms": 1790038554526,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790038556526,
+        "start_ms": 1790038555526
+      },
+      "event_count": 16,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790038586526,
+        "start_ms": 1790038585526
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790038546982,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000259",
+      "end_ms": 1790038707745,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790038709745,
+        "start_ms": 1790038708745
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790038739745,
+        "start_ms": 1790038738745
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790038703429,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000260",
+      "end_ms": 1790038956647,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790038958647,
+        "start_ms": 1790038957647
+      },
+      "event_count": 10,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790038988647,
+        "start_ms": 1790038987647
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790038956024,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000261",
+      "end_ms": 1790038988872,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790038990872,
+        "start_ms": 1790038989872
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790039020872,
+        "start_ms": 1790039019872
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790038986906,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000262",
+      "end_ms": 1790039019037,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790039021037,
+        "start_ms": 1790039020037
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790039051037,
+        "start_ms": 1790039050037
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790039015125,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000263",
+      "end_ms": 1790039114697,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790039116697,
+        "start_ms": 1790039115697
+      },
+      "event_count": 9,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790039146697,
+        "start_ms": 1790039145697
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790039107274,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000264",
+      "end_ms": 1790039941645,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790039943645,
+        "start_ms": 1790039942645
+      },
+      "event_count": 26,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790039973645,
+        "start_ms": 1790039972645
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790039931567,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000265",
+      "end_ms": 1790039956772,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790039958772,
+        "start_ms": 1790039957772
+      },
+      "event_count": 11,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790039988772,
+        "start_ms": 1790039987772
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790039953917,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000266",
+      "end_ms": 1790043150852,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790043152852,
+        "start_ms": 1790043151852
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790043182852,
+        "start_ms": 1790043181852
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790043150556,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000267",
+      "end_ms": 1790046751099,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790046753099,
+        "start_ms": 1790046752099
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790046783099,
+        "start_ms": 1790046782099
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790046746343,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000268",
+      "end_ms": 1790047336903,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790047338903,
+        "start_ms": 1790047337903
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790047368903,
+        "start_ms": 1790047367903
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790047336359,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000269",
+      "end_ms": 1790047378903,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790047380903,
+        "start_ms": 1790047379903
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790047410903,
+        "start_ms": 1790047409903
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790047378493,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000270",
+      "end_ms": 1790047399274,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790047401274,
+        "start_ms": 1790047400274
+      },
+      "event_count": 12,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790047431274,
+        "start_ms": 1790047430274
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790047394176,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000271",
+      "end_ms": 1790054301819,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790054303819,
+        "start_ms": 1790054302819
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790054333819,
+        "start_ms": 1790054332819
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790054301318,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000272",
+      "end_ms": 1790054324355,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790054326355,
+        "start_ms": 1790054325355
+      },
+      "event_count": 13,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790054356355,
+        "start_ms": 1790054355355
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790054313842,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000273",
+      "end_ms": 1790054723828,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790054725828,
+        "start_ms": 1790054724828
+      },
+      "event_count": 7,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790054755828,
+        "start_ms": 1790054754828
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790054723271,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000274",
+      "end_ms": 1790054773883,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790054775883,
+        "start_ms": 1790054774883
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790054805883,
+        "start_ms": 1790054804883
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790054773610,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000275",
+      "end_ms": 1790057591415,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790057593415,
+        "start_ms": 1790057592415
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790057623415,
+        "start_ms": 1790057622415
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790057589958,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000276",
+      "end_ms": 1790066127368,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790066129368,
+        "start_ms": 1790066128368
+      },
+      "event_count": 6,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790066159368,
+        "start_ms": 1790066158368
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790066122942,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000277",
+      "end_ms": 1790066144943,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790066146943,
+        "start_ms": 1790066145943
+      },
+      "event_count": 6,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790066176943,
+        "start_ms": 1790066175943
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790066143139,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000278",
+      "end_ms": 1790066152641,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790066154641,
+        "start_ms": 1790066153641
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790066184641,
+        "start_ms": 1790066183641
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790066151882,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000279",
+      "end_ms": 1790066188920,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790066190920,
+        "start_ms": 1790066189920
+      },
+      "event_count": 12,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790066220920,
+        "start_ms": 1790066219920
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790066177845,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000280",
+      "end_ms": 1790066223767,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790066225767,
+        "start_ms": 1790066224767
+      },
+      "event_count": 7,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790066255767,
+        "start_ms": 1790066254767
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790066217694,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000281",
+      "end_ms": 1790066244897,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790066246897,
+        "start_ms": 1790066245897
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790066276897,
+        "start_ms": 1790066275897
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790066239857,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000282",
+      "end_ms": 1790066307968,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790066309968,
+        "start_ms": 1790066308968
+      },
+      "event_count": 9,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790066339968,
+        "start_ms": 1790066338968
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790066296653,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000283",
+      "end_ms": 1790066457507,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790066459507,
+        "start_ms": 1790066458507
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790066489507,
+        "start_ms": 1790066488507
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790066453289,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000284",
+      "end_ms": 1790066492784,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790066494784,
+        "start_ms": 1790066493784
+      },
+      "event_count": 7,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790066524784,
+        "start_ms": 1790066523784
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790066487857,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000285",
+      "end_ms": 1790066547462,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790066549462,
+        "start_ms": 1790066548462
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790066579462,
+        "start_ms": 1790066578462
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790066543875,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000286",
+      "end_ms": 1790066590914,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790066592914,
+        "start_ms": 1790066591914
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790066622914,
+        "start_ms": 1790066621914
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790066590155,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000287",
+      "end_ms": 1790066599478,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790066601478,
+        "start_ms": 1790066600478
+      },
+      "event_count": 18,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790066631478,
+        "start_ms": 1790066630478
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790066596302,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000288",
+      "end_ms": 1790066691734,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790066693734,
+        "start_ms": 1790066692734
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790066723734,
+        "start_ms": 1790066722734
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790066686248,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000289",
+      "end_ms": 1790066704632,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790066706632,
+        "start_ms": 1790066705632
+      },
+      "event_count": 7,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790066736632,
+        "start_ms": 1790066735632
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790066703438,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000290",
+      "end_ms": 1790066846879,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790066848879,
+        "start_ms": 1790066847879
+      },
+      "event_count": 6,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790066878879,
+        "start_ms": 1790066877879
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790066846143,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000291",
+      "end_ms": 1790066871721,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790066873721,
+        "start_ms": 1790066872721
+      },
+      "event_count": 6,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790066903721,
+        "start_ms": 1790066902721
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790066868124,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000292",
+      "end_ms": 1790066916296,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790066918296,
+        "start_ms": 1790066917296
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790066948296,
+        "start_ms": 1790066947296
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790066909502,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000293",
+      "end_ms": 1790067197089,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790067199089,
+        "start_ms": 1790067198089
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790067229089,
+        "start_ms": 1790067228089
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790067193760,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000294",
+      "end_ms": 1790067845329,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790067847329,
+        "start_ms": 1790067846329
+      },
+      "event_count": 17,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790067877329,
+        "start_ms": 1790067876329
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790067817891,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000295",
+      "end_ms": 1790067881701,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790067883701,
+        "start_ms": 1790067882701
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790067913701,
+        "start_ms": 1790067912701
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790067876238,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000296",
+      "end_ms": 1790067904363,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790067906363,
+        "start_ms": 1790067905363
+      },
+      "event_count": 8,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790067936363,
+        "start_ms": 1790067935363
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790067893029,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000297",
+      "end_ms": 1790070832533,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790070834533,
+        "start_ms": 1790070833533
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790070864533,
+        "start_ms": 1790070863533
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790070830062,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000298",
+      "end_ms": 1790070989466,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790070991466,
+        "start_ms": 1790070990466
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790071021466,
+        "start_ms": 1790071020466
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790070989008,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000299",
+      "end_ms": 1790075825440,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790075827440,
+        "start_ms": 1790075826440
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790075857440,
+        "start_ms": 1790075856440
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790075822513,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000300",
+      "end_ms": 1790083659737,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790083661737,
+        "start_ms": 1790083660737
+      },
+      "event_count": 11,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790083691737,
+        "start_ms": 1790083690737
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790083654961,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000301",
+      "end_ms": 1790083708766,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790083710766,
+        "start_ms": 1790083709766
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790083740766,
+        "start_ms": 1790083739766
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790083707006,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000302",
+      "end_ms": 1790083845516,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790083847516,
+        "start_ms": 1790083846516
+      },
+      "event_count": 17,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790083877516,
+        "start_ms": 1790083876516
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790083841158,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000303",
+      "end_ms": 1790084092662,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790084094662,
+        "start_ms": 1790084093662
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790084124662,
+        "start_ms": 1790084123662
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790084087135,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000304",
+      "end_ms": 1790085482807,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790085484807,
+        "start_ms": 1790085483807
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790085514807,
+        "start_ms": 1790085513807
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790085481556,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000305",
+      "end_ms": 1790085515275,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790085517275,
+        "start_ms": 1790085516275
+      },
+      "event_count": 8,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790085547275,
+        "start_ms": 1790085546275
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790085506631,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000306",
+      "end_ms": 1790085579234,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790085581234,
+        "start_ms": 1790085580234
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790085611234,
+        "start_ms": 1790085610234
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790085577182,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000307",
+      "end_ms": 1790086385806,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790086387806,
+        "start_ms": 1790086386806
+      },
+      "event_count": 11,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790086417806,
+        "start_ms": 1790086416806
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790086383209,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000308",
+      "end_ms": 1790086418502,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790086420502,
+        "start_ms": 1790086419502
+      },
+      "event_count": 7,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790086450502,
+        "start_ms": 1790086449502
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790086417913,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000309",
+      "end_ms": 1790087407308,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790087409308,
+        "start_ms": 1790087408308
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790087439308,
+        "start_ms": 1790087438308
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790087400434,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000310",
+      "end_ms": 1790087458792,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790087460792,
+        "start_ms": 1790087459792
+      },
+      "event_count": 8,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790087490792,
+        "start_ms": 1790087489792
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790087454018,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000311",
+      "end_ms": 1790087550630,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790087552630,
+        "start_ms": 1790087551630
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790087582630,
+        "start_ms": 1790087581630
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790087546959,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000312",
+      "end_ms": 1790087728393,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790087730393,
+        "start_ms": 1790087729393
+      },
+      "event_count": 7,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790087760393,
+        "start_ms": 1790087759393
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790087719672,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000313",
+      "end_ms": 1790087760714,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790087762714,
+        "start_ms": 1790087761714
+      },
+      "event_count": 33,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790087792714,
+        "start_ms": 1790087791714
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790087745708,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000314",
+      "end_ms": 1790088931390,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790088933390,
+        "start_ms": 1790088932390
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790088963390,
+        "start_ms": 1790088962390
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790088930311,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000315",
+      "end_ms": 1790091750795,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790091752795,
+        "start_ms": 1790091751795
+      },
+      "event_count": 9,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790091782795,
+        "start_ms": 1790091781795
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790091742212,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000316",
+      "end_ms": 1790091887839,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790091889839,
+        "start_ms": 1790091888839
+      },
+      "event_count": 18,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790091919839,
+        "start_ms": 1790091918839
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790091877287,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000317",
+      "end_ms": 1790091936739,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790091938739,
+        "start_ms": 1790091937739
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790091968739,
+        "start_ms": 1790091967739
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790091936067,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000318",
+      "end_ms": 1790091972625,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790091974625,
+        "start_ms": 1790091973625
+      },
+      "event_count": 11,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790092004625,
+        "start_ms": 1790092003625
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790091967058,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000319",
+      "end_ms": 1790091979713,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790091981713,
+        "start_ms": 1790091980713
+      },
+      "event_count": 13,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790092011713,
+        "start_ms": 1790092010713
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790091978751,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000320",
+      "end_ms": 1790095800257,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790095802257,
+        "start_ms": 1790095801257
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790095832257,
+        "start_ms": 1790095831257
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790095800005,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000321",
+      "end_ms": 1790101571747,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790101573747,
+        "start_ms": 1790101572747
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790101603747,
+        "start_ms": 1790101602747
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790101571050,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000322",
+      "end_ms": 1790106812961,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790106814961,
+        "start_ms": 1790106813961
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790106844961,
+        "start_ms": 1790106843961
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790106807266,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000323",
+      "end_ms": 1790106871582,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790106873582,
+        "start_ms": 1790106872582
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790106903582,
+        "start_ms": 1790106902582
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790106865963,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000324",
+      "end_ms": 1790114592679,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790114594679,
+        "start_ms": 1790114593679
+      },
+      "event_count": 7,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790114624679,
+        "start_ms": 1790114623679
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790114591956,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000325",
+      "end_ms": 1790115140922,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790115142922,
+        "start_ms": 1790115141922
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790115172922,
+        "start_ms": 1790115171922
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790115140444,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000326",
+      "end_ms": 1790118338308,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790118340308,
+        "start_ms": 1790118339308
+      },
+      "event_count": 6,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790118370308,
+        "start_ms": 1790118369308
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790118335766,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000327",
+      "end_ms": 1790118345129,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790118347129,
+        "start_ms": 1790118346129
+      },
+      "event_count": 9,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790118377129,
+        "start_ms": 1790118376129
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790118343761,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000328",
+      "end_ms": 1790118368636,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790118370636,
+        "start_ms": 1790118369636
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790118400636,
+        "start_ms": 1790118399636
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790118368555,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000329",
+      "end_ms": 1790118601597,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790118603597,
+        "start_ms": 1790118602597
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790118633597,
+        "start_ms": 1790118632597
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790118592247,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000330",
+      "end_ms": 1790118735822,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790118737822,
+        "start_ms": 1790118736822
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790118767822,
+        "start_ms": 1790118766822
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790118735309,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000331",
+      "end_ms": 1790123466532,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790123468532,
+        "start_ms": 1790123467532
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790123498532,
+        "start_ms": 1790123497532
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790123465558,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000332",
+      "end_ms": 1790125382790,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790125384790,
+        "start_ms": 1790125383790
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790125414790,
+        "start_ms": 1790125413790
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790125380088,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000333",
+      "end_ms": 1790125633635,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790125635635,
+        "start_ms": 1790125634635
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790125665635,
+        "start_ms": 1790125664635
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790125631414,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000334",
+      "end_ms": 1790125656777,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790125658777,
+        "start_ms": 1790125657777
+      },
+      "event_count": 7,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790125688777,
+        "start_ms": 1790125687777
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790125655706,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000335",
+      "end_ms": 1790125985095,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790125987095,
+        "start_ms": 1790125986095
+      },
+      "event_count": 13,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790126017095,
+        "start_ms": 1790126016095
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790125984096,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000336",
+      "end_ms": 1790126009898,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790126011898,
+        "start_ms": 1790126010898
+      },
+      "event_count": 32,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790126041898,
+        "start_ms": 1790126040898
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790126003837,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000337",
+      "end_ms": 1790133824020,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790133826020,
+        "start_ms": 1790133825020
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790133856020,
+        "start_ms": 1790133855020
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790133823344,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000338",
+      "end_ms": 1790134848867,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790134850867,
+        "start_ms": 1790134849867
+      },
+      "event_count": 16,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790134880867,
+        "start_ms": 1790134879867
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790134840230,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000339",
+      "end_ms": 1790137260723,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790137262723,
+        "start_ms": 1790137261723
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790137292723,
+        "start_ms": 1790137291723
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790137260412,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000340",
+      "end_ms": 1790137266992,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790137268992,
+        "start_ms": 1790137267992
+      },
+      "event_count": 10,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790137298992,
+        "start_ms": 1790137297992
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790137266199,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000341",
+      "end_ms": 1790137278486,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790137280486,
+        "start_ms": 1790137279486
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790137310486,
+        "start_ms": 1790137309486
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790137276099,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000342",
+      "end_ms": 1790137405158,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790137407158,
+        "start_ms": 1790137406158
+      },
+      "event_count": 42,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790137437158,
+        "start_ms": 1790137436158
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790137399314,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000343",
+      "end_ms": 1790137420960,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790137422960,
+        "start_ms": 1790137421960
+      },
+      "event_count": 34,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790137452960,
+        "start_ms": 1790137451960
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790137414698,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000344",
+      "end_ms": 1790137524659,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790137526659,
+        "start_ms": 1790137525659
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790137556659,
+        "start_ms": 1790137555659
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790137520323,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000345",
+      "end_ms": 1790137669253,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790137671253,
+        "start_ms": 1790137670253
+      },
+      "event_count": 13,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790137701253,
+        "start_ms": 1790137700253
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790137664013,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000346",
+      "end_ms": 1790138001574,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790138003574,
+        "start_ms": 1790138002574
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790138033574,
+        "start_ms": 1790138032574
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790137999962,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000347",
+      "end_ms": 1790138068914,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790138070914,
+        "start_ms": 1790138069914
+      },
+      "event_count": 6,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790138100914,
+        "start_ms": 1790138099914
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790138064177,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000348",
+      "end_ms": 1790142582255,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790142584255,
+        "start_ms": 1790142583255
+      },
+      "event_count": 7,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790142614255,
+        "start_ms": 1790142613255
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790142579398,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000349",
+      "end_ms": 1790142658565,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790142660565,
+        "start_ms": 1790142659565
+      },
+      "event_count": 7,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790142690565,
+        "start_ms": 1790142689565
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790142654204,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000350",
+      "end_ms": 1790143092634,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790143094634,
+        "start_ms": 1790143093634
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790143124634,
+        "start_ms": 1790143123634
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790143087003,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000351",
+      "end_ms": 1790143107619,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790143109619,
+        "start_ms": 1790143108619
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790143139619,
+        "start_ms": 1790143138619
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790143104053,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000352",
+      "end_ms": 1790148989263,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790148991263,
+        "start_ms": 1790148990263
+      },
+      "event_count": 6,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790149021263,
+        "start_ms": 1790149020263
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790148988110,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000353",
+      "end_ms": 1790149470858,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790149472858,
+        "start_ms": 1790149471858
+      },
+      "event_count": 15,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790149502858,
+        "start_ms": 1790149501858
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790149465314,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000354",
+      "end_ms": 1790149481320,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790149483320,
+        "start_ms": 1790149482320
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790149513320,
+        "start_ms": 1790149512320
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790149479659,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000355",
+      "end_ms": 1790153249792,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790153251792,
+        "start_ms": 1790153250792
+      },
+      "event_count": 25,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790153281792,
+        "start_ms": 1790153280792
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790153242936,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000356",
+      "end_ms": 1790153378281,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790153380281,
+        "start_ms": 1790153379281
+      },
+      "event_count": 7,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790153410281,
+        "start_ms": 1790153409281
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790153375131,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000357",
+      "end_ms": 1790153410882,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790153412882,
+        "start_ms": 1790153411882
+      },
+      "event_count": 38,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790153442882,
+        "start_ms": 1790153441882
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790153385952,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000358",
+      "end_ms": 1790153529128,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790153531128,
+        "start_ms": 1790153530128
+      },
+      "event_count": 18,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790153561128,
+        "start_ms": 1790153560128
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790153515832,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000359",
+      "end_ms": 1790159016749,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790159018749,
+        "start_ms": 1790159017749
+      },
+      "event_count": 8,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790159048749,
+        "start_ms": 1790159047749
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790159011924,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000360",
+      "end_ms": 1790162457050,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790162459050,
+        "start_ms": 1790162458050
+      },
+      "event_count": 10,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790162489050,
+        "start_ms": 1790162488050
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790162454921,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000361",
+      "end_ms": 1790162518783,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790162520783,
+        "start_ms": 1790162519783
+      },
+      "event_count": 9,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790162550783,
+        "start_ms": 1790162549783
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790162515167,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000362",
+      "end_ms": 1790162535423,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790162537423,
+        "start_ms": 1790162536423
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790162567423,
+        "start_ms": 1790162566423
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790162530064,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000363",
+      "end_ms": 1790162743990,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790162745990,
+        "start_ms": 1790162744990
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790162775990,
+        "start_ms": 1790162774990
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790162743527,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000364",
+      "end_ms": 1790162758793,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790162760793,
+        "start_ms": 1790162759793
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790162790793,
+        "start_ms": 1790162789793
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790162757130,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000365",
+      "end_ms": 1790162890396,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790162892396,
+        "start_ms": 1790162891396
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790162922396,
+        "start_ms": 1790162921396
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790162889251,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000366",
+      "end_ms": 1790162897760,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790162899760,
+        "start_ms": 1790162898760
+      },
+      "event_count": 8,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790162929760,
+        "start_ms": 1790162928760
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790162897073,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000367",
+      "end_ms": 1790162954733,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790162956733,
+        "start_ms": 1790162955733
+      },
+      "event_count": 10,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790162986733,
+        "start_ms": 1790162985733
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790162951203,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000368",
+      "end_ms": 1790165849319,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790165851319,
+        "start_ms": 1790165850319
+      },
+      "event_count": 7,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790165881319,
+        "start_ms": 1790165880319
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790165847055,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000369",
+      "end_ms": 1790165867549,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790165869549,
+        "start_ms": 1790165868549
+      },
+      "event_count": 8,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790165899549,
+        "start_ms": 1790165898549
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790165859055,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000370",
+      "end_ms": 1790165906552,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790165908552,
+        "start_ms": 1790165907552
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790165938552,
+        "start_ms": 1790165937552
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790165904636,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000371",
+      "end_ms": 1790165930730,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790165932730,
+        "start_ms": 1790165931730
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790165962730,
+        "start_ms": 1790165961730
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790165928438,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000372",
+      "end_ms": 1790165948817,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790165950817,
+        "start_ms": 1790165949817
+      },
+      "event_count": 8,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790165980817,
+        "start_ms": 1790165979817
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790165947948,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000373",
+      "end_ms": 1790165996753,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790165998753,
+        "start_ms": 1790165997753
+      },
+      "event_count": 7,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790166028753,
+        "start_ms": 1790166027753
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790165984711,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000374",
+      "end_ms": 1790170687670,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790170689670,
+        "start_ms": 1790170688670
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790170719670,
+        "start_ms": 1790170718670
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790170687040,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000375",
+      "end_ms": 1790172081604,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790172083604,
+        "start_ms": 1790172082604
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790172113604,
+        "start_ms": 1790172112604
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790172081365,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000376",
+      "end_ms": 1790172505534,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790172507534,
+        "start_ms": 1790172506534
+      },
+      "event_count": 7,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790172537534,
+        "start_ms": 1790172536534
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790172495230,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000377",
+      "end_ms": 1790172529201,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790172531201,
+        "start_ms": 1790172530201
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790172561201,
+        "start_ms": 1790172560201
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790172528096,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000378",
+      "end_ms": 1790172609752,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790172611752,
+        "start_ms": 1790172610752
+      },
+      "event_count": 7,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790172641752,
+        "start_ms": 1790172640752
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790172604917,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000379",
+      "end_ms": 1790172693488,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790172695488,
+        "start_ms": 1790172694488
+      },
+      "event_count": 45,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790172725488,
+        "start_ms": 1790172724488
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790172667782,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000380",
+      "end_ms": 1790173040550,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790173042550,
+        "start_ms": 1790173041550
+      },
+      "event_count": 37,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790173072550,
+        "start_ms": 1790173071550
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790173032297,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000381",
+      "end_ms": 1790173132974,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790173134974,
+        "start_ms": 1790173133974
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790173164974,
+        "start_ms": 1790173163974
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790173128913,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000382",
+      "end_ms": 1790173151580,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790173153580,
+        "start_ms": 1790173152580
+      },
+      "event_count": 10,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790173183580,
+        "start_ms": 1790173182580
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790173145179,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000383",
+      "end_ms": 1790173214556,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790173216556,
+        "start_ms": 1790173215556
+      },
+      "event_count": 64,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790173246556,
+        "start_ms": 1790173245556
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790173188134,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000384",
+      "end_ms": 1790173351885,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790173353885,
+        "start_ms": 1790173352885
+      },
+      "event_count": 30,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790173383885,
+        "start_ms": 1790173382885
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790173336081,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000385",
+      "end_ms": 1790173387220,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790173389220,
+        "start_ms": 1790173388220
+      },
+      "event_count": 15,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790173419220,
+        "start_ms": 1790173418220
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790173382097,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000386",
+      "end_ms": 1790173400204,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790173402204,
+        "start_ms": 1790173401204
+      },
+      "event_count": 14,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790173432204,
+        "start_ms": 1790173431204
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790173395695,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000387",
+      "end_ms": 1790173424775,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790173426775,
+        "start_ms": 1790173425775
+      },
+      "event_count": 18,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790173456775,
+        "start_ms": 1790173455775
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790173423174,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000388",
+      "end_ms": 1790173778824,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790173780824,
+        "start_ms": 1790173779824
+      },
+      "event_count": 28,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790173810824,
+        "start_ms": 1790173809824
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790173773680,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000389",
+      "end_ms": 1790173867256,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790173869256,
+        "start_ms": 1790173868256
+      },
+      "event_count": 37,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790173899256,
+        "start_ms": 1790173898256
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790173860050,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000390",
+      "end_ms": 1790173875581,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790173877581,
+        "start_ms": 1790173876581
+      },
+      "event_count": 11,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790173907581,
+        "start_ms": 1790173906581
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790173873056,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000391",
+      "end_ms": 1790173998667,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790174000667,
+        "start_ms": 1790173999667
+      },
+      "event_count": 13,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790174030667,
+        "start_ms": 1790174029667
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790173983210,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000392",
+      "end_ms": 1790174084504,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790174086504,
+        "start_ms": 1790174085504
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790174116504,
+        "start_ms": 1790174115504
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790174083545,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000393",
+      "end_ms": 1790175281908,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790175283908,
+        "start_ms": 1790175282908
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790175313908,
+        "start_ms": 1790175312908
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790175281096,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000394",
+      "end_ms": 1790175698219,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790175700219,
+        "start_ms": 1790175699219
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790175730219,
+        "start_ms": 1790175729219
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790175693731,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000395",
+      "end_ms": 1790176089886,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790176091886,
+        "start_ms": 1790176090886
+      },
+      "event_count": 7,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790176121886,
+        "start_ms": 1790176120886
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790176087415,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000396",
+      "end_ms": 1790176529462,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790176531462,
+        "start_ms": 1790176530462
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790176561462,
+        "start_ms": 1790176560462
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790176525973,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000397",
+      "end_ms": 1790176574753,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790176576753,
+        "start_ms": 1790176575753
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790176606753,
+        "start_ms": 1790176605753
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790176568966,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000398",
+      "end_ms": 1790177475523,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790177477523,
+        "start_ms": 1790177476523
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790177507523,
+        "start_ms": 1790177506523
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790177474788,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000399",
+      "end_ms": 1790178468584,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790178470584,
+        "start_ms": 1790178469584
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790178500584,
+        "start_ms": 1790178499584
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790178462588,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "cluster_id": "S0C000400",
+      "end_ms": 1790178671227,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790178673227,
+        "start_ms": 1790178672227
+      },
+      "event_count": 7,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790178703227,
+        "start_ms": 1790178702227
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790178660673,
+      "symbol": "BTCUSDT"
+    }
+  ]
+}

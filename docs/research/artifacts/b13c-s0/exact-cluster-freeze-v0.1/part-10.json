@@ -1,0 +1,2110 @@
+{
+  "schema": "sc001.b13c_s0_exact_cluster_freeze_part.v0.1",
+  "parent_runner_artifact_sha256": "1138d6a034eb4a7269b8649272e375e5056e2f5b2d361bad3ea6ba54ddc7861c",
+  "part_index": 10,
+  "cluster_ordinal_start": 1801,
+  "cluster_ordinal_end": 1905,
+  "cluster_count": 105,
+  "eligible_clusters": [
+    {
+      "cluster_id": "S0C001801",
+      "end_ms": 1789814240215,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789814242215,
+        "start_ms": 1789814241215
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789814272215,
+        "start_ms": 1789814271215
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-19"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789814239427,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001802",
+      "end_ms": 1789816012744,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789816014744,
+        "start_ms": 1789816013744
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789816044744,
+        "start_ms": 1789816043744
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-19"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789816006638,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001803",
+      "end_ms": 1789816050893,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789816052893,
+        "start_ms": 1789816051893
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789816082893,
+        "start_ms": 1789816081893
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-19"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789816044654,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001804",
+      "end_ms": 1789846395148,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789846397148,
+        "start_ms": 1789846396148
+      },
+      "event_count": 7,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789846427148,
+        "start_ms": 1789846426148
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-19"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789846389580,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001805",
+      "end_ms": 1789852865755,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789852867755,
+        "start_ms": 1789852866755
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789852897755,
+        "start_ms": 1789852896755
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-19"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1789852863541,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001806",
+      "end_ms": 1789872257764,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789872259764,
+        "start_ms": 1789872258764
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789872289764,
+        "start_ms": 1789872288764
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-20"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1789872253734,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001807",
+      "end_ms": 1789872283008,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789872285008,
+        "start_ms": 1789872284008
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789872315008,
+        "start_ms": 1789872314008
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-20"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1789872278829,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001808",
+      "end_ms": 1789872820939,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789872822939,
+        "start_ms": 1789872821939
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789872852939,
+        "start_ms": 1789872851939
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-20"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1789872817555,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001809",
+      "end_ms": 1789872996226,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789872998226,
+        "start_ms": 1789872997226
+      },
+      "event_count": 6,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789873028226,
+        "start_ms": 1789873027226
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-20"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1789872995527,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001810",
+      "end_ms": 1789922360717,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789922362717,
+        "start_ms": 1789922361717
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789922392717,
+        "start_ms": 1789922391717
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-20"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789922359475,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001811",
+      "end_ms": 1789922411055,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789922413055,
+        "start_ms": 1789922412055
+      },
+      "event_count": 9,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789922443055,
+        "start_ms": 1789922442055
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-20"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789922401403,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001812",
+      "end_ms": 1789922652823,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789922654823,
+        "start_ms": 1789922653823
+      },
+      "event_count": 7,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789922684823,
+        "start_ms": 1789922683823
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-20"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789922643552,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001813",
+      "end_ms": 1789922831004,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789922833004,
+        "start_ms": 1789922832004
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789922863004,
+        "start_ms": 1789922862004
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-20"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789922827423,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001814",
+      "end_ms": 1789922842967,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789922844967,
+        "start_ms": 1789922843967
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789922874967,
+        "start_ms": 1789922873967
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-20"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789922840980,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001815",
+      "end_ms": 1789949900239,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789949902239,
+        "start_ms": 1789949901239
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789949932239,
+        "start_ms": 1789949931239
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789949892276,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001816",
+      "end_ms": 1789949914822,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789949916822,
+        "start_ms": 1789949915822
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789949946822,
+        "start_ms": 1789949945822
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789949908034,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001817",
+      "end_ms": 1789949932970,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789949934970,
+        "start_ms": 1789949933970
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789949964970,
+        "start_ms": 1789949963970
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789949931926,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001818",
+      "end_ms": 1789949946825,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789949948825,
+        "start_ms": 1789949947825
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789949978825,
+        "start_ms": 1789949977825
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789949937984,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001819",
+      "end_ms": 1789950012018,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789950014018,
+        "start_ms": 1789950013018
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789950044018,
+        "start_ms": 1789950043018
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789950004154,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001820",
+      "end_ms": 1789955774239,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789955776239,
+        "start_ms": 1789955775239
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789955806239,
+        "start_ms": 1789955805239
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1789955772082,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001821",
+      "end_ms": 1789971128191,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789971130191,
+        "start_ms": 1789971129191
+      },
+      "event_count": 7,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789971160191,
+        "start_ms": 1789971159191
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789971124113,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001822",
+      "end_ms": 1789971139232,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789971141232,
+        "start_ms": 1789971140232
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789971171232,
+        "start_ms": 1789971170232
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789971133711,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001823",
+      "end_ms": 1789971591187,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789971593187,
+        "start_ms": 1789971592187
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789971623187,
+        "start_ms": 1789971622187
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789971590554,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001824",
+      "end_ms": 1789979542944,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789979544944,
+        "start_ms": 1789979543944
+      },
+      "event_count": 6,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789979574944,
+        "start_ms": 1789979573944
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789979541361,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001825",
+      "end_ms": 1789979556858,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789979558858,
+        "start_ms": 1789979557858
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789979588858,
+        "start_ms": 1789979587858
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789979554154,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001826",
+      "end_ms": 1789979563809,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789979565809,
+        "start_ms": 1789979564809
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789979595809,
+        "start_ms": 1789979594809
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789979562646,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001827",
+      "end_ms": 1789979911817,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789979913817,
+        "start_ms": 1789979912817
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789979943817,
+        "start_ms": 1789979942817
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789979910629,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001828",
+      "end_ms": 1789981048945,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789981050945,
+        "start_ms": 1789981049945
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789981080945,
+        "start_ms": 1789981079945
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789981043972,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001829",
+      "end_ms": 1789982174145,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789982176145,
+        "start_ms": 1789982175145
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789982206145,
+        "start_ms": 1789982205145
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789982173857,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001830",
+      "end_ms": 1789982595153,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789982597153,
+        "start_ms": 1789982596153
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789982627153,
+        "start_ms": 1789982626153
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789982590237,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001831",
+      "end_ms": 1789983019099,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789983021099,
+        "start_ms": 1789983020099
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789983051099,
+        "start_ms": 1789983050099
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789983012755,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001832",
+      "end_ms": 1789983039160,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789983041160,
+        "start_ms": 1789983040160
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789983071160,
+        "start_ms": 1789983070160
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789983032202,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001833",
+      "end_ms": 1789983047113,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789983049113,
+        "start_ms": 1789983048113
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789983079113,
+        "start_ms": 1789983078113
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789983045118,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001834",
+      "end_ms": 1789983196949,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789983198949,
+        "start_ms": 1789983197949
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789983228949,
+        "start_ms": 1789983227949
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789983194043,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001835",
+      "end_ms": 1789994617266,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789994619266,
+        "start_ms": 1789994618266
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789994649266,
+        "start_ms": 1789994648266
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789994614667,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001836",
+      "end_ms": 1789995728957,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789995730957,
+        "start_ms": 1789995729957
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789995760957,
+        "start_ms": 1789995759957
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789995719064,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001837",
+      "end_ms": 1789995740028,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789995742028,
+        "start_ms": 1789995741028
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789995772028,
+        "start_ms": 1789995771028
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789995735024,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001838",
+      "end_ms": 1789995946465,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789995948465,
+        "start_ms": 1789995947465
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789995978465,
+        "start_ms": 1789995977465
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789995941207,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001839",
+      "end_ms": 1789996749408,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789996751408,
+        "start_ms": 1789996750408
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789996781408,
+        "start_ms": 1789996780408
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789996747100,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001840",
+      "end_ms": 1789997263125,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789997265125,
+        "start_ms": 1789997264125
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789997295125,
+        "start_ms": 1789997294125
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1789997262514,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001841",
+      "end_ms": 1789997478898,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789997480898,
+        "start_ms": 1789997479898
+      },
+      "event_count": 6,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789997510898,
+        "start_ms": 1789997509898
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1789997473431,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001842",
+      "end_ms": 1789999536360,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789999538360,
+        "start_ms": 1789999537360
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789999568360,
+        "start_ms": 1789999567360
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1789999534520,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001843",
+      "end_ms": 1790004465898,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790004467898,
+        "start_ms": 1790004466898
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790004497898,
+        "start_ms": 1790004496898
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790004465288,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001844",
+      "end_ms": 1790004522410,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790004524410,
+        "start_ms": 1790004523410
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790004554410,
+        "start_ms": 1790004553410
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790004516635,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001845",
+      "end_ms": 1790011017966,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790011019966,
+        "start_ms": 1790011018966
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790011049966,
+        "start_ms": 1790011048966
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790011014265,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001846",
+      "end_ms": 1790012894189,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790012896189,
+        "start_ms": 1790012895189
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790012926189,
+        "start_ms": 1790012925189
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790012889362,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001847",
+      "end_ms": 1790021947093,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790021949093,
+        "start_ms": 1790021948093
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790021979093,
+        "start_ms": 1790021978093
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790021942900,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001848",
+      "end_ms": 1790037182889,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790037184889,
+        "start_ms": 1790037183889
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790037214889,
+        "start_ms": 1790037213889
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790037181533,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001849",
+      "end_ms": 1790037204238,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790037206238,
+        "start_ms": 1790037205238
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790037236238,
+        "start_ms": 1790037235238
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790037199497,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001850",
+      "end_ms": 1790037424149,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790037426149,
+        "start_ms": 1790037425149
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790037456149,
+        "start_ms": 1790037455149
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790037423396,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001851",
+      "end_ms": 1790037585870,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790037587870,
+        "start_ms": 1790037586870
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790037617870,
+        "start_ms": 1790037616870
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790037583165,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001852",
+      "end_ms": 1790038137210,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790038139210,
+        "start_ms": 1790038138210
+      },
+      "event_count": 8,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790038169210,
+        "start_ms": 1790038168210
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790038129599,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001853",
+      "end_ms": 1790038144966,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790038146966,
+        "start_ms": 1790038145966
+      },
+      "event_count": 6,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790038176966,
+        "start_ms": 1790038175966
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790038143343,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001854",
+      "end_ms": 1790038853963,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790038855963,
+        "start_ms": 1790038854963
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790038885963,
+        "start_ms": 1790038884963
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790038851774,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001855",
+      "end_ms": 1790054719644,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790054721644,
+        "start_ms": 1790054720644
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790054751644,
+        "start_ms": 1790054750644
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790054714748,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001856",
+      "end_ms": 1790072712420,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790072714420,
+        "start_ms": 1790072713420
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790072744420,
+        "start_ms": 1790072743420
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790072708286,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001857",
+      "end_ms": 1790087575906,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790087577906,
+        "start_ms": 1790087576906
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790087607906,
+        "start_ms": 1790087606906
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790087572490,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001858",
+      "end_ms": 1790087767523,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790087769523,
+        "start_ms": 1790087768523
+      },
+      "event_count": 8,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790087799523,
+        "start_ms": 1790087798523
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790087755314,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001859",
+      "end_ms": 1790168889881,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790168891881,
+        "start_ms": 1790168890881
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790168921881,
+        "start_ms": 1790168920881
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790168885564,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001860",
+      "end_ms": 1790168969162,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790168971162,
+        "start_ms": 1790168970162
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790169001162,
+        "start_ms": 1790169000162
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790168967545,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001861",
+      "end_ms": 1790172505490,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790172507490,
+        "start_ms": 1790172506490
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790172537490,
+        "start_ms": 1790172536490
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790172500038,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001862",
+      "end_ms": 1790172642544,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790172644544,
+        "start_ms": 1790172643544
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790172674544,
+        "start_ms": 1790172673544
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790172636453,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001863",
+      "end_ms": 1790172651174,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790172653174,
+        "start_ms": 1790172652174
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790172683174,
+        "start_ms": 1790172682174
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790172648291,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001864",
+      "end_ms": 1790172672224,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790172674224,
+        "start_ms": 1790172673224
+      },
+      "event_count": 20,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790172704224,
+        "start_ms": 1790172703224
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790172667781,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001865",
+      "end_ms": 1790172763218,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790172765218,
+        "start_ms": 1790172764218
+      },
+      "event_count": 15,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790172795218,
+        "start_ms": 1790172794218
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790172754871,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001866",
+      "end_ms": 1790172781330,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790172783330,
+        "start_ms": 1790172782330
+      },
+      "event_count": 22,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790172813330,
+        "start_ms": 1790172812330
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790172772604,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001867",
+      "end_ms": 1790172794726,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790172796726,
+        "start_ms": 1790172795726
+      },
+      "event_count": 22,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790172826726,
+        "start_ms": 1790172825726
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790172788431,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001868",
+      "end_ms": 1790172803082,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790172805082,
+        "start_ms": 1790172804082
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790172835082,
+        "start_ms": 1790172834082
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790172802832,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001869",
+      "end_ms": 1790179267764,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790179269764,
+        "start_ms": 1790179268764
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790179299764,
+        "start_ms": 1790179298764
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790179266412,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001870",
+      "end_ms": 1790179296165,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790179298165,
+        "start_ms": 1790179297165
+      },
+      "event_count": 17,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790179328165,
+        "start_ms": 1790179327165
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790179280602,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001871",
+      "end_ms": 1790242262382,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790242264382,
+        "start_ms": 1790242263382
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790242294382,
+        "start_ms": 1790242293382
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790242258481,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001872",
+      "end_ms": 1790258843492,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790258845492,
+        "start_ms": 1790258844492
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790258875492,
+        "start_ms": 1790258874492
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790258835839,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001873",
+      "end_ms": 1790297655229,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790297657229,
+        "start_ms": 1790297656229
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790297687229,
+        "start_ms": 1790297686229
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790297652948,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001874",
+      "end_ms": 1790297920424,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790297922424,
+        "start_ms": 1790297921424
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790297952424,
+        "start_ms": 1790297951424
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790297918096,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001875",
+      "end_ms": 1790333293157,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790333295157,
+        "start_ms": 1790333294157
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790333325157,
+        "start_ms": 1790333324157
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790333292675,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001876",
+      "end_ms": 1790333320013,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790333322013,
+        "start_ms": 1790333321013
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790333352013,
+        "start_ms": 1790333351013
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790333318140,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001877",
+      "end_ms": 1790334426812,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790334428812,
+        "start_ms": 1790334427812
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790334458812,
+        "start_ms": 1790334457812
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790334425125,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001878",
+      "end_ms": 1790334457843,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790334459843,
+        "start_ms": 1790334458843
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790334489843,
+        "start_ms": 1790334488843
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790334454825,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001879",
+      "end_ms": 1790334883697,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790334885697,
+        "start_ms": 1790334884697
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790334915697,
+        "start_ms": 1790334914697
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790334879259,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001880",
+      "end_ms": 1790335049127,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790335051127,
+        "start_ms": 1790335050127
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790335081127,
+        "start_ms": 1790335080127
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790335041429,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001881",
+      "end_ms": 1790335086417,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790335088417,
+        "start_ms": 1790335087417
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790335118417,
+        "start_ms": 1790335117417
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790335083522,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001882",
+      "end_ms": 1790335182185,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790335184185,
+        "start_ms": 1790335183185
+      },
+      "event_count": 6,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790335214185,
+        "start_ms": 1790335213185
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790335177543,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001883",
+      "end_ms": 1790335385693,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790335387693,
+        "start_ms": 1790335386693
+      },
+      "event_count": 7,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790335417693,
+        "start_ms": 1790335416693
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790335377657,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001884",
+      "end_ms": 1790335455380,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790335457380,
+        "start_ms": 1790335456380
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790335487380,
+        "start_ms": 1790335486380
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790335451933,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001885",
+      "end_ms": 1790335633603,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790335635603,
+        "start_ms": 1790335634603
+      },
+      "event_count": 10,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790335665603,
+        "start_ms": 1790335664603
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790335620606,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001886",
+      "end_ms": 1790335767294,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790335769294,
+        "start_ms": 1790335768294
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790335799294,
+        "start_ms": 1790335798294
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790335766646,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001887",
+      "end_ms": 1790336003045,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790336005045,
+        "start_ms": 1790336004045
+      },
+      "event_count": 7,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790336035045,
+        "start_ms": 1790336034045
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790335995251,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001888",
+      "end_ms": 1790337725830,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790337727830,
+        "start_ms": 1790337726830
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790337757830,
+        "start_ms": 1790337756830
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790337722562,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001889",
+      "end_ms": 1790337737070,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790337739070,
+        "start_ms": 1790337738070
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790337769070,
+        "start_ms": 1790337768070
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790337736271,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001890",
+      "end_ms": 1790338436202,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790338438202,
+        "start_ms": 1790338437202
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790338468202,
+        "start_ms": 1790338467202
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790338435274,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001891",
+      "end_ms": 1790338524728,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790338526728,
+        "start_ms": 1790338525728
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790338556728,
+        "start_ms": 1790338555728
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790338522835,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001892",
+      "end_ms": 1790344026215,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790344028215,
+        "start_ms": 1790344027215
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790344058215,
+        "start_ms": 1790344057215
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790344018367,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001893",
+      "end_ms": 1790345009770,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790345011770,
+        "start_ms": 1790345010770
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790345041770,
+        "start_ms": 1790345040770
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790345005958,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001894",
+      "end_ms": 1790345065187,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790345067187,
+        "start_ms": 1790345066187
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790345097187,
+        "start_ms": 1790345096187
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790345064439,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001895",
+      "end_ms": 1790366539015,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790366541015,
+        "start_ms": 1790366540015
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790366571015,
+        "start_ms": 1790366570015
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790366535431,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001896",
+      "end_ms": 1790366553564,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790366555564,
+        "start_ms": 1790366554564
+      },
+      "event_count": 6,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790366585564,
+        "start_ms": 1790366584564
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790366548092,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001897",
+      "end_ms": 1790368223503,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790368225503,
+        "start_ms": 1790368224503
+      },
+      "event_count": 9,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790368255503,
+        "start_ms": 1790368254503
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790368212756,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001898",
+      "end_ms": 1790368674786,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790368676786,
+        "start_ms": 1790368675786
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790368706786,
+        "start_ms": 1790368705786
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790368671782,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001899",
+      "end_ms": 1790369114016,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790369116016,
+        "start_ms": 1790369115016
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790369146016,
+        "start_ms": 1790369145016
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790369113328,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001900",
+      "end_ms": 1790428924975,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790428926975,
+        "start_ms": 1790428925975
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790428956975,
+        "start_ms": 1790428955975
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-26"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790428923822,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001901",
+      "end_ms": 1790455182628,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790455184628,
+        "start_ms": 1790455183628
+      },
+      "event_count": 8,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790455214628,
+        "start_ms": 1790455213628
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-26"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790455180336,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001902",
+      "end_ms": 1790455195139,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790455197139,
+        "start_ms": 1790455196139
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790455227139,
+        "start_ms": 1790455226139
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-26"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790455190446,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001903",
+      "end_ms": 1790455204624,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790455206624,
+        "start_ms": 1790455205624
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790455236624,
+        "start_ms": 1790455235624
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-26"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790455200511,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001904",
+      "end_ms": 1790455231030,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790455233030,
+        "start_ms": 1790455232030
+      },
+      "event_count": 7,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790455263030,
+        "start_ms": 1790455262030
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-26"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790455225492,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001905",
+      "end_ms": 1790455655495,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790455657495,
+        "start_ms": 1790455656495
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790455687495,
+        "start_ms": 1790455686495
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-26"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790455653049,
+      "symbol": "SUIUSDT"
+    }
+  ]
+}

@@ -1,0 +1,132 @@
+{
+  "schema": "sc001.b13c_s0_exact_cluster_freeze_master_index.v0.1",
+  "date": "2026-09-27",
+  "status": "B13C_S0_EXACT_CLUSTER_FREEZE_MANIFEST_PASS",
+  "runner_job": {
+    "job_id": "job_20260927T073756Z_d064e97b",
+    "bundle_id": "bundle_20260927T072513Z_3e9d540c",
+    "bundle_sha256": "5b562444fb014c644a4115ace8e289220b329a3244cddaa8eb213e311d06e7ab",
+    "package_integrity_ok": true,
+    "exit_code": 0
+  },
+  "authoritative_runner_artifact": {
+    "path": "b13c_s0_exact_cluster_freeze_manifest.json",
+    "sha256": "1138d6a034eb4a7269b8649272e375e5056e2f5b2d361bad3ea6ba54ddc7861c",
+    "size_bytes": 996099
+  },
+  "parent_census_result": {
+    "path": "docs/research/sc001-b13c-s0-real-event-only-cluster-census-result-v0.1.json",
+    "sha256": "fd08901e77bb73c00bb53826e925b2124d52e05d6c8f45cdc154b1c57a2ab1eb"
+  },
+  "archive_metadata_preflight_result": {
+    "path": "docs/research/sc001-b13c-s0-price-archive-metadata-preflight-result-v0.1.json",
+    "sha256": "8992235a0d7bc620c3e4ff14db9b0108977ff2e0c274a6ff11416bb41f446c30",
+    "required_archive_count": 76,
+    "total_content_length_bytes": 2633144445
+  },
+  "analyzer_sha256": "601252728e8fa7caf2d9c467d99e61296268a78879a42323725b67bac223db5b",
+  "exact_cluster_freezer_sha256": "0f7c27e84c960d41a7dcbd1a058ba4b8b1b3b6865aabe97493a4ea810c7cb9d4",
+  "aggregate_integrity": {
+    "unique_events_in_window": 32381,
+    "total_raw_clusters_before_filters": 10734,
+    "clusters_under_min_events": 8743,
+    "mixed_side_clusters_excluded": 83,
+    "gap_censored_clusters": 3,
+    "eligible_cluster_count": 1905,
+    "required_price_archive_count": 76,
+    "merged_source_gap_count": 15,
+    "merged_source_gap_ms": 324430
+  },
+  "chunk_count": 10,
+  "chunks": [
+    {
+      "part_index": 1,
+      "path": "docs/research/artifacts/b13c-s0/exact-cluster-freeze-v0.1/part-01.json",
+      "sha256": "034330370606d1243cdce7c2a5d3dcff8cae3a023483af89f18f4538ff255103",
+      "cluster_ordinal_start": 1,
+      "cluster_ordinal_end": 200,
+      "cluster_count": 200
+    },
+    {
+      "part_index": 2,
+      "path": "docs/research/artifacts/b13c-s0/exact-cluster-freeze-v0.1/part-02.json",
+      "sha256": "731f0bf3931a9b48e8bc846a7d3492acac50d90bd7dec4166e7afd3fd908156e",
+      "cluster_ordinal_start": 201,
+      "cluster_ordinal_end": 400,
+      "cluster_count": 200
+    },
+    {
+      "part_index": 3,
+      "path": "docs/research/artifacts/b13c-s0/exact-cluster-freeze-v0.1/part-03.json",
+      "sha256": "3b3dfe37d1f03ffb073430d02f51d60c461611a4ee113d718ca70c5f040612b4",
+      "cluster_ordinal_start": 401,
+      "cluster_ordinal_end": 600,
+      "cluster_count": 200
+    },
+    {
+      "part_index": 4,
+      "path": "docs/research/artifacts/b13c-s0/exact-cluster-freeze-v0.1/part-04.json",
+      "sha256": "9b40956b3cf4569086c4ef8f6a51f0fa42443e665dbe0b7e6bbac285ab0ddb6f",
+      "cluster_ordinal_start": 601,
+      "cluster_ordinal_end": 800,
+      "cluster_count": 200
+    },
+    {
+      "part_index": 5,
+      "path": "docs/research/artifacts/b13c-s0/exact-cluster-freeze-v0.1/part-05.json",
+      "sha256": "e342f3ed7dfd0078151790877725ffcf172471d61d0dbb0a7ebbd22c78c27790",
+      "cluster_ordinal_start": 801,
+      "cluster_ordinal_end": 1000,
+      "cluster_count": 200
+    },
+    {
+      "part_index": 6,
+      "path": "docs/research/artifacts/b13c-s0/exact-cluster-freeze-v0.1/part-06.json",
+      "sha256": "adc4786aaa04ba5573e92713795fba789ea4cdd04e4a01f140beb8b05b1139ec",
+      "cluster_ordinal_start": 1001,
+      "cluster_ordinal_end": 1200,
+      "cluster_count": 200
+    },
+    {
+      "part_index": 7,
+      "path": "docs/research/artifacts/b13c-s0/exact-cluster-freeze-v0.1/part-07.json",
+      "sha256": "0bdcc1703d70cfe6028239a273361d6a7fc0b39d90c41f9e409b0473cde78205",
+      "cluster_ordinal_start": 1201,
+      "cluster_ordinal_end": 1400,
+      "cluster_count": 200
+    },
+    {
+      "part_index": 8,
+      "path": "docs/research/artifacts/b13c-s0/exact-cluster-freeze-v0.1/part-08.json",
+      "sha256": "9971bda5109d5d32347065dcb27a7ebab6e48ed620ae561a66ace88f7399b7c6",
+      "cluster_ordinal_start": 1401,
+      "cluster_ordinal_end": 1600,
+      "cluster_count": 200
+    },
+    {
+      "part_index": 9,
+      "path": "docs/research/artifacts/b13c-s0/exact-cluster-freeze-v0.1/part-09.json",
+      "sha256": "2d6361cf20aec8c81e6d5646c601347fab3a5c72698d71d889842dbca4d14a1c",
+      "cluster_ordinal_start": 1601,
+      "cluster_ordinal_end": 1800,
+      "cluster_count": 200
+    },
+    {
+      "part_index": 10,
+      "path": "docs/research/artifacts/b13c-s0/exact-cluster-freeze-v0.1/part-10.json",
+      "sha256": "c70e6763bc9b761e0407dd5f7fc658eb2192d2a2625472f98717864661d00d90",
+      "cluster_ordinal_start": 1801,
+      "cluster_ordinal_end": 1905,
+      "cluster_count": 105
+    }
+  ],
+  "reconstruction_rule": "Read chunks in ascending part_index and concatenate eligible_clusters arrays. Require exactly 1905 clusters with IDs S0C000001 through S0C001905, contiguous and unique.",
+  "boundaries": {
+    "price_data_opened": false,
+    "returns_calculated": false,
+    "per_symbol_performance_ranked": false,
+    "threshold_tuned": false,
+    "pnl_calculated": false
+  },
+  "next_state": "STREAM_EXACT_76_PRICE_ARCHIVES_AND_EXTRACT_FROZEN_ENTRY_EXIT_ANCHORS"
+}

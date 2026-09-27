@@ -1,0 +1,15 @@
+{
+  "schema": "sc001.b13c_s0_exact_cluster_freeze_result.v0.1",
+  "date": "2026-09-27",
+  "status": "B13C_S0_EXACT_CLUSTER_FREEZE_MANIFEST_PASS",
+  "runner_job_id": "job_20260927T073756Z_d064e97b",
+  "runner_artifact_sha256": "1138d6a034eb4a7269b8649272e375e5056e2f5b2d361bad3ea6ba54ddc7861c",
+  "runner_artifact_size_bytes": 996099,
+  "eligible_clusters": 1905,
+  "required_price_archives": 76,
+  "github_representation": "10 deterministic chunk files + master index",
+  "price_data_opened": false,
+  "returns_calculated": false,
+  "pnl_calculated": false,
+  "next_state": "PREPARE_STREAMING_PRICE_ANCHOR_EXTRACTOR"
+}

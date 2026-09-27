@@ -1,0 +1,4010 @@
+{
+  "schema": "sc001.b13c_s0_exact_cluster_freeze_part.v0.1",
+  "parent_runner_artifact_sha256": "1138d6a034eb4a7269b8649272e375e5056e2f5b2d361bad3ea6ba54ddc7861c",
+  "part_index": 6,
+  "cluster_ordinal_start": 1001,
+  "cluster_ordinal_end": 1200,
+  "cluster_count": 200,
+  "eligible_clusters": [
+    {
+      "cluster_id": "S0C001001",
+      "end_ms": 1790022227461,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790022229461,
+        "start_ms": 1790022228461
+      },
+      "event_count": 8,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790022259461,
+        "start_ms": 1790022258461
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790022221548,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001002",
+      "end_ms": 1790026381988,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790026383988,
+        "start_ms": 1790026382988
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790026413988,
+        "start_ms": 1790026412988
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790026381261,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001003",
+      "end_ms": 1790026470007,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790026472007,
+        "start_ms": 1790026471007
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790026502007,
+        "start_ms": 1790026501007
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790026466852,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001004",
+      "end_ms": 1790026484899,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790026486899,
+        "start_ms": 1790026485899
+      },
+      "event_count": 12,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790026516899,
+        "start_ms": 1790026515899
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790026475430,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001005",
+      "end_ms": 1790026525884,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790026527884,
+        "start_ms": 1790026526884
+      },
+      "event_count": 15,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790026557884,
+        "start_ms": 1790026556884
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790026518373,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001006",
+      "end_ms": 1790026644845,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790026646845,
+        "start_ms": 1790026645845
+      },
+      "event_count": 17,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790026676845,
+        "start_ms": 1790026675845
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790026637477,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001007",
+      "end_ms": 1790026739854,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790026741854,
+        "start_ms": 1790026740854
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790026771854,
+        "start_ms": 1790026770854
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790026739004,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001008",
+      "end_ms": 1790026778951,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790026780951,
+        "start_ms": 1790026779951
+      },
+      "event_count": 14,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790026810951,
+        "start_ms": 1790026809951
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790026768910,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001009",
+      "end_ms": 1790029070935,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790029072935,
+        "start_ms": 1790029071935
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790029102935,
+        "start_ms": 1790029101935
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790029068288,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001010",
+      "end_ms": 1790031855011,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790031857011,
+        "start_ms": 1790031856011
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790031887011,
+        "start_ms": 1790031886011
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790031852228,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001011",
+      "end_ms": 1790038650645,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790038652645,
+        "start_ms": 1790038651645
+      },
+      "event_count": 6,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790038682645,
+        "start_ms": 1790038681645
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790038648958,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001012",
+      "end_ms": 1790038957679,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790038959679,
+        "start_ms": 1790038958679
+      },
+      "event_count": 6,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790038989679,
+        "start_ms": 1790038988679
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790038956012,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001013",
+      "end_ms": 1790039036002,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790039038002,
+        "start_ms": 1790039037002
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790039068002,
+        "start_ms": 1790039067002
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790039032173,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001014",
+      "end_ms": 1790039957801,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790039959801,
+        "start_ms": 1790039958801
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790039989801,
+        "start_ms": 1790039988801
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790039957036,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001015",
+      "end_ms": 1790045623632,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790045625632,
+        "start_ms": 1790045624632
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790045655632,
+        "start_ms": 1790045654632
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790045619413,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001016",
+      "end_ms": 1790045644515,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790045646515,
+        "start_ms": 1790045645515
+      },
+      "event_count": 6,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790045676515,
+        "start_ms": 1790045675515
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790045634693,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001017",
+      "end_ms": 1790045760612,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790045762612,
+        "start_ms": 1790045761612
+      },
+      "event_count": 10,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790045792612,
+        "start_ms": 1790045791612
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790045752886,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001018",
+      "end_ms": 1790046086733,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790046088733,
+        "start_ms": 1790046087733
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790046118733,
+        "start_ms": 1790046117733
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790046083545,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001019",
+      "end_ms": 1790046102748,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790046104748,
+        "start_ms": 1790046103748
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790046134748,
+        "start_ms": 1790046133748
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790046096990,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001020",
+      "end_ms": 1790052621347,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790052623347,
+        "start_ms": 1790052622347
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790052653347,
+        "start_ms": 1790052652347
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790052620337,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001021",
+      "end_ms": 1790054314889,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790054316889,
+        "start_ms": 1790054315889
+      },
+      "event_count": 13,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790054346889,
+        "start_ms": 1790054345889
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790054312166,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001022",
+      "end_ms": 1790066604142,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790066606142,
+        "start_ms": 1790066605142
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790066636142,
+        "start_ms": 1790066635142
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790066595788,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001023",
+      "end_ms": 1790066711469,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790066713469,
+        "start_ms": 1790066712469
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790066743469,
+        "start_ms": 1790066742469
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790066711217,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001024",
+      "end_ms": 1790067194566,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790067196566,
+        "start_ms": 1790067195566
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790067226566,
+        "start_ms": 1790067225566
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790067192302,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001025",
+      "end_ms": 1790072709837,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790072711837,
+        "start_ms": 1790072710837
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790072741837,
+        "start_ms": 1790072740837
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790072707952,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001026",
+      "end_ms": 1790073272458,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790073274458,
+        "start_ms": 1790073273458
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790073304458,
+        "start_ms": 1790073303458
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790073268517,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001027",
+      "end_ms": 1790085509974,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790085511974,
+        "start_ms": 1790085510974
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790085541974,
+        "start_ms": 1790085540974
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790085509749,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001028",
+      "end_ms": 1790087459226,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790087461226,
+        "start_ms": 1790087460226
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790087491226,
+        "start_ms": 1790087490226
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790087454008,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001029",
+      "end_ms": 1790087467825,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790087469825,
+        "start_ms": 1790087468825
+      },
+      "event_count": 8,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790087499825,
+        "start_ms": 1790087498825
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790087465314,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001030",
+      "end_ms": 1790087589085,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790087591085,
+        "start_ms": 1790087590085
+      },
+      "event_count": 10,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790087621085,
+        "start_ms": 1790087620085
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790087584167,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001031",
+      "end_ms": 1790087728053,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790087730053,
+        "start_ms": 1790087729053
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790087760053,
+        "start_ms": 1790087759053
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790087722541,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001032",
+      "end_ms": 1790087747933,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790087749933,
+        "start_ms": 1790087748933
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790087779933,
+        "start_ms": 1790087778933
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790087744149,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001033",
+      "end_ms": 1790087760878,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790087762878,
+        "start_ms": 1790087761878
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790087792878,
+        "start_ms": 1790087791878
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790087753426,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001034",
+      "end_ms": 1790087767523,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790087769523,
+        "start_ms": 1790087768523
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790087799523,
+        "start_ms": 1790087798523
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790087767142,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001035",
+      "end_ms": 1790098276591,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790098278591,
+        "start_ms": 1790098277591
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790098308591,
+        "start_ms": 1790098307591
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790098276570,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001036",
+      "end_ms": 1790098415467,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790098417467,
+        "start_ms": 1790098416467
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790098447467,
+        "start_ms": 1790098446467
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790098415413,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001037",
+      "end_ms": 1790101022057,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790101024057,
+        "start_ms": 1790101023057
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790101054057,
+        "start_ms": 1790101053057
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790101021156,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001038",
+      "end_ms": 1790105273546,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790105275546,
+        "start_ms": 1790105274546
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790105305546,
+        "start_ms": 1790105304546
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790105271115,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001039",
+      "end_ms": 1790105318398,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790105320398,
+        "start_ms": 1790105319398
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790105350398,
+        "start_ms": 1790105349398
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790105315150,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001040",
+      "end_ms": 1790116896583,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790116898583,
+        "start_ms": 1790116897583
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790116928583,
+        "start_ms": 1790116927583
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790116889416,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001041",
+      "end_ms": 1790118369944,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790118371944,
+        "start_ms": 1790118370944
+      },
+      "event_count": 11,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790118401944,
+        "start_ms": 1790118400944
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790118363203,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001042",
+      "end_ms": 1790118602612,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790118604612,
+        "start_ms": 1790118603612
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790118634612,
+        "start_ms": 1790118633612
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790118602288,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001043",
+      "end_ms": 1790118735538,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790118737538,
+        "start_ms": 1790118736538
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790118767538,
+        "start_ms": 1790118766538
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790118734287,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001044",
+      "end_ms": 1790126010733,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790126012733,
+        "start_ms": 1790126011733
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790126042733,
+        "start_ms": 1790126041733
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790126003934,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001045",
+      "end_ms": 1790127698137,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790127700137,
+        "start_ms": 1790127699137
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790127730137,
+        "start_ms": 1790127729137
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790127696675,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001046",
+      "end_ms": 1790134862711,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790134864711,
+        "start_ms": 1790134863711
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790134894711,
+        "start_ms": 1790134893711
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790134860376,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001047",
+      "end_ms": 1790135091005,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790135093005,
+        "start_ms": 1790135092005
+      },
+      "event_count": 6,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790135123005,
+        "start_ms": 1790135122005
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790135086173,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001048",
+      "end_ms": 1790137419983,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790137421983,
+        "start_ms": 1790137420983
+      },
+      "event_count": 6,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790137451983,
+        "start_ms": 1790137450983
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790137416180,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001049",
+      "end_ms": 1790142823689,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790142825689,
+        "start_ms": 1790142824689
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790142855689,
+        "start_ms": 1790142854689
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790142821375,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001050",
+      "end_ms": 1790149470518,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790149472518,
+        "start_ms": 1790149471518
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790149502518,
+        "start_ms": 1790149501518
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790149466684,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001051",
+      "end_ms": 1790149481320,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790149483320,
+        "start_ms": 1790149482320
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790149513320,
+        "start_ms": 1790149512320
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790149480122,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001052",
+      "end_ms": 1790150737006,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790150739006,
+        "start_ms": 1790150738006
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790150769006,
+        "start_ms": 1790150768006
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790150732413,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001053",
+      "end_ms": 1790150758985,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790150760985,
+        "start_ms": 1790150759985
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790150790985,
+        "start_ms": 1790150789985
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790150758105,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001054",
+      "end_ms": 1790153386884,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790153388884,
+        "start_ms": 1790153387884
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790153418884,
+        "start_ms": 1790153417884
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790153386001,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001055",
+      "end_ms": 1790153410458,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790153412458,
+        "start_ms": 1790153411458
+      },
+      "event_count": 16,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790153442458,
+        "start_ms": 1790153441458
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790153396050,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001056",
+      "end_ms": 1790159135997,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790159137997,
+        "start_ms": 1790159136997
+      },
+      "event_count": 8,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790159167997,
+        "start_ms": 1790159166997
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790159130226,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001057",
+      "end_ms": 1790162526249,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790162528249,
+        "start_ms": 1790162527249
+      },
+      "event_count": 6,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790162558249,
+        "start_ms": 1790162557249
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790162524997,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001058",
+      "end_ms": 1790168859805,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790168861805,
+        "start_ms": 1790168860805
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790168891805,
+        "start_ms": 1790168890805
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790168856139,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001059",
+      "end_ms": 1790168889606,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790168891606,
+        "start_ms": 1790168890606
+      },
+      "event_count": 14,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790168921606,
+        "start_ms": 1790168920606
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790168880381,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001060",
+      "end_ms": 1790172481147,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790172483147,
+        "start_ms": 1790172482147
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790172513147,
+        "start_ms": 1790172512147
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790172478038,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001061",
+      "end_ms": 1790172499647,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790172501647,
+        "start_ms": 1790172500647
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790172531647,
+        "start_ms": 1790172530647
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790172497320,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001062",
+      "end_ms": 1790172650271,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790172652271,
+        "start_ms": 1790172651271
+      },
+      "event_count": 29,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790172682271,
+        "start_ms": 1790172681271
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790172648032,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001063",
+      "end_ms": 1790172671693,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790172673693,
+        "start_ms": 1790172672693
+      },
+      "event_count": 11,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790172703693,
+        "start_ms": 1790172702693
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790172667782,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001064",
+      "end_ms": 1790172694190,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790172696190,
+        "start_ms": 1790172695190
+      },
+      "event_count": 11,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790172726190,
+        "start_ms": 1790172725190
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790172687693,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001065",
+      "end_ms": 1790172763225,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790172765225,
+        "start_ms": 1790172764225
+      },
+      "event_count": 24,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790172795225,
+        "start_ms": 1790172794225
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790172754297,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001066",
+      "end_ms": 1790172794755,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790172796755,
+        "start_ms": 1790172795755
+      },
+      "event_count": 99,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790172826755,
+        "start_ms": 1790172825755
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790172771334,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001067",
+      "end_ms": 1790173191984,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790173193984,
+        "start_ms": 1790173192984
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790173223984,
+        "start_ms": 1790173222984
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790173189350,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001068",
+      "end_ms": 1790173865096,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790173867096,
+        "start_ms": 1790173866096
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790173897096,
+        "start_ms": 1790173896096
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790173864349,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001069",
+      "end_ms": 1790173874427,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790173876427,
+        "start_ms": 1790173875427
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790173906427,
+        "start_ms": 1790173905427
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790173873425,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001070",
+      "end_ms": 1790174196677,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790174198677,
+        "start_ms": 1790174197677
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790174228677,
+        "start_ms": 1790174227677
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790174193420,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001071",
+      "end_ms": 1790176392708,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790176394708,
+        "start_ms": 1790176393708
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790176424708,
+        "start_ms": 1790176423708
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790176392086,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001072",
+      "end_ms": 1790179268232,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790179270232,
+        "start_ms": 1790179269232
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790179300232,
+        "start_ms": 1790179299232
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790179267272,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001073",
+      "end_ms": 1790179294093,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790179296093,
+        "start_ms": 1790179295093
+      },
+      "event_count": 10,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790179326093,
+        "start_ms": 1790179325093
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790179280272,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001074",
+      "end_ms": 1790186585981,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790186587981,
+        "start_ms": 1790186586981
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790186617981,
+        "start_ms": 1790186616981
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790186583688,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001075",
+      "end_ms": 1790201225199,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790201227199,
+        "start_ms": 1790201226199
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790201257199,
+        "start_ms": 1790201256199
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790201222643,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001076",
+      "end_ms": 1790201243680,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790201245680,
+        "start_ms": 1790201244680
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790201275680,
+        "start_ms": 1790201274680
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790201240010,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001077",
+      "end_ms": 1790201299807,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790201301807,
+        "start_ms": 1790201300807
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790201331807,
+        "start_ms": 1790201330807
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790201298077,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001078",
+      "end_ms": 1790215517418,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790215519418,
+        "start_ms": 1790215518418
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790215549418,
+        "start_ms": 1790215548418
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790215516054,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001079",
+      "end_ms": 1790226065157,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790226067157,
+        "start_ms": 1790226066157
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790226097157,
+        "start_ms": 1790226096157
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790226061360,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001080",
+      "end_ms": 1790226331105,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790226333105,
+        "start_ms": 1790226332105
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790226363105,
+        "start_ms": 1790226362105
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790226327843,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001081",
+      "end_ms": 1790238919052,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790238921052,
+        "start_ms": 1790238920052
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790238951052,
+        "start_ms": 1790238950052
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790238916547,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001082",
+      "end_ms": 1790239630677,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790239632677,
+        "start_ms": 1790239631677
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790239662677,
+        "start_ms": 1790239661677
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790239627706,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001083",
+      "end_ms": 1790239753559,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790239755559,
+        "start_ms": 1790239754559
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790239785559,
+        "start_ms": 1790239784559
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790239753303,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001084",
+      "end_ms": 1790239782784,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790239784784,
+        "start_ms": 1790239783784
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790239814784,
+        "start_ms": 1790239813784
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790239777281,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001085",
+      "end_ms": 1790239800369,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790239802369,
+        "start_ms": 1790239801369
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790239832369,
+        "start_ms": 1790239831369
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790239797423,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001086",
+      "end_ms": 1790241550722,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790241552722,
+        "start_ms": 1790241551722
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790241582722,
+        "start_ms": 1790241581722
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790241549976,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001087",
+      "end_ms": 1790242267554,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790242269554,
+        "start_ms": 1790242268554
+      },
+      "event_count": 12,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790242299554,
+        "start_ms": 1790242298554
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790242253071,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001088",
+      "end_ms": 1790242352740,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790242354740,
+        "start_ms": 1790242353740
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790242384740,
+        "start_ms": 1790242383740
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790242349355,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001089",
+      "end_ms": 1790242403114,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790242405114,
+        "start_ms": 1790242404114
+      },
+      "event_count": 21,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790242435114,
+        "start_ms": 1790242434114
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790242398166,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001090",
+      "end_ms": 1790242443772,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790242445772,
+        "start_ms": 1790242444772
+      },
+      "event_count": 6,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790242475772,
+        "start_ms": 1790242474772
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790242440154,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001091",
+      "end_ms": 1790242474477,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790242476477,
+        "start_ms": 1790242475477
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790242506477,
+        "start_ms": 1790242505477
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790242473158,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001092",
+      "end_ms": 1790254862572,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790254864572,
+        "start_ms": 1790254863572
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790254894572,
+        "start_ms": 1790254893572
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790254858474,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001093",
+      "end_ms": 1790259970944,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790259972944,
+        "start_ms": 1790259971944
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790260002944,
+        "start_ms": 1790260001944
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790259969944,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001094",
+      "end_ms": 1790259978530,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790259980530,
+        "start_ms": 1790259979530
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790260010530,
+        "start_ms": 1790260009530
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790259978249,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001095",
+      "end_ms": 1790260100063,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790260102063,
+        "start_ms": 1790260101063
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790260132063,
+        "start_ms": 1790260131063
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790260093421,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001096",
+      "end_ms": 1790260113031,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790260115031,
+        "start_ms": 1790260114031
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790260145031,
+        "start_ms": 1790260144031
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790260112271,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001097",
+      "end_ms": 1790261436181,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790261438181,
+        "start_ms": 1790261437181
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790261468181,
+        "start_ms": 1790261467181
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790261435204,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001098",
+      "end_ms": 1790261573265,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790261575265,
+        "start_ms": 1790261574265
+      },
+      "event_count": 7,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790261605265,
+        "start_ms": 1790261604265
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790261563184,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001099",
+      "end_ms": 1790261586639,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790261588639,
+        "start_ms": 1790261587639
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790261618639,
+        "start_ms": 1790261617639
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790261584254,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001100",
+      "end_ms": 1790262935690,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790262937690,
+        "start_ms": 1790262936690
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790262967690,
+        "start_ms": 1790262966690
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790262933497,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001101",
+      "end_ms": 1790263450880,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790263452880,
+        "start_ms": 1790263451880
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790263482880,
+        "start_ms": 1790263481880
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790263444130,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001102",
+      "end_ms": 1790264115687,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790264117687,
+        "start_ms": 1790264116687
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790264147687,
+        "start_ms": 1790264146687
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790264114924,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001103",
+      "end_ms": 1790264247455,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790264249455,
+        "start_ms": 1790264248455
+      },
+      "event_count": 8,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790264279455,
+        "start_ms": 1790264278455
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790264244013,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001104",
+      "end_ms": 1790266538837,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790266540837,
+        "start_ms": 1790266539837
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790266570837,
+        "start_ms": 1790266569837
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790266538101,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001105",
+      "end_ms": 1790266546835,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790266548835,
+        "start_ms": 1790266547835
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790266578835,
+        "start_ms": 1790266577835
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790266546045,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001106",
+      "end_ms": 1790266565504,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790266567504,
+        "start_ms": 1790266566504
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790266597504,
+        "start_ms": 1790266596504
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790266563339,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001107",
+      "end_ms": 1790266583101,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790266585101,
+        "start_ms": 1790266584101
+      },
+      "event_count": 7,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790266615101,
+        "start_ms": 1790266614101
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790266579251,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001108",
+      "end_ms": 1790266589931,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790266591931,
+        "start_ms": 1790266590931
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790266621931,
+        "start_ms": 1790266620931
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790266589423,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001109",
+      "end_ms": 1790266617884,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790266619884,
+        "start_ms": 1790266618884
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790266649884,
+        "start_ms": 1790266648884
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790266617097,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001110",
+      "end_ms": 1790266624046,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790266626046,
+        "start_ms": 1790266625046
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790266656046,
+        "start_ms": 1790266655046
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790266623169,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001111",
+      "end_ms": 1790266686328,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790266688328,
+        "start_ms": 1790266687328
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790266718328,
+        "start_ms": 1790266717328
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790266685136,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001112",
+      "end_ms": 1790268030865,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790268032865,
+        "start_ms": 1790268031865
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790268062865,
+        "start_ms": 1790268061865
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790268029503,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001113",
+      "end_ms": 1790268038984,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790268040984,
+        "start_ms": 1790268039984
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790268070984,
+        "start_ms": 1790268069984
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790268037703,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001114",
+      "end_ms": 1790268088013,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790268090013,
+        "start_ms": 1790268089013
+      },
+      "event_count": 10,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790268120013,
+        "start_ms": 1790268119013
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790268081297,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001115",
+      "end_ms": 1790268140813,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790268142813,
+        "start_ms": 1790268141813
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790268172813,
+        "start_ms": 1790268171813
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790268139258,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001116",
+      "end_ms": 1790280833237,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790280835237,
+        "start_ms": 1790280834237
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790280865237,
+        "start_ms": 1790280864237
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790280827269,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001117",
+      "end_ms": 1790298164441,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790298166441,
+        "start_ms": 1790298165441
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790298196441,
+        "start_ms": 1790298195441
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790298162502,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001118",
+      "end_ms": 1790298220627,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790298222627,
+        "start_ms": 1790298221627
+      },
+      "event_count": 6,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790298252627,
+        "start_ms": 1790298251627
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790298218269,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001119",
+      "end_ms": 1790301849597,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790301851597,
+        "start_ms": 1790301850597
+      },
+      "event_count": 11,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790301881597,
+        "start_ms": 1790301880597
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790301846266,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001120",
+      "end_ms": 1790302769165,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790302771165,
+        "start_ms": 1790302770165
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790302801165,
+        "start_ms": 1790302800165
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790302766514,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001121",
+      "end_ms": 1790320129723,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790320131723,
+        "start_ms": 1790320130723
+      },
+      "event_count": 6,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790320161723,
+        "start_ms": 1790320160723
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790320128064,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001122",
+      "end_ms": 1790328489746,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790328491746,
+        "start_ms": 1790328490746
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790328521746,
+        "start_ms": 1790328520746
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790328485929,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001123",
+      "end_ms": 1790328539467,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790328541467,
+        "start_ms": 1790328540467
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790328571467,
+        "start_ms": 1790328570467
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790328538433,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001124",
+      "end_ms": 1790328639025,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790328641025,
+        "start_ms": 1790328640025
+      },
+      "event_count": 8,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790328671025,
+        "start_ms": 1790328670025
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790328634189,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001125",
+      "end_ms": 1790328680206,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790328682206,
+        "start_ms": 1790328681206
+      },
+      "event_count": 14,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790328712206,
+        "start_ms": 1790328711206
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790328663663,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001126",
+      "end_ms": 1790332026649,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790332028649,
+        "start_ms": 1790332027649
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790332058649,
+        "start_ms": 1790332057649
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790332022728,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001127",
+      "end_ms": 1790332105484,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790332107484,
+        "start_ms": 1790332106484
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790332137484,
+        "start_ms": 1790332136484
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790332102261,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001128",
+      "end_ms": 1790333443503,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790333445503,
+        "start_ms": 1790333444503
+      },
+      "event_count": 10,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790333475503,
+        "start_ms": 1790333474503
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790333434530,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001129",
+      "end_ms": 1790333682682,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790333684682,
+        "start_ms": 1790333683682
+      },
+      "event_count": 6,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790333714682,
+        "start_ms": 1790333713682
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790333679619,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001130",
+      "end_ms": 1790333705412,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790333707412,
+        "start_ms": 1790333706412
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790333737412,
+        "start_ms": 1790333736412
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790333702030,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001131",
+      "end_ms": 1790333721796,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790333723796,
+        "start_ms": 1790333722796
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790333753796,
+        "start_ms": 1790333752796
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790333719603,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001132",
+      "end_ms": 1790334400804,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790334402804,
+        "start_ms": 1790334401804
+      },
+      "event_count": 51,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790334432804,
+        "start_ms": 1790334431804
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790334380739,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001133",
+      "end_ms": 1790334428977,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790334430977,
+        "start_ms": 1790334429977
+      },
+      "event_count": 96,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790334460977,
+        "start_ms": 1790334459977
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790334408750,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001134",
+      "end_ms": 1790334440137,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790334442137,
+        "start_ms": 1790334441137
+      },
+      "event_count": 14,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790334472137,
+        "start_ms": 1790334471137
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790334439194,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001135",
+      "end_ms": 1790334470026,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790334472026,
+        "start_ms": 1790334471026
+      },
+      "event_count": 8,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790334502026,
+        "start_ms": 1790334501026
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790334469579,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001136",
+      "end_ms": 1790334496691,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790334498691,
+        "start_ms": 1790334497691
+      },
+      "event_count": 58,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790334528691,
+        "start_ms": 1790334527691
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790334481284,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001137",
+      "end_ms": 1790334518123,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790334520123,
+        "start_ms": 1790334519123
+      },
+      "event_count": 19,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790334550123,
+        "start_ms": 1790334549123
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790334503483,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001138",
+      "end_ms": 1790334597948,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790334599948,
+        "start_ms": 1790334598948
+      },
+      "event_count": 9,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790334629948,
+        "start_ms": 1790334628948
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790334597432,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001139",
+      "end_ms": 1790335303596,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790335305596,
+        "start_ms": 1790335304596
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790335335596,
+        "start_ms": 1790335334596
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790335302058,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001140",
+      "end_ms": 1790338392725,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790338394725,
+        "start_ms": 1790338393725
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790338424725,
+        "start_ms": 1790338423725
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790338392249,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001141",
+      "end_ms": 1790338441401,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790338443401,
+        "start_ms": 1790338442401
+      },
+      "event_count": 6,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790338473401,
+        "start_ms": 1790338472401
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790338435339,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001142",
+      "end_ms": 1790338564725,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790338566725,
+        "start_ms": 1790338565725
+      },
+      "event_count": 10,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790338596725,
+        "start_ms": 1790338595725
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790338550190,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001143",
+      "end_ms": 1790338614192,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790338616192,
+        "start_ms": 1790338615192
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790338646192,
+        "start_ms": 1790338645192
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790338613282,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001144",
+      "end_ms": 1790338677991,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790338679991,
+        "start_ms": 1790338678991
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790338709991,
+        "start_ms": 1790338708991
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790338670613,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001145",
+      "end_ms": 1790342382299,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790342384299,
+        "start_ms": 1790342383299
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790342414299,
+        "start_ms": 1790342413299
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790342380827,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001146",
+      "end_ms": 1790344023455,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790344025455,
+        "start_ms": 1790344024455
+      },
+      "event_count": 8,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790344055455,
+        "start_ms": 1790344054455
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790344019277,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001147",
+      "end_ms": 1790345093593,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790345095593,
+        "start_ms": 1790345094593
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790345125593,
+        "start_ms": 1790345124593
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790345091140,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001148",
+      "end_ms": 1790347519579,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790347521579,
+        "start_ms": 1790347520579
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790347551579,
+        "start_ms": 1790347550579
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790347518525,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001149",
+      "end_ms": 1790348525979,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790348527979,
+        "start_ms": 1790348526979
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790348557979,
+        "start_ms": 1790348556979
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790348522195,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001150",
+      "end_ms": 1790349330438,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790349332438,
+        "start_ms": 1790349331438
+      },
+      "event_count": 6,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790349362438,
+        "start_ms": 1790349361438
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790349326681,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001151",
+      "end_ms": 1790350760783,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790350762783,
+        "start_ms": 1790350761783
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790350792783,
+        "start_ms": 1790350791783
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790350755767,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001152",
+      "end_ms": 1790353217589,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790353219589,
+        "start_ms": 1790353218589
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790353249589,
+        "start_ms": 1790353248589
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790353217154,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001153",
+      "end_ms": 1790353988891,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790353990891,
+        "start_ms": 1790353989891
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790354020891,
+        "start_ms": 1790354019891
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790353981172,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001154",
+      "end_ms": 1790355729446,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790355731446,
+        "start_ms": 1790355730446
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790355761446,
+        "start_ms": 1790355760446
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790355727129,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001155",
+      "end_ms": 1790359948546,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790359950546,
+        "start_ms": 1790359949546
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790359980546,
+        "start_ms": 1790359979546
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790359946144,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001156",
+      "end_ms": 1790360126750,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790360128750,
+        "start_ms": 1790360127750
+      },
+      "event_count": 6,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790360158750,
+        "start_ms": 1790360157750
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790360125317,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001157",
+      "end_ms": 1790360143925,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790360145925,
+        "start_ms": 1790360144925
+      },
+      "event_count": 32,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790360175925,
+        "start_ms": 1790360174925
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790360136241,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001158",
+      "end_ms": 1790360440390,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790360442390,
+        "start_ms": 1790360441390
+      },
+      "event_count": 25,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790360472390,
+        "start_ms": 1790360471390
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790360437206,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001159",
+      "end_ms": 1790368743113,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790368745113,
+        "start_ms": 1790368744113
+      },
+      "event_count": 12,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790368775113,
+        "start_ms": 1790368774113
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790368737640,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001160",
+      "end_ms": 1790392217313,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790392219313,
+        "start_ms": 1790392218313
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790392249313,
+        "start_ms": 1790392248313
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-26"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790392216124,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001161",
+      "end_ms": 1790392281556,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790392283556,
+        "start_ms": 1790392282556
+      },
+      "event_count": 7,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790392313556,
+        "start_ms": 1790392312556
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-26"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790392280187,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001162",
+      "end_ms": 1790397008705,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790397010705,
+        "start_ms": 1790397009705
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790397040705,
+        "start_ms": 1790397039705
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-26"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790397002687,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001163",
+      "end_ms": 1790411828643,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790411830643,
+        "start_ms": 1790411829643
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790411860643,
+        "start_ms": 1790411859643
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-26"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790411823123,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001164",
+      "end_ms": 1790411847020,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790411849020,
+        "start_ms": 1790411848020
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790411879020,
+        "start_ms": 1790411878020
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-26"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790411842226,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001165",
+      "end_ms": 1790414039142,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790414041142,
+        "start_ms": 1790414040142
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790414071142,
+        "start_ms": 1790414070142
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-26"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790414036252,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001166",
+      "end_ms": 1790422509300,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790422511300,
+        "start_ms": 1790422510300
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790422541300,
+        "start_ms": 1790422540300
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-26"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790422508946,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001167",
+      "end_ms": 1790422535672,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790422537672,
+        "start_ms": 1790422536672
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790422567672,
+        "start_ms": 1790422566672
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-26"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790422535215,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001168",
+      "end_ms": 1790436620429,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790436622429,
+        "start_ms": 1790436621429
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790436652429,
+        "start_ms": 1790436651429
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-26"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790436616925,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001169",
+      "end_ms": 1790436900503,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790436902503,
+        "start_ms": 1790436901503
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790436932503,
+        "start_ms": 1790436931503
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-26"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790436899261,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001170",
+      "end_ms": 1790436924863,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790436926863,
+        "start_ms": 1790436925863
+      },
+      "event_count": 10,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790436956863,
+        "start_ms": 1790436955863
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-26"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790436922030,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001171",
+      "end_ms": 1790455208565,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790455210565,
+        "start_ms": 1790455209565
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790455240565,
+        "start_ms": 1790455239565
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-26"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790455204604,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001172",
+      "end_ms": 1790455261925,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790455263925,
+        "start_ms": 1790455262925
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790455293925,
+        "start_ms": 1790455292925
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-26"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790455253139,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001173",
+      "end_ms": 1790455794060,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790455796060,
+        "start_ms": 1790455795060
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790455826060,
+        "start_ms": 1790455825060
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-26"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790455793277,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "cluster_id": "S0C001174",
+      "end_ms": 1789823832031,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789823834031,
+        "start_ms": 1789823833031
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789823864031,
+        "start_ms": 1789823863031
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-19"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789823828622,
+      "symbol": "DOGEUSDT"
+    },
+    {
+      "cluster_id": "S0C001175",
+      "end_ms": 1789823960014,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789823962014,
+        "start_ms": 1789823961014
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789823992014,
+        "start_ms": 1789823991014
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-19"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789823955753,
+      "symbol": "DOGEUSDT"
+    },
+    {
+      "cluster_id": "S0C001176",
+      "end_ms": 1789831774391,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789831776391,
+        "start_ms": 1789831775391
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789831806391,
+        "start_ms": 1789831805391
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-19"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1789831774122,
+      "symbol": "DOGEUSDT"
+    },
+    {
+      "cluster_id": "S0C001177",
+      "end_ms": 1789837689564,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789837691564,
+        "start_ms": 1789837690564
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789837721564,
+        "start_ms": 1789837720564
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-19"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789837681789,
+      "symbol": "DOGEUSDT"
+    },
+    {
+      "cluster_id": "S0C001178",
+      "end_ms": 1789837735670,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789837737670,
+        "start_ms": 1789837736670
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789837767670,
+        "start_ms": 1789837766670
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-19"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789837734189,
+      "symbol": "DOGEUSDT"
+    },
+    {
+      "cluster_id": "S0C001179",
+      "end_ms": 1789842629620,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789842631620,
+        "start_ms": 1789842630620
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789842661620,
+        "start_ms": 1789842660620
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-19"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1789842628858,
+      "symbol": "DOGEUSDT"
+    },
+    {
+      "cluster_id": "S0C001180",
+      "end_ms": 1789852863955,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789852865955,
+        "start_ms": 1789852864955
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789852895955,
+        "start_ms": 1789852894955
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-19"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1789852858866,
+      "symbol": "DOGEUSDT"
+    },
+    {
+      "cluster_id": "S0C001181",
+      "end_ms": 1789853783430,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789853785430,
+        "start_ms": 1789853784430
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789853815430,
+        "start_ms": 1789853814430
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-19"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1789853781916,
+      "symbol": "DOGEUSDT"
+    },
+    {
+      "cluster_id": "S0C001182",
+      "end_ms": 1789872220100,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789872222100,
+        "start_ms": 1789872221100
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789872252100,
+        "start_ms": 1789872251100
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-20"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1789872218143,
+      "symbol": "DOGEUSDT"
+    },
+    {
+      "cluster_id": "S0C001183",
+      "end_ms": 1789872257727,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789872259727,
+        "start_ms": 1789872258727
+      },
+      "event_count": 8,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789872289727,
+        "start_ms": 1789872288727
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-20"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1789872252772,
+      "symbol": "DOGEUSDT"
+    },
+    {
+      "cluster_id": "S0C001184",
+      "end_ms": 1789872315261,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789872317261,
+        "start_ms": 1789872316261
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789872347261,
+        "start_ms": 1789872346261
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-20"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1789872310693,
+      "symbol": "DOGEUSDT"
+    },
+    {
+      "cluster_id": "S0C001185",
+      "end_ms": 1789872996240,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789872998240,
+        "start_ms": 1789872997240
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789873028240,
+        "start_ms": 1789873027240
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-20"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1789872995782,
+      "symbol": "DOGEUSDT"
+    },
+    {
+      "cluster_id": "S0C001186",
+      "end_ms": 1789873352610,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789873354610,
+        "start_ms": 1789873353610
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789873384610,
+        "start_ms": 1789873383610
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-20"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1789873346283,
+      "symbol": "DOGEUSDT"
+    },
+    {
+      "cluster_id": "S0C001187",
+      "end_ms": 1789920505435,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789920507435,
+        "start_ms": 1789920506435
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789920537435,
+        "start_ms": 1789920536435
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-20"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789920505282,
+      "symbol": "DOGEUSDT"
+    },
+    {
+      "cluster_id": "S0C001188",
+      "end_ms": 1789938136515,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789938138515,
+        "start_ms": 1789938137515
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789938168515,
+        "start_ms": 1789938167515
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-20"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1789938136090,
+      "symbol": "DOGEUSDT"
+    },
+    {
+      "cluster_id": "S0C001189",
+      "end_ms": 1789938185425,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789938187425,
+        "start_ms": 1789938186425
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789938217425,
+        "start_ms": 1789938216425
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-20"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1789938181393,
+      "symbol": "DOGEUSDT"
+    },
+    {
+      "cluster_id": "S0C001190",
+      "end_ms": 1789949198615,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789949200615,
+        "start_ms": 1789949199615
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789949230615,
+        "start_ms": 1789949229615
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789949192773,
+      "symbol": "DOGEUSDT"
+    },
+    {
+      "cluster_id": "S0C001191",
+      "end_ms": 1789949588763,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789949590763,
+        "start_ms": 1789949589763
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789949620763,
+        "start_ms": 1789949619763
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789949586675,
+      "symbol": "DOGEUSDT"
+    },
+    {
+      "cluster_id": "S0C001192",
+      "end_ms": 1789977650961,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789977652961,
+        "start_ms": 1789977651961
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789977682961,
+        "start_ms": 1789977681961
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789977647191,
+      "symbol": "DOGEUSDT"
+    },
+    {
+      "cluster_id": "S0C001193",
+      "end_ms": 1789977844698,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789977846698,
+        "start_ms": 1789977845698
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789977876698,
+        "start_ms": 1789977875698
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789977841170,
+      "symbol": "DOGEUSDT"
+    },
+    {
+      "cluster_id": "S0C001194",
+      "end_ms": 1789978989924,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789978991924,
+        "start_ms": 1789978990924
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789979021924,
+        "start_ms": 1789979020924
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789978987027,
+      "symbol": "DOGEUSDT"
+    },
+    {
+      "cluster_id": "S0C001195",
+      "end_ms": 1789979927211,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789979929211,
+        "start_ms": 1789979928211
+      },
+      "event_count": 10,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789979959211,
+        "start_ms": 1789979958211
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789979919265,
+      "symbol": "DOGEUSDT"
+    },
+    {
+      "cluster_id": "S0C001196",
+      "end_ms": 1789980209001,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789980211001,
+        "start_ms": 1789980210001
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789980241001,
+        "start_ms": 1789980240001
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789980208203,
+      "symbol": "DOGEUSDT"
+    },
+    {
+      "cluster_id": "S0C001197",
+      "end_ms": 1789980518093,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789980520093,
+        "start_ms": 1789980519093
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789980550093,
+        "start_ms": 1789980549093
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789980516768,
+      "symbol": "DOGEUSDT"
+    },
+    {
+      "cluster_id": "S0C001198",
+      "end_ms": 1789980538513,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789980540513,
+        "start_ms": 1789980539513
+      },
+      "event_count": 6,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789980570513,
+        "start_ms": 1789980569513
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789980529452,
+      "symbol": "DOGEUSDT"
+    },
+    {
+      "cluster_id": "S0C001199",
+      "end_ms": 1789982784679,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789982786679,
+        "start_ms": 1789982785679
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789982816679,
+        "start_ms": 1789982815679
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789982784014,
+      "symbol": "DOGEUSDT"
+    },
+    {
+      "cluster_id": "S0C001200",
+      "end_ms": 1789983317427,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789983319427,
+        "start_ms": 1789983318427
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789983349427,
+        "start_ms": 1789983348427
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789983316153,
+      "symbol": "DOGEUSDT"
+    }
+  ]
+}

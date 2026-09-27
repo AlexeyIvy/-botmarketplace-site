@@ -1,0 +1,4010 @@
+{
+  "schema": "sc001.b13c_s0_exact_cluster_freeze_part.v0.1",
+  "parent_runner_artifact_sha256": "1138d6a034eb4a7269b8649272e375e5056e2f5b2d361bad3ea6ba54ddc7861c",
+  "part_index": 9,
+  "cluster_ordinal_start": 1601,
+  "cluster_ordinal_end": 1800,
+  "cluster_count": 200,
+  "eligible_clusters": [
+    {
+      "cluster_id": "S0C001601",
+      "end_ms": 1790242227866,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790242229866,
+        "start_ms": 1790242228866
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790242259866,
+        "start_ms": 1790242258866
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790242223340,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001602",
+      "end_ms": 1790242274492,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790242276492,
+        "start_ms": 1790242275492
+      },
+      "event_count": 20,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790242306492,
+        "start_ms": 1790242305492
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790242254543,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001603",
+      "end_ms": 1790242281591,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790242283591,
+        "start_ms": 1790242282591
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790242313591,
+        "start_ms": 1790242312591
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790242280914,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001604",
+      "end_ms": 1790242334576,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790242336576,
+        "start_ms": 1790242335576
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790242366576,
+        "start_ms": 1790242365576
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790242331276,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001605",
+      "end_ms": 1790242353203,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790242355203,
+        "start_ms": 1790242354203
+      },
+      "event_count": 7,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790242385203,
+        "start_ms": 1790242384203
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790242348896,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001606",
+      "end_ms": 1790242404138,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790242406138,
+        "start_ms": 1790242405138
+      },
+      "event_count": 14,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790242436138,
+        "start_ms": 1790242435138
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790242389772,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001607",
+      "end_ms": 1790242425453,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790242427453,
+        "start_ms": 1790242426453
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790242457453,
+        "start_ms": 1790242456453
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790242421804,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001608",
+      "end_ms": 1790242485522,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790242487522,
+        "start_ms": 1790242486522
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790242517522,
+        "start_ms": 1790242516522
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790242484705,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001609",
+      "end_ms": 1790244828151,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790244830151,
+        "start_ms": 1790244829151
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790244860151,
+        "start_ms": 1790244859151
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790244826833,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001610",
+      "end_ms": 1790245862497,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790245864497,
+        "start_ms": 1790245863497
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790245894497,
+        "start_ms": 1790245893497
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790245862007,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001611",
+      "end_ms": 1790245884169,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790245886169,
+        "start_ms": 1790245885169
+      },
+      "event_count": 6,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790245916169,
+        "start_ms": 1790245915169
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790245876113,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001612",
+      "end_ms": 1790254649517,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790254651517,
+        "start_ms": 1790254650517
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790254681517,
+        "start_ms": 1790254680517
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790254648763,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001613",
+      "end_ms": 1790256716326,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790256718326,
+        "start_ms": 1790256717326
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790256748326,
+        "start_ms": 1790256747326
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790256711177,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001614",
+      "end_ms": 1790259691626,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790259693626,
+        "start_ms": 1790259692626
+      },
+      "event_count": 6,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790259723626,
+        "start_ms": 1790259722626
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790259690768,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001615",
+      "end_ms": 1790259875335,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790259877335,
+        "start_ms": 1790259876335
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790259907335,
+        "start_ms": 1790259906335
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790259871472,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001616",
+      "end_ms": 1790259884401,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790259886401,
+        "start_ms": 1790259885401
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790259916401,
+        "start_ms": 1790259915401
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790259883625,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001617",
+      "end_ms": 1790259915155,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790259917155,
+        "start_ms": 1790259916155
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790259947155,
+        "start_ms": 1790259946155
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790259908442,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001618",
+      "end_ms": 1790260098671,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790260100671,
+        "start_ms": 1790260099671
+      },
+      "event_count": 6,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790260130671,
+        "start_ms": 1790260129671
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790260085702,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001619",
+      "end_ms": 1790260122461,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790260124461,
+        "start_ms": 1790260123461
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790260154461,
+        "start_ms": 1790260153461
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790260121534,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001620",
+      "end_ms": 1790260143690,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790260145690,
+        "start_ms": 1790260144690
+      },
+      "event_count": 6,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790260175690,
+        "start_ms": 1790260174690
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790260139387,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001621",
+      "end_ms": 1790261301275,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790261303275,
+        "start_ms": 1790261302275
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790261333275,
+        "start_ms": 1790261332275
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790261298646,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001622",
+      "end_ms": 1790261313055,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790261315055,
+        "start_ms": 1790261314055
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790261345055,
+        "start_ms": 1790261344055
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790261307323,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001623",
+      "end_ms": 1790261388476,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790261390476,
+        "start_ms": 1790261389476
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790261420476,
+        "start_ms": 1790261419476
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790261387166,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001624",
+      "end_ms": 1790261397496,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790261399496,
+        "start_ms": 1790261398496
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790261429496,
+        "start_ms": 1790261428496
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790261396935,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001625",
+      "end_ms": 1790261567110,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790261569110,
+        "start_ms": 1790261568110
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790261599110,
+        "start_ms": 1790261598110
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790261564124,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001626",
+      "end_ms": 1790261575563,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790261577563,
+        "start_ms": 1790261576563
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790261607563,
+        "start_ms": 1790261606563
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790261573510,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001627",
+      "end_ms": 1790266603435,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790266605435,
+        "start_ms": 1790266604435
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790266635435,
+        "start_ms": 1790266634435
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790266600772,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001628",
+      "end_ms": 1790266625376,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790266627376,
+        "start_ms": 1790266626376
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790266657376,
+        "start_ms": 1790266656376
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790266624046,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001629",
+      "end_ms": 1790270204558,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790270206558,
+        "start_ms": 1790270205558
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790270236558,
+        "start_ms": 1790270235558
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790270200955,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001630",
+      "end_ms": 1790286800969,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790286802969,
+        "start_ms": 1790286801969
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790286832969,
+        "start_ms": 1790286831969
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790286791200,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001631",
+      "end_ms": 1790287103682,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790287105682,
+        "start_ms": 1790287104682
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790287135682,
+        "start_ms": 1790287134682
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790287102821,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001632",
+      "end_ms": 1790294719175,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790294721175,
+        "start_ms": 1790294720175
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790294751175,
+        "start_ms": 1790294750175
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790294716993,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001633",
+      "end_ms": 1790294758849,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790294760849,
+        "start_ms": 1790294759849
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790294790849,
+        "start_ms": 1790294789849
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790294757972,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001634",
+      "end_ms": 1790295612307,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790295614307,
+        "start_ms": 1790295613307
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790295644307,
+        "start_ms": 1790295643307
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790295607345,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001635",
+      "end_ms": 1790295620202,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790295622202,
+        "start_ms": 1790295621202
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790295652202,
+        "start_ms": 1790295651202
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790295617785,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001636",
+      "end_ms": 1790295638654,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790295640654,
+        "start_ms": 1790295639654
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790295670654,
+        "start_ms": 1790295669654
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790295634838,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001637",
+      "end_ms": 1790307059233,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790307061233,
+        "start_ms": 1790307060233
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790307091233,
+        "start_ms": 1790307090233
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790307057292,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001638",
+      "end_ms": 1790324494608,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790324496608,
+        "start_ms": 1790324495608
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790324526608,
+        "start_ms": 1790324525608
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790324490018,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001639",
+      "end_ms": 1790328490523,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790328492523,
+        "start_ms": 1790328491523
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790328522523,
+        "start_ms": 1790328521523
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790328486193,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001640",
+      "end_ms": 1790328636504,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790328638504,
+        "start_ms": 1790328637504
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790328668504,
+        "start_ms": 1790328667504
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790328636223,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001641",
+      "end_ms": 1790334345180,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790334347180,
+        "start_ms": 1790334346180
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790334377180,
+        "start_ms": 1790334376180
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790334344810,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001642",
+      "end_ms": 1790334470489,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790334472489,
+        "start_ms": 1790334471489
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790334502489,
+        "start_ms": 1790334501489
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790334466713,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001643",
+      "end_ms": 1790334491394,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790334493394,
+        "start_ms": 1790334492394
+      },
+      "event_count": 6,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790334523394,
+        "start_ms": 1790334522394
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790334487848,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001644",
+      "end_ms": 1790334895161,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790334897161,
+        "start_ms": 1790334896161
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790334927161,
+        "start_ms": 1790334926161
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790334893983,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001645",
+      "end_ms": 1790334993529,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790334995529,
+        "start_ms": 1790334994529
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790335025529,
+        "start_ms": 1790335024529
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790334988253,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001646",
+      "end_ms": 1790335014013,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790335016013,
+        "start_ms": 1790335015013
+      },
+      "event_count": 8,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790335046013,
+        "start_ms": 1790335045013
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790335008525,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001647",
+      "end_ms": 1790336127218,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790336129218,
+        "start_ms": 1790336128218
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790336159218,
+        "start_ms": 1790336158218
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790336124544,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001648",
+      "end_ms": 1790337080756,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790337082756,
+        "start_ms": 1790337081756
+      },
+      "event_count": 8,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790337112756,
+        "start_ms": 1790337111756
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790337079886,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001649",
+      "end_ms": 1790337094535,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790337096535,
+        "start_ms": 1790337095535
+      },
+      "event_count": 9,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790337126535,
+        "start_ms": 1790337125535
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790337085787,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001650",
+      "end_ms": 1790337107659,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790337109659,
+        "start_ms": 1790337108659
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790337139659,
+        "start_ms": 1790337138659
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790337106825,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001651",
+      "end_ms": 1790337708882,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790337710882,
+        "start_ms": 1790337709882
+      },
+      "event_count": 19,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790337740882,
+        "start_ms": 1790337739882
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790337694533,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001652",
+      "end_ms": 1790337724032,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790337726032,
+        "start_ms": 1790337725032
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790337756032,
+        "start_ms": 1790337755032
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790337723875,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001653",
+      "end_ms": 1790337762670,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790337764670,
+        "start_ms": 1790337763670
+      },
+      "event_count": 8,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790337794670,
+        "start_ms": 1790337793670
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790337756961,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001654",
+      "end_ms": 1790337800888,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790337802888,
+        "start_ms": 1790337801888
+      },
+      "event_count": 12,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790337832888,
+        "start_ms": 1790337831888
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790337793236,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001655",
+      "end_ms": 1790338036150,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790338038150,
+        "start_ms": 1790338037150
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790338068150,
+        "start_ms": 1790338067150
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790338035019,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001656",
+      "end_ms": 1790338062169,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790338064169,
+        "start_ms": 1790338063169
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790338094169,
+        "start_ms": 1790338093169
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790338054356,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001657",
+      "end_ms": 1790338084523,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790338086523,
+        "start_ms": 1790338085523
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790338116523,
+        "start_ms": 1790338115523
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790338083266,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001658",
+      "end_ms": 1790338439842,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790338441842,
+        "start_ms": 1790338440842
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790338471842,
+        "start_ms": 1790338470842
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790338435520,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001659",
+      "end_ms": 1790338563996,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790338565996,
+        "start_ms": 1790338564996
+      },
+      "event_count": 11,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790338595996,
+        "start_ms": 1790338594996
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790338551376,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001660",
+      "end_ms": 1790338681270,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790338683270,
+        "start_ms": 1790338682270
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790338713270,
+        "start_ms": 1790338712270
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790338677803,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001661",
+      "end_ms": 1790341012446,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790341014446,
+        "start_ms": 1790341013446
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790341044446,
+        "start_ms": 1790341043446
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790341010121,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001662",
+      "end_ms": 1790341227432,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790341229432,
+        "start_ms": 1790341228432
+      },
+      "event_count": 6,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790341259432,
+        "start_ms": 1790341258432
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790341220399,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001663",
+      "end_ms": 1790341263626,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790341265626,
+        "start_ms": 1790341264626
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790341295626,
+        "start_ms": 1790341294626
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790341257070,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001664",
+      "end_ms": 1790342167245,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790342169245,
+        "start_ms": 1790342168245
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790342199245,
+        "start_ms": 1790342198245
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790342163855,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001665",
+      "end_ms": 1790343094756,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790343096756,
+        "start_ms": 1790343095756
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790343126756,
+        "start_ms": 1790343125756
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790343086967,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001666",
+      "end_ms": 1790344027183,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790344029183,
+        "start_ms": 1790344028183
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790344059183,
+        "start_ms": 1790344058183
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790344021675,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001667",
+      "end_ms": 1790344971504,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790344973504,
+        "start_ms": 1790344972504
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790345003504,
+        "start_ms": 1790345002504
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790344968083,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001668",
+      "end_ms": 1790344985483,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790344987483,
+        "start_ms": 1790344986483
+      },
+      "event_count": 6,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790345017483,
+        "start_ms": 1790345016483
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790344980742,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001669",
+      "end_ms": 1790345021016,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790345023016,
+        "start_ms": 1790345022016
+      },
+      "event_count": 9,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790345053016,
+        "start_ms": 1790345052016
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790345003873,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001670",
+      "end_ms": 1790345070145,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790345072145,
+        "start_ms": 1790345071145
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790345102145,
+        "start_ms": 1790345101145
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790345064499,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001671",
+      "end_ms": 1790346903347,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790346905347,
+        "start_ms": 1790346904347
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790346935347,
+        "start_ms": 1790346934347
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790346901772,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001672",
+      "end_ms": 1790350733663,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790350735663,
+        "start_ms": 1790350734663
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790350765663,
+        "start_ms": 1790350764663
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790350733008,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001673",
+      "end_ms": 1790350761089,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790350763089,
+        "start_ms": 1790350762089
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790350793089,
+        "start_ms": 1790350792089
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790350760612,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001674",
+      "end_ms": 1790351489482,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790351491482,
+        "start_ms": 1790351490482
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790351521482,
+        "start_ms": 1790351520482
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790351487947,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001675",
+      "end_ms": 1790351528262,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790351530262,
+        "start_ms": 1790351529262
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790351560262,
+        "start_ms": 1790351559262
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790351520039,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001676",
+      "end_ms": 1790357348999,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790357350999,
+        "start_ms": 1790357349999
+      },
+      "event_count": 11,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790357380999,
+        "start_ms": 1790357379999
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790357344995,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001677",
+      "end_ms": 1790357411657,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790357413657,
+        "start_ms": 1790357412657
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790357443657,
+        "start_ms": 1790357442657
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790357407725,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001678",
+      "end_ms": 1790369483927,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790369485927,
+        "start_ms": 1790369484927
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790369515927,
+        "start_ms": 1790369514927
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790369480304,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001679",
+      "end_ms": 1790373604620,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790373606620,
+        "start_ms": 1790373605620
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790373636620,
+        "start_ms": 1790373635620
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790373603985,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001680",
+      "end_ms": 1790373645932,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790373647932,
+        "start_ms": 1790373646932
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790373677932,
+        "start_ms": 1790373676932
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790373645694,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001681",
+      "end_ms": 1790375799933,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790375801933,
+        "start_ms": 1790375800933
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790375831933,
+        "start_ms": 1790375830933
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790375798747,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001682",
+      "end_ms": 1790382713900,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790382715900,
+        "start_ms": 1790382714900
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790382745900,
+        "start_ms": 1790382744900
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-26"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790382706675,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001683",
+      "end_ms": 1790382733644,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790382735644,
+        "start_ms": 1790382734644
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790382765644,
+        "start_ms": 1790382764644
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-26"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790382727700,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001684",
+      "end_ms": 1790397005557,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790397007557,
+        "start_ms": 1790397006557
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790397037557,
+        "start_ms": 1790397036557
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-26"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790397003551,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001685",
+      "end_ms": 1790400941676,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790400943676,
+        "start_ms": 1790400942676
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790400973676,
+        "start_ms": 1790400972676
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-26"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790400940262,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001686",
+      "end_ms": 1790402572459,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790402574459,
+        "start_ms": 1790402573459
+      },
+      "event_count": 8,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790402604459,
+        "start_ms": 1790402603459
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-26"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790402571823,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001687",
+      "end_ms": 1790404108398,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790404110398,
+        "start_ms": 1790404109398
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790404140398,
+        "start_ms": 1790404139398
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-26"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790404107622,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001688",
+      "end_ms": 1790413843578,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790413845578,
+        "start_ms": 1790413844578
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790413875578,
+        "start_ms": 1790413874578
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-26"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790413842390,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001689",
+      "end_ms": 1790413886526,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790413888526,
+        "start_ms": 1790413887526
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790413918526,
+        "start_ms": 1790413917526
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-26"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790413885498,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001690",
+      "end_ms": 1790413989174,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790413991174,
+        "start_ms": 1790413990174
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790414021174,
+        "start_ms": 1790414020174
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-26"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790413988796,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001691",
+      "end_ms": 1790414039143,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790414041143,
+        "start_ms": 1790414040143
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790414071143,
+        "start_ms": 1790414070143
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-26"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790414037256,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001692",
+      "end_ms": 1790414047654,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790414049654,
+        "start_ms": 1790414048654
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790414079654,
+        "start_ms": 1790414078654
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-26"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790414046343,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001693",
+      "end_ms": 1790414225611,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790414227611,
+        "start_ms": 1790414226611
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790414257611,
+        "start_ms": 1790414256611
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-26"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790414224861,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001694",
+      "end_ms": 1790435686936,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790435688936,
+        "start_ms": 1790435687936
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790435718936,
+        "start_ms": 1790435717936
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-26"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790435682827,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001695",
+      "end_ms": 1790443906466,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790443908466,
+        "start_ms": 1790443907466
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790443938466,
+        "start_ms": 1790443937466
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-26"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790443905796,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001696",
+      "end_ms": 1790444052774,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790444054774,
+        "start_ms": 1790444053774
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790444084774,
+        "start_ms": 1790444083774
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-26"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790444051680,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001697",
+      "end_ms": 1790447631989,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790447633989,
+        "start_ms": 1790447632989
+      },
+      "event_count": 6,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790447663989,
+        "start_ms": 1790447662989
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-26"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790447630910,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001698",
+      "end_ms": 1790447791741,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790447793741,
+        "start_ms": 1790447792741
+      },
+      "event_count": 20,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790447823741,
+        "start_ms": 1790447822741
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-26"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790447787819,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001699",
+      "end_ms": 1790447918633,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790447920633,
+        "start_ms": 1790447919633
+      },
+      "event_count": 15,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790447950633,
+        "start_ms": 1790447949633
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-26"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790447909513,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001700",
+      "end_ms": 1790447997222,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790447999222,
+        "start_ms": 1790447998222
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790448029222,
+        "start_ms": 1790448028222
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-26"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790447994249,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001701",
+      "end_ms": 1790448041116,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790448043116,
+        "start_ms": 1790448042116
+      },
+      "event_count": 6,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790448073116,
+        "start_ms": 1790448072116
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-26"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790448034055,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001702",
+      "end_ms": 1790448519152,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790448521152,
+        "start_ms": 1790448520152
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790448551152,
+        "start_ms": 1790448550152
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-26"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790448517176,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001703",
+      "end_ms": 1790448666834,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790448668834,
+        "start_ms": 1790448667834
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790448698834,
+        "start_ms": 1790448697834
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-26"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790448666602,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001704",
+      "end_ms": 1790453362444,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790453364444,
+        "start_ms": 1790453363444
+      },
+      "event_count": 22,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790453394444,
+        "start_ms": 1790453393444
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-26"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790453354209,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001705",
+      "end_ms": 1790455181280,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790455183280,
+        "start_ms": 1790455182280
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790455213280,
+        "start_ms": 1790455212280
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-26"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790455180347,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001706",
+      "end_ms": 1790455205225,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790455207225,
+        "start_ms": 1790455206225
+      },
+      "event_count": 12,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790455237225,
+        "start_ms": 1790455236225
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-26"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790455192854,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001707",
+      "end_ms": 1790455230882,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790455232882,
+        "start_ms": 1790455231882
+      },
+      "event_count": 13,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790455262882,
+        "start_ms": 1790455261882
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-26"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790455223183,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001708",
+      "end_ms": 1790455649541,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790455651541,
+        "start_ms": 1790455650541
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790455681541,
+        "start_ms": 1790455680541
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-26"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790455647765,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001709",
+      "end_ms": 1790455793328,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790455795328,
+        "start_ms": 1790455794328
+      },
+      "event_count": 6,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790455825328,
+        "start_ms": 1790455824328
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-26"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790455788702,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "cluster_id": "S0C001710",
+      "end_ms": 1789994148461,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789994150461,
+        "start_ms": 1789994149461
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789994180461,
+        "start_ms": 1789994179461
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789994147257,
+      "symbol": "LTCUSDT"
+    },
+    {
+      "cluster_id": "S0C001711",
+      "end_ms": 1790172756559,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790172758559,
+        "start_ms": 1790172757559
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790172788559,
+        "start_ms": 1790172787559
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790172755613,
+      "symbol": "LTCUSDT"
+    },
+    {
+      "cluster_id": "S0C001712",
+      "end_ms": 1790172763762,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790172765762,
+        "start_ms": 1790172764762
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790172795762,
+        "start_ms": 1790172794762
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790172763513,
+      "symbol": "LTCUSDT"
+    },
+    {
+      "cluster_id": "S0C001713",
+      "end_ms": 1790172783293,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790172785293,
+        "start_ms": 1790172784293
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790172815293,
+        "start_ms": 1790172814293
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790172779934,
+      "symbol": "LTCUSDT"
+    },
+    {
+      "cluster_id": "S0C001714",
+      "end_ms": 1790172807451,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790172809451,
+        "start_ms": 1790172808451
+      },
+      "event_count": 29,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790172839451,
+        "start_ms": 1790172838451
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790172788507,
+      "symbol": "LTCUSDT"
+    },
+    {
+      "cluster_id": "S0C001715",
+      "end_ms": 1790172814090,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790172816090,
+        "start_ms": 1790172815090
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790172846090,
+        "start_ms": 1790172845090
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790172813319,
+      "symbol": "LTCUSDT"
+    },
+    {
+      "cluster_id": "S0C001716",
+      "end_ms": 1790218063035,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790218065035,
+        "start_ms": 1790218064035
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790218095035,
+        "start_ms": 1790218094035
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790218061056,
+      "symbol": "LTCUSDT"
+    },
+    {
+      "cluster_id": "S0C001717",
+      "end_ms": 1790218950430,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790218952430,
+        "start_ms": 1790218951430
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790218982430,
+        "start_ms": 1790218981430
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790218944438,
+      "symbol": "LTCUSDT"
+    },
+    {
+      "cluster_id": "S0C001718",
+      "end_ms": 1790222857094,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790222859094,
+        "start_ms": 1790222858094
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790222889094,
+        "start_ms": 1790222888094
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790222855429,
+      "symbol": "LTCUSDT"
+    },
+    {
+      "cluster_id": "S0C001719",
+      "end_ms": 1790222868966,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790222870966,
+        "start_ms": 1790222869966
+      },
+      "event_count": 12,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790222900966,
+        "start_ms": 1790222899966
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790222867260,
+      "symbol": "LTCUSDT"
+    },
+    {
+      "cluster_id": "S0C001720",
+      "end_ms": 1790226169237,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790226171237,
+        "start_ms": 1790226170237
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790226201237,
+        "start_ms": 1790226200237
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790226168447,
+      "symbol": "LTCUSDT"
+    },
+    {
+      "cluster_id": "S0C001721",
+      "end_ms": 1790242266228,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790242268228,
+        "start_ms": 1790242267228
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790242298228,
+        "start_ms": 1790242297228
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790242262117,
+      "symbol": "LTCUSDT"
+    },
+    {
+      "cluster_id": "S0C001722",
+      "end_ms": 1790251272837,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790251274837,
+        "start_ms": 1790251273837
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790251304837,
+        "start_ms": 1790251303837
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790251270746,
+      "symbol": "LTCUSDT"
+    },
+    {
+      "cluster_id": "S0C001723",
+      "end_ms": 1790256573803,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790256575803,
+        "start_ms": 1790256574803
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790256605803,
+        "start_ms": 1790256604803
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790256573094,
+      "symbol": "LTCUSDT"
+    },
+    {
+      "cluster_id": "S0C001724",
+      "end_ms": 1790257538905,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790257540905,
+        "start_ms": 1790257539905
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790257570905,
+        "start_ms": 1790257569905
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790257538686,
+      "symbol": "LTCUSDT"
+    },
+    {
+      "cluster_id": "S0C001725",
+      "end_ms": 1790257915133,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790257917133,
+        "start_ms": 1790257916133
+      },
+      "event_count": 6,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790257947133,
+        "start_ms": 1790257946133
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790257912502,
+      "symbol": "LTCUSDT"
+    },
+    {
+      "cluster_id": "S0C001726",
+      "end_ms": 1790257932650,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790257934650,
+        "start_ms": 1790257933650
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790257964650,
+        "start_ms": 1790257963650
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790257930277,
+      "symbol": "LTCUSDT"
+    },
+    {
+      "cluster_id": "S0C001727",
+      "end_ms": 1790258047755,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790258049755,
+        "start_ms": 1790258048755
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790258079755,
+        "start_ms": 1790258078755
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790258047159,
+      "symbol": "LTCUSDT"
+    },
+    {
+      "cluster_id": "S0C001728",
+      "end_ms": 1790258326867,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790258328867,
+        "start_ms": 1790258327867
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790258358867,
+        "start_ms": 1790258357867
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790258326158,
+      "symbol": "LTCUSDT"
+    },
+    {
+      "cluster_id": "S0C001729",
+      "end_ms": 1790258334462,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790258336462,
+        "start_ms": 1790258335462
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790258366462,
+        "start_ms": 1790258365462
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790258333034,
+      "symbol": "LTCUSDT"
+    },
+    {
+      "cluster_id": "S0C001730",
+      "end_ms": 1790259150935,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790259152935,
+        "start_ms": 1790259151935
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790259182935,
+        "start_ms": 1790259181935
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790259147416,
+      "symbol": "LTCUSDT"
+    },
+    {
+      "cluster_id": "S0C001731",
+      "end_ms": 1790259335249,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790259337249,
+        "start_ms": 1790259336249
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790259367249,
+        "start_ms": 1790259366249
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790259327243,
+      "symbol": "LTCUSDT"
+    },
+    {
+      "cluster_id": "S0C001732",
+      "end_ms": 1790259403512,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790259405512,
+        "start_ms": 1790259404512
+      },
+      "event_count": 14,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790259435512,
+        "start_ms": 1790259434512
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790259386499,
+      "symbol": "LTCUSDT"
+    },
+    {
+      "cluster_id": "S0C001733",
+      "end_ms": 1790259411112,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790259413112,
+        "start_ms": 1790259412112
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790259443112,
+        "start_ms": 1790259442112
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790259410480,
+      "symbol": "LTCUSDT"
+    },
+    {
+      "cluster_id": "S0C001734",
+      "end_ms": 1790259442860,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790259444860,
+        "start_ms": 1790259443860
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790259474860,
+        "start_ms": 1790259473860
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790259441190,
+      "symbol": "LTCUSDT"
+    },
+    {
+      "cluster_id": "S0C001735",
+      "end_ms": 1790260143078,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790260145078,
+        "start_ms": 1790260144078
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790260175078,
+        "start_ms": 1790260174078
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790260141325,
+      "symbol": "LTCUSDT"
+    },
+    {
+      "cluster_id": "S0C001736",
+      "end_ms": 1790260183263,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790260185263,
+        "start_ms": 1790260184263
+      },
+      "event_count": 6,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790260215263,
+        "start_ms": 1790260214263
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790260173562,
+      "symbol": "LTCUSDT"
+    },
+    {
+      "cluster_id": "S0C001737",
+      "end_ms": 1790260351674,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790260353674,
+        "start_ms": 1790260352674
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790260383674,
+        "start_ms": 1790260382674
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790260351462,
+      "symbol": "LTCUSDT"
+    },
+    {
+      "cluster_id": "S0C001738",
+      "end_ms": 1790261306787,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790261308787,
+        "start_ms": 1790261307787
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790261338787,
+        "start_ms": 1790261337787
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790261299762,
+      "symbol": "LTCUSDT"
+    },
+    {
+      "cluster_id": "S0C001739",
+      "end_ms": 1790261653096,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790261655096,
+        "start_ms": 1790261654096
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790261685096,
+        "start_ms": 1790261684096
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790261652109,
+      "symbol": "LTCUSDT"
+    },
+    {
+      "cluster_id": "S0C001740",
+      "end_ms": 1790263919496,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790263921496,
+        "start_ms": 1790263920496
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790263951496,
+        "start_ms": 1790263950496
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790263919372,
+      "symbol": "LTCUSDT"
+    },
+    {
+      "cluster_id": "S0C001741",
+      "end_ms": 1790266583452,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790266585452,
+        "start_ms": 1790266584452
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790266615452,
+        "start_ms": 1790266614452
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790266579520,
+      "symbol": "LTCUSDT"
+    },
+    {
+      "cluster_id": "S0C001742",
+      "end_ms": 1790271809573,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790271811573,
+        "start_ms": 1790271810573
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790271841573,
+        "start_ms": 1790271840573
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790271807380,
+      "symbol": "LTCUSDT"
+    },
+    {
+      "cluster_id": "S0C001743",
+      "end_ms": 1790274878940,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790274880940,
+        "start_ms": 1790274879940
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790274910940,
+        "start_ms": 1790274909940
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790274874455,
+      "symbol": "LTCUSDT"
+    },
+    {
+      "cluster_id": "S0C001744",
+      "end_ms": 1790288375038,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790288377038,
+        "start_ms": 1790288376038
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790288407038,
+        "start_ms": 1790288406038
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790288373703,
+      "symbol": "LTCUSDT"
+    },
+    {
+      "cluster_id": "S0C001745",
+      "end_ms": 1790326210003,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790326212003,
+        "start_ms": 1790326211003
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790326242003,
+        "start_ms": 1790326241003
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790326209649,
+      "symbol": "LTCUSDT"
+    },
+    {
+      "cluster_id": "S0C001746",
+      "end_ms": 1790338566020,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790338568020,
+        "start_ms": 1790338567020
+      },
+      "event_count": 11,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790338598020,
+        "start_ms": 1790338597020
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790338564448,
+      "symbol": "LTCUSDT"
+    },
+    {
+      "cluster_id": "S0C001747",
+      "end_ms": 1789852218072,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789852220072,
+        "start_ms": 1789852219072
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789852250072,
+        "start_ms": 1789852249072
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-19"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1789852217443,
+      "symbol": "OPUSDT"
+    },
+    {
+      "cluster_id": "S0C001748",
+      "end_ms": 1789979910967,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789979912967,
+        "start_ms": 1789979911967
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789979942967,
+        "start_ms": 1789979941967
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789979909106,
+      "symbol": "OPUSDT"
+    },
+    {
+      "cluster_id": "S0C001749",
+      "end_ms": 1790013215589,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790013217589,
+        "start_ms": 1790013216589
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790013247589,
+        "start_ms": 1790013246589
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-21"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790013211093,
+      "symbol": "OPUSDT"
+    },
+    {
+      "cluster_id": "S0C001750",
+      "end_ms": 1790118543999,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790118545999,
+        "start_ms": 1790118544999
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790118575999,
+        "start_ms": 1790118574999
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790118539018,
+      "symbol": "OPUSDT"
+    },
+    {
+      "cluster_id": "S0C001751",
+      "end_ms": 1790172637622,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790172639622,
+        "start_ms": 1790172638622
+      },
+      "event_count": 7,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790172669622,
+        "start_ms": 1790172668622
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790172632445,
+      "symbol": "OPUSDT"
+    },
+    {
+      "cluster_id": "S0C001752",
+      "end_ms": 1790172795186,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790172797186,
+        "start_ms": 1790172796186
+      },
+      "event_count": 8,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790172827186,
+        "start_ms": 1790172826186
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790172788507,
+      "symbol": "OPUSDT"
+    },
+    {
+      "cluster_id": "S0C001753",
+      "end_ms": 1790179336861,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790179338861,
+        "start_ms": 1790179337861
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790179368861,
+        "start_ms": 1790179367861
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790179335208,
+      "symbol": "OPUSDT"
+    },
+    {
+      "cluster_id": "S0C001754",
+      "end_ms": 1790242473762,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790242475762,
+        "start_ms": 1790242474762
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790242505762,
+        "start_ms": 1790242504762
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790242470510,
+      "symbol": "OPUSDT"
+    },
+    {
+      "cluster_id": "S0C001755",
+      "end_ms": 1790260181014,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790260183014,
+        "start_ms": 1790260182014
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790260213014,
+        "start_ms": 1790260212014
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790260180676,
+      "symbol": "OPUSDT"
+    },
+    {
+      "cluster_id": "S0C001756",
+      "end_ms": 1790288379214,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790288381214,
+        "start_ms": 1790288380214
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790288411214,
+        "start_ms": 1790288410214
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790288374029,
+      "symbol": "OPUSDT"
+    },
+    {
+      "cluster_id": "S0C001757",
+      "end_ms": 1790341389881,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790341391881,
+        "start_ms": 1790341390881
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790341421881,
+        "start_ms": 1790341420881
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790341385258,
+      "symbol": "OPUSDT"
+    },
+    {
+      "cluster_id": "S0C001758",
+      "end_ms": 1790377895940,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790377897940,
+        "start_ms": 1790377896940
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790377927940,
+        "start_ms": 1790377926940
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-25"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790377893639,
+      "symbol": "OPUSDT"
+    },
+    {
+      "cluster_id": "S0C001759",
+      "end_ms": 1790080239525,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790080241525,
+        "start_ms": 1790080240525
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790080271525,
+        "start_ms": 1790080270525
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790080235285,
+      "symbol": "BCHUSDT"
+    },
+    {
+      "cluster_id": "S0C001760",
+      "end_ms": 1790080772100,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790080774100,
+        "start_ms": 1790080773100
+      },
+      "event_count": 17,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790080804100,
+        "start_ms": 1790080803100
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790080758195,
+      "symbol": "BCHUSDT"
+    },
+    {
+      "cluster_id": "S0C001761",
+      "end_ms": 1790080830186,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790080832186,
+        "start_ms": 1790080831186
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790080862186,
+        "start_ms": 1790080861186
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790080824169,
+      "symbol": "BCHUSDT"
+    },
+    {
+      "cluster_id": "S0C001762",
+      "end_ms": 1790080840069,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790080842069,
+        "start_ms": 1790080841069
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790080872069,
+        "start_ms": 1790080871069
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790080836239,
+      "symbol": "BCHUSDT"
+    },
+    {
+      "cluster_id": "S0C001763",
+      "end_ms": 1790080853227,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790080855227,
+        "start_ms": 1790080854227
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790080885227,
+        "start_ms": 1790080884227
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790080848459,
+      "symbol": "BCHUSDT"
+    },
+    {
+      "cluster_id": "S0C001764",
+      "end_ms": 1790081905960,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790081907960,
+        "start_ms": 1790081906960
+      },
+      "event_count": 25,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790081937960,
+        "start_ms": 1790081936960
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790081894605,
+      "symbol": "BCHUSDT"
+    },
+    {
+      "cluster_id": "S0C001765",
+      "end_ms": 1790082184146,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790082186146,
+        "start_ms": 1790082185146
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790082216146,
+        "start_ms": 1790082215146
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790082183714,
+      "symbol": "BCHUSDT"
+    },
+    {
+      "cluster_id": "S0C001766",
+      "end_ms": 1790082208916,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790082210916,
+        "start_ms": 1790082209916
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790082240916,
+        "start_ms": 1790082239916
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790082201653,
+      "symbol": "BCHUSDT"
+    },
+    {
+      "cluster_id": "S0C001767",
+      "end_ms": 1790083226260,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790083228260,
+        "start_ms": 1790083227260
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790083258260,
+        "start_ms": 1790083257260
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790083224168,
+      "symbol": "BCHUSDT"
+    },
+    {
+      "cluster_id": "S0C001768",
+      "end_ms": 1790085355421,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790085357421,
+        "start_ms": 1790085356421
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790085387421,
+        "start_ms": 1790085386421
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790085354636,
+      "symbol": "BCHUSDT"
+    },
+    {
+      "cluster_id": "S0C001769",
+      "end_ms": 1790091678301,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790091680301,
+        "start_ms": 1790091679301
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790091710301,
+        "start_ms": 1790091709301
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790091675131,
+      "symbol": "BCHUSDT"
+    },
+    {
+      "cluster_id": "S0C001770",
+      "end_ms": 1790099385344,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790099387344,
+        "start_ms": 1790099386344
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790099417344,
+        "start_ms": 1790099416344
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790099384464,
+      "symbol": "BCHUSDT"
+    },
+    {
+      "cluster_id": "S0C001771",
+      "end_ms": 1790099662405,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790099664405,
+        "start_ms": 1790099663405
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790099694405,
+        "start_ms": 1790099693405
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790099660785,
+      "symbol": "BCHUSDT"
+    },
+    {
+      "cluster_id": "S0C001772",
+      "end_ms": 1790101309423,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790101311423,
+        "start_ms": 1790101310423
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790101341423,
+        "start_ms": 1790101340423
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790101304817,
+      "symbol": "BCHUSDT"
+    },
+    {
+      "cluster_id": "S0C001773",
+      "end_ms": 1790102715301,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790102717301,
+        "start_ms": 1790102716301
+      },
+      "event_count": 6,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790102747301,
+        "start_ms": 1790102746301
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790102713638,
+      "symbol": "BCHUSDT"
+    },
+    {
+      "cluster_id": "S0C001774",
+      "end_ms": 1790114591648,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790114593648,
+        "start_ms": 1790114592648
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790114623648,
+        "start_ms": 1790114622648
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790114591000,
+      "symbol": "BCHUSDT"
+    },
+    {
+      "cluster_id": "S0C001775",
+      "end_ms": 1790119216229,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790119218229,
+        "start_ms": 1790119217229
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790119248229,
+        "start_ms": 1790119247229
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-22"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790119210662,
+      "symbol": "BCHUSDT"
+    },
+    {
+      "cluster_id": "S0C001776",
+      "end_ms": 1790135101586,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790135103586,
+        "start_ms": 1790135102586
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790135133586,
+        "start_ms": 1790135132586
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790135099533,
+      "symbol": "BCHUSDT"
+    },
+    {
+      "cluster_id": "S0C001777",
+      "end_ms": 1790143441473,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790143443473,
+        "start_ms": 1790143442473
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790143473473,
+        "start_ms": 1790143472473
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790143439809,
+      "symbol": "BCHUSDT"
+    },
+    {
+      "cluster_id": "S0C001778",
+      "end_ms": 1790143466374,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790143468374,
+        "start_ms": 1790143467374
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790143498374,
+        "start_ms": 1790143497374
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790143466085,
+      "symbol": "BCHUSDT"
+    },
+    {
+      "cluster_id": "S0C001779",
+      "end_ms": 1790143567174,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790143569174,
+        "start_ms": 1790143568174
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790143599174,
+        "start_ms": 1790143598174
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790143561632,
+      "symbol": "BCHUSDT"
+    },
+    {
+      "cluster_id": "S0C001780",
+      "end_ms": 1790144376336,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790144378336,
+        "start_ms": 1790144377336
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790144408336,
+        "start_ms": 1790144407336
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790144373326,
+      "symbol": "BCHUSDT"
+    },
+    {
+      "cluster_id": "S0C001781",
+      "end_ms": 1790145458386,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790145460386,
+        "start_ms": 1790145459386
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790145490386,
+        "start_ms": 1790145489386
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790145457972,
+      "symbol": "BCHUSDT"
+    },
+    {
+      "cluster_id": "S0C001782",
+      "end_ms": 1790146025506,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790146027506,
+        "start_ms": 1790146026506
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790146057506,
+        "start_ms": 1790146056506
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790146022434,
+      "symbol": "BCHUSDT"
+    },
+    {
+      "cluster_id": "S0C001783",
+      "end_ms": 1790148962270,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790148964270,
+        "start_ms": 1790148963270
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790148994270,
+        "start_ms": 1790148993270
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790148960886,
+      "symbol": "BCHUSDT"
+    },
+    {
+      "cluster_id": "S0C001784",
+      "end_ms": 1790157929076,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790157931076,
+        "start_ms": 1790157930076
+      },
+      "event_count": 10,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790157961076,
+        "start_ms": 1790157960076
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790157924958,
+      "symbol": "BCHUSDT"
+    },
+    {
+      "cluster_id": "S0C001785",
+      "end_ms": 1790158562300,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790158564300,
+        "start_ms": 1790158563300
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790158594300,
+        "start_ms": 1790158593300
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790158561220,
+      "symbol": "BCHUSDT"
+    },
+    {
+      "cluster_id": "S0C001786",
+      "end_ms": 1790158760045,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790158762045,
+        "start_ms": 1790158761045
+      },
+      "event_count": 5,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790158792045,
+        "start_ms": 1790158791045
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790158756178,
+      "symbol": "BCHUSDT"
+    },
+    {
+      "cluster_id": "S0C001787",
+      "end_ms": 1790158878626,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790158880626,
+        "start_ms": 1790158879626
+      },
+      "event_count": 6,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790158910626,
+        "start_ms": 1790158909626
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790158877452,
+      "symbol": "BCHUSDT"
+    },
+    {
+      "cluster_id": "S0C001788",
+      "end_ms": 1790159174411,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790159176411,
+        "start_ms": 1790159175411
+      },
+      "event_count": 7,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790159206411,
+        "start_ms": 1790159205411
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790159172872,
+      "symbol": "BCHUSDT"
+    },
+    {
+      "cluster_id": "S0C001789",
+      "end_ms": 1790165028798,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790165030798,
+        "start_ms": 1790165029798
+      },
+      "event_count": 6,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790165060798,
+        "start_ms": 1790165059798
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790165027669,
+      "symbol": "BCHUSDT"
+    },
+    {
+      "cluster_id": "S0C001790",
+      "end_ms": 1790165054293,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790165056293,
+        "start_ms": 1790165055293
+      },
+      "event_count": 6,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790165086293,
+        "start_ms": 1790165085293
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790165050631,
+      "symbol": "BCHUSDT"
+    },
+    {
+      "cluster_id": "S0C001791",
+      "end_ms": 1790172369523,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790172371523,
+        "start_ms": 1790172370523
+      },
+      "event_count": 6,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790172401523,
+        "start_ms": 1790172400523
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790172363007,
+      "symbol": "BCHUSDT"
+    },
+    {
+      "cluster_id": "S0C001792",
+      "end_ms": 1790172794755,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790172796755,
+        "start_ms": 1790172795755
+      },
+      "event_count": 11,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790172826755,
+        "start_ms": 1790172825755
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790172783818,
+      "symbol": "BCHUSDT"
+    },
+    {
+      "cluster_id": "S0C001793",
+      "end_ms": 1790172804200,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790172806200,
+        "start_ms": 1790172805200
+      },
+      "event_count": 8,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790172836200,
+        "start_ms": 1790172835200
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790172801746,
+      "symbol": "BCHUSDT"
+    },
+    {
+      "cluster_id": "S0C001794",
+      "end_ms": 1790173425444,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790173427444,
+        "start_ms": 1790173426444
+      },
+      "event_count": 38,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790173457444,
+        "start_ms": 1790173456444
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790173420642,
+      "symbol": "BCHUSDT"
+    },
+    {
+      "cluster_id": "S0C001795",
+      "end_ms": 1790180312413,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790180314413,
+        "start_ms": 1790180313413
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790180344413,
+        "start_ms": 1790180343413
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790180310562,
+      "symbol": "BCHUSDT"
+    },
+    {
+      "cluster_id": "S0C001796",
+      "end_ms": 1790186803475,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790186805475,
+        "start_ms": 1790186804475
+      },
+      "event_count": 10,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790186835475,
+        "start_ms": 1790186834475
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-23"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1790186801403,
+      "symbol": "BCHUSDT"
+    },
+    {
+      "cluster_id": "S0C001797",
+      "end_ms": 1790238383744,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790238385744,
+        "start_ms": 1790238384744
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790238415744,
+        "start_ms": 1790238414744
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790238383649,
+      "symbol": "BCHUSDT"
+    },
+    {
+      "cluster_id": "S0C001798",
+      "end_ms": 1790239753548,
+      "entry_bucket": {
+        "end_ms_exclusive": 1790239755548,
+        "start_ms": 1790239754548
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1790239785548,
+        "start_ms": 1790239784548
+      },
+      "liquidation_side": "LONG_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-24"
+      ],
+      "reversal_sign": 1,
+      "start_ms": 1790239748847,
+      "symbol": "BCHUSDT"
+    },
+    {
+      "cluster_id": "S0C001799",
+      "end_ms": 1789813352545,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789813354545,
+        "start_ms": 1789813353545
+      },
+      "event_count": 3,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789813384545,
+        "start_ms": 1789813383545
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-19"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789813351487,
+      "symbol": "SUIUSDT"
+    },
+    {
+      "cluster_id": "S0C001800",
+      "end_ms": 1789814233243,
+      "entry_bucket": {
+        "end_ms_exclusive": 1789814235243,
+        "start_ms": 1789814234243
+      },
+      "event_count": 4,
+      "exit_bucket": {
+        "end_ms_exclusive": 1789814265243,
+        "start_ms": 1789814264243
+      },
+      "liquidation_side": "SHORT_LIQUIDATED",
+      "required_archive_days": [
+        "2026-09-19"
+      ],
+      "reversal_sign": -1,
+      "start_ms": 1789814228905,
+      "symbol": "SUIUSDT"
+    }
+  ]
+}
