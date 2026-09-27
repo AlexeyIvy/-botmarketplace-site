@@ -8,7 +8,7 @@
   "baseline_git_head": "94bf690f5c273c98b4a5e58d4bb2fe6ea7f9cf91",
   "last_strategy_review_head": "002f8bf9258058f8e14775472d315a69a53da031",
   "binding_refs": {
-    "roadmap": "docs/research/sc001-current-roadmap-and-stop-rules-v5.158.md",
+    "roadmap": "docs/research/sc001-current-roadmap-and-stop-rules-v5.159.md",
     "governance": "docs/research/sc001-midcourse-research-strategy-audit-and-governance-amendment-v0.2.md",
     "reusable_policy": "docs/research/sc001-terminal-experiment-reusable-block-extraction-policy-v0.1.md",
     "reusable_registry": "docs/research/sc001-reusable-market-building-blocks-registry-v0.9.md",
@@ -25,15 +25,15 @@
       "mutation_allowed": false
     },
     "B15-P2": {
-      "state": "PARSER_RESILIENCE_V011_FROZEN_OFFLINE_SELFTEST_PENDING",
+      "state": "PARSER_RESILIENCE_V011_OFFLINE_SELFTEST_SEALED_UNRUN",
       "price_outcome_authorized": false,
-      "root_cause": "GLOBAL_ANNOUNCEMENT_NORMALIZATION_REQUIRED_PUBLISHTIME_BEFORE_EXACT_RELEVANCE",
       "implementation": "research/sc001/sc001_b15p2_bybit_delisting_source_census_v0_1_1.py",
       "implementation_sha256": "7da36641ed71e0195320f0cc7cc389d629d4f843a646f64c41c1739fc0cd6b35",
-      "implementation_freeze": "docs/research/sc001-b15p2-bybit-delisting-source-census-implementation-freeze-v0.1.1.json",
-      "offline_selftest_spec": "docs/research/sc001-b15p2-bybit-delisting-source-census-offline-selftest-spec-v0.1.1.json",
-      "network_retry_authorized": false,
-      "next_allowed_action": "PREPARE_AND_SEAL_V011_OFFLINE_SELFTEST_NO_EXECUTION"
+      "bundle_id": "bundle_20260927T180555Z_bc1ff4ec",
+      "bundle_sha256": "5aab363e11e57dab6992292176e677542519d0a4ce31ae8be69df2ac7fd252ba",
+      "approval_code": "BM-5AAB363E11E5",
+      "execution_authorized": false,
+      "next_allowed_action": "AWAIT_EXPLICIT_APPROVAL_TO_RUN_V011_OFFLINE_SELFTEST"
     }
   },
   "deferred_branches": {
