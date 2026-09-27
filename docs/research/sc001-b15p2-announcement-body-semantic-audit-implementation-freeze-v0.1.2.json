@@ -1,0 +1,48 @@
+{
+  "schema": "sc001.b15p2_announcement_body_semantic_audit_implementation_freeze.v0.1.2",
+  "date": "2026-09-27",
+  "status": "FROZEN_HTML_STATE_MACHINE_CORRECTION_BEFORE_NETWORK_ACCESS",
+  "supersedes": "docs/research/sc001-b15p2-announcement-body-semantic-audit-implementation-freeze-v0.1.1.json",
+  "protocol": {
+    "path": "docs/research/sc001-b15p2-announcement-body-semantic-audit-protocol-v0.1.md",
+    "sha256": "4209779876e3796feff16a8310af93324cd1927862874524fb90ebf95d51d84f",
+    "changed": false
+  },
+  "entrypoint": {
+    "path": "research/sc001/sc001_b15p2_announcement_body_semantic_audit_v0_1_2.py",
+    "sha256": "a0fe50c52fcdcf3ce71ab0cb3a52c3be802f22426696a7f97e42b4d95a1dce78"
+  },
+  "triggering_failure": {
+    "diagnostic_path": "docs/research/sc001-b15p2-announcement-body-semantic-audit-v011-selftest-failure-diagnostic-v0.1.json",
+    "job_id": "job_20260927T195919Z_b604441c",
+    "classification": "SYNTHETIC_HTML_PARSER_STATE_MACHINE_ERROR"
+  },
+  "correction": {
+    "shared_skip_tags": [
+      "head",
+      "script",
+      "style",
+      "noscript",
+      "svg"
+    ],
+    "symmetric_start_end_skip_transitions": true,
+    "head_script_fixture_asserts_hidden_script_and_visible_body": true
+  },
+  "frozen_input": {
+    "source_result_sha256": "c28aeb2b1ac0a23fb0e4420ced943fd619dd0a60e3fdcf5820299579cb94206c",
+    "event_set_sha256": "1063695ec003a0d6789270659822f50577e6a0f07059d88ac03a5be4288ed1a2",
+    "event_count": 94,
+    "unique_announcement_url_count": 94
+  },
+  "semantic_classification_rules_changed": false,
+  "source_scope_changed": false,
+  "pass_review_rules_changed": false,
+  "price_access_authorized": false,
+  "external_reference_price_access_authorized": false,
+  "index_value_access_authorized": false,
+  "basis_access_authorized": false,
+  "return_access_authorized": false,
+  "pnl_authorized": false,
+  "event_outcome_ranking_authorized": false,
+  "expected_selftest_pass": "B15P2_ANNOUNCEMENT_BODY_SEMANTIC_AUDIT_V012_SELF_TEST_PASS"
+}

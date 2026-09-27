@@ -1,0 +1,25 @@
+{
+  "schema": "sc001.b15p2_announcement_body_semantic_audit_v011_selftest_failure_diagnostic.v0.1",
+  "date": "2026-09-27",
+  "status": "SYNTHETIC_SELFTEST_FAILURE_NO_NETWORK_NO_RESEARCH_OUTCOME",
+  "job_id": "job_20260927T195919Z_b604441c",
+  "bundle_id": "bundle_20260927T195617Z_135de720",
+  "package_integrity_ok": true,
+  "exit_code": 2,
+  "observed_token": "B15P2_ANNOUNCEMENT_BODY_SEMANTIC_AUDIT_V011_SELF_TEST_REVIEW",
+  "failure_stage": "FIXTURE3_VISIBLE_REGION_CLASSIFY",
+  "observed_error": "RuntimeError: visible body empty",
+  "root_cause": "VisibleTextParser added head to the start-tag skip set but not to the end-tag skip set. After </head>, skip remained nonzero and the following body was incorrectly suppressed.",
+  "correction": [
+    "define one shared SKIP_TAGS constant",
+    "use the same SKIP_TAGS for start-tag and end-tag transitions",
+    "explicitly assert in the head/script fixture that script text is hidden and body title remains visible"
+  ],
+  "network_calls": false,
+  "real_announcement_body_access": false,
+  "price_access": false,
+  "basis_access": false,
+  "returns_access": false,
+  "pnl_access": false,
+  "strategy_review_triggered": false
+}
