@@ -8,7 +8,7 @@
   "baseline_git_head": "94bf690f5c273c98b4a5e58d4bb2fe6ea7f9cf91",
   "last_strategy_review_head": "002f8bf9258058f8e14775472d315a69a53da031",
   "binding_refs": {
-    "roadmap": "docs/research/sc001-current-roadmap-and-stop-rules-v5.163.md",
+    "roadmap": "docs/research/sc001-current-roadmap-and-stop-rules-v5.164.md",
     "governance": "docs/research/sc001-midcourse-research-strategy-audit-and-governance-amendment-v0.2.md",
     "reusable_policy": "docs/research/sc001-terminal-experiment-reusable-block-extraction-policy-v0.1.md",
     "reusable_registry": "docs/research/sc001-reusable-market-building-blocks-registry-v0.9.md",
@@ -25,7 +25,7 @@
       "mutation_allowed": false
     },
     "B15-P2": {
-      "state": "SOURCE_ONLY_CENSUS_PASS_EXACT_EVENT_SET_FREEZE_PENDING",
+      "state": "SOURCE_CENSUS_PASS_EVENT_SET_FREEZE_WRAPPER_READY",
       "price_outcome_authorized": false,
       "source_census_status": "B15P2_BYBIT_DELISTING_SOURCE_CENSUS_PASS",
       "source_census_summary": "docs/research/sc001-b15p2-bybit-delisting-source-census-networked-result-v0.1.json",
@@ -36,7 +36,9 @@
       "matched_timestamp_integrity_issues": 0,
       "exact_event_set_promoted_to_github": false,
       "strategy_review_required_now": false,
-      "next_allowed_action": "FREEZE_EXACT_ADMITTED_EVENT_SET_NO_PRICE"
+      "next_allowed_action": "RUN_NO_NETWORK_EVENT_SET_FREEZE_PREFLIGHT_AND_PROMOTE",
+      "event_set_freeze_wrapper": "scripts/research/freeze-b15p2-bybit-source-census-event-set-v0.1.sh",
+      "event_set_freeze_wrapper_sha256": "b63134c62eb79f62da3246c2870d98cdceb45b60b0e21876fc0dcc32c2fdae11"
     }
   },
   "deferred_branches": {
