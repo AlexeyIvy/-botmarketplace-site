@@ -1,0 +1,23 @@
+{
+  "schema": "sc001.b15p2_bybit_delisting_source_census_offline_selftest_bundle_seal.v0.1",
+  "date": "2026-09-27",
+  "status": "SEALED_AWAITING_EXPLICIT_RUNNER_APPROVAL",
+  "bundle_id": "bundle_20260927T095903Z_afb63063",
+  "bundle_sha256": "ed2812b5baae997a24e3f10e5a214a5d71ae9f0f9fe9448625a4faf03611592a",
+  "approval_code": "BM-ED2812B5BAAE",
+  "runtime_profile": "offline-research-v1",
+  "inputs": [],
+  "package_files": 5,
+  "total_bytes": 28061,
+  "entrypoint": "research/sc001/sc001_b15p2_bybit_delisting_source_census_v0_1.py",
+  "entrypoint_sha256": "da047f6dba6881fdfa04db187616b851e1ed35af7af9b33ed6921daed807f8ef",
+  "protocol_sha256": "ea577e42252b13fc5153256f3cc87c90d4518384cfd97254e4ddba06bbe611e2",
+  "expected_pass": "B15P2_BYBIT_DELISTING_SOURCE_CENSUS_V01_SELF_TEST_PASS",
+  "network_calls": false,
+  "real_announcement_access": false,
+  "real_instrument_access": false,
+  "price_access": false,
+  "basis_access": false,
+  "pnl": false,
+  "next_state": "RUN_EXACT_OFFLINE_SELFTEST_AFTER_EXPLICIT_APPROVAL"
+}
