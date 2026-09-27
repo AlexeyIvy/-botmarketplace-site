@@ -81,9 +81,23 @@ The watch MUST NOT:
 - open protected outcome data beyond the canonical authorization boundary;
 - automatically modify roadmap/governance.
 
+## Runtime placement
+
+The automatic watcher is a **global Scheduled Task outside the Strategy Project**.
+
+The interactive `BotMarketplace — Research Strategy` Project should use Project-only memory to keep its conversational context isolated from execution work. ChatGPT Work is not relied upon inside that project.
+
+This separation intentionally gives two strategy surfaces:
+- automated, near-stateless review via the global condition watch;
+- manual, deeper strategy discussion inside the isolated Strategy Project.
+
 ## Architecture
 
-`EXECUTION WORKFLOW -> GITHUB RESULT + MANIFEST -> HOURLY CONDITION WATCH -> STRATEGY REVIEW -> USER`
+`EXECUTION PROJECT -> GITHUB RESULT + MANIFEST -> GLOBAL HOURLY CONDITION WATCH -> STRATEGY REVIEW -> USER`
+
+and for manual follow-up:
+
+`USER -> PROJECT-ONLY RESEARCH STRATEGY PROJECT -> GITHUB CANONICAL STATE`
 
 The user remains the approval authority for:
 - roadmap/governance writes;

@@ -44,19 +44,26 @@
     "B13-C-S0": {
       "state": "B13C_S0_SIMPLE_REVERSAL_HEADROOM_REJECT",
       "failure_class": "ECONOMIC_MAGNITUDE",
-      "reusable_blocks": ["RB021"],
+      "reusable_blocks": [
+        "RB021"
+      ],
       "same_evidence_rescue_allowed": false
     },
     "B14-B": {
       "state": "B14B_REJECT_PERSISTENT_CARRY_STRUCTURAL",
       "failure_class": "ECONOMIC_MAGNITUDE",
-      "reusable_blocks": ["RB022"],
+      "reusable_blocks": [
+        "RB022"
+      ],
       "same_evidence_rescue_allowed": false
     }
   },
   "reusable_knowledge": {
     "registry_through": "RB022",
-    "latest_blocks": ["RB021", "RB022"]
+    "latest_blocks": [
+      "RB021",
+      "RB022"
+    ]
   },
   "prospective_mechanism_governance": {
     "structured_fingerprint_required": true,
@@ -84,7 +91,10 @@
     "trigger_schema": "sc001.worker_result_manifest.v0.1",
     "notify_only_on_new_strategy_relevant_manifest": true,
     "automatic_research_execution": false,
-    "automatic_roadmap_write": false
+    "automatic_roadmap_write": false,
+    "runtime_location": "GLOBAL_SCHEDULED_TASK_OUTSIDE_PROJECT",
+    "strategy_project_role": "INTERACTIVE_PROJECT_ONLY_MEMORY_STRATEGY_WORKSPACE",
+    "work_required_inside_strategy_project": false
   },
   "open_strategy_decisions": [],
   "next_strategy_review_trigger": [
