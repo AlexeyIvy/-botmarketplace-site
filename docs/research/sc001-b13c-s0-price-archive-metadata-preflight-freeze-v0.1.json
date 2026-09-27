@@ -1,0 +1,33 @@
+{
+  "schema": "sc001.b13c_s0_price_archive_metadata_preflight_freeze.v0.1",
+  "date": "2026-09-27",
+  "status": "FROZEN_BEFORE_NETWORK_METADATA_PREFLIGHT",
+  "census_result_path": "docs/research/sc001-b13c-s0-real-event-only-cluster-census-result-v0.1.json",
+  "census_result_sha256": "fd08901e77bb73c00bb53826e925b2124d52e05d6c8f45cdc154b1c57a2ab1eb",
+  "required_archive_count": 76,
+  "runner_path": "research/sc001/sc001_b13c_s0_price_archive_metadata_preflight_v0_1.py",
+  "runner_sha256": "4ba2c03f060c3b009a1090d52fd394dbab5829f103a4a01328a75cdaf9bd5039",
+  "network_policy": {
+    "allowed_host": "public.bybit.com",
+    "http_method": "HEAD_ONLY",
+    "body_download_allowed": false,
+    "redirect_to_other_host_allowed": false
+  },
+  "allowed_outputs": [
+    "HTTP status",
+    "Content-Length",
+    "Last-Modified",
+    "ETag",
+    "Content-Type",
+    "aggregate total bytes",
+    "file counts by symbol/day"
+  ],
+  "forbidden": [
+    "PRICE_BODY_OPEN",
+    "PRICE_ROW_PARSE",
+    "RETURN_CALCULATION",
+    "PNL"
+  ],
+  "selftest_pass": "B13C_S0_PRICE_ARCHIVE_METADATA_PREFLIGHT_V01_SELF_TEST_PASS",
+  "expected_pass": "B13C_S0_PRICE_ARCHIVE_METADATA_PREFLIGHT_PASS"
+}

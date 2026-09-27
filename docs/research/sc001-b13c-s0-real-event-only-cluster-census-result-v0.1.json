@@ -1,0 +1,949 @@
+{
+  "schema": "sc001.b13c_s0_real_event_only_cluster_census_result.v0.1",
+  "date": "2026-09-27",
+  "status": "B13C_S0_SOURCE_ONLY_CLUSTER_CENSUS_PASS",
+  "runner_job": {
+    "job_id": "job_20260927T065951Z_3326eb04",
+    "bundle_id": "bundle_20260927T064727Z_cb2d998a",
+    "bundle_sha256": "92b1863f8fdce42654da2586de2037daf43698af086ac54258d269251d9a63e2",
+    "exit_code": 0,
+    "package_integrity_ok": true
+  },
+  "event_diagnostics": {
+    "duplicate_rows_collapsed": 0,
+    "raw_rows_read": 32474,
+    "unique_events_in_window": 32381
+  },
+  "merged_source_gap_count": 15,
+  "merged_source_gap_ms": 324430,
+  "cluster_census": {
+    "clusters_under_min_events": 8743,
+    "eligible_cluster_count": 1905,
+    "gap_censored_clusters": 3,
+    "minimum_sample_gate": 100,
+    "mixed_side_clusters_excluded": 83,
+    "required_price_archive_count": 76,
+    "required_price_archives": [
+      {
+        "filename": "BCHUSDT2026-09-22.csv.gz",
+        "symbol": "BCHUSDT",
+        "url": "https://public.bybit.com/trading/BCHUSDT/BCHUSDT2026-09-22.csv.gz",
+        "utc_day": "2026-09-22"
+      },
+      {
+        "filename": "BCHUSDT2026-09-23.csv.gz",
+        "symbol": "BCHUSDT",
+        "url": "https://public.bybit.com/trading/BCHUSDT/BCHUSDT2026-09-23.csv.gz",
+        "utc_day": "2026-09-23"
+      },
+      {
+        "filename": "BCHUSDT2026-09-24.csv.gz",
+        "symbol": "BCHUSDT",
+        "url": "https://public.bybit.com/trading/BCHUSDT/BCHUSDT2026-09-24.csv.gz",
+        "utc_day": "2026-09-24"
+      },
+      {
+        "filename": "BTCUSDT2026-09-19.csv.gz",
+        "symbol": "BTCUSDT",
+        "url": "https://public.bybit.com/trading/BTCUSDT/BTCUSDT2026-09-19.csv.gz",
+        "utc_day": "2026-09-19"
+      },
+      {
+        "filename": "BTCUSDT2026-09-20.csv.gz",
+        "symbol": "BTCUSDT",
+        "url": "https://public.bybit.com/trading/BTCUSDT/BTCUSDT2026-09-20.csv.gz",
+        "utc_day": "2026-09-20"
+      },
+      {
+        "filename": "BTCUSDT2026-09-21.csv.gz",
+        "symbol": "BTCUSDT",
+        "url": "https://public.bybit.com/trading/BTCUSDT/BTCUSDT2026-09-21.csv.gz",
+        "utc_day": "2026-09-21"
+      },
+      {
+        "filename": "BTCUSDT2026-09-22.csv.gz",
+        "symbol": "BTCUSDT",
+        "url": "https://public.bybit.com/trading/BTCUSDT/BTCUSDT2026-09-22.csv.gz",
+        "utc_day": "2026-09-22"
+      },
+      {
+        "filename": "BTCUSDT2026-09-23.csv.gz",
+        "symbol": "BTCUSDT",
+        "url": "https://public.bybit.com/trading/BTCUSDT/BTCUSDT2026-09-23.csv.gz",
+        "utc_day": "2026-09-23"
+      },
+      {
+        "filename": "BTCUSDT2026-09-24.csv.gz",
+        "symbol": "BTCUSDT",
+        "url": "https://public.bybit.com/trading/BTCUSDT/BTCUSDT2026-09-24.csv.gz",
+        "utc_day": "2026-09-24"
+      },
+      {
+        "filename": "BTCUSDT2026-09-25.csv.gz",
+        "symbol": "BTCUSDT",
+        "url": "https://public.bybit.com/trading/BTCUSDT/BTCUSDT2026-09-25.csv.gz",
+        "utc_day": "2026-09-25"
+      },
+      {
+        "filename": "BTCUSDT2026-09-26.csv.gz",
+        "symbol": "BTCUSDT",
+        "url": "https://public.bybit.com/trading/BTCUSDT/BTCUSDT2026-09-26.csv.gz",
+        "utc_day": "2026-09-26"
+      },
+      {
+        "filename": "DOGEUSDT2026-09-19.csv.gz",
+        "symbol": "DOGEUSDT",
+        "url": "https://public.bybit.com/trading/DOGEUSDT/DOGEUSDT2026-09-19.csv.gz",
+        "utc_day": "2026-09-19"
+      },
+      {
+        "filename": "DOGEUSDT2026-09-20.csv.gz",
+        "symbol": "DOGEUSDT",
+        "url": "https://public.bybit.com/trading/DOGEUSDT/DOGEUSDT2026-09-20.csv.gz",
+        "utc_day": "2026-09-20"
+      },
+      {
+        "filename": "DOGEUSDT2026-09-21.csv.gz",
+        "symbol": "DOGEUSDT",
+        "url": "https://public.bybit.com/trading/DOGEUSDT/DOGEUSDT2026-09-21.csv.gz",
+        "utc_day": "2026-09-21"
+      },
+      {
+        "filename": "DOGEUSDT2026-09-22.csv.gz",
+        "symbol": "DOGEUSDT",
+        "url": "https://public.bybit.com/trading/DOGEUSDT/DOGEUSDT2026-09-22.csv.gz",
+        "utc_day": "2026-09-22"
+      },
+      {
+        "filename": "DOGEUSDT2026-09-23.csv.gz",
+        "symbol": "DOGEUSDT",
+        "url": "https://public.bybit.com/trading/DOGEUSDT/DOGEUSDT2026-09-23.csv.gz",
+        "utc_day": "2026-09-23"
+      },
+      {
+        "filename": "DOGEUSDT2026-09-24.csv.gz",
+        "symbol": "DOGEUSDT",
+        "url": "https://public.bybit.com/trading/DOGEUSDT/DOGEUSDT2026-09-24.csv.gz",
+        "utc_day": "2026-09-24"
+      },
+      {
+        "filename": "DOGEUSDT2026-09-25.csv.gz",
+        "symbol": "DOGEUSDT",
+        "url": "https://public.bybit.com/trading/DOGEUSDT/DOGEUSDT2026-09-25.csv.gz",
+        "utc_day": "2026-09-25"
+      },
+      {
+        "filename": "DOGEUSDT2026-09-26.csv.gz",
+        "symbol": "DOGEUSDT",
+        "url": "https://public.bybit.com/trading/DOGEUSDT/DOGEUSDT2026-09-26.csv.gz",
+        "utc_day": "2026-09-26"
+      },
+      {
+        "filename": "ETHUSDT2026-09-19.csv.gz",
+        "symbol": "ETHUSDT",
+        "url": "https://public.bybit.com/trading/ETHUSDT/ETHUSDT2026-09-19.csv.gz",
+        "utc_day": "2026-09-19"
+      },
+      {
+        "filename": "ETHUSDT2026-09-20.csv.gz",
+        "symbol": "ETHUSDT",
+        "url": "https://public.bybit.com/trading/ETHUSDT/ETHUSDT2026-09-20.csv.gz",
+        "utc_day": "2026-09-20"
+      },
+      {
+        "filename": "ETHUSDT2026-09-21.csv.gz",
+        "symbol": "ETHUSDT",
+        "url": "https://public.bybit.com/trading/ETHUSDT/ETHUSDT2026-09-21.csv.gz",
+        "utc_day": "2026-09-21"
+      },
+      {
+        "filename": "ETHUSDT2026-09-22.csv.gz",
+        "symbol": "ETHUSDT",
+        "url": "https://public.bybit.com/trading/ETHUSDT/ETHUSDT2026-09-22.csv.gz",
+        "utc_day": "2026-09-22"
+      },
+      {
+        "filename": "ETHUSDT2026-09-23.csv.gz",
+        "symbol": "ETHUSDT",
+        "url": "https://public.bybit.com/trading/ETHUSDT/ETHUSDT2026-09-23.csv.gz",
+        "utc_day": "2026-09-23"
+      },
+      {
+        "filename": "ETHUSDT2026-09-24.csv.gz",
+        "symbol": "ETHUSDT",
+        "url": "https://public.bybit.com/trading/ETHUSDT/ETHUSDT2026-09-24.csv.gz",
+        "utc_day": "2026-09-24"
+      },
+      {
+        "filename": "ETHUSDT2026-09-25.csv.gz",
+        "symbol": "ETHUSDT",
+        "url": "https://public.bybit.com/trading/ETHUSDT/ETHUSDT2026-09-25.csv.gz",
+        "utc_day": "2026-09-25"
+      },
+      {
+        "filename": "ETHUSDT2026-09-26.csv.gz",
+        "symbol": "ETHUSDT",
+        "url": "https://public.bybit.com/trading/ETHUSDT/ETHUSDT2026-09-26.csv.gz",
+        "utc_day": "2026-09-26"
+      },
+      {
+        "filename": "FILUSDT2026-09-19.csv.gz",
+        "symbol": "FILUSDT",
+        "url": "https://public.bybit.com/trading/FILUSDT/FILUSDT2026-09-19.csv.gz",
+        "utc_day": "2026-09-19"
+      },
+      {
+        "filename": "FILUSDT2026-09-20.csv.gz",
+        "symbol": "FILUSDT",
+        "url": "https://public.bybit.com/trading/FILUSDT/FILUSDT2026-09-20.csv.gz",
+        "utc_day": "2026-09-20"
+      },
+      {
+        "filename": "FILUSDT2026-09-21.csv.gz",
+        "symbol": "FILUSDT",
+        "url": "https://public.bybit.com/trading/FILUSDT/FILUSDT2026-09-21.csv.gz",
+        "utc_day": "2026-09-21"
+      },
+      {
+        "filename": "FILUSDT2026-09-23.csv.gz",
+        "symbol": "FILUSDT",
+        "url": "https://public.bybit.com/trading/FILUSDT/FILUSDT2026-09-23.csv.gz",
+        "utc_day": "2026-09-23"
+      },
+      {
+        "filename": "FILUSDT2026-09-26.csv.gz",
+        "symbol": "FILUSDT",
+        "url": "https://public.bybit.com/trading/FILUSDT/FILUSDT2026-09-26.csv.gz",
+        "utc_day": "2026-09-26"
+      },
+      {
+        "filename": "LTCUSDT2026-09-21.csv.gz",
+        "symbol": "LTCUSDT",
+        "url": "https://public.bybit.com/trading/LTCUSDT/LTCUSDT2026-09-21.csv.gz",
+        "utc_day": "2026-09-21"
+      },
+      {
+        "filename": "LTCUSDT2026-09-23.csv.gz",
+        "symbol": "LTCUSDT",
+        "url": "https://public.bybit.com/trading/LTCUSDT/LTCUSDT2026-09-23.csv.gz",
+        "utc_day": "2026-09-23"
+      },
+      {
+        "filename": "LTCUSDT2026-09-24.csv.gz",
+        "symbol": "LTCUSDT",
+        "url": "https://public.bybit.com/trading/LTCUSDT/LTCUSDT2026-09-24.csv.gz",
+        "utc_day": "2026-09-24"
+      },
+      {
+        "filename": "LTCUSDT2026-09-25.csv.gz",
+        "symbol": "LTCUSDT",
+        "url": "https://public.bybit.com/trading/LTCUSDT/LTCUSDT2026-09-25.csv.gz",
+        "utc_day": "2026-09-25"
+      },
+      {
+        "filename": "OPUSDT2026-09-19.csv.gz",
+        "symbol": "OPUSDT",
+        "url": "https://public.bybit.com/trading/OPUSDT/OPUSDT2026-09-19.csv.gz",
+        "utc_day": "2026-09-19"
+      },
+      {
+        "filename": "OPUSDT2026-09-21.csv.gz",
+        "symbol": "OPUSDT",
+        "url": "https://public.bybit.com/trading/OPUSDT/OPUSDT2026-09-21.csv.gz",
+        "utc_day": "2026-09-21"
+      },
+      {
+        "filename": "OPUSDT2026-09-22.csv.gz",
+        "symbol": "OPUSDT",
+        "url": "https://public.bybit.com/trading/OPUSDT/OPUSDT2026-09-22.csv.gz",
+        "utc_day": "2026-09-22"
+      },
+      {
+        "filename": "OPUSDT2026-09-23.csv.gz",
+        "symbol": "OPUSDT",
+        "url": "https://public.bybit.com/trading/OPUSDT/OPUSDT2026-09-23.csv.gz",
+        "utc_day": "2026-09-23"
+      },
+      {
+        "filename": "OPUSDT2026-09-24.csv.gz",
+        "symbol": "OPUSDT",
+        "url": "https://public.bybit.com/trading/OPUSDT/OPUSDT2026-09-24.csv.gz",
+        "utc_day": "2026-09-24"
+      },
+      {
+        "filename": "OPUSDT2026-09-25.csv.gz",
+        "symbol": "OPUSDT",
+        "url": "https://public.bybit.com/trading/OPUSDT/OPUSDT2026-09-25.csv.gz",
+        "utc_day": "2026-09-25"
+      },
+      {
+        "filename": "ORDIUSDT2026-09-20.csv.gz",
+        "symbol": "ORDIUSDT",
+        "url": "https://public.bybit.com/trading/ORDIUSDT/ORDIUSDT2026-09-20.csv.gz",
+        "utc_day": "2026-09-20"
+      },
+      {
+        "filename": "ORDIUSDT2026-09-23.csv.gz",
+        "symbol": "ORDIUSDT",
+        "url": "https://public.bybit.com/trading/ORDIUSDT/ORDIUSDT2026-09-23.csv.gz",
+        "utc_day": "2026-09-23"
+      },
+      {
+        "filename": "ORDIUSDT2026-09-26.csv.gz",
+        "symbol": "ORDIUSDT",
+        "url": "https://public.bybit.com/trading/ORDIUSDT/ORDIUSDT2026-09-26.csv.gz",
+        "utc_day": "2026-09-26"
+      },
+      {
+        "filename": "SOLUSDT2026-09-19.csv.gz",
+        "symbol": "SOLUSDT",
+        "url": "https://public.bybit.com/trading/SOLUSDT/SOLUSDT2026-09-19.csv.gz",
+        "utc_day": "2026-09-19"
+      },
+      {
+        "filename": "SOLUSDT2026-09-20.csv.gz",
+        "symbol": "SOLUSDT",
+        "url": "https://public.bybit.com/trading/SOLUSDT/SOLUSDT2026-09-20.csv.gz",
+        "utc_day": "2026-09-20"
+      },
+      {
+        "filename": "SOLUSDT2026-09-21.csv.gz",
+        "symbol": "SOLUSDT",
+        "url": "https://public.bybit.com/trading/SOLUSDT/SOLUSDT2026-09-21.csv.gz",
+        "utc_day": "2026-09-21"
+      },
+      {
+        "filename": "SOLUSDT2026-09-22.csv.gz",
+        "symbol": "SOLUSDT",
+        "url": "https://public.bybit.com/trading/SOLUSDT/SOLUSDT2026-09-22.csv.gz",
+        "utc_day": "2026-09-22"
+      },
+      {
+        "filename": "SOLUSDT2026-09-23.csv.gz",
+        "symbol": "SOLUSDT",
+        "url": "https://public.bybit.com/trading/SOLUSDT/SOLUSDT2026-09-23.csv.gz",
+        "utc_day": "2026-09-23"
+      },
+      {
+        "filename": "SOLUSDT2026-09-24.csv.gz",
+        "symbol": "SOLUSDT",
+        "url": "https://public.bybit.com/trading/SOLUSDT/SOLUSDT2026-09-24.csv.gz",
+        "utc_day": "2026-09-24"
+      },
+      {
+        "filename": "SOLUSDT2026-09-25.csv.gz",
+        "symbol": "SOLUSDT",
+        "url": "https://public.bybit.com/trading/SOLUSDT/SOLUSDT2026-09-25.csv.gz",
+        "utc_day": "2026-09-25"
+      },
+      {
+        "filename": "SOLUSDT2026-09-26.csv.gz",
+        "symbol": "SOLUSDT",
+        "url": "https://public.bybit.com/trading/SOLUSDT/SOLUSDT2026-09-26.csv.gz",
+        "utc_day": "2026-09-26"
+      },
+      {
+        "filename": "SUIUSDT2026-09-19.csv.gz",
+        "symbol": "SUIUSDT",
+        "url": "https://public.bybit.com/trading/SUIUSDT/SUIUSDT2026-09-19.csv.gz",
+        "utc_day": "2026-09-19"
+      },
+      {
+        "filename": "SUIUSDT2026-09-20.csv.gz",
+        "symbol": "SUIUSDT",
+        "url": "https://public.bybit.com/trading/SUIUSDT/SUIUSDT2026-09-20.csv.gz",
+        "utc_day": "2026-09-20"
+      },
+      {
+        "filename": "SUIUSDT2026-09-21.csv.gz",
+        "symbol": "SUIUSDT",
+        "url": "https://public.bybit.com/trading/SUIUSDT/SUIUSDT2026-09-21.csv.gz",
+        "utc_day": "2026-09-21"
+      },
+      {
+        "filename": "SUIUSDT2026-09-22.csv.gz",
+        "symbol": "SUIUSDT",
+        "url": "https://public.bybit.com/trading/SUIUSDT/SUIUSDT2026-09-22.csv.gz",
+        "utc_day": "2026-09-22"
+      },
+      {
+        "filename": "SUIUSDT2026-09-23.csv.gz",
+        "symbol": "SUIUSDT",
+        "url": "https://public.bybit.com/trading/SUIUSDT/SUIUSDT2026-09-23.csv.gz",
+        "utc_day": "2026-09-23"
+      },
+      {
+        "filename": "SUIUSDT2026-09-24.csv.gz",
+        "symbol": "SUIUSDT",
+        "url": "https://public.bybit.com/trading/SUIUSDT/SUIUSDT2026-09-24.csv.gz",
+        "utc_day": "2026-09-24"
+      },
+      {
+        "filename": "SUIUSDT2026-09-25.csv.gz",
+        "symbol": "SUIUSDT",
+        "url": "https://public.bybit.com/trading/SUIUSDT/SUIUSDT2026-09-25.csv.gz",
+        "utc_day": "2026-09-25"
+      },
+      {
+        "filename": "SUIUSDT2026-09-26.csv.gz",
+        "symbol": "SUIUSDT",
+        "url": "https://public.bybit.com/trading/SUIUSDT/SUIUSDT2026-09-26.csv.gz",
+        "utc_day": "2026-09-26"
+      },
+      {
+        "filename": "UNIUSDT2026-09-19.csv.gz",
+        "symbol": "UNIUSDT",
+        "url": "https://public.bybit.com/trading/UNIUSDT/UNIUSDT2026-09-19.csv.gz",
+        "utc_day": "2026-09-19"
+      },
+      {
+        "filename": "UNIUSDT2026-09-20.csv.gz",
+        "symbol": "UNIUSDT",
+        "url": "https://public.bybit.com/trading/UNIUSDT/UNIUSDT2026-09-20.csv.gz",
+        "utc_day": "2026-09-20"
+      },
+      {
+        "filename": "UNIUSDT2026-09-21.csv.gz",
+        "symbol": "UNIUSDT",
+        "url": "https://public.bybit.com/trading/UNIUSDT/UNIUSDT2026-09-21.csv.gz",
+        "utc_day": "2026-09-21"
+      },
+      {
+        "filename": "UNIUSDT2026-09-22.csv.gz",
+        "symbol": "UNIUSDT",
+        "url": "https://public.bybit.com/trading/UNIUSDT/UNIUSDT2026-09-22.csv.gz",
+        "utc_day": "2026-09-22"
+      },
+      {
+        "filename": "UNIUSDT2026-09-23.csv.gz",
+        "symbol": "UNIUSDT",
+        "url": "https://public.bybit.com/trading/UNIUSDT/UNIUSDT2026-09-23.csv.gz",
+        "utc_day": "2026-09-23"
+      },
+      {
+        "filename": "UNIUSDT2026-09-24.csv.gz",
+        "symbol": "UNIUSDT",
+        "url": "https://public.bybit.com/trading/UNIUSDT/UNIUSDT2026-09-24.csv.gz",
+        "utc_day": "2026-09-24"
+      },
+      {
+        "filename": "UNIUSDT2026-09-25.csv.gz",
+        "symbol": "UNIUSDT",
+        "url": "https://public.bybit.com/trading/UNIUSDT/UNIUSDT2026-09-25.csv.gz",
+        "utc_day": "2026-09-25"
+      },
+      {
+        "filename": "XRPUSDT2026-09-19.csv.gz",
+        "symbol": "XRPUSDT",
+        "url": "https://public.bybit.com/trading/XRPUSDT/XRPUSDT2026-09-19.csv.gz",
+        "utc_day": "2026-09-19"
+      },
+      {
+        "filename": "XRPUSDT2026-09-20.csv.gz",
+        "symbol": "XRPUSDT",
+        "url": "https://public.bybit.com/trading/XRPUSDT/XRPUSDT2026-09-20.csv.gz",
+        "utc_day": "2026-09-20"
+      },
+      {
+        "filename": "XRPUSDT2026-09-21.csv.gz",
+        "symbol": "XRPUSDT",
+        "url": "https://public.bybit.com/trading/XRPUSDT/XRPUSDT2026-09-21.csv.gz",
+        "utc_day": "2026-09-21"
+      },
+      {
+        "filename": "XRPUSDT2026-09-22.csv.gz",
+        "symbol": "XRPUSDT",
+        "url": "https://public.bybit.com/trading/XRPUSDT/XRPUSDT2026-09-22.csv.gz",
+        "utc_day": "2026-09-22"
+      },
+      {
+        "filename": "XRPUSDT2026-09-23.csv.gz",
+        "symbol": "XRPUSDT",
+        "url": "https://public.bybit.com/trading/XRPUSDT/XRPUSDT2026-09-23.csv.gz",
+        "utc_day": "2026-09-23"
+      },
+      {
+        "filename": "XRPUSDT2026-09-24.csv.gz",
+        "symbol": "XRPUSDT",
+        "url": "https://public.bybit.com/trading/XRPUSDT/XRPUSDT2026-09-24.csv.gz",
+        "utc_day": "2026-09-24"
+      },
+      {
+        "filename": "XRPUSDT2026-09-25.csv.gz",
+        "symbol": "XRPUSDT",
+        "url": "https://public.bybit.com/trading/XRPUSDT/XRPUSDT2026-09-25.csv.gz",
+        "utc_day": "2026-09-25"
+      },
+      {
+        "filename": "XRPUSDT2026-09-26.csv.gz",
+        "symbol": "XRPUSDT",
+        "url": "https://public.bybit.com/trading/XRPUSDT/XRPUSDT2026-09-26.csv.gz",
+        "utc_day": "2026-09-26"
+      }
+    ],
+    "sample_gate_ready": true,
+    "total_raw_clusters_before_filters": 10734
+  },
+  "required_price_archives": [
+    {
+      "filename": "BCHUSDT2026-09-22.csv.gz",
+      "symbol": "BCHUSDT",
+      "url": "https://public.bybit.com/trading/BCHUSDT/BCHUSDT2026-09-22.csv.gz",
+      "utc_day": "2026-09-22"
+    },
+    {
+      "filename": "BCHUSDT2026-09-23.csv.gz",
+      "symbol": "BCHUSDT",
+      "url": "https://public.bybit.com/trading/BCHUSDT/BCHUSDT2026-09-23.csv.gz",
+      "utc_day": "2026-09-23"
+    },
+    {
+      "filename": "BCHUSDT2026-09-24.csv.gz",
+      "symbol": "BCHUSDT",
+      "url": "https://public.bybit.com/trading/BCHUSDT/BCHUSDT2026-09-24.csv.gz",
+      "utc_day": "2026-09-24"
+    },
+    {
+      "filename": "BTCUSDT2026-09-19.csv.gz",
+      "symbol": "BTCUSDT",
+      "url": "https://public.bybit.com/trading/BTCUSDT/BTCUSDT2026-09-19.csv.gz",
+      "utc_day": "2026-09-19"
+    },
+    {
+      "filename": "BTCUSDT2026-09-20.csv.gz",
+      "symbol": "BTCUSDT",
+      "url": "https://public.bybit.com/trading/BTCUSDT/BTCUSDT2026-09-20.csv.gz",
+      "utc_day": "2026-09-20"
+    },
+    {
+      "filename": "BTCUSDT2026-09-21.csv.gz",
+      "symbol": "BTCUSDT",
+      "url": "https://public.bybit.com/trading/BTCUSDT/BTCUSDT2026-09-21.csv.gz",
+      "utc_day": "2026-09-21"
+    },
+    {
+      "filename": "BTCUSDT2026-09-22.csv.gz",
+      "symbol": "BTCUSDT",
+      "url": "https://public.bybit.com/trading/BTCUSDT/BTCUSDT2026-09-22.csv.gz",
+      "utc_day": "2026-09-22"
+    },
+    {
+      "filename": "BTCUSDT2026-09-23.csv.gz",
+      "symbol": "BTCUSDT",
+      "url": "https://public.bybit.com/trading/BTCUSDT/BTCUSDT2026-09-23.csv.gz",
+      "utc_day": "2026-09-23"
+    },
+    {
+      "filename": "BTCUSDT2026-09-24.csv.gz",
+      "symbol": "BTCUSDT",
+      "url": "https://public.bybit.com/trading/BTCUSDT/BTCUSDT2026-09-24.csv.gz",
+      "utc_day": "2026-09-24"
+    },
+    {
+      "filename": "BTCUSDT2026-09-25.csv.gz",
+      "symbol": "BTCUSDT",
+      "url": "https://public.bybit.com/trading/BTCUSDT/BTCUSDT2026-09-25.csv.gz",
+      "utc_day": "2026-09-25"
+    },
+    {
+      "filename": "BTCUSDT2026-09-26.csv.gz",
+      "symbol": "BTCUSDT",
+      "url": "https://public.bybit.com/trading/BTCUSDT/BTCUSDT2026-09-26.csv.gz",
+      "utc_day": "2026-09-26"
+    },
+    {
+      "filename": "DOGEUSDT2026-09-19.csv.gz",
+      "symbol": "DOGEUSDT",
+      "url": "https://public.bybit.com/trading/DOGEUSDT/DOGEUSDT2026-09-19.csv.gz",
+      "utc_day": "2026-09-19"
+    },
+    {
+      "filename": "DOGEUSDT2026-09-20.csv.gz",
+      "symbol": "DOGEUSDT",
+      "url": "https://public.bybit.com/trading/DOGEUSDT/DOGEUSDT2026-09-20.csv.gz",
+      "utc_day": "2026-09-20"
+    },
+    {
+      "filename": "DOGEUSDT2026-09-21.csv.gz",
+      "symbol": "DOGEUSDT",
+      "url": "https://public.bybit.com/trading/DOGEUSDT/DOGEUSDT2026-09-21.csv.gz",
+      "utc_day": "2026-09-21"
+    },
+    {
+      "filename": "DOGEUSDT2026-09-22.csv.gz",
+      "symbol": "DOGEUSDT",
+      "url": "https://public.bybit.com/trading/DOGEUSDT/DOGEUSDT2026-09-22.csv.gz",
+      "utc_day": "2026-09-22"
+    },
+    {
+      "filename": "DOGEUSDT2026-09-23.csv.gz",
+      "symbol": "DOGEUSDT",
+      "url": "https://public.bybit.com/trading/DOGEUSDT/DOGEUSDT2026-09-23.csv.gz",
+      "utc_day": "2026-09-23"
+    },
+    {
+      "filename": "DOGEUSDT2026-09-24.csv.gz",
+      "symbol": "DOGEUSDT",
+      "url": "https://public.bybit.com/trading/DOGEUSDT/DOGEUSDT2026-09-24.csv.gz",
+      "utc_day": "2026-09-24"
+    },
+    {
+      "filename": "DOGEUSDT2026-09-25.csv.gz",
+      "symbol": "DOGEUSDT",
+      "url": "https://public.bybit.com/trading/DOGEUSDT/DOGEUSDT2026-09-25.csv.gz",
+      "utc_day": "2026-09-25"
+    },
+    {
+      "filename": "DOGEUSDT2026-09-26.csv.gz",
+      "symbol": "DOGEUSDT",
+      "url": "https://public.bybit.com/trading/DOGEUSDT/DOGEUSDT2026-09-26.csv.gz",
+      "utc_day": "2026-09-26"
+    },
+    {
+      "filename": "ETHUSDT2026-09-19.csv.gz",
+      "symbol": "ETHUSDT",
+      "url": "https://public.bybit.com/trading/ETHUSDT/ETHUSDT2026-09-19.csv.gz",
+      "utc_day": "2026-09-19"
+    },
+    {
+      "filename": "ETHUSDT2026-09-20.csv.gz",
+      "symbol": "ETHUSDT",
+      "url": "https://public.bybit.com/trading/ETHUSDT/ETHUSDT2026-09-20.csv.gz",
+      "utc_day": "2026-09-20"
+    },
+    {
+      "filename": "ETHUSDT2026-09-21.csv.gz",
+      "symbol": "ETHUSDT",
+      "url": "https://public.bybit.com/trading/ETHUSDT/ETHUSDT2026-09-21.csv.gz",
+      "utc_day": "2026-09-21"
+    },
+    {
+      "filename": "ETHUSDT2026-09-22.csv.gz",
+      "symbol": "ETHUSDT",
+      "url": "https://public.bybit.com/trading/ETHUSDT/ETHUSDT2026-09-22.csv.gz",
+      "utc_day": "2026-09-22"
+    },
+    {
+      "filename": "ETHUSDT2026-09-23.csv.gz",
+      "symbol": "ETHUSDT",
+      "url": "https://public.bybit.com/trading/ETHUSDT/ETHUSDT2026-09-23.csv.gz",
+      "utc_day": "2026-09-23"
+    },
+    {
+      "filename": "ETHUSDT2026-09-24.csv.gz",
+      "symbol": "ETHUSDT",
+      "url": "https://public.bybit.com/trading/ETHUSDT/ETHUSDT2026-09-24.csv.gz",
+      "utc_day": "2026-09-24"
+    },
+    {
+      "filename": "ETHUSDT2026-09-25.csv.gz",
+      "symbol": "ETHUSDT",
+      "url": "https://public.bybit.com/trading/ETHUSDT/ETHUSDT2026-09-25.csv.gz",
+      "utc_day": "2026-09-25"
+    },
+    {
+      "filename": "ETHUSDT2026-09-26.csv.gz",
+      "symbol": "ETHUSDT",
+      "url": "https://public.bybit.com/trading/ETHUSDT/ETHUSDT2026-09-26.csv.gz",
+      "utc_day": "2026-09-26"
+    },
+    {
+      "filename": "FILUSDT2026-09-19.csv.gz",
+      "symbol": "FILUSDT",
+      "url": "https://public.bybit.com/trading/FILUSDT/FILUSDT2026-09-19.csv.gz",
+      "utc_day": "2026-09-19"
+    },
+    {
+      "filename": "FILUSDT2026-09-20.csv.gz",
+      "symbol": "FILUSDT",
+      "url": "https://public.bybit.com/trading/FILUSDT/FILUSDT2026-09-20.csv.gz",
+      "utc_day": "2026-09-20"
+    },
+    {
+      "filename": "FILUSDT2026-09-21.csv.gz",
+      "symbol": "FILUSDT",
+      "url": "https://public.bybit.com/trading/FILUSDT/FILUSDT2026-09-21.csv.gz",
+      "utc_day": "2026-09-21"
+    },
+    {
+      "filename": "FILUSDT2026-09-23.csv.gz",
+      "symbol": "FILUSDT",
+      "url": "https://public.bybit.com/trading/FILUSDT/FILUSDT2026-09-23.csv.gz",
+      "utc_day": "2026-09-23"
+    },
+    {
+      "filename": "FILUSDT2026-09-26.csv.gz",
+      "symbol": "FILUSDT",
+      "url": "https://public.bybit.com/trading/FILUSDT/FILUSDT2026-09-26.csv.gz",
+      "utc_day": "2026-09-26"
+    },
+    {
+      "filename": "LTCUSDT2026-09-21.csv.gz",
+      "symbol": "LTCUSDT",
+      "url": "https://public.bybit.com/trading/LTCUSDT/LTCUSDT2026-09-21.csv.gz",
+      "utc_day": "2026-09-21"
+    },
+    {
+      "filename": "LTCUSDT2026-09-23.csv.gz",
+      "symbol": "LTCUSDT",
+      "url": "https://public.bybit.com/trading/LTCUSDT/LTCUSDT2026-09-23.csv.gz",
+      "utc_day": "2026-09-23"
+    },
+    {
+      "filename": "LTCUSDT2026-09-24.csv.gz",
+      "symbol": "LTCUSDT",
+      "url": "https://public.bybit.com/trading/LTCUSDT/LTCUSDT2026-09-24.csv.gz",
+      "utc_day": "2026-09-24"
+    },
+    {
+      "filename": "LTCUSDT2026-09-25.csv.gz",
+      "symbol": "LTCUSDT",
+      "url": "https://public.bybit.com/trading/LTCUSDT/LTCUSDT2026-09-25.csv.gz",
+      "utc_day": "2026-09-25"
+    },
+    {
+      "filename": "OPUSDT2026-09-19.csv.gz",
+      "symbol": "OPUSDT",
+      "url": "https://public.bybit.com/trading/OPUSDT/OPUSDT2026-09-19.csv.gz",
+      "utc_day": "2026-09-19"
+    },
+    {
+      "filename": "OPUSDT2026-09-21.csv.gz",
+      "symbol": "OPUSDT",
+      "url": "https://public.bybit.com/trading/OPUSDT/OPUSDT2026-09-21.csv.gz",
+      "utc_day": "2026-09-21"
+    },
+    {
+      "filename": "OPUSDT2026-09-22.csv.gz",
+      "symbol": "OPUSDT",
+      "url": "https://public.bybit.com/trading/OPUSDT/OPUSDT2026-09-22.csv.gz",
+      "utc_day": "2026-09-22"
+    },
+    {
+      "filename": "OPUSDT2026-09-23.csv.gz",
+      "symbol": "OPUSDT",
+      "url": "https://public.bybit.com/trading/OPUSDT/OPUSDT2026-09-23.csv.gz",
+      "utc_day": "2026-09-23"
+    },
+    {
+      "filename": "OPUSDT2026-09-24.csv.gz",
+      "symbol": "OPUSDT",
+      "url": "https://public.bybit.com/trading/OPUSDT/OPUSDT2026-09-24.csv.gz",
+      "utc_day": "2026-09-24"
+    },
+    {
+      "filename": "OPUSDT2026-09-25.csv.gz",
+      "symbol": "OPUSDT",
+      "url": "https://public.bybit.com/trading/OPUSDT/OPUSDT2026-09-25.csv.gz",
+      "utc_day": "2026-09-25"
+    },
+    {
+      "filename": "ORDIUSDT2026-09-20.csv.gz",
+      "symbol": "ORDIUSDT",
+      "url": "https://public.bybit.com/trading/ORDIUSDT/ORDIUSDT2026-09-20.csv.gz",
+      "utc_day": "2026-09-20"
+    },
+    {
+      "filename": "ORDIUSDT2026-09-23.csv.gz",
+      "symbol": "ORDIUSDT",
+      "url": "https://public.bybit.com/trading/ORDIUSDT/ORDIUSDT2026-09-23.csv.gz",
+      "utc_day": "2026-09-23"
+    },
+    {
+      "filename": "ORDIUSDT2026-09-26.csv.gz",
+      "symbol": "ORDIUSDT",
+      "url": "https://public.bybit.com/trading/ORDIUSDT/ORDIUSDT2026-09-26.csv.gz",
+      "utc_day": "2026-09-26"
+    },
+    {
+      "filename": "SOLUSDT2026-09-19.csv.gz",
+      "symbol": "SOLUSDT",
+      "url": "https://public.bybit.com/trading/SOLUSDT/SOLUSDT2026-09-19.csv.gz",
+      "utc_day": "2026-09-19"
+    },
+    {
+      "filename": "SOLUSDT2026-09-20.csv.gz",
+      "symbol": "SOLUSDT",
+      "url": "https://public.bybit.com/trading/SOLUSDT/SOLUSDT2026-09-20.csv.gz",
+      "utc_day": "2026-09-20"
+    },
+    {
+      "filename": "SOLUSDT2026-09-21.csv.gz",
+      "symbol": "SOLUSDT",
+      "url": "https://public.bybit.com/trading/SOLUSDT/SOLUSDT2026-09-21.csv.gz",
+      "utc_day": "2026-09-21"
+    },
+    {
+      "filename": "SOLUSDT2026-09-22.csv.gz",
+      "symbol": "SOLUSDT",
+      "url": "https://public.bybit.com/trading/SOLUSDT/SOLUSDT2026-09-22.csv.gz",
+      "utc_day": "2026-09-22"
+    },
+    {
+      "filename": "SOLUSDT2026-09-23.csv.gz",
+      "symbol": "SOLUSDT",
+      "url": "https://public.bybit.com/trading/SOLUSDT/SOLUSDT2026-09-23.csv.gz",
+      "utc_day": "2026-09-23"
+    },
+    {
+      "filename": "SOLUSDT2026-09-24.csv.gz",
+      "symbol": "SOLUSDT",
+      "url": "https://public.bybit.com/trading/SOLUSDT/SOLUSDT2026-09-24.csv.gz",
+      "utc_day": "2026-09-24"
+    },
+    {
+      "filename": "SOLUSDT2026-09-25.csv.gz",
+      "symbol": "SOLUSDT",
+      "url": "https://public.bybit.com/trading/SOLUSDT/SOLUSDT2026-09-25.csv.gz",
+      "utc_day": "2026-09-25"
+    },
+    {
+      "filename": "SOLUSDT2026-09-26.csv.gz",
+      "symbol": "SOLUSDT",
+      "url": "https://public.bybit.com/trading/SOLUSDT/SOLUSDT2026-09-26.csv.gz",
+      "utc_day": "2026-09-26"
+    },
+    {
+      "filename": "SUIUSDT2026-09-19.csv.gz",
+      "symbol": "SUIUSDT",
+      "url": "https://public.bybit.com/trading/SUIUSDT/SUIUSDT2026-09-19.csv.gz",
+      "utc_day": "2026-09-19"
+    },
+    {
+      "filename": "SUIUSDT2026-09-20.csv.gz",
+      "symbol": "SUIUSDT",
+      "url": "https://public.bybit.com/trading/SUIUSDT/SUIUSDT2026-09-20.csv.gz",
+      "utc_day": "2026-09-20"
+    },
+    {
+      "filename": "SUIUSDT2026-09-21.csv.gz",
+      "symbol": "SUIUSDT",
+      "url": "https://public.bybit.com/trading/SUIUSDT/SUIUSDT2026-09-21.csv.gz",
+      "utc_day": "2026-09-21"
+    },
+    {
+      "filename": "SUIUSDT2026-09-22.csv.gz",
+      "symbol": "SUIUSDT",
+      "url": "https://public.bybit.com/trading/SUIUSDT/SUIUSDT2026-09-22.csv.gz",
+      "utc_day": "2026-09-22"
+    },
+    {
+      "filename": "SUIUSDT2026-09-23.csv.gz",
+      "symbol": "SUIUSDT",
+      "url": "https://public.bybit.com/trading/SUIUSDT/SUIUSDT2026-09-23.csv.gz",
+      "utc_day": "2026-09-23"
+    },
+    {
+      "filename": "SUIUSDT2026-09-24.csv.gz",
+      "symbol": "SUIUSDT",
+      "url": "https://public.bybit.com/trading/SUIUSDT/SUIUSDT2026-09-24.csv.gz",
+      "utc_day": "2026-09-24"
+    },
+    {
+      "filename": "SUIUSDT2026-09-25.csv.gz",
+      "symbol": "SUIUSDT",
+      "url": "https://public.bybit.com/trading/SUIUSDT/SUIUSDT2026-09-25.csv.gz",
+      "utc_day": "2026-09-25"
+    },
+    {
+      "filename": "SUIUSDT2026-09-26.csv.gz",
+      "symbol": "SUIUSDT",
+      "url": "https://public.bybit.com/trading/SUIUSDT/SUIUSDT2026-09-26.csv.gz",
+      "utc_day": "2026-09-26"
+    },
+    {
+      "filename": "UNIUSDT2026-09-19.csv.gz",
+      "symbol": "UNIUSDT",
+      "url": "https://public.bybit.com/trading/UNIUSDT/UNIUSDT2026-09-19.csv.gz",
+      "utc_day": "2026-09-19"
+    },
+    {
+      "filename": "UNIUSDT2026-09-20.csv.gz",
+      "symbol": "UNIUSDT",
+      "url": "https://public.bybit.com/trading/UNIUSDT/UNIUSDT2026-09-20.csv.gz",
+      "utc_day": "2026-09-20"
+    },
+    {
+      "filename": "UNIUSDT2026-09-21.csv.gz",
+      "symbol": "UNIUSDT",
+      "url": "https://public.bybit.com/trading/UNIUSDT/UNIUSDT2026-09-21.csv.gz",
+      "utc_day": "2026-09-21"
+    },
+    {
+      "filename": "UNIUSDT2026-09-22.csv.gz",
+      "symbol": "UNIUSDT",
+      "url": "https://public.bybit.com/trading/UNIUSDT/UNIUSDT2026-09-22.csv.gz",
+      "utc_day": "2026-09-22"
+    },
+    {
+      "filename": "UNIUSDT2026-09-23.csv.gz",
+      "symbol": "UNIUSDT",
+      "url": "https://public.bybit.com/trading/UNIUSDT/UNIUSDT2026-09-23.csv.gz",
+      "utc_day": "2026-09-23"
+    },
+    {
+      "filename": "UNIUSDT2026-09-24.csv.gz",
+      "symbol": "UNIUSDT",
+      "url": "https://public.bybit.com/trading/UNIUSDT/UNIUSDT2026-09-24.csv.gz",
+      "utc_day": "2026-09-24"
+    },
+    {
+      "filename": "UNIUSDT2026-09-25.csv.gz",
+      "symbol": "UNIUSDT",
+      "url": "https://public.bybit.com/trading/UNIUSDT/UNIUSDT2026-09-25.csv.gz",
+      "utc_day": "2026-09-25"
+    },
+    {
+      "filename": "XRPUSDT2026-09-19.csv.gz",
+      "symbol": "XRPUSDT",
+      "url": "https://public.bybit.com/trading/XRPUSDT/XRPUSDT2026-09-19.csv.gz",
+      "utc_day": "2026-09-19"
+    },
+    {
+      "filename": "XRPUSDT2026-09-20.csv.gz",
+      "symbol": "XRPUSDT",
+      "url": "https://public.bybit.com/trading/XRPUSDT/XRPUSDT2026-09-20.csv.gz",
+      "utc_day": "2026-09-20"
+    },
+    {
+      "filename": "XRPUSDT2026-09-21.csv.gz",
+      "symbol": "XRPUSDT",
+      "url": "https://public.bybit.com/trading/XRPUSDT/XRPUSDT2026-09-21.csv.gz",
+      "utc_day": "2026-09-21"
+    },
+    {
+      "filename": "XRPUSDT2026-09-22.csv.gz",
+      "symbol": "XRPUSDT",
+      "url": "https://public.bybit.com/trading/XRPUSDT/XRPUSDT2026-09-22.csv.gz",
+      "utc_day": "2026-09-22"
+    },
+    {
+      "filename": "XRPUSDT2026-09-23.csv.gz",
+      "symbol": "XRPUSDT",
+      "url": "https://public.bybit.com/trading/XRPUSDT/XRPUSDT2026-09-23.csv.gz",
+      "utc_day": "2026-09-23"
+    },
+    {
+      "filename": "XRPUSDT2026-09-24.csv.gz",
+      "symbol": "XRPUSDT",
+      "url": "https://public.bybit.com/trading/XRPUSDT/XRPUSDT2026-09-24.csv.gz",
+      "utc_day": "2026-09-24"
+    },
+    {
+      "filename": "XRPUSDT2026-09-25.csv.gz",
+      "symbol": "XRPUSDT",
+      "url": "https://public.bybit.com/trading/XRPUSDT/XRPUSDT2026-09-25.csv.gz",
+      "utc_day": "2026-09-25"
+    },
+    {
+      "filename": "XRPUSDT2026-09-26.csv.gz",
+      "symbol": "XRPUSDT",
+      "url": "https://public.bybit.com/trading/XRPUSDT/XRPUSDT2026-09-26.csv.gz",
+      "utc_day": "2026-09-26"
+    }
+  ],
+  "price_data_opened": false,
+  "returns_calculated": false,
+  "pnl_calculated": false,
+  "next_state": "QUALIFY_EXACT_REQUIRED_PRICE_ARCHIVES"
+}
