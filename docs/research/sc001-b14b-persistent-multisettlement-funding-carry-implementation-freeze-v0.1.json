@@ -1,0 +1,65 @@
+{
+  "schema": "sc001.b14b_persistent_multisettlement_funding_carry_implementation_freeze.v0.1",
+  "date": "2026-09-27",
+  "status": "FROZEN_BEFORE_FRESH_2026_FUNDING_VALUE_ACCESS",
+  "protocol_path": "docs/research/sc001-b14b-persistent-multisettlement-funding-carry-protocol-v0.1.md",
+  "protocol_sha256": "8b54d27166d290c53b4490aafeab400e0955cd1202235179c8d96e49cd491012",
+  "contamination_registry_path": "docs/research/sc001-contamination-registry-v0.30.json",
+  "contamination_registry_sha256": "b715cdf1008793e4e76f831ea449d5c95d7a220270f6034adff2827aaa81e3ef",
+  "entrypoint": "research/sc001/sc001_b14b_persistent_multisettlement_funding_carry_v0_1.py",
+  "entrypoint_sha256": "cb288810ef8871ea1de3bfe9decf6e372cb525c1c62d0123969d4f7f459793f4",
+  "fresh_window": {
+    "start_utc": "2026-07-01T00:00:00Z",
+    "end_exclusive_utc": "2026-09-27T00:00:00Z"
+  },
+  "symbols": [
+    "BTC",
+    "ETH",
+    "SOL",
+    "DOGE",
+    "ORDI",
+    "FIL",
+    "UNI",
+    "XRP",
+    "LTC",
+    "OP",
+    "BCH",
+    "SUI"
+  ],
+  "venues": [
+    "OKX",
+    "BYBIT"
+  ],
+  "source_endpoints": {
+    "okx": "GET /api/v5/public/funding-rate-history",
+    "bybit": "GET /v5/market/funding/history"
+  },
+  "frozen_architecture": {
+    "trailing_matched_same_sign_differentials": 3,
+    "match_tolerance_ms": 300000,
+    "funding_magnitude_threshold": null,
+    "hold_days": 7,
+    "nonoverlap_per_symbol": true,
+    "all_realized_venue_cashflows_in_hold": true,
+    "min_funding_events_per_venue": 7,
+    "max_coverage_gap_ms": 86400000,
+    "structural_burden_bps": 40,
+    "gross_headroom_hurdle_bps": 50
+  },
+  "frozen_gates": {
+    "source_eligible_symbols_min": 8,
+    "valid_cycles_min": 24,
+    "cycle_symbols_min": 8,
+    "cycle_months_min": 2,
+    "median_gross_carry_bps_min": 50,
+    "positive_cycle_share_min": 0.6,
+    "positive_median_symbols_min": 6,
+    "positive_median_months_min": 2
+  },
+  "price_access_authorized": false,
+  "basis_access_authorized": false,
+  "pnl_authorized": false,
+  "alternate_horizon_search_authorized": false,
+  "symbol_selection_authorized": false,
+  "selftest_pass": "B14B_PERSISTENT_CARRY_V01_SELF_TEST_PASS"
+}

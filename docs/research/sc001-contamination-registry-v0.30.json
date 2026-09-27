@@ -1,0 +1,53 @@
+{
+  "stage": "SC001-CONTAMINATION-REGISTRY",
+  "version": "0.30",
+  "date": "2026-09-27",
+  "status": "UPDATED_BEFORE_B14B_FRESH_FUNDING_VALUE_ACCESS",
+  "scope": "SCALPING_RESEARCH_SC001",
+  "supersedes": "docs/research/sc001-contamination-registry-v0.29.json",
+  "inherited_registry": "docs/research/sc001-contamination-registry-v0.29.json",
+  "b13c_s0_terminal": {
+    "classification": "B13C_S0_SIMPLE_REVERSAL_HEADROOM_REJECT",
+    "protected_interval": "2026-09-19T06:47:38.969Z..2026-09-26T21:05:32.973Z",
+    "reusable_block": "RB021",
+    "same_interval_rescue_authorized": false,
+    "future_successor_requires_fresh_post_definition_evidence": true
+  },
+  "b14b_fresh_persistent_funding_screen": {
+    "classification": "FRESH_NONPROMOTIONAL_STRUCTURAL_SCREEN",
+    "window_start_utc": "2026-07-01T00:00:00Z",
+    "window_end_exclusive_utc": "2026-09-27T00:00:00Z",
+    "venues": [
+      "OKX",
+      "BYBIT"
+    ],
+    "symbols": [
+      "BTC",
+      "ETH",
+      "SOL",
+      "DOGE",
+      "ORDI",
+      "FIL",
+      "UNI",
+      "XRP",
+      "LTC",
+      "OP",
+      "BCH",
+      "SUI"
+    ],
+    "funding_value_access_authorized": true,
+    "funding_timestamp_access_authorized": true,
+    "fresh_relative_to_b13a_h1_2025": true,
+    "price_access_authorized": false,
+    "basis_access_authorized": false,
+    "trade_body_access_authorized": false,
+    "l2_access_authorized": false,
+    "strategy_price_pnl_authorized": false,
+    "promotional_evidence_authorized": false,
+    "hold_horizon_days": 7,
+    "trailing_same_sign_matched_differentials": 3,
+    "funding_magnitude_threshold": null,
+    "alternate_horizon_search_authorized": false,
+    "symbol_selection_authorized": false
+  }
+}

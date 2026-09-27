@@ -1,0 +1,31 @@
+{
+  "schema": "sc001.b14b_persistent_multisettlement_funding_carry_offline_selftest_spec.v0.1",
+  "date": "2026-09-27",
+  "status": "READY",
+  "entrypoint": "research/sc001/sc001_b14b_persistent_multisettlement_funding_carry_v0_1.py",
+  "entrypoint_sha256": "cb288810ef8871ea1de3bfe9decf6e372cb525c1c62d0123969d4f7f459793f4",
+  "runtime": "offline-research-v1",
+  "inputs": [],
+  "mode": "default self-test",
+  "synthetic_checks": [
+    "Runner launcher positional contract",
+    "one-to-one matched funding signal pairing",
+    "three same-sign matched differentials",
+    "positive and negative venue-direction mapping",
+    "signal funding event excluded from new cycle cashflow",
+    "seven-calendar-day hold",
+    "all venue cashflows inside hold included",
+    "non-overlapping cycles per symbol",
+    "coverage gap gate",
+    "50 bps structural headroom gate",
+    "synthetic SURVIVE fixture",
+    "synthetic REJECT fixture"
+  ],
+  "network_calls": false,
+  "fresh_real_funding_values_accessed": false,
+  "price_access": false,
+  "basis_access": false,
+  "pnl": false,
+  "expected_pass": "B14B_PERSISTENT_CARRY_V01_SELF_TEST_PASS",
+  "next_after_pass": "FREEZE_NETWORKED_FRESH_2026_FUNDING_SCREEN_LAUNCH"
+}
