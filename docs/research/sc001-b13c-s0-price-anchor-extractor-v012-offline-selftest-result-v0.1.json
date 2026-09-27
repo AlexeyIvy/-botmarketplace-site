@@ -1,0 +1,26 @@
+{
+  "schema": "sc001.b13c_s0_price_anchor_extractor_v012_offline_selftest_result.v0.1",
+  "date": "2026-09-27",
+  "status": "B13C_S0_PRICE_ANCHOR_EXTRACTOR_V011_SELF_TEST_PASS",
+  "runner_job": {
+    "job_id": "job_20260927T080705Z_561e3c54",
+    "bundle_id": "bundle_20260927T080056Z_82f5be3a",
+    "bundle_sha256": "2b093def1156a8dcf2667b9ea7d53d54e628f1874c93d89a7f8aa9a60ae72c74",
+    "exit_code": 0,
+    "package_integrity_ok": true
+  },
+  "stdout": [
+    "B13C_S0_PRICE_ANCHOR_EXTRACTOR_V011_SELF_TEST_PASS",
+    "canonical_clusters = 1905",
+    "canonical_archives = 76",
+    "returns/PnL = CLOSED"
+  ],
+  "stderr_empty": true,
+  "canonical_cluster_count": 1905,
+  "canonical_archive_count": 76,
+  "network_calls_performed": false,
+  "real_price_body_access": false,
+  "returns_calculated": false,
+  "pnl_calculated": false,
+  "next_state": "AWAIT_EXPLICIT_APPROVAL_FOR_NETWORKED_VPS_PRICE_ANCHOR_EXTRACTION"
+}

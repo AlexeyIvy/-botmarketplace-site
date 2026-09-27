@@ -1,0 +1,54 @@
+{
+  "schema": "sc001.b13c_s0_networked_price_anchor_extraction_launch_contract.v0.1",
+  "date": "2026-09-27",
+  "status": "READY_AWAITING_EXPLICIT_PRICE_BODY_ACCESS_APPROVAL",
+  "purpose": "Sequentially download and source-qualify the 76 exact frozen Bybit historical trade archives, extract only frozen entry/exit price anchors for 1,905 clusters, and delete each compressed body after successful extraction.",
+  "script": {
+    "path": "research/sc001/sc001_b13c_s0_streaming_price_anchor_extractor_v0_1_2.py",
+    "sha256": "abb876276976198be65d049c6269d732dd24c5364c6c496bfeb5ed9d3f1f5be9"
+  },
+  "protocol": {
+    "path": "docs/research/sc001-b13c-s0-streaming-price-anchor-extraction-protocol-v0.1.md",
+    "sha256": "be87a3e480d6e21b8a5f6bcac9871ad03b7125dccd8fc04797e27beb49fa5b46"
+  },
+  "cluster_master": {
+    "path": "docs/research/artifacts/b13c-s0/exact-cluster-freeze-v0.1/master-index.json",
+    "sha256": "0636ac25d6b7a484a4a9959f256aa57e0a1ead7f4e228423715f688b194fb87b",
+    "eligible_clusters": 1905
+  },
+  "archive_metadata": {
+    "required_archive_count": 76,
+    "total_content_length_bytes": 2633144445,
+    "total_content_length_gib": 2.452,
+    "vps_report": "/home/botmarket/sc001_data/SC001_B13C_S0_PRICE_ARCHIVE_PREFLIGHT/b13c_s0_price_archive_metadata_preflight_v0_1.json"
+  },
+  "execution": {
+    "environment": "NETWORKED_VPS_HOST",
+    "data_root": "/home/botmarket/sc001_data",
+    "repository": "/var/lib/botmarket-github-control/repo",
+    "mode": "extract",
+    "sequential_one_archive_at_a_time": true,
+    "compressed_archive_deleted_after_success": true,
+    "resume_via_per_archive_ledgers": true,
+    "min_free_reserve_bytes": 2147483648
+  },
+  "allowed": [
+    "GET exact 76 public.bybit.com archive URLs only",
+    "read historical trade price fields",
+    "calculate compressed archive SHA256",
+    "validate gzip/CSV/schema/timestamps",
+    "extract exact frozen entry/exit anchor trades",
+    "persist per-archive ledgers/candidates and final price_anchors.jsonl"
+  ],
+  "forbidden": [
+    "RETURN_CALCULATION",
+    "SIGNED_REVERSAL_CALCULATION",
+    "THRESHOLD_OUTCOME",
+    "PER_SYMBOL_PERFORMANCE_RANKING",
+    "PNL",
+    "ALTERNATE_PRICE_SOURCE",
+    "ALTERNATE_ENTRY_OR_EXIT_WINDOW"
+  ],
+  "expected_terminal_pass": "B13C_S0_PRICE_ANCHOR_EXTRACTION_PASS",
+  "next_after_pass": "FREEZE_PRICE_ANCHOR_DATASET_AND_PREPARE_SEPARATE_OFFLINE_S0_OUTCOME_BUNDLE"
+}
