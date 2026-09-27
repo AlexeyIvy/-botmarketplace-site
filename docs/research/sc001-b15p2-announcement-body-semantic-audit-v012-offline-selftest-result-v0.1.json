@@ -1,0 +1,53 @@
+{
+  "schema": "sc001.b15p2_announcement_body_semantic_audit_v012_offline_selftest_result.v0.1",
+  "date": "2026-09-27",
+  "status": "B15P2_ANNOUNCEMENT_BODY_SEMANTIC_AUDIT_V012_SELF_TEST_PASS",
+  "research_ref": "SC001-B15P2/ANNOUNCEMENT-BODY-SEMANTIC-AUDIT-V0.1.2/OFFLINE-SELFTEST",
+  "execution": {
+    "job_id": "job_20260927T201702Z_c370176c",
+    "bundle_id": "bundle_20260927T200214Z_b321091a",
+    "bundle_sha256": "5015f01b988d41ea8b48bb8982b13369e7c4dc9d8daf5533972fbcfa5589dd67",
+    "approval_code": "BM-5015F01B988D",
+    "run_key": "b15p2-semantic-v012-selftest",
+    "requested_utc": "2026-09-27T20:17:02.110771+00:00",
+    "finished_utc": "2026-09-27T20:17:02.588734+00:00",
+    "exit_code": 0,
+    "service_result": "success",
+    "package_integrity_ok": true,
+    "stderr_empty": true
+  },
+  "implementation": {
+    "path": "research/sc001/sc001_b15p2_announcement_body_semantic_audit_v0_1_2.py",
+    "sha256": "a0fe50c52fcdcf3ce71ab0cb3a52c3be802f22426696a7f97e42b4d95a1dce78"
+  },
+  "validated": [
+    "Runner launcher positional contract",
+    "nonempty visible-text extraction",
+    "symmetric head/script/style/noscript/svg suppression",
+    "head/script content hidden while body remains visible",
+    "exact article-region isolation",
+    "article-region minimum integrity gate",
+    "announced UTC timestamp parser",
+    "exact deliveryTime match",
+    "trading-stop detection",
+    "active/conditional order auto-cancel detection",
+    "open-position automatic-close detection",
+    "average-index-price window parsing",
+    "other explicit closing-basis fixture",
+    "funding/revision page-chrome false-positive protection",
+    "time-mismatch fail-closed fixture",
+    "stage-specific diagnostics"
+  ],
+  "boundary": {
+    "network_calls": false,
+    "real_announcement_body_access": false,
+    "price_access": false,
+    "basis_access": false,
+    "returns_access": false,
+    "pnl_access": false
+  },
+  "strategy_review_triggered": false,
+  "strategy_review_trigger_reason": "Synthetic semantic-parser self-test PASS only; no real announcement semantics or price/economic evidence opened.",
+  "binding_consequence": "PREPARE_NETWORKED_94_PAGE_SEMANTIC_AUDIT_BOUNDARY",
+  "networked_execution_authorized": false
+}
