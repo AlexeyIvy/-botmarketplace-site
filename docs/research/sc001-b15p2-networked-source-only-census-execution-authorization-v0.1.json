@@ -1,0 +1,27 @@
+{
+  "schema": "sc001.b15p2_networked_source_only_census_execution_authorization.v0.1",
+  "date": "2026-09-27",
+  "status": "EXPLICIT_USER_APPROVAL_RECEIVED_AWAITING_HOST_EXECUTION",
+  "approval_code": "BM-FB377A3598E7",
+  "launch_contract": {
+    "path": "docs/research/sc001-b15p2-networked-bybit-source-only-event-census-launch-contract-v0.1.json",
+    "sha256": "ede104f258d72af2d7a288af6d311c248797264989baf8107b526affee625373"
+  },
+  "host_wrapper": {
+    "path": "scripts/research/run-b15p2-bybit-delisting-source-census-v0.1.sh",
+    "sha256": "fb377a3598e7353ec8087ac400f7e3f5db19206eef6717fccd9f765e3085abe5"
+  },
+  "authorized_action": "RUN_NETWORKED_BYBIT_SOURCE_ONLY_EVENT_CENSUS_V0_1",
+  "authorized_network_scope": [
+    "api.bybit.com/v5/announcements/index?locale=en-US&type=delistings",
+    "api.bybit.com/v5/market/instruments-info?category=linear&status=Closed"
+  ],
+  "price_access_authorized": false,
+  "external_reference_price_access_authorized": false,
+  "basis_access_authorized": false,
+  "pnl_access_authorized": false,
+  "order_or_trade_execution_authorized": false,
+  "execution_started": false,
+  "execution_blocker": "CURRENT_CHAT_HAS_NO_NETWORKED_VPS_HOST_EXEC_ACTION",
+  "required_host_command": "sudo bash /var/lib/botmarket-github-control/repo/scripts/research/run-b15p2-bybit-delisting-source-census-v0.1.sh --launch"
+}

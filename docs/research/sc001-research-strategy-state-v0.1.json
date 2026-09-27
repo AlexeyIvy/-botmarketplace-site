@@ -25,7 +25,7 @@
       "mutation_allowed": false
     },
     "B15-P2": {
-      "state": "NETWORKED_SOURCE_ONLY_CENSUS_BOUNDARY_FROZEN_UNRUN",
+      "state": "NETWORKED_SOURCE_ONLY_APPROVED_AWAITING_HOST_EXECUTION",
       "price_outcome_authorized": false,
       "offline_selftest_status": "PASS",
       "offline_selftest_job_id": "job_20260927T164347Z_5e17af47",
@@ -33,8 +33,10 @@
       "networked_wrapper": "scripts/research/run-b15p2-bybit-delisting-source-census-v0.1.sh",
       "networked_wrapper_sha256": "fb377a3598e7353ec8087ac400f7e3f5db19206eef6717fccd9f765e3085abe5",
       "networked_approval_code": "BM-FB377A3598E7",
-      "networked_execution_authorized": false,
-      "next_allowed_action": "AWAIT_EXPLICIT_NETWORKED_SOURCE_ONLY_APPROVAL"
+      "networked_execution_authorized": true,
+      "next_allowed_action": "EXECUTE_FROZEN_NETWORKED_SOURCE_ONLY_HOST_WRAPPER",
+      "execution_started": false,
+      "execution_authorization": "docs/research/sc001-b15p2-networked-source-only-census-execution-authorization-v0.1.json"
     }
   },
   "deferred_branches": {
