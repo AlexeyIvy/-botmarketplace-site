@@ -8,7 +8,7 @@
   "baseline_git_head": "94bf690f5c273c98b4a5e58d4bb2fe6ea7f9cf91",
   "last_strategy_review_head": "002f8bf9258058f8e14775472d315a69a53da031",
   "binding_refs": {
-    "roadmap": "docs/research/sc001-current-roadmap-and-stop-rules-v5.164.md",
+    "roadmap": "docs/research/sc001-current-roadmap-and-stop-rules-v5.165.md",
     "governance": "docs/research/sc001-midcourse-research-strategy-audit-and-governance-amendment-v0.2.md",
     "reusable_policy": "docs/research/sc001-terminal-experiment-reusable-block-extraction-policy-v0.1.md",
     "reusable_registry": "docs/research/sc001-reusable-market-building-blocks-registry-v0.9.md",
@@ -25,20 +25,18 @@
       "mutation_allowed": false
     },
     "B15-P2": {
-      "state": "SOURCE_CENSUS_PASS_EVENT_SET_FREEZE_WRAPPER_READY",
+      "state": "EXACT_94_EVENT_SET_FROZEN_SEMANTIC_AUDIT_DESIGN_NEXT",
       "price_outcome_authorized": false,
-      "source_census_status": "B15P2_BYBIT_DELISTING_SOURCE_CENSUS_PASS",
-      "source_census_summary": "docs/research/sc001-b15p2-bybit-delisting-source-census-networked-result-v0.1.json",
-      "closed_in_scope": 94,
-      "admitted_events": 94,
+      "source_census_status": "PASS",
+      "frozen_event_count": 94,
       "announcement_match_coverage": 1,
-      "delivery_month_count": 9,
-      "matched_timestamp_integrity_issues": 0,
-      "exact_event_set_promoted_to_github": false,
+      "frozen_source_result": "docs/research/artifacts/b15-p2-source-census-v0.1.1/20260927T193110Z/source_census_result.v0.1.1.json",
+      "frozen_source_result_sha256": "c28aeb2b1ac0a23fb0e4420ced943fd619dd0a60e3fdcf5820299579cb94206c",
+      "event_set_freeze_manifest": "docs/research/artifacts/b15-p2-source-census-v0.1.1/20260927T193110Z/source_census_event_set_freeze.v0.1.json",
+      "event_set_freeze_manifest_sha256": "81952c83e7397481035cc00354388dfe3470ad17993c6e80665a7d376be907ed",
+      "event_set_sha256": "1063695ec003a0d6789270659822f50577e6a0f07059d88ac03a5be4288ed1a2",
       "strategy_review_required_now": false,
-      "next_allowed_action": "RUN_NO_NETWORK_EVENT_SET_FREEZE_PREFLIGHT_AND_PROMOTE",
-      "event_set_freeze_wrapper": "scripts/research/freeze-b15p2-bybit-source-census-event-set-v0.1.sh",
-      "event_set_freeze_wrapper_sha256": "b63134c62eb79f62da3246c2870d98cdceb45b60b0e21876fc0dcc32c2fdae11"
+      "next_allowed_action": "DESIGN_AND_FREEZE_ANNOUNCEMENT_BODY_SEMANTIC_AUDIT_NO_PRICE"
     }
   },
   "deferred_branches": {

@@ -1,0 +1,32 @@
+{
+  "coverage": 1.0,
+  "date": "2026-09-27",
+  "delivery_months": [
+    "2026-01",
+    "2026-02",
+    "2026-03",
+    "2026-04",
+    "2026-05",
+    "2026-06",
+    "2026-07",
+    "2026-08",
+    "2026-09"
+  ],
+  "event_count": 94,
+  "event_identity": "BYBIT x EXACT_USDT_PERPETUAL_SYMBOL x DELIVERY_TIME",
+  "event_set_sha256": "1063695ec003a0d6789270659822f50577e6a0f07059d88ac03a5be4288ed1a2",
+  "firewalls": {
+    "basis_calculated": false,
+    "event_ranked_by_outcome": false,
+    "pnl_calculated": false,
+    "price_accessed": false
+  },
+  "next_state": "ANNOUNCEMENT_BODY_SEMANTIC_AUDIT_ONLY",
+  "schema": "sc001.b15p2_bybit_source_census_event_set_freeze.v0.1",
+  "source_integrity_issue_count": 0,
+  "source_result": {
+    "path": "docs/research/artifacts/b15-p2-source-census-v0.1.1/20260927T193110Z/source_census_result.v0.1.1.json",
+    "sha256": "c28aeb2b1ac0a23fb0e4420ced943fd619dd0a60e3fdcf5820299579cb94206c"
+  },
+  "status": "B15P2_EXACT_ADMITTED_EVENT_SET_FROZEN"
+}
