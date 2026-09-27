@@ -1,0 +1,35 @@
+{
+  "schema": "sc001.b13c_s0_price_anchor_dataset_freeze_bundle_seal.v0.1",
+  "date": "2026-09-27",
+  "status": "SEALED_AWAITING_EXPLICIT_RUNNER_APPROVAL",
+  "bundle_id": "bundle_20260927T083221Z_90a5a578",
+  "bundle_sha256": "8b498bd030176e9ae2e21c12033b0e42d8db9119c7f3e7cca23747a3fba6f8ba",
+  "approval_code": "BM-8B498BD03017",
+  "runtime_profile": "offline-research-v1",
+  "package_files": 15,
+  "total_bytes": 1008048,
+  "runtime_inputs": [
+    "SC001_B13C_S0_PRICE_ANCHORS_V01/price_anchor_extraction_manifest.json",
+    "SC001_B13C_S0_PRICE_ANCHORS_V01/price_anchors.jsonl"
+  ],
+  "entrypoint": "research/sc001/sc001_b13c_s0_price_anchor_dataset_freeze_v0_1.py",
+  "entrypoint_sha256": "b45388ad453623a3a8bdd0a2893f31552b89b1bea090b0bbda475099e61a2d40",
+  "expected_pass": "B13C_S0_PRICE_ANCHOR_DATASET_FREEZE_PASS",
+  "expected_counts": {
+    "cluster_rows": 1905,
+    "valid_price_clusters": 1793,
+    "missing_entry": 25,
+    "missing_exit": 75,
+    "missing_both": 12,
+    "archive_count": 76
+  },
+  "boundaries": {
+    "returns_calculated": false,
+    "signed_reversal_calculated": false,
+    "threshold_outcome_calculated": false,
+    "per_symbol_performance_ranked": false,
+    "pnl_calculated": false,
+    "network_calls": false
+  },
+  "next_state": "RUN_EXACT_DATASET_FREEZE_AFTER_EXPLICIT_APPROVAL"
+}
