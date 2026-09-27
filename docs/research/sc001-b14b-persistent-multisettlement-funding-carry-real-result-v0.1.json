@@ -1,0 +1,126 @@
+{
+  "schema": "sc001.b14b_persistent_multisettlement_funding_carry_real_result.v0.1",
+  "date": "2026-09-27",
+  "status": "B14B_REJECT_PERSISTENT_CARRY_STRUCTURAL",
+  "execution": {
+    "environment": "networked VPS transient systemd",
+    "unit": "sc001-b14b-fresh-funding-v01.service",
+    "journal_terminal_state": "Deactivated successfully / Finished",
+    "script_sha256": "cb288810ef8871ea1de3bfe9decf6e372cb525c1c62d0123969d4f7f459793f4"
+  },
+  "window": {
+    "start_utc": "2026-07-01T00:00:00Z",
+    "end_exclusive_utc": "2026-09-27T00:00:00Z"
+  },
+  "source_counts": {
+    "BTC": {
+      "okx": 264,
+      "bybit": 264,
+      "matched": 264,
+      "cycles": 10
+    },
+    "ETH": {
+      "okx": 264,
+      "bybit": 264,
+      "matched": 264,
+      "cycles": 10
+    },
+    "SOL": {
+      "okx": 264,
+      "bybit": 264,
+      "matched": 264,
+      "cycles": 10
+    },
+    "DOGE": {
+      "okx": 264,
+      "bybit": 264,
+      "matched": 264,
+      "cycles": 9
+    },
+    "ORDI": {
+      "okx": 528,
+      "bybit": 528,
+      "matched": 528,
+      "cycles": 9
+    },
+    "FIL": {
+      "okx": 264,
+      "bybit": 264,
+      "matched": 264,
+      "cycles": 10
+    },
+    "UNI": {
+      "okx": 264,
+      "bybit": 264,
+      "matched": 264,
+      "cycles": 9
+    },
+    "XRP": {
+      "okx": 264,
+      "bybit": 264,
+      "matched": 264,
+      "cycles": 9
+    },
+    "LTC": {
+      "okx": 264,
+      "bybit": 264,
+      "matched": 264,
+      "cycles": 10
+    },
+    "OP": {
+      "okx": 264,
+      "bybit": 264,
+      "matched": 264,
+      "cycles": 6
+    },
+    "BCH": {
+      "okx": 264,
+      "bybit": 264,
+      "matched": 264,
+      "cycles": 10
+    },
+    "SUI": {
+      "okx": 264,
+      "bybit": 264,
+      "matched": 264,
+      "cycles": 8
+    }
+  },
+  "valid_cycles": 110,
+  "diagnostics": {
+    "p25_gross_carry_bps": -2.59510364735925,
+    "median_gross_carry_bps": 1.3863386217925,
+    "p75_gross_carry_bps": 3.64054417716775,
+    "positive_cycle_count": 67,
+    "positive_cycle_share": 0.6090909090909091,
+    "positive_median_symbol_count": 8,
+    "positive_median_month_count": 3
+  },
+  "data_gates": {
+    "cycle_months_ge2": true,
+    "cycle_symbols_ge8": true,
+    "source_eligible_symbols_ge8": true,
+    "valid_cycles_ge24": true
+  },
+  "structural_gates": {
+    "median_gross_carry_ge50bps": false,
+    "positive_cycle_share_ge60pct": true,
+    "positive_median_months_ge2": true,
+    "positive_median_symbols_ge6": true
+  },
+  "interpretation": {
+    "data_quality_failure": false,
+    "sample_failure": false,
+    "directionality_failure": false,
+    "economic_magnitude_failure": true,
+    "median_as_fraction_of_50bps_hurdle": 0.02772677243585,
+    "note": "The frozen persistence signal has broad positive directionality, but cumulative seven-day funding carry is far below the structural gross-headroom requirement."
+  },
+  "firewalls": {
+    "price_accessed": false,
+    "basis_calculated": false,
+    "strategy_price_pnl_calculated": false,
+    "promotional_evidence": false
+  },
+  "binding_consequence": "CLOSE_B14B_PERSISTENT_CARRY_ARCHITECTURE_NO_RESCUE"
+}
