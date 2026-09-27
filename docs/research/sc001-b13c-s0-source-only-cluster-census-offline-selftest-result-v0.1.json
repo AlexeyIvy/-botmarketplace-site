@@ -1,0 +1,18 @@
+{
+  "schema": "sc001.b13c_s0_source_only_cluster_census_offline_selftest_result.v0.1",
+  "date": "2026-09-27",
+  "status": "B13C_S0_SOURCE_ONLY_CLUSTER_CENSUS_V01_SELF_TEST_PASS",
+  "runner_job": {
+    "job_id": "job_20260927T064523Z_8278bc96",
+    "bundle_id": "bundle_20260926T214337Z_a25b8bff",
+    "bundle_sha256": "f6500de6a30e2d97430a29ec047ea85552c284d46f7e7917a794e198f4f2361e",
+    "exit_code": 0,
+    "package_integrity_ok": true
+  },
+  "stdout_token": "B13C_S0_SOURCE_ONLY_CLUSTER_CENSUS_V01_SELF_TEST_PASS",
+  "stderr_empty": true,
+  "real_liquidation_data_used": false,
+  "price_data_used": false,
+  "returns_calculated": false,
+  "next_state": "PREPARE_REAL_EVENT_ONLY_CLUSTER_CENSUS_BUNDLE"
+}

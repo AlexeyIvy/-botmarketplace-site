@@ -1,0 +1,43 @@
+{
+  "schema": "sc001.b13c_s0_real_event_only_cluster_census_contract.v0.1",
+  "date": "2026-09-27",
+  "status": "READY_FOR_SEAL",
+  "analyzer_path": "research/sc001/sc001_b13c_s0_source_only_cluster_census_v0_1.py",
+  "analyzer_sha256": "601252728e8fa7caf2d9c467d99e61296268a78879a42323725b67bac223db5b",
+  "bootstrap_path": "research/sc001/sc001_b13c_s0_real_event_only_cluster_census_bootstrap_v0_1.py",
+  "frozen_interval": {
+    "start_utc": "2026-09-19T06:47:38.969Z",
+    "end_utc": "2026-09-26T21:05:32.973Z"
+  },
+  "input_root": "sc001_data",
+  "input_dir": "SC001_B13C_PROSPECTIVE_LIQUIDATIONS",
+  "runtime_inputs": [
+    "collector_state.json",
+    "connection/connection_events.jsonl",
+    "events/2026-09-19.jsonl",
+    "events/2026-09-20.jsonl",
+    "events/2026-09-21.jsonl",
+    "events/2026-09-22.jsonl",
+    "events/2026-09-23.jsonl",
+    "events/2026-09-24.jsonl",
+    "events/2026-09-25.jsonl",
+    "events/2026-09-26.jsonl"
+  ],
+  "allowed_outputs": [
+    "aggregate unique event count",
+    "aggregate cluster exclusion/censor counts",
+    "aggregate eligible cluster count",
+    "sample_gate_ready >=100",
+    "exact required symbol-date archive identities"
+  ],
+  "forbidden": [
+    "PRICE_BODY_ACCESS",
+    "RETURN_CALCULATION",
+    "PER_SYMBOL_PERFORMANCE_RANKING",
+    "LIQUIDATION_SIZE_DISTRIBUTION",
+    "THRESHOLD_TUNING",
+    "PNL"
+  ],
+  "expected_census_pass": "B13C_S0_SOURCE_ONLY_CLUSTER_CENSUS_PASS",
+  "expected_bootstrap_pass": "B13C_S0_REAL_EVENT_ONLY_CLUSTER_CENSUS_BOOTSTRAP_PASS"
+}
