@@ -1,0 +1,27 @@
+{
+  "schema": "sc001.b15p2_networked_source_census_v012_preflight_failure_diagnostic.v0.1",
+  "date": "2026-09-27",
+  "status": "TECHNICAL_PREFLIGHT_FAILURE_NO_NETWORK_CALL",
+  "attempt": {
+    "wrapper": "scripts/research/run-b15p2-bybit-delisting-source-census-v0.1.2.sh",
+    "wrapper_sha256": "e9727b13cdd5677a369275f2bc433a611849242b41ee38a29826a11548f80c9e",
+    "approval_code": "BM-E9727B13CDD5"
+  },
+  "observed_error": "AssertionError: external_reference_price_access",
+  "root_cause": "The v0.1.2 wrapper checked external_reference_price_access inside the offline self-test result boundary, but that field is not part of that canonical result schema. The external-reference firewall is canonically stored as external_reference_access_authorized=false in the implementation freeze.",
+  "execution_stage_reached": "HOST_PREFLIGHT_ONLY",
+  "network_call_performed": false,
+  "staged_live_execution_started": false,
+  "research_outcome_observed": false,
+  "price_accessed": false,
+  "basis_accessed": false,
+  "pnl_accessed": false,
+  "strategy_review_triggered": false,
+  "required_correction": [
+    "validate self-test boundary fields only against fields actually present in self-test result",
+    "validate external-reference and event-outcome firewalls from implementation freeze",
+    "replace opaque assertions with named PRECHECK_FAILED codes",
+    "add explicit no-network --preflight mode",
+    "cross-check current canonical JSON before freezing the next wrapper"
+  ]
+}
