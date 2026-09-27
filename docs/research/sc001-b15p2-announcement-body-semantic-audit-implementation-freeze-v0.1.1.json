@@ -1,0 +1,47 @@
+{
+  "schema": "sc001.b15p2_announcement_body_semantic_audit_implementation_freeze.v0.1.1",
+  "date": "2026-09-27",
+  "status": "FROZEN_SELFTEST_CORRECTION_BEFORE_NETWORK_ACCESS",
+  "supersedes": "docs/research/sc001-b15p2-announcement-body-semantic-audit-implementation-freeze-v0.1.json",
+  "protocol": {
+    "path": "docs/research/sc001-b15p2-announcement-body-semantic-audit-protocol-v0.1.md",
+    "sha256": "4209779876e3796feff16a8310af93324cd1927862874524fb90ebf95d51d84f",
+    "changed": false
+  },
+  "entrypoint": {
+    "path": "research/sc001/sc001_b15p2_announcement_body_semantic_audit_v0_1_1.py",
+    "sha256": "a7ba9da9b5eb0786476b9360f39cc182277fc8e7cf26657747ac0d64d5550a5c"
+  },
+  "triggering_failure": {
+    "job_id": "job_20260927T195253Z_77823c65",
+    "observed_status": "B15P2_ANNOUNCEMENT_BODY_SEMANTIC_AUDIT_V01_SELF_TEST_REVIEW",
+    "observed_error": "RuntimeError: visible body unexpectedly short",
+    "classification": "SYNTHETIC_SELFTEST_INTEGRITY_GATE_ERROR_NO_NETWORK_NO_RESEARCH_OUTCOME"
+  },
+  "correction": {
+    "global_visible_page_minimum_removed": true,
+    "empty_visible_page_still_rejected": true,
+    "article_region_minimum_retained": true,
+    "article_region_minimum_chars": 120,
+    "semantic_region_still_requires_exact_contract_title": true,
+    "selftest_stage_diagnostics_added": true,
+    "reason": "Whole-page visible-text length is not a causal/source-integrity criterion. The correct fail-closed unit is the exact contract-specific article region."
+  },
+  "frozen_input": {
+    "source_result_sha256": "c28aeb2b1ac0a23fb0e4420ced943fd619dd0a60e3fdcf5820299579cb94206c",
+    "event_set_sha256": "1063695ec003a0d6789270659822f50577e6a0f07059d88ac03a5be4288ed1a2",
+    "event_count": 94,
+    "unique_announcement_url_count": 94
+  },
+  "source_scope_changed": false,
+  "semantic_classification_rules_changed": false,
+  "pass_review_rules_changed": false,
+  "price_access_authorized": false,
+  "external_reference_price_access_authorized": false,
+  "index_value_access_authorized": false,
+  "basis_access_authorized": false,
+  "return_access_authorized": false,
+  "pnl_authorized": false,
+  "event_outcome_ranking_authorized": false,
+  "expected_selftest_pass": "B15P2_ANNOUNCEMENT_BODY_SEMANTIC_AUDIT_V011_SELF_TEST_PASS"
+}
