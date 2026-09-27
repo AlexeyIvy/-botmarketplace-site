@@ -1,0 +1,38 @@
+{
+  "schema": "sc001.b15p2_networked_source_census_v0_1_host_failure_diagnostic.v0.1",
+  "date": "2026-09-27",
+  "status": "TECHNICAL_REVIEW_NO_RESEARCH_OUTCOME",
+  "attempt": {
+    "unit": "sc001-b15p2-bybit-source-census-v01-20260927T174710Z.service",
+    "wrapper": "scripts/research/run-b15p2-bybit-delisting-source-census-v0.1.sh",
+    "wrapper_sha256": "fb377a3598e7353ec8087ac400f7e3f5db19206eef6717fccd9f765e3085abe5",
+    "approval_code": "BM-FB377A3598E7"
+  },
+  "observed": {
+    "offline_selftest_prerequisite": "PASS",
+    "staged_selftest": "B15P2_BYBIT_DELISTING_SOURCE_CENSUS_V01_SELF_TEST_PASS",
+    "systemd_result": "exit-code",
+    "exec_status": 2,
+    "systemd_status_label": "INVALIDARGUMENT",
+    "runtime_seconds_approx": 6
+  },
+  "root_cause_status": "NOT_RECOVERABLE_FROM_V0_1_ARTIFACTS",
+  "root_cause_reason": "The live helper redirected Python stdout/stderr to a dedicated log, while the wrapper deleted that log and launch marker when systemd-run returned nonzero. The system journal therefore retained only the generic child exit status, not the underlying Python exception.",
+  "timing_hypothesis_nonbinding": "Approximately six seconds is consistent with four immediately failing request attempts plus 1+2+3 second retry sleeps, so the first Bybit public request is a leading diagnostic hypothesis, not a concluded cause.",
+  "research_firewalls": {
+    "price_access_authorized": false,
+    "external_reference_price_access_authorized": false,
+    "basis_access_authorized": false,
+    "pnl_access_authorized": false,
+    "strategy_outcome_observed": false
+  },
+  "strategy_review_triggered": false,
+  "strategy_review_reason": "Technical host-wrapper observability failure only; no economic/source-feasibility verdict was obtained.",
+  "required_fix": [
+    "preserve log and exit-code artifacts on failure",
+    "mirror live Python output to both journal and persistent log",
+    "preserve launch marker for attempt provenance",
+    "print status/log automatically when the transient unit fails",
+    "use a new versioned wrapper and a new exact approval boundary"
+  ]
+}

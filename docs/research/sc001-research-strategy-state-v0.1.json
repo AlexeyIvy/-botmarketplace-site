@@ -8,7 +8,7 @@
   "baseline_git_head": "94bf690f5c273c98b4a5e58d4bb2fe6ea7f9cf91",
   "last_strategy_review_head": "002f8bf9258058f8e14775472d315a69a53da031",
   "binding_refs": {
-    "roadmap": "docs/research/sc001-current-roadmap-and-stop-rules-v5.156.md",
+    "roadmap": "docs/research/sc001-current-roadmap-and-stop-rules-v5.157.md",
     "governance": "docs/research/sc001-midcourse-research-strategy-audit-and-governance-amendment-v0.2.md",
     "reusable_policy": "docs/research/sc001-terminal-experiment-reusable-block-extraction-policy-v0.1.md",
     "reusable_registry": "docs/research/sc001-reusable-market-building-blocks-registry-v0.9.md",
@@ -25,18 +25,17 @@
       "mutation_allowed": false
     },
     "B15-P2": {
-      "state": "NETWORKED_SOURCE_ONLY_APPROVED_AWAITING_HOST_EXECUTION",
+      "state": "NETWORKED_SOURCE_ONLY_V01_TECHNICAL_REVIEW_V011_RETRY_FROZEN_UNRUN",
       "price_outcome_authorized": false,
       "offline_selftest_status": "PASS",
-      "offline_selftest_job_id": "job_20260927T164347Z_5e17af47",
-      "networked_launch_contract": "docs/research/sc001-b15p2-networked-bybit-source-only-event-census-launch-contract-v0.1.json",
-      "networked_wrapper": "scripts/research/run-b15p2-bybit-delisting-source-census-v0.1.sh",
-      "networked_wrapper_sha256": "fb377a3598e7353ec8087ac400f7e3f5db19206eef6717fccd9f765e3085abe5",
-      "networked_approval_code": "BM-FB377A3598E7",
-      "networked_execution_authorized": true,
-      "next_allowed_action": "EXECUTE_FROZEN_NETWORKED_SOURCE_ONLY_HOST_WRAPPER",
-      "execution_started": false,
-      "execution_authorization": "docs/research/sc001-b15p2-networked-source-only-census-execution-authorization-v0.1.json"
+      "network_v01_result": "TECHNICAL_REVIEW_NO_RESEARCH_OUTCOME",
+      "network_v01_failure_diagnostic": "docs/research/sc001-b15p2-networked-source-census-v0.1-host-failure-diagnostic.json",
+      "network_v011_launch_contract": "docs/research/sc001-b15p2-networked-bybit-source-only-event-census-launch-contract-v0.1.1.json",
+      "network_v011_wrapper": "scripts/research/run-b15p2-bybit-delisting-source-census-v0.1.1.sh",
+      "network_v011_wrapper_sha256": "d15db20c2f9a732ec886138b5e80edaca8b179c64b2f74f99d0b90c4816d1f95",
+      "network_v011_approval_code": "BM-D15DB20C2F9A",
+      "network_v011_retry_authorized": false,
+      "next_allowed_action": "AWAIT_EXPLICIT_NETWORKED_SOURCE_ONLY_RETRY_APPROVAL"
     }
   },
   "deferred_branches": {
