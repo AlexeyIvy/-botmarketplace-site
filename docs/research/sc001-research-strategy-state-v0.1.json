@@ -8,7 +8,7 @@
   "baseline_git_head": "94bf690f5c273c98b4a5e58d4bb2fe6ea7f9cf91",
   "last_strategy_review_head": "002f8bf9258058f8e14775472d315a69a53da031",
   "binding_refs": {
-    "roadmap": "docs/research/sc001-current-roadmap-and-stop-rules-v5.165.md",
+    "roadmap": "docs/research/sc001-current-roadmap-and-stop-rules-v5.166.md",
     "governance": "docs/research/sc001-midcourse-research-strategy-audit-and-governance-amendment-v0.2.md",
     "reusable_policy": "docs/research/sc001-terminal-experiment-reusable-block-extraction-policy-v0.1.md",
     "reusable_registry": "docs/research/sc001-reusable-market-building-blocks-registry-v0.9.md",
@@ -25,18 +25,19 @@
       "mutation_allowed": false
     },
     "B15-P2": {
-      "state": "EXACT_94_EVENT_SET_FROZEN_SEMANTIC_AUDIT_DESIGN_NEXT",
+      "state": "SEMANTIC_AUDIT_V01_IMPLEMENTATION_FROZEN_OFFLINE_SELFTEST_PENDING",
       "price_outcome_authorized": false,
-      "source_census_status": "PASS",
       "frozen_event_count": 94,
-      "announcement_match_coverage": 1,
-      "frozen_source_result": "docs/research/artifacts/b15-p2-source-census-v0.1.1/20260927T193110Z/source_census_result.v0.1.1.json",
-      "frozen_source_result_sha256": "c28aeb2b1ac0a23fb0e4420ced943fd619dd0a60e3fdcf5820299579cb94206c",
-      "event_set_freeze_manifest": "docs/research/artifacts/b15-p2-source-census-v0.1.1/20260927T193110Z/source_census_event_set_freeze.v0.1.json",
-      "event_set_freeze_manifest_sha256": "81952c83e7397481035cc00354388dfe3470ad17993c6e80665a7d376be907ed",
+      "unique_announcement_url_count": 94,
       "event_set_sha256": "1063695ec003a0d6789270659822f50577e6a0f07059d88ac03a5be4288ed1a2",
+      "semantic_audit_protocol": "docs/research/sc001-b15p2-announcement-body-semantic-audit-protocol-v0.1.md",
+      "semantic_audit_protocol_sha256": "4209779876e3796feff16a8310af93324cd1927862874524fb90ebf95d51d84f",
+      "semantic_audit_implementation": "research/sc001/sc001_b15p2_announcement_body_semantic_audit_v0_1.py",
+      "semantic_audit_implementation_sha256": "4fddb8c42f262dc5744ca5dda572e4e873d0894eb77c666cb973b9de144fcd02",
+      "semantic_audit_implementation_freeze": "docs/research/sc001-b15p2-announcement-body-semantic-audit-implementation-freeze-v0.1.json",
+      "semantic_audit_selftest_spec": "docs/research/sc001-b15p2-announcement-body-semantic-audit-offline-selftest-spec-v0.1.json",
       "strategy_review_required_now": false,
-      "next_allowed_action": "DESIGN_AND_FREEZE_ANNOUNCEMENT_BODY_SEMANTIC_AUDIT_NO_PRICE"
+      "next_allowed_action": "PREPARE_AND_SEAL_SEMANTIC_AUDIT_V01_OFFLINE_SELFTEST_NO_EXECUTION"
     }
   },
   "deferred_branches": {

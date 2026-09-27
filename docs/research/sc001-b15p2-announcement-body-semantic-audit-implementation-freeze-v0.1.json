@@ -1,0 +1,57 @@
+{
+  "schema": "sc001.b15p2_announcement_body_semantic_audit_implementation_freeze.v0.1",
+  "date": "2026-09-27",
+  "status": "FROZEN_BEFORE_SEMANTIC_AUDIT_NETWORK_ACCESS",
+  "protocol": {
+    "path": "docs/research/sc001-b15p2-announcement-body-semantic-audit-protocol-v0.1.md",
+    "sha256": "4209779876e3796feff16a8310af93324cd1927862874524fb90ebf95d51d84f"
+  },
+  "entrypoint": {
+    "path": "research/sc001/sc001_b15p2_announcement_body_semantic_audit_v0_1.py",
+    "sha256": "4fddb8c42f262dc5744ca5dda572e4e873d0894eb77c666cb973b9de144fcd02"
+  },
+  "frozen_input": {
+    "source_result": {
+      "path": "docs/research/artifacts/b15-p2-source-census-v0.1.1/20260927T193110Z/source_census_result.v0.1.1.json",
+      "sha256": "c28aeb2b1ac0a23fb0e4420ced943fd619dd0a60e3fdcf5820299579cb94206c"
+    },
+    "event_set_freeze": {
+      "path": "docs/research/artifacts/b15-p2-source-census-v0.1.1/20260927T193110Z/source_census_event_set_freeze.v0.1.json",
+      "sha256": "81952c83e7397481035cc00354388dfe3470ad17993c6e80665a7d376be907ed",
+      "event_set_sha256": "1063695ec003a0d6789270659822f50577e6a0f07059d88ac03a5be4288ed1a2",
+      "event_count": 94
+    }
+  },
+  "semantic_source": {
+    "hostname": "announcements.bybit.com",
+    "exact_frozen_urls_only": true,
+    "unique_url_count": 94,
+    "search_engine_as_source": false
+  },
+  "classification_scope": [
+    "delisting timestamp match",
+    "trading termination wording",
+    "active-order handling",
+    "open-position automatic-close wording",
+    "closing-price basis class",
+    "closing-price window minutes when explicit",
+    "funding mention or not-stated",
+    "revision/postponement wording"
+  ],
+  "page_integrity": {
+    "raw_html_sha256": true,
+    "normalized_visible_text_sha256": true,
+    "article_region_sha256": true,
+    "full_body_persisted_to_github": false,
+    "page_chrome_excluded_from_semantic_classification": true
+  },
+  "pass_semantics": "PASS means all 94 frozen bodies are source-resolved and semantically classifiable with exact announced-time match. PASS does not require one common settlement formula.",
+  "price_access_authorized": false,
+  "external_reference_price_access_authorized": false,
+  "index_value_access_authorized": false,
+  "basis_access_authorized": false,
+  "return_access_authorized": false,
+  "pnl_authorized": false,
+  "event_outcome_ranking_authorized": false,
+  "expected_selftest_pass": "B15P2_ANNOUNCEMENT_BODY_SEMANTIC_AUDIT_V01_SELF_TEST_PASS"
+}
