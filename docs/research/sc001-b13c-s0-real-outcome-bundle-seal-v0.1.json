@@ -1,0 +1,38 @@
+{
+  "schema": "sc001.b13c_s0_real_outcome_bundle_seal.v0.1",
+  "date": "2026-09-27",
+  "status": "SEALED_AWAITING_EXPLICIT_RUNNER_APPROVAL",
+  "bundle_id": "bundle_20260927T085215Z_c2fc14bb",
+  "bundle_sha256": "8263a1192caf1e7927b83fde66bc676b3411a5579b53d602e5c2403dce6f90e1",
+  "approval_code": "BM-8263A1192CAF",
+  "runtime_profile": "offline-research-v1",
+  "package_files": 7,
+  "total_bytes": 29589,
+  "runtime_inputs": [
+    "SC001_B13C_S0_PRICE_ANCHORS_V01/price_anchor_extraction_manifest.json",
+    "SC001_B13C_S0_PRICE_ANCHORS_V01/price_anchors.jsonl"
+  ],
+  "frozen_input_sha256": {
+    "price_anchor_extraction_manifest": "79db43a19249c8f56f886cf01616f3e56704d4a8fc8e5c5e03609254b2de1acf",
+    "price_anchors": "5f84f40a91c3a7bc57bf3c4e878a53130ef696a28be162c014c10f8253223a1e"
+  },
+  "valid_price_clusters": 1793,
+  "entrypoint": "research/sc001/sc001_b13c_s0_real_outcome_bootstrap_v0_1.py",
+  "entrypoint_sha256": "24baa316b5dd32c64caf66c20a332db76d638dd558695617727f465b5134b5bc",
+  "analyzer_sha256": "45724b5670caa1b264b1d8c455e9dc6271b4e9bb600320f25c25a76f28202cdb",
+  "protocol_sha256": "b01ef69f6dcfe224f55841dd3ef4b9440bba8f76d3bb1a5f317bf6ae033e90a3",
+  "allowed_classifications": [
+    "B13C_S0_SIMPLE_REVERSAL_HEADROOM_SURVIVE",
+    "B13C_S0_SIMPLE_REVERSAL_HEADROOM_REJECT",
+    "B13C_S0_DEFER_SAMPLE"
+  ],
+  "forbidden": [
+    "PER_CLUSTER_RETURN_OUTPUT",
+    "PER_SYMBOL_PERFORMANCE_RANKING",
+    "LIQUIDATION_SIZE_STRATIFICATION",
+    "ALTERNATE_HORIZON",
+    "PNL"
+  ],
+  "expected_bootstrap_pass": "B13C_S0_REAL_OUTCOME_BOOTSTRAP_PASS",
+  "next_state": "RUN_EXACT_REAL_S0_OUTCOME_AFTER_EXPLICIT_APPROVAL"
+}
