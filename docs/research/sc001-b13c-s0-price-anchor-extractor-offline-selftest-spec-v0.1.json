@@ -1,0 +1,30 @@
+{
+  "schema": "sc001.b13c_s0_price_anchor_extractor_offline_selftest_spec.v0.1",
+  "date": "2026-09-27",
+  "status": "READY",
+  "entrypoint": "research/sc001/sc001_b13c_s0_streaming_price_anchor_extractor_v0_1.py",
+  "entrypoint_sha256": "f4a337fb8ff8f001e239ac0de8b33dcbb3fbdbbdfa2b3387e3f4ead6c60fbe07",
+  "mode": "self-test",
+  "runtime": "offline-research-v1",
+  "network_required": false,
+  "real_price_body_access": false,
+  "canonical_cluster_freeze_verification": true,
+  "synthetic_checks": [
+    "master SHA and all 10 chunk SHA bindings",
+    "exact 1905 contiguous cluster IDs",
+    "exact 76 required archive identities",
+    "gzip CSV parser",
+    "Bybit first-five header semantics",
+    "timestamp ordering",
+    "chronologically-last trade selection inside frozen one-second bucket"
+  ],
+  "forbidden": [
+    "NETWORK_CALLS",
+    "REAL_PRICE_BODY_ACCESS",
+    "RETURN_CALCULATION",
+    "THRESHOLD_OUTCOME",
+    "PNL"
+  ],
+  "expected_pass": "B13C_S0_PRICE_ANCHOR_EXTRACTOR_V01_SELF_TEST_PASS",
+  "next_after_pass": "RUN_NETWORKED_VPS_STREAMING_EXTRACTION_AFTER_SEPARATE_EXPLICIT_APPROVAL"
+}
