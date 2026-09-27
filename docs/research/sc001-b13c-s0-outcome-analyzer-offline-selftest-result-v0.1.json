@@ -1,0 +1,18 @@
+{
+  "schema": "sc001.b13c_s0_outcome_analyzer_offline_selftest_result.v0.1",
+  "date": "2026-09-27",
+  "status": "B13C_S0_OUTCOME_ANALYZER_V01_SELF_TEST_PASS",
+  "runner_job": {
+    "job_id": "job_20260927T085023Z_7859098d",
+    "bundle_id": "bundle_20260927T084255Z_e8542274",
+    "bundle_sha256": "9bc4936a61dabe2806049ff098bb85409232017fd619e27bae9fc6ad15f30fe2",
+    "exit_code": 0,
+    "package_integrity_ok": true
+  },
+  "stdout_token": "B13C_S0_OUTCOME_ANALYZER_V01_SELF_TEST_PASS",
+  "stderr_empty": true,
+  "real_price_anchor_access": false,
+  "real_return_calculation": false,
+  "pnl_calculation": false,
+  "next_state": "PREPARE_EXACT_REAL_S0_OUTCOME_BUNDLE"
+}
