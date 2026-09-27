@@ -1,0 +1,8 @@
+{
+  "schema": "sc001.b15p2_networked_source_only_census_v012_execution_approval.v0.1",
+  "date": "2026-09-27",
+  "status": "EXPLICIT_USER_APPROVAL_RECEIVED",
+  "approval_code": "BM-E9727B13CDD5",
+  "launch_contract_path": "docs/research/sc001-b15p2-networked-bybit-source-only-event-census-launch-contract-v0.1.2.json",
+  "execution_started": false
+}
