@@ -1,0 +1,41 @@
+{
+  "schema": "sc001.b13c_s0_exact_cluster_freeze_contract.v0.1",
+  "date": "2026-09-27",
+  "status": "READY_FOR_SEAL",
+  "purpose": "Emit the exact 1,905 S0 eligible cluster identities and frozen entry/exit bucket timestamps using the already validated source-only census rules, without reading prices.",
+  "parent_census_result_sha256": "fd08901e77bb73c00bb53826e925b2124d52e05d6c8f45cdc154b1c57a2ab1eb",
+  "analyzer_sha256": "601252728e8fa7caf2d9c467d99e61296268a78879a42323725b67bac223db5b",
+  "expected_aggregate": {
+    "unique_events_in_window": 32381,
+    "total_raw_clusters_before_filters": 10734,
+    "clusters_under_min_events": 8743,
+    "mixed_side_clusters_excluded": 83,
+    "gap_censored_clusters": 3,
+    "eligible_cluster_count": 1905,
+    "required_price_archive_count": 76,
+    "merged_source_gap_count": 15,
+    "merged_source_gap_ms": 324430
+  },
+  "allowed_output_fields": [
+    "cluster_id",
+    "symbol",
+    "liquidation_side",
+    "reversal_sign",
+    "start_ms",
+    "end_ms",
+    "event_count",
+    "entry_bucket",
+    "exit_bucket",
+    "required_archive_days",
+    "required_price_archive identities"
+  ],
+  "forbidden": [
+    "PRICE_BODY_ACCESS",
+    "RETURN_CALCULATION",
+    "PER_SYMBOL_PERFORMANCE_RANKING",
+    "THRESHOLD_TUNING",
+    "PNL",
+    "NETWORK_CALLS"
+  ],
+  "expected_pass": "B13C_S0_EXACT_CLUSTER_FREEZE_MANIFEST_PASS"
+}

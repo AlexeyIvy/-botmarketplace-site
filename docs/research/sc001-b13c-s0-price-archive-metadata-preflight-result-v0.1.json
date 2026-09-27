@@ -1,0 +1,16 @@
+{
+  "schema": "sc001.b13c_s0_price_archive_metadata_preflight_result_record.v0.1",
+  "date": "2026-09-27",
+  "status": "B13C_S0_PRICE_ARCHIVE_METADATA_PREFLIGHT_PASS",
+  "execution": "operator-run on VPS",
+  "required_archive_count": 76,
+  "total_content_length_bytes": 2633144445,
+  "total_content_length_gib": 2.452,
+  "report_path": "/home/botmarket/sc001_data/SC001_B13C_S0_PRICE_ARCHIVE_PREFLIGHT/b13c_s0_price_archive_metadata_preflight_v0_1.json",
+  "price_body_opened": false,
+  "price_rows_parsed": false,
+  "returns_calculated": false,
+  "pnl_calculated": false,
+  "interpretation": "All 76 exact archive identities passed HEAD-only availability/metadata preflight. Compressed total size is known before any body download.",
+  "next_state": "FREEZE_EXACT_ELIGIBLE_CLUSTER_MANIFEST_THEN_STREAM_PRICE_ARCHIVES_ONE_BY_ONE"
+}
