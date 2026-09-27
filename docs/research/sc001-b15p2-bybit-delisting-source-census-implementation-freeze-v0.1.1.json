@@ -1,0 +1,50 @@
+{
+  "schema": "sc001.b15p2_bybit_delisting_source_census_implementation_freeze.v0.1.1",
+  "date": "2026-09-27",
+  "status": "FROZEN_PARSER_RESILIENCE_CORRECTION_BEFORE_RETRY",
+  "supersedes": "docs/research/sc001-b15p2-bybit-delisting-source-census-implementation-freeze-v0.1.json",
+  "protocol": {
+    "path": "docs/research/sc001-b15p2-bybit-delisting-source-only-event-census-protocol-v0.1.md",
+    "sha256": "ea577e42252b13fc5153256f3cc87c90d4518384cfd97254e4ddba06bbe611e2",
+    "changed": false
+  },
+  "entrypoint": {
+    "path": "research/sc001/sc001_b15p2_bybit_delisting_source_census_v0_1_1.py",
+    "sha256": "7da36641ed71e0195320f0cc7cc389d629d4f843a646f64c41c1739fc0cd6b35"
+  },
+  "triggering_failure": {
+    "attempt": "networked wrapper v0.1.1",
+    "observed_error": "RuntimeError: announcement publishTime missing",
+    "classification": "SOURCE_PARSER_COMPATIBILITY_ERROR_NO_RESEARCH_OUTCOME"
+  },
+  "causal_interpretation": {
+    "publishTime": "Only numeric plausible-millisecond publishTime may establish causal announcement timing.",
+    "dateTimestamp": "Diagnostic/source metadata only. Never substituted for publishTime.",
+    "legacy_rows_without_publishTime": "Allowed to exist in the historical endpoint response. They do not fail the census merely by being retrieved.",
+    "exact_in_scope_match_without_publishTime": "Fail-closed REVIEW because causal publication time cannot be established.",
+    "pre_launch_same_symbol_notice": "Excluded from the current listing episode when numeric publishTime is earlier than instrument launchTime.",
+    "post_delivery_notice": "Retained only as a diagnostic count and never used as causal notice."
+  },
+  "resilience_changes": [
+    "normalize missing/invalid publishTime without aborting on unrelated historical rows",
+    "require exact-symbol relevance before missing publishTime becomes an integrity issue",
+    "do not use dateTimestamp as a causal fallback",
+    "validate timestamp units/plausibility",
+    "use launchTime as a causal lower bound when available",
+    "normalize string/boolean isPreListing forms",
+    "deduplicate overlapping announcement pagination rows",
+    "paginate safely even if total is absent",
+    "retry only transient HTTP/network failures",
+    "do not retry deterministic JSON/schema/retCode errors",
+    "persist a source-only REVIEW report on live exceptions"
+  ],
+  "source_scope_changed": false,
+  "census_window_changed": false,
+  "gates_changed": false,
+  "price_access_authorized": false,
+  "external_reference_access_authorized": false,
+  "basis_access_authorized": false,
+  "pnl_authorized": false,
+  "event_outcome_ranking_authorized": false,
+  "expected_selftest_pass": "B15P2_BYBIT_DELISTING_SOURCE_CENSUS_V011_SELF_TEST_PASS"
+}

@@ -1,0 +1,32 @@
+{
+  "schema": "sc001.b15p2_bybit_delisting_source_census_offline_selftest_spec.v0.1.1",
+  "date": "2026-09-27",
+  "status": "READY_FOR_SEALED_OFFLINE_SELFTEST",
+  "runtime": "offline-research-v1",
+  "entrypoint": "research/sc001/sc001_b15p2_bybit_delisting_source_census_v0_1_1.py",
+  "entrypoint_sha256": "7da36641ed71e0195320f0cc7cc389d629d4f843a646f64c41c1739fc0cd6b35",
+  "inputs": [],
+  "expected_pass": "B15P2_BYBIT_DELISTING_SOURCE_CENSUS_V011_SELF_TEST_PASS",
+  "mandatory_checks": [
+    "Runner launcher positional contract",
+    "baseline PASS census fixture",
+    "baseline DEFER census fixture",
+    "exact-symbol alphanumeric-token matching",
+    "legacy unrelated missing-publishTime row does not abort census",
+    "exact in-scope missing-publishTime match produces fail-closed REVIEW",
+    "dateTimestamp is never substituted for publishTime",
+    "post-delivery notice is not causal evidence",
+    "same-symbol pre-launch notice is excluded from current listing episode",
+    "invalid/non-numeric publishTime is classified without crash",
+    "seconds-like timestamp is rejected as non-millisecond",
+    "string true isPreListing is excluded",
+    "type-7 quantile fixture"
+  ],
+  "network_calls": false,
+  "real_announcement_access": false,
+  "real_instrument_access": false,
+  "price_access": false,
+  "basis_access": false,
+  "pnl": false,
+  "next_after_pass": "PREPARE_NETWORKED_SOURCE_ONLY_WRAPPER_V0_1_2_AGAINST_EXACT_V011_IMPLEMENTATION"
+}
