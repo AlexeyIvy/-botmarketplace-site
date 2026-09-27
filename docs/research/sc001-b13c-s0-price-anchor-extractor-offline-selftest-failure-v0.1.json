@@ -1,0 +1,25 @@
+{
+  "schema": "sc001.b13c_s0_price_anchor_extractor_offline_selftest_failure.v0.1",
+  "date": "2026-09-27",
+  "status": "TECHNICAL_LAUNCHER_COMPATIBILITY_FAILURE",
+  "runner_job": {
+    "job_id": "job_20260927T075438Z_85b2eb56",
+    "bundle_id": "bundle_20260927T074816Z_abb0ce4f",
+    "bundle_sha256": "e9fdaa98fe9950d173ba5a136e4e9b2dafed095237be23baac581b499cd9a568",
+    "package_integrity_ok": true,
+    "exit_code": 2
+  },
+  "stderr": "argparse required --mode; Runner v1.0.5 supplies package_root and entrypoint positional args and no --mode",
+  "research_logic_executed": false,
+  "network_calls_performed": false,
+  "real_price_body_access": false,
+  "returns_calculated": false,
+  "threshold_outcome_calculated": false,
+  "pnl_calculated": false,
+  "interpretation": "Failure occurred before self-test body. No research outcome or price-source evidence was opened.",
+  "corrective_action": {
+    "new_entrypoint": "research/sc001/sc001_b13c_s0_streaming_price_anchor_extractor_v0_1_1.py",
+    "new_entrypoint_sha256": "18621a8540d9b2e70f01bf34a0ee103e0eb1dc10fceec33e69a2572d827f1ee0",
+    "change_scope": "Runner launcher compatibility only: self-test default mode plus validation of two positional launcher arguments."
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "schema": "sc001.b13c_s0_price_anchor_extractor_offline_selftest_spec.v0.1.1",
+  "date": "2026-09-27",
+  "status": "READY",
+  "supersedes": "sc001-b13c-s0-price-anchor-extractor-offline-selftest-spec-v0.1.json",
+  "entrypoint": "research/sc001/sc001_b13c_s0_streaming_price_anchor_extractor_v0_1_1.py",
+  "entrypoint_sha256": "18621a8540d9b2e70f01bf34a0ee103e0eb1dc10fceec33e69a2572d827f1ee0",
+  "mode": "default self-test when Runner omits --mode",
+  "launcher_contract": "Accept and fail-closed validate Runner package_root + exact entrypoint positional arguments.",
+  "runtime": "offline-research-v1",
+  "network_required": false,
+  "real_price_body_access": false,
+  "canonical_cluster_freeze_verification": true,
+  "synthetic_checks": [
+    "Runner launcher positional contract",
+    "master SHA and all 10 chunk SHA bindings",
+    "exact 1905 contiguous cluster IDs",
+    "exact 76 required archive identities",
+    "gzip CSV parser",
+    "Bybit first-five header semantics",
+    "timestamp ordering",
+    "chronologically-last trade selection inside frozen one-second bucket"
+  ],
+  "forbidden": [
+    "NETWORK_CALLS",
+    "REAL_PRICE_BODY_ACCESS",
+    "RETURN_CALCULATION",
+    "THRESHOLD_OUTCOME",
+    "PNL"
+  ],
+  "expected_pass": "B13C_S0_PRICE_ANCHOR_EXTRACTOR_V011_SELF_TEST_PASS",
+  "next_after_pass": "RUN_NETWORKED_VPS_STREAMING_EXTRACTION_AFTER_SEPARATE_EXPLICIT_APPROVAL"
+}
