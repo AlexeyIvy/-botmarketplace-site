@@ -1,0 +1,99 @@
+{
+  "schema": "sc001.b13c_s0_simple_reversal_real_outcome_result.v0.1",
+  "date": "2026-09-27",
+  "status": "B13C_S0_SIMPLE_REVERSAL_HEADROOM_REJECT",
+  "runner_job": {
+    "job_id": "job_20260927T085710Z_8508adc3",
+    "bundle_id": "bundle_20260927T085215Z_c2fc14bb",
+    "bundle_sha256": "8263a1192caf1e7927b83fde66bc676b3411a5579b53d602e5c2403dce6f90e1",
+    "exit_code": 0,
+    "package_integrity_ok": true
+  },
+  "artifacts": {
+    "outcome": {
+      "path": "b13c_s0_simple_reversal_outcome.json",
+      "sha256": "0359bcf4d30f2adb1ced65d1f890cc5846bbce461466528d8dd2eae176c5e9fe",
+      "size_bytes": 1998
+    },
+    "bootstrap": {
+      "path": "b13c_s0_real_outcome_bootstrap_manifest.json",
+      "sha256": "95285e0914e0f24988156e316f65eff40e29164388c5a542b593b545ad110476",
+      "size_bytes": 1357
+    }
+  },
+  "frozen_inputs": {
+    "price_anchors_sha256": "5f84f40a91c3a7bc57bf3c4e878a53130ef696a28be162c014c10f8253223a1e",
+    "extraction_manifest_sha256": "79db43a19249c8f56f886cf01616f3e56704d4a8fc8e5c5e03609254b2de1acf"
+  },
+  "pooled": {
+    "n": 1793,
+    "p25_signed_reversal_bps": -5.139314757998588,
+    "median_signed_reversal_bps": 1.3681762232303778,
+    "p75_signed_reversal_bps": 9.10497417358004,
+    "positive_count": 1002,
+    "positive_share": 0.5588399330730619
+  },
+  "complete_days": [
+    {
+      "utc_day": "2026-09-20",
+      "valid_cluster_count": 152,
+      "median_signed_reversal_bps": 1.190237746384426,
+      "positive_median": true
+    },
+    {
+      "utc_day": "2026-09-21",
+      "valid_cluster_count": 487,
+      "median_signed_reversal_bps": 2.2256776398505314,
+      "positive_median": true
+    },
+    {
+      "utc_day": "2026-09-22",
+      "valid_cluster_count": 238,
+      "median_signed_reversal_bps": 1.3033790434185129,
+      "positive_median": true
+    },
+    {
+      "utc_day": "2026-09-23",
+      "valid_cluster_count": 307,
+      "median_signed_reversal_bps": 1.299431559586918,
+      "positive_median": true
+    },
+    {
+      "utc_day": "2026-09-24",
+      "valid_cluster_count": 239,
+      "median_signed_reversal_bps": -0.035385349403204,
+      "positive_median": false
+    },
+    {
+      "utc_day": "2026-09-25",
+      "valid_cluster_count": 222,
+      "median_signed_reversal_bps": 1.1744245092892815,
+      "positive_median": true
+    }
+  ],
+  "gates": {
+    "sample_ge_100": true,
+    "median_ge_30bps": false,
+    "positive_share_ge_55pct": true,
+    "positive_complete_days_ge_4_of_6": true
+  },
+  "interpretation": {
+    "directionality_detected_descriptively": true,
+    "economic_headroom_gate_passed": false,
+    "median_as_fraction_of_30bps_gate": 0.04560587410767926,
+    "reject_reason": "The simple frozen 30-second reversal signal is directionally persistent but gross magnitude is far below the pre-frozen economic headroom requirement."
+  },
+  "pnl_calculated": false,
+  "rescue_tuning_on_same_interval_allowed": false,
+  "prohibited_same_interval_rescues": [
+    "size threshold search",
+    "large-liquidation subset selection",
+    "winner-symbol selection",
+    "alternate cluster-gap search",
+    "alternate minimum-event count",
+    "mixed-side majority rule",
+    "alternate entry delay",
+    "alternate 5s/10s/60s/5m horizon scan"
+  ],
+  "binding_consequence": "CLOSE_B13C_S0_SIMPLE_REVERSAL_ARCHITECTURE_NO_RESCUE"
+}
