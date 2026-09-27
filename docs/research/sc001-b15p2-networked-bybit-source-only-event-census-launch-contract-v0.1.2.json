@@ -1,0 +1,115 @@
+{
+  "schema": "sc001.b15p2_networked_bybit_source_only_event_census_launch_contract.v0.1.2",
+  "date": "2026-09-27",
+  "status": "FROZEN_AWAITING_EXPLICIT_NETWORKED_APPROVAL",
+  "supersedes": "docs/research/sc001-b15p2-networked-bybit-source-only-event-census-launch-contract-v0.1.1.json",
+  "purpose": "Run the frozen B15-P2 Bybit public source-only census using the exact parser-resilience v0.1.1 implementation that passed sealed offline self-test. No price, basis, return or PnL access.",
+  "prerequisite": {
+    "offline_selftest_result": {
+      "path": "docs/research/sc001-b15p2-bybit-delisting-source-census-v011-offline-selftest-result-v0.1.json",
+      "sha256": "7cf4c91389be71415343d38b98520be7006c38907dafd908552eb1a47763efcd",
+      "required_status": "B15P2_BYBIT_DELISTING_SOURCE_CENSUS_V011_SELF_TEST_PASS",
+      "job_id": "job_20260927T180943Z_cfc1dfaf"
+    }
+  },
+  "implementation": {
+    "path": "research/sc001/sc001_b15p2_bybit_delisting_source_census_v0_1_1.py",
+    "sha256": "7da36641ed71e0195320f0cc7cc389d629d4f843a646f64c41c1739fc0cd6b35"
+  },
+  "implementation_freeze": {
+    "path": "docs/research/sc001-b15p2-bybit-delisting-source-census-implementation-freeze-v0.1.1.json",
+    "sha256": "693484fd882c3983c92a667793119df1815b6ca80672c672597e5f1c9ff0ec86"
+  },
+  "protocol": {
+    "path": "docs/research/sc001-b15p2-bybit-delisting-source-only-event-census-protocol-v0.1.md",
+    "sha256": "ea577e42252b13fc5153256f3cc87c90d4518384cfd97254e4ddba06bbe611e2"
+  },
+  "host_wrapper": {
+    "path": "scripts/research/run-b15p2-bybit-delisting-source-census-v0.1.2.sh",
+    "sha256": "e9727b13cdd5677a369275f2bc433a611849242b41ee38a29826a11548f80c9e",
+    "launch_mode": "--launch",
+    "status_mode": "--status",
+    "static_checks": {
+      "exact_v011_script": true,
+      "exact_selftest_result": true,
+      "pass_defer_review_supported": true,
+      "persistent_log_on_failure": true,
+      "bounded_runtime_seconds": 900,
+      "old_v01_script_reference_absent": true
+    }
+  },
+  "approval": {
+    "required": true,
+    "approval_code": "BM-E9727B13CDD5",
+    "networked_execution_authorized": false
+  },
+  "network_scope": {
+    "host": "api.bybit.com",
+    "endpoints": [
+      "/v5/announcements/index?locale=en-US&type=delistings",
+      "/v5/market/instruments-info?category=linear&status=Closed"
+    ],
+    "authentication_required": false,
+    "public_read_only": true
+  },
+  "census_window": {
+    "start_utc": "2026-01-01T00:00:00Z",
+    "end_exclusive_utc": "2026-09-27T00:00:00Z"
+  },
+  "execution": {
+    "environment": "NETWORKED_VPS_HOST",
+    "repository": "/var/lib/botmarket-github-control/repo",
+    "staging_root": "/home/botmarket/.local/share/botmarket/b15p2-bybit-source-census-v0.1.2-stage",
+    "data_root": "/home/botmarket/sc001_data",
+    "systemd_transient_oneshot": true,
+    "timeout_seconds": 900,
+    "run_user": "botmarket",
+    "one_shot_launch_marker": true,
+    "survives_ssh_disconnect": true,
+    "launch_command": "sudo bash /var/lib/botmarket-github-control/repo/scripts/research/run-b15p2-bybit-delisting-source-census-v0.1.2.sh --launch",
+    "status_command": "sudo bash /var/lib/botmarket-github-control/repo/scripts/research/run-b15p2-bybit-delisting-source-census-v0.1.2.sh --status"
+  },
+  "output": {
+    "result": "/home/botmarket/sc001_data/SC001_B15P2_BYBIT_DELISTING_SOURCE_CENSUS/sc001_b15p2_bybit_delisting_source_census_v0_1_1.json",
+    "log": "/home/botmarket/sc001_data/SC001_B15P2_BYBIT_DELISTING_SOURCE_CENSUS/networked_source_census_v0_1_2.log",
+    "exit_code": "/home/botmarket/sc001_data/SC001_B15P2_BYBIT_DELISTING_SOURCE_CENSUS/networked_source_census_v0_1_2.exit_code",
+    "marker": "/home/botmarket/sc001_data/SC001_B15P2_BYBIT_DELISTING_SOURCE_CENSUS/networked_source_census_v0_1_2.launch.json"
+  },
+  "allowed": [
+    "read official public Bybit delisting announcements",
+    "read official public closed linear instrument metadata",
+    "filter the frozen 2026 census window",
+    "match exact USDT perpetual symbols",
+    "use numeric publishTime for causal notice timing",
+    "use launchTime only as a lower-bound current-listing-episode guard",
+    "measure source coverage, announcement lead time and delivery-month breadth",
+    "persist source-only PASS, DEFER or REVIEW diagnostics"
+  ],
+  "forbidden": [
+    "DATE_TIMESTAMP_AS_CAUSAL_PUBLISH_FALLBACK",
+    "PRICE_ACCESS",
+    "EXTERNAL_REFERENCE_PRICE_ACCESS",
+    "INDEX_LEVEL_ACCESS",
+    "BASIS_ACCESS",
+    "SPREAD_ACCESS",
+    "RETURN_ACCESS",
+    "PNL_ACCESS",
+    "EVENT_OUTCOME_RANKING",
+    "HORIZON_SELECTION_FROM_OUTCOMES",
+    "THRESHOLD_TUNING",
+    "ORDER_OR_TRADE_EXECUTION"
+  ],
+  "expected_terminal_states": [
+    "B15P2_BYBIT_DELISTING_SOURCE_CENSUS_PASS",
+    "B15P2_BYBIT_DELISTING_SOURCE_CENSUS_DEFER",
+    "B15P2_BYBIT_DELISTING_SOURCE_CENSUS_REVIEW"
+  ],
+  "strategy_review_policy": {
+    "pass_alone_triggers_review": false,
+    "meaningful_defer_or_review_may_trigger_review": true,
+    "next_mandatory_strategy_gate": "BEFORE_ANY_B15P2_PRICE_OUTCOME"
+  },
+  "next_after_pass": "FREEZE_EXACT_ADMITTED_EVENT_SET_AND_RUN_ANNOUNCEMENT_BODY_SEMANTIC_AUDIT",
+  "next_after_defer": "REVIEW_SOURCE_FEASIBILITY_WITHOUT_OPENING_PRICES",
+  "next_after_review": "REVIEW_SOURCE_INTEGRITY_OR_TECHNICAL_CAUSE_WITHOUT_OPENING_PRICES"
+}
