@@ -1,0 +1,22 @@
+{
+  "schema": "sc001.b13c_s0_price_anchor_extractor_offline_selftest_bundle_seal.v0.1",
+  "date": "2026-09-27",
+  "status": "SEALED_AWAITING_EXPLICIT_RUNNER_APPROVAL",
+  "bundle_id": "bundle_20260927T074816Z_abb0ce4f",
+  "bundle_sha256": "e9fdaa98fe9950d173ba5a136e4e9b2dafed095237be23baac581b499cd9a568",
+  "approval_code": "BM-E9FDAA98FE99",
+  "runtime_profile": "offline-research-v1",
+  "inputs": [],
+  "package_files": 17,
+  "total_bytes": 1054178,
+  "entrypoint": "research/sc001/sc001_b13c_s0_streaming_price_anchor_extractor_v0_1.py",
+  "entrypoint_sha256": "f4a337fb8ff8f001e239ac0de8b33dcbb3fbdbbdfa2b3387e3f4ead6c60fbe07",
+  "expected_pass": "B13C_S0_PRICE_ANCHOR_EXTRACTOR_V01_SELF_TEST_PASS",
+  "canonical_cluster_count": 1905,
+  "canonical_archive_count": 76,
+  "real_price_body_access": false,
+  "network_calls": false,
+  "returns_calculated": false,
+  "pnl_calculated": false,
+  "next_state": "RUN_EXACT_OFFLINE_SELFTEST_AFTER_EXPLICIT_APPROVAL"
+}
