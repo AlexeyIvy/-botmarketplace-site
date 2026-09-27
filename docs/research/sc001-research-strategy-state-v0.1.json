@@ -1,18 +1,21 @@
 {
   "schema": "sc001.research_strategy_state.v0.1",
   "date": "2026-09-27",
-  "status": "ACTIVE_INITIAL_MVP",
+  "status": "ACTIVE_INITIAL_MVP_WITH_AUTOMATION_WATCH",
   "scope": "SCALPING_RESEARCH_SC001",
   "source_of_truth": "GITHUB",
   "rebuildable_cache_only": true,
   "baseline_git_head": "94bf690f5c273c98b4a5e58d4bb2fe6ea7f9cf91",
-  "last_strategy_review_head": null,
+  "last_strategy_review_head": "002f8bf9258058f8e14775472d315a69a53da031",
   "binding_refs": {
     "roadmap": "docs/research/sc001-current-roadmap-and-stop-rules-v5.154.md",
     "governance": "docs/research/sc001-midcourse-research-strategy-audit-and-governance-amendment-v0.2.md",
     "reusable_policy": "docs/research/sc001-terminal-experiment-reusable-block-extraction-policy-v0.1.md",
     "reusable_registry": "docs/research/sc001-reusable-market-building-blocks-registry-v0.9.md",
-    "contamination_registry": "docs/research/sc001-contamination-registry-v0.30.json"
+    "contamination_registry": "docs/research/sc001-contamination-registry-v0.30.json",
+    "strategy_charter": "docs/research/sc001-research-strategy-agent-charter-v0.1.md",
+    "worker_manifest_schema": "docs/research/sc001-worker-result-manifest-schema-v0.1.json",
+    "automation_watch": "docs/research/sc001-research-strategy-automation-watch-v0.1.md"
   },
   "active_branches": {
     "B15-P1": {
@@ -75,7 +78,15 @@
     "protected_outcome_access_default": false,
     "github_write_default": false
   },
-  "open_strategy_decisions": ["RUN_INITIAL_RESEARCH_STRATEGY_MANAGER_DRY_RUN"],
+  "automation_watch": {
+    "enabled": true,
+    "mode": "HOURLY_CONDITION_WATCH",
+    "trigger_schema": "sc001.worker_result_manifest.v0.1",
+    "notify_only_on_new_strategy_relevant_manifest": true,
+    "automatic_research_execution": false,
+    "automatic_roadmap_write": false
+  },
+  "open_strategy_decisions": [],
   "next_strategy_review_trigger": [
     "NEW_OUTCOME_MECHANISM_GATE",
     "TERMINAL_REJECT_DEFER",
