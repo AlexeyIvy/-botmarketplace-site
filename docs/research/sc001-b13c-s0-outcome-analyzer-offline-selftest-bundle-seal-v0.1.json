@@ -1,0 +1,20 @@
+{
+  "schema": "sc001.b13c_s0_outcome_analyzer_offline_selftest_bundle_seal.v0.1",
+  "date": "2026-09-27",
+  "status": "SEALED_AWAITING_EXPLICIT_RUNNER_APPROVAL",
+  "bundle_id": "bundle_20260927T084255Z_e8542274",
+  "bundle_sha256": "9bc4936a61dabe2806049ff098bb85409232017fd619e27bae9fc6ad15f30fe2",
+  "approval_code": "BM-9BC4936A61DA",
+  "runtime_profile": "offline-research-v1",
+  "inputs": [],
+  "package_files": 5,
+  "total_bytes": 22876,
+  "entrypoint": "research/sc001/sc001_b13c_s0_outcome_analyzer_v0_1.py",
+  "entrypoint_sha256": "45724b5670caa1b264b1d8c455e9dc6271b4e9bb600320f25c25a76f28202cdb",
+  "protocol_sha256": "b01ef69f6dcfe224f55841dd3ef4b9440bba8f76d3bb1a5f317bf6ae033e90a3",
+  "expected_pass": "B13C_S0_OUTCOME_ANALYZER_V01_SELF_TEST_PASS",
+  "real_price_anchor_access": false,
+  "real_return_calculation": false,
+  "pnl_calculation": false,
+  "next_state": "RUN_EXACT_SYNTHETIC_OUTCOME_SELFTEST_AFTER_EXPLICIT_APPROVAL"
+}
