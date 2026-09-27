@@ -8,7 +8,7 @@
   "baseline_git_head": "94bf690f5c273c98b4a5e58d4bb2fe6ea7f9cf91",
   "last_strategy_review_head": "002f8bf9258058f8e14775472d315a69a53da031",
   "binding_refs": {
-    "roadmap": "docs/research/sc001-current-roadmap-and-stop-rules-v5.170.md",
+    "roadmap": "docs/research/sc001-current-roadmap-and-stop-rules-v5.171.md",
     "governance": "docs/research/sc001-midcourse-research-strategy-audit-and-governance-amendment-v0.2.md",
     "reusable_policy": "docs/research/sc001-terminal-experiment-reusable-block-extraction-policy-v0.1.md",
     "reusable_registry": "docs/research/sc001-reusable-market-building-blocks-registry-v0.9.md",
@@ -25,19 +25,20 @@
       "mutation_allowed": false
     },
     "B15-P2": {
-      "state": "SEMANTIC_AUDIT_V011_HTML_PARSER_FAILURE_V012_FROZEN",
+      "state": "SEMANTIC_AUDIT_V012_OFFLINE_SELFTEST_SEALED_UNRUN",
       "price_outcome_authorized": false,
       "frozen_event_count": 94,
       "event_set_sha256": "1063695ec003a0d6789270659822f50577e6a0f07059d88ac03a5be4288ed1a2",
-      "v011_selftest_result": "SYNTHETIC_REVIEW_NO_NETWORK",
-      "v011_selftest_job_id": "job_20260927T195919Z_b604441c",
-      "v011_failure_diagnostic": "docs/research/sc001-b15p2-announcement-body-semantic-audit-v011-selftest-failure-diagnostic-v0.1.json",
       "semantic_audit_implementation": "research/sc001/sc001_b15p2_announcement_body_semantic_audit_v0_1_2.py",
       "semantic_audit_implementation_sha256": "a0fe50c52fcdcf3ce71ab0cb3a52c3be802f22426696a7f97e42b4d95a1dce78",
-      "semantic_audit_implementation_freeze": "docs/research/sc001-b15p2-announcement-body-semantic-audit-implementation-freeze-v0.1.2.json",
-      "semantic_audit_selftest_spec": "docs/research/sc001-b15p2-announcement-body-semantic-audit-offline-selftest-spec-v0.1.2.json",
+      "v011_selftest_result": "SYNTHETIC_REVIEW_NO_NETWORK",
+      "v011_selftest_job_id": "job_20260927T195919Z_b604441c",
+      "bundle_id": "bundle_20260927T200214Z_b321091a",
+      "bundle_sha256": "5015f01b988d41ea8b48bb8982b13369e7c4dc9d8daf5533972fbcfa5589dd67",
+      "approval_code": "BM-5015F01B988D",
+      "execution_authorized": false,
       "strategy_review_required_now": false,
-      "next_allowed_action": "PREPARE_AND_SEAL_SEMANTIC_AUDIT_V012_OFFLINE_SELFTEST_NO_EXECUTION"
+      "next_allowed_action": "AWAIT_EXPLICIT_APPROVAL_TO_RUN_SEMANTIC_AUDIT_V012_OFFLINE_SELFTEST"
     }
   },
   "deferred_branches": {
