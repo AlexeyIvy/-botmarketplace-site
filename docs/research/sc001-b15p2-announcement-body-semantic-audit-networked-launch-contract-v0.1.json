@@ -1,0 +1,102 @@
+{
+  "schema": "sc001.b15p2_announcement_body_semantic_audit_networked_launch_contract.v0.1",
+  "date": "2026-09-27",
+  "status": "FROZEN_AWAITING_EXPLICIT_NETWORKED_APPROVAL",
+  "purpose": "Fetch and classify the exact 94 frozen official Bybit announcement pages using the exact semantic parser that passed offline self-test. No market-price, index-value, basis, return or PnL data is authorized.",
+  "frozen_input": {
+    "source_result": {
+      "path": "docs/research/artifacts/b15-p2-source-census-v0.1.1/20260927T193110Z/source_census_result.v0.1.1.json",
+      "sha256": "c28aeb2b1ac0a23fb0e4420ced943fd619dd0a60e3fdcf5820299579cb94206c"
+    },
+    "event_set_freeze": {
+      "path": "docs/research/artifacts/b15-p2-source-census-v0.1.1/20260927T193110Z/source_census_event_set_freeze.v0.1.json",
+      "sha256": "81952c83e7397481035cc00354388dfe3470ad17993c6e80665a7d376be907ed",
+      "event_set_sha256": "1063695ec003a0d6789270659822f50577e6a0f07059d88ac03a5be4288ed1a2",
+      "event_count": 94,
+      "unique_announcement_url_count": 94
+    }
+  },
+  "implementation": {
+    "path": "research/sc001/sc001_b15p2_announcement_body_semantic_audit_v0_1_2.py",
+    "sha256": "a0fe50c52fcdcf3ce71ab0cb3a52c3be802f22426696a7f97e42b4d95a1dce78"
+  },
+  "protocol": {
+    "path": "docs/research/sc001-b15p2-announcement-body-semantic-audit-protocol-v0.1.md",
+    "sha256": "4209779876e3796feff16a8310af93324cd1927862874524fb90ebf95d51d84f"
+  },
+  "implementation_freeze": {
+    "path": "docs/research/sc001-b15p2-announcement-body-semantic-audit-implementation-freeze-v0.1.2.json",
+    "sha256": "167318dda414d321022ee15808c41143a352f327366fb152de67ff28cc4bbe1b"
+  },
+  "offline_selftest_result": {
+    "path": "docs/research/sc001-b15p2-announcement-body-semantic-audit-v012-offline-selftest-result-v0.1.json",
+    "sha256": "55b41c7549a961e0b1534cbe8b6bd6293f265c7a3c9dcb78db8c2998afa0b908",
+    "required_status": "B15P2_ANNOUNCEMENT_BODY_SEMANTIC_AUDIT_V012_SELF_TEST_PASS",
+    "job_id": "job_20260927T201702Z_c370176c"
+  },
+  "host_wrapper": {
+    "path": "scripts/research/run-b15p2-announcement-body-semantic-audit-v0.1.sh",
+    "sha256": "9e33adf5736b362fc491385ebee865c5b4a6df458df0f1aaa315a546e800d023",
+    "preflight_mode": "--preflight",
+    "launch_mode": "--launch",
+    "status_mode": "--status",
+    "preflight_cross_document_validation": "PASS",
+    "staged_selftest_required": true,
+    "persistent_diagnostics": true,
+    "semantic_review_is_valid_terminal_state": true,
+    "runtime_bound_seconds": 1800,
+    "uses_git_status": false
+  },
+  "approval": {
+    "required": true,
+    "approval_code": "BM-9E33ADF5736B",
+    "networked_execution_authorized": false
+  },
+  "network_scope": {
+    "allowed_hostname": "announcements.bybit.com",
+    "exact_frozen_urls_only": true,
+    "frozen_url_count": 94,
+    "redirect_final_hostname_must_match": true,
+    "public_read_only": true,
+    "search_engine_as_source": false
+  },
+  "allowed_outputs": [
+    "page fetch/resolution counts",
+    "raw HTML SHA256",
+    "normalized visible-text SHA256",
+    "article-region SHA256",
+    "exact announced-time match",
+    "trading-stop class",
+    "active-order handling class",
+    "open-position automatic-close class",
+    "closing-price basis class",
+    "closing-price window minutes when explicit",
+    "funding-mentioned or not-stated class",
+    "revision/postponement wording class",
+    "unresolved event identities"
+  ],
+  "forbidden": [
+    "AFFECTED_CONTRACT_PRICE_ACCESS",
+    "EXTERNAL_REFERENCE_PRICE_ACCESS",
+    "INDEX_VALUE_ACCESS",
+    "BASIS_OR_SPREAD_ACCESS",
+    "RETURN_ACCESS",
+    "PNL_ACCESS",
+    "EVENT_OUTCOME_RANKING",
+    "OUTCOME_DRIVEN_EVENT_FILTERING",
+    "HORIZON_SELECTION_FROM_PRICE_OUTCOMES",
+    "ORDER_OR_TRADE_EXECUTION"
+  ],
+  "expected_terminal_states": [
+    "B15P2_ANNOUNCEMENT_BODY_SEMANTIC_AUDIT_PASS",
+    "B15P2_ANNOUNCEMENT_BODY_SEMANTIC_AUDIT_REVIEW"
+  ],
+  "strategy_review_policy": {
+    "full_semantic_result_is_strategy_relevant": true,
+    "worker_manifest_required_after_terminal_result": true,
+    "automatic_strategy_watch_should_trigger": true,
+    "mandatory_gate_before_any_price_outcome": true
+  },
+  "next_after_pass": "FREEZE_SEMANTIC_CLASSES_AND_TRIGGER_RESEARCH_STRATEGY_MANAGER_PRE_PRICE_GATE",
+  "next_after_review": "REVIEW_SEMANTIC_SOURCE_INTEGRITY_WITHOUT_OPENING_PRICES"
+}

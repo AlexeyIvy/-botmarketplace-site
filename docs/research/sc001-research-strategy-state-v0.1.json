@@ -8,7 +8,7 @@
   "baseline_git_head": "94bf690f5c273c98b4a5e58d4bb2fe6ea7f9cf91",
   "last_strategy_review_head": "002f8bf9258058f8e14775472d315a69a53da031",
   "binding_refs": {
-    "roadmap": "docs/research/sc001-current-roadmap-and-stop-rules-v5.172.md",
+    "roadmap": "docs/research/sc001-current-roadmap-and-stop-rules-v5.173.md",
     "governance": "docs/research/sc001-midcourse-research-strategy-audit-and-governance-amendment-v0.2.md",
     "reusable_policy": "docs/research/sc001-terminal-experiment-reusable-block-extraction-policy-v0.1.md",
     "reusable_registry": "docs/research/sc001-reusable-market-building-blocks-registry-v0.9.md",
@@ -25,19 +25,20 @@
       "mutation_allowed": false
     },
     "B15-P2": {
-      "state": "SEMANTIC_AUDIT_V012_SELFTEST_PASS_PREPARE_NETWORKED_BOUNDARY",
+      "state": "NETWORKED_94_PAGE_SEMANTIC_AUDIT_BOUNDARY_FROZEN_UNRUN",
       "price_outcome_authorized": false,
       "frozen_event_count": 94,
       "unique_announcement_url_count": 94,
       "event_set_sha256": "1063695ec003a0d6789270659822f50577e6a0f07059d88ac03a5be4288ed1a2",
       "semantic_audit_implementation": "research/sc001/sc001_b15p2_announcement_body_semantic_audit_v0_1_2.py",
       "semantic_audit_implementation_sha256": "a0fe50c52fcdcf3ce71ab0cb3a52c3be802f22426696a7f97e42b4d95a1dce78",
-      "offline_selftest_status": "PASS",
-      "offline_selftest_job_id": "job_20260927T201702Z_c370176c",
-      "offline_selftest_result": "docs/research/sc001-b15p2-announcement-body-semantic-audit-v012-offline-selftest-result-v0.1.json",
+      "networked_launch_contract": "docs/research/sc001-b15p2-announcement-body-semantic-audit-networked-launch-contract-v0.1.json",
+      "networked_wrapper": "scripts/research/run-b15p2-announcement-body-semantic-audit-v0.1.sh",
+      "networked_wrapper_sha256": "9e33adf5736b362fc491385ebee865c5b4a6df458df0f1aaa315a546e800d023",
+      "networked_approval_code": "BM-9E33ADF5736B",
       "networked_execution_authorized": false,
-      "strategy_review_required_now": false,
-      "next_allowed_action": "PREPARE_NETWORKED_94_PAGE_SEMANTIC_AUDIT_BOUNDARY_NO_EXECUTION"
+      "strategy_review_required_after_terminal_semantic_result": true,
+      "next_allowed_action": "AWAIT_EXPLICIT_NETWORKED_SEMANTIC_AUDIT_APPROVAL"
     }
   },
   "deferred_branches": {
