@@ -1,0 +1,32 @@
+{
+  "schema": "sc001.b13c_s0_price_anchor_dataset_freeze_result.v0.1",
+  "date": "2026-09-27",
+  "status": "B13C_S0_PRICE_ANCHOR_DATASET_FREEZE_PASS",
+  "runner_job": {
+    "job_id": "job_20260927T084007Z_e2824e69",
+    "bundle_id": "bundle_20260927T083221Z_90a5a578",
+    "bundle_sha256": "8b498bd030176e9ae2e21c12033b0e42d8db9119c7f3e7cca23747a3fba6f8ba",
+    "exit_code": 0,
+    "package_integrity_ok": true
+  },
+  "artifact": {
+    "path": "b13c_s0_price_anchor_dataset_freeze_manifest.json",
+    "sha256": "946aa91f835391b0cdf2ba14c1e1e517deccf30531dd8e8955df365c2cec0521",
+    "size_bytes": 913
+  },
+  "extraction_manifest_sha256": "79db43a19249c8f56f886cf01616f3e56704d4a8fc8e5c5e03609254b2de1acf",
+  "price_anchors_sha256": "5f84f40a91c3a7bc57bf3c4e878a53130ef696a28be162c014c10f8253223a1e",
+  "canonical_master_sha256": "0636ac25d6b7a484a4a9959f256aa57e0a1ead7f4e228423715f688b194fb87b",
+  "cluster_rows": 1905,
+  "valid_price_clusters": 1793,
+  "missing_entry": 25,
+  "missing_exit": 75,
+  "missing_both": 12,
+  "archive_sha256_count": 76,
+  "returns_calculated": false,
+  "signed_reversal_calculated": false,
+  "threshold_outcome_calculated": false,
+  "per_symbol_performance_ranked": false,
+  "pnl_calculated": false,
+  "next_state": "FREEZE_AND_SELFTEST_SEPARATE_OFFLINE_S0_OUTCOME_ANALYZER"
+}
