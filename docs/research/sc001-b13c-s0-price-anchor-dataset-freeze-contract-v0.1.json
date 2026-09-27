@@ -1,0 +1,43 @@
+{
+  "schema": "sc001.b13c_s0_price_anchor_dataset_freeze_contract.v0.1",
+  "date": "2026-09-27",
+  "status": "READY_FOR_SEAL",
+  "entrypoint": "research/sc001/sc001_b13c_s0_price_anchor_dataset_freeze_v0_1.py",
+  "entrypoint_sha256": "b45388ad453623a3a8bdd0a2893f31552b89b1bea090b0bbda475099e61a2d40",
+  "runtime": "offline-research-v1",
+  "input_root": "sc001_data",
+  "runtime_inputs": [
+    "SC001_B13C_S0_PRICE_ANCHORS_V01/price_anchor_extraction_manifest.json",
+    "SC001_B13C_S0_PRICE_ANCHORS_V01/price_anchors.jsonl"
+  ],
+  "expected": {
+    "cluster_rows": 1905,
+    "valid_price_clusters": 1793,
+    "missing_entry": 25,
+    "missing_exit": 75,
+    "missing_both": 12,
+    "archive_count": 76,
+    "metadata_total_content_length_bytes": 2633144445
+  },
+  "required_checks": [
+    "extraction manifest status PASS",
+    "price_anchors SHA matches extraction manifest",
+    "canonical master and all 10 chunk SHA bindings",
+    "exact cluster IDs S0C000001..S0C001905",
+    "anchor metadata matches canonical cluster identity and frozen buckets",
+    "found anchor timestamps lie inside frozen one-second buckets",
+    "positive finite price and size",
+    "source archive SHA syntax present",
+    "valid/missing partition exactly 1793/25/75/12"
+  ],
+  "forbidden": [
+    "RETURN_CALCULATION",
+    "SIGNED_REVERSAL_CALCULATION",
+    "THRESHOLD_OUTCOME",
+    "PER_SYMBOL_PERFORMANCE_RANKING",
+    "PNL",
+    "NETWORK_CALLS"
+  ],
+  "expected_pass": "B13C_S0_PRICE_ANCHOR_DATASET_FREEZE_PASS",
+  "next_after_pass": "PREPARE_SEPARATE_OFFLINE_S0_OUTCOME_ANALYZER"
+}
