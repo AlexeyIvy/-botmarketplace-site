@@ -1,0 +1,22 @@
+{
+  "schema": "sc001.b14b_persistent_multisettlement_funding_carry_offline_selftest_bundle_seal.v0.1",
+  "date": "2026-09-27",
+  "status": "SEALED_AWAITING_EXPLICIT_RUNNER_APPROVAL",
+  "bundle_id": "bundle_20260927T091925Z_389f482b",
+  "bundle_sha256": "563919504e09b4c2ee866f45a71cabe776c72d40fbd5c36d0f46c8df5418aad4",
+  "approval_code": "BM-563919504E09",
+  "runtime_profile": "offline-research-v1",
+  "inputs": [],
+  "package_files": 7,
+  "total_bytes": 37021,
+  "entrypoint": "research/sc001/sc001_b14b_persistent_multisettlement_funding_carry_v0_1.py",
+  "entrypoint_sha256": "cb288810ef8871ea1de3bfe9decf6e372cb525c1c62d0123969d4f7f459793f4",
+  "protocol_sha256": "8b54d27166d290c53b4490aafeab400e0955cd1202235179c8d96e49cd491012",
+  "expected_pass": "B14B_PERSISTENT_CARRY_V01_SELF_TEST_PASS",
+  "fresh_real_funding_values_accessed": false,
+  "network_calls": false,
+  "price_access": false,
+  "basis_access": false,
+  "pnl": false,
+  "next_state": "RUN_EXACT_OFFLINE_SELFTEST_AFTER_EXPLICIT_APPROVAL"
+}
