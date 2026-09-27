@@ -1,0 +1,147 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "sc001.worker_result_manifest.v0.1",
+  "title": "SC001 Strategy-Relevant Worker Result Manifest v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "project",
+    "experiment_id",
+    "stage",
+    "date",
+    "status",
+    "strategy_triggers",
+    "canonical_result",
+    "evidence",
+    "decision",
+    "reusable_blocks"
+  ],
+  "properties": {
+    "schema": { "const": "sc001.worker_result_manifest.v0.1" },
+    "project": { "const": "SC001" },
+    "experiment_id": { "type": "string", "minLength": 1 },
+    "stage": { "type": "string", "minLength": 1 },
+    "date": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+    "status": { "type": "string", "minLength": 1 },
+    "strategy_triggers": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "NEW_OUTCOME_MECHANISM_GATE",
+          "TERMINAL_REJECT_DEFER",
+          "REUSABLE_BLOCK_CHANGE",
+          "EVIDENCE_MATURITY_CHANGE",
+          "CONTAMINATION_CHANGE",
+          "ROADMAP_GOVERNANCE_CHANGE",
+          "CUSTOM_INDICATOR_PROPOSAL",
+          "PORTFOLIO_AUDIT",
+          "OTHER"
+        ]
+      }
+    },
+    "canonical_result": { "$ref": "#/$defs/file_ref" },
+    "protocol": {
+      "anyOf": [
+        { "$ref": "#/$defs/file_ref" },
+        { "type": "null" }
+      ]
+    },
+    "implementation": {
+      "anyOf": [
+        { "$ref": "#/$defs/file_ref" },
+        { "type": "null" }
+      ]
+    },
+    "execution": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "enum": ["OFFLINE_RUNNER", "NETWORKED_VPS", "COLLECTOR", "READ_ONLY", "NONE"]
+        },
+        "bundle_id": { "type": ["string", "null"] },
+        "bundle_sha256": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" },
+        "job_id": { "type": ["string", "null"] }
+      }
+    },
+    "mechanism": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fingerprint_ref", "disposition", "adaptive_discovery_generated"],
+      "properties": {
+        "fingerprint_ref": { "type": ["string", "null"] },
+        "disposition": {
+          "type": ["string", "null"],
+          "enum": [
+            "INDEPENDENT_MECHANISM",
+            "RELATED_BUT_MATERIALLY_DIFFERENT_ARCHITECTURE",
+            "SAME_MECHANISM_VARIANT",
+            "DISGUISED_RESCUE_REJECT",
+            "NOT_APPLICABLE_PRE_OUTCOME",
+            null
+          ]
+        },
+        "adaptive_discovery_generated": { "type": "boolean" }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["class", "promotional", "outcome_accessed", "contamination_registry_ref"],
+      "properties": {
+        "class": { "type": "string" },
+        "promotional": { "type": "boolean" },
+        "outcome_accessed": { "type": "boolean" },
+        "window": { "type": ["string", "null"] },
+        "contamination_registry_ref": { "type": "string" }
+      }
+    },
+    "key_metrics": {
+      "type": "object",
+      "maxProperties": 12,
+      "additionalProperties": { "type": ["number", "integer", "string", "boolean", "null"] }
+    },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["class", "summary", "failed_gate", "allowed_claims", "forbidden_reuse", "next_allowed_action"],
+      "properties": {
+        "class": {
+          "enum": ["PASS", "REJECT", "DEFER", "TERMINAL", "HOLD", "ACTIVE", "NO_DECISION"]
+        },
+        "summary": { "type": "string", "maxLength": 1200 },
+        "failed_gate": { "type": ["string", "null"] },
+        "allowed_claims": {
+          "type": "array",
+          "maxItems": 10,
+          "items": { "type": "string" }
+        },
+        "forbidden_reuse": {
+          "type": "array",
+          "maxItems": 15,
+          "items": { "type": "string" }
+        },
+        "next_allowed_action": { "type": "string" }
+      }
+    },
+    "reusable_blocks": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string" }
+    }
+  },
+  "$defs": {
+    "file_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": { "type": "string", "minLength": 1 },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    }
+  }
+}

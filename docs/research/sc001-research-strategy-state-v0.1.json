@@ -1,0 +1,88 @@
+{
+  "schema": "sc001.research_strategy_state.v0.1",
+  "date": "2026-09-27",
+  "status": "ACTIVE_INITIAL_MVP",
+  "scope": "SCALPING_RESEARCH_SC001",
+  "source_of_truth": "GITHUB",
+  "rebuildable_cache_only": true,
+  "baseline_git_head": "94bf690f5c273c98b4a5e58d4bb2fe6ea7f9cf91",
+  "last_strategy_review_head": null,
+  "binding_refs": {
+    "roadmap": "docs/research/sc001-current-roadmap-and-stop-rules-v5.154.md",
+    "governance": "docs/research/sc001-midcourse-research-strategy-audit-and-governance-amendment-v0.2.md",
+    "reusable_policy": "docs/research/sc001-terminal-experiment-reusable-block-extraction-policy-v0.1.md",
+    "reusable_registry": "docs/research/sc001-reusable-market-building-blocks-registry-v0.9.md",
+    "contamination_registry": "docs/research/sc001-contamination-registry-v0.30.json"
+  },
+  "active_branches": {
+    "B15-P1": {
+      "state": "W1_ACCUMULATION_OPERATIONAL_FREEZE",
+      "window_utc": "2026-09-27..2026-10-03",
+      "earliest_real_census_utc": "2026-10-04T00:00:00Z",
+      "mutation_allowed": false
+    },
+    "B15-P2": {
+      "state": "SOURCE_ONLY_SELFTEST_SEALED_UNRUN",
+      "price_outcome_authorized": false,
+      "bundle_id": "bundle_20260927T095903Z_afb63063",
+      "bundle_sha256": "ed2812b5baae997a24e3f10e5a214a5d71ae9f0f9fe9448625a4faf03611592a",
+      "next_allowed_action": "EXPLICIT_APPROVAL_TO_RUN_EXISTING_SOURCE_ONLY_SELFTEST"
+    }
+  },
+  "deferred_branches": {
+    "B14-A": {
+      "state": "B14A_P0_DEFER_DATA",
+      "economic_reject": false,
+      "reason": "OKX_WEBSOCKET_SUBSCRIBE_ID_60033",
+      "retry_rule": "NEW_PROSPECTIVE_EXPIRY_AFTER_TRANSPORT_ACK_PREFLIGHT"
+    }
+  },
+  "terminal_branches": {
+    "B13-C-S0": {
+      "state": "B13C_S0_SIMPLE_REVERSAL_HEADROOM_REJECT",
+      "failure_class": "ECONOMIC_MAGNITUDE",
+      "reusable_blocks": ["RB021"],
+      "same_evidence_rescue_allowed": false
+    },
+    "B14-B": {
+      "state": "B14B_REJECT_PERSISTENT_CARRY_STRUCTURAL",
+      "failure_class": "ECONOMIC_MAGNITUDE",
+      "reusable_blocks": ["RB022"],
+      "same_evidence_rescue_allowed": false
+    }
+  },
+  "reusable_knowledge": {
+    "registry_through": "RB022",
+    "latest_blocks": ["RB021", "RB022"]
+  },
+  "prospective_mechanism_governance": {
+    "structured_fingerprint_required": true,
+    "historical_fingerprint_backfill_required": false,
+    "B15-P2": {
+      "fingerprint_status": "REQUIRED_BEFORE_ANY_PRICE_OUTCOME",
+      "mechanism_timescale_status": "REQUIRED_BEFORE_ANY_PRICE_OUTCOME",
+      "edge_to_fill_status": "REQUIRED_BEFORE_ANY_PRICE_OUTCOME",
+      "minimum_viable_horizon_status": "REQUIRED_BEFORE_ANY_PRICE_OUTCOME",
+      "capital_time_status": "REQUIRED_BEFORE_ANY_PRICE_OUTCOME"
+    }
+  },
+  "manager_access_policy": {
+    "github_canonical_read": true,
+    "runner_execution": false,
+    "network_job_execution": false,
+    "collector_mutation": false,
+    "raw_vps_browsing_default": false,
+    "protected_outcome_access_default": false,
+    "github_write_default": false
+  },
+  "open_strategy_decisions": ["RUN_INITIAL_RESEARCH_STRATEGY_MANAGER_DRY_RUN"],
+  "next_strategy_review_trigger": [
+    "NEW_OUTCOME_MECHANISM_GATE",
+    "TERMINAL_REJECT_DEFER",
+    "REUSABLE_BLOCK_CHANGE",
+    "EVIDENCE_MATURITY_CHANGE",
+    "CONTAMINATION_CHANGE",
+    "CUSTOM_INDICATOR_PROPOSAL",
+    "ROADMAP_GOVERNANCE_CHANGE"
+  ]
+}
