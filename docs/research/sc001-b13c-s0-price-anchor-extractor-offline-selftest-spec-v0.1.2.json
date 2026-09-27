@@ -1,0 +1,16 @@
+{
+  "schema": "sc001.b13c_s0_price_anchor_extractor_offline_selftest_spec.v0.1.2",
+  "date": "2026-09-27",
+  "status": "READY",
+  "supersedes": "sc001-b13c-s0-price-anchor-extractor-offline-selftest-spec-v0.1.1.json",
+  "entrypoint": "research/sc001/sc001_b13c_s0_streaming_price_anchor_extractor_v0_1_2.py",
+  "entrypoint_sha256": "abb876276976198be65d049c6269d732dd24c5364c6c496bfeb5ed9d3f1f5be9",
+  "launcher_contract": "Default self-test when --mode omitted; accept and validate Runner package_root and exact entrypoint positional args.",
+  "runtime": "offline-research-v1",
+  "inputs": [],
+  "expected_pass": "B13C_S0_PRICE_ANCHOR_EXTRACTOR_V011_SELF_TEST_PASS",
+  "network_calls": false,
+  "real_price_body_access": false,
+  "returns_calculated": false,
+  "pnl_calculated": false
+}

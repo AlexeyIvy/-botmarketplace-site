@@ -1,0 +1,29 @@
+{
+  "schema": "sc001.b13c_s0_price_anchor_extractor_freeze.v0.1.2",
+  "date": "2026-09-27",
+  "status": "FROZEN_BEFORE_PRICE_BODY_ACCESS",
+  "supersedes": "sc001-b13c-s0-price-anchor-extractor-freeze-v0.1.1.json",
+  "protocol_path": "docs/research/sc001-b13c-s0-streaming-price-anchor-extraction-protocol-v0.1.md",
+  "protocol_sha256": "be87a3e480d6e21b8a5f6bcac9871ad03b7125dccd8fc04797e27beb49fa5b46",
+  "cluster_master_path": "docs/research/artifacts/b13c-s0/exact-cluster-freeze-v0.1/master-index.json",
+  "cluster_master_sha256": "0636ac25d6b7a484a4a9959f256aa57e0a1ead7f4e228423715f688b194fb87b",
+  "cluster_count": 1905,
+  "required_archive_count": 76,
+  "frozen_total_content_length_bytes": 2633144445,
+  "runner_path": "research/sc001/sc001_b13c_s0_streaming_price_anchor_extractor_v0_1_2.py",
+  "runner_sha256": "abb876276976198be65d049c6269d732dd24c5364c6c496bfeb5ed9d3f1f5be9",
+  "delta_from_v011": {
+    "research_semantics_changed": false,
+    "source_universe_changed": false,
+    "cluster_freeze_changed": false,
+    "price_bucket_changed": false,
+    "thresholds_changed": false,
+    "selftest_token_name_only": true
+  },
+  "selftest_pass": "B13C_S0_PRICE_ANCHOR_EXTRACTOR_V011_SELF_TEST_PASS",
+  "extraction_pass": "B13C_S0_PRICE_ANCHOR_EXTRACTION_PASS",
+  "real_price_body_access_authorized": true,
+  "return_calculation_authorized": false,
+  "threshold_outcome_authorized": false,
+  "pnl_authorized": false
+}

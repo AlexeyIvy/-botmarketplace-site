@@ -1,0 +1,15 @@
+{
+  "schema": "sc001.b13c_s0_price_anchor_extractor_v011_pre_run_contract_review.v0.1",
+  "date": "2026-09-27",
+  "status": "SEALED_NOT_RUN_CONTRACT_TOKEN_MISMATCH",
+  "bundle_id": "bundle_20260927T075649Z_0da5dbae",
+  "bundle_sha256": "dd2579248bc0604fa70709ce91036eedbe8d146e24278fd77e3042b323a5c40d",
+  "approval_code": "BM-DD2579248BC0",
+  "issue": "Python SELFTEST_PASS token remained B13C_S0_PRICE_ANCHOR_EXTRACTOR_V01_SELF_TEST_PASS while v0.1.1 freeze/spec required B13C_S0_PRICE_ANCHOR_EXTRACTOR_V011_SELF_TEST_PASS.",
+  "run_performed": false,
+  "research_semantics_changed": false,
+  "price_body_access": false,
+  "returns_calculated": false,
+  "corrective_entrypoint": "research/sc001/sc001_b13c_s0_streaming_price_anchor_extractor_v0_1_2.py",
+  "corrective_entrypoint_sha256": "abb876276976198be65d049c6269d732dd24c5364c6c496bfeb5ed9d3f1f5be9"
+}
