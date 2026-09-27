@@ -1,0 +1,78 @@
+{
+  "schema": "sc001.b14b_networked_fresh_funding_screen_launch_contract.v0.1",
+  "date": "2026-09-27",
+  "status": "READY_AWAITING_EXPLICIT_FUNDING_VALUE_ACCESS_APPROVAL",
+  "purpose": "Run the frozen B14-B persistent multi-settlement funding carry structural screen on fresh Jul-Sep 2026 public funding histories from OKX and Bybit without price/basis/PnL access.",
+  "script": {
+    "path": "research/sc001/sc001_b14b_persistent_multisettlement_funding_carry_v0_1.py",
+    "sha256": "cb288810ef8871ea1de3bfe9decf6e372cb525c1c62d0123969d4f7f459793f4"
+  },
+  "protocol": {
+    "path": "docs/research/sc001-b14b-persistent-multisettlement-funding-carry-protocol-v0.1.md",
+    "sha256": "8b54d27166d290c53b4490aafeab400e0955cd1202235179c8d96e49cd491012"
+  },
+  "contamination_registry": {
+    "path": "docs/research/sc001-contamination-registry-v0.30.json",
+    "sha256": "b715cdf1008793e4e76f831ea449d5c95d7a220270f6034adff2827aaa81e3ef"
+  },
+  "window": {
+    "start_utc": "2026-07-01T00:00:00Z",
+    "end_exclusive_utc": "2026-09-27T00:00:00Z"
+  },
+  "venues": [
+    "OKX",
+    "BYBIT"
+  ],
+  "symbols": [
+    "BTC",
+    "ETH",
+    "SOL",
+    "DOGE",
+    "ORDI",
+    "FIL",
+    "UNI",
+    "XRP",
+    "LTC",
+    "OP",
+    "BCH",
+    "SUI"
+  ],
+  "network_scope": {
+    "okx_host": "www.okx.com",
+    "okx_endpoint": "/api/v5/public/funding-rate-history",
+    "bybit_host": "api.bybit.com",
+    "bybit_endpoint": "/v5/market/funding/history"
+  },
+  "execution": {
+    "environment": "NETWORKED_VPS_HOST",
+    "data_root": "/home/botmarket/sc001_data",
+    "repository": "/var/lib/botmarket-github-control/repo",
+    "mode": "live",
+    "systemd_transient_oneshot": true,
+    "survives_ssh_disconnect": true
+  },
+  "allowed": [
+    "read public realized funding histories for the frozen window",
+    "match causal signal timestamps within 5 minutes",
+    "construct non-overlapping 7-day carry cycles",
+    "sum all realized funding cashflows in each hold",
+    "report frozen aggregate structural diagnostics and terminal classification"
+  ],
+  "forbidden": [
+    "PRICE_ACCESS",
+    "BASIS_ACCESS",
+    "TRADE_BODY_ACCESS",
+    "L2_ACCESS",
+    "PRICE_PNL",
+    "ALTERNATE_HORIZON_SEARCH",
+    "FUNDING_MAGNITUDE_THRESHOLD_SEARCH",
+    "SYMBOL_SELECTION",
+    "PROMOTIONAL_EVIDENCE"
+  ],
+  "expected_terminal_states": [
+    "B14B_PERSISTENT_CARRY_STRUCTURAL_SURVIVE",
+    "B14B_REJECT_PERSISTENT_CARRY_STRUCTURAL",
+    "B14B_DEFER_SOURCE_OR_SAMPLE"
+  ],
+  "next_after_run": "PERSIST_RESULT_AND_RUN_MANDATORY_REUSABLE_BLOCK_EXTRACTION_IF_TERMINAL"
+}

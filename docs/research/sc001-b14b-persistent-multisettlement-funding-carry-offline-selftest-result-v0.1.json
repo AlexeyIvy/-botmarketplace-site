@@ -1,0 +1,20 @@
+{
+  "schema": "sc001.b14b_persistent_multisettlement_funding_carry_offline_selftest_result.v0.1",
+  "date": "2026-09-27",
+  "status": "B14B_PERSISTENT_CARRY_V01_SELF_TEST_PASS",
+  "runner_job": {
+    "job_id": "job_20260927T092950Z_3f4b8e6f",
+    "bundle_id": "bundle_20260927T091925Z_389f482b",
+    "bundle_sha256": "563919504e09b4c2ee866f45a71cabe776c72d40fbd5c36d0f46c8df5418aad4",
+    "exit_code": 0,
+    "package_integrity_ok": true
+  },
+  "stdout_token": "B14B_PERSISTENT_CARRY_V01_SELF_TEST_PASS",
+  "stderr_empty": true,
+  "fresh_real_funding_values_accessed": false,
+  "network_calls_performed": false,
+  "price_accessed": false,
+  "basis_calculated": false,
+  "pnl_calculated": false,
+  "next_state": "AWAIT_EXPLICIT_APPROVAL_FOR_NETWORKED_FRESH_2026_FUNDING_SCREEN"
+}
