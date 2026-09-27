@@ -1,0 +1,43 @@
+{
+  "schema": "sc001.b15p2_bybit_delisting_source_census_implementation_freeze.v0.1",
+  "date": "2026-09-27",
+  "status": "FROZEN_BEFORE_ANY_B15P2_PRICE_OUTCOME_ACCESS",
+  "protocol": {
+    "path": "docs/research/sc001-b15p2-bybit-delisting-source-only-event-census-protocol-v0.1.md",
+    "sha256": "ea577e42252b13fc5153256f3cc87c90d4518384cfd97254e4ddba06bbe611e2"
+  },
+  "entrypoint": {
+    "path": "research/sc001/sc001_b15p2_bybit_delisting_source_census_v0_1.py",
+    "sha256": "da047f6dba6881fdfa04db187616b851e1ed35af7af9b33ed6921daed807f8ef"
+  },
+  "census_window": {
+    "start_utc": "2026-01-01T00:00:00Z",
+    "end_exclusive_utc": "2026-09-27T00:00:00Z"
+  },
+  "authoritative_sources": [
+    "Bybit GET /v5/announcements/index?locale=en-US&type=delistings",
+    "Bybit GET /v5/market/instruments-info?category=linear&status=Closed"
+  ],
+  "scope": {
+    "venue": "BYBIT",
+    "contract_type": "LinearPerpetual",
+    "quote_coin": "USDT",
+    "closed_only": true,
+    "prelisting_only_excluded": true
+  },
+  "event_identity": "BYBIT x EXACT_USDT_PERPETUAL_SYMBOL x DELIVERY_TIME",
+  "exact_symbol_matching": "alphanumeric token boundary",
+  "gates": {
+    "closed_in_scope_min": 5,
+    "admitted_events_min": 5,
+    "announcement_match_coverage_min": 0.8,
+    "all_admitted_positive_lead": true,
+    "delivery_months_min": 3
+  },
+  "price_access_authorized": false,
+  "external_reference_access_authorized": false,
+  "basis_access_authorized": false,
+  "pnl_authorized": false,
+  "event_outcome_ranking_authorized": false,
+  "expected_selftest_pass": "B15P2_BYBIT_DELISTING_SOURCE_CENSUS_V01_SELF_TEST_PASS"
+}

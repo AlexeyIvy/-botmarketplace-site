@@ -1,0 +1,31 @@
+{
+  "schema": "sc001.b15p2_bybit_delisting_source_census_offline_selftest_spec.v0.1.1",
+  "date": "2026-09-27",
+  "status": "READY",
+  "runtime": "offline-research-v1",
+  "entrypoint": "research/sc001/sc001_b15p2_bybit_delisting_source_census_v0_1.py",
+  "entrypoint_sha256": "da047f6dba6881fdfa04db187616b851e1ed35af7af9b33ed6921daed807f8ef",
+  "inputs": [],
+  "expected_pass": "B15P2_BYBIT_DELISTING_SOURCE_CENSUS_V01_SELF_TEST_PASS",
+  "checks": [
+    "Runner launcher positional contract",
+    "LinearPerpetual/USDT/Closed/window filtering",
+    "pre-market-only identity exclusion when isPreListing=true",
+    "derivative-relevant delisting announcement filtering",
+    "exact symbol alphanumeric-token matching",
+    "pre-event publishTime causality",
+    "first/last pre-event notice selection",
+    "deliveryTime event identity",
+    "announcement coverage and month breadth gates",
+    "type-7 lead-time quantiles",
+    "synthetic PASS fixture",
+    "synthetic DEFER fixture"
+  ],
+  "network_calls": false,
+  "real_announcement_access": false,
+  "real_instrument_access": false,
+  "price_access": false,
+  "basis_access": false,
+  "pnl": false,
+  "next_after_pass": "FREEZE_NETWORKED_BYBIT_SOURCE_ONLY_EVENT_CENSUS_LAUNCH"
+}
