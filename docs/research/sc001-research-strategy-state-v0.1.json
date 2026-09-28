@@ -25,7 +25,7 @@
       "mutation_allowed": false
     },
     "B15-P2": {
-      "state": "NEXT_DATA_STRUCTURE_PROBE_V02_FROZEN_UNRUN",
+      "state": "NEXT_DATA_STRUCTURE_PROBE_V02_APPROVED_AWAITING_HOST_EXECUTION",
       "price_outcome_authorized": false,
       "frozen_event_count": 94,
       "event_set_sha256": "1063695ec003a0d6789270659822f50577e6a0f07059d88ac03a5be4288ed1a2",
@@ -38,9 +38,11 @@
       "next_data_probe_wrapper_sha256": "32728fcbe7b8feb733449bafaa1a8ba5bf95870166a9efedf0068cd34c98d703",
       "next_data_probe_contract": "docs/research/sc001-b15p2-next-data-structure-probe-contract-v0.2.json",
       "next_data_probe_approval_code": "BM-32728FCBE7B8",
-      "next_data_probe_authorized": false,
+      "next_data_probe_authorized": true,
       "strategy_review_required_now": false,
-      "next_allowed_action": "AWAIT_EXPLICIT_NEXT_DATA_STRUCTURE_PROBE_V02_APPROVAL"
+      "next_allowed_action": "RUN_NEXT_DATA_STRUCTURE_PROBE_V02_VIA_HOST_WRAPPER",
+      "next_data_probe_execution_started": false,
+      "execution_approval": "docs/research/sc001-b15p2-next-data-structure-probe-v02-execution-approval-v0.1.json"
     }
   },
   "deferred_branches": {
