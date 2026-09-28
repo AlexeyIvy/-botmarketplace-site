@@ -8,7 +8,7 @@
   "baseline_git_head": "94bf690f5c273c98b4a5e58d4bb2fe6ea7f9cf91",
   "last_strategy_review_head": "002f8bf9258058f8e14775472d315a69a53da031",
   "binding_refs": {
-    "roadmap": "docs/research/sc001-current-roadmap-and-stop-rules-v5.175.md",
+    "roadmap": "docs/research/sc001-current-roadmap-and-stop-rules-v5.176.md",
     "governance": "docs/research/sc001-midcourse-research-strategy-audit-and-governance-amendment-v0.2.md",
     "reusable_policy": "docs/research/sc001-terminal-experiment-reusable-block-extraction-policy-v0.1.md",
     "reusable_registry": "docs/research/sc001-reusable-market-building-blocks-registry-v0.9.md",
@@ -25,20 +25,19 @@
       "mutation_allowed": false
     },
     "B15-P2": {
-      "state": "SEMANTIC_AUDIT_V013_OFFLINE_SELFTEST_SEALED_UNRUN",
+      "state": "SEMANTIC_AUDIT_V013_SELFTEST_PASS_PREPARE_ASYNC_NETWORKED_BOUNDARY",
       "price_outcome_authorized": false,
       "frozen_event_count": 94,
       "unique_announcement_url_count": 94,
       "event_set_sha256": "1063695ec003a0d6789270659822f50577e6a0f07059d88ac03a5be4288ed1a2",
       "semantic_audit_implementation": "research/sc001/sc001_b15p2_announcement_body_semantic_audit_v0_1_3.py",
       "semantic_audit_implementation_sha256": "8a5ba89168dcd7845a7f340027e552767b41836b3c10755df00a6f9b7a309e78",
-      "prior_network_result": "TECHNICAL_TIMEOUT_NO_TERMINAL_SEMANTIC_RESULT",
-      "bundle_id": "bundle_20260928T065015Z_930e8ea2",
-      "bundle_sha256": "26635d7bf6c6983fb0c4c8e50ab181389978fa98d2ffdbd6f117518cd909cb2e",
-      "approval_code": "BM-26635D7BF6C6",
-      "execution_authorized": false,
+      "offline_selftest_status": "PASS",
+      "offline_selftest_job_id": "job_20260928T065945Z_6977cbfd",
+      "offline_selftest_result": "docs/research/sc001-b15p2-announcement-body-semantic-audit-v013-offline-selftest-result-v0.1.json",
+      "networked_execution_authorized": false,
       "strategy_review_required_now": false,
-      "next_allowed_action": "AWAIT_EXPLICIT_APPROVAL_TO_RUN_SEMANTIC_AUDIT_V013_OFFLINE_SELFTEST"
+      "next_allowed_action": "PREPARE_ASYNC_NETWORKED_94_PAGE_SEMANTIC_AUDIT_BOUNDARY_NO_EXECUTION"
     }
   },
   "deferred_branches": {
