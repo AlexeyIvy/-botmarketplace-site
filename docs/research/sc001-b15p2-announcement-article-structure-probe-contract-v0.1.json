@@ -1,0 +1,63 @@
+{
+  "schema": "sc001.b15p2_announcement_article_structure_probe_contract.v0.1",
+  "date": "2026-09-28",
+  "status": "FROZEN_AWAITING_EXPLICIT_APPROVAL",
+  "purpose": "Determine why the exact official Bybit announcement HTML yields an article region shorter than the frozen integrity threshold, without semantic classification and without opening any market data.",
+  "triggering_failure": {
+    "path": "docs/research/sc001-b15p2-announcement-body-smoke-v014-extraction-failure-diagnostic-v0.1.json"
+  },
+  "probe_script": {
+    "path": "scripts/research/probe-b15p2-announcement-article-structure-v0.1.py",
+    "sha256": "73c14a0963a245ad9ee431f6e76d16deed99d698fddeb32f78ca4c1fb685fa81",
+    "selftest_mode": "--mode self-test",
+    "live_mode": "--mode live"
+  },
+  "network_scope": {
+    "exact_frozen_events": [
+      "DOGUSDT",
+      "TONUSDT"
+    ],
+    "allowed_hostname": "announcements.bybit.com",
+    "transport": "curl_ipv4_http11_browser_ua",
+    "same_host_redirects_only": true
+  },
+  "structural_dimensions": [
+    "raw HTML byte count and SHA256",
+    "visible-text length",
+    "exact-title count and position",
+    "article region length before and after terminator cut",
+    "terminator positions",
+    "script count and aggregate script length",
+    "scripts containing exact title",
+    "JSON/JSON-LD script counts",
+    "articleBody candidate lengths/hashes only",
+    "JSON strings containing title candidate lengths/hashes only",
+    "Next.js __NEXT_DATA__ marker",
+    "Next.js self.__next_f.push marker"
+  ],
+  "privacy_and_copyright": {
+    "full_article_body_persisted": false,
+    "text_excerpts_persisted": false,
+    "only_lengths_hashes_booleans_and_paths": true
+  },
+  "forbidden": [
+    "SEMANTIC_CLASSIFICATION",
+    "PRICE_ACCESS",
+    "EXTERNAL_REFERENCE_PRICE_ACCESS",
+    "INDEX_VALUE_ACCESS",
+    "BASIS_ACCESS",
+    "RETURN_ACCESS",
+    "PNL_ACCESS",
+    "TRADING"
+  ],
+  "execution_authorized": false,
+  "approval": {
+    "required": true,
+    "approval_code": "BM-73C14A0963A2",
+    "networked_execution_authorized": false
+  },
+  "execution_sequence": [
+    "RUN_NO_NETWORK_SELFTEST",
+    "IF_SELFTEST_PASS_RUN_TWO_PAGE_STRUCTURE_PROBE"
+  ]
+}

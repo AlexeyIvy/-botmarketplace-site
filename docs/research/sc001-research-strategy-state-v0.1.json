@@ -8,7 +8,7 @@
   "baseline_git_head": "94bf690f5c273c98b4a5e58d4bb2fe6ea7f9cf91",
   "last_strategy_review_head": "002f8bf9258058f8e14775472d315a69a53da031",
   "binding_refs": {
-    "roadmap": "docs/research/sc001-current-roadmap-and-stop-rules-v5.186.md",
+    "roadmap": "docs/research/sc001-current-roadmap-and-stop-rules-v5.187.md",
     "governance": "docs/research/sc001-midcourse-research-strategy-audit-and-governance-amendment-v0.2.md",
     "reusable_policy": "docs/research/sc001-terminal-experiment-reusable-block-extraction-policy-v0.1.md",
     "reusable_registry": "docs/research/sc001-reusable-market-building-blocks-registry-v0.9.md",
@@ -25,24 +25,20 @@
       "mutation_allowed": false
     },
     "B15-P2": {
-      "state": "SEMANTIC_NETWORK_V03_APPROVED_AWAITING_HOST_EXECUTION",
+      "state": "SMOKE_EXTRACTION_FAILURE_ARTICLE_STRUCTURE_PROBE_FROZEN_UNRUN",
       "price_outcome_authorized": false,
       "frozen_event_count": 94,
       "event_set_sha256": "1063695ec003a0d6789270659822f50577e6a0f07059d88ac03a5be4288ed1a2",
-      "transport_observed_pattern": "CURL_HTML_WORKS_URLLIB_HTML_FAILS",
-      "semantic_audit_implementation": "research/sc001/sc001_b15p2_announcement_body_semantic_audit_v0_1_4.py",
-      "semantic_audit_implementation_sha256": "ca96be6b0cb8cae3a37fedb1a22fa2b426f5286ca3decdf7c272bf7cd29feceb",
-      "offline_selftest_status": "PASS",
-      "networked_launch_contract": "docs/research/sc001-b15p2-announcement-body-semantic-audit-networked-launch-contract-v0.3.json",
-      "networked_wrapper": "scripts/research/run-b15p2-announcement-body-semantic-audit-v0.3.sh",
-      "networked_wrapper_sha256": "90b028b3cf4c1d12e364b7b5e147c7a44b366ddbb9b95c095cf4f49425b2513b",
-      "networked_approval_code": "BM-90B028B3CF4C",
-      "automatic_two_page_smoke_required": true,
-      "networked_execution_authorized": true,
-      "strategy_review_required_after_terminal_full_semantic_result": true,
-      "next_allowed_action": "RUN_V03_PREFLIGHT_THEN_LAUNCH_SMOKE_GATED_ASYNC_FULL_AUDIT",
-      "execution_started": false,
-      "execution_approval": "docs/research/sc001-b15p2-announcement-body-semantic-audit-network-v03-execution-approval-v0.1.json"
+      "semantic_terminal_result_observed": false,
+      "smoke_result": "EXTRACTION_REVIEW_FULL_94_NOT_STARTED",
+      "smoke_failure_diagnostic": "docs/research/sc001-b15p2-announcement-body-smoke-v014-extraction-failure-diagnostic-v0.1.json",
+      "article_structure_probe_script": "scripts/research/probe-b15p2-announcement-article-structure-v0.1.py",
+      "article_structure_probe_sha256": "73c14a0963a245ad9ee431f6e76d16deed99d698fddeb32f78ca4c1fb685fa81",
+      "article_structure_probe_contract": "docs/research/sc001-b15p2-announcement-article-structure-probe-contract-v0.1.json",
+      "article_structure_probe_approval_code": "BM-73C14A0963A2",
+      "article_structure_probe_authorized": false,
+      "strategy_review_required_now": false,
+      "next_allowed_action": "AWAIT_EXPLICIT_ARTICLE_STRUCTURE_PROBE_APPROVAL"
     }
   },
   "deferred_branches": {
