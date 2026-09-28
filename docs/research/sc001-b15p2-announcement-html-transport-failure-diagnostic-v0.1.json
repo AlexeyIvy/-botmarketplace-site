@@ -1,0 +1,37 @@
+{
+  "schema": "sc001.b15p2_announcement_html_transport_failure_diagnostic.v0.1",
+  "date": "2026-09-28",
+  "status": "TRANSPORT_FAILURE_NO_TERMINAL_SEMANTIC_RESULT",
+  "attempt": {
+    "unit": "sc001-b15p2-semantic-audit-v02-20260928T103612Z",
+    "wrapper": "scripts/research/run-b15p2-announcement-body-semantic-audit-v0.2.sh",
+    "wrapper_sha256": "7bf4d61206b4f761f986f23cf6c58a2ddb436406b490523fb8923dc721520a31",
+    "approval_code": "BM-7BF4D61206B4"
+  },
+  "observed_at_manual_stop": {
+    "progress_started": 71,
+    "progress_done": 0,
+    "progress_errors": 70,
+    "representative_error": "NETWORK_ERROR:TimeoutError:The read operation timed out",
+    "representative_elapsed_seconds": 61.1,
+    "systemd_after_stop": {
+      "active_state": "failed",
+      "sub_state": "failed",
+      "result": "signal",
+      "exec_main_status": 15
+    }
+  },
+  "interpretation": "The exact announcement-page HTML transport from the VPS is not usable through the current Python urllib path. Seventy completed event attempts produced zero successful page fetches, with timing matching two 30-second read attempts plus retry delay. The job was manually stopped to avoid wasting additional time.",
+  "terminal_semantic_result_observed": false,
+  "semantic_review_observed": false,
+  "real_announcement_access_attempted": true,
+  "partial_semantic_classifications_exposed": false,
+  "price_access_authorized": false,
+  "external_reference_price_access_authorized": false,
+  "index_value_access_authorized": false,
+  "basis_access_authorized": false,
+  "returns_access_authorized": false,
+  "pnl_access_authorized": false,
+  "strategy_review_triggered": false,
+  "next_diagnostic": "MINIMAL_TRANSPORT_CAPABILITY_PROBE_IPV4_IPV6_CURL_URLLIB_AND_ANNOUNCEMENT_API_CONTROL"
+}
