@@ -25,7 +25,7 @@
       "mutation_allowed": false
     },
     "B15-P2": {
-      "state": "GENERIC_NEXT_DATA_MAPPER_V03_FROZEN_UNRUN",
+      "state": "GENERIC_NEXT_DATA_MAPPER_V03_APPROVED_AWAITING_HOST_EXECUTION",
       "price_outcome_authorized": false,
       "frozen_event_count": 94,
       "event_set_sha256": "1063695ec003a0d6789270659822f50577e6a0f07059d88ac03a5be4288ed1a2",
@@ -40,10 +40,12 @@
       "next_data_probe_wrapper_sha256": "61314ae69307cd9ec8748d84868c8141e3102d0370e880e0ff2c45c28c2edb59",
       "next_data_probe_contract": "docs/research/sc001-b15p2-next-data-structure-probe-contract-v0.3.json",
       "next_data_probe_approval_code": "BM-61314AE69307",
-      "next_data_probe_authorized": false,
+      "next_data_probe_authorized": true,
       "engineering_stabilization_rule": "THREE_LAYER_PREFREEZE_CHECK",
       "strategy_review_required_now": false,
-      "next_allowed_action": "AWAIT_EXPLICIT_GENERIC_NEXT_DATA_MAPPER_V03_APPROVAL"
+      "next_allowed_action": "RUN_GENERIC_NEXT_DATA_MAPPER_V03_VIA_HOST_WRAPPER",
+      "next_data_probe_execution_started": false,
+      "execution_approval": "docs/research/sc001-b15p2-next-data-structure-probe-v03-execution-approval-v0.1.json"
     }
   },
   "deferred_branches": {

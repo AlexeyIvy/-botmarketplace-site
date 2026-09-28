@@ -1,0 +1,32 @@
+{
+  "schema": "sc001.b15p2_next_data_structure_probe_v03_execution_approval.v0.1",
+  "date": "2026-09-28",
+  "status": "EXPLICIT_USER_APPROVAL_RECEIVED",
+  "approval_code": "BM-61314AE69307",
+  "probe_contract": {
+    "path": "docs/research/sc001-b15p2-next-data-structure-probe-contract-v0.3.json",
+    "sha256": "91aea92d2a0b53c2bd7f9593fda8b6abe55a96ef7cbb465b96d65fcedd78e2cc"
+  },
+  "probe_script": {
+    "path": "scripts/research/probe-b15p2-next-data-structure-v0.3.py",
+    "sha256": "b0a7cbb2aadb68ecf570865205cfb30ecc4b1f953c8a1e16cb839196b22b0bb9"
+  },
+  "host_wrapper": {
+    "path": "scripts/research/run-b15p2-next-data-structure-probe-v0.3.sh",
+    "sha256": "61314ae69307cd9ec8748d84868c8141e3102d0370e880e0ff2c45c28c2edb59"
+  },
+  "authorized_sequence": [
+    "RUN_NO_NETWORK_PREFLIGHT_AND_SELFTEST",
+    "IF_AND_ONLY_IF_PASS_RUN_TWO_PAGE_GENERIC_NEXT_DATA_MAPPER"
+  ],
+  "article_body_text_persisted": false,
+  "semantic_classification_authorized": false,
+  "price_access_authorized": false,
+  "external_reference_price_access_authorized": false,
+  "index_value_access_authorized": false,
+  "basis_access_authorized": false,
+  "returns_access_authorized": false,
+  "pnl_access_authorized": false,
+  "trading_authorized": false,
+  "execution_started": false
+}
