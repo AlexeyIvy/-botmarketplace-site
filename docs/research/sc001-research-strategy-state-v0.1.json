@@ -25,7 +25,7 @@
       "mutation_allowed": false
     },
     "B15-P2": {
-      "state": "NETWORKED_94_PAGE_SEMANTIC_AUDIT_BOUNDARY_FROZEN_UNRUN",
+      "state": "NETWORKED_94_PAGE_SEMANTIC_AUDIT_APPROVED_AWAITING_HOST_EXECUTION",
       "price_outcome_authorized": false,
       "frozen_event_count": 94,
       "unique_announcement_url_count": 94,
@@ -36,9 +36,11 @@
       "networked_wrapper": "scripts/research/run-b15p2-announcement-body-semantic-audit-v0.1.sh",
       "networked_wrapper_sha256": "9e33adf5736b362fc491385ebee865c5b4a6df458df0f1aaa315a546e800d023",
       "networked_approval_code": "BM-9E33ADF5736B",
-      "networked_execution_authorized": false,
+      "networked_execution_authorized": true,
       "strategy_review_required_after_terminal_semantic_result": true,
-      "next_allowed_action": "AWAIT_EXPLICIT_NETWORKED_SEMANTIC_AUDIT_APPROVAL"
+      "next_allowed_action": "RUN_SEMANTIC_AUDIT_PREFLIGHT_THEN_LAUNCH_IF_PASS",
+      "execution_started": false,
+      "execution_approval": "docs/research/sc001-b15p2-announcement-body-semantic-audit-networked-execution-approval-v0.1.json"
     }
   },
   "deferred_branches": {

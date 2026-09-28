@@ -1,0 +1,26 @@
+{
+  "schema": "sc001.b15p2_announcement_body_semantic_audit_networked_execution_approval.v0.1",
+  "date": "2026-09-28",
+  "status": "EXPLICIT_USER_APPROVAL_RECEIVED",
+  "approval_code": "BM-9E33ADF5736B",
+  "launch_contract": {
+    "path": "docs/research/sc001-b15p2-announcement-body-semantic-audit-networked-launch-contract-v0.1.json",
+    "sha256": "70806e9e08d893a64c307ede76af2982c67bae6b338cd9078ee3150ecad95aac"
+  },
+  "host_wrapper": {
+    "path": "scripts/research/run-b15p2-announcement-body-semantic-audit-v0.1.sh",
+    "sha256": "9e33adf5736b362fc491385ebee865c5b4a6df458df0f1aaa315a546e800d023"
+  },
+  "authorized_sequence": [
+    "RUN_NO_NETWORK_PREFLIGHT",
+    "IF_PREFLIGHT_PASS_RUN_NETWORKED_94_PAGE_SEMANTIC_AUDIT"
+  ],
+  "price_access_authorized": false,
+  "external_reference_price_access_authorized": false,
+  "index_value_access_authorized": false,
+  "basis_access_authorized": false,
+  "returns_access_authorized": false,
+  "pnl_access_authorized": false,
+  "order_or_trade_execution_authorized": false,
+  "execution_started": false
+}
