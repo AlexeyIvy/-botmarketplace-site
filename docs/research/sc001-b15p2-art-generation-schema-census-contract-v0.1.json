@@ -1,0 +1,81 @@
+{
+  "schema": "sc001.b15p2_art_generation_schema_census_contract.v0.1",
+  "date": "2026-09-28",
+  "status": "AUTHORIZED_RECOVERY_ITERATION_2_PREPARED_AWAITING_HOST_EXECUTION",
+  "authorization_basis": {
+    "type": "USER_STANDING_DELEGATION_CURRENT_B15P2_ENGINEERING_CONTOUR",
+    "max_recovery_iterations": 5,
+    "iterations_consumed": 1,
+    "prepared_iteration": 2,
+    "scope_expansion": false,
+    "new_data_source": false,
+    "price_or_outcome_access": false
+  },
+  "reason": {
+    "terminal_semantic_review": "docs/research/sc001-b15p2-announcement-body-semantic-audit-v015-review-result-v0.1.json",
+    "observed_partition": {
+      "BLT": {
+        "count": 76,
+        "status": "SEMANTICALLY_RESOLVED"
+      },
+      "DOUBLE_DASH_ART": {
+        "count": 18,
+        "status": "HYDRATION_PRIMARY_BODY_PATH_UNRESOLVED"
+      }
+    }
+  },
+  "probe": {
+    "path": "scripts/research/probe-b15p2-art-generation-schema-census-v0.1.py",
+    "sha256": "7ee2057a3c66e0b4a3f08b0f23a16df295abc3a4e7fcf88a71e29543b2f06de0"
+  },
+  "wrapper": {
+    "path": "scripts/research/run-b15p2-art-generation-schema-census-v0.1.sh",
+    "sha256": "5c86181cc072b393b9ed274bbb4505522286896deed0916bcad0cdb4a7984b17",
+    "run_mode": "--run",
+    "status_mode": "--status",
+    "execution": "SYNCHRONOUS_HOST_WRAPPER"
+  },
+  "selection": {
+    "source": "EXACT_FROZEN_94_EVENT_SOURCE",
+    "rule": "announcement URL path matches --art[0-9a-f]+",
+    "expected_event_count": 18,
+    "selection_uses_semantic_or_price_outcomes": false,
+    "symbols_are_not_hardcoded": true
+  },
+  "analysis": {
+    "all_parseable_json_scripts": true,
+    "exact_title_identity_frequency": true,
+    "candidate_identity_frequency": true,
+    "title_document_coupling_frequency": true,
+    "common_candidate_coverage_across_all_18": true,
+    "supports_body_in_separate_json_script": true,
+    "article_body_text_persisted": false,
+    "semantic_classification_performed": false
+  },
+  "transport": {
+    "allowed_hostname": "announcements.bybit.com",
+    "https_only": true,
+    "client": "curl",
+    "address_family": "IPv4",
+    "http_version": "HTTP/1.1",
+    "attempts_per_url": 2
+  },
+  "runtime_output": {
+    "result_target": "docs/research/runtime-inbox/sc001-b15p2-art-generation-schema-census-v0.1-latest.json",
+    "log_target": "docs/research/runtime-inbox/sc001-b15p2-art-generation-schema-census-v0.1-latest.log",
+    "meta_target": "docs/research/runtime-inbox/sc001-b15p2-art-generation-schema-census-v0.1-latest.meta.json"
+  },
+  "stop_rule": "Use the census to freeze one common ART-generation schema only if structurally supported across the frozen 18-event generation. Do not create per-symbol fallback rules.",
+  "forbidden": [
+    "SEMANTIC_CLASSIFICATION",
+    "PRICE_ACCESS",
+    "EXTERNAL_REFERENCE_PRICE_ACCESS",
+    "INDEX_VALUE_ACCESS",
+    "BASIS_ACCESS",
+    "RETURN_ACCESS",
+    "PNL_ACCESS",
+    "EVENT_OUTCOME_RANKING",
+    "PAGE_SPECIFIC_ADAPTIVE_FALLBACK",
+    "TRADING"
+  ]
+}

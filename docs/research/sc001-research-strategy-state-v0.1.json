@@ -8,7 +8,7 @@
   "baseline_git_head": "94bf690f5c273c98b4a5e58d4bb2fe6ea7f9cf91",
   "last_strategy_review_head": "002f8bf9258058f8e14775472d315a69a53da031",
   "binding_refs": {
-    "roadmap": "docs/research/sc001-current-roadmap-and-stop-rules-v5.193.md",
+    "roadmap": "docs/research/sc001-current-roadmap-and-stop-rules-v5.194.md",
     "governance": "docs/research/sc001-midcourse-research-strategy-audit-and-governance-amendment-v0.2.md",
     "reusable_policy": "docs/research/sc001-terminal-experiment-reusable-block-extraction-policy-v0.1.md",
     "reusable_registry": "docs/research/sc001-reusable-market-building-blocks-registry-v0.9.md",
@@ -25,7 +25,7 @@
       "mutation_allowed": false
     },
     "B15-P2": {
-      "state": "SEMANTIC_V015_REVIEW_ART_SCHEMA_SOURCE_INTEGRITY_HOLD",
+      "state": "ART_GENERATION_SCHEMA_CENSUS_ITERATION_2_PREPARED_AWAITING_HOST_EXECUTION",
       "price_outcome_authorized": false,
       "frozen_event_count": 94,
       "event_set_sha256": "1063695ec003a0d6789270659822f50577e6a0f07059d88ac03a5be4288ed1a2",
@@ -46,7 +46,7 @@
       "engineering_stabilization_rule": "THREE_LAYER_PREFREEZE_CHECK_PLUS_EXACT_STAGE",
       "hydration_stop_rule": "STOP_AFTER_V04_IF_NO_STABLE_COMMON_HIGH_CONFIDENCE_BODY_IDENTITY",
       "strategy_review_required_now": true,
-      "next_allowed_action": "PREPARE_AND_RUN_FROZEN_18_EVENT_ART_GENERATION_SCHEMA_CENSUS",
+      "next_allowed_action": "RUN_RECOVERY_ITERATION_2_ALL_18_ART_GENERATION_SCHEMA_CENSUS",
       "next_data_probe_execution_started": false,
       "execution_approval": "docs/research/sc001-b15p2-next-data-structure-probe-v04-execution-approval-v0.1.json",
       "delegated_engineering_iteration_budget": {
@@ -82,7 +82,7 @@
         "screenshot_role": "COMPLETION_TOKEN_OR_PATH_ONLY",
         "runtime_inbox_enabled": true,
         "current_result_relay": "STATUS_BUILTIN_RUNTIME_INBOX_RELAY",
-        "current_runtime_inbox_target": "docs/research/runtime-inbox/sc001-b15p2-semantic-audit-v0.1.5-latest.json",
+        "current_runtime_inbox_target": "docs/research/runtime-inbox/sc001-b15p2-art-generation-schema-census-v0.1-latest.json",
         "progress_snapshot_relay": "scripts/research/publish-b15p2-semantic-runtime-snapshot-v0.1.sh",
         "progress_snapshot_relay_sha256": "f2a6f81d058eda31d4cd05808b9aad0492d47361a0570bdef0a0becaee675b78",
         "progress_snapshot_target": "docs/research/runtime-inbox/sc001-b15p2-semantic-runtime-v0.1.5-latest.meta.json",
@@ -131,7 +131,23 @@
       "semantic_terminal_result": "docs/research/sc001-b15p2-announcement-body-semantic-audit-v015-review-result-v0.1.json",
       "semantic_terminal_result_sha256": "3a979c4d8bf662fb23c7650bc76c1d5977e32ba446f2c790e5dfd818983be870",
       "semantic_worker_manifest": "docs/research/worker-results/sc001-b15p2-semantic-v015-review-manifest-v0.1.json",
-      "semantic_worker_manifest_sha256": "d6a293894103b169e246ce5d9d7df814f99ee1ea18c6a0faa34809dcb6250b66"
+      "semantic_worker_manifest_sha256": "d6a293894103b169e246ce5d9d7df814f99ee1ea18c6a0faa34809dcb6250b66",
+      "art_schema_census_probe": "scripts/research/probe-b15p2-art-generation-schema-census-v0.1.py",
+      "art_schema_census_probe_sha256": "7ee2057a3c66e0b4a3f08b0f23a16df295abc3a4e7fcf88a71e29543b2f06de0",
+      "art_schema_census_wrapper": "scripts/research/run-b15p2-art-generation-schema-census-v0.1.sh",
+      "art_schema_census_wrapper_sha256": "5c86181cc072b393b9ed274bbb4505522286896deed0916bcad0cdb4a7984b17",
+      "art_schema_census_contract": "docs/research/sc001-b15p2-art-generation-schema-census-contract-v0.1.json",
+      "art_schema_census_contract_sha256": "5b013c1e181bdb6a6549409de346e3ebbc22f4f2d9baec4f6dea325e04646e2d",
+      "source_schema_partition": {
+        "BLT": {
+          "count": 76,
+          "status": "SEMANTICALLY_RESOLVED"
+        },
+        "DOUBLE_DASH_ART": {
+          "count": 18,
+          "status": "BODY_SOURCE_UNRESOLVED"
+        }
+      }
     }
   },
   "deferred_branches": {
