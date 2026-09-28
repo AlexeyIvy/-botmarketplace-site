@@ -1,0 +1,32 @@
+{
+  "artifacts": {
+    "exit_code": {
+      "path": null,
+      "present": false,
+      "sha256": null
+    },
+    "log": {
+      "path": "/var/lib/botmarket-github-control/repo/docs/research/runtime-inbox/sc001-b15p2-semantic-audit-v0.1.5-latest.log",
+      "present": true,
+      "sha256": "2d8ff6ea615e700aeefae5430890e951f18de5ffb30bb853bcc9049412b54fe3"
+    },
+    "marker": {
+      "path": null,
+      "present": false,
+      "sha256": null
+    },
+    "result": {
+      "path": null,
+      "present": false,
+      "sha256": null
+    },
+    "smoke": {
+      "path": "/var/lib/botmarket-github-control/repo/docs/research/runtime-inbox/sc001-b15p2-hydration-smoke-v0.1.5-latest.json",
+      "present": true,
+      "sha256": "ad886a7f5084cbfd48e641dab342c1ec14cf69645106e98665ee8bb4c5270344"
+    }
+  },
+  "content_mutated": false,
+  "published_utc": "2026-09-28T19:22:41.247932+00:00",
+  "schema": "sc001.b15p2_semantic_runtime_snapshot.v0.1"
+}

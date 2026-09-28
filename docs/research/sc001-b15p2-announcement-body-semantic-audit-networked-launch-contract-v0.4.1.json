@@ -1,0 +1,73 @@
+{
+  "schema": "sc001.b15p2_announcement_body_semantic_audit_networked_launch_contract.v0.4.1",
+  "date": "2026-09-28",
+  "status": "AUTHORIZED_RECOVERY_ITERATION_1_PREPARED_AWAITING_HOST_EXECUTION",
+  "supersedes": "docs/research/sc001-b15p2-announcement-body-semantic-audit-networked-launch-contract-v0.4.json",
+  "authorization_basis": {
+    "type": "USER_STANDING_DELEGATION_CURRENT_B15P2_ENGINEERING_CONTOUR",
+    "max_technical_recovery_iterations": 5,
+    "prepared_recovery_iteration": 1,
+    "iterations_consumed_before_execution": 0,
+    "scope_expansion_allowed": false,
+    "frozen_rule_change_allowed": false,
+    "price_or_outcome_access_allowed": false
+  },
+  "root_cause_diagnostic": {
+    "path": "docs/research/sc001-b15p2-semantic-v04-post-smoke-launch-failure-diagnostic-v0.1.json"
+  },
+  "semantic_implementation": {
+    "path": "research/sc001/sc001_b15p2_announcement_body_semantic_audit_v0_1_5.py",
+    "sha256": "70cc8164fa1cffc8f8bde749a7e3c67744974b0eeb4c8e21b6e1d10621e8094d",
+    "changed_from_failed_v0_4_attempt": false
+  },
+  "static_live_helper": {
+    "path": "scripts/research/run-b15p2-semantic-live-helper-v0.1.sh",
+    "sha256": "ce3d20648a6c835295ae3c2e49d1d5f22a9f12860ccaaf5cf363d7fb68317ca1",
+    "dynamic_heredoc_generation": false,
+    "captures_python_and_tee_exit_codes": true
+  },
+  "host_wrapper": {
+    "path": "scripts/research/run-b15p2-announcement-body-semantic-audit-v0.4.1.sh",
+    "sha256": "1ebadef385e4636bbb9adc990b8d467a8ed8deb6074e5ca5f58e5a7020cf6470",
+    "preflight_mode": "--preflight",
+    "launch_mode": "--launch",
+    "status_mode": "--status",
+    "same_exact_stage_inputs_as_v0_4": true,
+    "fresh_hydration_smoke_required": true,
+    "full_94_launch_blocked_until_smoke_pass": true,
+    "systemd_type": "exec",
+    "runtime_bound_seconds": 4200
+  },
+  "recovery_artifact_names": {
+    "log": "networked_semantic_audit_v0_4_1.log",
+    "exit_code": "networked_semantic_audit_v0_4_1.exit_code",
+    "launch_marker": "networked_semantic_audit_v0_4_1.launch.json",
+    "unit_prefix": "sc001-b15p2-semantic-audit-v041-"
+  },
+  "runtime_observability": {
+    "status_progress_target": "docs/research/runtime-inbox/sc001-b15p2-semantic-audit-v0.1.5-progress.json",
+    "terminal_result_target": "docs/research/runtime-inbox/sc001-b15p2-semantic-audit-v0.1.5-latest.json",
+    "terminal_log_target": "docs/research/runtime-inbox/sc001-b15p2-semantic-audit-v0.1.5-latest.log",
+    "user_handoff_after_status": "A short completed/checked message is sufficient; screenshots are not required."
+  },
+  "research_scope": {
+    "frozen_event_count": 94,
+    "event_set_sha256": "1063695ec003a0d6789270659822f50577e6a0f07059d88ac03a5be4288ed1a2",
+    "allowed_hostname": "announcements.bybit.com",
+    "hydration_title_path": "$.props.pageProps.articleDetail.title",
+    "hydration_primary_body_path": "$.props.pageProps.articleDetail.content.json.children",
+    "hydration_secondary_consistency_path": "$.props.pageProps.articleDetail.entry.entryKey.children"
+  },
+  "forbidden": [
+    "PRICE_ACCESS",
+    "EXTERNAL_REFERENCE_PRICE_ACCESS",
+    "INDEX_VALUE_ACCESS",
+    "BASIS_OR_SPREAD_ACCESS",
+    "RETURN_ACCESS",
+    "PNL_ACCESS",
+    "EVENT_OUTCOME_RANKING",
+    "OUTCOME_DRIVEN_FILTERING",
+    "HORIZON_TUNING_FROM_OUTCOMES",
+    "TRADING"
+  ]
+}

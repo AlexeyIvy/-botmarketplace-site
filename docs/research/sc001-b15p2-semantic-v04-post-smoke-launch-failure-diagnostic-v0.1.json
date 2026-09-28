@@ -1,0 +1,50 @@
+{
+  "schema": "sc001.b15p2_semantic_v04_post_smoke_launch_failure_diagnostic.v0.1",
+  "date": "2026-09-28",
+  "status": "TECHNICAL_LAUNCHER_FAILURE_FULL_94_NOT_STARTED",
+  "observed_runtime_snapshot": {
+    "meta_path": "docs/research/runtime-inbox/sc001-b15p2-semantic-runtime-v0.1.5-latest.meta.json",
+    "meta_sha256": "730eebad44ecdb3f5497052d1c85ecad2bbe05bc603655d008d5525eb9c05be5",
+    "log_sha256": "2d8ff6ea615e700aeefae5430890e951f18de5ffb30bb853bcc9049412b54fe3",
+    "smoke_present": true,
+    "marker_present": false,
+    "terminal_result_present": false,
+    "exit_code_present": false
+  },
+  "hydration_smoke": {
+    "status": "B15P2_ANNOUNCEMENT_BODY_HYDRATION_SMOKE_V015_PASS",
+    "sha256": "ad886a7f5084cbfd48e641dab342c1ec14cf69645106e98665ee8bb4c5270344",
+    "dogusdt_primary_body_length": 858,
+    "tonusdt_primary_body_length": 858,
+    "secondary_consistency_match_both": true
+  },
+  "root_cause": {
+    "class": "PARENT_WRAPPER_HEREDOC_VARIABLE_EXPANSION",
+    "description": "The v0.4 wrapper dynamically generated a live helper with an unquoted heredoc. Helper-local variables such as $rc and $tmp were expanded by the parent wrapper during helper creation. Because the parent wrapper used set -u and those variables were not defined in the parent scope, execution aborted after the smoke gate and before systemd-run/launch-marker creation.",
+    "full_94_started": false
+  },
+  "architectural_correction": [
+    "remove dynamic helper generation entirely",
+    "use a versioned immutable helper script with exact SHA256",
+    "copy helper as root:botmarket mode 0550 and verify it is readable/executable but not writable by botmarket",
+    "pass runtime paths through explicit systemd environment variables",
+    "capture Python and tee pipeline exit codes inside the helper using PIPESTATUS",
+    "use recovery-specific log/exit/marker names to avoid collision with the failed v0.4 attempt",
+    "validate and republish the prior PASS smoke before replacing it with a fresh smoke",
+    "publish structured progress metadata from --status into GitHub runtime inbox"
+  ],
+  "research_consequence": "NONE",
+  "semantic_result_observed": false,
+  "strategy_review_triggered": false,
+  "price_accessed": false,
+  "external_reference_price_accessed": false,
+  "index_value_accessed": false,
+  "basis_accessed": false,
+  "returns_accessed": false,
+  "pnl_accessed": false,
+  "recovery_iteration": {
+    "prepared_iteration_number": 1,
+    "consumed": false,
+    "consumption_rule": "Count only when the materially changed v0.4.1 implementation is actually re-executed after this technical failure."
+  }
+}
