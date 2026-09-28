@@ -1,0 +1,29 @@
+{
+  "schema": "sc001.b15p2_announcement_body_semantic_audit_network_v03_execution_approval.v0.1",
+  "date": "2026-09-28",
+  "status": "EXPLICIT_USER_APPROVAL_RECEIVED",
+  "approval_code": "BM-90B028B3CF4C",
+  "launch_contract": {
+    "path": "docs/research/sc001-b15p2-announcement-body-semantic-audit-networked-launch-contract-v0.3.json",
+    "sha256": "3a5069764e3a8f3155d4d444beea37bdaada50d06d33b88126cd994a24bf0a47"
+  },
+  "host_wrapper": {
+    "path": "scripts/research/run-b15p2-announcement-body-semantic-audit-v0.3.sh",
+    "sha256": "90b028b3cf4c1d12e364b7b5e147c7a44b366ddbb9b95c095cf4f49425b2513b"
+  },
+  "authorized_sequence": [
+    "RUN_NO_NETWORK_PREFLIGHT",
+    "RUN_STAGED_EXACT_V014_SELFTEST",
+    "RUN_TWO_PAGE_DOG_TON_TRANSPORT_SMOKE",
+    "IF_AND_ONLY_IF_SMOKE_PASS_START_ASYNC_FULL_94_SEMANTIC_AUDIT"
+  ],
+  "price_access_authorized": false,
+  "external_reference_price_access_authorized": false,
+  "index_value_access_authorized": false,
+  "basis_access_authorized": false,
+  "returns_access_authorized": false,
+  "pnl_access_authorized": false,
+  "event_outcome_ranking_authorized": false,
+  "trading_authorized": false,
+  "execution_started": false
+}

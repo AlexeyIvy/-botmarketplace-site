@@ -25,7 +25,7 @@
       "mutation_allowed": false
     },
     "B15-P2": {
-      "state": "SEMANTIC_NETWORK_V03_SMOKE_THEN_94_BOUNDARY_FROZEN_UNRUN",
+      "state": "SEMANTIC_NETWORK_V03_APPROVED_AWAITING_HOST_EXECUTION",
       "price_outcome_authorized": false,
       "frozen_event_count": 94,
       "event_set_sha256": "1063695ec003a0d6789270659822f50577e6a0f07059d88ac03a5be4288ed1a2",
@@ -38,9 +38,11 @@
       "networked_wrapper_sha256": "90b028b3cf4c1d12e364b7b5e147c7a44b366ddbb9b95c095cf4f49425b2513b",
       "networked_approval_code": "BM-90B028B3CF4C",
       "automatic_two_page_smoke_required": true,
-      "networked_execution_authorized": false,
+      "networked_execution_authorized": true,
       "strategy_review_required_after_terminal_full_semantic_result": true,
-      "next_allowed_action": "AWAIT_EXPLICIT_NETWORKED_SEMANTIC_V03_APPROVAL"
+      "next_allowed_action": "RUN_V03_PREFLIGHT_THEN_LAUNCH_SMOKE_GATED_ASYNC_FULL_AUDIT",
+      "execution_started": false,
+      "execution_approval": "docs/research/sc001-b15p2-announcement-body-semantic-audit-network-v03-execution-approval-v0.1.json"
     }
   },
   "deferred_branches": {
