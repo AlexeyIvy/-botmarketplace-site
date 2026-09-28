@@ -1,0 +1,27 @@
+{
+  "schema": "sc001.b15p2_announcement_article_structure_probe_execution_approval.v0.1",
+  "date": "2026-09-28",
+  "status": "EXPLICIT_USER_APPROVAL_RECEIVED",
+  "approval_code": "BM-73C14A0963A2",
+  "probe_contract": {
+    "path": "docs/research/sc001-b15p2-announcement-article-structure-probe-contract-v0.1.json",
+    "sha256": "2b8894740e35d3c4dac742c4c4c1dd6fbf107145d4ba5d875ea330c48286932e"
+  },
+  "probe_script": {
+    "path": "scripts/research/probe-b15p2-announcement-article-structure-v0.1.py",
+    "sha256": "73c14a0963a245ad9ee431f6e76d16deed99d698fddeb32f78ca4c1fb685fa81"
+  },
+  "authorized_sequence": [
+    "RUN_NO_NETWORK_SELFTEST",
+    "IF_SELFTEST_PASS_RUN_TWO_PAGE_STRUCTURE_PROBE"
+  ],
+  "semantic_classification_authorized": false,
+  "price_access_authorized": false,
+  "external_reference_price_access_authorized": false,
+  "index_value_access_authorized": false,
+  "basis_access_authorized": false,
+  "returns_access_authorized": false,
+  "pnl_access_authorized": false,
+  "trading_authorized": false,
+  "execution_started": false
+}
