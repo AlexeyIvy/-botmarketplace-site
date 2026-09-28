@@ -25,11 +25,11 @@
       "mutation_allowed": false
     },
     "B15-P2": {
-      "state": "SEMANTIC_V041_RECOVERY_ITERATION_1_PREPARED_AWAITING_HOST_EXECUTION",
+      "state": "SEMANTIC_V015_REVIEW_ART_SCHEMA_SOURCE_INTEGRITY_HOLD",
       "price_outcome_authorized": false,
       "frozen_event_count": 94,
       "event_set_sha256": "1063695ec003a0d6789270659822f50577e6a0f07059d88ac03a5be4288ed1a2",
-      "semantic_terminal_result_observed": false,
+      "semantic_terminal_result_observed": true,
       "transport_observed_pattern": "CURL_HTML_WORKS_URLLIB_HTML_FAILS",
       "article_structure_pattern": "NEXT_HYDRATION_SCRIPT_CONTAINS_TITLE",
       "v03_probe_result": "HOST_PREFLIGHT_PERMISSION_FAILURE_NO_NETWORK",
@@ -45,8 +45,8 @@
       "exact_stage_file_count": 3,
       "engineering_stabilization_rule": "THREE_LAYER_PREFREEZE_CHECK_PLUS_EXACT_STAGE",
       "hydration_stop_rule": "STOP_AFTER_V04_IF_NO_STABLE_COMMON_HIGH_CONFIDENCE_BODY_IDENTITY",
-      "strategy_review_required_now": false,
-      "next_allowed_action": "RUN_RECOVERY_ITERATION_1_SEMANTIC_V041",
+      "strategy_review_required_now": true,
+      "next_allowed_action": "PREPARE_AND_RUN_FROZEN_18_EVENT_ART_GENERATION_SCHEMA_CENSUS",
       "next_data_probe_execution_started": false,
       "execution_approval": "docs/research/sc001-b15p2-next-data-structure-probe-v04-execution-approval-v0.1.json",
       "delegated_engineering_iteration_budget": {
@@ -70,11 +70,11 @@
           "NEW_SEALED_RUNNER_BUNDLE_REQUIRING_EXACT_APPROVAL"
         ],
         "stop_after_failed_iterations": 5,
-        "iterations_consumed": 0,
+        "iterations_consumed": 1,
         "pre_iteration_requirement": "FULL_PROGRAMMER_EXPERT_REVIEW_BEFORE_EACH_EXECUTED_ITERATION",
         "iteration_accounting": "COUNT_ONLY_MATERIALLY_CHANGED_REEXECUTION_AFTER_TECHNICAL_FAILURE",
-        "prepared_iteration": 1,
-        "prepared_iteration_scope": "V0_4_1_STATIC_HELPER_RECOVERY_SAME_RESEARCH_SCOPE"
+        "prepared_iteration": 2,
+        "prepared_iteration_scope": "ALL_18_DOUBLE_DASH_ART_SCHEMA_CENSUS_SAME_FROZEN_SOURCE_SCOPE"
       },
       "runtime_output_policy": {
         "binding_policy": "docs/research/sc001-engineering-iteration-and-runtime-output-policy-v0.1.md",
@@ -106,16 +106,32 @@
       "strategy_review_required_after_terminal_full_semantic_result": true,
       "last_observed_runtime_state": {
         "hydration_smoke_status": "B15P2_ANNOUNCEMENT_BODY_HYDRATION_SMOKE_V015_PASS",
-        "hydration_smoke_sha256": "ad886a7f5084cbfd48e641dab342c1ec14cf69645106e98665ee8bb4c5270344",
-        "full_94_started": false,
-        "launch_marker_present": false,
-        "terminal_semantic_result_published": false,
-        "exit_code_present": false,
-        "failure_class": "PARENT_WRAPPER_HEREDOC_VARIABLE_EXPANSION",
-        "diagnostic": "docs/research/sc001-b15p2-semantic-v04-post-smoke-launch-failure-diagnostic-v0.1.json"
+        "full_94_started": true,
+        "full_94_completed": true,
+        "terminal_status": "B15P2_ANNOUNCEMENT_BODY_SEMANTIC_AUDIT_REVIEW",
+        "terminal_result_sha256": "8bc2c493625d82f43f0a07b5f3156c1e34ffd4054f8b1377b180e8172e68ec29",
+        "runtime_log_sha256": "09dbba46cdee18dd39c6ce706b32260ea8a45e626560947eca8803831341e3df",
+        "events_started": 94,
+        "events_resolved": 76,
+        "body_source_errors": 18,
+        "transport_retries": 0,
+        "url_generation_partition": {
+          "BLT": {
+            "count": 76,
+            "status": "RESOLVED"
+          },
+          "DOUBLE_DASH_ART": {
+            "count": 18,
+            "status": "BODY_SOURCE_UNRESOLVED"
+          }
+        }
       },
       "semantic_live_helper": "scripts/research/run-b15p2-semantic-live-helper-v0.1.sh",
-      "semantic_live_helper_sha256": "ce3d20648a6c835295ae3c2e49d1d5f22a9f12860ccaaf5cf363d7fb68317ca1"
+      "semantic_live_helper_sha256": "ce3d20648a6c835295ae3c2e49d1d5f22a9f12860ccaaf5cf363d7fb68317ca1",
+      "semantic_terminal_result": "docs/research/sc001-b15p2-announcement-body-semantic-audit-v015-review-result-v0.1.json",
+      "semantic_terminal_result_sha256": "3a979c4d8bf662fb23c7650bc76c1d5977e32ba446f2c790e5dfd818983be870",
+      "semantic_worker_manifest": "docs/research/worker-results/sc001-b15p2-semantic-v015-review-manifest-v0.1.json",
+      "semantic_worker_manifest_sha256": "d6a293894103b169e246ce5d9d7df814f99ee1ea18c6a0faa34809dcb6250b66"
     }
   },
   "deferred_branches": {

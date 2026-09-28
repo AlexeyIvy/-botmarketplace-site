@@ -1,0 +1,87 @@
+{
+  "schema": "sc001.b15p2_announcement_body_semantic_audit_v015_review_result.v0.1",
+  "date": "2026-09-28",
+  "status": "B15P2_ANNOUNCEMENT_BODY_SEMANTIC_AUDIT_REVIEW",
+  "runtime_result": {
+    "path": "docs/research/runtime-inbox/sc001-b15p2-semantic-audit-v0.1.5-latest.json",
+    "sha256": "8bc2c493625d82f43f0a07b5f3156c1e34ffd4054f8b1377b180e8172e68ec29",
+    "size_bytes": 168450
+  },
+  "runtime_log": {
+    "path": "docs/research/runtime-inbox/sc001-b15p2-semantic-audit-v0.1.5-latest.log",
+    "sha256": "09dbba46cdee18dd39c6ce706b32260ea8a45e626560947eca8803831341e3df",
+    "size_bytes": 10028
+  },
+  "execution": {
+    "frozen_event_count": 94,
+    "events_started": 94,
+    "events_semantically_resolved": 76,
+    "events_body_source_unresolved": 18,
+    "transport_retries": 0,
+    "transport_errors": 0,
+    "semantic_terminal_result_observed": true
+  },
+  "resolved_semantics": {
+    "exact_time_match_count": 76,
+    "automatic_close_explicit_count": 76,
+    "active_order_auto_cancel_explicit_count": 76,
+    "trading_stop_explicit_count": 76,
+    "closing_price_basis_counts": {
+      "AVERAGE_INDEX_PRICE_WINDOW": 76
+    },
+    "closing_price_window_minute_counts": {
+      "30": 76
+    },
+    "funding_mentioned_count": 0,
+    "revision_wording_count": 0,
+    "semantic_unresolved_among_successfully_extracted": 0,
+    "time_mismatch_among_successfully_extracted": 0
+  },
+  "source_schema_partition": {
+    "resolved_url_generation": {
+      "class": "BLT",
+      "count": 76,
+      "observed_delivery_range_utc": "2026-01-02T09:00:00Z..2026-06-26T11:30:00Z",
+      "hydration_primary_body_path": "$.props.pageProps.articleDetail.content.json.children",
+      "all_secondary_consistency_matches": true,
+      "primary_text_leaf_count_all": 9
+    },
+    "unresolved_url_generation": {
+      "class": "DOUBLE_DASH_ART",
+      "count": 18,
+      "observed_delivery_range_utc": "2026-07-10T09:00:00Z..2026-09-18T09:00:00Z",
+      "error": "HYDRATION_PRIMARY_BODY_PATH",
+      "symbols": [
+        "ESUSDT",
+        "SCRUSDT",
+        "SWARMSUSDT",
+        "HIGHUSDT",
+        "PUMPBTCUSDT",
+        "WHITEWHALEUSDT",
+        "AERGOUSDT",
+        "BOBBOBUSDT",
+        "GIGAUSDT",
+        "ROAMUSDT",
+        "TSTBSCUSDT",
+        "VANRYUSDT",
+        "HFTUSDT",
+        "VINEUSDT",
+        "ACXUSDT",
+        "ASPUSDT",
+        "SCRTUSDT",
+        "ICXUSDT"
+      ]
+    }
+  },
+  "interpretation": "The REVIEW is a source-schema integrity hold, not an economic or semantic contradiction. All 76 BLT-generation pages were fully resolved and shared the same explicit forced-close semantics. All 18 failures are concentrated in the later DOUBLE_DASH_ART URL generation and fail at the frozen hydration body path before semantic classification. The next task is a structural census of all 18 ART-generation pages without prices or outcome access.",
+  "decision": "HOLD_SOURCE_SCHEMA_INTEGRITY",
+  "next_allowed_action": "RUN_FROZEN_18_EVENT_ART_GENERATION_HYDRATION_SCHEMA_CENSUS",
+  "strategy_review_required": true,
+  "price_accessed": false,
+  "external_reference_price_accessed": false,
+  "index_value_accessed": false,
+  "basis_accessed": false,
+  "returns_accessed": false,
+  "pnl_accessed": false,
+  "event_ranked_by_outcome": false
+}

@@ -1,0 +1,29 @@
+{
+  "basis_access_authorized": false,
+  "exit_code": "2",
+  "external_reference_price_access_authorized": false,
+  "index_value_access_authorized": false,
+  "pnl_access_authorized": false,
+  "price_access_authorized": false,
+  "progress": {
+    "done": 76,
+    "errors": 18,
+    "expected_events": 94,
+    "last_progress": "EVENT_ERROR 094/094 symbol=ICXUSDT kind=RuntimeError elapsed_s=0.337 error=HYDRATION_PRIMARY_BODY_PATH",
+    "retries": 0,
+    "started": 94
+  },
+  "published_utc": "2026-09-28T19:37:05.796472+00:00",
+  "returns_access_authorized": false,
+  "schema": "sc001.b15p2_semantic_audit_progress.v0.1",
+  "smoke_status": "B15P2_ANNOUNCEMENT_BODY_HYDRATION_SMOKE_V015_PASS",
+  "systemd": {
+    "active_state": "failed",
+    "exec_main_code": "1",
+    "exec_main_status": "2",
+    "result": "exit-code",
+    "sub_state": "failed"
+  },
+  "terminal_status": "B15P2_ANNOUNCEMENT_BODY_SEMANTIC_AUDIT_REVIEW",
+  "unit": "sc001-b15p2-semantic-audit-v041-20260928T193218Z"
+}

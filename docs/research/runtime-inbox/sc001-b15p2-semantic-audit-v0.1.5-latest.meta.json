@@ -1,0 +1,10 @@
+{
+  "content_mutated": false,
+  "log_relative_path": "docs/research/runtime-inbox/sc001-b15p2-semantic-audit-v0.1.5-latest.log",
+  "log_sha256": "09dbba46cdee18dd39c6ce706b32260ea8a45e626560947eca8803831341e3df",
+  "published_utc": "2026-09-28T19:37:05.536867+00:00",
+  "result_relative_path": "docs/research/runtime-inbox/sc001-b15p2-semantic-audit-v0.1.5-latest.json",
+  "result_sha256": "8bc2c493625d82f43f0a07b5f3156c1e34ffd4054f8b1377b180e8172e68ec29",
+  "result_status": "B15P2_ANNOUNCEMENT_BODY_SEMANTIC_AUDIT_REVIEW",
+  "schema": "sc001.semantic_runtime_result_publish_meta.v0.1"
+}
