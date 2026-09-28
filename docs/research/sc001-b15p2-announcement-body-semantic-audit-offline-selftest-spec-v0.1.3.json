@@ -1,0 +1,32 @@
+{
+  "schema": "sc001.b15p2_announcement_body_semantic_audit_offline_selftest_spec.v0.1.3",
+  "date": "2026-09-28",
+  "status": "READY_FOR_SEALED_OFFLINE_SELFTEST",
+  "runtime": "offline-research-v1",
+  "entrypoint": "research/sc001/sc001_b15p2_announcement_body_semantic_audit_v0_1_3.py",
+  "entrypoint_sha256": "8a5ba89168dcd7845a7f340027e552767b41836b3c10755df00a6f9b7a309e78",
+  "inputs": [],
+  "expected_pass": "B15P2_ANNOUNCEMENT_BODY_SEMANTIC_AUDIT_V013_SELF_TEST_PASS",
+  "mandatory_checks": [
+    "Runner launcher positional contract",
+    "symmetric HTML skip-state handling",
+    "exact article-region isolation",
+    "announced UTC timestamp parser",
+    "exact deliveryTime match",
+    "trading-stop detection",
+    "active/conditional order auto-cancel detection",
+    "open-position automatic-close detection",
+    "average-index-price window parsing",
+    "other explicit closing-basis fixture",
+    "funding/revision page-chrome false-positive protection",
+    "time-mismatch fail-closed fixture",
+    "transport progress instrumentation does not expose semantic classifications"
+  ],
+  "network_calls": false,
+  "real_announcement_body_access": false,
+  "price_access": false,
+  "basis_access": false,
+  "returns_access": false,
+  "pnl_access": false,
+  "next_after_pass": "PREPARE_ASYNC_NETWORKED_94_PAGE_SEMANTIC_AUDIT_BOUNDARY"
+}

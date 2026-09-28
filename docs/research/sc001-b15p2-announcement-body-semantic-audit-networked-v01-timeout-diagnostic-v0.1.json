@@ -1,0 +1,37 @@
+{
+  "schema": "sc001.b15p2_announcement_body_semantic_audit_networked_v01_timeout_diagnostic.v0.1",
+  "date": "2026-09-28",
+  "status": "TECHNICAL_TIMEOUT_NO_TERMINAL_SEMANTIC_RESULT",
+  "unit": "sc001-b15p2-semantic-audit-v01-20260928T055315Z",
+  "wrapper": {
+    "path": "scripts/research/run-b15p2-announcement-body-semantic-audit-v0.1.sh",
+    "sha256": "9e33adf5736b362fc491385ebee865c5b4a6df458df0f1aaa315a546e800d023"
+  },
+  "observed": {
+    "no_network_preflight": "PASS",
+    "staged_selftest": "B15P2_ANNOUNCEMENT_BODY_SEMANTIC_AUDIT_V012_SELF_TEST_PASS",
+    "systemd_result": "timeout",
+    "exec_main_code": 2,
+    "exec_main_status": 15,
+    "exit_file": "PENDING_OR_ABSENT",
+    "terminal_result": "PENDING_OR_REVIEW",
+    "persistent_log_tail_at_wrapper_return": "EMPTY"
+  },
+  "interpretation": "The 1800-second host runtime bound terminated the sequential 94-page acquisition before a terminal PASS/REVIEW report was persisted. This is not a semantic REVIEW and not a mechanism result.",
+  "real_announcement_access_started": true,
+  "terminal_semantic_result_observed": false,
+  "price_access_authorized": false,
+  "external_reference_price_access_authorized": false,
+  "index_value_access_authorized": false,
+  "basis_access_authorized": false,
+  "returns_access_authorized": false,
+  "pnl_access_authorized": false,
+  "strategy_review_triggered": false,
+  "required_correction": [
+    "emit transport-only per-event progress without semantic classifications",
+    "reduce single-request timeout and retry count to keep worst-case runtime bounded",
+    "make host execution asynchronous so the Termux prompt returns immediately",
+    "allow status polling from the same Termux session",
+    "increase total service runtime bound so 94 bounded page fetches can finish"
+  ]
+}

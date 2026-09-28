@@ -1,0 +1,50 @@
+{
+  "schema": "sc001.b15p2_announcement_body_semantic_audit_implementation_freeze.v0.1.3",
+  "date": "2026-09-28",
+  "status": "FROZEN_OPERATIONAL_PROGRESS_TIMEOUT_CORRECTION_BEFORE_RETRY",
+  "supersedes": "docs/research/sc001-b15p2-announcement-body-semantic-audit-implementation-freeze-v0.1.2.json",
+  "protocol": {
+    "path": "docs/research/sc001-b15p2-announcement-body-semantic-audit-protocol-v0.1.md",
+    "sha256": "4209779876e3796feff16a8310af93324cd1927862874524fb90ebf95d51d84f",
+    "changed": false
+  },
+  "entrypoint": {
+    "path": "research/sc001/sc001_b15p2_announcement_body_semantic_audit_v0_1_3.py",
+    "sha256": "8a5ba89168dcd7845a7f340027e552767b41836b3c10755df00a6f9b7a309e78"
+  },
+  "triggering_failure": {
+    "diagnostic_path": "docs/research/sc001-b15p2-announcement-body-semantic-audit-networked-v01-timeout-diagnostic-v0.1.json",
+    "classification": "HOST_RUNTIME_TIMEOUT_NO_TERMINAL_SEMANTIC_RESULT"
+  },
+  "semantic_invariants": {
+    "classify_text_unchanged_from_v0_1_2": true,
+    "article_region_unchanged_from_v0_1_2": true,
+    "frozen_input_validation_unchanged_from_v0_1_2": true
+  },
+  "operational_changes": {
+    "per_request_timeout_seconds": 30,
+    "request_attempts": 2,
+    "request_retry_diagnostics": true,
+    "event_start_progress": true,
+    "event_done_progress": true,
+    "progress_contains_semantic_classification": false,
+    "acquisition_start_finish_timestamps": true
+  },
+  "frozen_input": {
+    "source_result_sha256": "c28aeb2b1ac0a23fb0e4420ced943fd619dd0a60e3fdcf5820299579cb94206c",
+    "event_set_sha256": "1063695ec003a0d6789270659822f50577e6a0f07059d88ac03a5be4288ed1a2",
+    "event_count": 94,
+    "unique_announcement_url_count": 94
+  },
+  "source_scope_changed": false,
+  "semantic_classification_rules_changed": false,
+  "pass_review_rules_changed": false,
+  "price_access_authorized": false,
+  "external_reference_price_access_authorized": false,
+  "index_value_access_authorized": false,
+  "basis_access_authorized": false,
+  "return_access_authorized": false,
+  "pnl_authorized": false,
+  "event_outcome_ranking_authorized": false,
+  "expected_selftest_pass": "B15P2_ANNOUNCEMENT_BODY_SEMANTIC_AUDIT_V013_SELF_TEST_PASS"
+}
