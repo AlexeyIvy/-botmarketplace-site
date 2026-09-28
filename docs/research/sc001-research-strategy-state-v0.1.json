@@ -8,7 +8,7 @@
   "baseline_git_head": "94bf690f5c273c98b4a5e58d4bb2fe6ea7f9cf91",
   "last_strategy_review_head": "002f8bf9258058f8e14775472d315a69a53da031",
   "binding_refs": {
-    "roadmap": "docs/research/sc001-current-roadmap-and-stop-rules-v5.187.md",
+    "roadmap": "docs/research/sc001-current-roadmap-and-stop-rules-v5.188.md",
     "governance": "docs/research/sc001-midcourse-research-strategy-audit-and-governance-amendment-v0.2.md",
     "reusable_policy": "docs/research/sc001-terminal-experiment-reusable-block-extraction-policy-v0.1.md",
     "reusable_registry": "docs/research/sc001-reusable-market-building-blocks-registry-v0.9.md",
@@ -25,7 +25,7 @@
       "mutation_allowed": false
     },
     "B15-P2": {
-      "state": "ARTICLE_STRUCTURE_PROBE_APPROVED_AWAITING_HOST_EXECUTION",
+      "state": "ARTICLE_STRUCTURE_PROBE_APPROVED_CORRECTED_HOST_WRAPPER_READY",
       "price_outcome_authorized": false,
       "frozen_event_count": 94,
       "event_set_sha256": "1063695ec003a0d6789270659822f50577e6a0f07059d88ac03a5be4288ed1a2",
@@ -38,9 +38,11 @@
       "article_structure_probe_approval_code": "BM-73C14A0963A2",
       "article_structure_probe_authorized": true,
       "strategy_review_required_now": false,
-      "next_allowed_action": "RUN_ARTICLE_STRUCTURE_SELFTEST_THEN_LIVE_PROBE",
+      "next_allowed_action": "RERUN_APPROVED_ARTICLE_STRUCTURE_PROBE_VIA_CORRECTED_HOST_WRAPPER",
       "article_structure_probe_execution_started": false,
-      "execution_approval": "docs/research/sc001-b15p2-announcement-article-structure-probe-execution-approval-v0.1.json"
+      "execution_approval": "docs/research/sc001-b15p2-announcement-article-structure-probe-execution-approval-v0.1.json",
+      "article_structure_probe_wrapper": "scripts/research/run-b15p2-announcement-article-structure-probe-v0.1.sh",
+      "article_structure_probe_wrapper_sha256": "3439f583b0f9d485252193b8af7f4a0117bfdc02ba5cfdb60a19bf831cdeaeb0"
     }
   },
   "deferred_branches": {

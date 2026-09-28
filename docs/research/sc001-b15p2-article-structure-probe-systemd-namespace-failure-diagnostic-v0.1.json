@@ -1,0 +1,39 @@
+{
+  "schema": "sc001.b15p2_article_structure_probe_systemd_namespace_failure_diagnostic.v0.1",
+  "date": "2026-09-28",
+  "status": "HOST_LAUNCHER_FAILURE_PROBE_NOT_EXECUTED",
+  "approved_probe": {
+    "path": "scripts/research/probe-b15p2-announcement-article-structure-v0.1.py",
+    "sha256": "73c14a0963a245ad9ee431f6e76d16deed99d698fddeb32f78ca4c1fb685fa81",
+    "approval_code": "BM-73C14A0963A2"
+  },
+  "failed_unit": "sc001-b15p2-article-structure-probe-v01.service",
+  "observed": {
+    "selftest": "B15P2_ANNOUNCEMENT_ARTICLE_STRUCTURE_PROBE_V01_SELF_TEST_PASS",
+    "systemd_result": "exit-code",
+    "exec_main_status": "226/NAMESPACE",
+    "error": "Failed to set up mount namespacing: /home/botmarket/sc001_data/SC001_B15P2_ANNOUNCEMENT_STRUCTURE_PROBE: No such file or directory",
+    "runtime_warning": "RuntimeMaxSec has no effect in combination with Type=oneshot"
+  },
+  "root_cause": [
+    "ReadWritePaths target did not exist before systemd created the protected mount namespace",
+    "Type=oneshot made RuntimeMaxSec ineffective for the intended runtime cap"
+  ],
+  "probe_process_started": false,
+  "network_calls_performed_by_probe": false,
+  "semantic_classification_performed": false,
+  "price_accessed": false,
+  "external_reference_price_accessed": false,
+  "index_value_accessed": false,
+  "basis_accessed": false,
+  "returns_accessed": false,
+  "pnl_accessed": false,
+  "strategy_review_triggered": false,
+  "correction": [
+    "create output directory before systemd-run",
+    "use Type=exec rather than Type=oneshot",
+    "retain RuntimeMaxSec=180",
+    "use a unique transient unit name",
+    "persist launch marker and expose status mode"
+  ]
+}
