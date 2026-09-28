@@ -1,0 +1,83 @@
+{
+  "schema": "sc001.b15p2_announcement_body_semantic_audit_implementation_freeze.v0.1.5",
+  "date": "2026-09-28",
+  "status": "FROZEN_FINAL_HYDRATION_EXTRACTOR_BEFORE_NETWORK_EXECUTION",
+  "supersedes": "docs/research/sc001-b15p2-announcement-body-semantic-audit-implementation-freeze-v0.1.4.json",
+  "protocol": {
+    "path": "docs/research/sc001-b15p2-announcement-body-semantic-audit-protocol-v0.1.md",
+    "sha256": "4209779876e3796feff16a8310af93324cd1927862874524fb90ebf95d51d84f",
+    "changed": false
+  },
+  "entrypoint": {
+    "path": "research/sc001/sc001_b15p2_announcement_body_semantic_audit_v0_1_5.py",
+    "sha256": "70cc8164fa1cffc8f8bde749a7e3c67744974b0eeb4c8e21b6e1d10621e8094d"
+  },
+  "hydration_selection": {
+    "path": "docs/research/sc001-b15p2-hydration-body-selection-freeze-v0.1.json",
+    "sha256": "ba2ccfa336a70e0592a9e4ce1742161e518060ceb5da090b37c666bc34c2c033",
+    "title_path": "$.props.pageProps.articleDetail.title",
+    "primary_body_path": "$.props.pageProps.articleDetail.content.json.children",
+    "secondary_consistency_path": "$.props.pageProps.articleDetail.entry.entryKey.children",
+    "adaptive_fallback_paths": false
+  },
+  "mapper_evidence": {
+    "path": "docs/research/sc001-b15p2-generic-hydration-mapper-v04-result-v0.1.json",
+    "sha256": "3cd9216f0974d9b2e33886dfe59955946bc541b2fb9b4ae871332f4bffeccb38",
+    "runtime_report_sha256": "dc7afb944164b315c5523bb216a49ba8c2352f804feaaff7ae6af778bfe1233d"
+  },
+  "semantic_invariants": {
+    "classify_text_unchanged_from_v0_1_4": true,
+    "parse_announcement_time_unchanged_from_v0_1_4": true,
+    "frozen_input_validation_unchanged_from_v0_1_4": true,
+    "curl_transport_unchanged_from_v0_1_4": true,
+    "pass_review_rules_unchanged": true,
+    "event_set_unchanged": true
+  },
+  "hydration_extraction": {
+    "source": "__NEXT_DATA__",
+    "one_exact_next_data_script_required": true,
+    "exact_title_equality_required": true,
+    "primary_body_type": "list",
+    "minimum_normalized_body_chars": 120,
+    "deterministic_text_leaf_traversal": true,
+    "secondary_consistency_optional_if_absent": true,
+    "secondary_consistency_fail_closed_if_present_and_mismatched": true,
+    "article_region": "normalized exact title + normalized primary rich-text body",
+    "full_article_body_persisted": false
+  },
+  "execution_sequence": [
+    "exact-stage preflight",
+    "offline self-test from staged bytes",
+    "DOGUSDT/TONUSDT hydration smoke using same staged implementation",
+    "strict smoke-result validation",
+    "only on smoke PASS start full frozen 94-page semantic audit asynchronously"
+  ],
+  "frozen_input": {
+    "source_result_sha256": "c28aeb2b1ac0a23fb0e4420ced943fd619dd0a60e3fdcf5820299579cb94206c",
+    "event_set_sha256": "1063695ec003a0d6789270659822f50577e6a0f07059d88ac03a5be4288ed1a2",
+    "event_count": 94,
+    "unique_announcement_url_count": 94
+  },
+  "transport": {
+    "client": "curl",
+    "address_family": "IPv4",
+    "http_version": "HTTP/1.1",
+    "user_agent": "browser-like",
+    "proxy": false,
+    "https_only": true,
+    "same_host_redirects_only": true,
+    "connect_timeout_seconds": 5,
+    "total_timeout_seconds": 15,
+    "attempts_per_url": 2,
+    "max_html_bytes": 2000000
+  },
+  "price_access_authorized": false,
+  "external_reference_price_access_authorized": false,
+  "index_value_access_authorized": false,
+  "basis_access_authorized": false,
+  "returns_access_authorized": false,
+  "pnl_access_authorized": false,
+  "event_outcome_ranking_authorized": false,
+  "expected_selftest_pass": "B15P2_ANNOUNCEMENT_BODY_SEMANTIC_AUDIT_V015_SELF_TEST_PASS",
+  "expected_smoke_pass": "B15P2_ANNOUNCEMENT_BODY_HYDRATION_SMOKE_V015_PASS"
+}

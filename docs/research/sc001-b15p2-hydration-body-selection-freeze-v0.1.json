@@ -1,0 +1,40 @@
+{
+  "schema": "sc001.b15p2_hydration_body_selection_freeze.v0.1",
+  "date": "2026-09-28",
+  "status": "FROZEN_BEFORE_FINAL_HYDRATION_EXTRACTION",
+  "evidence": {
+    "mapper_result": {
+      "path": "docs/research/sc001-b15p2-generic-hydration-mapper-v04-result-v0.1.json"
+    },
+    "runtime_report_sha256": "dc7afb944164b315c5523bb216a49ba8c2352f804feaaff7ae6af778bfe1233d"
+  },
+  "script_role": "__NEXT_DATA__",
+  "exact_title_path": "$.props.pageProps.articleDetail.title",
+  "primary_body_path": "$.props.pageProps.articleDetail.content.json.children",
+  "secondary_consistency_path": "$.props.pageProps.articleDetail.entry.entryKey.children",
+  "selection_rules": [
+    "exact title must equal Delisting of <EXACT_SYMBOL> Perpetual Contract after whitespace normalization",
+    "primary body must exist and be a nonempty list",
+    "primary body text is extracted deterministically from descendant text leaves in document order",
+    "normalized primary body length must be at least 120 characters",
+    "article region is exact title plus normalized primary body",
+    "if secondary consistency path exists, extract it with the same algorithm and require normalized body SHA256 equality",
+    "secondary path absence does not authorize fallback and does not invalidate an otherwise valid primary path",
+    "primary path failure does not authorize another candidate path; event becomes BODY_SOURCE_UNRESOLVED/REVIEW",
+    "no page-specific path selection or adaptive fallback is allowed"
+  ],
+  "integrity": {
+    "minimum_normalized_body_chars": 120,
+    "one_exact_next_data_script_required": true,
+    "one_exact_title_required": true,
+    "same_host_https_only": true
+  },
+  "semantic_rules_changed": false,
+  "frozen_event_set_changed": false,
+  "price_access_authorized": false,
+  "external_reference_price_access_authorized": false,
+  "index_value_access_authorized": false,
+  "basis_access_authorized": false,
+  "returns_access_authorized": false,
+  "pnl_access_authorized": false
+}

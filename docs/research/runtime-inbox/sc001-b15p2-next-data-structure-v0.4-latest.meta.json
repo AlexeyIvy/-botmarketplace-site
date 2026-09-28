@@ -1,0 +1,9 @@
+{
+  "content_mutated": false,
+  "published_utc": "2026-09-28T18:44:40.851077+00:00",
+  "schema": "sc001.runtime_result_publish_meta.v0.1",
+  "source_path": "/home/botmarket/sc001_data/SC001_B15P2_NEXT_DATA_STRUCTURE_PROBE/next_data_structure_probe_v0_4_1790619841_p65039.json",
+  "source_sha256": "dc7afb944164b315c5523bb216a49ba8c2352f804feaaff7ae6af778bfe1233d",
+  "source_size_bytes": 110833,
+  "target_relative_path": "docs/research/runtime-inbox/sc001-b15p2-next-data-structure-v0.4-latest.json"
+}

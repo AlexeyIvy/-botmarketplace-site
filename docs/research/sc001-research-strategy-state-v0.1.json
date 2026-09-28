@@ -8,7 +8,7 @@
   "baseline_git_head": "94bf690f5c273c98b4a5e58d4bb2fe6ea7f9cf91",
   "last_strategy_review_head": "002f8bf9258058f8e14775472d315a69a53da031",
   "binding_refs": {
-    "roadmap": "docs/research/sc001-current-roadmap-and-stop-rules-v5.191.md",
+    "roadmap": "docs/research/sc001-current-roadmap-and-stop-rules-v5.192.md",
     "governance": "docs/research/sc001-midcourse-research-strategy-audit-and-governance-amendment-v0.2.md",
     "reusable_policy": "docs/research/sc001-terminal-experiment-reusable-block-extraction-policy-v0.1.md",
     "reusable_registry": "docs/research/sc001-reusable-market-building-blocks-registry-v0.9.md",
@@ -25,7 +25,7 @@
       "mutation_allowed": false
     },
     "B15-P2": {
-      "state": "GENERIC_HYDRATION_MAPPER_V04_APPROVED_AWAITING_HOST_EXECUTION",
+      "state": "SEMANTIC_V015_SMOKE_GATED_FULL_94_AUTHORIZED_AWAITING_HOST_EXECUTION",
       "price_outcome_authorized": false,
       "frozen_event_count": 94,
       "event_set_sha256": "1063695ec003a0d6789270659822f50577e6a0f07059d88ac03a5be4288ed1a2",
@@ -46,7 +46,7 @@
       "engineering_stabilization_rule": "THREE_LAYER_PREFREEZE_CHECK_PLUS_EXACT_STAGE",
       "hydration_stop_rule": "STOP_AFTER_V04_IF_NO_STABLE_COMMON_HIGH_CONFIDENCE_BODY_IDENTITY",
       "strategy_review_required_now": false,
-      "next_allowed_action": "RUN_GENERIC_HYDRATION_MAPPER_V04_VIA_EXACT_STAGE_HOST_WRAPPER",
+      "next_allowed_action": "RUN_SEMANTIC_V015_SMOKE_GATE_THEN_FULL_94",
       "next_data_probe_execution_started": false,
       "execution_approval": "docs/research/sc001-b15p2-next-data-structure-probe-v04-execution-approval-v0.1.json",
       "delegated_engineering_iteration_budget": {
@@ -79,9 +79,25 @@
         "large_output_primary_handoff": "STRUCTURED_VPS_JSON_OR_PERSISTENT_LOG",
         "screenshot_role": "COMPLETION_TOKEN_OR_PATH_ONLY",
         "runtime_inbox_enabled": true,
-        "current_result_relay": "scripts/research/publish-b15p2-next-data-v04-result-to-github-v0.1.sh",
-        "current_runtime_inbox_target": "docs/research/runtime-inbox/sc001-b15p2-next-data-structure-v0.4-latest.json"
-      }
+        "current_result_relay": "STATUS_BUILTIN_RUNTIME_INBOX_RELAY",
+        "current_runtime_inbox_target": "docs/research/runtime-inbox/sc001-b15p2-semantic-audit-v0.1.5-latest.json"
+      },
+      "semantic_audit_implementation": "research/sc001/sc001_b15p2_announcement_body_semantic_audit_v0_1_5.py",
+      "semantic_audit_implementation_sha256": "70cc8164fa1cffc8f8bde749a7e3c67744974b0eeb4c8e21b6e1d10621e8094d",
+      "semantic_audit_wrapper": "scripts/research/run-b15p2-announcement-body-semantic-audit-v0.4.sh",
+      "semantic_audit_wrapper_sha256": "f2ad6e0e1de6ef3f4fdc7e3eb0db25028a9c865ffb6593234709030564b5fb1c",
+      "semantic_audit_contract": "docs/research/sc001-b15p2-announcement-body-semantic-audit-networked-launch-contract-v0.4.json",
+      "semantic_audit_contract_sha256": "9bd0c5fef69d6c65989599df961aef8b871608946c67bef1e9b7bc4892d0117c",
+      "hydration_selection_freeze": "docs/research/sc001-b15p2-hydration-body-selection-freeze-v0.1.json",
+      "hydration_selection_sha256": "ba2ccfa336a70e0592a9e4ce1742161e518060ceb5da090b37c666bc34c2c033",
+      "hydration_mapper_result": "docs/research/sc001-b15p2-generic-hydration-mapper-v04-result-v0.1.json",
+      "hydration_mapper_result_sha256": "3cd9216f0974d9b2e33886dfe59955946bc541b2fb9b4ae871332f4bffeccb38",
+      "primary_body_path": "$.props.pageProps.articleDetail.content.json.children",
+      "secondary_consistency_path": "$.props.pageProps.articleDetail.entry.entryKey.children",
+      "semantic_network_authorized": true,
+      "authorization_basis": "USER_STANDING_DELEGATION_CURRENT_B15P2_ENGINEERING_CONTOUR_UP_TO_5_RECOVERY_ITERATIONS",
+      "execution_started": false,
+      "strategy_review_required_after_terminal_full_semantic_result": true
     }
   },
   "deferred_branches": {

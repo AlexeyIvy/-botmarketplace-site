@@ -1,0 +1,102 @@
+{
+  "schema": "sc001.b15p2_announcement_body_semantic_audit_networked_launch_contract.v0.4",
+  "date": "2026-09-28",
+  "status": "AUTHORIZED_BY_STANDING_ENGINEERING_DELEGATION_AWAITING_HOST_EXECUTION",
+  "purpose": "Validate the frozen final hydration extractor on DOGUSDT and TONUSDT, then only on smoke PASS execute the frozen 94-event semantic audit using the same exact staged implementation.",
+  "authorization_basis": {
+    "type": "USER_STANDING_DELEGATION_CURRENT_B15P2_ENGINEERING_CONTOUR",
+    "max_technical_recovery_iterations": 5,
+    "iterations_consumed_before_this_execution": 0,
+    "scope_expansion_allowed": false,
+    "frozen_rule_change_allowed": false,
+    "price_or_outcome_access_allowed": false
+  },
+  "implementation": {
+    "path": "research/sc001/sc001_b15p2_announcement_body_semantic_audit_v0_1_5.py",
+    "sha256": "70cc8164fa1cffc8f8bde749a7e3c67744974b0eeb4c8e21b6e1d10621e8094d"
+  },
+  "host_wrapper": {
+    "path": "scripts/research/run-b15p2-announcement-body-semantic-audit-v0.4.sh",
+    "sha256": "f2ad6e0e1de6ef3f4fdc7e3eb0db25028a9c865ffb6593234709030564b5fb1c",
+    "preflight_mode": "--preflight",
+    "launch_mode": "--launch",
+    "status_mode": "--status"
+  },
+  "implementation_freeze": {
+    "path": "docs/research/sc001-b15p2-announcement-body-semantic-audit-implementation-freeze-v0.1.5.json",
+    "sha256": "ba373094d153dba028e39ce3cc20b1377a23af009a869bffc2a8b0a8b61a6b47"
+  },
+  "hydration_selection": {
+    "path": "docs/research/sc001-b15p2-hydration-body-selection-freeze-v0.1.json",
+    "sha256": "ba2ccfa336a70e0592a9e4ce1742161e518060ceb5da090b37c666bc34c2c033",
+    "exact_title_path": "$.props.pageProps.articleDetail.title",
+    "primary_body_path": "$.props.pageProps.articleDetail.content.json.children",
+    "secondary_consistency_path": "$.props.pageProps.articleDetail.entry.entryKey.children",
+    "adaptive_fallback_paths": false
+  },
+  "mapper_evidence": {
+    "path": "docs/research/sc001-b15p2-generic-hydration-mapper-v04-result-v0.1.json",
+    "sha256": "3cd9216f0974d9b2e33886dfe59955946bc541b2fb9b4ae871332f4bffeccb38",
+    "runtime_report_sha256": "dc7afb944164b315c5523bb216a49ba8c2352f804feaaff7ae6af778bfe1233d"
+  },
+  "frozen_input": {
+    "source_result_sha256": "c28aeb2b1ac0a23fb0e4420ced943fd619dd0a60e3fdcf5820299579cb94206c",
+    "event_set_sha256": "1063695ec003a0d6789270659822f50577e6a0f07059d88ac03a5be4288ed1a2",
+    "event_count": 94,
+    "unique_announcement_url_count": 94
+  },
+  "execution_sequence": [
+    "validate exact SHA/schema/firewall contracts",
+    "copy exactly seven frozen files into root:botmarket read-only staging",
+    "verify staged bytes and non-writability by botmarket",
+    "run v0.1.5 no-network self-test as botmarket",
+    "run DOGUSDT/TONUSDT hydration smoke as botmarket using same staged implementation",
+    "strictly validate smoke structure and primary-secondary body consistency",
+    "only if smoke PASS start full frozen 94-event semantic audit asynchronously as botmarket",
+    "persist structured result and log on VPS",
+    "on status, validate and relay smoke/terminal JSON and log into GitHub runtime inbox"
+  ],
+  "transport": {
+    "allowed_hostname": "announcements.bybit.com",
+    "client": "curl",
+    "address_family": "IPv4",
+    "http_version": "HTTP/1.1",
+    "user_agent": "browser-like",
+    "proxy": false,
+    "same_host_redirects_only": true
+  },
+  "systemd": {
+    "type": "exec",
+    "runtime_bound_seconds": 4200,
+    "user": "botmarket",
+    "group": "botmarket",
+    "protect_system": "strict",
+    "stage_read_only": true,
+    "output_directory_only_write_path": true
+  },
+  "runtime_output": {
+    "structured_vps_result": true,
+    "persistent_log": true,
+    "concise_terminal_summary": true,
+    "status_relay_to_github_runtime_inbox": true,
+    "terminal_result_target": "docs/research/runtime-inbox/sc001-b15p2-semantic-audit-v0.1.5-latest.json",
+    "log_target": "docs/research/runtime-inbox/sc001-b15p2-semantic-audit-v0.1.5-latest.log"
+  },
+  "forbidden": [
+    "PRICE_ACCESS",
+    "EXTERNAL_REFERENCE_PRICE_ACCESS",
+    "INDEX_VALUE_ACCESS",
+    "BASIS_OR_SPREAD_ACCESS",
+    "RETURN_ACCESS",
+    "PNL_ACCESS",
+    "EVENT_OUTCOME_RANKING",
+    "OUTCOME_DRIVEN_FILTERING",
+    "HORIZON_TUNING_FROM_OUTCOMES",
+    "TRADING"
+  ],
+  "terminal_strategy_trigger": {
+    "full_94_PASS_or_REVIEW_is_strategy_relevant": true,
+    "worker_result_manifest_required": true,
+    "strategy_manager_review_required_before_any_price_outcome": true
+  }
+}

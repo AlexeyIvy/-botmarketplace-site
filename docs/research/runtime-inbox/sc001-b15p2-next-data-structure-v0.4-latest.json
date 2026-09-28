@@ -1,0 +1,3009 @@
+{
+  "article_body_text_persisted": false,
+  "basis_accessed": false,
+  "consensus": {
+    "common_candidate_count": 18,
+    "common_candidates": [
+      {
+        "chars": {
+          "DOGUSDT": 1664,
+          "TONUSDT": 1664
+        },
+        "html_tag_counts": {
+          "DOGUSDT": 0,
+          "TONUSDT": 0
+        },
+        "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.content.json.children",
+        "kinds": {
+          "DOGUSDT": "container",
+          "TONUSDT": "container"
+        },
+        "min_chars": 1664,
+        "min_score": 8,
+        "path": "$.props.pageProps.articleDetail.content.json.children",
+        "path_depth": 6,
+        "scores": {
+          "DOGUSDT": 8,
+          "TONUSDT": 8
+        },
+        "script_role": "__NEXT_DATA__",
+        "types": {
+          "DOGUSDT": "list",
+          "TONUSDT": "list"
+        }
+      },
+      {
+        "chars": {
+          "DOGUSDT": 1664,
+          "TONUSDT": 1664
+        },
+        "html_tag_counts": {
+          "DOGUSDT": 0,
+          "TONUSDT": 0
+        },
+        "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.entry.entryKey.children",
+        "kinds": {
+          "DOGUSDT": "container",
+          "TONUSDT": "container"
+        },
+        "min_chars": 1664,
+        "min_score": 8,
+        "path": "$.props.pageProps.articleDetail.entry.entryKey.children",
+        "path_depth": 6,
+        "scores": {
+          "DOGUSDT": 8,
+          "TONUSDT": 8
+        },
+        "script_role": "__NEXT_DATA__",
+        "types": {
+          "DOGUSDT": "list",
+          "TONUSDT": "list"
+        }
+      },
+      {
+        "chars": {
+          "DOGUSDT": 1933,
+          "TONUSDT": 1933
+        },
+        "html_tag_counts": {
+          "DOGUSDT": 0,
+          "TONUSDT": 0
+        },
+        "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.content",
+        "kinds": {
+          "DOGUSDT": "container",
+          "TONUSDT": "container"
+        },
+        "min_chars": 1933,
+        "min_score": 8,
+        "path": "$.props.pageProps.articleDetail.content",
+        "path_depth": 4,
+        "scores": {
+          "DOGUSDT": 8,
+          "TONUSDT": 8
+        },
+        "script_role": "__NEXT_DATA__",
+        "types": {
+          "DOGUSDT": "dict",
+          "TONUSDT": "dict"
+        }
+      },
+      {
+        "chars": {
+          "DOGUSDT": 185,
+          "TONUSDT": 185
+        },
+        "html_tag_counts": {
+          "DOGUSDT": 0,
+          "TONUSDT": 0
+        },
+        "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.content.json.children[8].children",
+        "kinds": {
+          "DOGUSDT": "container",
+          "TONUSDT": "container"
+        },
+        "min_chars": 185,
+        "min_score": 7,
+        "path": "$.props.pageProps.articleDetail.content.json.children[8].children",
+        "path_depth": 8,
+        "scores": {
+          "DOGUSDT": 7,
+          "TONUSDT": 7
+        },
+        "script_role": "__NEXT_DATA__",
+        "types": {
+          "DOGUSDT": "list",
+          "TONUSDT": "list"
+        }
+      },
+      {
+        "chars": {
+          "DOGUSDT": 185,
+          "TONUSDT": 185
+        },
+        "html_tag_counts": {
+          "DOGUSDT": 0,
+          "TONUSDT": 0
+        },
+        "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.entry.entryKey.children[8].children",
+        "kinds": {
+          "DOGUSDT": "container",
+          "TONUSDT": "container"
+        },
+        "min_chars": 185,
+        "min_score": 7,
+        "path": "$.props.pageProps.articleDetail.entry.entryKey.children[8].children",
+        "path_depth": 8,
+        "scores": {
+          "DOGUSDT": 7,
+          "TONUSDT": 7
+        },
+        "script_role": "__NEXT_DATA__",
+        "types": {
+          "DOGUSDT": "list",
+          "TONUSDT": "list"
+        }
+      },
+      {
+        "chars": {
+          "DOGUSDT": 126,
+          "TONUSDT": 126
+        },
+        "html_tag_counts": {
+          "DOGUSDT": 0,
+          "TONUSDT": 0
+        },
+        "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.content.json.children[12].children",
+        "kinds": {
+          "DOGUSDT": "container",
+          "TONUSDT": "container"
+        },
+        "min_chars": 126,
+        "min_score": 7,
+        "path": "$.props.pageProps.articleDetail.content.json.children[12].children",
+        "path_depth": 8,
+        "scores": {
+          "DOGUSDT": 7,
+          "TONUSDT": 7
+        },
+        "script_role": "__NEXT_DATA__",
+        "types": {
+          "DOGUSDT": "list",
+          "TONUSDT": "list"
+        }
+      },
+      {
+        "chars": {
+          "DOGUSDT": 126,
+          "TONUSDT": 126
+        },
+        "html_tag_counts": {
+          "DOGUSDT": 0,
+          "TONUSDT": 0
+        },
+        "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.entry.entryKey.children[12].children",
+        "kinds": {
+          "DOGUSDT": "container",
+          "TONUSDT": "container"
+        },
+        "min_chars": 126,
+        "min_score": 7,
+        "path": "$.props.pageProps.articleDetail.entry.entryKey.children[12].children",
+        "path_depth": 8,
+        "scores": {
+          "DOGUSDT": 7,
+          "TONUSDT": 7
+        },
+        "script_role": "__NEXT_DATA__",
+        "types": {
+          "DOGUSDT": "list",
+          "TONUSDT": "list"
+        }
+      },
+      {
+        "chars": {
+          "DOGUSDT": 185,
+          "TONUSDT": 185
+        },
+        "html_tag_counts": {
+          "DOGUSDT": 0,
+          "TONUSDT": 0
+        },
+        "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.content.json.children[8].children[0].text",
+        "kinds": {
+          "DOGUSDT": "string",
+          "TONUSDT": "string"
+        },
+        "min_chars": 185,
+        "min_score": 6,
+        "path": "$.props.pageProps.articleDetail.content.json.children[8].children[0].text",
+        "path_depth": 10,
+        "scores": {
+          "DOGUSDT": 6,
+          "TONUSDT": 6
+        },
+        "script_role": "__NEXT_DATA__",
+        "types": {
+          "DOGUSDT": "string",
+          "TONUSDT": "string"
+        }
+      },
+      {
+        "chars": {
+          "DOGUSDT": 185,
+          "TONUSDT": 185
+        },
+        "html_tag_counts": {
+          "DOGUSDT": 0,
+          "TONUSDT": 0
+        },
+        "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.entry.entryKey.children[8].children[0].text",
+        "kinds": {
+          "DOGUSDT": "string",
+          "TONUSDT": "string"
+        },
+        "min_chars": 185,
+        "min_score": 6,
+        "path": "$.props.pageProps.articleDetail.entry.entryKey.children[8].children[0].text",
+        "path_depth": 10,
+        "scores": {
+          "DOGUSDT": 6,
+          "TONUSDT": 6
+        },
+        "script_role": "__NEXT_DATA__",
+        "types": {
+          "DOGUSDT": "string",
+          "TONUSDT": "string"
+        }
+      },
+      {
+        "chars": {
+          "DOGUSDT": 126,
+          "TONUSDT": 126
+        },
+        "html_tag_counts": {
+          "DOGUSDT": 0,
+          "TONUSDT": 0
+        },
+        "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.content.json.children[12].children[0].text",
+        "kinds": {
+          "DOGUSDT": "string",
+          "TONUSDT": "string"
+        },
+        "min_chars": 126,
+        "min_score": 6,
+        "path": "$.props.pageProps.articleDetail.content.json.children[12].children[0].text",
+        "path_depth": 10,
+        "scores": {
+          "DOGUSDT": 6,
+          "TONUSDT": 6
+        },
+        "script_role": "__NEXT_DATA__",
+        "types": {
+          "DOGUSDT": "string",
+          "TONUSDT": "string"
+        }
+      },
+      {
+        "chars": {
+          "DOGUSDT": 126,
+          "TONUSDT": 126
+        },
+        "html_tag_counts": {
+          "DOGUSDT": 0,
+          "TONUSDT": 0
+        },
+        "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.entry.entryKey.children[12].children[0].text",
+        "kinds": {
+          "DOGUSDT": "string",
+          "TONUSDT": "string"
+        },
+        "min_chars": 126,
+        "min_score": 6,
+        "path": "$.props.pageProps.articleDetail.entry.entryKey.children[12].children[0].text",
+        "path_depth": 10,
+        "scores": {
+          "DOGUSDT": 6,
+          "TONUSDT": 6
+        },
+        "script_role": "__NEXT_DATA__",
+        "types": {
+          "DOGUSDT": "string",
+          "TONUSDT": "string"
+        }
+      },
+      {
+        "chars": {
+          "DOGUSDT": 4303,
+          "TONUSDT": 4303
+        },
+        "html_tag_counts": {
+          "DOGUSDT": 0,
+          "TONUSDT": 0
+        },
+        "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail",
+        "kinds": {
+          "DOGUSDT": "container",
+          "TONUSDT": "container"
+        },
+        "min_chars": 4303,
+        "min_score": 6,
+        "path": "$.props.pageProps.articleDetail",
+        "path_depth": 3,
+        "scores": {
+          "DOGUSDT": 6,
+          "TONUSDT": 6
+        },
+        "script_role": "__NEXT_DATA__",
+        "types": {
+          "DOGUSDT": "dict",
+          "TONUSDT": "dict"
+        }
+      },
+      {
+        "chars": {
+          "DOGUSDT": 5172,
+          "TONUSDT": 5172
+        },
+        "html_tag_counts": {
+          "DOGUSDT": 0,
+          "TONUSDT": 0
+        },
+        "identity": "__NEXT_DATA__::$.props.pageProps",
+        "kinds": {
+          "DOGUSDT": "container",
+          "TONUSDT": "container"
+        },
+        "min_chars": 5172,
+        "min_score": 6,
+        "path": "$.props.pageProps",
+        "path_depth": 2,
+        "scores": {
+          "DOGUSDT": 6,
+          "TONUSDT": 6
+        },
+        "script_role": "__NEXT_DATA__",
+        "types": {
+          "DOGUSDT": "dict",
+          "TONUSDT": "dict"
+        }
+      },
+      {
+        "chars": {
+          "DOGUSDT": 326,
+          "TONUSDT": 326
+        },
+        "html_tag_counts": {
+          "DOGUSDT": 0,
+          "TONUSDT": 0
+        },
+        "identity": "__NEXT_DATA__::$.props.pageProps.pageEntry",
+        "kinds": {
+          "DOGUSDT": "container",
+          "TONUSDT": "container"
+        },
+        "min_chars": 326,
+        "min_score": 4,
+        "path": "$.props.pageProps.pageEntry",
+        "path_depth": 3,
+        "scores": {
+          "DOGUSDT": 4,
+          "TONUSDT": 4
+        },
+        "script_role": "__NEXT_DATA__",
+        "types": {
+          "DOGUSDT": "dict",
+          "TONUSDT": "dict"
+        }
+      },
+      {
+        "chars": {
+          "DOGUSDT": 1699,
+          "TONUSDT": 1699
+        },
+        "html_tag_counts": {
+          "DOGUSDT": 0,
+          "TONUSDT": 0
+        },
+        "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.content.json",
+        "kinds": {
+          "DOGUSDT": "container",
+          "TONUSDT": "container"
+        },
+        "min_chars": 1699,
+        "min_score": 3,
+        "path": "$.props.pageProps.articleDetail.content.json",
+        "path_depth": 5,
+        "scores": {
+          "DOGUSDT": 3,
+          "TONUSDT": 3
+        },
+        "script_role": "__NEXT_DATA__",
+        "types": {
+          "DOGUSDT": "dict",
+          "TONUSDT": "dict"
+        }
+      },
+      {
+        "chars": {
+          "DOGUSDT": 1699,
+          "TONUSDT": 1699
+        },
+        "html_tag_counts": {
+          "DOGUSDT": 0,
+          "TONUSDT": 0
+        },
+        "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.entry.entryKey",
+        "kinds": {
+          "DOGUSDT": "container",
+          "TONUSDT": "container"
+        },
+        "min_chars": 1699,
+        "min_score": 3,
+        "path": "$.props.pageProps.articleDetail.entry.entryKey",
+        "path_depth": 5,
+        "scores": {
+          "DOGUSDT": 3,
+          "TONUSDT": 3
+        },
+        "script_role": "__NEXT_DATA__",
+        "types": {
+          "DOGUSDT": "dict",
+          "TONUSDT": "dict"
+        }
+      },
+      {
+        "chars": {
+          "DOGUSDT": 1981,
+          "TONUSDT": 1981
+        },
+        "html_tag_counts": {
+          "DOGUSDT": 0,
+          "TONUSDT": 0
+        },
+        "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.entry",
+        "kinds": {
+          "DOGUSDT": "container",
+          "TONUSDT": "container"
+        },
+        "min_chars": 1981,
+        "min_score": 3,
+        "path": "$.props.pageProps.articleDetail.entry",
+        "path_depth": 4,
+        "scores": {
+          "DOGUSDT": 3,
+          "TONUSDT": 3
+        },
+        "script_role": "__NEXT_DATA__",
+        "types": {
+          "DOGUSDT": "dict",
+          "TONUSDT": "dict"
+        }
+      },
+      {
+        "chars": {
+          "DOGUSDT": 5172,
+          "TONUSDT": 5172
+        },
+        "html_tag_counts": {
+          "DOGUSDT": 0,
+          "TONUSDT": 0
+        },
+        "identity": "__NEXT_DATA__::$.props",
+        "kinds": {
+          "DOGUSDT": "container",
+          "TONUSDT": "container"
+        },
+        "min_chars": 5172,
+        "min_score": 3,
+        "path": "$.props",
+        "path_depth": 1,
+        "scores": {
+          "DOGUSDT": 3,
+          "TONUSDT": 3
+        },
+        "script_role": "__NEXT_DATA__",
+        "types": {
+          "DOGUSDT": "dict",
+          "TONUSDT": "dict"
+        }
+      }
+    ],
+    "common_exact_title_identities": [
+      "__NEXT_DATA__::$.props.pageProps.articleDetail.title"
+    ],
+    "high_confidence_candidate_count": 13,
+    "high_confidence_candidates": [
+      {
+        "chars": {
+          "DOGUSDT": 1664,
+          "TONUSDT": 1664
+        },
+        "html_tag_counts": {
+          "DOGUSDT": 0,
+          "TONUSDT": 0
+        },
+        "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.content.json.children",
+        "kinds": {
+          "DOGUSDT": "container",
+          "TONUSDT": "container"
+        },
+        "min_chars": 1664,
+        "min_score": 8,
+        "path": "$.props.pageProps.articleDetail.content.json.children",
+        "path_depth": 6,
+        "scores": {
+          "DOGUSDT": 8,
+          "TONUSDT": 8
+        },
+        "script_role": "__NEXT_DATA__",
+        "types": {
+          "DOGUSDT": "list",
+          "TONUSDT": "list"
+        }
+      },
+      {
+        "chars": {
+          "DOGUSDT": 1664,
+          "TONUSDT": 1664
+        },
+        "html_tag_counts": {
+          "DOGUSDT": 0,
+          "TONUSDT": 0
+        },
+        "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.entry.entryKey.children",
+        "kinds": {
+          "DOGUSDT": "container",
+          "TONUSDT": "container"
+        },
+        "min_chars": 1664,
+        "min_score": 8,
+        "path": "$.props.pageProps.articleDetail.entry.entryKey.children",
+        "path_depth": 6,
+        "scores": {
+          "DOGUSDT": 8,
+          "TONUSDT": 8
+        },
+        "script_role": "__NEXT_DATA__",
+        "types": {
+          "DOGUSDT": "list",
+          "TONUSDT": "list"
+        }
+      },
+      {
+        "chars": {
+          "DOGUSDT": 1933,
+          "TONUSDT": 1933
+        },
+        "html_tag_counts": {
+          "DOGUSDT": 0,
+          "TONUSDT": 0
+        },
+        "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.content",
+        "kinds": {
+          "DOGUSDT": "container",
+          "TONUSDT": "container"
+        },
+        "min_chars": 1933,
+        "min_score": 8,
+        "path": "$.props.pageProps.articleDetail.content",
+        "path_depth": 4,
+        "scores": {
+          "DOGUSDT": 8,
+          "TONUSDT": 8
+        },
+        "script_role": "__NEXT_DATA__",
+        "types": {
+          "DOGUSDT": "dict",
+          "TONUSDT": "dict"
+        }
+      },
+      {
+        "chars": {
+          "DOGUSDT": 185,
+          "TONUSDT": 185
+        },
+        "html_tag_counts": {
+          "DOGUSDT": 0,
+          "TONUSDT": 0
+        },
+        "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.content.json.children[8].children",
+        "kinds": {
+          "DOGUSDT": "container",
+          "TONUSDT": "container"
+        },
+        "min_chars": 185,
+        "min_score": 7,
+        "path": "$.props.pageProps.articleDetail.content.json.children[8].children",
+        "path_depth": 8,
+        "scores": {
+          "DOGUSDT": 7,
+          "TONUSDT": 7
+        },
+        "script_role": "__NEXT_DATA__",
+        "types": {
+          "DOGUSDT": "list",
+          "TONUSDT": "list"
+        }
+      },
+      {
+        "chars": {
+          "DOGUSDT": 185,
+          "TONUSDT": 185
+        },
+        "html_tag_counts": {
+          "DOGUSDT": 0,
+          "TONUSDT": 0
+        },
+        "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.entry.entryKey.children[8].children",
+        "kinds": {
+          "DOGUSDT": "container",
+          "TONUSDT": "container"
+        },
+        "min_chars": 185,
+        "min_score": 7,
+        "path": "$.props.pageProps.articleDetail.entry.entryKey.children[8].children",
+        "path_depth": 8,
+        "scores": {
+          "DOGUSDT": 7,
+          "TONUSDT": 7
+        },
+        "script_role": "__NEXT_DATA__",
+        "types": {
+          "DOGUSDT": "list",
+          "TONUSDT": "list"
+        }
+      },
+      {
+        "chars": {
+          "DOGUSDT": 126,
+          "TONUSDT": 126
+        },
+        "html_tag_counts": {
+          "DOGUSDT": 0,
+          "TONUSDT": 0
+        },
+        "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.content.json.children[12].children",
+        "kinds": {
+          "DOGUSDT": "container",
+          "TONUSDT": "container"
+        },
+        "min_chars": 126,
+        "min_score": 7,
+        "path": "$.props.pageProps.articleDetail.content.json.children[12].children",
+        "path_depth": 8,
+        "scores": {
+          "DOGUSDT": 7,
+          "TONUSDT": 7
+        },
+        "script_role": "__NEXT_DATA__",
+        "types": {
+          "DOGUSDT": "list",
+          "TONUSDT": "list"
+        }
+      },
+      {
+        "chars": {
+          "DOGUSDT": 126,
+          "TONUSDT": 126
+        },
+        "html_tag_counts": {
+          "DOGUSDT": 0,
+          "TONUSDT": 0
+        },
+        "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.entry.entryKey.children[12].children",
+        "kinds": {
+          "DOGUSDT": "container",
+          "TONUSDT": "container"
+        },
+        "min_chars": 126,
+        "min_score": 7,
+        "path": "$.props.pageProps.articleDetail.entry.entryKey.children[12].children",
+        "path_depth": 8,
+        "scores": {
+          "DOGUSDT": 7,
+          "TONUSDT": 7
+        },
+        "script_role": "__NEXT_DATA__",
+        "types": {
+          "DOGUSDT": "list",
+          "TONUSDT": "list"
+        }
+      },
+      {
+        "chars": {
+          "DOGUSDT": 185,
+          "TONUSDT": 185
+        },
+        "html_tag_counts": {
+          "DOGUSDT": 0,
+          "TONUSDT": 0
+        },
+        "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.content.json.children[8].children[0].text",
+        "kinds": {
+          "DOGUSDT": "string",
+          "TONUSDT": "string"
+        },
+        "min_chars": 185,
+        "min_score": 6,
+        "path": "$.props.pageProps.articleDetail.content.json.children[8].children[0].text",
+        "path_depth": 10,
+        "scores": {
+          "DOGUSDT": 6,
+          "TONUSDT": 6
+        },
+        "script_role": "__NEXT_DATA__",
+        "types": {
+          "DOGUSDT": "string",
+          "TONUSDT": "string"
+        }
+      },
+      {
+        "chars": {
+          "DOGUSDT": 185,
+          "TONUSDT": 185
+        },
+        "html_tag_counts": {
+          "DOGUSDT": 0,
+          "TONUSDT": 0
+        },
+        "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.entry.entryKey.children[8].children[0].text",
+        "kinds": {
+          "DOGUSDT": "string",
+          "TONUSDT": "string"
+        },
+        "min_chars": 185,
+        "min_score": 6,
+        "path": "$.props.pageProps.articleDetail.entry.entryKey.children[8].children[0].text",
+        "path_depth": 10,
+        "scores": {
+          "DOGUSDT": 6,
+          "TONUSDT": 6
+        },
+        "script_role": "__NEXT_DATA__",
+        "types": {
+          "DOGUSDT": "string",
+          "TONUSDT": "string"
+        }
+      },
+      {
+        "chars": {
+          "DOGUSDT": 126,
+          "TONUSDT": 126
+        },
+        "html_tag_counts": {
+          "DOGUSDT": 0,
+          "TONUSDT": 0
+        },
+        "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.content.json.children[12].children[0].text",
+        "kinds": {
+          "DOGUSDT": "string",
+          "TONUSDT": "string"
+        },
+        "min_chars": 126,
+        "min_score": 6,
+        "path": "$.props.pageProps.articleDetail.content.json.children[12].children[0].text",
+        "path_depth": 10,
+        "scores": {
+          "DOGUSDT": 6,
+          "TONUSDT": 6
+        },
+        "script_role": "__NEXT_DATA__",
+        "types": {
+          "DOGUSDT": "string",
+          "TONUSDT": "string"
+        }
+      },
+      {
+        "chars": {
+          "DOGUSDT": 126,
+          "TONUSDT": 126
+        },
+        "html_tag_counts": {
+          "DOGUSDT": 0,
+          "TONUSDT": 0
+        },
+        "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.entry.entryKey.children[12].children[0].text",
+        "kinds": {
+          "DOGUSDT": "string",
+          "TONUSDT": "string"
+        },
+        "min_chars": 126,
+        "min_score": 6,
+        "path": "$.props.pageProps.articleDetail.entry.entryKey.children[12].children[0].text",
+        "path_depth": 10,
+        "scores": {
+          "DOGUSDT": 6,
+          "TONUSDT": 6
+        },
+        "script_role": "__NEXT_DATA__",
+        "types": {
+          "DOGUSDT": "string",
+          "TONUSDT": "string"
+        }
+      },
+      {
+        "chars": {
+          "DOGUSDT": 4303,
+          "TONUSDT": 4303
+        },
+        "html_tag_counts": {
+          "DOGUSDT": 0,
+          "TONUSDT": 0
+        },
+        "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail",
+        "kinds": {
+          "DOGUSDT": "container",
+          "TONUSDT": "container"
+        },
+        "min_chars": 4303,
+        "min_score": 6,
+        "path": "$.props.pageProps.articleDetail",
+        "path_depth": 3,
+        "scores": {
+          "DOGUSDT": 6,
+          "TONUSDT": 6
+        },
+        "script_role": "__NEXT_DATA__",
+        "types": {
+          "DOGUSDT": "dict",
+          "TONUSDT": "dict"
+        }
+      },
+      {
+        "chars": {
+          "DOGUSDT": 5172,
+          "TONUSDT": 5172
+        },
+        "html_tag_counts": {
+          "DOGUSDT": 0,
+          "TONUSDT": 0
+        },
+        "identity": "__NEXT_DATA__::$.props.pageProps",
+        "kinds": {
+          "DOGUSDT": "container",
+          "TONUSDT": "container"
+        },
+        "min_chars": 5172,
+        "min_score": 6,
+        "path": "$.props.pageProps",
+        "path_depth": 2,
+        "scores": {
+          "DOGUSDT": 6,
+          "TONUSDT": 6
+        },
+        "script_role": "__NEXT_DATA__",
+        "types": {
+          "DOGUSDT": "dict",
+          "TONUSDT": "dict"
+        }
+      }
+    ],
+    "symbols": [
+      "DOGUSDT",
+      "TONUSDT"
+    ]
+  },
+  "date": "2026-09-28",
+  "elapsed_seconds": 0.789,
+  "events": [
+    {
+      "final_url": "https://announcements.bybit.com/en/article/delisting-of-dogusdt-perpetual-contract-blt9ee6b6807b7ba01f/",
+      "hydration": {
+        "exact_title_node_count": 1,
+        "exact_title_nodes": [
+          {
+            "ancestors": [
+              {
+                "field_count": 13,
+                "fields": [
+                  {
+                    "key": "appGip",
+                    "type": "bool"
+                  },
+                  {
+                    "contains_exact_title": false,
+                    "escaped_html_marker_count": 0,
+                    "html_tag_count": 0,
+                    "key": "assetPrefix",
+                    "newline_count": 0,
+                    "normalized_length": 21,
+                    "parseable_json_string": false,
+                    "raw_length": 21,
+                    "sha256": "a968d720611ab09c4d80d68cffa5032a26499903cb31fc25c8f1c99db72d7ab0",
+                    "type": "string"
+                  },
+                  {
+                    "contains_exact_title": false,
+                    "escaped_html_marker_count": 0,
+                    "html_tag_count": 0,
+                    "key": "buildId",
+                    "newline_count": 0,
+                    "normalized_length": 21,
+                    "parseable_json_string": false,
+                    "raw_length": 21,
+                    "sha256": "2de18e15e03ff5097283c853186b2b0cc6b8b426c29c5e51e9b6973e1ff6d4d5",
+                    "type": "string"
+                  },
+                  {
+                    "key": "customServer",
+                    "type": "bool"
+                  },
+                  {
+                    "contains_exact_title": false,
+                    "escaped_html_marker_count": 0,
+                    "html_tag_count": 0,
+                    "key": "defaultLocale",
+                    "newline_count": 0,
+                    "normalized_length": 2,
+                    "parseable_json_string": false,
+                    "raw_length": 2,
+                    "sha256": "dbd3a49d0d906b4ed9216b73330d2fb080ef2f758c12f3885068222e5e17151c",
+                    "type": "string"
+                  },
+                  {
+                    "key": "gssp",
+                    "type": "bool"
+                  },
+                  {
+                    "key": "isFallback",
+                    "type": "bool"
+                  },
+                  {
+                    "contains_exact_title": false,
+                    "escaped_html_marker_count": 0,
+                    "html_tag_count": 0,
+                    "key": "locale",
+                    "newline_count": 0,
+                    "normalized_length": 2,
+                    "parseable_json_string": false,
+                    "raw_length": 2,
+                    "sha256": "dbd3a49d0d906b4ed9216b73330d2fb080ef2f758c12f3885068222e5e17151c",
+                    "type": "string"
+                  },
+                  {
+                    "child_count": 66,
+                    "descendant_escaped_html_marker_count": 0,
+                    "descendant_html_tag_count": 0,
+                    "descendant_max_string_length": 6,
+                    "descendant_max_string_path": "$[23]",
+                    "descendant_parseable_json_string_count": 0,
+                    "descendant_string_count": 66,
+                    "descendant_title_match_count": 0,
+                    "descendant_total_normalized_chars": 348,
+                    "key": "locales",
+                    "type": "list"
+                  },
+                  {
+                    "contains_exact_title": false,
+                    "escaped_html_marker_count": 0,
+                    "html_tag_count": 0,
+                    "key": "page",
+                    "newline_count": 0,
+                    "normalized_length": 23,
+                    "parseable_json_string": false,
+                    "raw_length": 23,
+                    "sha256": "4d3aaee033b075f0fc57b9c24431108552a05b23e27ea6a717e07032265756ce",
+                    "type": "string"
+                  },
+                  {
+                    "child_count": 2,
+                    "descendant_escaped_html_marker_count": 0,
+                    "descendant_html_tag_count": 0,
+                    "descendant_max_string_length": 185,
+                    "descendant_max_string_path": "$.pageProps.articleDetail.content.json.children[8].children[0].text",
+                    "descendant_parseable_json_string_count": 0,
+                    "descendant_string_count": 242,
+                    "descendant_title_match_count": 1,
+                    "descendant_total_normalized_chars": 5172,
+                    "key": "props",
+                    "type": "dict"
+                  },
+                  {
+                    "child_count": 1,
+                    "descendant_escaped_html_marker_count": 0,
+                    "descendant_html_tag_count": 0,
+                    "descendant_max_string_length": 59,
+                    "descendant_max_string_path": "$.articleTitle",
+                    "descendant_parseable_json_string_count": 0,
+                    "descendant_string_count": 1,
+                    "descendant_title_match_count": 0,
+                    "descendant_total_normalized_chars": 59,
+                    "key": "query",
+                    "type": "dict"
+                  },
+                  {
+                    "child_count": 0,
+                    "descendant_escaped_html_marker_count": 0,
+                    "descendant_html_tag_count": 0,
+                    "descendant_max_string_length": 0,
+                    "descendant_max_string_path": null,
+                    "descendant_parseable_json_string_count": 0,
+                    "descendant_string_count": 0,
+                    "descendant_title_match_count": 0,
+                    "descendant_total_normalized_chars": 0,
+                    "key": "scriptLoader",
+                    "type": "list"
+                  }
+                ],
+                "path": "$",
+                "type": "dict"
+              },
+              {
+                "field_count": 2,
+                "fields": [
+                  {
+                    "key": "__N_SSP",
+                    "type": "bool"
+                  },
+                  {
+                    "child_count": 13,
+                    "descendant_escaped_html_marker_count": 0,
+                    "descendant_html_tag_count": 0,
+                    "descendant_max_string_length": 185,
+                    "descendant_max_string_path": "$.articleDetail.content.json.children[8].children[0].text",
+                    "descendant_parseable_json_string_count": 0,
+                    "descendant_string_count": 242,
+                    "descendant_title_match_count": 1,
+                    "descendant_total_normalized_chars": 5172,
+                    "key": "pageProps",
+                    "type": "dict"
+                  }
+                ],
+                "path": "$.props",
+                "type": "dict"
+              },
+              {
+                "field_count": 13,
+                "fields": [
+                  {
+                    "child_count": 19,
+                    "descendant_escaped_html_marker_count": 0,
+                    "descendant_html_tag_count": 0,
+                    "descendant_max_string_length": 185,
+                    "descendant_max_string_path": "$.content.json.children[8].children[0].text",
+                    "descendant_parseable_json_string_count": 0,
+                    "descendant_string_count": 144,
+                    "descendant_title_match_count": 1,
+                    "descendant_total_normalized_chars": 4303,
+                    "key": "articleDetail",
+                    "type": "dict"
+                  },
+                  {
+                    "contains_exact_title": false,
+                    "escaped_html_marker_count": 0,
+                    "html_tag_count": 0,
+                    "key": "articleObjectID",
+                    "newline_count": 0,
+                    "normalized_length": 27,
+                    "parseable_json_string": false,
+                    "raw_length": 27,
+                    "sha256": "b20352145743d92e0828ccb0fb22da7e6bafb124bfbb7adbf84a7b87603f17a7",
+                    "type": "string"
+                  },
+                  {
+                    "contains_exact_title": false,
+                    "escaped_html_marker_count": 0,
+                    "html_tag_count": 0,
+                    "key": "articleUID",
+                    "newline_count": 0,
+                    "normalized_length": 19,
+                    "parseable_json_string": false,
+                    "raw_length": 19,
+                    "sha256": "735bf7e3daa62471e29870e25ff5c630690c4257061bdbb6ca68acbd1bc4d312",
+                    "type": "string"
+                  },
+                  {
+                    "contains_exact_title": false,
+                    "escaped_html_marker_count": 0,
+                    "html_tag_count": 0,
+                    "key": "canonical",
+                    "newline_count": 0,
+                    "normalized_length": 103,
+                    "parseable_json_string": false,
+                    "raw_length": 103,
+                    "sha256": "c68ac7d9f5b1769074ddf510480afbdde7e2bde78e59623eef7e850daf5f12bf",
+                    "type": "string"
+                  },
+                  {
+                    "contains_exact_title": false,
+                    "escaped_html_marker_count": 0,
+                    "html_tag_count": 0,
+                    "key": "host",
+                    "newline_count": 0,
+                    "normalized_length": 23,
+                    "parseable_json_string": false,
+                    "raw_length": 23,
+                    "sha256": "f1cf26f501ada1cf2f136795eb3fb01b26cacc062bd7fe8ba843261839f6ed61",
+                    "type": "string"
+                  },
+                  {
+                    "contains_exact_title": false,
+                    "escaped_html_marker_count": 0,
+                    "html_tag_count": 0,
+                    "key": "hrefFrom",
+                    "newline_count": 0,
+                    "normalized_length": 6,
+                    "parseable_json_string": false,
+                    "raw_length": 6,
+                    "sha256": "317b32c143692b9939c197f6a5df54f9698df9a4882fe8bf19608968662be4fa",
+                    "type": "string"
+                  },
+                  {
+                    "contains_exact_title": false,
+                    "escaped_html_marker_count": 0,
+                    "html_tag_count": 0,
+                    "key": "initialCategory",
+                    "newline_count": 0,
+                    "normalized_length": 10,
+                    "parseable_json_string": false,
+                    "raw_length": 10,
+                    "sha256": "b640b5582df188447211879b441185c59a003b32674a750745b0f95dbcfbfb2a",
+                    "type": "string"
+                  },
+                  {
+                    "contains_exact_title": false,
+                    "escaped_html_marker_count": 0,
+                    "html_tag_count": 0,
+                    "key": "initialSearchKeyword",
+                    "newline_count": 0,
+                    "normalized_length": 0,
+                    "parseable_json_string": false,
+                    "raw_length": 0,
+                    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                    "type": "string"
+                  },
+                  {
+                    "contains_exact_title": false,
+                    "escaped_html_marker_count": 0,
+                    "html_tag_count": 0,
+                    "key": "locale",
+                    "newline_count": 0,
+                    "normalized_length": 2,
+                    "parseable_json_string": false,
+                    "raw_length": 2,
+                    "sha256": "dbd3a49d0d906b4ed9216b73330d2fb080ef2f758c12f3885068222e5e17151c",
+                    "type": "string"
+                  },
+                  {
+                    "child_count": 66,
+                    "descendant_escaped_html_marker_count": 0,
+                    "descendant_html_tag_count": 0,
+                    "descendant_max_string_length": 6,
+                    "descendant_max_string_path": "$[23]",
+                    "descendant_parseable_json_string_count": 0,
+                    "descendant_string_count": 66,
+                    "descendant_title_match_count": 0,
+                    "descendant_total_normalized_chars": 348,
+                    "key": "locales",
+                    "type": "list"
+                  },
+                  {
+                    "child_count": 4,
+                    "descendant_escaped_html_marker_count": 0,
+                    "descendant_html_tag_count": 0,
+                    "descendant_max_string_length": 65,
+                    "descendant_max_string_path": "$.description",
+                    "descendant_parseable_json_string_count": 0,
+                    "descendant_string_count": 23,
+                    "descendant_title_match_count": 0,
+                    "descendant_total_normalized_chars": 326,
+                    "key": "pageEntry",
+                    "type": "dict"
+                  },
+                  {
+                    "child_count": 0,
+                    "descendant_escaped_html_marker_count": 0,
+                    "descendant_html_tag_count": 0,
+                    "descendant_max_string_length": 0,
+                    "descendant_max_string_path": null,
+                    "descendant_parseable_json_string_count": 0,
+                    "descendant_string_count": 0,
+                    "descendant_title_match_count": 0,
+                    "descendant_total_normalized_chars": 0,
+                    "key": "recommendData",
+                    "type": "list"
+                  },
+                  {
+                    "contains_exact_title": false,
+                    "escaped_html_marker_count": 0,
+                    "html_tag_count": 0,
+                    "key": "theme",
+                    "newline_count": 0,
+                    "normalized_length": 5,
+                    "parseable_json_string": false,
+                    "raw_length": 5,
+                    "sha256": "99a7026172d42714d0293e5598ec1c8e8260d7d0c4b8582ad002c1883494e216",
+                    "type": "string"
+                  }
+                ],
+                "path": "$.props.pageProps",
+                "type": "dict"
+              },
+              {
+                "field_count": 19,
+                "fields": [
+                  {
+                    "child_count": 0,
+                    "descendant_escaped_html_marker_count": 0,
+                    "descendant_html_tag_count": 0,
+                    "descendant_max_string_length": 0,
+                    "descendant_max_string_path": null,
+                    "descendant_parseable_json_string_count": 0,
+                    "descendant_string_count": 0,
+                    "descendant_title_match_count": 0,
+                    "descendant_total_normalized_chars": 0,
+                    "key": "bu_or_function",
+                    "type": "list"
+                  },
+                  {
+                    "contains_exact_title": false,
+                    "escaped_html_marker_count": 0,
+                    "html_tag_count": 0,
+                    "key": "campaign_id",
+                    "newline_count": 0,
+                    "normalized_length": 0,
+                    "parseable_json_string": false,
+                    "raw_length": 0,
+                    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                    "type": "string"
+                  },
+                  {
+                    "child_count": 1,
+                    "descendant_escaped_html_marker_count": 0,
+                    "descendant_html_tag_count": 0,
+                    "descendant_max_string_length": 10,
+                    "descendant_max_string_path": "$.edges[0].node.title",
+                    "descendant_parseable_json_string_count": 0,
+                    "descendant_string_count": 2,
+                    "descendant_title_match_count": 0,
+                    "descendant_total_normalized_chars": 20,
+                    "key": "categoryConnection",
+                    "type": "dict"
+                  },
+                  {
+                    "child_count": 2,
+                    "descendant_escaped_html_marker_count": 0,
+                    "descendant_html_tag_count": 0,
+                    "descendant_max_string_length": 185,
+                    "descendant_max_string_path": "$.json.children[8].children[0].text",
+                    "descendant_parseable_json_string_count": 0,
+                    "descendant_string_count": 63,
+                    "descendant_title_match_count": 0,
+                    "descendant_total_normalized_chars": 1933,
+                    "key": "content",
+                    "type": "dict"
+                  },
+                  {
+                    "contains_exact_title": false,
+                    "escaped_html_marker_count": 0,
+                    "html_tag_count": 0,
+                    "key": "content_html",
+                    "newline_count": 0,
+                    "normalized_length": 0,
+                    "parseable_json_string": false,
+                    "raw_length": 0,
+                    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                    "type": "string"
+                  },
+                  {
+                    "contains_exact_title": false,
+                    "escaped_html_marker_count": 0,
+                    "html_tag_count": 0,
+                    "key": "date",
+                    "newline_count": 0,
+                    "normalized_length": 25,
+                    "parseable_json_string": false,
+                    "raw_length": 25,
+                    "sha256": "8d586fa548fdab50354925c0060fe4edf8ca780d8eba726e2dffb01f273f91ab",
+                    "type": "string"
+                  },
+                  {
+                    "contains_exact_title": false,
+                    "escaped_html_marker_count": 0,
+                    "html_tag_count": 0,
+                    "key": "description",
+                    "newline_count": 0,
+                    "normalized_length": 83,
+                    "parseable_json_string": false,
+                    "raw_length": 83,
+                    "sha256": "73d63467973d0ad98b4014800820e36747122fe4a47894145af1385a79993ca3",
+                    "type": "string"
+                  },
+                  {
+                    "contains_exact_title": false,
+                    "escaped_html_marker_count": 0,
+                    "html_tag_count": 0,
+                    "key": "end_time",
+                    "newline_count": 0,
+                    "normalized_length": 25,
+                    "parseable_json_string": false,
+                    "raw_length": 25,
+                    "sha256": "8d586fa548fdab50354925c0060fe4edf8ca780d8eba726e2dffb01f273f91ab",
+                    "type": "string"
+                  },
+                  {
+                    "child_count": 3,
+                    "descendant_escaped_html_marker_count": 0,
+                    "descendant_html_tag_count": 0,
+                    "descendant_max_string_length": 185,
+                    "descendant_max_string_path": "$.entryKey.children[8].children[0].text",
+                    "descendant_parseable_json_string_count": 0,
+                    "descendant_string_count": 66,
+                    "descendant_title_match_count": 0,
+                    "descendant_total_normalized_chars": 1981,
+                    "key": "entry",
+                    "type": "dict"
+                  },
+                  {
+                    "child_count": 3,
+                    "descendant_escaped_html_marker_count": 0,
+                    "descendant_html_tag_count": 0,
+                    "descendant_max_string_length": 12,
+                    "descendant_max_string_path": "$[1]",
+                    "descendant_parseable_json_string_count": 0,
+                    "descendant_string_count": 3,
+                    "descendant_title_match_count": 0,
+                    "descendant_total_normalized_chars": 33,
+                    "key": "keywords",
+                    "type": "list"
+                  },
+                  {
+                    "contains_exact_title": false,
+                    "escaped_html_marker_count": 0,
+                    "html_tag_count": 0,
+                    "key": "locale",
+                    "newline_count": 0,
+                    "normalized_length": 2,
+                    "parseable_json_string": false,
+                    "raw_length": 2,
+                    "sha256": "dbd3a49d0d906b4ed9216b73330d2fb080ef2f758c12f3885068222e5e17151c",
+                    "type": "string"
+                  },
+                  {
+                    "key": "read_time",
+                    "type": "number"
+                  },
+                  {
+                    "key": "show_thumbnail_first",
+                    "type": "bool"
+                  },
+                  {
+                    "contains_exact_title": false,
+                    "escaped_html_marker_count": 0,
+                    "html_tag_count": 0,
+                    "key": "start_time",
+                    "newline_count": 0,
+                    "normalized_length": 0,
+                    "parseable_json_string": false,
+                    "raw_length": 0,
+                    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                    "type": "string"
+                  },
+                  {
+                    "key": "system",
+                    "type": "null"
+                  },
+                  {
+                    "child_count": 1,
+                    "descendant_escaped_html_marker_count": 0,
+                    "descendant_html_tag_count": 0,
+                    "descendant_max_string_length": 93,
+                    "descendant_max_string_path": "$.edges[0].node.url",
+                    "descendant_parseable_json_string_count": 0,
+                    "descendant_string_count": 1,
+                    "descendant_title_match_count": 0,
+                    "descendant_total_normalized_chars": 93,
+                    "key": "thumbnailConnection",
+                    "type": "dict"
+                  },
+                  {
+                    "contains_exact_title": true,
+                    "escaped_html_marker_count": 0,
+                    "html_tag_count": 0,
+                    "key": "title",
+                    "newline_count": 0,
+                    "normalized_length": 39,
+                    "parseable_json_string": false,
+                    "raw_length": 39,
+                    "sha256": "5a7b37b8072838a36dba866e9a37469b38bc0976bdea905dd4b1ab69e3e0f612",
+                    "type": "string"
+                  },
+                  {
+                    "contains_exact_title": false,
+                    "escaped_html_marker_count": 0,
+                    "html_tag_count": 0,
+                    "key": "url",
+                    "newline_count": 0,
+                    "normalized_length": 69,
+                    "parseable_json_string": false,
+                    "raw_length": 69,
+                    "sha256": "5299d36e5feebe55d53da0d1bcc10506f2fafd2f6cd5d5a3210d597e55e0dbcb",
+                    "type": "string"
+                  },
+                  {
+                    "key": "whether_to_top",
+                    "type": "bool"
+                  }
+                ],
+                "path": "$.props.pageProps.articleDetail",
+                "type": "dict"
+              }
+            ],
+            "exact_string_match": true,
+            "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.title",
+            "length": 39,
+            "path": "$.props.pageProps.articleDetail.title",
+            "script_index": 19,
+            "script_role": "__NEXT_DATA__",
+            "sha256": "5a7b37b8072838a36dba866e9a37469b38bc0976bdea905dd4b1ab69e3e0f612"
+          }
+        ],
+        "json_candidate_script_count": 1,
+        "json_documents": [
+          {
+            "containing_title_node_count": 1,
+            "exact_title_node_count": 1,
+            "pageprops_keys": [
+              "articleDetail",
+              "articleObjectID",
+              "articleUID",
+              "canonical",
+              "host",
+              "hrefFrom",
+              "initialCategory",
+              "initialSearchKeyword",
+              "locale",
+              "locales",
+              "pageEntry",
+              "recommendData",
+              "theme"
+            ],
+            "parse_error": null,
+            "parseable_json": true,
+            "role": "__NEXT_DATA__",
+            "script_id": "__NEXT_DATA__",
+            "script_index": 19,
+            "script_length": 9799,
+            "script_sha256": "64163683a7e0bbf451fd5febba76559e970262aa40126ccc597ebfa9cb965a7d",
+            "script_type": "application/json",
+            "structural_candidate_count": 18,
+            "top_level_keys": [
+              "appGip",
+              "assetPrefix",
+              "buildId",
+              "customServer",
+              "defaultLocale",
+              "gssp",
+              "isFallback",
+              "locale",
+              "locales",
+              "page",
+              "props",
+              "query",
+              "scriptLoader"
+            ]
+          }
+        ],
+        "key_inventory": [
+          "__N_SSP",
+          "_content_type_uid",
+          "_embedded_items",
+          "_version",
+          "alt",
+          "appGip",
+          "articleDetail",
+          "articleObjectID",
+          "articleTitle",
+          "articleUID",
+          "asset-alt",
+          "asset-link",
+          "asset-name",
+          "asset-type",
+          "asset-uid",
+          "assetPrefix",
+          "attrs",
+          "bu_or_function",
+          "buildId",
+          "campaign_id",
+          "canonical",
+          "categories",
+          "categoryConnection",
+          "children",
+          "class-name",
+          "content",
+          "content-type-uid",
+          "content_html",
+          "content_type",
+          "content_type_uid",
+          "customServer",
+          "date",
+          "defaultLocale",
+          "description",
+          "display-type",
+          "edges",
+          "embedded_itemsConnection",
+          "end_time",
+          "entry",
+          "entryKey",
+          "filename",
+          "gssp",
+          "host",
+          "hrefFrom",
+          "initialCategory",
+          "initialSearchKeyword",
+          "inline",
+          "isFallback",
+          "json",
+          "key",
+          "keywords",
+          "label",
+          "locale",
+          "locales",
+          "node",
+          "page",
+          "pageEntry",
+          "pageProps",
+          "props",
+          "query",
+          "read_time",
+          "recommendData",
+          "scriptLoader",
+          "show_thumbnail_first",
+          "start_time",
+          "system",
+          "text",
+          "theme",
+          "thumbnailConnection",
+          "title",
+          "type",
+          "uid",
+          "url",
+          "whether_to_top"
+        ],
+        "next_data_contains_exact_title": true,
+        "next_data_script_count": 1,
+        "parseable_json_script_count": 1,
+        "parseable_title_script_count": 1,
+        "script_count": 27,
+        "scripts_with_raw_exact_title": [
+          {
+            "script_id": "__NEXT_DATA__",
+            "script_index": 19,
+            "script_length": 9799,
+            "script_sha256": "64163683a7e0bbf451fd5febba76559e970262aa40126ccc597ebfa9cb965a7d",
+            "script_type": "application/json"
+          }
+        ],
+        "scripts_with_raw_exact_title_count": 1,
+        "structural_candidate_count": 18,
+        "structural_candidates": [
+          {
+            "chars": 1933,
+            "child_count": 2,
+            "descendant_escaped_html_marker_count": 0,
+            "descendant_html_tag_count": 0,
+            "descendant_max_string_length": 185,
+            "descendant_max_string_path": "$.json.children[8].children[0].text",
+            "descendant_parseable_json_string_count": 0,
+            "descendant_string_count": 63,
+            "descendant_title_match_count": 0,
+            "descendant_total_normalized_chars": 1933,
+            "fallback_large": true,
+            "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.content",
+            "kind": "container",
+            "path": "$.props.pageProps.articleDetail.content",
+            "score": 8,
+            "script_index": 19,
+            "script_role": "__NEXT_DATA__",
+            "type": "dict"
+          },
+          {
+            "chars": 1664,
+            "child_count": 15,
+            "descendant_escaped_html_marker_count": 0,
+            "descendant_html_tag_count": 0,
+            "descendant_max_string_length": 185,
+            "descendant_max_string_path": "$[8].children[0].text",
+            "descendant_parseable_json_string_count": 0,
+            "descendant_string_count": 55,
+            "descendant_title_match_count": 0,
+            "descendant_total_normalized_chars": 1664,
+            "fallback_large": true,
+            "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.content.json.children",
+            "kind": "container",
+            "path": "$.props.pageProps.articleDetail.content.json.children",
+            "score": 8,
+            "script_index": 19,
+            "script_role": "__NEXT_DATA__",
+            "type": "list"
+          },
+          {
+            "chars": 1664,
+            "child_count": 15,
+            "descendant_escaped_html_marker_count": 0,
+            "descendant_html_tag_count": 0,
+            "descendant_max_string_length": 185,
+            "descendant_max_string_path": "$[8].children[0].text",
+            "descendant_parseable_json_string_count": 0,
+            "descendant_string_count": 55,
+            "descendant_title_match_count": 0,
+            "descendant_total_normalized_chars": 1664,
+            "fallback_large": true,
+            "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.entry.entryKey.children",
+            "kind": "container",
+            "path": "$.props.pageProps.articleDetail.entry.entryKey.children",
+            "score": 8,
+            "script_index": 19,
+            "script_role": "__NEXT_DATA__",
+            "type": "list"
+          },
+          {
+            "chars": 185,
+            "child_count": 1,
+            "descendant_escaped_html_marker_count": 0,
+            "descendant_html_tag_count": 0,
+            "descendant_max_string_length": 185,
+            "descendant_max_string_path": "$[0].text",
+            "descendant_parseable_json_string_count": 0,
+            "descendant_string_count": 1,
+            "descendant_title_match_count": 0,
+            "descendant_total_normalized_chars": 185,
+            "fallback_large": false,
+            "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.content.json.children[8].children",
+            "kind": "container",
+            "path": "$.props.pageProps.articleDetail.content.json.children[8].children",
+            "score": 7,
+            "script_index": 19,
+            "script_role": "__NEXT_DATA__",
+            "type": "list"
+          },
+          {
+            "chars": 185,
+            "child_count": 1,
+            "descendant_escaped_html_marker_count": 0,
+            "descendant_html_tag_count": 0,
+            "descendant_max_string_length": 185,
+            "descendant_max_string_path": "$[0].text",
+            "descendant_parseable_json_string_count": 0,
+            "descendant_string_count": 1,
+            "descendant_title_match_count": 0,
+            "descendant_total_normalized_chars": 185,
+            "fallback_large": false,
+            "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.entry.entryKey.children[8].children",
+            "kind": "container",
+            "path": "$.props.pageProps.articleDetail.entry.entryKey.children[8].children",
+            "score": 7,
+            "script_index": 19,
+            "script_role": "__NEXT_DATA__",
+            "type": "list"
+          },
+          {
+            "chars": 126,
+            "child_count": 1,
+            "descendant_escaped_html_marker_count": 0,
+            "descendant_html_tag_count": 0,
+            "descendant_max_string_length": 126,
+            "descendant_max_string_path": "$[0].text",
+            "descendant_parseable_json_string_count": 0,
+            "descendant_string_count": 1,
+            "descendant_title_match_count": 0,
+            "descendant_total_normalized_chars": 126,
+            "fallback_large": false,
+            "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.content.json.children[12].children",
+            "kind": "container",
+            "path": "$.props.pageProps.articleDetail.content.json.children[12].children",
+            "score": 7,
+            "script_index": 19,
+            "script_role": "__NEXT_DATA__",
+            "type": "list"
+          },
+          {
+            "chars": 126,
+            "child_count": 1,
+            "descendant_escaped_html_marker_count": 0,
+            "descendant_html_tag_count": 0,
+            "descendant_max_string_length": 126,
+            "descendant_max_string_path": "$[0].text",
+            "descendant_parseable_json_string_count": 0,
+            "descendant_string_count": 1,
+            "descendant_title_match_count": 0,
+            "descendant_total_normalized_chars": 126,
+            "fallback_large": false,
+            "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.entry.entryKey.children[12].children",
+            "kind": "container",
+            "path": "$.props.pageProps.articleDetail.entry.entryKey.children[12].children",
+            "score": 7,
+            "script_index": 19,
+            "script_role": "__NEXT_DATA__",
+            "type": "list"
+          },
+          {
+            "chars": 5172,
+            "child_count": 13,
+            "descendant_escaped_html_marker_count": 0,
+            "descendant_html_tag_count": 0,
+            "descendant_max_string_length": 185,
+            "descendant_max_string_path": "$.articleDetail.content.json.children[8].children[0].text",
+            "descendant_parseable_json_string_count": 0,
+            "descendant_string_count": 242,
+            "descendant_title_match_count": 1,
+            "descendant_total_normalized_chars": 5172,
+            "fallback_large": true,
+            "identity": "__NEXT_DATA__::$.props.pageProps",
+            "kind": "container",
+            "path": "$.props.pageProps",
+            "score": 6,
+            "script_index": 19,
+            "script_role": "__NEXT_DATA__",
+            "type": "dict"
+          },
+          {
+            "chars": 4303,
+            "child_count": 19,
+            "descendant_escaped_html_marker_count": 0,
+            "descendant_html_tag_count": 0,
+            "descendant_max_string_length": 185,
+            "descendant_max_string_path": "$.content.json.children[8].children[0].text",
+            "descendant_parseable_json_string_count": 0,
+            "descendant_string_count": 144,
+            "descendant_title_match_count": 1,
+            "descendant_total_normalized_chars": 4303,
+            "fallback_large": true,
+            "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail",
+            "kind": "container",
+            "path": "$.props.pageProps.articleDetail",
+            "score": 6,
+            "script_index": 19,
+            "script_role": "__NEXT_DATA__",
+            "type": "dict"
+          },
+          {
+            "chars": 185,
+            "contains_exact_title": false,
+            "escaped_html_marker_count": 0,
+            "fallback_large": false,
+            "html_tag_count": 0,
+            "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.content.json.children[8].children[0].text",
+            "kind": "string",
+            "newline_count": 0,
+            "normalized_length": 185,
+            "parseable_json_string": false,
+            "path": "$.props.pageProps.articleDetail.content.json.children[8].children[0].text",
+            "raw_length": 185,
+            "score": 6,
+            "script_index": 19,
+            "script_role": "__NEXT_DATA__",
+            "sha256": "fcb2a97b404bf4986a823bdd3261a4fa9d28facab4321e749c3bbd74d08bf4af",
+            "type": "string"
+          },
+          {
+            "chars": 185,
+            "contains_exact_title": false,
+            "escaped_html_marker_count": 0,
+            "fallback_large": false,
+            "html_tag_count": 0,
+            "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.entry.entryKey.children[8].children[0].text",
+            "kind": "string",
+            "newline_count": 0,
+            "normalized_length": 185,
+            "parseable_json_string": false,
+            "path": "$.props.pageProps.articleDetail.entry.entryKey.children[8].children[0].text",
+            "raw_length": 185,
+            "score": 6,
+            "script_index": 19,
+            "script_role": "__NEXT_DATA__",
+            "sha256": "fcb2a97b404bf4986a823bdd3261a4fa9d28facab4321e749c3bbd74d08bf4af",
+            "type": "string"
+          },
+          {
+            "chars": 126,
+            "contains_exact_title": false,
+            "escaped_html_marker_count": 0,
+            "fallback_large": false,
+            "html_tag_count": 0,
+            "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.content.json.children[12].children[0].text",
+            "kind": "string",
+            "newline_count": 0,
+            "normalized_length": 126,
+            "parseable_json_string": false,
+            "path": "$.props.pageProps.articleDetail.content.json.children[12].children[0].text",
+            "raw_length": 126,
+            "score": 6,
+            "script_index": 19,
+            "script_role": "__NEXT_DATA__",
+            "sha256": "4a2f05510c55b188ccfa53edb420fe3118a49fcb1c5ed715ac160bcdea28b2a7",
+            "type": "string"
+          },
+          {
+            "chars": 126,
+            "contains_exact_title": false,
+            "escaped_html_marker_count": 0,
+            "fallback_large": false,
+            "html_tag_count": 0,
+            "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.entry.entryKey.children[12].children[0].text",
+            "kind": "string",
+            "newline_count": 0,
+            "normalized_length": 126,
+            "parseable_json_string": false,
+            "path": "$.props.pageProps.articleDetail.entry.entryKey.children[12].children[0].text",
+            "raw_length": 126,
+            "score": 6,
+            "script_index": 19,
+            "script_role": "__NEXT_DATA__",
+            "sha256": "4a2f05510c55b188ccfa53edb420fe3118a49fcb1c5ed715ac160bcdea28b2a7",
+            "type": "string"
+          },
+          {
+            "chars": 326,
+            "child_count": 4,
+            "descendant_escaped_html_marker_count": 0,
+            "descendant_html_tag_count": 0,
+            "descendant_max_string_length": 65,
+            "descendant_max_string_path": "$.description",
+            "descendant_parseable_json_string_count": 0,
+            "descendant_string_count": 23,
+            "descendant_title_match_count": 0,
+            "descendant_total_normalized_chars": 326,
+            "fallback_large": false,
+            "identity": "__NEXT_DATA__::$.props.pageProps.pageEntry",
+            "kind": "container",
+            "path": "$.props.pageProps.pageEntry",
+            "score": 4,
+            "script_index": 19,
+            "script_role": "__NEXT_DATA__",
+            "type": "dict"
+          },
+          {
+            "chars": 5172,
+            "child_count": 2,
+            "descendant_escaped_html_marker_count": 0,
+            "descendant_html_tag_count": 0,
+            "descendant_max_string_length": 185,
+            "descendant_max_string_path": "$.pageProps.articleDetail.content.json.children[8].children[0].text",
+            "descendant_parseable_json_string_count": 0,
+            "descendant_string_count": 242,
+            "descendant_title_match_count": 1,
+            "descendant_total_normalized_chars": 5172,
+            "fallback_large": true,
+            "identity": "__NEXT_DATA__::$.props",
+            "kind": "container",
+            "path": "$.props",
+            "score": 3,
+            "script_index": 19,
+            "script_role": "__NEXT_DATA__",
+            "type": "dict"
+          },
+          {
+            "chars": 1981,
+            "child_count": 3,
+            "descendant_escaped_html_marker_count": 0,
+            "descendant_html_tag_count": 0,
+            "descendant_max_string_length": 185,
+            "descendant_max_string_path": "$.entryKey.children[8].children[0].text",
+            "descendant_parseable_json_string_count": 0,
+            "descendant_string_count": 66,
+            "descendant_title_match_count": 0,
+            "descendant_total_normalized_chars": 1981,
+            "fallback_large": true,
+            "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.entry",
+            "kind": "container",
+            "path": "$.props.pageProps.articleDetail.entry",
+            "score": 3,
+            "script_index": 19,
+            "script_role": "__NEXT_DATA__",
+            "type": "dict"
+          },
+          {
+            "chars": 1699,
+            "child_count": 5,
+            "descendant_escaped_html_marker_count": 0,
+            "descendant_html_tag_count": 0,
+            "descendant_max_string_length": 185,
+            "descendant_max_string_path": "$.children[8].children[0].text",
+            "descendant_parseable_json_string_count": 0,
+            "descendant_string_count": 57,
+            "descendant_title_match_count": 0,
+            "descendant_total_normalized_chars": 1699,
+            "fallback_large": true,
+            "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.content.json",
+            "kind": "container",
+            "path": "$.props.pageProps.articleDetail.content.json",
+            "score": 3,
+            "script_index": 19,
+            "script_role": "__NEXT_DATA__",
+            "type": "dict"
+          },
+          {
+            "chars": 1699,
+            "child_count": 5,
+            "descendant_escaped_html_marker_count": 0,
+            "descendant_html_tag_count": 0,
+            "descendant_max_string_length": 185,
+            "descendant_max_string_path": "$.children[8].children[0].text",
+            "descendant_parseable_json_string_count": 0,
+            "descendant_string_count": 57,
+            "descendant_title_match_count": 0,
+            "descendant_total_normalized_chars": 1699,
+            "fallback_large": true,
+            "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.entry.entryKey",
+            "kind": "container",
+            "path": "$.props.pageProps.articleDetail.entry.entryKey",
+            "score": 3,
+            "script_index": 19,
+            "script_role": "__NEXT_DATA__",
+            "type": "dict"
+          }
+        ],
+        "title_outside_next_data": false
+      },
+      "raw_html_bytes": 38140,
+      "raw_html_sha256": "dcd2f0ac597c65a710575b4659a83682a893ce60fbcebc7ac10e19bcdfbc585f",
+      "requested_url": "https://announcements.bybit.com/en-US/article/delisting-of-dogusdt-perpetual-contract-blt9ee6b6807b7ba01f/",
+      "symbol": "DOGUSDT"
+    },
+    {
+      "final_url": "https://announcements.bybit.com/en/article/delisting-of-tonusdt-perpetual-contract-bltd27f1f00e6b0f5ed/",
+      "hydration": {
+        "exact_title_node_count": 1,
+        "exact_title_nodes": [
+          {
+            "ancestors": [
+              {
+                "field_count": 13,
+                "fields": [
+                  {
+                    "key": "appGip",
+                    "type": "bool"
+                  },
+                  {
+                    "contains_exact_title": false,
+                    "escaped_html_marker_count": 0,
+                    "html_tag_count": 0,
+                    "key": "assetPrefix",
+                    "newline_count": 0,
+                    "normalized_length": 21,
+                    "parseable_json_string": false,
+                    "raw_length": 21,
+                    "sha256": "a968d720611ab09c4d80d68cffa5032a26499903cb31fc25c8f1c99db72d7ab0",
+                    "type": "string"
+                  },
+                  {
+                    "contains_exact_title": false,
+                    "escaped_html_marker_count": 0,
+                    "html_tag_count": 0,
+                    "key": "buildId",
+                    "newline_count": 0,
+                    "normalized_length": 21,
+                    "parseable_json_string": false,
+                    "raw_length": 21,
+                    "sha256": "2de18e15e03ff5097283c853186b2b0cc6b8b426c29c5e51e9b6973e1ff6d4d5",
+                    "type": "string"
+                  },
+                  {
+                    "key": "customServer",
+                    "type": "bool"
+                  },
+                  {
+                    "contains_exact_title": false,
+                    "escaped_html_marker_count": 0,
+                    "html_tag_count": 0,
+                    "key": "defaultLocale",
+                    "newline_count": 0,
+                    "normalized_length": 2,
+                    "parseable_json_string": false,
+                    "raw_length": 2,
+                    "sha256": "dbd3a49d0d906b4ed9216b73330d2fb080ef2f758c12f3885068222e5e17151c",
+                    "type": "string"
+                  },
+                  {
+                    "key": "gssp",
+                    "type": "bool"
+                  },
+                  {
+                    "key": "isFallback",
+                    "type": "bool"
+                  },
+                  {
+                    "contains_exact_title": false,
+                    "escaped_html_marker_count": 0,
+                    "html_tag_count": 0,
+                    "key": "locale",
+                    "newline_count": 0,
+                    "normalized_length": 2,
+                    "parseable_json_string": false,
+                    "raw_length": 2,
+                    "sha256": "dbd3a49d0d906b4ed9216b73330d2fb080ef2f758c12f3885068222e5e17151c",
+                    "type": "string"
+                  },
+                  {
+                    "child_count": 66,
+                    "descendant_escaped_html_marker_count": 0,
+                    "descendant_html_tag_count": 0,
+                    "descendant_max_string_length": 6,
+                    "descendant_max_string_path": "$[23]",
+                    "descendant_parseable_json_string_count": 0,
+                    "descendant_string_count": 66,
+                    "descendant_title_match_count": 0,
+                    "descendant_total_normalized_chars": 348,
+                    "key": "locales",
+                    "type": "list"
+                  },
+                  {
+                    "contains_exact_title": false,
+                    "escaped_html_marker_count": 0,
+                    "html_tag_count": 0,
+                    "key": "page",
+                    "newline_count": 0,
+                    "normalized_length": 23,
+                    "parseable_json_string": false,
+                    "raw_length": 23,
+                    "sha256": "4d3aaee033b075f0fc57b9c24431108552a05b23e27ea6a717e07032265756ce",
+                    "type": "string"
+                  },
+                  {
+                    "child_count": 2,
+                    "descendant_escaped_html_marker_count": 0,
+                    "descendant_html_tag_count": 0,
+                    "descendant_max_string_length": 185,
+                    "descendant_max_string_path": "$.pageProps.articleDetail.content.json.children[8].children[0].text",
+                    "descendant_parseable_json_string_count": 0,
+                    "descendant_string_count": 242,
+                    "descendant_title_match_count": 1,
+                    "descendant_total_normalized_chars": 5172,
+                    "key": "props",
+                    "type": "dict"
+                  },
+                  {
+                    "child_count": 1,
+                    "descendant_escaped_html_marker_count": 0,
+                    "descendant_html_tag_count": 0,
+                    "descendant_max_string_length": 59,
+                    "descendant_max_string_path": "$.articleTitle",
+                    "descendant_parseable_json_string_count": 0,
+                    "descendant_string_count": 1,
+                    "descendant_title_match_count": 0,
+                    "descendant_total_normalized_chars": 59,
+                    "key": "query",
+                    "type": "dict"
+                  },
+                  {
+                    "child_count": 0,
+                    "descendant_escaped_html_marker_count": 0,
+                    "descendant_html_tag_count": 0,
+                    "descendant_max_string_length": 0,
+                    "descendant_max_string_path": null,
+                    "descendant_parseable_json_string_count": 0,
+                    "descendant_string_count": 0,
+                    "descendant_title_match_count": 0,
+                    "descendant_total_normalized_chars": 0,
+                    "key": "scriptLoader",
+                    "type": "list"
+                  }
+                ],
+                "path": "$",
+                "type": "dict"
+              },
+              {
+                "field_count": 2,
+                "fields": [
+                  {
+                    "key": "__N_SSP",
+                    "type": "bool"
+                  },
+                  {
+                    "child_count": 13,
+                    "descendant_escaped_html_marker_count": 0,
+                    "descendant_html_tag_count": 0,
+                    "descendant_max_string_length": 185,
+                    "descendant_max_string_path": "$.articleDetail.content.json.children[8].children[0].text",
+                    "descendant_parseable_json_string_count": 0,
+                    "descendant_string_count": 242,
+                    "descendant_title_match_count": 1,
+                    "descendant_total_normalized_chars": 5172,
+                    "key": "pageProps",
+                    "type": "dict"
+                  }
+                ],
+                "path": "$.props",
+                "type": "dict"
+              },
+              {
+                "field_count": 13,
+                "fields": [
+                  {
+                    "child_count": 19,
+                    "descendant_escaped_html_marker_count": 0,
+                    "descendant_html_tag_count": 0,
+                    "descendant_max_string_length": 185,
+                    "descendant_max_string_path": "$.content.json.children[8].children[0].text",
+                    "descendant_parseable_json_string_count": 0,
+                    "descendant_string_count": 144,
+                    "descendant_title_match_count": 1,
+                    "descendant_total_normalized_chars": 4303,
+                    "key": "articleDetail",
+                    "type": "dict"
+                  },
+                  {
+                    "contains_exact_title": false,
+                    "escaped_html_marker_count": 0,
+                    "html_tag_count": 0,
+                    "key": "articleObjectID",
+                    "newline_count": 0,
+                    "normalized_length": 27,
+                    "parseable_json_string": false,
+                    "raw_length": 27,
+                    "sha256": "da4c4a91cab845a758ed483cd67a6a211d698392b43b22fe3002b8e7fc2f9548",
+                    "type": "string"
+                  },
+                  {
+                    "contains_exact_title": false,
+                    "escaped_html_marker_count": 0,
+                    "html_tag_count": 0,
+                    "key": "articleUID",
+                    "newline_count": 0,
+                    "normalized_length": 19,
+                    "parseable_json_string": false,
+                    "raw_length": 19,
+                    "sha256": "e7b74dd03458e0952870d2b00c6c4e17190f74bbd893876a3dc5f4f083a3ba00",
+                    "type": "string"
+                  },
+                  {
+                    "contains_exact_title": false,
+                    "escaped_html_marker_count": 0,
+                    "html_tag_count": 0,
+                    "key": "canonical",
+                    "newline_count": 0,
+                    "normalized_length": 103,
+                    "parseable_json_string": false,
+                    "raw_length": 103,
+                    "sha256": "c121d720069bf8ff5e12af1fb6492564d2b523fb596331c2559195cbbf247766",
+                    "type": "string"
+                  },
+                  {
+                    "contains_exact_title": false,
+                    "escaped_html_marker_count": 0,
+                    "html_tag_count": 0,
+                    "key": "host",
+                    "newline_count": 0,
+                    "normalized_length": 23,
+                    "parseable_json_string": false,
+                    "raw_length": 23,
+                    "sha256": "f1cf26f501ada1cf2f136795eb3fb01b26cacc062bd7fe8ba843261839f6ed61",
+                    "type": "string"
+                  },
+                  {
+                    "contains_exact_title": false,
+                    "escaped_html_marker_count": 0,
+                    "html_tag_count": 0,
+                    "key": "hrefFrom",
+                    "newline_count": 0,
+                    "normalized_length": 6,
+                    "parseable_json_string": false,
+                    "raw_length": 6,
+                    "sha256": "317b32c143692b9939c197f6a5df54f9698df9a4882fe8bf19608968662be4fa",
+                    "type": "string"
+                  },
+                  {
+                    "contains_exact_title": false,
+                    "escaped_html_marker_count": 0,
+                    "html_tag_count": 0,
+                    "key": "initialCategory",
+                    "newline_count": 0,
+                    "normalized_length": 10,
+                    "parseable_json_string": false,
+                    "raw_length": 10,
+                    "sha256": "b640b5582df188447211879b441185c59a003b32674a750745b0f95dbcfbfb2a",
+                    "type": "string"
+                  },
+                  {
+                    "contains_exact_title": false,
+                    "escaped_html_marker_count": 0,
+                    "html_tag_count": 0,
+                    "key": "initialSearchKeyword",
+                    "newline_count": 0,
+                    "normalized_length": 0,
+                    "parseable_json_string": false,
+                    "raw_length": 0,
+                    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                    "type": "string"
+                  },
+                  {
+                    "contains_exact_title": false,
+                    "escaped_html_marker_count": 0,
+                    "html_tag_count": 0,
+                    "key": "locale",
+                    "newline_count": 0,
+                    "normalized_length": 2,
+                    "parseable_json_string": false,
+                    "raw_length": 2,
+                    "sha256": "dbd3a49d0d906b4ed9216b73330d2fb080ef2f758c12f3885068222e5e17151c",
+                    "type": "string"
+                  },
+                  {
+                    "child_count": 66,
+                    "descendant_escaped_html_marker_count": 0,
+                    "descendant_html_tag_count": 0,
+                    "descendant_max_string_length": 6,
+                    "descendant_max_string_path": "$[23]",
+                    "descendant_parseable_json_string_count": 0,
+                    "descendant_string_count": 66,
+                    "descendant_title_match_count": 0,
+                    "descendant_total_normalized_chars": 348,
+                    "key": "locales",
+                    "type": "list"
+                  },
+                  {
+                    "child_count": 4,
+                    "descendant_escaped_html_marker_count": 0,
+                    "descendant_html_tag_count": 0,
+                    "descendant_max_string_length": 65,
+                    "descendant_max_string_path": "$.description",
+                    "descendant_parseable_json_string_count": 0,
+                    "descendant_string_count": 23,
+                    "descendant_title_match_count": 0,
+                    "descendant_total_normalized_chars": 326,
+                    "key": "pageEntry",
+                    "type": "dict"
+                  },
+                  {
+                    "child_count": 0,
+                    "descendant_escaped_html_marker_count": 0,
+                    "descendant_html_tag_count": 0,
+                    "descendant_max_string_length": 0,
+                    "descendant_max_string_path": null,
+                    "descendant_parseable_json_string_count": 0,
+                    "descendant_string_count": 0,
+                    "descendant_title_match_count": 0,
+                    "descendant_total_normalized_chars": 0,
+                    "key": "recommendData",
+                    "type": "list"
+                  },
+                  {
+                    "contains_exact_title": false,
+                    "escaped_html_marker_count": 0,
+                    "html_tag_count": 0,
+                    "key": "theme",
+                    "newline_count": 0,
+                    "normalized_length": 5,
+                    "parseable_json_string": false,
+                    "raw_length": 5,
+                    "sha256": "99a7026172d42714d0293e5598ec1c8e8260d7d0c4b8582ad002c1883494e216",
+                    "type": "string"
+                  }
+                ],
+                "path": "$.props.pageProps",
+                "type": "dict"
+              },
+              {
+                "field_count": 19,
+                "fields": [
+                  {
+                    "child_count": 0,
+                    "descendant_escaped_html_marker_count": 0,
+                    "descendant_html_tag_count": 0,
+                    "descendant_max_string_length": 0,
+                    "descendant_max_string_path": null,
+                    "descendant_parseable_json_string_count": 0,
+                    "descendant_string_count": 0,
+                    "descendant_title_match_count": 0,
+                    "descendant_total_normalized_chars": 0,
+                    "key": "bu_or_function",
+                    "type": "list"
+                  },
+                  {
+                    "contains_exact_title": false,
+                    "escaped_html_marker_count": 0,
+                    "html_tag_count": 0,
+                    "key": "campaign_id",
+                    "newline_count": 0,
+                    "normalized_length": 0,
+                    "parseable_json_string": false,
+                    "raw_length": 0,
+                    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                    "type": "string"
+                  },
+                  {
+                    "child_count": 1,
+                    "descendant_escaped_html_marker_count": 0,
+                    "descendant_html_tag_count": 0,
+                    "descendant_max_string_length": 10,
+                    "descendant_max_string_path": "$.edges[0].node.title",
+                    "descendant_parseable_json_string_count": 0,
+                    "descendant_string_count": 2,
+                    "descendant_title_match_count": 0,
+                    "descendant_total_normalized_chars": 20,
+                    "key": "categoryConnection",
+                    "type": "dict"
+                  },
+                  {
+                    "child_count": 2,
+                    "descendant_escaped_html_marker_count": 0,
+                    "descendant_html_tag_count": 0,
+                    "descendant_max_string_length": 185,
+                    "descendant_max_string_path": "$.json.children[8].children[0].text",
+                    "descendant_parseable_json_string_count": 0,
+                    "descendant_string_count": 63,
+                    "descendant_title_match_count": 0,
+                    "descendant_total_normalized_chars": 1933,
+                    "key": "content",
+                    "type": "dict"
+                  },
+                  {
+                    "contains_exact_title": false,
+                    "escaped_html_marker_count": 0,
+                    "html_tag_count": 0,
+                    "key": "content_html",
+                    "newline_count": 0,
+                    "normalized_length": 0,
+                    "parseable_json_string": false,
+                    "raw_length": 0,
+                    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                    "type": "string"
+                  },
+                  {
+                    "contains_exact_title": false,
+                    "escaped_html_marker_count": 0,
+                    "html_tag_count": 0,
+                    "key": "date",
+                    "newline_count": 0,
+                    "normalized_length": 25,
+                    "parseable_json_string": false,
+                    "raw_length": 25,
+                    "sha256": "81de625d64337cf27ebcd22e200884127ab3dfb59be2b47106c3a9241b3878f2",
+                    "type": "string"
+                  },
+                  {
+                    "contains_exact_title": false,
+                    "escaped_html_marker_count": 0,
+                    "html_tag_count": 0,
+                    "key": "description",
+                    "newline_count": 0,
+                    "normalized_length": 83,
+                    "parseable_json_string": false,
+                    "raw_length": 83,
+                    "sha256": "62444857763c9049532aff69477f48e52075214f07107c9ae5872c84a5634792",
+                    "type": "string"
+                  },
+                  {
+                    "contains_exact_title": false,
+                    "escaped_html_marker_count": 0,
+                    "html_tag_count": 0,
+                    "key": "end_time",
+                    "newline_count": 0,
+                    "normalized_length": 25,
+                    "parseable_json_string": false,
+                    "raw_length": 25,
+                    "sha256": "81de625d64337cf27ebcd22e200884127ab3dfb59be2b47106c3a9241b3878f2",
+                    "type": "string"
+                  },
+                  {
+                    "child_count": 3,
+                    "descendant_escaped_html_marker_count": 0,
+                    "descendant_html_tag_count": 0,
+                    "descendant_max_string_length": 185,
+                    "descendant_max_string_path": "$.entryKey.children[8].children[0].text",
+                    "descendant_parseable_json_string_count": 0,
+                    "descendant_string_count": 66,
+                    "descendant_title_match_count": 0,
+                    "descendant_total_normalized_chars": 1981,
+                    "key": "entry",
+                    "type": "dict"
+                  },
+                  {
+                    "child_count": 3,
+                    "descendant_escaped_html_marker_count": 0,
+                    "descendant_html_tag_count": 0,
+                    "descendant_max_string_length": 12,
+                    "descendant_max_string_path": "$[1]",
+                    "descendant_parseable_json_string_count": 0,
+                    "descendant_string_count": 3,
+                    "descendant_title_match_count": 0,
+                    "descendant_total_normalized_chars": 33,
+                    "key": "keywords",
+                    "type": "list"
+                  },
+                  {
+                    "contains_exact_title": false,
+                    "escaped_html_marker_count": 0,
+                    "html_tag_count": 0,
+                    "key": "locale",
+                    "newline_count": 0,
+                    "normalized_length": 2,
+                    "parseable_json_string": false,
+                    "raw_length": 2,
+                    "sha256": "dbd3a49d0d906b4ed9216b73330d2fb080ef2f758c12f3885068222e5e17151c",
+                    "type": "string"
+                  },
+                  {
+                    "key": "read_time",
+                    "type": "number"
+                  },
+                  {
+                    "key": "show_thumbnail_first",
+                    "type": "bool"
+                  },
+                  {
+                    "contains_exact_title": false,
+                    "escaped_html_marker_count": 0,
+                    "html_tag_count": 0,
+                    "key": "start_time",
+                    "newline_count": 0,
+                    "normalized_length": 0,
+                    "parseable_json_string": false,
+                    "raw_length": 0,
+                    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                    "type": "string"
+                  },
+                  {
+                    "key": "system",
+                    "type": "null"
+                  },
+                  {
+                    "child_count": 1,
+                    "descendant_escaped_html_marker_count": 0,
+                    "descendant_html_tag_count": 0,
+                    "descendant_max_string_length": 93,
+                    "descendant_max_string_path": "$.edges[0].node.url",
+                    "descendant_parseable_json_string_count": 0,
+                    "descendant_string_count": 1,
+                    "descendant_title_match_count": 0,
+                    "descendant_total_normalized_chars": 93,
+                    "key": "thumbnailConnection",
+                    "type": "dict"
+                  },
+                  {
+                    "contains_exact_title": true,
+                    "escaped_html_marker_count": 0,
+                    "html_tag_count": 0,
+                    "key": "title",
+                    "newline_count": 0,
+                    "normalized_length": 39,
+                    "parseable_json_string": false,
+                    "raw_length": 39,
+                    "sha256": "3f054fdb11e38079e423567734dec207a23dd3a5f1a17246fdcbdb5aa1c24b4e",
+                    "type": "string"
+                  },
+                  {
+                    "contains_exact_title": false,
+                    "escaped_html_marker_count": 0,
+                    "html_tag_count": 0,
+                    "key": "url",
+                    "newline_count": 0,
+                    "normalized_length": 69,
+                    "parseable_json_string": false,
+                    "raw_length": 69,
+                    "sha256": "cf8905fcf2ad837f2a8daaf6c5461dceed0cd00650795502a82fda59a5381af0",
+                    "type": "string"
+                  },
+                  {
+                    "key": "whether_to_top",
+                    "type": "bool"
+                  }
+                ],
+                "path": "$.props.pageProps.articleDetail",
+                "type": "dict"
+              }
+            ],
+            "exact_string_match": true,
+            "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.title",
+            "length": 39,
+            "path": "$.props.pageProps.articleDetail.title",
+            "script_index": 19,
+            "script_role": "__NEXT_DATA__",
+            "sha256": "3f054fdb11e38079e423567734dec207a23dd3a5f1a17246fdcbdb5aa1c24b4e"
+          }
+        ],
+        "json_candidate_script_count": 1,
+        "json_documents": [
+          {
+            "containing_title_node_count": 1,
+            "exact_title_node_count": 1,
+            "pageprops_keys": [
+              "articleDetail",
+              "articleObjectID",
+              "articleUID",
+              "canonical",
+              "host",
+              "hrefFrom",
+              "initialCategory",
+              "initialSearchKeyword",
+              "locale",
+              "locales",
+              "pageEntry",
+              "recommendData",
+              "theme"
+            ],
+            "parse_error": null,
+            "parseable_json": true,
+            "role": "__NEXT_DATA__",
+            "script_id": "__NEXT_DATA__",
+            "script_index": 19,
+            "script_length": 9799,
+            "script_sha256": "38c3e0563f27d6c8bb18314de0c9d44c703e1b91320cac8be55ae7a154d12617",
+            "script_type": "application/json",
+            "structural_candidate_count": 18,
+            "top_level_keys": [
+              "appGip",
+              "assetPrefix",
+              "buildId",
+              "customServer",
+              "defaultLocale",
+              "gssp",
+              "isFallback",
+              "locale",
+              "locales",
+              "page",
+              "props",
+              "query",
+              "scriptLoader"
+            ]
+          }
+        ],
+        "key_inventory": [
+          "__N_SSP",
+          "_content_type_uid",
+          "_embedded_items",
+          "_version",
+          "alt",
+          "appGip",
+          "articleDetail",
+          "articleObjectID",
+          "articleTitle",
+          "articleUID",
+          "asset-alt",
+          "asset-link",
+          "asset-name",
+          "asset-type",
+          "asset-uid",
+          "assetPrefix",
+          "attrs",
+          "bu_or_function",
+          "buildId",
+          "campaign_id",
+          "canonical",
+          "categories",
+          "categoryConnection",
+          "children",
+          "class-name",
+          "content",
+          "content-type-uid",
+          "content_html",
+          "content_type",
+          "content_type_uid",
+          "customServer",
+          "date",
+          "defaultLocale",
+          "description",
+          "display-type",
+          "edges",
+          "embedded_itemsConnection",
+          "end_time",
+          "entry",
+          "entryKey",
+          "filename",
+          "gssp",
+          "host",
+          "hrefFrom",
+          "initialCategory",
+          "initialSearchKeyword",
+          "inline",
+          "isFallback",
+          "json",
+          "key",
+          "keywords",
+          "label",
+          "locale",
+          "locales",
+          "node",
+          "page",
+          "pageEntry",
+          "pageProps",
+          "props",
+          "query",
+          "read_time",
+          "recommendData",
+          "scriptLoader",
+          "show_thumbnail_first",
+          "start_time",
+          "system",
+          "text",
+          "theme",
+          "thumbnailConnection",
+          "title",
+          "type",
+          "uid",
+          "url",
+          "whether_to_top"
+        ],
+        "next_data_contains_exact_title": true,
+        "next_data_script_count": 1,
+        "parseable_json_script_count": 1,
+        "parseable_title_script_count": 1,
+        "script_count": 27,
+        "scripts_with_raw_exact_title": [
+          {
+            "script_id": "__NEXT_DATA__",
+            "script_index": 19,
+            "script_length": 9799,
+            "script_sha256": "38c3e0563f27d6c8bb18314de0c9d44c703e1b91320cac8be55ae7a154d12617",
+            "script_type": "application/json"
+          }
+        ],
+        "scripts_with_raw_exact_title_count": 1,
+        "structural_candidate_count": 18,
+        "structural_candidates": [
+          {
+            "chars": 1933,
+            "child_count": 2,
+            "descendant_escaped_html_marker_count": 0,
+            "descendant_html_tag_count": 0,
+            "descendant_max_string_length": 185,
+            "descendant_max_string_path": "$.json.children[8].children[0].text",
+            "descendant_parseable_json_string_count": 0,
+            "descendant_string_count": 63,
+            "descendant_title_match_count": 0,
+            "descendant_total_normalized_chars": 1933,
+            "fallback_large": true,
+            "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.content",
+            "kind": "container",
+            "path": "$.props.pageProps.articleDetail.content",
+            "score": 8,
+            "script_index": 19,
+            "script_role": "__NEXT_DATA__",
+            "type": "dict"
+          },
+          {
+            "chars": 1664,
+            "child_count": 15,
+            "descendant_escaped_html_marker_count": 0,
+            "descendant_html_tag_count": 0,
+            "descendant_max_string_length": 185,
+            "descendant_max_string_path": "$[8].children[0].text",
+            "descendant_parseable_json_string_count": 0,
+            "descendant_string_count": 55,
+            "descendant_title_match_count": 0,
+            "descendant_total_normalized_chars": 1664,
+            "fallback_large": true,
+            "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.content.json.children",
+            "kind": "container",
+            "path": "$.props.pageProps.articleDetail.content.json.children",
+            "score": 8,
+            "script_index": 19,
+            "script_role": "__NEXT_DATA__",
+            "type": "list"
+          },
+          {
+            "chars": 1664,
+            "child_count": 15,
+            "descendant_escaped_html_marker_count": 0,
+            "descendant_html_tag_count": 0,
+            "descendant_max_string_length": 185,
+            "descendant_max_string_path": "$[8].children[0].text",
+            "descendant_parseable_json_string_count": 0,
+            "descendant_string_count": 55,
+            "descendant_title_match_count": 0,
+            "descendant_total_normalized_chars": 1664,
+            "fallback_large": true,
+            "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.entry.entryKey.children",
+            "kind": "container",
+            "path": "$.props.pageProps.articleDetail.entry.entryKey.children",
+            "score": 8,
+            "script_index": 19,
+            "script_role": "__NEXT_DATA__",
+            "type": "list"
+          },
+          {
+            "chars": 185,
+            "child_count": 1,
+            "descendant_escaped_html_marker_count": 0,
+            "descendant_html_tag_count": 0,
+            "descendant_max_string_length": 185,
+            "descendant_max_string_path": "$[0].text",
+            "descendant_parseable_json_string_count": 0,
+            "descendant_string_count": 1,
+            "descendant_title_match_count": 0,
+            "descendant_total_normalized_chars": 185,
+            "fallback_large": false,
+            "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.content.json.children[8].children",
+            "kind": "container",
+            "path": "$.props.pageProps.articleDetail.content.json.children[8].children",
+            "score": 7,
+            "script_index": 19,
+            "script_role": "__NEXT_DATA__",
+            "type": "list"
+          },
+          {
+            "chars": 185,
+            "child_count": 1,
+            "descendant_escaped_html_marker_count": 0,
+            "descendant_html_tag_count": 0,
+            "descendant_max_string_length": 185,
+            "descendant_max_string_path": "$[0].text",
+            "descendant_parseable_json_string_count": 0,
+            "descendant_string_count": 1,
+            "descendant_title_match_count": 0,
+            "descendant_total_normalized_chars": 185,
+            "fallback_large": false,
+            "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.entry.entryKey.children[8].children",
+            "kind": "container",
+            "path": "$.props.pageProps.articleDetail.entry.entryKey.children[8].children",
+            "score": 7,
+            "script_index": 19,
+            "script_role": "__NEXT_DATA__",
+            "type": "list"
+          },
+          {
+            "chars": 126,
+            "child_count": 1,
+            "descendant_escaped_html_marker_count": 0,
+            "descendant_html_tag_count": 0,
+            "descendant_max_string_length": 126,
+            "descendant_max_string_path": "$[0].text",
+            "descendant_parseable_json_string_count": 0,
+            "descendant_string_count": 1,
+            "descendant_title_match_count": 0,
+            "descendant_total_normalized_chars": 126,
+            "fallback_large": false,
+            "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.content.json.children[12].children",
+            "kind": "container",
+            "path": "$.props.pageProps.articleDetail.content.json.children[12].children",
+            "score": 7,
+            "script_index": 19,
+            "script_role": "__NEXT_DATA__",
+            "type": "list"
+          },
+          {
+            "chars": 126,
+            "child_count": 1,
+            "descendant_escaped_html_marker_count": 0,
+            "descendant_html_tag_count": 0,
+            "descendant_max_string_length": 126,
+            "descendant_max_string_path": "$[0].text",
+            "descendant_parseable_json_string_count": 0,
+            "descendant_string_count": 1,
+            "descendant_title_match_count": 0,
+            "descendant_total_normalized_chars": 126,
+            "fallback_large": false,
+            "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.entry.entryKey.children[12].children",
+            "kind": "container",
+            "path": "$.props.pageProps.articleDetail.entry.entryKey.children[12].children",
+            "score": 7,
+            "script_index": 19,
+            "script_role": "__NEXT_DATA__",
+            "type": "list"
+          },
+          {
+            "chars": 5172,
+            "child_count": 13,
+            "descendant_escaped_html_marker_count": 0,
+            "descendant_html_tag_count": 0,
+            "descendant_max_string_length": 185,
+            "descendant_max_string_path": "$.articleDetail.content.json.children[8].children[0].text",
+            "descendant_parseable_json_string_count": 0,
+            "descendant_string_count": 242,
+            "descendant_title_match_count": 1,
+            "descendant_total_normalized_chars": 5172,
+            "fallback_large": true,
+            "identity": "__NEXT_DATA__::$.props.pageProps",
+            "kind": "container",
+            "path": "$.props.pageProps",
+            "score": 6,
+            "script_index": 19,
+            "script_role": "__NEXT_DATA__",
+            "type": "dict"
+          },
+          {
+            "chars": 4303,
+            "child_count": 19,
+            "descendant_escaped_html_marker_count": 0,
+            "descendant_html_tag_count": 0,
+            "descendant_max_string_length": 185,
+            "descendant_max_string_path": "$.content.json.children[8].children[0].text",
+            "descendant_parseable_json_string_count": 0,
+            "descendant_string_count": 144,
+            "descendant_title_match_count": 1,
+            "descendant_total_normalized_chars": 4303,
+            "fallback_large": true,
+            "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail",
+            "kind": "container",
+            "path": "$.props.pageProps.articleDetail",
+            "score": 6,
+            "script_index": 19,
+            "script_role": "__NEXT_DATA__",
+            "type": "dict"
+          },
+          {
+            "chars": 185,
+            "contains_exact_title": false,
+            "escaped_html_marker_count": 0,
+            "fallback_large": false,
+            "html_tag_count": 0,
+            "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.content.json.children[8].children[0].text",
+            "kind": "string",
+            "newline_count": 0,
+            "normalized_length": 185,
+            "parseable_json_string": false,
+            "path": "$.props.pageProps.articleDetail.content.json.children[8].children[0].text",
+            "raw_length": 185,
+            "score": 6,
+            "script_index": 19,
+            "script_role": "__NEXT_DATA__",
+            "sha256": "5aae48e5ea173b8e0d724524ee54c434fcdeda1fa19b61e09ab4921392f1b3e1",
+            "type": "string"
+          },
+          {
+            "chars": 185,
+            "contains_exact_title": false,
+            "escaped_html_marker_count": 0,
+            "fallback_large": false,
+            "html_tag_count": 0,
+            "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.entry.entryKey.children[8].children[0].text",
+            "kind": "string",
+            "newline_count": 0,
+            "normalized_length": 185,
+            "parseable_json_string": false,
+            "path": "$.props.pageProps.articleDetail.entry.entryKey.children[8].children[0].text",
+            "raw_length": 185,
+            "score": 6,
+            "script_index": 19,
+            "script_role": "__NEXT_DATA__",
+            "sha256": "5aae48e5ea173b8e0d724524ee54c434fcdeda1fa19b61e09ab4921392f1b3e1",
+            "type": "string"
+          },
+          {
+            "chars": 126,
+            "contains_exact_title": false,
+            "escaped_html_marker_count": 0,
+            "fallback_large": false,
+            "html_tag_count": 0,
+            "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.content.json.children[12].children[0].text",
+            "kind": "string",
+            "newline_count": 0,
+            "normalized_length": 126,
+            "parseable_json_string": false,
+            "path": "$.props.pageProps.articleDetail.content.json.children[12].children[0].text",
+            "raw_length": 126,
+            "score": 6,
+            "script_index": 19,
+            "script_role": "__NEXT_DATA__",
+            "sha256": "4a2f05510c55b188ccfa53edb420fe3118a49fcb1c5ed715ac160bcdea28b2a7",
+            "type": "string"
+          },
+          {
+            "chars": 126,
+            "contains_exact_title": false,
+            "escaped_html_marker_count": 0,
+            "fallback_large": false,
+            "html_tag_count": 0,
+            "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.entry.entryKey.children[12].children[0].text",
+            "kind": "string",
+            "newline_count": 0,
+            "normalized_length": 126,
+            "parseable_json_string": false,
+            "path": "$.props.pageProps.articleDetail.entry.entryKey.children[12].children[0].text",
+            "raw_length": 126,
+            "score": 6,
+            "script_index": 19,
+            "script_role": "__NEXT_DATA__",
+            "sha256": "4a2f05510c55b188ccfa53edb420fe3118a49fcb1c5ed715ac160bcdea28b2a7",
+            "type": "string"
+          },
+          {
+            "chars": 326,
+            "child_count": 4,
+            "descendant_escaped_html_marker_count": 0,
+            "descendant_html_tag_count": 0,
+            "descendant_max_string_length": 65,
+            "descendant_max_string_path": "$.description",
+            "descendant_parseable_json_string_count": 0,
+            "descendant_string_count": 23,
+            "descendant_title_match_count": 0,
+            "descendant_total_normalized_chars": 326,
+            "fallback_large": false,
+            "identity": "__NEXT_DATA__::$.props.pageProps.pageEntry",
+            "kind": "container",
+            "path": "$.props.pageProps.pageEntry",
+            "score": 4,
+            "script_index": 19,
+            "script_role": "__NEXT_DATA__",
+            "type": "dict"
+          },
+          {
+            "chars": 5172,
+            "child_count": 2,
+            "descendant_escaped_html_marker_count": 0,
+            "descendant_html_tag_count": 0,
+            "descendant_max_string_length": 185,
+            "descendant_max_string_path": "$.pageProps.articleDetail.content.json.children[8].children[0].text",
+            "descendant_parseable_json_string_count": 0,
+            "descendant_string_count": 242,
+            "descendant_title_match_count": 1,
+            "descendant_total_normalized_chars": 5172,
+            "fallback_large": true,
+            "identity": "__NEXT_DATA__::$.props",
+            "kind": "container",
+            "path": "$.props",
+            "score": 3,
+            "script_index": 19,
+            "script_role": "__NEXT_DATA__",
+            "type": "dict"
+          },
+          {
+            "chars": 1981,
+            "child_count": 3,
+            "descendant_escaped_html_marker_count": 0,
+            "descendant_html_tag_count": 0,
+            "descendant_max_string_length": 185,
+            "descendant_max_string_path": "$.entryKey.children[8].children[0].text",
+            "descendant_parseable_json_string_count": 0,
+            "descendant_string_count": 66,
+            "descendant_title_match_count": 0,
+            "descendant_total_normalized_chars": 1981,
+            "fallback_large": true,
+            "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.entry",
+            "kind": "container",
+            "path": "$.props.pageProps.articleDetail.entry",
+            "score": 3,
+            "script_index": 19,
+            "script_role": "__NEXT_DATA__",
+            "type": "dict"
+          },
+          {
+            "chars": 1699,
+            "child_count": 5,
+            "descendant_escaped_html_marker_count": 0,
+            "descendant_html_tag_count": 0,
+            "descendant_max_string_length": 185,
+            "descendant_max_string_path": "$.children[8].children[0].text",
+            "descendant_parseable_json_string_count": 0,
+            "descendant_string_count": 57,
+            "descendant_title_match_count": 0,
+            "descendant_total_normalized_chars": 1699,
+            "fallback_large": true,
+            "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.content.json",
+            "kind": "container",
+            "path": "$.props.pageProps.articleDetail.content.json",
+            "score": 3,
+            "script_index": 19,
+            "script_role": "__NEXT_DATA__",
+            "type": "dict"
+          },
+          {
+            "chars": 1699,
+            "child_count": 5,
+            "descendant_escaped_html_marker_count": 0,
+            "descendant_html_tag_count": 0,
+            "descendant_max_string_length": 185,
+            "descendant_max_string_path": "$.children[8].children[0].text",
+            "descendant_parseable_json_string_count": 0,
+            "descendant_string_count": 57,
+            "descendant_title_match_count": 0,
+            "descendant_total_normalized_chars": 1699,
+            "fallback_large": true,
+            "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.entry.entryKey",
+            "kind": "container",
+            "path": "$.props.pageProps.articleDetail.entry.entryKey",
+            "score": 3,
+            "script_index": 19,
+            "script_role": "__NEXT_DATA__",
+            "type": "dict"
+          }
+        ],
+        "title_outside_next_data": false
+      },
+      "raw_html_bytes": 38140,
+      "raw_html_sha256": "0d48f83338cde3feb4893353e84bb01ba105544ae56fa6ac903d48641a2d2d26",
+      "requested_url": "https://announcements.bybit.com/en-US/article/delisting-of-tonusdt-perpetual-contract-bltd27f1f00e6b0f5ed/",
+      "symbol": "TONUSDT"
+    }
+  ],
+  "external_reference_price_accessed": false,
+  "index_value_accessed": false,
+  "pnl_accessed": false,
+  "price_accessed": false,
+  "returns_accessed": false,
+  "schema": "sc001.b15p2_next_data_structure_probe.v0.4",
+  "semantic_classification_performed": false,
+  "status": "B15P2_NEXT_DATA_STRUCTURE_PROBE_V04_COMPLETE"
+}
