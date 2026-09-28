@@ -1,0 +1,120 @@
+{
+  "schema": "sc001.b15p2_announcement_body_semantic_audit_networked_launch_contract.v0.2",
+  "date": "2026-09-28",
+  "status": "FROZEN_AWAITING_EXPLICIT_NETWORKED_APPROVAL",
+  "purpose": "Retry the exact frozen 94-page Bybit announcement semantic audit using unchanged semantic logic and an asynchronous host wrapper with transport-only progress. No market-price, index-value, basis, return or PnL data is authorized.",
+  "frozen_input": {
+    "source_result": {
+      "path": "docs/research/artifacts/b15-p2-source-census-v0.1.1/20260927T193110Z/source_census_result.v0.1.1.json",
+      "sha256": "c28aeb2b1ac0a23fb0e4420ced943fd619dd0a60e3fdcf5820299579cb94206c"
+    },
+    "event_set_freeze": {
+      "path": "docs/research/artifacts/b15-p2-source-census-v0.1.1/20260927T193110Z/source_census_event_set_freeze.v0.1.json",
+      "sha256": "81952c83e7397481035cc00354388dfe3470ad17993c6e80665a7d376be907ed",
+      "event_set_sha256": "1063695ec003a0d6789270659822f50577e6a0f07059d88ac03a5be4288ed1a2",
+      "event_count": 94,
+      "unique_announcement_url_count": 94
+    }
+  },
+  "implementation": {
+    "path": "research/sc001/sc001_b15p2_announcement_body_semantic_audit_v0_1_3.py",
+    "sha256": "8a5ba89168dcd7845a7f340027e552767b41836b3c10755df00a6f9b7a309e78",
+    "semantic_logic_unchanged_from_v0_1_2": true
+  },
+  "protocol": {
+    "path": "docs/research/sc001-b15p2-announcement-body-semantic-audit-protocol-v0.1.md",
+    "sha256": "4209779876e3796feff16a8310af93324cd1927862874524fb90ebf95d51d84f"
+  },
+  "implementation_freeze": {
+    "path": "docs/research/sc001-b15p2-announcement-body-semantic-audit-implementation-freeze-v0.1.3.json",
+    "sha256": "175381cdff6873310405ffdf2ae3a3b2630e87a5c6ca0ad3f422ba45a85ba3b1"
+  },
+  "offline_selftest_result": {
+    "path": "docs/research/sc001-b15p2-announcement-body-semantic-audit-v013-offline-selftest-result-v0.1.json",
+    "sha256": "71d1f9cdffc2f8b02699b2c5b305f20b985dc7494e0373ca64c1303a9dcb4123",
+    "required_status": "B15P2_ANNOUNCEMENT_BODY_SEMANTIC_AUDIT_V013_SELF_TEST_PASS",
+    "job_id": "job_20260928T065945Z_6977cbfd"
+  },
+  "host_wrapper": {
+    "path": "scripts/research/run-b15p2-announcement-body-semantic-audit-v0.2.sh",
+    "sha256": "7bf4d61206b4f761f986f23cf6c58a2ddb436406b490523fb8923dc721520a31",
+    "preflight_mode": "--preflight",
+    "launch_mode": "--launch",
+    "status_mode": "--status",
+    "preflight_cross_document_validation": "PASS",
+    "staged_selftest_required": true,
+    "execution_mode": "ASYNC_SYSTEMD_NO_BLOCK",
+    "termux_prompt_returns_after_launch": true,
+    "same_session_status_polling": true,
+    "running_states": [
+      "activating",
+      "active",
+      "reloading"
+    ],
+    "transport_progress_only_while_running": true,
+    "intermediate_semantic_classification_exposed": false,
+    "persistent_diagnostics": true,
+    "runtime_bound_seconds": 7200,
+    "uses_git_status": false
+  },
+  "deterministic_runtime_bound_reasoning": {
+    "event_count": 94,
+    "per_request_timeout_seconds": 30,
+    "attempts_per_url": 2,
+    "retry_sleep_seconds_max_per_url": 1,
+    "inter_event_sleep_seconds": 0.25,
+    "approximate_worst_case_seconds": 5757,
+    "service_bound_seconds": 7200
+  },
+  "approval": {
+    "required": true,
+    "approval_code": "BM-7BF4D61206B4",
+    "networked_execution_authorized": false
+  },
+  "network_scope": {
+    "allowed_hostname": "announcements.bybit.com",
+    "exact_frozen_urls_only": true,
+    "frozen_url_count": 94,
+    "redirect_final_hostname_must_match": true,
+    "public_read_only": true,
+    "search_engine_as_source": false
+  },
+  "running_status_allowed": [
+    "systemd active/sub state",
+    "progress_started_count",
+    "progress_done_count",
+    "progress_error_count",
+    "last transport-progress line",
+    "transport error diagnostics"
+  ],
+  "running_status_forbidden": [
+    "partial semantic-class counts",
+    "partial settlement architecture",
+    "partial funding classification",
+    "partial time-match classification"
+  ],
+  "forbidden": [
+    "AFFECTED_CONTRACT_PRICE_ACCESS",
+    "EXTERNAL_REFERENCE_PRICE_ACCESS",
+    "INDEX_VALUE_ACCESS",
+    "BASIS_OR_SPREAD_ACCESS",
+    "RETURN_ACCESS",
+    "PNL_ACCESS",
+    "EVENT_OUTCOME_RANKING",
+    "OUTCOME_DRIVEN_EVENT_FILTERING",
+    "HORIZON_SELECTION_FROM_PRICE_OUTCOMES",
+    "ORDER_OR_TRADE_EXECUTION"
+  ],
+  "expected_terminal_states": [
+    "B15P2_ANNOUNCEMENT_BODY_SEMANTIC_AUDIT_PASS",
+    "B15P2_ANNOUNCEMENT_BODY_SEMANTIC_AUDIT_REVIEW"
+  ],
+  "strategy_review_policy": {
+    "terminal_semantic_result_is_strategy_relevant": true,
+    "worker_manifest_required_after_terminal_result": true,
+    "automatic_strategy_watch_should_trigger": true,
+    "mandatory_gate_before_any_price_outcome": true
+  },
+  "next_after_pass": "FREEZE_SEMANTIC_CLASSES_AND_TRIGGER_RESEARCH_STRATEGY_MANAGER_PRE_PRICE_GATE",
+  "next_after_review": "REVIEW_SEMANTIC_SOURCE_INTEGRITY_WITHOUT_OPENING_PRICES"
+}
