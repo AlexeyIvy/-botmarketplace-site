@@ -1,0 +1,111 @@
+{
+  "schema": "sc001.b15p2_next_data_structure_probe_contract.v0.4",
+  "date": "2026-09-28",
+  "status": "FROZEN_AWAITING_EXPLICIT_APPROVAL",
+  "supersedes": "docs/research/sc001-b15p2-next-data-structure-probe-contract-v0.3.json",
+  "purpose": "Perform one stabilized generic hydration-mapping pass across DOGUSDT and TONUSDT, independent of GitHub-Control repo permissions, and derive stable cross-event body-candidate identities without storing article text or performing semantic classification.",
+  "prior_evidence": {
+    "article_structure_result": {
+      "path": "docs/research/sc001-b15p2-announcement-article-structure-probe-v01-result-v0.1.json",
+      "sha256": "5b0203971b08cb8df9a9ed9caaf77438f40df56edb5749698974eb76368f7f01",
+      "required_pattern": "NEXT_HYDRATION_SCRIPT_CONTAINS_TITLE"
+    },
+    "v03_host_failure": {
+      "path": "docs/research/sc001-b15p2-next-data-structure-v03-host-preflight-permission-failure-diagnostic-v0.1.json"
+    }
+  },
+  "probe_script": {
+    "path": "scripts/research/probe-b15p2-next-data-structure-probe-v0.4.py",
+    "sha256": "5517ec5304e44e1ea5ebbaef043223a1f09067256da10d20ddf9837d7513181f",
+    "selftest_mode": "--mode self-test",
+    "live_mode": "--mode live"
+  },
+  "host_wrapper": {
+    "path": "scripts/research/run-b15p2-next-data-structure-probe-v0.4.sh",
+    "sha256": "42eac9cc82f6a5649f5bacb0c459563f52ea44b8ead36876f23510f0df9f2bc1",
+    "preflight_mode": "--preflight",
+    "launch_mode": "--launch",
+    "status_mode": "--status",
+    "exact_stage": true,
+    "stage_file_count": 3,
+    "stage_files": [
+      "probe script",
+      "frozen source result",
+      "frozen event-set freeze"
+    ],
+    "staged_file_owner": "root",
+    "staged_file_group": "botmarket",
+    "staged_file_mode": "0440",
+    "staged_files_nonwritable_by_botmarket": true,
+    "selftest_as_user": "botmarket",
+    "live_as_user": "botmarket",
+    "repo_root_environment_override": "B15P2_REPO_ROOT",
+    "output_directory_precreated": true,
+    "systemd_type": "exec",
+    "runtime_bound_seconds": 180,
+    "async": true,
+    "one_shot_marker_guard": true
+  },
+  "network_scope": {
+    "exact_frozen_events": ["DOGUSDT","TONUSDT"],
+    "allowed_hostname": "announcements.bybit.com",
+    "transport": "curl_ipv4_http11_browser_ua",
+    "same_host_redirects_only": true
+  },
+  "mapper_capabilities": [
+    "maps all parseable hydration JSON scripts, not only __NEXT_DATA__",
+    "distinguishes exact title equality from substring containment",
+    "records whether title is inside or outside __NEXT_DATA__",
+    "indexes non-NEXT JSON script roles to avoid identity collisions",
+    "maps up to five ancestor levels",
+    "supports body candidates as string, dict or list",
+    "detects parseable JSON strings",
+    "includes large unknown-key fallback candidates",
+    "counts opening and closing HTML tags",
+    "builds cross-event consensus by script-role + JSON-path identity",
+    "orders equal-score consensus candidates toward more specific JSON paths"
+  ],
+  "synthetic_contract_suite": [
+    "HTML opening/closing tag metric",
+    "string body sibling",
+    "nested rich-text container body",
+    "JSON-encoded body string",
+    "list-backed article/title",
+    "large unhinted fallback field",
+    "cross-event common title/body consensus",
+    "title outside __NEXT_DATA__",
+    "SEO substring is not accepted as exact title node",
+    "raw body is not persisted in mapper output",
+    "curl IPv4/HTTP1.1/no-proxy/HTTPS-only URL contract"
+  ],
+  "candidate_acceptance_for_later_extractor": {
+    "same_identity_on_both_events_required": true,
+    "minimum_chars": 120,
+    "high_confidence_min_score": 6,
+    "specificity_path_depth_recorded": true,
+    "no_body_text_persistence": true,
+    "no_semantic_classification": true
+  },
+  "pre_freeze_validation": {
+    "synthetic_contract_review": "PASS_STATIC",
+    "probe_wrapper_invariant_review": "PASS",
+    "host_launcher_review": "PASS_STATIC"
+  },
+  "forbidden": [
+    "ARTICLE_TEXT_PERSISTENCE",
+    "SEMANTIC_CLASSIFICATION",
+    "PRICE_ACCESS",
+    "EXTERNAL_REFERENCE_PRICE_ACCESS",
+    "INDEX_VALUE_ACCESS",
+    "BASIS_ACCESS",
+    "RETURN_ACCESS",
+    "PNL_ACCESS",
+    "TRADING"
+  ],
+  "approval": {
+    "required": true,
+    "approval_code": "BM-42EAC9CC82F6",
+    "networked_execution_authorized": false
+  },
+  "stop_rule": "If v0.4 yields no stable common high-confidence body candidate, stop hydration-parser iteration and select a different official extraction route."
+}

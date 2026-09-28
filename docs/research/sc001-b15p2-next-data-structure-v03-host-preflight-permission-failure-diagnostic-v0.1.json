@@ -1,0 +1,41 @@
+{
+  "schema": "sc001.b15p2_next_data_structure_v03_host_preflight_permission_failure_diagnostic.v0.1",
+  "date": "2026-09-28",
+  "status": "HOST_PREFLIGHT_PERMISSION_FAILURE_LIVE_PROBE_NOT_STARTED",
+  "approved_boundary": {
+    "approval_code": "BM-61314AE69307",
+    "probe": {
+      "path": "scripts/research/probe-b15p2-next-data-structure-probe-v0.3.py",
+      "sha256": "b0a7cbb2aadb68ecf570865205cfb30ecc4b1f953c8a1e16cb839196b22b0bb9"
+    },
+    "wrapper": {
+      "path": "scripts/research/run-b15p2-next-data-structure-probe-v0.3.sh",
+      "sha256": "61314ae69307cd9ec8748d84868c8141e3102d0370e880e0ff2c45c28c2edb59"
+    }
+  },
+  "observed": {
+    "host_review_reason": "probe_not_readable_by_botmarket",
+    "launch_marker": "ABSENT",
+    "selftest_started": false,
+    "live_network_probe_started": false
+  },
+  "root_cause": "The v0.3 host wrapper assumed that the unprivileged botmarket user could directly traverse/read the GitHub-Control working tree under /var/lib/botmarket-github-control/repo. That assumption is false in the current host permissions model.",
+  "architectural_correction": [
+    "root host wrapper validates exact SHA values in GitHub-Control repo",
+    "root host wrapper copies exactly probe + source result + event freeze into a dedicated staging tree",
+    "staged directories are root:botmarket and group-readable",
+    "staged files are root:botmarket mode 0440 and explicitly verified non-writable by botmarket",
+    "selftest and live job execute only staged bytes as botmarket",
+    "B15P2_REPO_ROOT points the probe at the exact staged repository root",
+    "live job no longer depends on botmarket access to GitHub-Control repo"
+  ],
+  "article_body_text_persisted": false,
+  "semantic_classification_performed": false,
+  "price_accessed": false,
+  "external_reference_price_accessed": false,
+  "index_value_accessed": false,
+  "basis_accessed": false,
+  "returns_accessed": false,
+  "pnl_accessed": false,
+  "strategy_review_triggered": false
+}
