@@ -1,0 +1,63 @@
+{
+  "schema": "sc001.b15p2_announcement_article_structure_probe_v01_result.v0.1",
+  "date": "2026-09-28",
+  "status": "B15P2_ANNOUNCEMENT_ARTICLE_STRUCTURE_PROBE_COMPLETE",
+  "events": [
+    {
+      "symbol": "DOGUSDT",
+      "derived_structure_pattern": "NEXT_HYDRATION_SCRIPT_CONTAINS_TITLE",
+      "raw_html_bytes": 38140,
+      "visible_text_length": 332,
+      "exact_title_count": 1,
+      "exact_title_position": 267,
+      "pre_cut_region_length": 65,
+      "post_cut_region_length": 65,
+      "terminator_positions": {
+        "If you have any questions": -1,
+        "Thank you for your continued support": -1,
+        "The Bybit Team": -1
+      },
+      "script_count": 27,
+      "scripts_with_exact_title_count": 1,
+      "json_script_count": 1,
+      "jsonld_script_count": 0,
+      "articlebody_candidate_count": 0,
+      "json_string_with_title_candidate_count": 0,
+      "has_next_data_marker": true,
+      "has_next_f_marker": false
+    },
+    {
+      "symbol": "TONUSDT",
+      "derived_structure_pattern": "NEXT_HYDRATION_SCRIPT_CONTAINS_TITLE",
+      "raw_html_bytes": 38140,
+      "visible_text_length": 332,
+      "exact_title_count": 1,
+      "exact_title_position": 267,
+      "pre_cut_region_length": 65,
+      "post_cut_region_length": 65,
+      "terminator_positions": {
+        "If you have any questions": -1,
+        "Thank you for your continued support": -1,
+        "The Bybit Team": -1
+      },
+      "script_count": 27,
+      "scripts_with_exact_title_count": 1,
+      "json_script_count": 1,
+      "jsonld_script_count": 0,
+      "articlebody_candidate_count": 0,
+      "json_string_with_title_candidate_count": 0,
+      "has_next_data_marker": true,
+      "has_next_f_marker": false
+    }
+  ],
+  "interpretation": "The exact title is present in visible DOM but the visible contract-specific region is only 65 characters and no terminator caused the truncation. The raw page contains __NEXT_DATA__ and exactly one script containing the exact title. The article body is therefore likely represented elsewhere in the same hydration object or a neighboring hydration field rather than as visible DOM or JSON-LD articleBody.",
+  "semantic_classification_performed": false,
+  "article_body_text_persisted": false,
+  "price_accessed": false,
+  "external_reference_price_accessed": false,
+  "index_value_accessed": false,
+  "basis_accessed": false,
+  "returns_accessed": false,
+  "pnl_accessed": false,
+  "strategy_review_triggered": false
+}

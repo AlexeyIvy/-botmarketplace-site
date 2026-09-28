@@ -8,7 +8,7 @@
   "baseline_git_head": "94bf690f5c273c98b4a5e58d4bb2fe6ea7f9cf91",
   "last_strategy_review_head": "002f8bf9258058f8e14775472d315a69a53da031",
   "binding_refs": {
-    "roadmap": "docs/research/sc001-current-roadmap-and-stop-rules-v5.188.md",
+    "roadmap": "docs/research/sc001-current-roadmap-and-stop-rules-v5.189.md",
     "governance": "docs/research/sc001-midcourse-research-strategy-audit-and-governance-amendment-v0.2.md",
     "reusable_policy": "docs/research/sc001-terminal-experiment-reusable-block-extraction-policy-v0.1.md",
     "reusable_registry": "docs/research/sc001-reusable-market-building-blocks-registry-v0.9.md",
@@ -25,24 +25,22 @@
       "mutation_allowed": false
     },
     "B15-P2": {
-      "state": "ARTICLE_STRUCTURE_PROBE_APPROVED_CORRECTED_HOST_WRAPPER_READY",
+      "state": "NEXT_DATA_STRUCTURE_PROBE_V02_FROZEN_UNRUN",
       "price_outcome_authorized": false,
       "frozen_event_count": 94,
       "event_set_sha256": "1063695ec003a0d6789270659822f50577e6a0f07059d88ac03a5be4288ed1a2",
       "semantic_terminal_result_observed": false,
-      "smoke_result": "EXTRACTION_REVIEW_FULL_94_NOT_STARTED",
-      "smoke_failure_diagnostic": "docs/research/sc001-b15p2-announcement-body-smoke-v014-extraction-failure-diagnostic-v0.1.json",
-      "article_structure_probe_script": "scripts/research/probe-b15p2-announcement-article-structure-v0.1.py",
-      "article_structure_probe_sha256": "73c14a0963a245ad9ee431f6e76d16deed99d698fddeb32f78ca4c1fb685fa81",
-      "article_structure_probe_contract": "docs/research/sc001-b15p2-announcement-article-structure-probe-contract-v0.1.json",
-      "article_structure_probe_approval_code": "BM-73C14A0963A2",
-      "article_structure_probe_authorized": true,
+      "article_structure_result": "docs/research/sc001-b15p2-announcement-article-structure-probe-v01-result-v0.1.json",
+      "article_structure_pattern": "NEXT_HYDRATION_SCRIPT_CONTAINS_TITLE",
+      "next_data_probe_script": "scripts/research/probe-b15p2-next-data-structure-v0.2.py",
+      "next_data_probe_sha256": "6bd708526944c6b875757f3f5443da1f088289cdc4792952f569642d142703a6",
+      "next_data_probe_wrapper": "scripts/research/run-b15p2-next-data-structure-probe-v0.2.sh",
+      "next_data_probe_wrapper_sha256": "32728fcbe7b8feb733449bafaa1a8ba5bf95870166a9efedf0068cd34c98d703",
+      "next_data_probe_contract": "docs/research/sc001-b15p2-next-data-structure-probe-contract-v0.2.json",
+      "next_data_probe_approval_code": "BM-32728FCBE7B8",
+      "next_data_probe_authorized": false,
       "strategy_review_required_now": false,
-      "next_allowed_action": "RERUN_APPROVED_ARTICLE_STRUCTURE_PROBE_VIA_CORRECTED_HOST_WRAPPER",
-      "article_structure_probe_execution_started": false,
-      "execution_approval": "docs/research/sc001-b15p2-announcement-article-structure-probe-execution-approval-v0.1.json",
-      "article_structure_probe_wrapper": "scripts/research/run-b15p2-announcement-article-structure-probe-v0.1.sh",
-      "article_structure_probe_wrapper_sha256": "3439f583b0f9d485252193b8af7f4a0117bfdc02ba5cfdb60a19bf831cdeaeb0"
+      "next_allowed_action": "AWAIT_EXPLICIT_NEXT_DATA_STRUCTURE_PROBE_V02_APPROVAL"
     }
   },
   "deferred_branches": {
