@@ -1,0 +1,26 @@
+{
+  "schema": "sc001.b15p2_announcement_html_transport_probe_v02_execution_approval.v0.1",
+  "date": "2026-09-28",
+  "status": "EXPLICIT_USER_APPROVAL_RECEIVED_FOR_FINALIZED_PROBE",
+  "approval_code": "BM-11516ABEA2FD",
+  "probe_contract": {
+    "path": "docs/research/sc001-b15p2-announcement-html-transport-probe-contract-v0.2.json"
+  },
+  "probe_script": {
+    "path": "scripts/research/probe-b15p2-announcement-html-transport-v0.2.py",
+    "sha256": "11516abea2fd3e46297d05e1ae29066918b78926ace7ef69a0a103085e96014f"
+  },
+  "authorized_sequence": [
+    "RUN_NO_NETWORK_SELFTEST",
+    "IF_SELFTEST_PASS_RUN_BOUNDED_NETWORK_TRANSPORT_PROBE"
+  ],
+  "semantic_classification_authorized": false,
+  "price_access_authorized": false,
+  "external_reference_price_access_authorized": false,
+  "index_value_access_authorized": false,
+  "basis_access_authorized": false,
+  "returns_access_authorized": false,
+  "pnl_access_authorized": false,
+  "trading_authorized": false,
+  "execution_started": false
+}

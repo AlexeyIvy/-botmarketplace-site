@@ -1,0 +1,86 @@
+{
+  "schema": "sc001.b15p2_announcement_html_transport_probe_contract.v0.2",
+  "date": "2026-09-28",
+  "status": "FROZEN_AND_EXPLICITLY_APPROVED_AWAITING_HOST_EXECUTION",
+  "supersedes": "docs/research/sc001-b15p2-announcement-html-transport-probe-contract-v0.1.json",
+  "purpose": "Localize the VPS announcement-page transport failure with a robust, bounded, read-only diagnostic before any further semantic-audit retry.",
+  "triggering_diagnostic": {
+    "path": "docs/research/sc001-b15p2-announcement-html-transport-failure-diagnostic-v0.1.json",
+    "sha256": "2774d015b739041c5ffef5c1e45b8d50db89cbe227241a4aae4599410992e0b2"
+  },
+  "probe_script": {
+    "path": "scripts/research/probe-b15p2-announcement-html-transport-v0.2.py",
+    "sha256": "11516abea2fd3e46297d05e1ae29066918b78926ace7ef69a0a103085e96014f",
+    "selftest_mode": "--mode self-test",
+    "live_mode": "--mode live"
+  },
+  "engineering_improvements_over_v0_1": [
+    "Python-native JSON generation instead of shell string assembly",
+    "DNS inspection through socket.getaddrinfo with graceful error capture",
+    "curl absence classified explicitly rather than misreported as endpoint failure",
+    "proxy environment disabled for both curl and urllib to match the original env-clean job",
+    "same-host HTTPS redirect enforcement",
+    "curl IPv4 and IPv6 isolation",
+    "curl browser User-Agent versus BotMarketplace User-Agent",
+    "curl default protocol versus forced HTTP/1.1",
+    "second frozen announcement URL control",
+    "official Announcement API control",
+    "urllib default versus forced IPv4 versus forced IPv6",
+    "bounded per-hop subprocess and urllib timeouts",
+    "unique run IDs and atomic output writes",
+    "no semantic classification",
+    "synthetic self-test for URL policy, result-pattern classification and curl-metric parsing"
+  ],
+  "network_scope": {
+    "exact_frozen_announcement_urls": [
+      "https://announcements.bybit.com/en-US/article/delisting-of-dogusdt-perpetual-contract-blt9ee6b6807b7ba01f/",
+      "https://announcements.bybit.com/en-US/article/delisting-of-tonusdt-perpetual-contract-bltd27f1f00e6b0f5ed/"
+    ],
+    "announcement_api_control": "https://api.bybit.com/v5/announcements/index?locale=en-US&type=delistings&limit=1",
+    "same_host_redirects_only": true,
+    "proxy_usage_disabled": true,
+    "price_endpoints": false
+  },
+  "diagnostic_dimensions": [
+    "DNS IPv4/IPv6 visibility",
+    "curl IPv4 announcement HTML",
+    "curl IPv6 announcement HTML",
+    "curl HTTP negotiation versus forced HTTP/1.1",
+    "browser-like versus BotMarketplace User-Agent",
+    "second exact frozen page control",
+    "official Announcement API reachability",
+    "Python urllib default stack",
+    "Python urllib forced IPv4",
+    "Python urllib forced IPv6"
+  ],
+  "possible_observed_patterns": [
+    "PYTHON_DEFAULT_ADDRESS_SELECTION_PROBLEM_IPV4_WORKS",
+    "CURL_HTML_WORKS_URLLIB_HTML_FAILS",
+    "IPV4_HTML_WORKS_IPV6_HTML_FAILS",
+    "HTML_USER_AGENT_DEPENDENT",
+    "HTML_HTTP_PROTOCOL_DEPENDENT",
+    "ANNOUNCEMENT_HTML_FAILS_BUT_ANNOUNCEMENT_API_CONTROL_WORKS",
+    "ANNOUNCEMENT_HTML_AND_API_CONTROL_FAIL_FROM_VPS",
+    "HTML_TRANSPORT_CURRENTLY_WORKS_ALL_PRIMARY_CONTROLS",
+    "URLLIB_IPV4_WORKS_IPV6_FAILS",
+    "CURL_UNAVAILABLE_REVIEW",
+    "MIXED_TRANSPORT_RESULT_REVIEW"
+  ],
+  "forbidden": [
+    "SEMANTIC_CLASSIFICATION",
+    "PRICE_ACCESS",
+    "EXTERNAL_REFERENCE_PRICE_ACCESS",
+    "INDEX_VALUE_ACCESS",
+    "BASIS_ACCESS",
+    "RETURN_ACCESS",
+    "PNL_ACCESS",
+    "ORDER_OR_TRADE_EXECUTION"
+  ],
+  "approval": {
+    "required": true,
+    "approval_code": "BM-11516ABEA2FD",
+    "approval_basis": "User explicitly authorized execution of the finalized probe after programmer-expert review in the current conversation.",
+    "networked_execution_authorized": true
+  },
+  "next_after_result": "CLASSIFY_TRANSPORT_PATH_AND_SELECT_MINIMAL_SEMANTIC_ACQUISITION_FIX_WITHOUT_CHANGING_SEMANTIC_RULES"
+}
