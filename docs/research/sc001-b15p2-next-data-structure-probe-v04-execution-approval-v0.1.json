@@ -1,0 +1,33 @@
+{
+  "schema": "sc001.b15p2_next_data_structure_probe_v04_execution_approval.v0.1",
+  "date": "2026-09-28",
+  "status": "EXPLICIT_USER_APPROVAL_RECEIVED",
+  "approval_code": "BM-42EAC9CC82F6",
+  "probe_contract": {
+    "path": "docs/research/sc001-b15p2-next-data-structure-probe-contract-v0.4.json",
+    "sha256": "e6c3ed1c39260c250de8c97c5606214b709e3005fcde0e48f900875eb8b2840f"
+  },
+  "probe_script": {
+    "path": "scripts/research/probe-b15p2-next-data-structure-probe-v0.4.py",
+    "sha256": "5517ec5304e44e1ea5ebbaef043223a1f09067256da10d20ddf9837d7513181f"
+  },
+  "host_wrapper": {
+    "path": "scripts/research/run-b15p2-next-data-structure-probe-v0.4.sh",
+    "sha256": "42eac9cc82f6a5649f5bacb0c459563f52ea44b8ead36876f23510f0df9f2bc1"
+  },
+  "authorized_sequence": [
+    "RUN_EXACT_STAGE_PREFLIGHT",
+    "RUN_NO_NETWORK_SELFTEST_FROM_STAGED_BYTES_AS_BOTMARKET",
+    "IF_AND_ONLY_IF_PASS_RUN_TWO_PAGE_GENERIC_HYDRATION_MAPPER_FROM_SAME_STAGED_BYTES"
+  ],
+  "article_body_text_persisted": false,
+  "semantic_classification_authorized": false,
+  "price_access_authorized": false,
+  "external_reference_price_access_authorized": false,
+  "index_value_access_authorized": false,
+  "basis_access_authorized": false,
+  "returns_access_authorized": false,
+  "pnl_access_authorized": false,
+  "trading_authorized": false,
+  "execution_started": false
+}

@@ -25,7 +25,7 @@
       "mutation_allowed": false
     },
     "B15-P2": {
-      "state": "GENERIC_HYDRATION_MAPPER_V04_STABILIZED_FROZEN_UNRUN",
+      "state": "GENERIC_HYDRATION_MAPPER_V04_APPROVED_AWAITING_HOST_EXECUTION",
       "price_outcome_authorized": false,
       "frozen_event_count": 94,
       "event_set_sha256": "1063695ec003a0d6789270659822f50577e6a0f07059d88ac03a5be4288ed1a2",
@@ -40,13 +40,15 @@
       "next_data_probe_wrapper_sha256": "42eac9cc82f6a5649f5bacb0c459563f52ea44b8ead36876f23510f0df9f2bc1",
       "next_data_probe_contract": "docs/research/sc001-b15p2-next-data-structure-probe-contract-v0.4.json",
       "next_data_probe_approval_code": "BM-42EAC9CC82F6",
-      "next_data_probe_authorized": false,
+      "next_data_probe_authorized": true,
       "exact_stage_required": true,
       "exact_stage_file_count": 3,
       "engineering_stabilization_rule": "THREE_LAYER_PREFREEZE_CHECK_PLUS_EXACT_STAGE",
       "hydration_stop_rule": "STOP_AFTER_V04_IF_NO_STABLE_COMMON_HIGH_CONFIDENCE_BODY_IDENTITY",
       "strategy_review_required_now": false,
-      "next_allowed_action": "AWAIT_EXPLICIT_GENERIC_HYDRATION_MAPPER_V04_APPROVAL"
+      "next_allowed_action": "RUN_GENERIC_HYDRATION_MAPPER_V04_VIA_EXACT_STAGE_HOST_WRAPPER",
+      "next_data_probe_execution_started": false,
+      "execution_approval": "docs/research/sc001-b15p2-next-data-structure-probe-v04-execution-approval-v0.1.json"
     }
   },
   "deferred_branches": {
