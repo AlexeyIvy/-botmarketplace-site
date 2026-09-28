@@ -25,7 +25,7 @@
       "mutation_allowed": false
     },
     "B15-P2": {
-      "state": "TRANSPORT_PROBE_V02_CURL_INVALID_V03_FROZEN_UNRUN",
+      "state": "TRANSPORT_PROBE_V03_APPROVED_AWAITING_HOST_EXECUTION",
       "price_outcome_authorized": false,
       "semantic_terminal_result_observed": false,
       "v02_probe_result": "PARTIAL_TRANSPORT_EVIDENCE_ONLY",
@@ -35,9 +35,11 @@
       "transport_probe_script_sha256": "e3295d3c79d480e8efa17adf8fcec0f0b85cac32903b580b5535b0ef9963d42f",
       "transport_probe_contract": "docs/research/sc001-b15p2-announcement-html-transport-probe-contract-v0.3.json",
       "transport_probe_approval_code": "BM-E3295D3C79D4",
-      "transport_probe_authorized": false,
+      "transport_probe_authorized": true,
       "strategy_review_required_now": false,
-      "next_allowed_action": "AWAIT_FRESH_EXPLICIT_TRANSPORT_PROBE_V03_APPROVAL"
+      "next_allowed_action": "RUN_V03_SELFTEST_THEN_LIVE_TRANSPORT_PROBE",
+      "transport_probe_execution_started": false,
+      "execution_approval": "docs/research/sc001-b15p2-announcement-html-transport-probe-v03-execution-approval-v0.1.json"
     }
   },
   "deferred_branches": {
