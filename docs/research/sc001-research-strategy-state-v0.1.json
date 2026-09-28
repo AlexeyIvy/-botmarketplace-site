@@ -70,7 +70,17 @@
           "NEW_SEALED_RUNNER_BUNDLE_REQUIRING_EXACT_APPROVAL"
         ],
         "stop_after_failed_iterations": 5,
-        "iterations_consumed": 0
+        "iterations_consumed": 0,
+        "pre_iteration_requirement": "FULL_PROGRAMMER_EXPERT_REVIEW_BEFORE_EACH_EXECUTED_ITERATION",
+        "iteration_accounting": "COUNT_ONLY_MATERIALLY_CHANGED_REEXECUTION_AFTER_TECHNICAL_FAILURE"
+      },
+      "runtime_output_policy": {
+        "binding_policy": "docs/research/sc001-engineering-iteration-and-runtime-output-policy-v0.1.md",
+        "large_output_primary_handoff": "STRUCTURED_VPS_JSON_OR_PERSISTENT_LOG",
+        "screenshot_role": "COMPLETION_TOKEN_OR_PATH_ONLY",
+        "runtime_inbox_enabled": true,
+        "current_result_relay": "scripts/research/publish-b15p2-next-data-v04-result-to-github-v0.1.sh",
+        "current_runtime_inbox_target": "docs/research/runtime-inbox/sc001-b15p2-next-data-structure-v0.4-latest.json"
       }
     }
   },
