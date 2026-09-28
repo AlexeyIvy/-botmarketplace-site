@@ -8,7 +8,7 @@
   "baseline_git_head": "94bf690f5c273c98b4a5e58d4bb2fe6ea7f9cf91",
   "last_strategy_review_head": "002f8bf9258058f8e14775472d315a69a53da031",
   "binding_refs": {
-    "roadmap": "docs/research/sc001-current-roadmap-and-stop-rules-v5.180.md",
+    "roadmap": "docs/research/sc001-current-roadmap-and-stop-rules-v5.181.md",
     "governance": "docs/research/sc001-midcourse-research-strategy-audit-and-governance-amendment-v0.2.md",
     "reusable_policy": "docs/research/sc001-terminal-experiment-reusable-block-extraction-policy-v0.1.md",
     "reusable_registry": "docs/research/sc001-reusable-market-building-blocks-registry-v0.9.md",
@@ -25,24 +25,19 @@
       "mutation_allowed": false
     },
     "B15-P2": {
-      "state": "ANNOUNCEMENT_TRANSPORT_PROBE_V02_APPROVED_AWAITING_HOST_EXECUTION",
+      "state": "TRANSPORT_PROBE_V02_CURL_INVALID_V03_FROZEN_UNRUN",
       "price_outcome_authorized": false,
-      "frozen_event_count": 94,
-      "event_set_sha256": "1063695ec003a0d6789270659822f50577e6a0f07059d88ac03a5be4288ed1a2",
       "semantic_terminal_result_observed": false,
-      "prior_transport_failure": {
-        "started": 71,
-        "done": 0,
-        "errors": 70
-      },
-      "transport_probe_script": "scripts/research/probe-b15p2-announcement-html-transport-v0.2.py",
-      "transport_probe_script_sha256": "11516abea2fd3e46297d05e1ae29066918b78926ace7ef69a0a103085e96014f",
-      "transport_probe_contract": "docs/research/sc001-b15p2-announcement-html-transport-probe-contract-v0.2.json",
-      "transport_probe_approval_code": "BM-11516ABEA2FD",
-      "transport_probe_authorized": true,
-      "transport_probe_execution_started": false,
+      "v02_probe_result": "PARTIAL_TRANSPORT_EVIDENCE_ONLY",
+      "v02_invalid_observed_pattern": "ANNOUNCEMENT_HTML_AND_API_CONTROL_FAIL_FROM_VPS",
+      "v02_failure_diagnostic": "docs/research/sc001-b15p2-announcement-transport-probe-v02-command-construction-failure-diagnostic-v0.1.json",
+      "transport_probe_script": "scripts/research/probe-b15p2-announcement-html-transport-v0.3.py",
+      "transport_probe_script_sha256": "e3295d3c79d480e8efa17adf8fcec0f0b85cac32903b580b5535b0ef9963d42f",
+      "transport_probe_contract": "docs/research/sc001-b15p2-announcement-html-transport-probe-contract-v0.3.json",
+      "transport_probe_approval_code": "BM-E3295D3C79D4",
+      "transport_probe_authorized": false,
       "strategy_review_required_now": false,
-      "next_allowed_action": "EXECUTE_APPROVED_TRANSPORT_PROBE_V02_SELFTEST_THEN_LIVE"
+      "next_allowed_action": "AWAIT_FRESH_EXPLICIT_TRANSPORT_PROBE_V03_APPROVAL"
     }
   },
   "deferred_branches": {

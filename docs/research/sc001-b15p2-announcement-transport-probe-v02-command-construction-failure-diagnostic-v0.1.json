@@ -1,0 +1,33 @@
+{
+  "schema": "sc001.b15p2_announcement_transport_probe_v02_command_construction_failure_diagnostic.v0.1",
+  "date": "2026-09-28",
+  "status": "PROBE_IMPLEMENTATION_ERROR_PARTIAL_TRANSPORT_EVIDENCE_ONLY",
+  "v02_report_observed_pattern": "ANNOUNCEMENT_HTML_AND_API_CONTROL_FAIL_FROM_VPS",
+  "v02_observed_pattern_valid": false,
+  "reason": "All curl probes returned curl exit code 2 with 'no URL specified'. The v0.2 command builder omitted the URL argument entirely, so curl never contacted Bybit. Therefore curl HTML and Announcement API control results from v0.2 are invalid.",
+  "trusted_v02_observations": {
+    "dns_announcements_ipv4_present": true,
+    "dns_announcements_ipv6_present": false,
+    "dns_api_ipv4_present": true,
+    "dns_api_ipv6_present": false,
+    "urllib_default_dog_result": "TimeoutError: The read operation timed out",
+    "urllib_ipv4_dog_result": "TimeoutError: The read operation timed out",
+    "urllib_ipv6_dog_result": "URLError: no_addresses_for_forced_ipv6"
+  },
+  "untrusted_v02_observations": [
+    "all curl HTML reachability claims",
+    "curl IPv4 vs IPv6 comparison",
+    "curl browser-vs-bot User-Agent comparison",
+    "curl HTTP/1.1 comparison",
+    "Announcement API control reachability",
+    "v0.2 derived observed_pattern"
+  ],
+  "semantic_classification_performed": false,
+  "price_accessed": false,
+  "external_reference_price_accessed": false,
+  "index_value_accessed": false,
+  "basis_accessed": false,
+  "returns_accessed": false,
+  "pnl_accessed": false,
+  "strategy_review_triggered": false
+}

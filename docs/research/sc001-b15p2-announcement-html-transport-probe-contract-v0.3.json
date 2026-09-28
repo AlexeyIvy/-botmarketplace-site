@@ -1,0 +1,64 @@
+{
+  "schema": "sc001.b15p2_announcement_html_transport_probe_contract.v0.3",
+  "date": "2026-09-28",
+  "status": "FROZEN_AWAITING_FRESH_EXPLICIT_APPROVAL",
+  "supersedes": "docs/research/sc001-b15p2-announcement-html-transport-probe-contract-v0.2.json",
+  "purpose": "Repeat the minimal VPS announcement transport diagnosis after fixing the v0.2 curl command-construction defect. No semantic classification or market data access.",
+  "prior_failure_diagnostic": {
+    "path": "docs/research/sc001-b15p2-announcement-transport-probe-v02-command-construction-failure-diagnostic-v0.1.json"
+  },
+  "probe_script": {
+    "path": "scripts/research/probe-b15p2-announcement-html-transport-v0.3.py",
+    "sha256": "e3295d3c79d480e8efa17adf8fcec0f0b85cac32903b580b5535b0ef9963d42f",
+    "selftest_mode": "--mode self-test",
+    "live_mode": "--mode live"
+  },
+  "key_corrections": [
+    "curl command construction moved into pure build_curl_command()",
+    "every curl command uses explicit --url <URL>",
+    "fail-closed guard requires the final --url pair and exactly one URL occurrence",
+    "self-test checks IPv4, IPv6 and HTTP/1.1 command construction",
+    "self-test checks no-proxy, HTTPS-only and timeout arguments",
+    "v0.3 report namespace prevents confusion with invalid v0.2 report",
+    "output directory ownership/permissions normalized",
+    "all v0.2 transport decision-pattern fixtures retained"
+  ],
+  "network_scope": {
+    "exact_frozen_announcement_urls": [
+      "https://announcements.bybit.com/en-US/article/delisting-of-dogusdt-perpetual-contract-blt9ee6b6807b7ba01f/",
+      "https://announcements.bybit.com/en-US/article/delisting-of-tonusdt-perpetual-contract-bltd27f1f00e6b0f5ed/"
+    ],
+    "announcement_api_control": "https://api.bybit.com/v5/announcements/index?locale=en-US&type=delistings&limit=1",
+    "same_host_redirects_only": true,
+    "proxy_usage_disabled": true,
+    "price_endpoints": false
+  },
+  "diagnostic_dimensions": [
+    "DNS IPv4/IPv6 visibility",
+    "curl IPv4 announcement HTML",
+    "curl IPv6 announcement HTML",
+    "curl default protocol versus forced HTTP/1.1",
+    "browser-like versus BotMarketplace User-Agent",
+    "second exact frozen page control",
+    "official Announcement API reachability",
+    "Python urllib default",
+    "Python urllib forced IPv4",
+    "Python urllib forced IPv6"
+  ],
+  "forbidden": [
+    "SEMANTIC_CLASSIFICATION",
+    "PRICE_ACCESS",
+    "EXTERNAL_REFERENCE_PRICE_ACCESS",
+    "INDEX_VALUE_ACCESS",
+    "BASIS_ACCESS",
+    "RETURN_ACCESS",
+    "PNL_ACCESS",
+    "ORDER_OR_TRADE_EXECUTION"
+  ],
+  "approval": {
+    "required": true,
+    "approval_code": "BM-E3295D3C79D4",
+    "networked_execution_authorized": false
+  },
+  "next_after_result": "CLASSIFY_TRANSPORT_PATH_AND_SELECT_MINIMAL_SEMANTIC_ACQUISITION_FIX_WITHOUT_CHANGING_SEMANTIC_RULES"
+}
