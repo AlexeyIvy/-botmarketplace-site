@@ -1,0 +1,26 @@
+{
+  "schema": "sc001.b15p2_next_data_structure_v02_selftest_failure_diagnostic.v0.1",
+  "date": "2026-09-28",
+  "status": "SYNTHETIC_SELFTEST_FAILURE_LIVE_PROBE_NOT_STARTED",
+  "probe": {
+    "path": "scripts/research/probe-b15p2-next-data-structure-v0.2.py",
+    "sha256": "6bd708526944c6b875757f3f5443da1f088289cdc4792952f569642d142703a6"
+  },
+  "observed": {
+    "selftest_status": "B15P2_NEXT_DATA_STRUCTURE_PROBE_V02_SELF_TEST_REVIEW",
+    "error": "RuntimeError: PARENT_CONTENT_HTML",
+    "launch_marker": "ABSENT",
+    "live_network_probe_started": false
+  },
+  "root_cause": "The synthetic fixture expected both opening and closing HTML tags to be counted, while the v0.2 regex counted only opening tags. This was a brittle incidental assertion and not a failure of the real __NEXT_DATA__ hypothesis.",
+  "process_consequence": "Do not patch v0.2 locally. Replace it with a more general hydration mapper whose self-tests validate contracts rather than incidental representation details.",
+  "semantic_classification_performed": false,
+  "article_body_text_persisted": false,
+  "price_accessed": false,
+  "external_reference_price_accessed": false,
+  "index_value_accessed": false,
+  "basis_accessed": false,
+  "returns_accessed": false,
+  "pnl_accessed": false,
+  "strategy_review_triggered": false
+}

@@ -8,7 +8,7 @@
   "baseline_git_head": "94bf690f5c273c98b4a5e58d4bb2fe6ea7f9cf91",
   "last_strategy_review_head": "002f8bf9258058f8e14775472d315a69a53da031",
   "binding_refs": {
-    "roadmap": "docs/research/sc001-current-roadmap-and-stop-rules-v5.189.md",
+    "roadmap": "docs/research/sc001-current-roadmap-and-stop-rules-v5.190.md",
     "governance": "docs/research/sc001-midcourse-research-strategy-audit-and-governance-amendment-v0.2.md",
     "reusable_policy": "docs/research/sc001-terminal-experiment-reusable-block-extraction-policy-v0.1.md",
     "reusable_registry": "docs/research/sc001-reusable-market-building-blocks-registry-v0.9.md",
@@ -25,24 +25,25 @@
       "mutation_allowed": false
     },
     "B15-P2": {
-      "state": "NEXT_DATA_STRUCTURE_PROBE_V02_APPROVED_AWAITING_HOST_EXECUTION",
+      "state": "GENERIC_NEXT_DATA_MAPPER_V03_FROZEN_UNRUN",
       "price_outcome_authorized": false,
       "frozen_event_count": 94,
       "event_set_sha256": "1063695ec003a0d6789270659822f50577e6a0f07059d88ac03a5be4288ed1a2",
       "semantic_terminal_result_observed": false,
-      "article_structure_result": "docs/research/sc001-b15p2-announcement-article-structure-probe-v01-result-v0.1.json",
+      "transport_observed_pattern": "CURL_HTML_WORKS_URLLIB_HTML_FAILS",
       "article_structure_pattern": "NEXT_HYDRATION_SCRIPT_CONTAINS_TITLE",
-      "next_data_probe_script": "scripts/research/probe-b15p2-next-data-structure-v0.2.py",
-      "next_data_probe_sha256": "6bd708526944c6b875757f3f5443da1f088289cdc4792952f569642d142703a6",
-      "next_data_probe_wrapper": "scripts/research/run-b15p2-next-data-structure-probe-v0.2.sh",
-      "next_data_probe_wrapper_sha256": "32728fcbe7b8feb733449bafaa1a8ba5bf95870166a9efedf0068cd34c98d703",
-      "next_data_probe_contract": "docs/research/sc001-b15p2-next-data-structure-probe-contract-v0.2.json",
-      "next_data_probe_approval_code": "BM-32728FCBE7B8",
-      "next_data_probe_authorized": true,
+      "v02_probe_result": "SYNTHETIC_SELFTEST_REVIEW_NO_NETWORK",
+      "v02_failure_diagnostic": "docs/research/sc001-b15p2-next-data-structure-v02-selftest-failure-diagnostic-v0.1.json",
+      "next_data_probe_script": "scripts/research/probe-b15p2-next-data-structure-v0.3.py",
+      "next_data_probe_sha256": "b0a7cbb2aadb68ecf570865205cfb30ecc4b1f953c8a1e16cb839196b22b0bb9",
+      "next_data_probe_wrapper": "scripts/research/run-b15p2-next-data-structure-probe-v0.3.sh",
+      "next_data_probe_wrapper_sha256": "61314ae69307cd9ec8748d84868c8141e3102d0370e880e0ff2c45c28c2edb59",
+      "next_data_probe_contract": "docs/research/sc001-b15p2-next-data-structure-probe-contract-v0.3.json",
+      "next_data_probe_approval_code": "BM-61314AE69307",
+      "next_data_probe_authorized": false,
+      "engineering_stabilization_rule": "THREE_LAYER_PREFREEZE_CHECK",
       "strategy_review_required_now": false,
-      "next_allowed_action": "RUN_NEXT_DATA_STRUCTURE_PROBE_V02_VIA_HOST_WRAPPER",
-      "next_data_probe_execution_started": false,
-      "execution_approval": "docs/research/sc001-b15p2-next-data-structure-probe-v02-execution-approval-v0.1.json"
+      "next_allowed_action": "AWAIT_EXPLICIT_GENERIC_NEXT_DATA_MAPPER_V03_APPROVAL"
     }
   },
   "deferred_branches": {

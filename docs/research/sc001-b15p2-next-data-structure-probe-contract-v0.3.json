@@ -1,0 +1,86 @@
+{
+  "schema": "sc001.b15p2_next_data_structure_probe_contract.v0.3",
+  "date": "2026-09-28",
+  "status": "FROZEN_AWAITING_EXPLICIT_APPROVAL",
+  "supersedes": "docs/research/sc001-b15p2-next-data-structure-probe-contract-v0.2.json",
+  "purpose": "Map the Next.js hydration structure generically across DOGUSDT and TONUSDT and derive stable cross-event body-candidate paths without storing article text or performing semantic classification.",
+  "input_evidence": {
+    "article_structure_result": {
+      "path": "docs/research/sc001-b15p2-announcement-article-structure-probe-v01-result-v0.1.json",
+      "sha256": "5b0203971b08cb8df9a9ed9caaf77438f40df56edb5749698974eb76368f7f01",
+      "required_pattern": "NEXT_HYDRATION_SCRIPT_CONTAINS_TITLE"
+    },
+    "v02_selftest_failure": {
+      "path": "docs/research/sc001-b15p2-next-data-structure-v02-selftest-failure-diagnostic-v0.1.json"
+    }
+  },
+  "probe_script": {
+    "path": "scripts/research/probe-b15p2-next-data-structure-v0.3.py",
+    "sha256": "b0a7cbb2aadb68ecf570865205cfb30ecc4b1f953c8a1e16cb839196b22b0bb9",
+    "selftest_mode": "--mode self-test",
+    "live_mode": "--mode live"
+  },
+  "host_wrapper": {
+    "path": "scripts/research/run-b15p2-next-data-structure-probe-v0.3.sh",
+    "sha256": "61314ae69307cd9ec8748d84868c8141e3102d0370e880e0ff2c45c28c2edb59",
+    "preflight_mode": "--preflight",
+    "launch_mode": "--launch",
+    "status_mode": "--status",
+    "selftest_as_user": "botmarket",
+    "frozen_input_readability_preflight": true,
+    "output_directory_precreated": true,
+    "systemd_type": "exec",
+    "systemd_user": "botmarket",
+    "runtime_bound_seconds": 180,
+    "async": true
+  },
+  "network_scope": {
+    "exact_frozen_events": ["DOGUSDT","TONUSDT"],
+    "allowed_hostname": "announcements.bybit.com",
+    "transport": "curl_ipv4_http11_browser_ua",
+    "same_host_redirects_only": true
+  },
+  "mapper_capabilities": [
+    "exact-title nodes",
+    "up to five ancestor container summaries",
+    "string body candidates",
+    "nested dict/list body candidates",
+    "parseable JSON-string candidates",
+    "large unknown-key fallback candidates",
+    "HTML opening and closing tag metrics",
+    "cross-event exact title path consensus",
+    "cross-event structural candidate path consensus",
+    "high-confidence common candidate paths"
+  ],
+  "candidate_acceptance_for_later_extractor": {
+    "same_path_on_both_events_required": true,
+    "minimum_chars": 120,
+    "high_confidence_min_score": 6,
+    "no_body_text_persistence": true,
+    "no_semantic_classification": true
+  },
+  "engineering_stabilization": {
+    "pre_freeze_layers": [
+      "synthetic contract self-tests",
+      "static probe/wrapper invariant audit",
+      "host-launcher audit"
+    ],
+    "micro_patch_freeze_policy": "Do not create a new network boundary for an isolated line-level fix until the whole candidate passes all three layers."
+  },
+  "forbidden": [
+    "ARTICLE_TEXT_PERSISTENCE",
+    "SEMANTIC_CLASSIFICATION",
+    "PRICE_ACCESS",
+    "EXTERNAL_REFERENCE_PRICE_ACCESS",
+    "INDEX_VALUE_ACCESS",
+    "BASIS_ACCESS",
+    "RETURN_ACCESS",
+    "PNL_ACCESS",
+    "TRADING"
+  ],
+  "approval": {
+    "required": true,
+    "approval_code": "BM-61314AE69307",
+    "networked_execution_authorized": false
+  }
+}
