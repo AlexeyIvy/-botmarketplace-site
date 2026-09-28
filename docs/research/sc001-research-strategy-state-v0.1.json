@@ -48,7 +48,30 @@
       "strategy_review_required_now": false,
       "next_allowed_action": "RUN_GENERIC_HYDRATION_MAPPER_V04_VIA_EXACT_STAGE_HOST_WRAPPER",
       "next_data_probe_execution_started": false,
-      "execution_approval": "docs/research/sc001-b15p2-next-data-structure-probe-v04-execution-approval-v0.1.json"
+      "execution_approval": "docs/research/sc001-b15p2-next-data-structure-probe-v04-execution-approval-v0.1.json",
+      "delegated_engineering_iteration_budget": {
+        "enabled": true,
+        "max_iterations": 5,
+        "scope": "CURRENT_B15P2_ENGINEERING_CONTOUR_ONLY",
+        "allowed": [
+          "SCRIPT_BUG_FIX",
+          "SELFTEST_FIX",
+          "HOST_WRAPPER_FIX",
+          "STAGING_PERMISSION_FIX",
+          "RESULT_PARSER_FIX",
+          "RETRY_WITHIN_UNCHANGED_NETWORK_AND_DATA_SCOPE"
+        ],
+        "requires_fresh_user_approval_if": [
+          "NETWORK_SCOPE_EXPANSION",
+          "NEW_DATA_SOURCE_OR_ENDPOINT_CLASS",
+          "PRICE_INDEX_BASIS_RETURN_OR_PNL_ACCESS",
+          "FROZEN_RULE_OR_HYPOTHESIS_CHANGE",
+          "TRADING_OR_ORDER_EXECUTION",
+          "NEW_SEALED_RUNNER_BUNDLE_REQUIRING_EXACT_APPROVAL"
+        ],
+        "stop_after_failed_iterations": 5,
+        "iterations_consumed": 0
+      }
     }
   },
   "deferred_branches": {
