@@ -1,0 +1,120 @@
+{
+  "schema": "sc001.b15p2_announcement_body_semantic_audit_networked_launch_contract.v0.3",
+  "date": "2026-09-28",
+  "status": "FROZEN_AWAITING_EXPLICIT_NETWORKED_APPROVAL",
+  "purpose": "Run the frozen 94-event Bybit announcement semantic audit using the validated curl IPv4 HTTP/1.1 acquisition adapter, but only after an automatic two-page DOGUSDT/TONUSDT body smoke passes. No market-price, index-value, basis, return or PnL access.",
+  "frozen_input": {
+    "source_result": {
+      "path": "docs/research/artifacts/b15-p2-source-census-v0.1.1/20260927T193110Z/source_census_result.v0.1.1.json",
+      "sha256": "c28aeb2b1ac0a23fb0e4420ced943fd619dd0a60e3fdcf5820299579cb94206c"
+    },
+    "event_set_freeze": {
+      "path": "docs/research/artifacts/b15-p2-source-census-v0.1.1/20260927T193110Z/source_census_event_set_freeze.v0.1.json",
+      "sha256": "81952c83e7397481035cc00354388dfe3470ad17993c6e80665a7d376be907ed",
+      "event_set_sha256": "1063695ec003a0d6789270659822f50577e6a0f07059d88ac03a5be4288ed1a2",
+      "event_count": 94,
+      "unique_announcement_url_count": 94
+    }
+  },
+  "transport_evidence": {
+    "path": "docs/research/sc001-b15p2-announcement-html-transport-probe-v03-result-v0.1.json",
+    "sha256": "97498ed8f60ab119d5a547a449d1e449366c4226d55442ed8d7abb0d1ba39e6f",
+    "required_observed_pattern": "CURL_HTML_WORKS_URLLIB_HTML_FAILS"
+  },
+  "implementation": {
+    "path": "research/sc001/sc001_b15p2_announcement_body_semantic_audit_v0_1_4.py",
+    "sha256": "ca96be6b0cb8cae3a37fedb1a22fa2b426f5286ca3decdf7c272bf7cd29feceb",
+    "semantic_logic_unchanged_from_v0_1_3": true
+  },
+  "protocol": {
+    "path": "docs/research/sc001-b15p2-announcement-body-semantic-audit-protocol-v0.1.md",
+    "sha256": "4209779876e3796feff16a8310af93324cd1927862874524fb90ebf95d51d84f"
+  },
+  "implementation_freeze": {
+    "path": "docs/research/sc001-b15p2-announcement-body-semantic-audit-implementation-freeze-v0.1.4.json",
+    "sha256": "ff30f3a599b76995dad57ed8ab145597487cc0c6e14487f96e20908119f029cc"
+  },
+  "offline_selftest_result": {
+    "path": "docs/research/sc001-b15p2-announcement-body-semantic-audit-v014-offline-selftest-result-v0.1.json",
+    "sha256": "8fa053319833cbb78be66a9dc4dc8b9ea89be417ffd8bb8703616dbb30447687",
+    "required_status": "B15P2_ANNOUNCEMENT_BODY_SEMANTIC_AUDIT_V014_SELF_TEST_PASS",
+    "job_id": "job_20260928T140518Z_694b33e5"
+  },
+  "host_wrapper": {
+    "path": "scripts/research/run-b15p2-announcement-body-semantic-audit-v0.3.sh",
+    "sha256": "90b028b3cf4c1d12e364b7b5e147c7a44b366ddbb9b95c095cf4f49425b2513b",
+    "preflight_mode": "--preflight",
+    "launch_mode": "--launch",
+    "status_mode": "--status",
+    "cross_document_preflight": true,
+    "staged_selftest_required": true,
+    "two_page_network_smoke_required": true,
+    "full_94_launch_blocked_until_smoke_pass": true,
+    "execution_mode_after_smoke": "ASYNC_SYSTEMD_NO_BLOCK",
+    "termux_prompt_returns_after_full_launch": true,
+    "same_session_status_polling": true,
+    "persistent_diagnostics": true,
+    "runtime_bound_seconds": 4200
+  },
+  "automatic_smoke_gate": {
+    "events": ["DOGUSDT", "TONUSDT"],
+    "uses_exact_same_staged_implementation_as_full_run": true,
+    "transport": {
+      "client": "curl",
+      "address_family": "IPv4",
+      "http_version": "HTTP/1.1",
+      "user_agent": "browser-like",
+      "proxy": false,
+      "https_only": true,
+      "same_host_redirects_only": true
+    },
+    "required_checks": [
+      "HTTP 2xx acquisition",
+      "official final hostname",
+      "nonempty body within 2 MB",
+      "exact contract title",
+      "article-region extraction",
+      "content hashes persisted",
+      "semantic_classification_performed=false",
+      "all price/index/basis/return/PnL firewalls false"
+    ],
+    "failure_consequence": "FULL_94_NOT_STARTED"
+  },
+  "network_scope": {
+    "allowed_hostname": "announcements.bybit.com",
+    "exact_frozen_urls_only": true,
+    "frozen_url_count": 94,
+    "public_read_only": true,
+    "search_engine_as_source": false
+  },
+  "forbidden": [
+    "AFFECTED_CONTRACT_PRICE_ACCESS",
+    "EXTERNAL_REFERENCE_PRICE_ACCESS",
+    "INDEX_VALUE_ACCESS",
+    "BASIS_OR_SPREAD_ACCESS",
+    "RETURN_ACCESS",
+    "PNL_ACCESS",
+    "EVENT_OUTCOME_RANKING",
+    "OUTCOME_DRIVEN_EVENT_FILTERING",
+    "HORIZON_SELECTION_FROM_PRICE_OUTCOMES",
+    "ORDER_OR_TRADE_EXECUTION"
+  ],
+  "expected_terminal_states": [
+    "B15P2_ANNOUNCEMENT_BODY_SEMANTIC_AUDIT_PASS",
+    "B15P2_ANNOUNCEMENT_BODY_SEMANTIC_AUDIT_REVIEW"
+  ],
+  "strategy_review_policy": {
+    "smoke_pass_or_failure_is_not_strategy_relevant": true,
+    "terminal_full_semantic_result_is_strategy_relevant": true,
+    "worker_manifest_required_after_terminal_full_result": true,
+    "automatic_strategy_watch_should_trigger_after_terminal_full_result": true,
+    "mandatory_gate_before_any_price_outcome": true
+  },
+  "approval": {
+    "required": true,
+    "approval_code": "BM-90B028B3CF4C",
+    "networked_execution_authorized": false
+  },
+  "next_after_pass": "FREEZE_SEMANTIC_CLASSES_CREATE_WORKER_RESULT_MANIFEST_TRIGGER_STRATEGY_MANAGER_PRE_PRICE_GATE",
+  "next_after_review": "FREEZE_REVIEW_RESULT_CREATE_WORKER_RESULT_MANIFEST_TRIGGER_STRATEGY_MANAGER_BEFORE_ANY_PRICE_ACCESS"
+}
