@@ -8,7 +8,7 @@
   "baseline_git_head": "94bf690f5c273c98b4a5e58d4bb2fe6ea7f9cf91",
   "last_strategy_review_head": "002f8bf9258058f8e14775472d315a69a53da031",
   "binding_refs": {
-    "roadmap": "docs/research/sc001-current-roadmap-and-stop-rules-v5.183.md",
+    "roadmap": "docs/research/sc001-current-roadmap-and-stop-rules-v5.184.md",
     "governance": "docs/research/sc001-midcourse-research-strategy-audit-and-governance-amendment-v0.2.md",
     "reusable_policy": "docs/research/sc001-terminal-experiment-reusable-block-extraction-policy-v0.1.md",
     "reusable_registry": "docs/research/sc001-reusable-market-building-blocks-registry-v0.9.md",
@@ -25,18 +25,20 @@
       "mutation_allowed": false
     },
     "B15-P2": {
-      "state": "SEMANTIC_CURL_TRANSPORT_V014_FROZEN_OFFLINE_SELFTEST_PENDING",
+      "state": "SEMANTIC_CURL_TRANSPORT_V014_OFFLINE_SELFTEST_SEALED_UNRUN",
       "price_outcome_authorized": false,
       "frozen_event_count": 94,
       "event_set_sha256": "1063695ec003a0d6789270659822f50577e6a0f07059d88ac03a5be4288ed1a2",
       "transport_observed_pattern": "CURL_HTML_WORKS_URLLIB_HTML_FAILS",
       "semantic_audit_implementation": "research/sc001/sc001_b15p2_announcement_body_semantic_audit_v0_1_4.py",
       "semantic_audit_implementation_sha256": "ca96be6b0cb8cae3a37fedb1a22fa2b426f5286ca3decdf7c272bf7cd29feceb",
-      "semantic_audit_implementation_freeze": "docs/research/sc001-b15p2-announcement-body-semantic-audit-implementation-freeze-v0.1.4.json",
-      "semantic_audit_selftest_spec": "docs/research/sc001-b15p2-announcement-body-semantic-audit-offline-selftest-spec-v0.1.4.json",
-      "mandatory_two_page_smoke": true,
+      "offline_selftest_bundle_id": "bundle_20260928T140229Z_8e07e478",
+      "offline_selftest_bundle_sha256": "7f3cfce3c732cd7184da27c9c6aab7103a59f7bf933dfbb647d59563ea6699c4",
+      "offline_selftest_approval_code": "BM-7F3CFCE3C732",
+      "offline_selftest_execution_authorized": false,
+      "mandatory_two_page_smoke_after_selftest_pass": true,
       "strategy_review_required_now": false,
-      "next_allowed_action": "PREPARE_AND_SEAL_SEMANTIC_AUDIT_V014_OFFLINE_SELFTEST_NO_EXECUTION"
+      "next_allowed_action": "AWAIT_EXPLICIT_APPROVAL_TO_RUN_SEMANTIC_AUDIT_V014_OFFLINE_SELFTEST"
     }
   },
   "deferred_branches": {
