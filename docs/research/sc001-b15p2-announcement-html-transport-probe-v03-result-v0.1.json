@@ -1,0 +1,73 @@
+{
+  "schema": "sc001.b15p2_announcement_html_transport_probe_v03_result.v0.1",
+  "date": "2026-09-28",
+  "status": "B15P2_ANNOUNCEMENT_HTML_TRANSPORT_PROBE_COMPLETE",
+  "observed_pattern": "CURL_HTML_WORKS_URLLIB_HTML_FAILS",
+  "dns": {
+    "announcements.bybit.com": {
+      "ipv4": ["23.38.98.70", "23.38.98.90"],
+      "ipv6": []
+    },
+    "api.bybit.com": {
+      "ipv4": ["52.222.236.109", "52.222.236.24", "52.222.236.61", "52.222.236.66"],
+      "ipv6": []
+    }
+  },
+  "validated_transport": {
+    "curl_ipv4_dog_browser_http2": {
+      "ok": true,
+      "http": 200,
+      "remote_ip": "23.38.98.90",
+      "http_version": "2",
+      "ttfb_seconds": 0.284707,
+      "total_seconds": 0.285873
+    },
+    "curl_ipv4_dog_browser_http11": {
+      "ok": true,
+      "http": 200,
+      "remote_ip": "23.38.98.90",
+      "http_version": "1.1",
+      "ttfb_seconds": 0.261675,
+      "total_seconds": 0.262909
+    },
+    "curl_ipv4_ton_browser_http2": {
+      "ok": true,
+      "http": 200,
+      "remote_ip": "23.38.98.90",
+      "http_version": "2",
+      "ttfb_seconds": 0.243872,
+      "total_seconds": 0.245373
+    },
+    "curl_ipv4_announcement_api_control": {
+      "ok": true,
+      "http": 200,
+      "remote_ip": "52.222.236.24",
+      "http_version": "2",
+      "ttfb_seconds": 0.256509,
+      "total_seconds": 0.256614
+    }
+  },
+  "nonworking_or_unavailable_paths": {
+    "curl_ipv6_dog_browser": "No IPv6 address; curl exit code 6.",
+    "urllib_default_dog_bot": "TimeoutError: The read operation timed out (~10.056 s).",
+    "urllib_ipv4_dog_bot": "TimeoutError: The read operation timed out (~10.048 s).",
+    "urllib_ipv6_dog_bot": "No addresses for forced IPv6.",
+    "curl_ipv4_dog_bot_http2": "curl exit 92: HTTP/2 stream INTERNAL_ERROR. This does not isolate User-Agent from HTTP/2 interaction because bot-UA + HTTP/1.1 was not tested."
+  },
+  "minimal_transport_fix": {
+    "client": "curl",
+    "address_family": "IPv4",
+    "http_version": "HTTP/1.1",
+    "user_agent": "browser-like",
+    "reason": "This exact combination succeeded on a frozen announcement URL and avoids both the failing urllib path and the observed bot-UA/HTTP2 failure interaction."
+  },
+  "next_safeguard": "Before the full 94-event semantic audit, fetch DOGUSDT and TONUSDT with the frozen curl transport and verify exact article-region extraction. Only then proceed to all 94.",
+  "semantic_classification_performed": false,
+  "price_accessed": false,
+  "external_reference_price_accessed": false,
+  "index_value_accessed": false,
+  "basis_accessed": false,
+  "returns_accessed": false,
+  "pnl_accessed": false,
+  "strategy_review_triggered": false
+}

@@ -8,7 +8,7 @@
   "baseline_git_head": "94bf690f5c273c98b4a5e58d4bb2fe6ea7f9cf91",
   "last_strategy_review_head": "002f8bf9258058f8e14775472d315a69a53da031",
   "binding_refs": {
-    "roadmap": "docs/research/sc001-current-roadmap-and-stop-rules-v5.181.md",
+    "roadmap": "docs/research/sc001-current-roadmap-and-stop-rules-v5.182.md",
     "governance": "docs/research/sc001-midcourse-research-strategy-audit-and-governance-amendment-v0.2.md",
     "reusable_policy": "docs/research/sc001-terminal-experiment-reusable-block-extraction-policy-v0.1.md",
     "reusable_registry": "docs/research/sc001-reusable-market-building-blocks-registry-v0.9.md",
@@ -25,21 +25,23 @@
       "mutation_allowed": false
     },
     "B15-P2": {
-      "state": "TRANSPORT_PROBE_V03_APPROVED_AWAITING_HOST_EXECUTION",
+      "state": "TRANSPORT_RESOLVED_CURL_IPV4_HTTP11_SEMANTIC_ADAPTER_BUILD_NEXT",
       "price_outcome_authorized": false,
       "semantic_terminal_result_observed": false,
-      "v02_probe_result": "PARTIAL_TRANSPORT_EVIDENCE_ONLY",
-      "v02_invalid_observed_pattern": "ANNOUNCEMENT_HTML_AND_API_CONTROL_FAIL_FROM_VPS",
-      "v02_failure_diagnostic": "docs/research/sc001-b15p2-announcement-transport-probe-v02-command-construction-failure-diagnostic-v0.1.json",
-      "transport_probe_script": "scripts/research/probe-b15p2-announcement-html-transport-v0.3.py",
-      "transport_probe_script_sha256": "e3295d3c79d480e8efa17adf8fcec0f0b85cac32903b580b5535b0ef9963d42f",
-      "transport_probe_contract": "docs/research/sc001-b15p2-announcement-html-transport-probe-contract-v0.3.json",
-      "transport_probe_approval_code": "BM-E3295D3C79D4",
-      "transport_probe_authorized": true,
+      "transport_probe_status": "PASS_DIAGNOSTIC_COMPLETE",
+      "transport_probe_observed_pattern": "CURL_HTML_WORKS_URLLIB_HTML_FAILS",
+      "transport_probe_result": "docs/research/sc001-b15p2-announcement-html-transport-probe-v03-result-v0.1.json",
+      "selected_semantic_transport": {
+        "client": "curl",
+        "address_family": "IPv4",
+        "http_version": "HTTP/1.1",
+        "user_agent": "browser-like",
+        "proxy": false,
+        "same_host_redirects_only": true
+      },
+      "two_page_smoke_required": true,
       "strategy_review_required_now": false,
-      "next_allowed_action": "RUN_V03_SELFTEST_THEN_LIVE_TRANSPORT_PROBE",
-      "transport_probe_execution_started": false,
-      "execution_approval": "docs/research/sc001-b15p2-announcement-html-transport-probe-v03-execution-approval-v0.1.json"
+      "next_allowed_action": "BUILD_FREEZE_AND_OFFLINE_VALIDATE_CURL_IPV4_HTTP11_SEMANTIC_ACQUISITION_ADAPTER"
     }
   },
   "deferred_branches": {
