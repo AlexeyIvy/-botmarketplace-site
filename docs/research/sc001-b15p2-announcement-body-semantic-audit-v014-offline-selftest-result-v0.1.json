@@ -1,0 +1,51 @@
+{
+  "schema": "sc001.b15p2_announcement_body_semantic_audit_v014_offline_selftest_result.v0.1",
+  "date": "2026-09-28",
+  "status": "B15P2_ANNOUNCEMENT_BODY_SEMANTIC_AUDIT_V014_SELF_TEST_PASS",
+  "research_ref": "SC001-B15P2/ANNOUNCEMENT-BODY-SEMANTIC-AUDIT-V0.1.4/OFFLINE-SELFTEST",
+  "execution": {
+    "job_id": "job_20260928T140518Z_694b33e5",
+    "bundle_id": "bundle_20260928T140229Z_8e07e478",
+    "bundle_sha256": "7f3cfce3c732cd7184da27c9c6aab7103a59f7bf933dfbb647d59563ea6699c4",
+    "approval_code": "BM-7F3CFCE3C732",
+    "run_key": "b15p2-semantic-v014-selftest",
+    "requested_utc": "2026-09-28T14:05:18.161008+00:00",
+    "finished_utc": "2026-09-28T14:05:18.661226+00:00",
+    "exit_code": 0,
+    "service_result": "success",
+    "package_integrity_ok": true,
+    "stderr_empty": true
+  },
+  "implementation": {
+    "path": "research/sc001/sc001_b15p2_announcement_body_semantic_audit_v0_1_4.py",
+    "sha256": "ca96be6b0cb8cae3a37fedb1a22fa2b426f5286ca3decdf7c272bf7cd29feceb"
+  },
+  "validated": [
+    "Runner launcher positional contract",
+    "semantic fixtures unchanged",
+    "HTML skip-state handling",
+    "article-region extraction",
+    "announced-time parser",
+    "semantic class fixtures",
+    "curl explicit IPv4",
+    "curl forced HTTP/1.1",
+    "curl proxy disabled",
+    "curl HTTPS-only",
+    "curl connect/total timeout bounds",
+    "curl body-size cap",
+    "browser-like User-Agent",
+    "explicit --url pair exactly once",
+    "cross-host and HTTP URL rejection"
+  ],
+  "boundary": {
+    "network_calls": false,
+    "real_announcement_body_access": false,
+    "price_access": false,
+    "basis_access": false,
+    "returns_access": false,
+    "pnl_access": false
+  },
+  "strategy_review_triggered": false,
+  "binding_consequence": "FREEZE_NETWORKED_BOUNDARY_WITH_AUTOMATIC_TWO_PAGE_SMOKE_THEN_94",
+  "networked_execution_authorized": false
+}
