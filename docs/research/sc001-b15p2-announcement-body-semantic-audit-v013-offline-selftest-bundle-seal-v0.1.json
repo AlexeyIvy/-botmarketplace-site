@@ -1,0 +1,34 @@
+{
+  "schema": "sc001.b15p2_announcement_body_semantic_audit_v013_offline_selftest_bundle_seal.v0.1",
+  "date": "2026-09-28",
+  "status": "SEALED_AWAITING_EXPLICIT_APPROVAL",
+  "bundle_id": "bundle_20260928T065015Z_930e8ea2",
+  "bundle_sha256": "26635d7bf6c6983fb0c4c8e50ab181389978fa98d2ffdbd6f117518cd909cb2e",
+  "approval_code": "BM-26635D7BF6C6",
+  "research_ref": "SC001-B15P2/ANNOUNCEMENT-BODY-SEMANTIC-AUDIT-V0.1.3/OFFLINE-SELFTEST",
+  "entrypoint": {
+    "path": "research/sc001/sc001_b15p2_announcement_body_semantic_audit_v0_1_3.py",
+    "sha256": "8a5ba89168dcd7845a7f340027e552767b41836b3c10755df00a6f9b7a309e78"
+  },
+  "implementation_freeze": {
+    "path": "docs/research/sc001-b15p2-announcement-body-semantic-audit-implementation-freeze-v0.1.3.json",
+    "sha256": "175381cdff6873310405ffdf2ae3a3b2630e87a5c6ca0ad3f422ba45a85ba3b1"
+  },
+  "selftest_spec": {
+    "path": "docs/research/sc001-b15p2-announcement-body-semantic-audit-offline-selftest-spec-v0.1.3.json",
+    "sha256": "ebbc829b10fe74b475aa63552c910a98750ec379d02088f86457ca2224472a37"
+  },
+  "protocol": {
+    "path": "docs/research/sc001-b15p2-announcement-body-semantic-audit-protocol-v0.1.md",
+    "sha256": "4209779876e3796feff16a8310af93324cd1927862874524fb90ebf95d51d84f"
+  },
+  "inputs": [],
+  "network": false,
+  "real_announcement_body_access": false,
+  "price_access": false,
+  "basis_access": false,
+  "returns_access": false,
+  "pnl_access": false,
+  "expected_pass": "B15P2_ANNOUNCEMENT_BODY_SEMANTIC_AUDIT_V013_SELF_TEST_PASS",
+  "execution_authorized": false
+}
