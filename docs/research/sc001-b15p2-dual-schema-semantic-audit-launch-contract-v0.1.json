@@ -1,0 +1,10 @@
+{
+  "schema": "sc001.alias.v0.1",
+  "date": "2026-09-28",
+  "status": "SUPERSEDED_BY_CANONICAL",
+  "canonical": {
+    "path": "docs/research/sc001-b15p2-dual-schema-semantic-audit-contract-v0.1.json",
+    "sha256": "6794f9623a945155e7ad5626f6c6502dbbeb7f115bc0956b48aba7b95313fc4a"
+  },
+  "reason": "Use the canonical dual-schema semantic audit contract referenced by sc001-research-strategy-state-v0.1.json."
+}

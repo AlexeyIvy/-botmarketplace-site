@@ -1,0 +1,65 @@
+{
+  "schema": "sc001.b15p2_hydration_dual_schema_routing_freeze.v0.1",
+  "date": "2026-09-28",
+  "status": "FROZEN_BEFORE_DUAL_SCHEMA_SEMANTIC_RERUN",
+  "frozen_event_set_sha256": "1063695ec003a0d6789270659822f50577e6a0f07059d88ac03a5be4288ed1a2",
+  "exact_title_path_both_schemas": "$.props.pageProps.articleDetail.title",
+  "routing": [
+    {
+      "schema_id": "BLT_RICHTEXT",
+      "url_generation_regex": "-blt[0-9a-f]+/?$",
+      "observed_frozen_event_count": 76,
+      "primary_body_path": "$.props.pageProps.articleDetail.content.json.children",
+      "primary_body_type": "list",
+      "body_normalization": "deterministic descendant text-leaf traversal in document order",
+      "secondary_consistency_path": "$.props.pageProps.articleDetail.entry.entryKey.children",
+      "secondary_consistency_rule": "optional if absent; if present, normalized body must match primary exactly",
+      "evidence": {
+        "semantic_review_result": "docs/research/sc001-b15p2-announcement-body-semantic-audit-v015-review-result-v0.1.json",
+        "resolved_count": 76
+      }
+    },
+    {
+      "schema_id": "DOUBLE_DASH_ART_HTML",
+      "url_generation_regex": "--art[0-9a-f]+/?$",
+      "observed_frozen_event_count": 18,
+      "primary_body_path": "$.props.pageProps.articleDetail.content_html",
+      "primary_body_type": "string",
+      "body_normalization": "parse only content_html as an HTML fragment, require at least two HTML tags, exclude script/style/head/noscript/svg, then whitespace-normalize visible text",
+      "minimum_observed_html_tag_count": 31,
+      "observed_html_tag_count_all_18": 31,
+      "observed_raw_or_normalized_char_range": [
+        1671,
+        1719
+      ],
+      "evidence": {
+        "schema_census_result": "docs/research/sc001-b15p2-art-generation-schema-census-result-v0.1.json",
+        "coverage": "18/18"
+      },
+      "minimum_required_html_tag_count": 2,
+      "unique_content_sha256_count": 18
+    }
+  ],
+  "routing_rules": [
+    "determine schema only from the already-frozen official announcement URL generation",
+    "require the exact expected structural path for the selected schema",
+    "do not fall back from SCHEMA_A to SCHEMA_B or from SCHEMA_B to SCHEMA_A",
+    "do not select a path based on semantic classification success",
+    "do not select a path based on any price or outcome data",
+    "unknown URL generation is BODY_SOURCE_UNRESOLVED/REVIEW"
+  ],
+  "integrity": {
+    "exact_title_equality_required": true,
+    "minimum_normalized_body_chars": 120,
+    "one_exact_next_data_script_required": true,
+    "same_host_https_only": true
+  },
+  "semantic_rules_changed": false,
+  "frozen_event_set_changed": false,
+  "price_access_authorized": false,
+  "external_reference_price_access_authorized": false,
+  "index_value_access_authorized": false,
+  "basis_access_authorized": false,
+  "returns_access_authorized": false,
+  "pnl_access_authorized": false
+}

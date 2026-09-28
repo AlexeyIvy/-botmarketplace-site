@@ -1,0 +1,10 @@
+{
+  "schema": "sc001.alias.v0.1",
+  "date": "2026-09-28",
+  "status": "SUPERSEDED_BY_CANONICAL",
+  "canonical": {
+    "path": "docs/research/sc001-b15p2-hydration-dual-schema-routing-freeze-v0.1.json",
+    "sha256": "5a58a4289aa73b6a510a8cdaade586c56433da20b35472b526e43174789c929f"
+  },
+  "reason": "A parallel, more detailed canonical dual-schema routing freeze was present in the same GitHub-Control worktree and was verified against the exact runtime census JSON. Use only the canonical file above."
+}

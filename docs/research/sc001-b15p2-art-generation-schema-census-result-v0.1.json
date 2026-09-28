@@ -1,0 +1,71 @@
+{
+  "schema": "sc001.b15p2_art_generation_schema_census_result.v0.1",
+  "date": "2026-09-28",
+  "status": "B15P2_ART_GENERATION_SCHEMA_CENSUS_PASS",
+  "runtime_result": {
+    "path": "docs/research/runtime-inbox/sc001-b15p2-art-generation-schema-census-v0.1-latest.json",
+    "sha256": "581ecec49653fc9230c18c05e1baa1371e268cba8899a170d1494861f8c4e943",
+    "size_bytes": 591154
+  },
+  "runtime_log": {
+    "path": "docs/research/runtime-inbox/sc001-b15p2-art-generation-schema-census-v0.1-latest.log",
+    "sha256": "66c8f09e559b8c618cdf9603821eef9088b9edac8a909875c5d440490f706a8f",
+    "size_bytes": 3241
+  },
+  "selection": {
+    "source": "EXACT_FROZEN_94_EVENT_SOURCE",
+    "rule": "announcement URL path matches --art[0-9a-f]+",
+    "selected_event_count": 18,
+    "selection_uses_semantic_or_price_outcomes": false
+  },
+  "exact_title": {
+    "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.title",
+    "coverage": "18/18"
+  },
+  "common_candidate_count": 5,
+  "common_high_confidence_candidate_count": 3,
+  "selected_schema_b_body": {
+    "identity": "__NEXT_DATA__::$.props.pageProps.articleDetail.content_html",
+    "path": "$.props.pageProps.articleDetail.content_html",
+    "type": "string",
+    "coverage_event_count": 18,
+    "coverage_fraction": 1,
+    "title_document_event_count": 18,
+    "all_events_title_coupled": true,
+    "min_score": 7,
+    "max_score": 7,
+    "min_raw_or_normalized_chars": 1671,
+    "max_raw_or_normalized_chars": 1719,
+    "unique_content_sha256_count": 18,
+    "html_tag_count_all_18": 31,
+    "parseable_json_string": false
+  },
+  "rejected_as_primary": [
+    {
+      "path": "$.props.pageProps.articleDetail",
+      "reason": "broad metadata container rather than body-specific field"
+    },
+    {
+      "path": "$.props.pageProps",
+      "reason": "broad page container"
+    },
+    {
+      "path": "$.props",
+      "reason": "broad application-state container"
+    },
+    {
+      "path": "$.props.pageProps.pageEntry",
+      "reason": "page metadata rather than article body"
+    }
+  ],
+  "interpretation": "The later DOUBLE_DASH_ART URL generation is structurally homogeneous across all 18 frozen events. It preserves the exact title in articleDetail.title but moves the article body from the BLT rich-text children structure to the direct articleDetail.content_html string. This supports a second deterministic official CMS schema rather than per-event fallback behavior.",
+  "article_body_text_persisted": false,
+  "semantic_classification_performed": false,
+  "price_accessed": false,
+  "external_reference_price_accessed": false,
+  "index_value_accessed": false,
+  "basis_accessed": false,
+  "returns_accessed": false,
+  "pnl_accessed": false,
+  "next_state": "FREEZE_DUAL_SCHEMA_ROUTING_AND_RUN_SEMANTIC_V016"
+}

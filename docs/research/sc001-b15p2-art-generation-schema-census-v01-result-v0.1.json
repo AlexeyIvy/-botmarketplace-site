@@ -1,0 +1,10 @@
+{
+  "schema": "sc001.alias.v0.1",
+  "date": "2026-09-28",
+  "status": "SUPERSEDED_BY_CANONICAL",
+  "canonical": {
+    "path": "docs/research/sc001-b15p2-art-generation-schema-census-result-v0.1.json",
+    "sha256": "44c7494b7ab125a83ce895ea93646af3ffae34d7a8c188e2e6415487d1bc3712"
+  },
+  "reason": "A parallel, more detailed canonical census result was present in the same GitHub-Control worktree and was verified against the exact runtime census JSON. Use only the canonical file above."
+}

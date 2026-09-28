@@ -1,0 +1,75 @@
+{
+  "schema": "sc001.b15p2_announcement_body_semantic_audit_implementation_freeze.v0.1.6",
+  "date": "2026-09-28",
+  "status": "FROZEN_DUAL_SCHEMA_IMPLEMENTATION_BEFORE_NETWORK_EXECUTION",
+  "supersedes": "docs/research/sc001-b15p2-announcement-body-semantic-audit-implementation-freeze-v0.1.5.json",
+  "protocol": {
+    "path": "docs/research/sc001-b15p2-announcement-body-semantic-audit-protocol-v0.1.md",
+    "sha256": "4209779876e3796feff16a8310af93324cd1927862874524fb90ebf95d51d84f",
+    "changed": false
+  },
+  "entrypoint": {
+    "path": "research/sc001/sc001_b15p2_announcement_body_semantic_audit_v0_1_6.py",
+    "sha256": "1bc02d6e13ad919dbfa405f92b12f80d8c36271b294ed6845968c9dcac96315c"
+  },
+  "dual_schema_routing": {
+    "path": "docs/research/sc001-b15p2-hydration-dual-schema-routing-freeze-v0.1.json",
+    "sha256": "5a58a4289aa73b6a510a8cdaade586c56433da20b35472b526e43174789c929f",
+    "schema_a": "BLT_RICHTEXT",
+    "schema_b": "DOUBLE_DASH_ART_HTML",
+    "routing_source": "frozen requested announcement URL",
+    "adaptive_fallback_paths": false,
+    "schema_b_minimum_html_tag_count": 2
+  },
+  "semantic_invariants": {
+    "classify_text_unchanged_from_v0_1_5": true,
+    "parse_announcement_time_unchanged_from_v0_1_5": true,
+    "frozen_input_validation_unchanged_from_v0_1_5": true,
+    "curl_transport_unchanged_from_v0_1_5": true,
+    "pass_review_rules_unchanged": true,
+    "event_set_unchanged": true
+  },
+  "expected_partition": {
+    "BLT_RICHTEXT": 76,
+    "DOUBLE_DASH_ART_HTML": 18
+  },
+  "execution_sequence": [
+    "exact-stage preflight",
+    "offline self-test",
+    "four-page extraction smoke with two BLT and two ART representatives",
+    "strict smoke validation",
+    "full frozen 94-event semantic audit synchronously using same staged bytes",
+    "validate and relay structured result and log"
+  ],
+  "frozen_input": {
+    "source_result_sha256": "c28aeb2b1ac0a23fb0e4420ced943fd619dd0a60e3fdcf5820299579cb94206c",
+    "event_set_sha256": "1063695ec003a0d6789270659822f50577e6a0f07059d88ac03a5be4288ed1a2",
+    "event_count": 94
+  },
+  "price_access_authorized": false,
+  "external_reference_price_access_authorized": false,
+  "index_value_access_authorized": false,
+  "basis_access_authorized": false,
+  "returns_access_authorized": false,
+  "pnl_access_authorized": false,
+  "event_outcome_ranking_authorized": false,
+  "expected_selftest_pass": "B15P2_ANNOUNCEMENT_BODY_SEMANTIC_AUDIT_V016_SELF_TEST_PASS",
+  "expected_smoke_pass": "B15P2_ANNOUNCEMENT_BODY_DUAL_SCHEMA_SMOKE_V016_PASS",
+  "schema_b_census": {
+    "path": "docs/research/sc001-b15p2-art-generation-schema-census-result-v0.1.json",
+    "sha256": "44c7494b7ab125a83ce895ea93646af3ffae34d7a8c188e2e6415487d1bc3712"
+  },
+  "art_schema_census": {
+    "path": "docs/research/sc001-b15p2-art-generation-schema-census-result-v0.1.json",
+    "sha256": "44c7494b7ab125a83ce895ea93646af3ffae34d7a8c188e2e6415487d1bc3712",
+    "selected_body_path": "$.props.pageProps.articleDetail.content_html",
+    "coverage": "18/18",
+    "html_tag_count_all_18": 31
+  },
+  "schema_b_integrity": {
+    "minimum_required_html_tag_count": 2,
+    "observed_html_tag_count_all_18": 31,
+    "script_style_head_noscript_svg_excluded_from_visible_text": true,
+    "cross_schema_fallback_forbidden": true
+  }
+}

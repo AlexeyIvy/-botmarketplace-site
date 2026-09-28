@@ -1,0 +1,85 @@
+{
+  "schema": "sc001.b15p2_dual_schema_semantic_audit_contract.v0.1",
+  "date": "2026-09-28",
+  "status": "AUTHORIZED_RECOVERY_ITERATION_3_PREPARED_AWAITING_HOST_EXECUTION",
+  "authorization_basis": {
+    "type": "USER_STANDING_DELEGATION_CURRENT_B15P2_ENGINEERING_CONTOUR",
+    "max_recovery_iterations": 5,
+    "iterations_consumed": 2,
+    "prepared_iteration": 3,
+    "scope_expansion": false,
+    "new_data_source": false,
+    "price_or_outcome_access": false
+  },
+  "implementation": {
+    "path": "research/sc001/sc001_b15p2_announcement_body_semantic_audit_v0_1_6.py",
+    "sha256": "1bc02d6e13ad919dbfa405f92b12f80d8c36271b294ed6845968c9dcac96315c"
+  },
+  "wrapper": {
+    "path": "scripts/research/run-b15p2-dual-schema-semantic-audit-v0.1.sh",
+    "sha256": "24e8cb382e026852178d26da9c9006c784dd437291e6836b426f0104ed321cbd",
+    "run_mode": "--run",
+    "status_mode": "--status",
+    "execution": "SYNCHRONOUS_HOST_WRAPPER"
+  },
+  "implementation_freeze": {
+    "path": "docs/research/sc001-b15p2-announcement-body-semantic-audit-implementation-freeze-v0.1.6.json",
+    "sha256": "27210c0c281a5eb74fbc396f1ea8c8ca804a31353689b0e012b089562c78a08d"
+  },
+  "routing_freeze": {
+    "path": "docs/research/sc001-b15p2-hydration-dual-schema-routing-freeze-v0.1.json",
+    "sha256": "5a58a4289aa73b6a510a8cdaade586c56433da20b35472b526e43174789c929f",
+    "schema_a_count": 76,
+    "schema_b_count": 18
+  },
+  "schema_a": {
+    "name": "BLT_RICHTEXT",
+    "url_generation": "-blt...",
+    "body_path": "$.props.pageProps.articleDetail.content.json.children"
+  },
+  "schema_b": {
+    "name": "DOUBLE_DASH_ART_HTML",
+    "url_generation": "--art...",
+    "body_path": "$.props.pageProps.articleDetail.content_html",
+    "census_coverage": "18/18",
+    "census_result": {
+      "path": "docs/research/sc001-b15p2-art-generation-schema-census-result-v0.1.json",
+      "sha256": "44c7494b7ab125a83ce895ea93646af3ffae34d7a8c188e2e6415487d1bc3712"
+    },
+    "observed_html_tag_count_all_18": 31,
+    "minimum_required_html_tag_count": 2
+  },
+  "execution_sequence": [
+    "exact contract/SHA/firewall preflight",
+    "stage seven exact read-only files",
+    "run offline v0.1.6 self-test",
+    "run four-page extraction smoke: DOGUSDT, TONUSDT, earliest ART, latest ART",
+    "validate both schema branches without semantic classification",
+    "run full frozen 94-event semantic audit synchronously from same staged bytes",
+    "validate terminal result",
+    "publish smoke, result, and persistent log to GitHub runtime inbox"
+  ],
+  "runtime_output": {
+    "terminal_result_target": "docs/research/runtime-inbox/sc001-b15p2-semantic-audit-v0.1.6-latest.json",
+    "smoke_target": "docs/research/runtime-inbox/sc001-b15p2-dual-schema-smoke-v0.1.6-latest.json",
+    "log_target": "docs/research/runtime-inbox/sc001-b15p2-semantic-audit-v0.1.6-latest.log"
+  },
+  "forbidden": [
+    "PRICE_ACCESS",
+    "EXTERNAL_REFERENCE_PRICE_ACCESS",
+    "INDEX_VALUE_ACCESS",
+    "BASIS_OR_SPREAD_ACCESS",
+    "RETURN_ACCESS",
+    "PNL_ACCESS",
+    "EVENT_OUTCOME_RANKING",
+    "OUTCOME_DRIVEN_ROUTING",
+    "PAGE_SPECIFIC_FALLBACK",
+    "TRADING"
+  ],
+  "pre_run_hardening": {
+    "no_cross_schema_fallback_selftest": true,
+    "schema_b_script_style_exclusion_selftest": true,
+    "schema_b_html_tag_integrity_gate": true,
+    "schema_a_secondary_consistency_fail_closed": true
+  }
+}
