@@ -1,0 +1,82 @@
+{
+  "schema": "sc001.b15p2_mechanism_fingerprint.v0.1",
+  "date": "2026-09-29",
+  "status": "PRE_PRICE_FROZEN",
+  "source_semantic_freeze": {
+    "path": "docs/research/sc001-b15p2-semantic-classes-freeze-v0.1.json",
+    "sha256": "77dbf177df2c5a91e225f394cd65827ac547ec0031d90fa11f78908ebc322c07"
+  },
+  "frozen_event_set_sha256": "1063695ec003a0d6789270659822f50577e6a0f07059d88ac03a5be4288ed1a2",
+  "mechanism": {
+    "trigger": "Official Bybit announcement states perpetual-contract delisting time T.",
+    "operational_sequence": [
+      "Trading stops at T.",
+      "Active and conditional orders are automatically canceled.",
+      "Open positions are automatically closed.",
+      "Closing price is based on average index price over the 30 minutes immediately preceding T."
+    ],
+    "closing_price_window": {
+      "start_relative_to_T": "T-30m",
+      "end_relative_to_T": "T",
+      "aggregation": "AVERAGE_INDEX_PRICE_WINDOW",
+      "exact_exchange_internal_sampling_rule": "NOT_YET_OBSERVED"
+    }
+  },
+  "causal_boundaries": {
+    "announcement_information_time": "Must be no later than any strategy decision timestamp; exact publication/observability timestamp must be separately frozen before price testing.",
+    "delisting_time": "T from frozen official announcement semantic result.",
+    "closing_window": "[T-30m, T) conceptually; exact endpoint convention must be verified before economic testing.",
+    "no_future_information_rule": true
+  },
+  "prospective_hypothesis": {
+    "class": "PRE_PRICE_TESTABLE_HYPOTHESIS_ONLY",
+    "statement": "If market participants and forced close mechanics create a repeatable price/index dislocation or liquidity pattern around the announced delisting process, a causal strategy may exhibit gross edge before costs.",
+    "profitability_claim": false,
+    "direction_not_frozen": true,
+    "signal_formula_not_frozen": true
+  },
+  "edge_to_fill_requirements": [
+    "Any signal must use only information observable before its decision timestamp.",
+    "Execution prices must be derived from contemporaneous executable market data, not future bars or closing values.",
+    "Forced-close settlement/index mechanics must not be used as an executable price unless the strategy can actually transact at that reference.",
+    "Latency, spread, taker/maker fees, slippage, depth and order-cancel risk must be modeled explicitly."
+  ],
+  "minimum_viable_horizon": {
+    "status": "TO_BE_DESIGNED_PRE_PRICE",
+    "principle": "Test multiple pre-specified horizons around T rather than tune to one ex-post interval.",
+    "forbidden": "No horizon selection after inspecting event returns without contamination accounting."
+  },
+  "capital_time_accounting": {
+    "required": true,
+    "include": [
+      "capital committed duration",
+      "margin utilization",
+      "concurrent-event overlap",
+      "position sizing constraints",
+      "liquidation/forced-close exposure"
+    ]
+  },
+  "contamination_controls": [
+    "Frozen 94-event set cannot change after outcome access.",
+    "Semantic classes and routing are frozen.",
+    "Signal family and horizon grid must be frozen before reading outcome returns.",
+    "Any adaptive choice after outcome access must be recorded as contaminated/exploratory.",
+    "Holdout or prospective confirmation required before promotion."
+  ],
+  "falsification_rules": [
+    "Reject if gross effect is not directionally stable across pre-specified horizons.",
+    "Reject if estimated edge disappears under realistic fees/spread/slippage.",
+    "Reject if result depends on non-causal use of the 30-minute closing window.",
+    "Reject if a small subset of events dominates aggregate performance without a pre-specified reason.",
+    "Reject or defer if executable liquidity cannot support the modeled fills.",
+    "Do not rescue-tune a failed frozen hypothesis on the same evidence."
+  ],
+  "firewalls": {
+    "price_access": false,
+    "index_value_access": false,
+    "basis_access": false,
+    "returns_access": false,
+    "pnl_access": false,
+    "trading": false
+  }
+}
