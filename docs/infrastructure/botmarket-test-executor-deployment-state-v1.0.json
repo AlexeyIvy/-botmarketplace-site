@@ -1,0 +1,36 @@
+{
+  "schema": "botmarket.test_executor_deployment_state.v1.0",
+  "date": "2026-09-29",
+  "status": "LOCAL_EXECUTOR_PASS_TUNNEL_PENDING",
+  "git_head": "f873606a0e0aa596eadd8e201737b2ff0dad1c46",
+  "installation_freeze": {
+    "path": "docs/infrastructure/botmarket-test-executor-installation-freeze-v1.0.2.json",
+    "sha256": "c2952ea6d01d4e31652c0b2d22467a1cac8da0ad7f5a880c8b9ff190624796e6"
+  },
+  "observed_installation_result": {
+    "github_read": "PASS",
+    "github_write": "DENIED_AS_REQUIRED",
+    "arbitrary_root_sudo": "DENIED_AS_REQUIRED",
+    "server_python_compile": "PASS",
+    "mcp_service_restricted_sudo_bridge_self_test": "PASS",
+    "isolated_offline_job_self_test": "PASS",
+    "public_research_network_sandbox_self_test": "PASS",
+    "local_mcp": "http://127.0.0.1:8769/mcp",
+    "service": "botmarket-test-executor.service",
+    "control_user": "botmarket-testctl",
+    "job_user": "botmarket-testjob",
+    "network_profiles": [
+      "offline",
+      "public_research"
+    ],
+    "autonomous_limits": {
+      "max_runs_per_rolling_hour": 3,
+      "max_runs_per_utc_day": 10,
+      "max_concurrent_jobs": 1
+    },
+    "trading_credentials_available_to_jobs": false,
+    "research_runner_modified": false,
+    "github_control_modified": false
+  },
+  "next_state": "CREATE_DEDICATED_OPENAI_TUNNEL_AND_CONNECT_TEST_EXECUTOR_APP"
+}

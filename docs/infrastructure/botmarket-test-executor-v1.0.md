@@ -1,7 +1,7 @@
 # BotMarketplace Test Executor MCP v1.0
 
 Date: 2026-09-29  
-Status: **HOST SANDBOX COMPATIBILITY LOCALIZED / INSTALLATION FREEZE v1.0.2 READY / NOT YET OPERATIONAL**
+Status: **LOCAL EXECUTOR DEPLOYMENT PASS / OPENAI TUNNEL + APP CONNECTION PENDING**
 
 ## Purpose
 
@@ -358,6 +358,27 @@ Main installer:
 Tunnel installer:
 
 `scripts/mcp/install-botmarket-test-executor-tunnel-v1.sh`
+
+## Local deployment result
+
+The v1.0.2 installer completed successfully on 2026-09-29.
+
+Observed PASS conditions:
+
+- GitHub repository read: PASS;
+- GitHub repository write: DENIED AS REQUIRED;
+- arbitrary root sudo: DENIED AS REQUIRED;
+- MCP server compile: PASS;
+- control-service restricted sudo bridge self-test: PASS;
+- isolated offline worker self-test: PASS;
+- public-research network sandbox self-test: PASS;
+- local MCP active at `http://127.0.0.1:8769/mcp`.
+
+Canonical deployment state:
+
+`docs/infrastructure/botmarket-test-executor-deployment-state-v1.0.json`
+
+The Test Executor is locally operational. Remote ChatGPT access remains pending until the dedicated OpenAI tunnel and app/plugin connection are completed.
 
 ## First deployment sequence
 
