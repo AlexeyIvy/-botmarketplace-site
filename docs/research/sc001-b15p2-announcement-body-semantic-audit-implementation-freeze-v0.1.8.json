@@ -1,0 +1,69 @@
+{
+  "schema": "sc001.b15p2_announcement_body_semantic_audit_implementation_freeze.v0.1.8",
+  "date": "2026-09-29",
+  "status": "FROZEN_AFTER_TEST_EXECUTOR_OFFLINE_PASS_PUBLIC_SMOKE_PENDING",
+  "supersedes": "docs/research/sc001-b15p2-announcement-body-semantic-audit-implementation-freeze-v0.1.7.json",
+  "entrypoint": {
+    "path": "research/sc001/sc001_b15p2_announcement_body_semantic_audit_v0_1_8.py",
+    "sha256": "c58d6c31f56c41d593ea5156d0e8ea407f9dfea1e515aa613a0d5113f5a0f9fa"
+  },
+  "protocol": {
+    "path": "docs/research/sc001-b15p2-announcement-body-semantic-audit-protocol-v0.1.md",
+    "sha256": "4209779876e3796feff16a8310af93324cd1927862874524fb90ebf95d51d84f",
+    "changed": false
+  },
+  "canonical_routing": {
+    "path": "docs/research/sc001-b15p2-hydration-dual-schema-routing-freeze-v0.1.json",
+    "sha256": "5a58a4289aa73b6a510a8cdaade586c56433da20b35472b526e43174789c929f"
+  },
+  "canonical_art_census": {
+    "path": "docs/research/sc001-b15p2-art-generation-schema-census-result-v0.1.json",
+    "sha256": "44c7494b7ab125a83ce895ea93646af3ffae34d7a8c188e2e6415487d1bc3712"
+  },
+  "engineering_budget": {
+    "path": "docs/research/sc001-b15p2-engineering-recovery-budget-v0.1.json",
+    "authorized_max_iterations": 3,
+    "iterations_consumed_after_offline_run": 1
+  },
+  "change_scope": {
+    "production_parser_changed": false,
+    "production_fetch_changed": false,
+    "semantic_classifier_changed": false,
+    "dual_schema_routing_changed": false,
+    "frozen_event_set_changed": false,
+    "synthetic_fixture_serialization_changed": true,
+    "selftest_layering_changed": true
+  },
+  "selftest_change": {
+    "script_context_safe_json": "Escapes &, < and > to JSON unicode escapes before embedding synthetic hydration JSON inside the outer __NEXT_DATA__ script element, while requiring JSON round-trip equality.",
+    "sanitizer_unit_stage": "SCHEMA_B_SANITIZER_UNIT",
+    "hydration_end_to_end_stage": "SCHEMA_B_SCRIPT_CONTEXT_SAFE_HYDRATION",
+    "old_coupled_stage_removed": "SCHEMA_B_SCRIPT_STYLE_EXCLUSION"
+  },
+  "offline_dynamic_validation": {
+    "executor": "BotMarketplace Test Executor",
+    "repo_head": "2e0ec98b080324d522288d28656dc703381cd00c",
+    "job_id": "job_20260929T125116Z_b631a281",
+    "network_profile": "offline",
+    "entrypoint_sha256": "c58d6c31f56c41d593ea5156d0e8ea407f9dfea1e515aa613a0d5113f5a0f9fa",
+    "timeout_seconds": 120,
+    "snapshot_file_count": 2526,
+    "snapshot_bytes": 19525266,
+    "exit_code": 0,
+    "timed_out": false,
+    "result_error": null,
+    "log_sha256": "52fd46b136ccfca2d1accbc8e0d576d2d17f8a9a1f9ef5bd3b9c084d11d9dbe0",
+    "pass_token": "B15P2_ANNOUNCEMENT_BODY_SEMANTIC_AUDIT_V018_SELF_TEST_PASS",
+    "trading_credentials_available": false
+  },
+  "expected_selftest_pass": "B15P2_ANNOUNCEMENT_BODY_SEMANTIC_AUDIT_V018_SELF_TEST_PASS",
+  "expected_smoke_pass": "B15P2_ANNOUNCEMENT_BODY_DUAL_SCHEMA_SMOKE_V018_PASS",
+  "price_access_authorized": false,
+  "external_reference_price_access_authorized": false,
+  "index_value_access_authorized": false,
+  "basis_access_authorized": false,
+  "returns_access_authorized": false,
+  "pnl_access_authorized": false,
+  "event_outcome_ranking_authorized": false,
+  "next_state": "PUBLIC_RESEARCH_DUAL_SCHEMA_SMOKE_SAME_ENDPOINT_CLASS"
+}

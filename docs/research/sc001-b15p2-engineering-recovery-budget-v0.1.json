@@ -1,12 +1,13 @@
 {
   "schema": "sc001.b15p2_engineering_recovery_budget.v0.1",
   "date": "2026-09-29",
-  "status": "AUTHORIZED",
+  "status": "AUTHORIZED_OFFLINE_ITERATION_1_PASS",
   "authorization": {
     "source": "EXPLICIT_USER_APPROVAL_IN_CHAT",
     "approved_scope": "CURRENT_B15P2_ENGINEERING_CONTOUR_ONLY",
     "max_recovery_iterations": 3,
-    "iterations_consumed": 0
+    "iterations_consumed": 1,
+    "iterations_remaining": 2
   },
   "purpose": "Repair and dynamically validate the synthetic __NEXT_DATA__ fixture and separated sanitizer/hydration self-tests without changing frozen research evidence, semantic rules, network scope, or economic firewalls.",
   "allowed": [
@@ -46,6 +47,10 @@
   ],
   "candidate": {
     "path": "research/sc001/sc001_b15p2_announcement_body_semantic_audit_v0_1_8.py",
-    "pre_execution_sha256": "c58d6c31f56c41d593ea5156d0e8ea407f9dfea1e515aa613a0d5113f5a0f9fa"
-  }
+    "sha256": "c58d6c31f56c41d593ea5156d0e8ea407f9dfea1e515aa613a0d5113f5a0f9fa",
+    "offline_validation_status": "PASS",
+    "offline_job_id": "job_20260929T125116Z_b631a281",
+    "offline_pass_token": "B15P2_ANNOUNCEMENT_BODY_SEMANTIC_AUDIT_V018_SELF_TEST_PASS"
+  },
+  "next_state": "FROZEN_V018_PUBLIC_RESEARCH_SMOKE_ALLOWED"
 }
