@@ -1,0 +1,81 @@
+{
+  "schema": "sc001.worker_result_manifest.v0.1",
+  "project": "SC001",
+  "experiment_id": "B15-P2",
+  "stage": "P0_BASIS_CONVERGENCE_FULL_REGISTERED_RUN",
+  "date": "2026-09-29",
+  "status": "DEFER_SOURCE_COVERAGE",
+  "strategy_triggers": [
+    "NEW_OUTCOME_MECHANISM_GATE",
+    "TERMINAL_REJECT_DEFER",
+    "EVIDENCE_MATURITY_CHANGE",
+    "CONTAMINATION_CHANGE",
+    "ROADMAP_GOVERNANCE_CHANGE"
+  ],
+  "canonical_result": {
+    "path": "docs/research/sc001-b15p2-p0-basis-convergence-result-v0.1.json",
+    "sha256": "e2554fcf95992e64d58ffcdac85faf68edff45f5320a596a5249256176bd13a3"
+  },
+  "protocol": {
+    "path": "docs/research/sc001-b15p2-pre-registered-price-experiment-spec-v0.1.json",
+    "sha256": "1dc79403307177c1f9785090fa6f31aac0322ccb10864c509846e8da415856a7"
+  },
+  "implementation": {
+    "path": "research/sc001/sc001_b15p2_p0_basis_convergence_v0_1.py",
+    "sha256": "dc52b2fb4914ea29bc6bc85a9cfc8aa27f327d8dd160e6c4aa9feeab5e328945"
+  },
+  "execution": {
+    "mode": "NETWORKED_VPS",
+    "bundle_id": null,
+    "bundle_sha256": null,
+    "job_id": "job_20260929T142359Z_85d4a91d"
+  },
+  "mechanism": {
+    "fingerprint_ref": "docs/research/sc001-b15p2-mechanism-fingerprint-v0.1.json",
+    "disposition": "SAME_MECHANISM_VARIANT",
+    "adaptive_discovery_generated": true
+  },
+  "evidence": {
+    "class": "PRE_REGISTERED_P0_SOURCE_COVERAGE_DEFER",
+    "promotional": false,
+    "outcome_accessed": true,
+    "window": "2026-01..2026-09 frozen events",
+    "contamination_registry_ref": "docs/research/sc001-contamination-registry-v0.34.json"
+  },
+  "key_metrics": {
+    "raw_events": 94,
+    "eligible_events": 23,
+    "frozen_clusters": 37,
+    "eligible_clusters": 18,
+    "eligible_months": 8,
+    "cluster_median_d_bps": 0.43078129,
+    "cluster_positive_d_share": 0.5555555555555556,
+    "bootstrap_d_p05_bps": -24.623053925,
+    "bootstrap_d_p95_bps": 26.20930124,
+    "positive_months": 4,
+    "cluster_median_c_event_bps": 0.652667335,
+    "zero_activity_errors": 125
+  },
+  "decision": {
+    "class": "DEFER",
+    "summary": "The exact frozen P0 run completed once, but the pre-registered source gate failed: 23/94 events, 18/37 delivery clusters, and 8/9 frozen months were eligible. 125 of 126 registered-snapshot errors were CONTRACT_ZERO_ACTIVITY; one was Bybit retCode 10016. Metrics from the surviving subset are descriptive only and cannot support the registered mechanism inference.",
+    "failed_gate": "SOURCE_GATE",
+    "allowed_claims": [
+      "The exact frozen full P0 run completed once with exit code 0",
+      "23 of 94 events were eligible under the frozen source-integrity rule",
+      "18 of 37 delivery clusters were eligible",
+      "8 of 9 frozen months had an eligible cluster",
+      "125 of 126 registered-snapshot errors were CONTRACT_ZERO_ACTIVITY",
+      "No alternate source or source substitution was used"
+    ],
+    "forbidden_reuse": [
+      "Do not treat the surviving 18 clusters as a replacement valid experiment",
+      "Do not promote descriptive metrics to a terminal mechanism verdict",
+      "Do not relax the zero-activity eligibility rule and rerun on the same outcomes",
+      "Do not substitute alternate price sources",
+      "Do not search alternate horizons, symbols or thresholds from these outcomes"
+    ],
+    "next_allowed_action": "Review official Bybit source coverage semantics without source substitution or outcome-based rescue; if a successor is defensible, pre-register it before new outcome access."
+  },
+  "reusable_blocks": []
+}

@@ -1,0 +1,5201 @@
+{
+  "a_minus30_summary_bps": {
+    "count": 18,
+    "max": 494.23620618499996,
+    "median": 52.614283882500004,
+    "min": 8.05152979,
+    "p25": 23.0528767875,
+    "p75": 116.61989500624999
+  },
+  "a_minus55_summary_bps": {
+    "count": 18,
+    "max": 349.74439908,
+    "median": 60.010098625,
+    "min": 3.9824771,
+    "p25": 18.87842255,
+    "p75": 89.61193124625
+  },
+  "a_minus5_summary_bps": {
+    "count": 18,
+    "max": 281.46230993,
+    "median": 45.416112565000006,
+    "min": 4.91642085,
+    "p25": 17.3212659525,
+    "p75": 86.0153734225
+  },
+  "bootstrap_cluster_median_d_90pct": {
+    "p05": -24.623053925,
+    "p95": 26.20930124,
+    "replications": 10000,
+    "seed": 1502
+  },
+  "c_control_summary_bps": {
+    "count": 18,
+    "max": 205.34066516000001,
+    "median": -6.3917555,
+    "min": -390.818724885,
+    "p25": -30.94231279,
+    "p75": 26.793367661250002
+  },
+  "c_event_summary_bps": {
+    "count": 18,
+    "max": 435.20432897,
+    "median": 0.652667335,
+    "min": -220.8470652,
+    "p25": -17.861894083750002,
+    "p75": 48.83256462625
+  },
+  "causal_clock_freeze_sha256": "9e4f6db4ce173cf9d5fa590a1acd1a56fa6a9f465c001c88de47b2542a172d70",
+  "cluster_ledger": [
+    {
+      "a_minus30_median_bps": 213.0227529,
+      "a_minus55_median_bps": 244.13495607000002,
+      "a_minus5_median_bps": 95.03163769,
+      "c_control_median_bps": 31.11220317,
+      "c_event_median_bps": 117.99111521500001,
+      "d_median_bps": 86.87891204499999,
+      "delivery_cluster_id": "C03",
+      "delivery_month": "2026-01",
+      "delivery_ms": 1769245200000,
+      "eligible_event_count": 2,
+      "event_symbols": [
+        "ALEOUSDT",
+        "XNOUSDT"
+      ]
+    },
+    {
+      "a_minus30_median_bps": 65.7318142,
+      "a_minus55_median_bps": 56.61619487,
+      "a_minus5_median_bps": 48.6381323,
+      "c_control_median_bps": -9.11561933,
+      "c_event_median_bps": 17.0936819,
+      "d_median_bps": 26.20930124,
+      "delivery_cluster_id": "C04",
+      "delivery_month": "2026-01",
+      "delivery_ms": 1769677200000,
+      "eligible_event_count": 1,
+      "event_symbols": [
+        "PHBUSDT"
+      ]
+    },
+    {
+      "a_minus30_median_bps": 23.18648559,
+      "a_minus55_median_bps": 36.48424544,
+      "a_minus5_median_bps": 10.13513514,
+      "c_control_median_bps": 13.29775985,
+      "c_event_median_bps": 13.05135046,
+      "d_median_bps": -0.24640939,
+      "delivery_cluster_id": "C07",
+      "delivery_month": "2026-02",
+      "delivery_ms": 1770368400000,
+      "eligible_event_count": 1,
+      "event_symbols": [
+        "10000ELONUSDT"
+      ]
+    },
+    {
+      "a_minus30_median_bps": 60.61524473,
+      "a_minus55_median_bps": 93.98496241,
+      "a_minus5_median_bps": 281.46230993,
+      "c_control_median_bps": 33.36971767,
+      "c_event_median_bps": -220.8470652,
+      "d_median_bps": -254.21678287,
+      "delivery_cluster_id": "C08",
+      "delivery_month": "2026-02",
+      "delivery_ms": 1770454800000,
+      "eligible_event_count": 1,
+      "event_symbols": [
+        "YALAUSDT"
+      ]
+    },
+    {
+      "a_minus30_median_bps": 28.38892832,
+      "a_minus55_median_bps": 7.15717149,
+      "a_minus5_median_bps": 34.73729917,
+      "c_control_median_bps": -21.23175683,
+      "c_event_median_bps": -6.34837086,
+      "d_median_bps": 14.88338598,
+      "delivery_cluster_id": "C10",
+      "delivery_month": "2026-02",
+      "delivery_ms": 1771578000000,
+      "eligible_event_count": 1,
+      "event_symbols": [
+        "OMUSDT"
+      ]
+    },
+    {
+      "a_minus30_median_bps": 48.02364241,
+      "a_minus55_median_bps": 14.76559616,
+      "a_minus5_median_bps": 154.60030166,
+      "c_control_median_bps": -33.25804625,
+      "c_event_median_bps": -106.57665925,
+      "d_median_bps": -73.318613,
+      "delivery_cluster_id": "C13",
+      "delivery_month": "2026-03",
+      "delivery_ms": 1773910800000,
+      "eligible_event_count": 1,
+      "event_symbols": [
+        "XCHUSDT"
+      ]
+    },
+    {
+      "a_minus30_median_bps": 50.016553635,
+      "a_minus55_median_bps": 63.85341477,
+      "a_minus5_median_bps": 60.80274643,
+      "c_control_median_bps": 13.836861135,
+      "c_event_median_bps": -10.786192795000002,
+      "d_median_bps": -24.623053925,
+      "delivery_cluster_id": "C15",
+      "delivery_month": "2026-04",
+      "delivery_ms": 1775196000000,
+      "eligible_event_count": 2,
+      "event_symbols": [
+        "HOOKUSDT",
+        "SXPUSDT"
+      ]
+    },
+    {
+      "a_minus30_median_bps": 17.3370319,
+      "a_minus55_median_bps": 72.31404959,
+      "a_minus5_median_bps": 37.67123288,
+      "c_control_median_bps": 54.97701769,
+      "c_event_median_bps": -20.33420098,
+      "d_median_bps": -75.31121866,
+      "delivery_cluster_id": "C16",
+      "delivery_month": "2026-04",
+      "delivery_ms": 1775714400000,
+      "eligible_event_count": 1,
+      "event_symbols": [
+        "SFPUSDT"
+      ]
+    },
+    {
+      "a_minus30_median_bps": 88.58267717,
+      "a_minus55_median_bps": 53.89514944,
+      "a_minus5_median_bps": 4.91642085,
+      "c_control_median_bps": -34.68752773,
+      "c_event_median_bps": 83.66625632,
+      "d_median_bps": 118.35378405,
+      "delivery_cluster_id": "C17",
+      "delivery_month": "2026-04",
+      "delivery_ms": 1776330000000,
+      "eligible_event_count": 1,
+      "event_symbols": [
+        "CAMPUSDT"
+      ]
+    },
+    {
+      "a_minus30_median_bps": 14.91074852,
+      "a_minus55_median_bps": 12.64808803,
+      "a_minus5_median_bps": 16.33565472,
+      "c_control_median_bps": -2.26266049,
+      "c_event_median_bps": -1.4249062,
+      "d_median_bps": 0.83775429,
+      "delivery_cluster_id": "C18",
+      "delivery_month": "2026-04",
+      "delivery_ms": 1776852000000,
+      "eligible_event_count": 1,
+      "event_symbols": [
+        "PROMUSDT"
+      ]
+    },
+    {
+      "a_minus30_median_bps": 494.23620618499996,
+      "a_minus55_median_bps": 103.4174813,
+      "a_minus5_median_bps": 59.031877215,
+      "c_control_median_bps": -390.818724885,
+      "c_event_median_bps": 435.20432897,
+      "d_median_bps": 826.0230538550001,
+      "delivery_cluster_id": "C19",
+      "delivery_month": "2026-04",
+      "delivery_ms": 1777539600000,
+      "eligible_event_count": 2,
+      "event_symbols": [
+        "FIOUSDT",
+        "TRUUSDT"
+      ]
+    },
+    {
+      "a_minus30_median_bps": 144.403733925,
+      "a_minus55_median_bps": 349.74439908,
+      "a_minus5_median_bps": 101.26444119499999,
+      "c_control_median_bps": 205.34066516000001,
+      "c_event_median_bps": 43.139292729999994,
+      "d_median_bps": -162.20137243000002,
+      "delivery_cluster_id": "C22",
+      "delivery_month": "2026-05",
+      "delivery_ms": 1779958800000,
+      "eligible_event_count": 2,
+      "event_symbols": [
+        "DOGUSDT",
+        "HPOS10IUSDT"
+      ]
+    },
+    {
+      "a_minus30_median_bps": 55.21201413,
+      "a_minus55_median_bps": 31.21690172,
+      "a_minus5_median_bps": 89.60872711,
+      "c_control_median_bps": -23.99511241,
+      "c_event_median_bps": -34.39671298,
+      "d_median_bps": -10.40160056,
+      "delivery_cluster_id": "C25",
+      "delivery_month": "2026-06",
+      "delivery_ms": 1781514000000,
+      "eligible_event_count": 1,
+      "event_symbols": [
+        "TONUSDT"
+      ]
+    },
+    {
+      "a_minus30_median_bps": 23.00834052,
+      "a_minus55_median_bps": 14.29388222,
+      "a_minus5_median_bps": 20.27809965,
+      "c_control_median_bps": -8.71445831,
+      "c_event_median_bps": 2.73024087,
+      "d_median_bps": 11.44469918,
+      "delivery_cluster_id": "C27",
+      "delivery_month": "2026-06",
+      "delivery_ms": 1782457200000,
+      "eligible_event_count": 1,
+      "event_symbols": [
+        "IPUSDT"
+      ]
+    },
+    {
+      "a_minus30_median_bps": 21.97363164,
+      "a_minus55_median_bps": 63.40400238,
+      "a_minus5_median_bps": 42.19409283,
+      "c_control_median_bps": 41.43037074,
+      "c_event_median_bps": -20.22046118,
+      "d_median_bps": -61.65083192,
+      "delivery_cluster_id": "C29",
+      "delivery_month": "2026-07",
+      "delivery_ms": 1783674000000,
+      "eligible_event_count": 1,
+      "event_symbols": [
+        "ESUSDT"
+      ]
+    },
+    {
+      "a_minus30_median_bps": 8.05152979,
+      "a_minus55_median_bps": 3.9824771,
+      "a_minus5_median_bps": 12.09677419,
+      "c_control_median_bps": -4.06905269,
+      "c_event_median_bps": -4.0452444,
+      "d_median_bps": 0.02380829,
+      "delivery_cluster_id": "C33",
+      "delivery_month": "2026-08",
+      "delivery_ms": 1786525200000,
+      "eligible_event_count": 1,
+      "event_symbols": [
+        "VANRYUSDT"
+      ]
+    },
+    {
+      "a_minus30_median_bps": 125.965634285,
+      "a_minus55_median_bps": 76.492837755,
+      "a_minus5_median_bps": 75.23531236,
+      "c_control_median_bps": -49.47279653,
+      "c_event_median_bps": 50.730321925,
+      "d_median_bps": 100.20311845500001,
+      "delivery_cluster_id": "C34",
+      "delivery_month": "2026-08",
+      "delivery_ms": 1787302800000,
+      "eligible_event_count": 2,
+      "event_symbols": [
+        "HFTUSDT",
+        "VINEUSDT"
+      ]
+    },
+    {
+      "a_minus30_median_bps": 217.77221527,
+      "a_minus55_median_bps": 168.00401204,
+      "a_minus5_median_bps": 7.45341615,
+      "c_control_median_bps": -49.76820323,
+      "c_event_median_bps": 210.31879912,
+      "d_median_bps": 260.08700235,
+      "delivery_cluster_id": "C35",
+      "delivery_month": "2026-08",
+      "delivery_ms": 1788080400000,
+      "eligible_event_count": 1,
+      "event_symbols": [
+        "ACXUSDT"
+      ]
+    }
+  ],
+  "cluster_median_c_event_bps": 0.652667335,
+  "cluster_median_d_bps": 0.43078129,
+  "cluster_positive_d_share": 0.5555555555555556,
+  "d_summary_bps": {
+    "count": 18,
+    "max": 826.0230538550001,
+    "median": 0.43078129,
+    "min": -254.21678287,
+    "p25": -52.39388742125,
+    "p75": 71.71150934375
+  },
+  "date": "2026-09-29",
+  "eligible_delivery_cluster_count": 18,
+  "eligible_event_count": 23,
+  "eligible_month_count": 8,
+  "event_ledger": [
+    {
+      "delivery_cluster_id": "C01",
+      "delivery_month": "2026-01",
+      "delivery_ms": 1767344400000,
+      "eligible": false,
+      "first_notice_ms": 1767000116000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 1,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1767341040000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1767342540000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1767342540000,
+          "present": false
+        },
+        "-5": {
+          "candle_start_ms": 1767344040000,
+          "present": true
+        },
+        "-55": {
+          "candle_start_ms": 1767341040000,
+          "present": false
+        }
+      },
+      "symbol": "FXSUSDT"
+    },
+    {
+      "delivery_cluster_id": "C02",
+      "delivery_month": "2026-01",
+      "delivery_ms": 1768035600000,
+      "eligible": false,
+      "first_notice_ms": 1767776616000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 1,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1768033740000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        },
+        {
+          "candle_start_ms": 1768035240000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1768033740000,
+          "present": false
+        },
+        "-5": {
+          "candle_start_ms": 1768035240000,
+          "present": false
+        },
+        "-55": {
+          "candle_start_ms": 1768032240000,
+          "present": true
+        }
+      },
+      "symbol": "DAMUSDT"
+    },
+    {
+      "a_minus30_bps": 200.5888848,
+      "a_minus55_bps": 275.98896044,
+      "a_minus5_bps": 13.80834024,
+      "c_control_bps": 75.40007564,
+      "c_event_bps": 186.78054456,
+      "d_bps": 111.38046892,
+      "delivery_cluster_id": "C03",
+      "delivery_month": "2026-01",
+      "delivery_ms": 1769245200000,
+      "eligible": true,
+      "first_notice_ms": 1768991845000,
+      "future_execution_side": "LONG_PERPETUAL",
+      "ineligible_reason": null,
+      "simultaneous_event_count": 3,
+      "snapshot_errors": [],
+      "snapshots": {
+        "-30": {
+          "absolute_basis_bps": 200.5888848,
+          "basis_bps": -200.5888848,
+          "candle_start_ms": 1769243340000,
+          "contract_close": "0.1065",
+          "contract_turnover": "49.9485",
+          "contract_volume": "469",
+          "index_close": "0.10868"
+        },
+        "-5": {
+          "absolute_basis_bps": 13.80834024,
+          "basis_bps": -13.80834024,
+          "candle_start_ms": 1769244840000,
+          "contract_close": "0.10848",
+          "contract_turnover": "1016.30126",
+          "contract_volume": "9375",
+          "index_close": "0.10863"
+        },
+        "-55": {
+          "absolute_basis_bps": 275.98896044,
+          "basis_bps": -275.98896044,
+          "candle_start_ms": 1769241840000,
+          "contract_close": "0.1057",
+          "contract_turnover": "362.96511",
+          "contract_volume": "3442",
+          "index_close": "0.1087"
+        }
+      },
+      "symbol": "ALEOUSDT"
+    },
+    {
+      "delivery_cluster_id": "C03",
+      "delivery_month": "2026-01",
+      "delivery_ms": 1769245200000,
+      "eligible": false,
+      "first_notice_ms": 1768991809000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 3,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1769241840000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1769243340000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        },
+        {
+          "candle_start_ms": 1769244840000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1769243340000,
+          "present": false
+        },
+        "-5": {
+          "candle_start_ms": 1769244840000,
+          "present": false
+        },
+        "-55": {
+          "candle_start_ms": 1769241840000,
+          "present": false
+        }
+      },
+      "symbol": "FWOGUSDT"
+    },
+    {
+      "a_minus30_bps": 225.456621,
+      "a_minus55_bps": 212.2809517,
+      "a_minus5_bps": 176.25493514,
+      "c_control_bps": -13.1756693,
+      "c_event_bps": 49.20168587,
+      "d_bps": 62.37735517,
+      "delivery_cluster_id": "C03",
+      "delivery_month": "2026-01",
+      "delivery_ms": 1769245200000,
+      "eligible": true,
+      "first_notice_ms": 1768991856000,
+      "future_execution_side": "LONG_PERPETUAL",
+      "ineligible_reason": null,
+      "simultaneous_event_count": 3,
+      "snapshot_errors": [],
+      "snapshots": {
+        "-30": {
+          "absolute_basis_bps": 225.456621,
+          "basis_bps": -225.456621,
+          "candle_start_ms": 1769243340000,
+          "contract_close": "0.685",
+          "contract_turnover": "37.6576",
+          "contract_volume": "55",
+          "index_close": "0.7008"
+        },
+        "-5": {
+          "absolute_basis_bps": 176.25493514,
+          "basis_bps": -176.25493514,
+          "candle_start_ms": 1769244840000,
+          "contract_close": "0.6967",
+          "contract_turnover": "4730.5662",
+          "contract_volume": "6738",
+          "index_close": "0.7092"
+        },
+        "-55": {
+          "absolute_basis_bps": 212.2809517,
+          "basis_bps": -212.2809517,
+          "candle_start_ms": 1769241840000,
+          "contract_close": "0.687",
+          "contract_turnover": "48.777",
+          "contract_volume": "71",
+          "index_close": "0.7019"
+        }
+      },
+      "symbol": "XNOUSDT"
+    },
+    {
+      "delivery_cluster_id": "C04",
+      "delivery_month": "2026-01",
+      "delivery_ms": 1769677200000,
+      "eligible": false,
+      "first_notice_ms": 1769425536000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 3,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1769675340000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        },
+        {
+          "candle_start_ms": 1769676840000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1769675340000,
+          "present": false
+        },
+        "-5": {
+          "candle_start_ms": 1769676840000,
+          "present": false
+        },
+        "-55": {
+          "candle_start_ms": 1769673840000,
+          "present": true
+        }
+      },
+      "symbol": "NKNUSDT"
+    },
+    {
+      "a_minus30_bps": 65.7318142,
+      "a_minus55_bps": 56.61619487,
+      "a_minus5_bps": 48.6381323,
+      "c_control_bps": -9.11561933,
+      "c_event_bps": 17.0936819,
+      "d_bps": 26.20930124,
+      "delivery_cluster_id": "C04",
+      "delivery_month": "2026-01",
+      "delivery_ms": 1769677200000,
+      "eligible": true,
+      "first_notice_ms": 1769425546000,
+      "future_execution_side": "SHORT_PERPETUAL",
+      "ineligible_reason": null,
+      "simultaneous_event_count": 3,
+      "snapshot_errors": [],
+      "snapshots": {
+        "-30": {
+          "absolute_basis_bps": 65.7318142,
+          "basis_bps": 65.7318142,
+          "candle_start_ms": 1769675340000,
+          "contract_close": "0.2297",
+          "contract_turnover": "50.53391",
+          "contract_volume": "220",
+          "index_close": "0.2282"
+        },
+        "-5": {
+          "absolute_basis_bps": 48.6381323,
+          "basis_bps": 48.6381323,
+          "candle_start_ms": 1769676840000,
+          "contract_close": "0.22726",
+          "contract_turnover": "9.77218",
+          "contract_volume": "43",
+          "index_close": "0.22616"
+        },
+        "-55": {
+          "absolute_basis_bps": 56.61619487,
+          "basis_bps": 56.61619487,
+          "candle_start_ms": 1769673840000,
+          "contract_close": "0.22914",
+          "contract_turnover": "34.81972",
+          "contract_volume": "152",
+          "index_close": "0.22785"
+        }
+      },
+      "symbol": "PHBUSDT"
+    },
+    {
+      "delivery_cluster_id": "C04",
+      "delivery_month": "2026-01",
+      "delivery_ms": 1769677200000,
+      "eligible": false,
+      "first_notice_ms": 1769425606000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 3,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1769675340000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1769675340000,
+          "present": false
+        },
+        "-5": {
+          "candle_start_ms": 1769676840000,
+          "present": true
+        },
+        "-55": {
+          "candle_start_ms": 1769673840000,
+          "present": true
+        }
+      },
+      "symbol": "VICUSDT"
+    },
+    {
+      "delivery_cluster_id": "C05",
+      "delivery_month": "2026-01",
+      "delivery_ms": 1769763600000,
+      "eligible": false,
+      "first_notice_ms": 1769600454000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 1,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1769763240000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1769761740000,
+          "present": true
+        },
+        "-5": {
+          "candle_start_ms": 1769763240000,
+          "present": false
+        },
+        "-55": {
+          "candle_start_ms": 1769760240000,
+          "present": true
+        }
+      },
+      "symbol": "EPTUSDT"
+    },
+    {
+      "delivery_cluster_id": "C06",
+      "delivery_month": "2026-02",
+      "delivery_ms": 1770022800000,
+      "eligible": false,
+      "first_notice_ms": 1769842848000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 1,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1770019440000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1770020940000,
+          "present": true
+        },
+        "-5": {
+          "candle_start_ms": 1770022440000,
+          "present": true
+        },
+        "-55": {
+          "candle_start_ms": 1770019440000,
+          "present": false
+        }
+      },
+      "symbol": "COMMONUSDT"
+    },
+    {
+      "a_minus30_bps": 23.18648559,
+      "a_minus55_bps": 36.48424544,
+      "a_minus5_bps": 10.13513514,
+      "c_control_bps": 13.29775985,
+      "c_event_bps": 13.05135046,
+      "d_bps": -0.24640939,
+      "delivery_cluster_id": "C07",
+      "delivery_month": "2026-02",
+      "delivery_ms": 1770368400000,
+      "eligible": true,
+      "first_notice_ms": 1770194693000,
+      "future_execution_side": "LONG_PERPETUAL",
+      "ineligible_reason": null,
+      "simultaneous_event_count": 3,
+      "snapshot_errors": [],
+      "snapshots": {
+        "-30": {
+          "absolute_basis_bps": 23.18648559,
+          "basis_bps": -23.18648559,
+          "candle_start_ms": 1770366540000,
+          "contract_close": "0.0003012",
+          "contract_turnover": "11.01673",
+          "contract_volume": "36500",
+          "index_close": "0.0003019"
+        },
+        "-5": {
+          "absolute_basis_bps": 10.13513514,
+          "basis_bps": -10.13513514,
+          "candle_start_ms": 1770368040000,
+          "contract_close": "0.0002957",
+          "contract_turnover": "5.82529",
+          "contract_volume": "19700",
+          "index_close": "0.000296"
+        },
+        "-55": {
+          "absolute_basis_bps": 36.48424544,
+          "basis_bps": -36.48424544,
+          "candle_start_ms": 1770365040000,
+          "contract_close": "0.0003004",
+          "contract_turnover": "5.43724",
+          "contract_volume": "18100",
+          "index_close": "0.0003015"
+        }
+      },
+      "symbol": "10000ELONUSDT"
+    },
+    {
+      "delivery_cluster_id": "C07",
+      "delivery_month": "2026-02",
+      "delivery_ms": 1770368400000,
+      "eligible": false,
+      "first_notice_ms": 1770194660000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 3,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1770365040000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1770366540000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        },
+        {
+          "candle_start_ms": 1770368040000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1770366540000,
+          "present": false
+        },
+        "-5": {
+          "candle_start_ms": 1770368040000,
+          "present": false
+        },
+        "-55": {
+          "candle_start_ms": 1770365040000,
+          "present": false
+        }
+      },
+      "symbol": "DENTUSDT"
+    },
+    {
+      "delivery_cluster_id": "C07",
+      "delivery_month": "2026-02",
+      "delivery_ms": 1770368400000,
+      "eligible": false,
+      "first_notice_ms": 1770194671000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 3,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1770365040000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1770366540000,
+          "present": true
+        },
+        "-5": {
+          "candle_start_ms": 1770368040000,
+          "present": true
+        },
+        "-55": {
+          "candle_start_ms": 1770365040000,
+          "present": false
+        }
+      },
+      "symbol": "ZEUSUSDT"
+    },
+    {
+      "a_minus30_bps": 60.61524473,
+      "a_minus55_bps": 93.98496241,
+      "a_minus5_bps": 281.46230993,
+      "c_control_bps": 33.36971767,
+      "c_event_bps": -220.8470652,
+      "d_bps": -254.21678287,
+      "delivery_cluster_id": "C08",
+      "delivery_month": "2026-02",
+      "delivery_ms": 1770454800000,
+      "eligible": true,
+      "first_notice_ms": 1770284893000,
+      "future_execution_side": "SHORT_PERPETUAL",
+      "ineligible_reason": null,
+      "simultaneous_event_count": 1,
+      "snapshot_errors": [],
+      "snapshots": {
+        "-30": {
+          "absolute_basis_bps": 60.61524473,
+          "basis_bps": 60.61524473,
+          "candle_start_ms": 1770452940000,
+          "contract_close": "0.006639",
+          "contract_turnover": "1312.473904",
+          "contract_volume": "197520",
+          "index_close": "0.006599"
+        },
+        "-5": {
+          "absolute_basis_bps": 281.46230993,
+          "basis_bps": 281.46230993,
+          "candle_start_ms": 1770454440000,
+          "contract_close": "0.006356",
+          "contract_turnover": "338.462344",
+          "contract_volume": "53207",
+          "index_close": "0.006182"
+        },
+        "-55": {
+          "absolute_basis_bps": 93.98496241,
+          "basis_bps": 93.98496241,
+          "candle_start_ms": 1770451440000,
+          "contract_close": "0.006444",
+          "contract_turnover": "75.001716",
+          "contract_volume": "11639",
+          "index_close": "0.006384"
+        }
+      },
+      "symbol": "YALAUSDT"
+    },
+    {
+      "delivery_cluster_id": "C09",
+      "delivery_month": "2026-02",
+      "delivery_ms": 1770800400000,
+      "eligible": false,
+      "first_notice_ms": 1770627291000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 3,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1770797040000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1770798540000,
+          "present": true
+        },
+        "-5": {
+          "candle_start_ms": 1770800040000,
+          "present": true
+        },
+        "-55": {
+          "candle_start_ms": 1770797040000,
+          "present": false
+        }
+      },
+      "symbol": "1000XUSDT"
+    },
+    {
+      "delivery_cluster_id": "C09",
+      "delivery_month": "2026-02",
+      "delivery_ms": 1770800400000,
+      "eligible": false,
+      "first_notice_ms": 1770627311000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 3,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1770797040000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1770798540000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        },
+        {
+          "candle_start_ms": 1770800040000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1770798540000,
+          "present": false
+        },
+        "-5": {
+          "candle_start_ms": 1770800040000,
+          "present": false
+        },
+        "-55": {
+          "candle_start_ms": 1770797040000,
+          "present": false
+        }
+      },
+      "symbol": "CUDISUSDT"
+    },
+    {
+      "delivery_cluster_id": "C09",
+      "delivery_month": "2026-02",
+      "delivery_ms": 1770800400000,
+      "eligible": false,
+      "first_notice_ms": 1770627301000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 3,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1770798540000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1770798540000,
+          "present": false
+        },
+        "-5": {
+          "candle_start_ms": 1770800040000,
+          "present": true
+        },
+        "-55": {
+          "candle_start_ms": 1770797040000,
+          "present": true
+        }
+      },
+      "symbol": "SAROSUSDT"
+    },
+    {
+      "a_minus30_bps": 28.38892832,
+      "a_minus55_bps": 7.15717149,
+      "a_minus5_bps": 34.73729917,
+      "c_control_bps": -21.23175683,
+      "c_event_bps": -6.34837086,
+      "d_bps": 14.88338598,
+      "delivery_cluster_id": "C10",
+      "delivery_month": "2026-02",
+      "delivery_ms": 1771578000000,
+      "eligible": true,
+      "first_notice_ms": 1770973579000,
+      "future_execution_side": "LONG_PERPETUAL",
+      "ineligible_reason": null,
+      "simultaneous_event_count": 1,
+      "snapshot_errors": [],
+      "snapshots": {
+        "-30": {
+          "absolute_basis_bps": 28.38892832,
+          "basis_bps": -28.38892832,
+          "candle_start_ms": 1771576140000,
+          "contract_close": "0.07025",
+          "contract_turnover": "99.54161",
+          "contract_volume": "1417",
+          "index_close": "0.07045"
+        },
+        "-5": {
+          "absolute_basis_bps": 34.73729917,
+          "basis_bps": 34.73729917,
+          "candle_start_ms": 1771577640000,
+          "contract_close": "0.06933",
+          "contract_turnover": "78337.19849",
+          "contract_volume": "1131127",
+          "index_close": "0.06909"
+        },
+        "-55": {
+          "absolute_basis_bps": 7.15717149,
+          "basis_bps": -7.15717149,
+          "candle_start_ms": 1771574640000,
+          "contract_close": "0.06981",
+          "contract_turnover": "33.85785",
+          "contract_volume": "485",
+          "index_close": "0.06986"
+        }
+      },
+      "symbol": "OMUSDT"
+    },
+    {
+      "delivery_cluster_id": "C11",
+      "delivery_month": "2026-02",
+      "delivery_ms": 1772190000000,
+      "eligible": false,
+      "first_notice_ms": 1772017161000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 5,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1772186640000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1772188140000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        },
+        {
+          "candle_start_ms": 1772189640000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1772188140000,
+          "present": false
+        },
+        "-5": {
+          "candle_start_ms": 1772189640000,
+          "present": false
+        },
+        "-55": {
+          "candle_start_ms": 1772186640000,
+          "present": false
+        }
+      },
+      "symbol": "A2ZUSDT"
+    },
+    {
+      "delivery_cluster_id": "C11",
+      "delivery_month": "2026-02",
+      "delivery_ms": 1772190000000,
+      "eligible": false,
+      "first_notice_ms": 1772017206000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 5,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1772186640000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1772189640000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1772188140000,
+          "present": true
+        },
+        "-5": {
+          "candle_start_ms": 1772189640000,
+          "present": false
+        },
+        "-55": {
+          "candle_start_ms": 1772186640000,
+          "present": false
+        }
+      },
+      "symbol": "DGBUSDT"
+    },
+    {
+      "delivery_cluster_id": "C11",
+      "delivery_month": "2026-02",
+      "delivery_ms": 1772190000000,
+      "eligible": false,
+      "first_notice_ms": 1772017193000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 5,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1772186640000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1772188140000,
+          "present": true
+        },
+        "-5": {
+          "candle_start_ms": 1772189640000,
+          "present": true
+        },
+        "-55": {
+          "candle_start_ms": 1772186640000,
+          "present": false
+        }
+      },
+      "symbol": "IDEXUSDT"
+    },
+    {
+      "delivery_cluster_id": "C11",
+      "delivery_month": "2026-02",
+      "delivery_ms": 1772190000000,
+      "eligible": false,
+      "first_notice_ms": 1772017182000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 5,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1772186640000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1772188140000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        },
+        {
+          "candle_start_ms": 1772189640000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1772188140000,
+          "present": false
+        },
+        "-5": {
+          "candle_start_ms": 1772189640000,
+          "present": false
+        },
+        "-55": {
+          "candle_start_ms": 1772186640000,
+          "present": false
+        }
+      },
+      "symbol": "NSUSDT"
+    },
+    {
+      "delivery_cluster_id": "C11",
+      "delivery_month": "2026-02",
+      "delivery_ms": 1772190000000,
+      "eligible": false,
+      "first_notice_ms": 1772017171000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 5,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1772186640000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1772188140000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        },
+        {
+          "candle_start_ms": 1772189640000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1772188140000,
+          "present": false
+        },
+        "-5": {
+          "candle_start_ms": 1772189640000,
+          "present": false
+        },
+        "-55": {
+          "candle_start_ms": 1772186640000,
+          "present": false
+        }
+      },
+      "symbol": "OBTUSDT"
+    },
+    {
+      "delivery_cluster_id": "C12",
+      "delivery_month": "2026-03",
+      "delivery_ms": 1772787600000,
+      "eligible": false,
+      "first_notice_ms": 1772614994000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 5,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1772787240000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1772785740000,
+          "present": true
+        },
+        "-5": {
+          "candle_start_ms": 1772787240000,
+          "present": false
+        },
+        "-55": {
+          "candle_start_ms": 1772784240000,
+          "present": true
+        }
+      },
+      "symbol": "AINUSDT"
+    },
+    {
+      "delivery_cluster_id": "C12",
+      "delivery_month": "2026-03",
+      "delivery_ms": 1772787600000,
+      "eligible": false,
+      "first_notice_ms": 1772614984000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 5,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1772785740000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        },
+        {
+          "candle_start_ms": 1772787240000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1772785740000,
+          "present": false
+        },
+        "-5": {
+          "candle_start_ms": 1772787240000,
+          "present": false
+        },
+        "-55": {
+          "candle_start_ms": 1772784240000,
+          "present": true
+        }
+      },
+      "symbol": "ALUUSDT"
+    },
+    {
+      "delivery_cluster_id": "C12",
+      "delivery_month": "2026-03",
+      "delivery_ms": 1772787600000,
+      "eligible": false,
+      "first_notice_ms": 1772614948000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 5,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1772784240000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1772785740000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1772785740000,
+          "present": false
+        },
+        "-5": {
+          "candle_start_ms": 1772787240000,
+          "present": true
+        },
+        "-55": {
+          "candle_start_ms": 1772784240000,
+          "present": false
+        }
+      },
+      "symbol": "DODOUSDT"
+    },
+    {
+      "delivery_cluster_id": "C12",
+      "delivery_month": "2026-03",
+      "delivery_ms": 1772787600000,
+      "eligible": false,
+      "first_notice_ms": 1772614963000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 5,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1772785740000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1772785740000,
+          "present": false
+        },
+        "-5": {
+          "candle_start_ms": 1772787240000,
+          "present": true
+        },
+        "-55": {
+          "candle_start_ms": 1772784240000,
+          "present": true
+        }
+      },
+      "symbol": "SDUSDT"
+    },
+    {
+      "delivery_cluster_id": "C12",
+      "delivery_month": "2026-03",
+      "delivery_ms": 1772787600000,
+      "eligible": false,
+      "first_notice_ms": 1772614973000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 5,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1772784240000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1772785740000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        },
+        {
+          "candle_start_ms": 1772787240000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1772785740000,
+          "present": false
+        },
+        "-5": {
+          "candle_start_ms": 1772787240000,
+          "present": false
+        },
+        "-55": {
+          "candle_start_ms": 1772784240000,
+          "present": false
+        }
+      },
+      "symbol": "SKYAIUSDT"
+    },
+    {
+      "delivery_cluster_id": "C13",
+      "delivery_month": "2026-03",
+      "delivery_ms": 1773910800000,
+      "eligible": false,
+      "first_notice_ms": 1773739897000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 3,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1773907440000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1773908940000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1773908940000,
+          "present": false
+        },
+        "-5": {
+          "candle_start_ms": 1773910440000,
+          "present": true
+        },
+        "-55": {
+          "candle_start_ms": 1773907440000,
+          "present": false
+        }
+      },
+      "symbol": "CTSIUSDT"
+    },
+    {
+      "delivery_cluster_id": "C13",
+      "delivery_month": "2026-03",
+      "delivery_ms": 1773910800000,
+      "eligible": false,
+      "first_notice_ms": 1773739842000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 3,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1773907440000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1773908940000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1773908940000,
+          "present": false
+        },
+        "-5": {
+          "candle_start_ms": 1773910440000,
+          "present": true
+        },
+        "-55": {
+          "candle_start_ms": 1773907440000,
+          "present": false
+        }
+      },
+      "symbol": "TAIUSDT"
+    },
+    {
+      "a_minus30_bps": 48.02364241,
+      "a_minus55_bps": 14.76559616,
+      "a_minus5_bps": 154.60030166,
+      "c_control_bps": -33.25804625,
+      "c_event_bps": -106.57665925,
+      "d_bps": -73.318613,
+      "delivery_cluster_id": "C13",
+      "delivery_month": "2026-03",
+      "delivery_ms": 1773910800000,
+      "eligible": true,
+      "first_notice_ms": 1773739853000,
+      "future_execution_side": "SHORT_PERPETUAL",
+      "ineligible_reason": null,
+      "simultaneous_event_count": 3,
+      "snapshot_errors": [],
+      "snapshots": {
+        "-30": {
+          "absolute_basis_bps": 48.02364241,
+          "basis_bps": 48.02364241,
+          "candle_start_ms": 1773908940000,
+          "contract_close": "2.72",
+          "contract_turnover": "12.2672",
+          "contract_volume": "4.51",
+          "index_close": "2.707"
+        },
+        "-5": {
+          "absolute_basis_bps": 154.60030166,
+          "basis_bps": 154.60030166,
+          "candle_start_ms": 1773910440000,
+          "contract_close": "2.693",
+          "contract_turnover": "569.16555",
+          "contract_volume": "211.35",
+          "index_close": "2.652"
+        },
+        "-55": {
+          "absolute_basis_bps": 14.76559616,
+          "basis_bps": -14.76559616,
+          "candle_start_ms": 1773907440000,
+          "contract_close": "2.705",
+          "contract_turnover": "976.3968",
+          "contract_volume": "360.96",
+          "index_close": "2.709"
+        }
+      },
+      "symbol": "XCHUSDT"
+    },
+    {
+      "delivery_cluster_id": "C14",
+      "delivery_month": "2026-03",
+      "delivery_ms": 1774602000000,
+      "eligible": false,
+      "first_notice_ms": 1774432240000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 3,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1774598640000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1774600140000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1774600140000,
+          "present": false
+        },
+        "-5": {
+          "candle_start_ms": 1774601640000,
+          "present": true
+        },
+        "-55": {
+          "candle_start_ms": 1774598640000,
+          "present": false
+        }
+      },
+      "symbol": "AVLUSDT"
+    },
+    {
+      "delivery_cluster_id": "C14",
+      "delivery_month": "2026-03",
+      "delivery_ms": 1774602000000,
+      "eligible": false,
+      "first_notice_ms": 1774432229000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 3,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1774598640000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1774600140000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        },
+        {
+          "candle_start_ms": 1774601640000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1774600140000,
+          "present": false
+        },
+        "-5": {
+          "candle_start_ms": 1774601640000,
+          "present": false
+        },
+        "-55": {
+          "candle_start_ms": 1774598640000,
+          "present": false
+        }
+      },
+      "symbol": "COOKUSDT"
+    },
+    {
+      "delivery_cluster_id": "C14",
+      "delivery_month": "2026-03",
+      "delivery_ms": 1774602000000,
+      "eligible": false,
+      "first_notice_ms": 1774432251000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 3,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1774601640000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1774600140000,
+          "present": true
+        },
+        "-5": {
+          "candle_start_ms": 1774601640000,
+          "present": false
+        },
+        "-55": {
+          "candle_start_ms": 1774598640000,
+          "present": true
+        }
+      },
+      "symbol": "VFYUSDT"
+    },
+    {
+      "a_minus30_bps": 94.56264775,
+      "a_minus55_bps": 0.0,
+      "a_minus5_bps": 72.63922518,
+      "c_control_bps": -94.56264775,
+      "c_event_bps": 21.92342257,
+      "d_bps": 116.48607033,
+      "delivery_cluster_id": "C15",
+      "delivery_month": "2026-04",
+      "delivery_ms": 1775196000000,
+      "eligible": true,
+      "first_notice_ms": 1775024129000,
+      "future_execution_side": "LONG_PERPETUAL",
+      "ineligible_reason": null,
+      "simultaneous_event_count": 5,
+      "snapshot_errors": [],
+      "snapshots": {
+        "-30": {
+          "absolute_basis_bps": 94.56264775,
+          "basis_bps": -94.56264775,
+          "candle_start_ms": 1775194140000,
+          "contract_close": "0.00838",
+          "contract_turnover": "1249.859716",
+          "contract_volume": "149326.2",
+          "index_close": "0.00846"
+        },
+        "-5": {
+          "absolute_basis_bps": 72.63922518,
+          "basis_bps": 72.63922518,
+          "candle_start_ms": 1775195640000,
+          "contract_close": "0.00832",
+          "contract_turnover": "131.581894",
+          "contract_volume": "15747.7",
+          "index_close": "0.00826"
+        },
+        "-55": {
+          "absolute_basis_bps": 0.0,
+          "basis_bps": 0.0,
+          "candle_start_ms": 1775192640000,
+          "contract_close": "0.00811",
+          "contract_turnover": "554.328193",
+          "contract_volume": "68314.5",
+          "index_close": "0.00811"
+        }
+      },
+      "symbol": "HOOKUSDT"
+    },
+    {
+      "delivery_cluster_id": "C15",
+      "delivery_month": "2026-04",
+      "delivery_ms": 1775196000000,
+      "eligible": false,
+      "first_notice_ms": 1775024063000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 5,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1775195640000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1775194140000,
+          "present": true
+        },
+        "-5": {
+          "candle_start_ms": 1775195640000,
+          "present": false
+        },
+        "-55": {
+          "candle_start_ms": 1775192640000,
+          "present": true
+        }
+      },
+      "symbol": "L3USDT"
+    },
+    {
+      "delivery_cluster_id": "C15",
+      "delivery_month": "2026-04",
+      "delivery_ms": 1775196000000,
+      "eligible": false,
+      "first_notice_ms": 1775024073000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 5,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1775192640000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1775194140000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1775194140000,
+          "present": false
+        },
+        "-5": {
+          "candle_start_ms": 1775195640000,
+          "present": true
+        },
+        "-55": {
+          "candle_start_ms": 1775192640000,
+          "present": false
+        }
+      },
+      "symbol": "NTRNUSDT"
+    },
+    {
+      "a_minus30_bps": 5.47045952,
+      "a_minus55_bps": 127.70682954,
+      "a_minus5_bps": 48.96626768,
+      "c_control_bps": 122.23637002,
+      "c_event_bps": -43.49580816,
+      "d_bps": -165.73217818,
+      "delivery_cluster_id": "C15",
+      "delivery_month": "2026-04",
+      "delivery_ms": 1775196000000,
+      "eligible": true,
+      "first_notice_ms": 1775024140000,
+      "future_execution_side": "SHORT_PERPETUAL",
+      "ineligible_reason": null,
+      "simultaneous_event_count": 5,
+      "snapshot_errors": [],
+      "snapshots": {
+        "-30": {
+          "absolute_basis_bps": 5.47045952,
+          "basis_bps": 5.47045952,
+          "candle_start_ms": 1775194140000,
+          "contract_close": "0.001829",
+          "contract_turnover": "12.0467385",
+          "contract_volume": "6591.5",
+          "index_close": "0.001828"
+        },
+        "-5": {
+          "absolute_basis_bps": 48.96626768,
+          "basis_bps": -48.96626768,
+          "candle_start_ms": 1775195640000,
+          "contract_close": "0.001829",
+          "contract_turnover": "796.5499626",
+          "contract_volume": "435160.3",
+          "index_close": "0.001838"
+        },
+        "-55": {
+          "absolute_basis_bps": 127.70682954,
+          "basis_bps": 127.70682954,
+          "candle_start_ms": 1775192640000,
+          "contract_close": "0.001824",
+          "contract_turnover": "126.4081655",
+          "contract_volume": "69589.9",
+          "index_close": "0.001801"
+        }
+      },
+      "symbol": "SXPUSDT"
+    },
+    {
+      "delivery_cluster_id": "C15",
+      "delivery_month": "2026-04",
+      "delivery_ms": 1775196000000,
+      "eligible": false,
+      "first_notice_ms": 1775024001000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 5,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1775194140000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1775194140000,
+          "present": false
+        },
+        "-5": {
+          "candle_start_ms": 1775195640000,
+          "present": true
+        },
+        "-55": {
+          "candle_start_ms": 1775192640000,
+          "present": true
+        }
+      },
+      "symbol": "SYSUSDT"
+    },
+    {
+      "delivery_cluster_id": "C16",
+      "delivery_month": "2026-04",
+      "delivery_ms": 1775714400000,
+      "eligible": false,
+      "first_notice_ms": 1775541821000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 5,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1775714040000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1775712540000,
+          "present": true
+        },
+        "-5": {
+          "candle_start_ms": 1775714040000,
+          "present": false
+        },
+        "-55": {
+          "candle_start_ms": 1775711040000,
+          "present": true
+        }
+      },
+      "symbol": "NFPUSDT"
+    },
+    {
+      "delivery_cluster_id": "C16",
+      "delivery_month": "2026-04",
+      "delivery_ms": 1775714400000,
+      "eligible": false,
+      "first_notice_ms": 1775541914000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 5,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1775711040000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1775712540000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        },
+        {
+          "candle_start_ms": 1775714040000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1775712540000,
+          "present": false
+        },
+        "-5": {
+          "candle_start_ms": 1775714040000,
+          "present": false
+        },
+        "-55": {
+          "candle_start_ms": 1775711040000,
+          "present": false
+        }
+      },
+      "symbol": "ONEUSDT"
+    },
+    {
+      "delivery_cluster_id": "C16",
+      "delivery_month": "2026-04",
+      "delivery_ms": 1775714400000,
+      "eligible": false,
+      "first_notice_ms": 1775541809000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 5,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1775711040000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1775712540000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        },
+        {
+          "candle_start_ms": 1775714040000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1775712540000,
+          "present": false
+        },
+        "-5": {
+          "candle_start_ms": 1775714040000,
+          "present": false
+        },
+        "-55": {
+          "candle_start_ms": 1775711040000,
+          "present": false
+        }
+      },
+      "symbol": "PONKEUSDT"
+    },
+    {
+      "a_minus30_bps": 17.3370319,
+      "a_minus55_bps": 72.31404959,
+      "a_minus5_bps": 37.67123288,
+      "c_control_bps": 54.97701769,
+      "c_event_bps": -20.33420098,
+      "d_bps": -75.31121866,
+      "delivery_cluster_id": "C16",
+      "delivery_month": "2026-04",
+      "delivery_ms": 1775714400000,
+      "eligible": true,
+      "first_notice_ms": 1775541879000,
+      "future_execution_side": "LONG_PERPETUAL",
+      "ineligible_reason": null,
+      "simultaneous_event_count": 5,
+      "snapshot_errors": [],
+      "snapshots": {
+        "-30": {
+          "absolute_basis_bps": 17.3370319,
+          "basis_bps": -17.3370319,
+          "candle_start_ms": 1775712540000,
+          "contract_close": "0.2879",
+          "contract_turnover": "56.92522",
+          "contract_volume": "197.9",
+          "index_close": "0.2884"
+        },
+        "-5": {
+          "absolute_basis_bps": 37.67123288,
+          "basis_bps": -37.67123288,
+          "candle_start_ms": 1775714040000,
+          "contract_close": "0.2909",
+          "contract_turnover": "92.05438",
+          "contract_volume": "316.5",
+          "index_close": "0.292"
+        },
+        "-55": {
+          "absolute_basis_bps": 72.31404959,
+          "basis_bps": -72.31404959,
+          "candle_start_ms": 1775711040000,
+          "contract_close": "0.2883",
+          "contract_turnover": "0.05762",
+          "contract_volume": "0.2",
+          "index_close": "0.2904"
+        }
+      },
+      "symbol": "SFPUSDT"
+    },
+    {
+      "delivery_cluster_id": "C16",
+      "delivery_month": "2026-04",
+      "delivery_ms": 1775714400000,
+      "eligible": false,
+      "first_notice_ms": 1775541866000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 5,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1775711040000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1775714040000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1775712540000,
+          "present": true
+        },
+        "-5": {
+          "candle_start_ms": 1775714040000,
+          "present": false
+        },
+        "-55": {
+          "candle_start_ms": 1775711040000,
+          "present": false
+        }
+      },
+      "symbol": "SPELLUSDT"
+    },
+    {
+      "a_minus30_bps": 88.58267717,
+      "a_minus55_bps": 53.89514944,
+      "a_minus5_bps": 4.91642085,
+      "c_control_bps": -34.68752773,
+      "c_event_bps": 83.66625632,
+      "d_bps": 118.35378405,
+      "delivery_cluster_id": "C17",
+      "delivery_month": "2026-04",
+      "delivery_ms": 1776330000000,
+      "eligible": true,
+      "first_notice_ms": 1776157213000,
+      "future_execution_side": "SHORT_PERPETUAL",
+      "ineligible_reason": null,
+      "simultaneous_event_count": 4,
+      "snapshot_errors": [],
+      "snapshots": {
+        "-30": {
+          "absolute_basis_bps": 88.58267717,
+          "basis_bps": 88.58267717,
+          "candle_start_ms": 1776328140000,
+          "contract_close": "0.00205",
+          "contract_turnover": "0.6724",
+          "contract_volume": "328",
+          "index_close": "0.002032"
+        },
+        "-5": {
+          "absolute_basis_bps": 4.91642085,
+          "basis_bps": 4.91642085,
+          "candle_start_ms": 1776329640000,
+          "contract_close": "0.002035",
+          "contract_turnover": "200.083153",
+          "contract_volume": "98321",
+          "index_close": "0.002034"
+        },
+        "-55": {
+          "absolute_basis_bps": 53.89514944,
+          "basis_bps": 53.89514944,
+          "candle_start_ms": 1776326640000,
+          "contract_close": "0.002052",
+          "contract_turnover": "29.747844",
+          "contract_volume": "14497",
+          "index_close": "0.002041"
+        }
+      },
+      "symbol": "CAMPUSDT"
+    },
+    {
+      "delivery_cluster_id": "C17",
+      "delivery_month": "2026-04",
+      "delivery_ms": 1776330000000,
+      "eligible": false,
+      "first_notice_ms": 1776157223000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 4,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1776328140000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1776328140000,
+          "present": false
+        },
+        "-5": {
+          "candle_start_ms": 1776329640000,
+          "present": true
+        },
+        "-55": {
+          "candle_start_ms": 1776326640000,
+          "present": true
+        }
+      },
+      "symbol": "HIPPOUSDT"
+    },
+    {
+      "delivery_cluster_id": "C17",
+      "delivery_month": "2026-04",
+      "delivery_ms": 1776330000000,
+      "eligible": false,
+      "first_notice_ms": 1776157234000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 4,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1776326640000,
+          "error": "RuntimeError:LISTAUSDT:/v5/market/kline:1776326640000:RETCODE:10016:svc error: Get kline failed",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1776329640000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1776328140000,
+          "present": true
+        },
+        "-5": {
+          "candle_start_ms": 1776329640000,
+          "present": false
+        },
+        "-55": {
+          "candle_start_ms": 1776326640000,
+          "present": false
+        }
+      },
+      "symbol": "LISTAUSDT"
+    },
+    {
+      "delivery_cluster_id": "C17",
+      "delivery_month": "2026-04",
+      "delivery_ms": 1776330000000,
+      "eligible": false,
+      "first_notice_ms": 1776157202000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 4,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1776326640000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1776328140000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1776328140000,
+          "present": false
+        },
+        "-5": {
+          "candle_start_ms": 1776329640000,
+          "present": true
+        },
+        "-55": {
+          "candle_start_ms": 1776326640000,
+          "present": false
+        }
+      },
+      "symbol": "RLSUSDT"
+    },
+    {
+      "delivery_cluster_id": "C18",
+      "delivery_month": "2026-04",
+      "delivery_ms": 1776852000000,
+      "eligible": false,
+      "first_notice_ms": 1776679217000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 2,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1776850140000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1776850140000,
+          "present": false
+        },
+        "-5": {
+          "candle_start_ms": 1776851640000,
+          "present": true
+        },
+        "-55": {
+          "candle_start_ms": 1776848640000,
+          "present": true
+        }
+      },
+      "symbol": "CTKUSDT"
+    },
+    {
+      "a_minus30_bps": 14.91074852,
+      "a_minus55_bps": 12.64808803,
+      "a_minus5_bps": 16.33565472,
+      "c_control_bps": -2.26266049,
+      "c_event_bps": -1.4249062,
+      "d_bps": 0.83775429,
+      "delivery_cluster_id": "C18",
+      "delivery_month": "2026-04",
+      "delivery_ms": 1776852000000,
+      "eligible": true,
+      "first_notice_ms": 1776679228000,
+      "future_execution_side": "SHORT_PERPETUAL",
+      "ineligible_reason": null,
+      "simultaneous_event_count": 2,
+      "snapshot_errors": [],
+      "snapshots": {
+        "-30": {
+          "absolute_basis_bps": 14.91074852,
+          "basis_bps": 14.91074852,
+          "candle_start_ms": 1776850140000,
+          "contract_close": "2.3508",
+          "contract_turnover": "236.74562",
+          "contract_volume": "100.7",
+          "index_close": "2.3473"
+        },
+        "-5": {
+          "absolute_basis_bps": 16.33565472,
+          "basis_bps": -16.33565472,
+          "candle_start_ms": 1776851640000,
+          "contract_close": "2.3224",
+          "contract_turnover": "58.99649",
+          "contract_volume": "25.4",
+          "index_close": "2.3262"
+        },
+        "-55": {
+          "absolute_basis_bps": 12.64808803,
+          "basis_bps": -12.64808803,
+          "candle_start_ms": 1776848640000,
+          "contract_close": "2.3689",
+          "contract_turnover": "59.2243",
+          "contract_volume": "25",
+          "index_close": "2.3719"
+        }
+      },
+      "symbol": "PROMUSDT"
+    },
+    {
+      "delivery_cluster_id": "C19",
+      "delivery_month": "2026-04",
+      "delivery_ms": 1777539600000,
+      "eligible": false,
+      "first_notice_ms": 1777521702000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 5,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1777536240000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1777537740000,
+          "present": true
+        },
+        "-5": {
+          "candle_start_ms": 1777539240000,
+          "present": true
+        },
+        "-55": {
+          "candle_start_ms": 1777536240000,
+          "present": false
+        }
+      },
+      "symbol": "BSUUSDT"
+    },
+    {
+      "a_minus30_bps": 958.90410959,
+      "a_minus55_bps": 136.98630137,
+      "a_minus5_bps": 0.0,
+      "c_control_bps": -821.91780822,
+      "c_event_bps": 958.90410959,
+      "d_bps": 1780.82191781,
+      "delivery_cluster_id": "C19",
+      "delivery_month": "2026-04",
+      "delivery_ms": 1777539600000,
+      "eligible": true,
+      "first_notice_ms": 1777367028000,
+      "future_execution_side": "SHORT_PERPETUAL",
+      "ineligible_reason": null,
+      "simultaneous_event_count": 5,
+      "snapshot_errors": [],
+      "snapshots": {
+        "-30": {
+          "absolute_basis_bps": 958.90410959,
+          "basis_bps": 958.90410959,
+          "candle_start_ms": 1777537740000,
+          "contract_close": "0.0008",
+          "contract_turnover": "1149.36896",
+          "contract_volume": "1460570",
+          "index_close": "0.00073"
+        },
+        "-5": {
+          "absolute_basis_bps": 0.0,
+          "basis_bps": 0.0,
+          "candle_start_ms": 1777539240000,
+          "contract_close": "0.000735",
+          "contract_turnover": "99.93912",
+          "contract_volume": "136090",
+          "index_close": "0.000735"
+        },
+        "-55": {
+          "absolute_basis_bps": 136.98630137,
+          "basis_bps": 136.98630137,
+          "candle_start_ms": 1777536240000,
+          "contract_close": "0.00074",
+          "contract_turnover": "628.90998",
+          "contract_volume": "851830",
+          "index_close": "0.00073"
+        }
+      },
+      "symbol": "FIOUSDT"
+    },
+    {
+      "delivery_cluster_id": "C19",
+      "delivery_month": "2026-04",
+      "delivery_ms": 1777539600000,
+      "eligible": false,
+      "first_notice_ms": 1777367129000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 5,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1777536240000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1777537740000,
+          "present": true
+        },
+        "-5": {
+          "candle_start_ms": 1777539240000,
+          "present": true
+        },
+        "-55": {
+          "candle_start_ms": 1777536240000,
+          "present": false
+        }
+      },
+      "symbol": "RDNTUSDT"
+    },
+    {
+      "a_minus30_bps": 29.56830278,
+      "a_minus55_bps": 69.84866123,
+      "a_minus5_bps": 118.06375443,
+      "c_control_bps": 40.28035845,
+      "c_event_bps": -88.49545165,
+      "d_bps": -128.7758101,
+      "delivery_cluster_id": "C19",
+      "delivery_month": "2026-04",
+      "delivery_ms": 1777539600000,
+      "eligible": true,
+      "first_notice_ms": 1777367159000,
+      "future_execution_side": "SHORT_PERPETUAL",
+      "ineligible_reason": null,
+      "simultaneous_event_count": 5,
+      "snapshot_errors": [],
+      "snapshots": {
+        "-30": {
+          "absolute_basis_bps": 29.56830278,
+          "basis_bps": 29.56830278,
+          "candle_start_ms": 1777537740000,
+          "contract_close": "0.001696",
+          "contract_turnover": "53.61672",
+          "contract_volume": "31624",
+          "index_close": "0.001691"
+        },
+        "-5": {
+          "absolute_basis_bps": 118.06375443,
+          "basis_bps": -118.06375443,
+          "candle_start_ms": 1777539240000,
+          "contract_close": "0.001674",
+          "contract_turnover": "8.515781",
+          "contract_volume": "5079",
+          "index_close": "0.001694"
+        },
+        "-55": {
+          "absolute_basis_bps": 69.84866123,
+          "basis_bps": 69.84866123,
+          "candle_start_ms": 1777536240000,
+          "contract_close": "0.00173",
+          "contract_turnover": "0.33216",
+          "contract_volume": "192",
+          "index_close": "0.001718"
+        }
+      },
+      "symbol": "TRUUSDT"
+    },
+    {
+      "delivery_cluster_id": "C19",
+      "delivery_month": "2026-04",
+      "delivery_ms": 1777539600000,
+      "eligible": false,
+      "first_notice_ms": 1777366985000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 5,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1777536240000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1777537740000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1777537740000,
+          "present": false
+        },
+        "-5": {
+          "candle_start_ms": 1777539240000,
+          "present": true
+        },
+        "-55": {
+          "candle_start_ms": 1777536240000,
+          "present": false
+        }
+      },
+      "symbol": "YZYUSDT"
+    },
+    {
+      "delivery_cluster_id": "C20",
+      "delivery_month": "2026-05",
+      "delivery_ms": 1778230800000,
+      "eligible": false,
+      "first_notice_ms": 1778058174000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 2,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1778227440000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1778228940000,
+          "present": true
+        },
+        "-5": {
+          "candle_start_ms": 1778230440000,
+          "present": true
+        },
+        "-55": {
+          "candle_start_ms": 1778227440000,
+          "present": false
+        }
+      },
+      "symbol": "CLOUDUSDT"
+    },
+    {
+      "delivery_cluster_id": "C20",
+      "delivery_month": "2026-05",
+      "delivery_ms": 1778230800000,
+      "eligible": false,
+      "first_notice_ms": 1778058184000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 2,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1778227440000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1778228940000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        },
+        {
+          "candle_start_ms": 1778230440000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1778228940000,
+          "present": false
+        },
+        "-5": {
+          "candle_start_ms": 1778230440000,
+          "present": false
+        },
+        "-55": {
+          "candle_start_ms": 1778227440000,
+          "present": false
+        }
+      },
+      "symbol": "SYNUSDT"
+    },
+    {
+      "delivery_cluster_id": "C21",
+      "delivery_month": "2026-05",
+      "delivery_ms": 1778752800000,
+      "eligible": false,
+      "first_notice_ms": 1778580257000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 3,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1778749440000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1778750940000,
+          "present": true
+        },
+        "-5": {
+          "candle_start_ms": 1778752440000,
+          "present": true
+        },
+        "-55": {
+          "candle_start_ms": 1778749440000,
+          "present": false
+        }
+      },
+      "symbol": "10000QUBICUSDT"
+    },
+    {
+      "delivery_cluster_id": "C21",
+      "delivery_month": "2026-05",
+      "delivery_ms": 1778752800000,
+      "eligible": false,
+      "first_notice_ms": 1778580267000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 3,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1778749440000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1778750940000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1778750940000,
+          "present": false
+        },
+        "-5": {
+          "candle_start_ms": 1778752440000,
+          "present": true
+        },
+        "-55": {
+          "candle_start_ms": 1778749440000,
+          "present": false
+        }
+      },
+      "symbol": "DEGENUSDT"
+    },
+    {
+      "delivery_cluster_id": "C21",
+      "delivery_month": "2026-05",
+      "delivery_ms": 1778752800000,
+      "eligible": false,
+      "first_notice_ms": 1778580288000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 3,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1778749440000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1778750940000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        },
+        {
+          "candle_start_ms": 1778752440000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1778750940000,
+          "present": false
+        },
+        "-5": {
+          "candle_start_ms": 1778752440000,
+          "present": false
+        },
+        "-55": {
+          "candle_start_ms": 1778749440000,
+          "present": false
+        }
+      },
+      "symbol": "OXTUSDT"
+    },
+    {
+      "delivery_cluster_id": "C22",
+      "delivery_month": "2026-05",
+      "delivery_ms": 1779958800000,
+      "eligible": false,
+      "first_notice_ms": 1779786247000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 3,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1779955440000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1779958440000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1779956940000,
+          "present": true
+        },
+        "-5": {
+          "candle_start_ms": 1779958440000,
+          "present": false
+        },
+        "-55": {
+          "candle_start_ms": 1779955440000,
+          "present": false
+        }
+      },
+      "symbol": "1000000CHEEMSUSDT"
+    },
+    {
+      "a_minus30_bps": 273.44353468,
+      "a_minus55_bps": 687.94219479,
+      "a_minus5_bps": 170.05721551,
+      "c_control_bps": 414.49866011,
+      "c_event_bps": 103.38631917,
+      "d_bps": -311.11234094,
+      "delivery_cluster_id": "C22",
+      "delivery_month": "2026-05",
+      "delivery_ms": 1779958800000,
+      "eligible": true,
+      "first_notice_ms": 1779786312000,
+      "future_execution_side": "SHORT_PERPETUAL",
+      "ineligible_reason": null,
+      "simultaneous_event_count": 3,
+      "snapshot_errors": [],
+      "snapshots": {
+        "-30": {
+          "absolute_basis_bps": 273.44353468,
+          "basis_bps": 273.44353468,
+          "candle_start_ms": 1779956940000,
+          "contract_close": "0.000665",
+          "contract_turnover": "49.9415",
+          "contract_volume": "75100",
+          "index_close": "0.0006473"
+        },
+        "-5": {
+          "absolute_basis_bps": 170.05721551,
+          "basis_bps": 170.05721551,
+          "candle_start_ms": 1779958440000,
+          "contract_close": "0.0006399",
+          "contract_turnover": "27.74673",
+          "contract_volume": "43300",
+          "index_close": "0.0006292"
+        },
+        "-55": {
+          "absolute_basis_bps": 687.94219479,
+          "basis_bps": 687.94219479,
+          "candle_start_ms": 1779955440000,
+          "contract_close": "0.00071",
+          "contract_turnover": "2869.06328",
+          "contract_volume": "4043200",
+          "index_close": "0.0006643"
+        }
+      },
+      "symbol": "DOGUSDT"
+    },
+    {
+      "a_minus30_bps": 15.36393317,
+      "a_minus55_bps": 11.54660337,
+      "a_minus5_bps": 32.47166688,
+      "c_control_bps": -3.81732979,
+      "c_event_bps": -17.10773371,
+      "d_bps": -13.29040392,
+      "delivery_cluster_id": "C22",
+      "delivery_month": "2026-05",
+      "delivery_ms": 1779958800000,
+      "eligible": true,
+      "first_notice_ms": 1779786302000,
+      "future_execution_side": "LONG_PERPETUAL",
+      "ineligible_reason": null,
+      "simultaneous_event_count": 3,
+      "snapshot_errors": [],
+      "snapshots": {
+        "-30": {
+          "absolute_basis_bps": 15.36393317,
+          "basis_bps": -15.36393317,
+          "candle_start_ms": 1779956940000,
+          "contract_close": "0.015597",
+          "contract_turnover": "11.962899",
+          "contract_volume": "767",
+          "index_close": "0.015621"
+        },
+        "-5": {
+          "absolute_basis_bps": 32.47166688,
+          "basis_bps": -32.47166688,
+          "candle_start_ms": 1779958440000,
+          "contract_close": "0.015655",
+          "contract_turnover": "14.4026",
+          "contract_volume": "920",
+          "index_close": "0.015706"
+        },
+        "-55": {
+          "absolute_basis_bps": 11.54660337,
+          "basis_bps": -11.54660337,
+          "candle_start_ms": 1779955440000,
+          "contract_close": "0.015571",
+          "contract_turnover": "117.910343",
+          "contract_volume": "7594",
+          "index_close": "0.015589"
+        }
+      },
+      "symbol": "HPOS10IUSDT"
+    },
+    {
+      "delivery_cluster_id": "C23",
+      "delivery_month": "2026-06",
+      "delivery_ms": 1780477200000,
+      "eligible": false,
+      "first_notice_ms": 1780304723000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 3,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1780476840000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1780475340000,
+          "present": true
+        },
+        "-5": {
+          "candle_start_ms": 1780476840000,
+          "present": false
+        },
+        "-55": {
+          "candle_start_ms": 1780473840000,
+          "present": true
+        }
+      },
+      "symbol": "GNOUSDT"
+    },
+    {
+      "delivery_cluster_id": "C23",
+      "delivery_month": "2026-06",
+      "delivery_ms": 1780477200000,
+      "eligible": false,
+      "first_notice_ms": 1780304714000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 3,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1780473840000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1780475340000,
+          "present": true
+        },
+        "-5": {
+          "candle_start_ms": 1780476840000,
+          "present": true
+        },
+        "-55": {
+          "candle_start_ms": 1780473840000,
+          "present": false
+        }
+      },
+      "symbol": "OLUSDT"
+    },
+    {
+      "delivery_cluster_id": "C23",
+      "delivery_month": "2026-06",
+      "delivery_ms": 1780477200000,
+      "eligible": false,
+      "first_notice_ms": 1780304734000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 3,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1780475340000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1780475340000,
+          "present": false
+        },
+        "-5": {
+          "candle_start_ms": 1780476840000,
+          "present": true
+        },
+        "-55": {
+          "candle_start_ms": 1780473840000,
+          "present": true
+        }
+      },
+      "symbol": "REQUSDT"
+    },
+    {
+      "delivery_cluster_id": "C24",
+      "delivery_month": "2026-06",
+      "delivery_ms": 1781168400000,
+      "eligible": false,
+      "first_notice_ms": 1780995665000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 4,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1781166540000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1781166540000,
+          "present": false
+        },
+        "-5": {
+          "candle_start_ms": 1781168040000,
+          "present": true
+        },
+        "-55": {
+          "candle_start_ms": 1781165040000,
+          "present": true
+        }
+      },
+      "symbol": "GODSUSDT"
+    },
+    {
+      "delivery_cluster_id": "C24",
+      "delivery_month": "2026-06",
+      "delivery_ms": 1781168400000,
+      "eligible": false,
+      "first_notice_ms": 1780996017000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 4,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1781166540000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1781166540000,
+          "present": false
+        },
+        "-5": {
+          "candle_start_ms": 1781168040000,
+          "present": true
+        },
+        "-55": {
+          "candle_start_ms": 1781165040000,
+          "present": true
+        }
+      },
+      "symbol": "ORBSUSDT"
+    },
+    {
+      "delivery_cluster_id": "C24",
+      "delivery_month": "2026-06",
+      "delivery_ms": 1781168400000,
+      "eligible": false,
+      "first_notice_ms": 1780995612000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 4,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1781166540000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1781166540000,
+          "present": false
+        },
+        "-5": {
+          "candle_start_ms": 1781168040000,
+          "present": true
+        },
+        "-55": {
+          "candle_start_ms": 1781165040000,
+          "present": true
+        }
+      },
+      "symbol": "PYRUSDT"
+    },
+    {
+      "delivery_cluster_id": "C24",
+      "delivery_month": "2026-06",
+      "delivery_ms": 1781168400000,
+      "eligible": false,
+      "first_notice_ms": 1780996062000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 4,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1781165040000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1781166540000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        },
+        {
+          "candle_start_ms": 1781168040000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1781166540000,
+          "present": false
+        },
+        "-5": {
+          "candle_start_ms": 1781168040000,
+          "present": false
+        },
+        "-55": {
+          "candle_start_ms": 1781165040000,
+          "present": false
+        }
+      },
+      "symbol": "SCUSDT"
+    },
+    {
+      "a_minus30_bps": 55.21201413,
+      "a_minus55_bps": 31.21690172,
+      "a_minus5_bps": 89.60872711,
+      "c_control_bps": -23.99511241,
+      "c_event_bps": -34.39671298,
+      "d_bps": -10.40160056,
+      "delivery_cluster_id": "C25",
+      "delivery_month": "2026-06",
+      "delivery_ms": 1781514000000,
+      "eligible": true,
+      "first_notice_ms": 1781172074000,
+      "future_execution_side": "LONG_PERPETUAL",
+      "ineligible_reason": null,
+      "simultaneous_event_count": 1,
+      "snapshot_errors": [],
+      "snapshots": {
+        "-30": {
+          "absolute_basis_bps": 55.21201413,
+          "basis_bps": -55.21201413,
+          "candle_start_ms": 1781512140000,
+          "contract_close": "1.8012",
+          "contract_turnover": "13062.90405",
+          "contract_volume": "7262.7",
+          "index_close": "1.8112"
+        },
+        "-5": {
+          "absolute_basis_bps": 89.60872711,
+          "basis_bps": -89.60872711,
+          "candle_start_ms": 1781513640000,
+          "contract_close": "1.7806",
+          "contract_turnover": "38003.20379",
+          "contract_volume": "21362.4",
+          "index_close": "1.7967"
+        },
+        "-55": {
+          "absolute_basis_bps": 31.21690172,
+          "basis_bps": -31.21690172,
+          "candle_start_ms": 1781510640000,
+          "contract_close": "1.7883",
+          "contract_turnover": "22185.15815",
+          "contract_volume": "12402.2",
+          "index_close": "1.7939"
+        }
+      },
+      "symbol": "TONUSDT"
+    },
+    {
+      "delivery_cluster_id": "C26",
+      "delivery_month": "2026-06",
+      "delivery_ms": 1781773200000,
+      "eligible": false,
+      "first_notice_ms": 1781600835000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 1,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1781771340000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1781771340000,
+          "present": false
+        },
+        "-5": {
+          "candle_start_ms": 1781772840000,
+          "present": true
+        },
+        "-55": {
+          "candle_start_ms": 1781769840000,
+          "present": true
+        }
+      },
+      "symbol": "XIONUSDT"
+    },
+    {
+      "a_minus30_bps": 23.00834052,
+      "a_minus55_bps": 14.29388222,
+      "a_minus5_bps": 20.27809965,
+      "c_control_bps": -8.71445831,
+      "c_event_bps": 2.73024087,
+      "d_bps": 11.44469918,
+      "delivery_cluster_id": "C27",
+      "delivery_month": "2026-06",
+      "delivery_ms": 1782457200000,
+      "eligible": true,
+      "first_notice_ms": 1782198171000,
+      "future_execution_side": "LONG_PERPETUAL",
+      "ineligible_reason": null,
+      "simultaneous_event_count": 1,
+      "snapshot_errors": [],
+      "snapshots": {
+        "-30": {
+          "absolute_basis_bps": 23.00834052,
+          "basis_bps": -23.00834052,
+          "candle_start_ms": 1782455340000,
+          "contract_close": "0.3469",
+          "contract_turnover": "2278.4497",
+          "contract_volume": "6572.4",
+          "index_close": "0.3477"
+        },
+        "-5": {
+          "absolute_basis_bps": 20.27809965,
+          "basis_bps": -20.27809965,
+          "candle_start_ms": 1782456840000,
+          "contract_close": "0.3445",
+          "contract_turnover": "3037.30226",
+          "contract_volume": "8806.6",
+          "index_close": "0.3452"
+        },
+        "-55": {
+          "absolute_basis_bps": 14.29388222,
+          "basis_bps": -14.29388222,
+          "candle_start_ms": 1782453840000,
+          "contract_close": "0.3493",
+          "contract_turnover": "2900.83554",
+          "contract_volume": "8291",
+          "index_close": "0.3498"
+        }
+      },
+      "symbol": "IPUSDT"
+    },
+    {
+      "delivery_cluster_id": "C28",
+      "delivery_month": "2026-06",
+      "delivery_ms": 1782473400000,
+      "eligible": false,
+      "first_notice_ms": 1782300790000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 3,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1782470040000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1782471540000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        },
+        {
+          "candle_start_ms": 1782473040000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1782471540000,
+          "present": false
+        },
+        "-5": {
+          "candle_start_ms": 1782473040000,
+          "present": false
+        },
+        "-55": {
+          "candle_start_ms": 1782470040000,
+          "present": false
+        }
+      },
+      "symbol": "MBOXUSDT"
+    },
+    {
+      "delivery_cluster_id": "C28",
+      "delivery_month": "2026-06",
+      "delivery_ms": 1782473400000,
+      "eligible": false,
+      "first_notice_ms": 1782300707000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 3,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1782471540000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        },
+        {
+          "candle_start_ms": 1782473040000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1782471540000,
+          "present": false
+        },
+        "-5": {
+          "candle_start_ms": 1782473040000,
+          "present": false
+        },
+        "-55": {
+          "candle_start_ms": 1782470040000,
+          "present": true
+        }
+      },
+      "symbol": "MLNUSDT"
+    },
+    {
+      "delivery_cluster_id": "C28",
+      "delivery_month": "2026-06",
+      "delivery_ms": 1782473400000,
+      "eligible": false,
+      "first_notice_ms": 1782300763000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 3,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1782470040000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1782471540000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1782471540000,
+          "present": false
+        },
+        "-5": {
+          "candle_start_ms": 1782473040000,
+          "present": true
+        },
+        "-55": {
+          "candle_start_ms": 1782470040000,
+          "present": false
+        }
+      },
+      "symbol": "SOLVUSDT"
+    },
+    {
+      "a_minus30_bps": 21.97363164,
+      "a_minus55_bps": 63.40400238,
+      "a_minus5_bps": 42.19409283,
+      "c_control_bps": 41.43037074,
+      "c_event_bps": -20.22046118,
+      "d_bps": -61.65083192,
+      "delivery_cluster_id": "C29",
+      "delivery_month": "2026-07",
+      "delivery_ms": 1783674000000,
+      "eligible": true,
+      "first_notice_ms": 1783501362000,
+      "future_execution_side": "SHORT_PERPETUAL",
+      "ineligible_reason": null,
+      "simultaneous_event_count": 3,
+      "snapshot_errors": [],
+      "snapshots": {
+        "-30": {
+          "absolute_basis_bps": 21.97363164,
+          "basis_bps": 21.97363164,
+          "candle_start_ms": 1783672140000,
+          "contract_close": "0.005017",
+          "contract_turnover": "6.216063",
+          "contract_volume": "1239",
+          "index_close": "0.005006"
+        },
+        "-5": {
+          "absolute_basis_bps": 42.19409283,
+          "basis_bps": 42.19409283,
+          "candle_start_ms": 1783673640000,
+          "contract_close": "0.004998",
+          "contract_turnover": "500.189844",
+          "contract_volume": "100078",
+          "index_close": "0.004977"
+        },
+        "-55": {
+          "absolute_basis_bps": 63.40400238,
+          "basis_bps": -63.40400238,
+          "candle_start_ms": 1783670640000,
+          "contract_close": "0.005015",
+          "contract_turnover": "414.723009",
+          "contract_volume": "82627",
+          "index_close": "0.005047"
+        }
+      },
+      "symbol": "ESUSDT"
+    },
+    {
+      "delivery_cluster_id": "C29",
+      "delivery_month": "2026-07",
+      "delivery_ms": 1783674000000,
+      "eligible": false,
+      "first_notice_ms": 1783501324000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 3,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1783672140000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1783672140000,
+          "present": false
+        },
+        "-5": {
+          "candle_start_ms": 1783673640000,
+          "present": true
+        },
+        "-55": {
+          "candle_start_ms": 1783670640000,
+          "present": true
+        }
+      },
+      "symbol": "SCRUSDT"
+    },
+    {
+      "delivery_cluster_id": "C29",
+      "delivery_month": "2026-07",
+      "delivery_ms": 1783674000000,
+      "eligible": false,
+      "first_notice_ms": 1783501342000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 3,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1783672140000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1783672140000,
+          "present": false
+        },
+        "-5": {
+          "candle_start_ms": 1783673640000,
+          "present": true
+        },
+        "-55": {
+          "candle_start_ms": 1783670640000,
+          "present": true
+        }
+      },
+      "symbol": "SWARMSUSDT"
+    },
+    {
+      "delivery_cluster_id": "C30",
+      "delivery_month": "2026-07",
+      "delivery_ms": 1784538000000,
+      "eligible": false,
+      "first_notice_ms": 1784279263000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 3,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1784534640000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1784536140000,
+          "present": true
+        },
+        "-5": {
+          "candle_start_ms": 1784537640000,
+          "present": true
+        },
+        "-55": {
+          "candle_start_ms": 1784534640000,
+          "present": false
+        }
+      },
+      "symbol": "HIGHUSDT"
+    },
+    {
+      "delivery_cluster_id": "C30",
+      "delivery_month": "2026-07",
+      "delivery_ms": 1784538000000,
+      "eligible": false,
+      "first_notice_ms": 1784279269000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 3,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1784534640000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1784537640000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1784536140000,
+          "present": true
+        },
+        "-5": {
+          "candle_start_ms": 1784537640000,
+          "present": false
+        },
+        "-55": {
+          "candle_start_ms": 1784534640000,
+          "present": false
+        }
+      },
+      "symbol": "PUMPBTCUSDT"
+    },
+    {
+      "delivery_cluster_id": "C30",
+      "delivery_month": "2026-07",
+      "delivery_ms": 1784538000000,
+      "eligible": false,
+      "first_notice_ms": 1784279273000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 3,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1784534640000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1784536140000,
+          "present": true
+        },
+        "-5": {
+          "candle_start_ms": 1784537640000,
+          "present": true
+        },
+        "-55": {
+          "candle_start_ms": 1784534640000,
+          "present": false
+        }
+      },
+      "symbol": "WHITEWHALEUSDT"
+    },
+    {
+      "delivery_cluster_id": "C31",
+      "delivery_month": "2026-07",
+      "delivery_ms": 1784970000000,
+      "eligible": false,
+      "first_notice_ms": 1784883680000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 1,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1784968140000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1784968140000,
+          "present": false
+        },
+        "-5": {
+          "candle_start_ms": 1784969640000,
+          "present": true
+        },
+        "-55": {
+          "candle_start_ms": 1784966640000,
+          "present": true
+        }
+      },
+      "symbol": "AERGOUSDT"
+    },
+    {
+      "delivery_cluster_id": "C32",
+      "delivery_month": "2026-07",
+      "delivery_ms": 1785142800000,
+      "eligible": false,
+      "first_notice_ms": 1784883653000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 4,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1785139440000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1785140940000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1785140940000,
+          "present": false
+        },
+        "-5": {
+          "candle_start_ms": 1785142440000,
+          "present": true
+        },
+        "-55": {
+          "candle_start_ms": 1785139440000,
+          "present": false
+        }
+      },
+      "symbol": "BOBBOBUSDT"
+    },
+    {
+      "delivery_cluster_id": "C32",
+      "delivery_month": "2026-07",
+      "delivery_ms": 1785142800000,
+      "eligible": false,
+      "first_notice_ms": 1784883674000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 4,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1785139440000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1785140940000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1785140940000,
+          "present": false
+        },
+        "-5": {
+          "candle_start_ms": 1785142440000,
+          "present": true
+        },
+        "-55": {
+          "candle_start_ms": 1785139440000,
+          "present": false
+        }
+      },
+      "symbol": "GIGAUSDT"
+    },
+    {
+      "delivery_cluster_id": "C32",
+      "delivery_month": "2026-07",
+      "delivery_ms": 1785142800000,
+      "eligible": false,
+      "first_notice_ms": 1784883658000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 4,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1785139440000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1785140940000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        },
+        {
+          "candle_start_ms": 1785142440000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1785140940000,
+          "present": false
+        },
+        "-5": {
+          "candle_start_ms": 1785142440000,
+          "present": false
+        },
+        "-55": {
+          "candle_start_ms": 1785139440000,
+          "present": false
+        }
+      },
+      "symbol": "ROAMUSDT"
+    },
+    {
+      "delivery_cluster_id": "C32",
+      "delivery_month": "2026-07",
+      "delivery_ms": 1785142800000,
+      "eligible": false,
+      "first_notice_ms": 1784883668000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 4,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1785139440000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1785140940000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1785140940000,
+          "present": false
+        },
+        "-5": {
+          "candle_start_ms": 1785142440000,
+          "present": true
+        },
+        "-55": {
+          "candle_start_ms": 1785139440000,
+          "present": false
+        }
+      },
+      "symbol": "TSTBSCUSDT"
+    },
+    {
+      "a_minus30_bps": 8.05152979,
+      "a_minus55_bps": 3.9824771,
+      "a_minus5_bps": 12.09677419,
+      "c_control_bps": -4.06905269,
+      "c_event_bps": -4.0452444,
+      "d_bps": 0.02380829,
+      "delivery_cluster_id": "C33",
+      "delivery_month": "2026-08",
+      "delivery_ms": 1786525200000,
+      "eligible": true,
+      "first_notice_ms": 1786352639000,
+      "future_execution_side": "LONG_PERPETUAL",
+      "ineligible_reason": null,
+      "simultaneous_event_count": 1,
+      "snapshot_errors": [],
+      "snapshots": {
+        "-30": {
+          "absolute_basis_bps": 8.05152979,
+          "basis_bps": -8.05152979,
+          "candle_start_ms": 1786523340000,
+          "contract_close": "0.002482",
+          "contract_turnover": "257.312069",
+          "contract_volume": "103827",
+          "index_close": "0.002484"
+        },
+        "-5": {
+          "absolute_basis_bps": 12.09677419,
+          "basis_bps": -12.09677419,
+          "candle_start_ms": 1786524840000,
+          "contract_close": "0.002477",
+          "contract_turnover": "1731.083137",
+          "contract_volume": "699423",
+          "index_close": "0.00248"
+        },
+        "-55": {
+          "absolute_basis_bps": 3.9824771,
+          "basis_bps": -3.9824771,
+          "candle_start_ms": 1786521840000,
+          "contract_close": "0.00251",
+          "contract_turnover": "134.421834",
+          "contract_volume": "53429",
+          "index_close": "0.002511"
+        }
+      },
+      "symbol": "VANRYUSDT"
+    },
+    {
+      "a_minus30_bps": 200.86526576,
+      "a_minus55_bps": 58.19295559,
+      "a_minus5_bps": 49.17780851,
+      "c_control_bps": -142.67231017,
+      "c_event_bps": 151.68745725,
+      "d_bps": 294.35976742,
+      "delivery_cluster_id": "C34",
+      "delivery_month": "2026-08",
+      "delivery_ms": 1787302800000,
+      "eligible": true,
+      "first_notice_ms": 1787130035000,
+      "future_execution_side": "SHORT_PERPETUAL",
+      "ineligible_reason": null,
+      "simultaneous_event_count": 2,
+      "snapshot_errors": [],
+      "snapshots": {
+        "-30": {
+          "absolute_basis_bps": 200.86526576,
+          "basis_bps": 200.86526576,
+          "candle_start_ms": 1787300940000,
+          "contract_close": "0.006602",
+          "contract_turnover": "0.291486",
+          "contract_volume": "44",
+          "index_close": "0.006472"
+        },
+        "-5": {
+          "absolute_basis_bps": 49.17780851,
+          "basis_bps": 49.17780851,
+          "candle_start_ms": 1787302440000,
+          "contract_close": "0.006539",
+          "contract_turnover": "568.049469",
+          "contract_volume": "86871",
+          "index_close": "0.006507"
+        },
+        "-55": {
+          "absolute_basis_bps": 58.19295559,
+          "basis_bps": 58.19295559,
+          "candle_start_ms": 1787299440000,
+          "contract_close": "0.006568",
+          "contract_turnover": "0.288548",
+          "contract_volume": "44",
+          "index_close": "0.00653"
+        }
+      },
+      "symbol": "HFTUSDT"
+    },
+    {
+      "a_minus30_bps": 51.06600281,
+      "a_minus55_bps": 94.79271992,
+      "a_minus5_bps": 101.29281621,
+      "c_control_bps": 43.72671711,
+      "c_event_bps": -50.2268134,
+      "d_bps": -93.95353051,
+      "delivery_cluster_id": "C34",
+      "delivery_month": "2026-08",
+      "delivery_ms": 1787302800000,
+      "eligible": true,
+      "first_notice_ms": 1787130032000,
+      "future_execution_side": "SHORT_PERPETUAL",
+      "ineligible_reason": null,
+      "simultaneous_event_count": 2,
+      "snapshot_errors": [],
+      "snapshots": {
+        "-30": {
+          "absolute_basis_bps": 51.06600281,
+          "basis_bps": 51.06600281,
+          "candle_start_ms": 1787300940000,
+          "contract_close": "0.007873",
+          "contract_turnover": "473.195048",
+          "contract_volume": "60116",
+          "index_close": "0.007833"
+        },
+        "-5": {
+          "absolute_basis_bps": 101.29281621,
+          "basis_bps": 101.29281621,
+          "candle_start_ms": 1787302440000,
+          "contract_close": "0.007579",
+          "contract_turnover": "770.564658",
+          "contract_volume": "101519",
+          "index_close": "0.007503"
+        },
+        "-55": {
+          "absolute_basis_bps": 94.79271992,
+          "basis_bps": 94.79271992,
+          "candle_start_ms": 1787299440000,
+          "contract_close": "0.007987",
+          "contract_turnover": "64.119636",
+          "contract_volume": "8028",
+          "index_close": "0.007912"
+        }
+      },
+      "symbol": "VINEUSDT"
+    },
+    {
+      "a_minus30_bps": 217.77221527,
+      "a_minus55_bps": 168.00401204,
+      "a_minus5_bps": 7.45341615,
+      "c_control_bps": -49.76820323,
+      "c_event_bps": 210.31879912,
+      "d_bps": 260.08700235,
+      "delivery_cluster_id": "C35",
+      "delivery_month": "2026-08",
+      "delivery_ms": 1788080400000,
+      "eligible": true,
+      "first_notice_ms": 1787907954000,
+      "future_execution_side": "LONG_PERPETUAL",
+      "ineligible_reason": null,
+      "simultaneous_event_count": 1,
+      "snapshot_errors": [],
+      "snapshots": {
+        "-30": {
+          "absolute_basis_bps": 217.77221527,
+          "basis_bps": -217.77221527,
+          "candle_start_ms": 1788078540000,
+          "contract_close": "0.03908",
+          "contract_turnover": "148.5343",
+          "contract_volume": "3804",
+          "index_close": "0.03995"
+        },
+        "-5": {
+          "absolute_basis_bps": 7.45341615,
+          "basis_bps": -7.45341615,
+          "candle_start_ms": 1788080040000,
+          "contract_close": "0.04022",
+          "contract_turnover": "7.96356",
+          "contract_volume": "198",
+          "index_close": "0.04025"
+        },
+        "-55": {
+          "absolute_basis_bps": 168.00401204,
+          "basis_bps": -168.00401204,
+          "candle_start_ms": 1788077040000,
+          "contract_close": "0.03921",
+          "contract_turnover": "66.04268",
+          "contract_volume": "1674",
+          "index_close": "0.03988"
+        }
+      },
+      "symbol": "ACXUSDT"
+    },
+    {
+      "delivery_cluster_id": "C36",
+      "delivery_month": "2026-09",
+      "delivery_ms": 1788598800000,
+      "eligible": false,
+      "first_notice_ms": 1788426105000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 2,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1788595440000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1788596940000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        },
+        {
+          "candle_start_ms": 1788598440000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1788596940000,
+          "present": false
+        },
+        "-5": {
+          "candle_start_ms": 1788598440000,
+          "present": false
+        },
+        "-55": {
+          "candle_start_ms": 1788595440000,
+          "present": false
+        }
+      },
+      "symbol": "ASPUSDT"
+    },
+    {
+      "delivery_cluster_id": "C36",
+      "delivery_month": "2026-09",
+      "delivery_ms": 1788598800000,
+      "eligible": false,
+      "first_notice_ms": 1788426109000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 2,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1788598440000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1788596940000,
+          "present": true
+        },
+        "-5": {
+          "candle_start_ms": 1788598440000,
+          "present": false
+        },
+        "-55": {
+          "candle_start_ms": 1788595440000,
+          "present": true
+        }
+      },
+      "symbol": "SCRTUSDT"
+    },
+    {
+      "delivery_cluster_id": "C37",
+      "delivery_month": "2026-09",
+      "delivery_ms": 1789722000000,
+      "eligible": false,
+      "first_notice_ms": 1789549309000,
+      "ineligible_reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "simultaneous_event_count": 1,
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1789718640000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1789720140000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "snapshots": {
+        "-30": {
+          "candle_start_ms": 1789720140000,
+          "present": false
+        },
+        "-5": {
+          "candle_start_ms": 1789721640000,
+          "present": true
+        },
+        "-55": {
+          "candle_start_ms": 1789718640000,
+          "present": false
+        }
+      },
+      "symbol": "ICXUSDT"
+    }
+  ],
+  "expected_months": [
+    "2026-01",
+    "2026-02",
+    "2026-03",
+    "2026-04",
+    "2026-05",
+    "2026-06",
+    "2026-07",
+    "2026-08",
+    "2026-09"
+  ],
+  "firewalls": {
+    "affected_contract_price_accessed": true,
+    "basis_calculated": true,
+    "event_ranked_by_outcome": false,
+    "external_venue_price_accessed": false,
+    "funding_value_accessed": false,
+    "individual_trade_body_accessed": false,
+    "l1_l2_accessed": false,
+    "mark_price_accessed": false,
+    "official_bybit_index_value_accessed": true,
+    "pnl_calculated": false,
+    "premium_index_accessed": false,
+    "returns_calculated": false,
+    "spot_price_accessed": false,
+    "trading": false
+  },
+  "frozen_event_set_sha256": "1063695ec003a0d6789270659822f50577e6a0f07059d88ac03a5be4288ed1a2",
+  "ineligible_event_count": 71,
+  "month_summary": [
+    {
+      "d_median_bps": 56.5441066425,
+      "delivery_month": "2026-01",
+      "eligible_cluster_count": 2,
+      "positive_d_cluster_count": 2
+    },
+    {
+      "d_median_bps": -0.24640939,
+      "delivery_month": "2026-02",
+      "eligible_cluster_count": 3,
+      "positive_d_cluster_count": 1
+    },
+    {
+      "d_median_bps": -73.318613,
+      "delivery_month": "2026-03",
+      "eligible_cluster_count": 1,
+      "positive_d_cluster_count": 0
+    },
+    {
+      "d_median_bps": 0.83775429,
+      "delivery_month": "2026-04",
+      "eligible_cluster_count": 5,
+      "positive_d_cluster_count": 3
+    },
+    {
+      "d_median_bps": -162.20137243000002,
+      "delivery_month": "2026-05",
+      "eligible_cluster_count": 1,
+      "positive_d_cluster_count": 0
+    },
+    {
+      "d_median_bps": 0.5215493100000002,
+      "delivery_month": "2026-06",
+      "eligible_cluster_count": 2,
+      "positive_d_cluster_count": 1
+    },
+    {
+      "d_median_bps": -61.65083192,
+      "delivery_month": "2026-07",
+      "eligible_cluster_count": 1,
+      "positive_d_cluster_count": 0
+    },
+    {
+      "d_median_bps": 100.20311845500001,
+      "delivery_month": "2026-08",
+      "eligible_cluster_count": 3,
+      "positive_d_cluster_count": 3
+    }
+  ],
+  "network_source": {
+    "category": "linear",
+    "contract_endpoint": "/v5/market/kline",
+    "host": "api.bybit.com",
+    "index_endpoint": "/v5/market/index-price-kline",
+    "interval": "1",
+    "registered_offsets_minutes": [
+      -55,
+      -30,
+      -5
+    ],
+    "source_substitution_used": false
+  },
+  "next_state": "REVIEW_OFFICIAL_SOURCE_COVERAGE_WITHOUT_SOURCE_SUBSTITUTION",
+  "positive_month_median_d_count": 4,
+  "pre_registered_spec_sha256": "1dc79403307177c1f9785090fa6f31aac0322ccb10864c509846e8da415856a7",
+  "schema": "sc001.b15p2_p0_basis_convergence_result.v0.1",
+  "source_gate_pass": false,
+  "source_missing_ledger": [
+    {
+      "delivery_cluster_id": "C01",
+      "delivery_ms": 1767344400000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1767341040000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1767342540000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "symbol": "FXSUSDT"
+    },
+    {
+      "delivery_cluster_id": "C02",
+      "delivery_ms": 1768035600000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1768033740000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        },
+        {
+          "candle_start_ms": 1768035240000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "symbol": "DAMUSDT"
+    },
+    {
+      "delivery_cluster_id": "C03",
+      "delivery_ms": 1769245200000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1769241840000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1769243340000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        },
+        {
+          "candle_start_ms": 1769244840000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "symbol": "FWOGUSDT"
+    },
+    {
+      "delivery_cluster_id": "C04",
+      "delivery_ms": 1769677200000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1769675340000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        },
+        {
+          "candle_start_ms": 1769676840000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "symbol": "NKNUSDT"
+    },
+    {
+      "delivery_cluster_id": "C04",
+      "delivery_ms": 1769677200000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1769675340000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "symbol": "VICUSDT"
+    },
+    {
+      "delivery_cluster_id": "C05",
+      "delivery_ms": 1769763600000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1769763240000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "symbol": "EPTUSDT"
+    },
+    {
+      "delivery_cluster_id": "C06",
+      "delivery_ms": 1770022800000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1770019440000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        }
+      ],
+      "symbol": "COMMONUSDT"
+    },
+    {
+      "delivery_cluster_id": "C07",
+      "delivery_ms": 1770368400000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1770365040000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1770366540000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        },
+        {
+          "candle_start_ms": 1770368040000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "symbol": "DENTUSDT"
+    },
+    {
+      "delivery_cluster_id": "C07",
+      "delivery_ms": 1770368400000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1770365040000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        }
+      ],
+      "symbol": "ZEUSUSDT"
+    },
+    {
+      "delivery_cluster_id": "C09",
+      "delivery_ms": 1770800400000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1770797040000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        }
+      ],
+      "symbol": "1000XUSDT"
+    },
+    {
+      "delivery_cluster_id": "C09",
+      "delivery_ms": 1770800400000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1770797040000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1770798540000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        },
+        {
+          "candle_start_ms": 1770800040000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "symbol": "CUDISUSDT"
+    },
+    {
+      "delivery_cluster_id": "C09",
+      "delivery_ms": 1770800400000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1770798540000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "symbol": "SAROSUSDT"
+    },
+    {
+      "delivery_cluster_id": "C11",
+      "delivery_ms": 1772190000000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1772186640000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1772188140000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        },
+        {
+          "candle_start_ms": 1772189640000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "symbol": "A2ZUSDT"
+    },
+    {
+      "delivery_cluster_id": "C11",
+      "delivery_ms": 1772190000000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1772186640000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1772189640000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "symbol": "DGBUSDT"
+    },
+    {
+      "delivery_cluster_id": "C11",
+      "delivery_ms": 1772190000000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1772186640000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        }
+      ],
+      "symbol": "IDEXUSDT"
+    },
+    {
+      "delivery_cluster_id": "C11",
+      "delivery_ms": 1772190000000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1772186640000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1772188140000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        },
+        {
+          "candle_start_ms": 1772189640000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "symbol": "NSUSDT"
+    },
+    {
+      "delivery_cluster_id": "C11",
+      "delivery_ms": 1772190000000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1772186640000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1772188140000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        },
+        {
+          "candle_start_ms": 1772189640000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "symbol": "OBTUSDT"
+    },
+    {
+      "delivery_cluster_id": "C12",
+      "delivery_ms": 1772787600000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1772787240000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "symbol": "AINUSDT"
+    },
+    {
+      "delivery_cluster_id": "C12",
+      "delivery_ms": 1772787600000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1772785740000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        },
+        {
+          "candle_start_ms": 1772787240000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "symbol": "ALUUSDT"
+    },
+    {
+      "delivery_cluster_id": "C12",
+      "delivery_ms": 1772787600000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1772784240000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1772785740000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "symbol": "DODOUSDT"
+    },
+    {
+      "delivery_cluster_id": "C12",
+      "delivery_ms": 1772787600000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1772785740000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "symbol": "SDUSDT"
+    },
+    {
+      "delivery_cluster_id": "C12",
+      "delivery_ms": 1772787600000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1772784240000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1772785740000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        },
+        {
+          "candle_start_ms": 1772787240000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "symbol": "SKYAIUSDT"
+    },
+    {
+      "delivery_cluster_id": "C13",
+      "delivery_ms": 1773910800000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1773907440000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1773908940000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "symbol": "CTSIUSDT"
+    },
+    {
+      "delivery_cluster_id": "C13",
+      "delivery_ms": 1773910800000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1773907440000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1773908940000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "symbol": "TAIUSDT"
+    },
+    {
+      "delivery_cluster_id": "C14",
+      "delivery_ms": 1774602000000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1774598640000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1774600140000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "symbol": "AVLUSDT"
+    },
+    {
+      "delivery_cluster_id": "C14",
+      "delivery_ms": 1774602000000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1774598640000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1774600140000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        },
+        {
+          "candle_start_ms": 1774601640000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "symbol": "COOKUSDT"
+    },
+    {
+      "delivery_cluster_id": "C14",
+      "delivery_ms": 1774602000000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1774601640000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "symbol": "VFYUSDT"
+    },
+    {
+      "delivery_cluster_id": "C15",
+      "delivery_ms": 1775196000000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1775195640000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "symbol": "L3USDT"
+    },
+    {
+      "delivery_cluster_id": "C15",
+      "delivery_ms": 1775196000000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1775192640000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1775194140000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "symbol": "NTRNUSDT"
+    },
+    {
+      "delivery_cluster_id": "C15",
+      "delivery_ms": 1775196000000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1775194140000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "symbol": "SYSUSDT"
+    },
+    {
+      "delivery_cluster_id": "C16",
+      "delivery_ms": 1775714400000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1775714040000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "symbol": "NFPUSDT"
+    },
+    {
+      "delivery_cluster_id": "C16",
+      "delivery_ms": 1775714400000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1775711040000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1775712540000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        },
+        {
+          "candle_start_ms": 1775714040000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "symbol": "ONEUSDT"
+    },
+    {
+      "delivery_cluster_id": "C16",
+      "delivery_ms": 1775714400000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1775711040000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1775712540000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        },
+        {
+          "candle_start_ms": 1775714040000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "symbol": "PONKEUSDT"
+    },
+    {
+      "delivery_cluster_id": "C16",
+      "delivery_ms": 1775714400000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1775711040000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1775714040000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "symbol": "SPELLUSDT"
+    },
+    {
+      "delivery_cluster_id": "C17",
+      "delivery_ms": 1776330000000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1776328140000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "symbol": "HIPPOUSDT"
+    },
+    {
+      "delivery_cluster_id": "C17",
+      "delivery_ms": 1776330000000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1776326640000,
+          "error": "RuntimeError:LISTAUSDT:/v5/market/kline:1776326640000:RETCODE:10016:svc error: Get kline failed",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1776329640000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "symbol": "LISTAUSDT"
+    },
+    {
+      "delivery_cluster_id": "C17",
+      "delivery_ms": 1776330000000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1776326640000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1776328140000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "symbol": "RLSUSDT"
+    },
+    {
+      "delivery_cluster_id": "C18",
+      "delivery_ms": 1776852000000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1776850140000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "symbol": "CTKUSDT"
+    },
+    {
+      "delivery_cluster_id": "C19",
+      "delivery_ms": 1777539600000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1777536240000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        }
+      ],
+      "symbol": "BSUUSDT"
+    },
+    {
+      "delivery_cluster_id": "C19",
+      "delivery_ms": 1777539600000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1777536240000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        }
+      ],
+      "symbol": "RDNTUSDT"
+    },
+    {
+      "delivery_cluster_id": "C19",
+      "delivery_ms": 1777539600000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1777536240000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1777537740000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "symbol": "YZYUSDT"
+    },
+    {
+      "delivery_cluster_id": "C20",
+      "delivery_ms": 1778230800000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1778227440000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        }
+      ],
+      "symbol": "CLOUDUSDT"
+    },
+    {
+      "delivery_cluster_id": "C20",
+      "delivery_ms": 1778230800000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1778227440000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1778228940000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        },
+        {
+          "candle_start_ms": 1778230440000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "symbol": "SYNUSDT"
+    },
+    {
+      "delivery_cluster_id": "C21",
+      "delivery_ms": 1778752800000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1778749440000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        }
+      ],
+      "symbol": "10000QUBICUSDT"
+    },
+    {
+      "delivery_cluster_id": "C21",
+      "delivery_ms": 1778752800000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1778749440000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1778750940000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "symbol": "DEGENUSDT"
+    },
+    {
+      "delivery_cluster_id": "C21",
+      "delivery_ms": 1778752800000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1778749440000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1778750940000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        },
+        {
+          "candle_start_ms": 1778752440000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "symbol": "OXTUSDT"
+    },
+    {
+      "delivery_cluster_id": "C22",
+      "delivery_ms": 1779958800000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1779955440000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1779958440000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "symbol": "1000000CHEEMSUSDT"
+    },
+    {
+      "delivery_cluster_id": "C23",
+      "delivery_ms": 1780477200000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1780476840000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "symbol": "GNOUSDT"
+    },
+    {
+      "delivery_cluster_id": "C23",
+      "delivery_ms": 1780477200000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1780473840000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        }
+      ],
+      "symbol": "OLUSDT"
+    },
+    {
+      "delivery_cluster_id": "C23",
+      "delivery_ms": 1780477200000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1780475340000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "symbol": "REQUSDT"
+    },
+    {
+      "delivery_cluster_id": "C24",
+      "delivery_ms": 1781168400000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1781166540000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "symbol": "GODSUSDT"
+    },
+    {
+      "delivery_cluster_id": "C24",
+      "delivery_ms": 1781168400000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1781166540000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "symbol": "ORBSUSDT"
+    },
+    {
+      "delivery_cluster_id": "C24",
+      "delivery_ms": 1781168400000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1781166540000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "symbol": "PYRUSDT"
+    },
+    {
+      "delivery_cluster_id": "C24",
+      "delivery_ms": 1781168400000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1781165040000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1781166540000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        },
+        {
+          "candle_start_ms": 1781168040000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "symbol": "SCUSDT"
+    },
+    {
+      "delivery_cluster_id": "C26",
+      "delivery_ms": 1781773200000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1781771340000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "symbol": "XIONUSDT"
+    },
+    {
+      "delivery_cluster_id": "C28",
+      "delivery_ms": 1782473400000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1782470040000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1782471540000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        },
+        {
+          "candle_start_ms": 1782473040000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "symbol": "MBOXUSDT"
+    },
+    {
+      "delivery_cluster_id": "C28",
+      "delivery_ms": 1782473400000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1782471540000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        },
+        {
+          "candle_start_ms": 1782473040000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "symbol": "MLNUSDT"
+    },
+    {
+      "delivery_cluster_id": "C28",
+      "delivery_ms": 1782473400000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1782470040000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1782471540000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "symbol": "SOLVUSDT"
+    },
+    {
+      "delivery_cluster_id": "C29",
+      "delivery_ms": 1783674000000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1783672140000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "symbol": "SCRUSDT"
+    },
+    {
+      "delivery_cluster_id": "C29",
+      "delivery_ms": 1783674000000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1783672140000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "symbol": "SWARMSUSDT"
+    },
+    {
+      "delivery_cluster_id": "C30",
+      "delivery_ms": 1784538000000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1784534640000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        }
+      ],
+      "symbol": "HIGHUSDT"
+    },
+    {
+      "delivery_cluster_id": "C30",
+      "delivery_ms": 1784538000000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1784534640000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1784537640000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "symbol": "PUMPBTCUSDT"
+    },
+    {
+      "delivery_cluster_id": "C30",
+      "delivery_ms": 1784538000000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1784534640000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        }
+      ],
+      "symbol": "WHITEWHALEUSDT"
+    },
+    {
+      "delivery_cluster_id": "C31",
+      "delivery_ms": 1784970000000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1784968140000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "symbol": "AERGOUSDT"
+    },
+    {
+      "delivery_cluster_id": "C32",
+      "delivery_ms": 1785142800000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1785139440000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1785140940000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "symbol": "BOBBOBUSDT"
+    },
+    {
+      "delivery_cluster_id": "C32",
+      "delivery_ms": 1785142800000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1785139440000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1785140940000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "symbol": "GIGAUSDT"
+    },
+    {
+      "delivery_cluster_id": "C32",
+      "delivery_ms": 1785142800000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1785139440000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1785140940000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        },
+        {
+          "candle_start_ms": 1785142440000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "symbol": "ROAMUSDT"
+    },
+    {
+      "delivery_cluster_id": "C32",
+      "delivery_ms": 1785142800000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1785139440000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1785140940000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "symbol": "TSTBSCUSDT"
+    },
+    {
+      "delivery_cluster_id": "C36",
+      "delivery_ms": 1788598800000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1788595440000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1788596940000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        },
+        {
+          "candle_start_ms": 1788598440000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "symbol": "ASPUSDT"
+    },
+    {
+      "delivery_cluster_id": "C36",
+      "delivery_ms": 1788598800000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1788598440000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -5
+        }
+      ],
+      "symbol": "SCRTUSDT"
+    },
+    {
+      "delivery_cluster_id": "C37",
+      "delivery_ms": 1789722000000,
+      "reason": "SOURCE_MISSING_OR_INVALID_REGISTERED_SNAPSHOT",
+      "snapshot_errors": [
+        {
+          "candle_start_ms": 1789718640000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -55
+        },
+        {
+          "candle_start_ms": 1789720140000,
+          "error": "LookupError:CONTRACT_ZERO_ACTIVITY",
+          "offset_min": -30
+        }
+      ],
+      "symbol": "ICXUSDT"
+    }
+  ],
+  "stage": "SC001-B15P2-P0-BASIS-CONVERGENCE-V0.1",
+  "status": "DEFER_SOURCE_COVERAGE",
+  "timing_specificity_gate_pass": false,
+  "verdict": "DEFER_SOURCE_COVERAGE"
+}
