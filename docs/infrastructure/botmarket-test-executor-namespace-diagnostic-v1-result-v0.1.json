@@ -1,0 +1,58 @@
+{
+  "schema": "botmarket.test_executor_namespace_diagnostic_result.v0.1",
+  "date": "2026-09-29",
+  "status": "INCOMPATIBILITY_LOCALIZED",
+  "runtime_result": {
+    "path": "docs/research/runtime-inbox/botmarket-test-executor-namespace-diagnostic-v1.json",
+    "sha256": "9240700972ee0c5096ec9ba4353bbc8f5e95479f0bc528f4d2263a5e1b16e383",
+    "size_bytes": 41864
+  },
+  "last_passing_stage": "inaccessible__var_lib_botmarket_tunnel",
+  "first_failing_stage": "inaccessible__run_systemd",
+  "failing_property": "InaccessiblePaths=/run/systemd",
+  "failure": {
+    "systemd_run_exit_code": 1,
+    "result": "exit-code",
+    "exec_main_status": 226,
+    "systemd_status_name": "NAMESPACE"
+  },
+  "isolated_confirmation": {
+    "classification": "FAIL_PROPERTY_ALONE",
+    "property": "InaccessiblePaths=/run/systemd",
+    "systemd_run_exit_code": 1
+  },
+  "interpretation": "Masking the entire /run/systemd hierarchy is incompatible with transient-service namespace setup on this VPS/systemd. The failure reproduces when the property is applied outside the cumulative hardening chain, so it is not an interaction with earlier protections.",
+  "confirmed_passing_before_failure": [
+    "worker user/group/working directory",
+    "UMask",
+    "TasksMax",
+    "MemoryMax",
+    "CPUQuota",
+    "LimitFSIZE",
+    "NoNewPrivileges",
+    "PrivateTmp",
+    "PrivateDevices",
+    "ProtectSystem=strict",
+    "ProtectHome",
+    "ProtectKernelTunables",
+    "ProtectKernelModules",
+    "ProtectControlGroups",
+    "ProtectKernelLogs",
+    "ProtectClock",
+    "ProtectHostname",
+    "ProtectProc=invisible",
+    "ProcSubset=pid",
+    "RestrictSUIDSGID",
+    "RestrictRealtime",
+    "RestrictNamespaces",
+    "LockPersonality",
+    "empty CapabilityBoundingSet",
+    "empty AmbientCapabilities",
+    "ReadOnlyPaths",
+    "ReadWritePaths",
+    "secret/config/state InaccessiblePaths through /var/lib/botmarket-tunnel"
+  ],
+  "network_access_performed": false,
+  "project_code_executed": false,
+  "next_state": "TEST_TARGETED_SYSTEMD_CONTROL_SOCKET_MASK_AND_REMAINING_SANDBOX_BOUNDARY"
+}
