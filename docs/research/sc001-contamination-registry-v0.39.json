@@ -1,0 +1,76 @@
+{
+  "stage": "SC001-CONTAMINATION-REGISTRY",
+  "version": "0.39",
+  "date": "2026-09-29",
+  "status": "NEXT_PRIMARY_FORCED_FLOW_PREFREEZE_QUALIFIED_STRATEGY_USER_HOLD",
+  "scope": "SCALPING_RESEARCH_SC001",
+  "supersedes": "docs/research/sc001-contamination-registry-v0.38.json",
+  "inherited_registry": "docs/research/sc001-contamination-registry-v0.38.json",
+  "next_primary_forced_flow_relative_dislocation": {
+    "task_id": "SC001-NEXT-PRIMARY-PREFREEZE-01",
+    "family": "VENUE_LOCAL_FORCED_FLOW_RELATIVE_DISLOCATION",
+    "classification": "ADAPTIVE_DISCOVERY_GENERATED_PREFROZEN_PRE_OUTCOME",
+    "terminal_handoff_status": "PREFREEZE_READY_FOR_STRATEGY/USER_GATE",
+    "mechanism_disposition": "RELATED_BUT_MATERIALLY_DIFFERENT_ARCHITECTURE",
+    "lineage": {
+      "RB021": "event/state semantics only: explicit pure-side liquidation clustering",
+      "RB011": "strict-coactive one-second cross-venue clock",
+      "RB012": "causal local cross-venue basis reference"
+    },
+    "b13c_protected_interval": {
+      "interval": "2026-09-19T06:47:38.969Z..2026-09-26T21:05:32.973Z",
+      "promotional_evidence_authorized_for_new_candidate": false,
+      "design_tuning_authorized": false,
+      "forbidden_uses": [
+        "liquidation-size threshold search",
+        "event-count search",
+        "cluster-gap search",
+        "alternate entry-delay search",
+        "winner-symbol selection",
+        "horizon scan",
+        "sign flip"
+      ]
+    },
+    "fresh_window": {
+      "window_start_utc": "2026-09-30T00:00:00Z",
+      "window_end_exclusive_utc": "2026-10-07T00:00:00Z",
+      "frozen_utc_date_denominator": 7,
+      "movable_for_source_failure": false,
+      "alternate_reconstruction_authorized": false
+    },
+    "breadth_semantics": {
+      "zero_valid_cluster_day_median": null,
+      "zero_valid_cluster_day_counts_positive": false,
+      "positive_day_requirement": "5/7 fixed frozen UTC dates",
+      "unrepresented_symbol_median": null,
+      "unrepresented_symbol_counts_positive": false,
+      "positive_symbol_requirement": "6/12 fixed frozen symbols"
+    },
+    "fee_and_hurdle": {
+      "fee_qualification_ref": "docs/research/sc001-next-primary-forced-flow-relative-dislocation-fee-qualification-v0.1.md",
+      "conservative_regular_user_taker_fee_bps_per_fill": 11,
+      "two_fill_fee_floor_bps": 22,
+      "spread_depth_reference_bps": 10,
+      "execution_model_reserve_bps": 10,
+      "structural_burden_bps": 42,
+      "H_bps": 52
+    },
+    "operational_source_continuity": {
+      "qualification_ref": "docs/research/sc001-next-primary-forced-flow-relative-dislocation-operational-source-continuity-qualification-v0.1.md",
+      "status": "B13C_FRESH_WINDOW_CONTINUITY_NOT_ESTABLISHED_READONLY"
+    },
+    "candidate_2_3_parallel_outcome_access_authorized": false,
+    "b15p2_frozen_p0_change_authorized": false,
+    "collector_mutation_authorized": false,
+    "new_c_series_id_assigned": false,
+    "s0_price_outcome_access_authorized": false,
+    "returns_authorized": false,
+    "pnl_authorized": false,
+    "l1_l2_authorized": false,
+    "threshold_search_authorized": false,
+    "horizon_search_authorized": false,
+    "symbol_search_authorized": false,
+    "next_allowed_action": "STRATEGY_USER_GATE_AND_READONLY_SOURCE_CONTINUITY_QUALIFICATION_BEFORE_ANY_S0_AUTHORIZATION"
+  },
+  "selection_rule": "Anything inspected for feature choice, threshold, horizon, asset subset, execution mode, event definition or candidate selection is nonpromotional for that implementation."
+}
