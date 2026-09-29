@@ -1,0 +1,54 @@
+{
+  "stage": "SC001-CONTAMINATION-REGISTRY",
+  "version": "0.38",
+  "date": "2026-09-29",
+  "status": "NEXT_PRIMARY_FORCED_FLOW_RELATIVE_DISLOCATION_PREFREEZE",
+  "scope": "SCALPING_RESEARCH_SC001",
+  "supersedes": "docs/research/sc001-contamination-registry-v0.37.json",
+  "inherited_registry": "docs/research/sc001-contamination-registry-v0.37.json",
+  "next_primary_forced_flow_relative_dislocation": {
+    "task_id": "SC001-NEXT-PRIMARY-PREFREEZE-01",
+    "family": "VENUE_LOCAL_FORCED_FLOW_RELATIVE_DISLOCATION",
+    "classification": "ADAPTIVE_DISCOVERY_GENERATED_PREFROZEN_PRE_OUTCOME",
+    "mechanism_disposition": "RELATED_BUT_MATERIALLY_DIFFERENT_ARCHITECTURE",
+    "lineage": {
+      "RB021": "event/state semantics only: explicit pure-side liquidation clustering",
+      "RB011": "strict-coactive one-second cross-venue clock",
+      "RB012": "causal local cross-venue basis reference"
+    },
+    "b13c_protected_interval": {
+      "interval": "2026-09-19T06:47:38.969Z..2026-09-26T21:05:32.973Z",
+      "promotional_evidence_authorized_for_new_candidate": false,
+      "design_tuning_authorized": false,
+      "forbidden_uses": [
+        "liquidation-size threshold search",
+        "event-count search",
+        "cluster-gap search",
+        "alternate entry-delay search",
+        "winner-symbol selection",
+        "horizon scan",
+        "sign flip"
+      ]
+    },
+    "fresh_window": {
+      "rule": "first seven complete UTC days beginning after the commit containing final fingerprint and S0 protocol",
+      "planned_freeze_commit_date_utc": "2026-09-29",
+      "window_start_utc": "2026-09-30T00:00:00Z",
+      "window_end_exclusive_utc": "2026-10-07T00:00:00Z",
+      "if_commit_date_changes": "re-freeze mechanically before any outcome access; no outcome-informed replacement"
+    },
+    "candidate_2_3_parallel_outcome_access_authorized": false,
+    "b15p2_frozen_p0_change_authorized": false,
+    "collector_mutation_authorized": false,
+    "new_c_series_id_assigned": false,
+    "s0_price_outcome_access_authorized": false,
+    "returns_authorized": false,
+    "pnl_authorized": false,
+    "l1_l2_authorized": false,
+    "threshold_search_authorized": false,
+    "horizon_search_authorized": false,
+    "symbol_search_authorized": false,
+    "next_allowed_action": "STRATEGY_USER_GATE_ON_PREFREEZE_PACKAGE"
+  },
+  "selection_rule": "Anything inspected for feature choice, threshold, horizon, asset subset, execution mode, event definition or candidate selection is nonpromotional for that implementation."
+}
