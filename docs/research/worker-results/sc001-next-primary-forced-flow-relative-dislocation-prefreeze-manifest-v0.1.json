@@ -1,0 +1,79 @@
+{
+  "schema": "sc001.worker_result_manifest.v0.1",
+  "project": "SC001",
+  "experiment_id": "SC001-NEXT-PRIMARY-PREFREEZE-01",
+  "stage": "VENUE_LOCAL_FORCED_FLOW_RELATIVE_DISLOCATION_PREFREEZE",
+  "date": "2026-09-29",
+  "status": "PREFREEZE_READY_FOR_STRATEGY/USER_GATE",
+  "strategy_triggers": [
+    "NEW_OUTCOME_MECHANISM_GATE",
+    "CONTAMINATION_CHANGE"
+  ],
+  "canonical_result": {
+    "path": "docs/research/sc001-next-primary-forced-flow-relative-dislocation-feasibility-card-v0.1.md",
+    "sha256": "a83091299b748b6e9d0cbdff0a6588f41b233637bc14ab5f431840783e0bed1f"
+  },
+  "protocol": {
+    "path": "docs/research/sc001-next-primary-forced-flow-relative-dislocation-s0-protocol-v0.1.md",
+    "sha256": "fdcbf804528a0fc8c3905a8a91a0a0773d9f4599797813c9ebf67d037d6c5c37"
+  },
+  "implementation": null,
+  "execution": {
+    "mode": "NONE",
+    "bundle_id": null,
+    "bundle_sha256": null,
+    "job_id": null
+  },
+  "mechanism": {
+    "fingerprint_ref": "docs/research/sc001-next-primary-forced-flow-relative-dislocation-mechanism-fingerprint-v0.1.json",
+    "disposition": "RELATED_BUT_MATERIALLY_DIFFERENT_ARCHITECTURE",
+    "adaptive_discovery_generated": true
+  },
+  "evidence": {
+    "class": "PRE_OUTCOME_PREFREEZE_DESIGN_ONLY",
+    "promotional": false,
+    "outcome_accessed": false,
+    "window": "2026-09-30T00:00:00Z..2026-10-07T00:00:00Z first seven complete UTC days after 2026-09-29 prefreeze commit; no S0 outcome opened",
+    "contamination_registry_ref": "docs/research/sc001-contamination-registry-v0.38.json"
+  },
+  "key_metrics": {
+    "frozen_symbol_count": 12,
+    "structural_fill_count": 2,
+    "two_fill_fee_floor_bps": 11,
+    "spread_depth_reference_bps": 10,
+    "execution_model_reserve_bps": 10,
+    "two_fill_structural_burden_bps": 31,
+    "headroom_hurdle_bps": 41,
+    "minimum_valid_clusters": 300,
+    "minimum_symbols_represented": 8,
+    "minimum_utc_days_represented": 5,
+    "price_outcome_accessed": false
+  },
+  "decision": {
+    "class": "PASS",
+    "summary": "Strategy-Manager-selected next-primary mechanism prefreeze is complete: materially distinct fingerprint, exact B13-C/RB021 event semantics, fail-closed cross-venue source/identity gate, conservative 31 bps two-fill burden, fixed H=41 bps, fresh seven-day chronology, exact S0 clock and terminal rules. No new price/outcome research was run.",
+    "failed_gate": null,
+    "allowed_claims": [
+      "Prefreeze design package is committed and internally consistent with the Strategy Manager review",
+      "Mechanism disposition is RELATED_BUT_MATERIALLY_DIFFERENT_ARCHITECTURE",
+      "Candidate remains ADAPTIVE_DISCOVERY_GENERATED",
+      "No new price/outcome evidence was accessed",
+      "No C-series experiment ID was assigned"
+    ],
+    "forbidden_reuse": [
+      "Do not use B13-C protected outcome interval as promotional evidence for this candidate",
+      "Do not search liquidation magnitude, event count, cluster gap, entry delay, horizons or symbol subsets",
+      "Do not run Candidate 2 or Candidate 3 outcome research in parallel",
+      "Do not lower H=41 bps after outcome",
+      "Do not open later convergence prices, returns or PnL in S0",
+      "Do not mutate existing collectors",
+      "Do not change frozen B15-P2 P0"
+    ],
+    "next_allowed_action": "Strategy/User gate on the committed prefreeze package. Any S0 price/outcome execution requires separate explicit authorization after source-semantic qualification and the binding pre-outcome implementation handshake."
+  },
+  "reusable_blocks": [
+    "RB021",
+    "RB011",
+    "RB012"
+  ]
+}
