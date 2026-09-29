@@ -1,0 +1,42 @@
+{
+  "schema": "sc001.b15p2_v018_full_94_semantic_rerun_execution_approval.v0.1",
+  "date": "2026-09-29",
+  "status": "AUTHORIZED",
+  "authorization_source": "EXPLICIT_USER_APPROVAL_IN_CHAT",
+  "implementation": {
+    "path": "research/sc001/sc001_b15p2_announcement_body_semantic_audit_v0_1_8.py",
+    "sha256": "c58d6c31f56c41d593ea5156d0e8ea407f9dfea1e515aa613a0d5113f5a0f9fa"
+  },
+  "implementation_freeze": {
+    "path": "docs/research/sc001-b15p2-announcement-body-semantic-audit-implementation-freeze-v0.1.8.json",
+    "sha256": "709c06a314bd685ad37503bf4daa75f062525ba487bfae96292bf699c2a1c96e"
+  },
+  "frozen_event_count": 94,
+  "frozen_event_set_sha256": "1063695ec003a0d6789270659822f50577e6a0f07059d88ac03a5be4288ed1a2",
+  "execution": {
+    "executor": "BotMarketplace Test Executor",
+    "mode": "live",
+    "network_profile": "public_research",
+    "timeout_seconds": 900,
+    "endpoint_class": "https://announcements.bybit.com official announcement pages only"
+  },
+  "allowed": [
+    "FETCH_FROZEN_94_OFFICIAL_ANNOUNCEMENT_PAGES",
+    "DUAL_SCHEMA_HYDRATION_EXTRACTION",
+    "SEMANTIC_CLASSIFICATION",
+    "STRUCTURED_RESULT_AND_LOG_PERSISTENCE"
+  ],
+  "forbidden": [
+    "PRICE_ACCESS",
+    "EXTERNAL_REFERENCE_PRICE_ACCESS",
+    "OBSERVED_INDEX_VALUE_ACCESS",
+    "BASIS_OR_SPREAD_CALCULATION",
+    "RETURNS_CALCULATION",
+    "PNL_CALCULATION",
+    "OUTCOME_RANKING",
+    "TRADING_OR_ORDER_EXECUTION",
+    "FROZEN_EVENT_SET_CHANGE",
+    "SEMANTIC_RULE_CHANGE"
+  ],
+  "post_run_requirement": "READ_STRUCTURED_RESULT_THEN_THREE_ROLE_REVIEW_BEFORE_ANY_PRICE_OUTCOME_GATE"
+}

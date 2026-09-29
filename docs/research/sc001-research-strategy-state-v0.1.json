@@ -25,7 +25,7 @@
       "mutation_allowed": false
     },
     "B15-P2": {
-      "state": "V018_OFFLINE_AND_PUBLIC_SMOKE_PASS_FULL_94_RERUN_APPROVAL_REQUIRED",
+      "state": "V018_FULL_94_SEMANTIC_RERUN_AUTHORIZED_PENDING_EXECUTION",
       "price_outcome_authorized": false,
       "frozen_event_count": 94,
       "event_set_sha256": "1063695ec003a0d6789270659822f50577e6a0f07059d88ac03a5be4288ed1a2",
@@ -46,7 +46,7 @@
       "engineering_stabilization_rule": "THREE_LAYER_PREFREEZE_CHECK_PLUS_EXACT_STAGE",
       "hydration_stop_rule": "STOP_AFTER_V04_IF_NO_STABLE_COMMON_HIGH_CONFIDENCE_BODY_IDENTITY",
       "strategy_review_required_now": true,
-      "next_allowed_action": "OBTAIN_EXPLICIT_USER_APPROVAL_BEFORE_FULL_FROZEN_94_SEMANTIC_RERUN_V018",
+      "next_allowed_action": "RUN_EXACT_FROZEN_V018_FULL_94_SEMANTIC_RERUN_VIA_TEST_EXECUTOR_PUBLIC_RESEARCH",
       "next_data_probe_execution_started": false,
       "execution_approval": "docs/research/sc001-b15p2-next-data-structure-probe-v04-execution-approval-v0.1.json",
       "delegated_engineering_iteration_budget": {
@@ -60,7 +60,7 @@
         "public_research_smoke": "PASS",
         "pre_iteration_requirement": "FULL_PROGRAMMER_EXPERT_REVIEW_BEFORE_EACH_EXECUTED_CHANGED_ITERATION",
         "iteration_accounting": "COUNT_ONLY_MATERIALLY_CHANGED_REEXECUTION_AFTER_TECHNICAL_FAILURE",
-        "full_94_rerun_authorized": false
+        "full_94_rerun_authorized": true
       },
       "runtime_output_policy": {
         "binding_policy": "docs/research/sc001-engineering-iteration-and-runtime-output-policy-v0.1.md",
@@ -89,8 +89,8 @@
       "hydration_mapper_result_sha256": "3cd9216f0974d9b2e33886dfe59955946bc541b2fb9b4ae871332f4bffeccb38",
       "primary_body_path": "$.props.pageProps.articleDetail.content.json.children",
       "secondary_consistency_path": "$.props.pageProps.articleDetail.entry.entryKey.children",
-      "semantic_network_authorized": false,
-      "authorization_basis": "V018_ENGINEERING_BUDGET_AUTHORIZED_OFFLINE_AND_PUBLIC_SMOKE_COMPLETED_FULL_94_RERUN_PENDING_FRESH_USER_DECISION",
+      "semantic_network_authorized": true,
+      "authorization_basis": "EXPLICIT_USER_APPROVAL_FULL_FROZEN_94_SEMANTIC_RERUN_V018_2026_09_29",
       "execution_started": false,
       "strategy_review_required_after_terminal_full_semantic_result": true,
       "last_observed_runtime_state": {
@@ -110,7 +110,9 @@
         "index_value_accessed": false,
         "basis_accessed": false,
         "returns_accessed": false,
-        "pnl_accessed": false
+        "pnl_accessed": false,
+        "full_94_rerun_authorized": true,
+        "full_94_rerun_started": false
       },
       "semantic_live_helper": "scripts/research/run-b15p2-semantic-live-helper-v0.1.sh",
       "semantic_live_helper_sha256": "ce3d20648a6c835295ae3c2e49d1d5f22a9f12860ccaaf5cf363d7fb68317ca1",
@@ -212,9 +214,7 @@
     "strategy_project_role": "INTERACTIVE_PROJECT_ONLY_MEMORY_STRATEGY_WORKSPACE",
     "work_required_inside_strategy_project": false
   },
-  "open_strategy_decisions": [
-    "AUTHORIZE_FULL_FROZEN_94_SEMANTIC_RERUN_V018"
-  ],
+  "open_strategy_decisions": [],
   "next_strategy_review_trigger": [
     "NEW_OUTCOME_MECHANISM_GATE",
     "TERMINAL_REJECT_DEFER",
