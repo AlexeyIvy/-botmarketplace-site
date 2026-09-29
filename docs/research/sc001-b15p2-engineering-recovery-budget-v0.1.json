@@ -1,7 +1,7 @@
 {
   "schema": "sc001.b15p2_engineering_recovery_budget.v0.1",
   "date": "2026-09-29",
-  "status": "AUTHORIZED_OFFLINE_ITERATION_1_PASS",
+  "status": "ENGINEERING_VALIDATION_PASS_FULL_94_RERUN_REQUIRES_USER_DECISION",
   "authorization": {
     "source": "EXPLICIT_USER_APPROVAL_IN_CHAT",
     "approved_scope": "CURRENT_B15P2_ENGINEERING_CONTOUR_ONLY",
@@ -52,5 +52,15 @@
     "offline_job_id": "job_20260929T125116Z_b631a281",
     "offline_pass_token": "B15P2_ANNOUNCEMENT_BODY_SEMANTIC_AUDIT_V018_SELF_TEST_PASS"
   },
-  "next_state": "FROZEN_V018_PUBLIC_RESEARCH_SMOKE_ALLOWED"
+  "next_state": "RETURN_TO_USER_BEFORE_ANY_FULL_94_EVENT_SEMANTIC_RERUN",
+  "public_research_smoke": {
+    "status": "PASS",
+    "job_id": "job_20260929T125331Z_89a763dd",
+    "network_profile": "public_research",
+    "canonical_result": {
+      "path": "docs/research/sc001-b15p2-announcement-body-dual-schema-smoke-v0.1.8-result.json",
+      "sha256": "21c80bbf0a921df9544c7c9d9ef04e4710f33985c5d5c51ed181ed19de4fc2b2"
+    },
+    "pass_token": "B15P2_ANNOUNCEMENT_BODY_DUAL_SCHEMA_SMOKE_V018_PASS"
+  }
 }

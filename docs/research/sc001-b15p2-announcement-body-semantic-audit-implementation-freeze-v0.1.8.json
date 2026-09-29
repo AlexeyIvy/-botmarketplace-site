@@ -1,7 +1,7 @@
 {
   "schema": "sc001.b15p2_announcement_body_semantic_audit_implementation_freeze.v0.1.8",
   "date": "2026-09-29",
-  "status": "FROZEN_AFTER_TEST_EXECUTOR_OFFLINE_PASS_PUBLIC_SMOKE_PENDING",
+  "status": "FROZEN_OFFLINE_AND_PUBLIC_SMOKE_PASS_FULL_94_RERUN_APPROVAL_REQUIRED",
   "supersedes": "docs/research/sc001-b15p2-announcement-body-semantic-audit-implementation-freeze-v0.1.7.json",
   "entrypoint": {
     "path": "research/sc001/sc001_b15p2_announcement_body_semantic_audit_v0_1_8.py",
@@ -65,5 +65,34 @@
   "returns_access_authorized": false,
   "pnl_access_authorized": false,
   "event_outcome_ranking_authorized": false,
-  "next_state": "PUBLIC_RESEARCH_DUAL_SCHEMA_SMOKE_SAME_ENDPOINT_CLASS"
+  "next_state": "USER_DECISION_REQUIRED_BEFORE_FULL_FROZEN_94_SEMANTIC_RERUN",
+  "public_research_smoke": {
+    "executor": "BotMarketplace Test Executor",
+    "repo_head": "7312f5ff53838d6983a7dd904c7056cb08131a8b",
+    "job_id": "job_20260929T125331Z_89a763dd",
+    "network_profile": "public_research",
+    "entrypoint_sha256": "c58d6c31f56c41d593ea5156d0e8ea407f9dfea1e515aa613a0d5113f5a0f9fa",
+    "timeout_seconds": 180,
+    "exit_code": 0,
+    "timed_out": false,
+    "result_error": null,
+    "log_sha256": "5626e473e68acf7865629553e68feede42a149ed251d0333becb79959bfb605f",
+    "pass_token": "B15P2_ANNOUNCEMENT_BODY_DUAL_SCHEMA_SMOKE_V018_PASS",
+    "canonical_result": {
+      "path": "docs/research/sc001-b15p2-announcement-body-dual-schema-smoke-v0.1.8-result.json",
+      "sha256": "21c80bbf0a921df9544c7c9d9ef04e4710f33985c5d5c51ed181ed19de4fc2b2"
+    },
+    "event_count": 4,
+    "schema_a_count": 2,
+    "schema_b_count": 2,
+    "article_body_text_persisted": false,
+    "semantic_classification_performed": false,
+    "price_accessed": false,
+    "external_reference_price_accessed": false,
+    "index_value_accessed": false,
+    "basis_accessed": false,
+    "returns_accessed": false,
+    "pnl_accessed": false,
+    "trading_credentials_available": false
+  }
 }
