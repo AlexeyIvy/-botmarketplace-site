@@ -1,0 +1,125 @@
+{
+  "schema": "sc001.next_primary.forced_flow_relative_dislocation.mechanism_fingerprint.v0.2",
+  "date": "2026-09-29",
+  "task_id": "SC001-NEXT-PRIMARY-PREFREEZE-01",
+  "family": "VENUE_LOCAL_FORCED_FLOW_RELATIVE_DISLOCATION",
+  "status": "PREFROZEN_STRATEGY_USER_HOLD_NO_OUTCOME_AUTHORIZED",
+  "supersedes": "docs/research/sc001-next-primary-forced-flow-relative-dislocation-mechanism-fingerprint-v0.1.json",
+  "c_series_experiment_id": null,
+  "adaptive_discovery_generated": true,
+  "disposition": "RELATED_BUT_MATERIALLY_DIFFERENT_ARCHITECTURE",
+  "binding_source": {
+    "path": "docs/research/sc001-strategy-manager-portfolio-review-v0.1.md",
+    "commit": "5bab788cb32dcf99f3d2ff4fc869d9f833ae5686"
+  },
+  "mechanism_fingerprint": {
+    "parent_family_lineage": [
+      "B13-C/RB021 explicit pure-side liquidation-cluster state semantics",
+      "RB011 strict-coactive one-second cross-venue clock",
+      "RB012 causal local cross-venue basis reference",
+      "C8B relative-basis measurement lineage"
+    ],
+    "economic_payer": "Non-discretionary price-insensitive forced deleveraging on Bybit can consume local liquidity; broader same-underlying price discovery plus arbitrage/liquidity provision can re-anchor the forced venue after forced flow ends.",
+    "causal_trigger_state": "Frozen B13-C/RB021 pure-side liquidation cluster: deterministic fingerprints, per symbol, inter-event gap <=5 seconds, >=3 distinct events, all events same liquidation side, source-gap censoring +/-5 seconds around cluster.",
+    "economic_objects": [
+      "Bybit linear USDT perpetual trade price",
+      "OKX same-underlying USDT perpetual trade price as reference only",
+      "causal local cross-venue basis median",
+      "explicit Bybit forced-liquidation cluster"
+    ],
+    "monetization_path": "One-sided Bybit trading only; OKX is never a hedge leg.",
+    "entry_architecture": "S0 opens no entry. Later architecture may enter on Bybit after the first actionable strict-coactive observation at least 1 second after cluster end.",
+    "exit_termination_anchor": "S0 opens no later price. Only after S0 SURVIVE may a separate prospectively frozen 10-second convergence sentinel be prepared.",
+    "structural_fill_count": 2,
+    "horizon_class": "S0 has no return horizon; first actionable 1-second observation only. Proposed later convergence horizon is 10 seconds, separately frozen only after S0 SURVIVE.",
+    "latency_dependency": "MODERATE_HIGH_NOT_SUBMILLISECOND",
+    "capital_risk_constraint": "Small-capital one-venue exposure, short intended occupancy, stressed spread/slippage risk, no external hedge leg.",
+    "relationship_to_nearest_prior_mechanism": {
+      "b13c": "B13-C tested unconditional same-venue 30-second absolute reversal; this candidate tests event-conditioned venue-relative displacement versus a strict-coactive external same-underlying reference.",
+      "c8b": "C8B tested paired cross-venue relative-basis structure; this candidate is liquidation-conditioned and one-sided on the forced venue.",
+      "same_mechanism_variant_if": [
+        "only liquidation size changes",
+        "only cluster count changes",
+        "only cluster gap changes",
+        "only symbol subset changes",
+        "only entry delay changes",
+        "only hold horizon changes while retaining old same-venue reversal object"
+      ]
+    }
+  },
+  "frozen_event_definition": {
+    "fingerprint": "deterministic liquidation fingerprint inherited from B13-C/RB021",
+    "scope": "per symbol",
+    "inter_event_gap_max_seconds": 5,
+    "minimum_distinct_events": 3,
+    "same_liquidation_side_required": true,
+    "source_gap_censor_seconds_before_after_cluster": 5,
+    "liquidation_magnitude_threshold": null
+  },
+  "frozen_universe": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "DOGEUSDT",
+    "ORDIUSDT",
+    "FILUSDT",
+    "UNIUSDT",
+    "XRPUSDT",
+    "LTCUSDT",
+    "OPUSDT",
+    "BCHUSDT",
+    "SUIUSDT"
+  ],
+  "fresh_window": {
+    "rule": "first seven complete UTC days beginning after the 2026-09-29 final prefreeze commit",
+    "window_start_utc": "2026-09-30T00:00:00Z",
+    "window_end_exclusive_utc": "2026-10-07T00:00:00Z",
+    "window_movable_for_source_failure": false,
+    "alternate_reconstruction_authorized": false
+  },
+  "edge_to_fill": {
+    "execution_venue": "BYBIT",
+    "reference_venue": "OKX_REFERENCE_ONLY",
+    "structural_fills": 2,
+    "fee_qualification_ref": "docs/research/sc001-next-primary-forced-flow-relative-dislocation-fee-qualification-v0.1.md",
+    "conservative_regular_user_taker_fee_bps_per_fill": 11,
+    "two_fill_fee_floor_bps": 22,
+    "spread_depth_reference_bps": 10,
+    "execution_model_reserve_bps": 10,
+    "funding_borrow_reference_bps": 0,
+    "two_fill_structural_burden_bps": 42,
+    "minimum_economic_reserve_bps": 10,
+    "headroom_formula": "H=max(30, two_fill_structural_burden_bps+10)",
+    "H_bps": 52,
+    "maker_rebate_credit": false
+  },
+  "breadth_semantics": {
+    "frozen_utc_date_denominator": 7,
+    "zero_valid_cluster_day_median": null,
+    "zero_valid_cluster_day_counts_positive": false,
+    "positive_day_survive_requirement": "at least 5 of 7 frozen UTC dates",
+    "frozen_symbol_denominator": 12,
+    "unrepresented_symbol_counts_positive": false,
+    "positive_symbol_survive_requirement": "at least 6 of 12 frozen symbols"
+  },
+  "operational_source_continuity": {
+    "qualification_ref": "docs/research/sc001-next-primary-forced-flow-relative-dislocation-operational-source-continuity-qualification-v0.1.md",
+    "status": "B13C_FRESH_WINDOW_CONTINUITY_NOT_ESTABLISHED_READONLY",
+    "s0_execution_authorized": false
+  },
+  "outcome_firewall": {
+    "price_outcome_access_authorized": false,
+    "later_price_authorized_in_s0": false,
+    "returns_authorized": false,
+    "pnl_authorized": false,
+    "l1_l2_authorized": false,
+    "mark_premium_index_authorized": false,
+    "funding_as_alpha_input_authorized": false,
+    "spot_authorized": false,
+    "external_hedge_authorized": false,
+    "threshold_search_authorized": false,
+    "horizon_search_authorized": false,
+    "symbol_search_authorized": false,
+    "candidate_2_3_parallel_outcome_authorized": false
+  }
+}
