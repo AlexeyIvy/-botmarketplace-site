@@ -1,0 +1,51 @@
+{
+  "schema": "sc001.b15p2_engineering_recovery_budget.v0.1",
+  "date": "2026-09-29",
+  "status": "AUTHORIZED",
+  "authorization": {
+    "source": "EXPLICIT_USER_APPROVAL_IN_CHAT",
+    "approved_scope": "CURRENT_B15P2_ENGINEERING_CONTOUR_ONLY",
+    "max_recovery_iterations": 3,
+    "iterations_consumed": 0
+  },
+  "purpose": "Repair and dynamically validate the synthetic __NEXT_DATA__ fixture and separated sanitizer/hydration self-tests without changing frozen research evidence, semantic rules, network scope, or economic firewalls.",
+  "allowed": [
+    "SCRIPT_CONTEXT_SAFE_SYNTHETIC_JSON_SERIALIZATION",
+    "SEPARATE_VISIBLE_TEXT_FRAGMENT_SANITIZER_UNIT_TEST",
+    "SEPARATE_END_TO_END_NEXT_DATA_HYDRATION_TEST",
+    "STATIC_REVIEW",
+    "OFFLINE_TEST_EXECUTOR_RUN",
+    "CONSOLIDATED_TECHNICAL_FIX_IF_OFFLINE_TEST_FAILS",
+    "FREEZE_AFTER_OFFLINE_PASS",
+    "SAME_ENDPOINT_CLASS_PUBLIC_RESEARCH_SMOKE_AFTER_OFFLINE_PASS"
+  ],
+  "not_authorized": [
+    "FROZEN_94_EVENT_SET_CHANGE",
+    "NEW_DATA_SOURCE_OR_ENDPOINT_CLASS",
+    "SEMANTIC_RULE_CHANGE",
+    "HYDRATION_ROUTING_RULE_CHANGE",
+    "PRICE_ACCESS",
+    "EXTERNAL_REFERENCE_PRICE_ACCESS",
+    "OBSERVED_INDEX_VALUE_ACCESS",
+    "BASIS_OR_SPREAD_CALCULATION",
+    "RETURNS_CALCULATION",
+    "PNL_CALCULATION",
+    "OUTCOME_RANKING",
+    "TRADING_OR_ORDER_EXECUTION",
+    "B15P1_COLLECTOR_MUTATION",
+    "PROTECTED_OUTCOME_DATA_ACCESS"
+  ],
+  "iteration_accounting": "Consume one recovery iteration only when a materially changed B15-P2 implementation is actually executed after a technical failure. Static review, read-only inspection, documentation, and freeze operations do not consume an iteration.",
+  "required_sequence": [
+    "STATIC_REVIEW",
+    "REAL_OFFLINE_DYNAMIC_TEST_VIA_TEST_EXECUTOR",
+    "FIX_IF_NEEDED_WITHIN_BUDGET",
+    "FREEZE_AFTER_OFFLINE_PASS",
+    "OPTIONAL_PUBLIC_RESEARCH_SMOKE_SAME_ENDPOINT_CLASS",
+    "RETURN_TO_USER_BEFORE_ANY_FULL_94_EVENT_SEMANTIC_RERUN"
+  ],
+  "candidate": {
+    "path": "research/sc001/sc001_b15p2_announcement_body_semantic_audit_v0_1_8.py",
+    "pre_execution_sha256": "c58d6c31f56c41d593ea5156d0e8ea407f9dfea1e515aa613a0d5113f5a0f9fa"
+  }
+}
