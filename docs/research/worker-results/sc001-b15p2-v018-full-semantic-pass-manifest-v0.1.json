@@ -1,0 +1,77 @@
+{
+  "schema": "sc001.worker_result_manifest.v0.1",
+  "project": "SC001",
+  "experiment_id": "B15-P2",
+  "stage": "V018_FULL_94_SEMANTIC_RERUN",
+  "date": "2026-09-29",
+  "status": "FULL_94_SEMANTIC_PASS_PRE_PRICE_GATE",
+  "strategy_triggers": [
+    "NEW_OUTCOME_MECHANISM_GATE",
+    "EVIDENCE_MATURITY_CHANGE",
+    "ROADMAP_GOVERNANCE_CHANGE"
+  ],
+  "canonical_result": {
+    "path": "docs/research/sc001-b15p2-announcement-body-semantic-audit-v018-result-v0.1.json",
+    "sha256": "440b3f53b2ead7a96ccc5522dd054c33264ea1e37a62bd9214bc3f1416bb0216"
+  },
+  "protocol": {
+    "path": "docs/research/sc001-b15p2-announcement-body-semantic-audit-protocol-v0.1.md",
+    "sha256": "4209779876e3796feff16a8310af93324cd1927862874524fb90ebf95d51d84f"
+  },
+  "implementation": {
+    "path": "research/sc001/sc001_b15p2_announcement_body_semantic_audit_v0_1_8.py",
+    "sha256": "c58d6c31f56c41d593ea5156d0e8ea407f9dfea1e515aa613a0d5113f5a0f9fa"
+  },
+  "execution": {
+    "mode": "NETWORKED_VPS",
+    "bundle_id": null,
+    "bundle_sha256": null,
+    "job_id": "job_20260929T131756Z_0f3706bf"
+  },
+  "mechanism": {
+    "fingerprint_ref": "docs/research/sc001-b15p2-semantic-classes-freeze-v0.1.json",
+    "disposition": "NOT_APPLICABLE_PRE_OUTCOME",
+    "adaptive_discovery_generated": false
+  },
+  "evidence": {
+    "class": "PRE_OUTCOME_FULL_SEMANTIC_MECHANISM_EVIDENCE",
+    "promotional": false,
+    "outcome_accessed": false,
+    "window": null,
+    "contamination_registry_ref": "docs/research/sc001-contamination-registry-v0.30.json"
+  },
+  "key_metrics": {
+    "frozen_event_count": 94,
+    "fetch_success_count": 94,
+    "fetch_error_count": 0,
+    "semantic_resolved_count": 94,
+    "exact_time_match_count": 94,
+    "schema_a_count": 76,
+    "schema_b_count": 18,
+    "avg_index_window_count": 94,
+    "window_30m_count": 94,
+    "funding_mentioned_count": 0,
+    "revision_wording_count": 0
+  },
+  "decision": {
+    "class": "HOLD",
+    "summary": "The exact frozen v0.1.8 full 94-event semantic rerun passed. All 94 official announcements resolve to the same documented operational mechanism: exact delisting time, trading stop, automatic order cancellation, automatic position closure, and a 30-minute average-index closing-price basis. This is pre-outcome mechanism evidence only; economic firewalls remain closed pending a pre-price strategy gate.",
+    "failed_gate": null,
+    "allowed_claims": [
+      "All 94 frozen official announcement pages were fetched and semantically resolved",
+      "All 94 matched the frozen delisting timestamp",
+      "All 94 explicitly state automatic position closure and active-order cancellation",
+      "All 94 state a 30-minute average-index closing-price basis",
+      "The 76 BLT / 18 ART dual-schema routing held across the full frozen set"
+    ],
+    "forbidden_reuse": [
+      "Do not infer profitability or expected returns",
+      "Do not infer executable edge from semantic uniformity",
+      "Do not open price/index/basis/returns/PnL without a separate gate",
+      "Do not alter the frozen 94-event set",
+      "Do not rank events by outcome"
+    ],
+    "next_allowed_action": "Run the pre-price strategy gate from trader, programmer-trader, and statistician roles without accessing price/outcome data."
+  },
+  "reusable_blocks": []
+}

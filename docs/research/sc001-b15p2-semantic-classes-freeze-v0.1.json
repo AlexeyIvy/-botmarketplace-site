@@ -1,0 +1,49 @@
+{
+  "schema": "sc001.b15p2_semantic_classes_freeze.v0.1",
+  "date": "2026-09-29",
+  "status": "FROZEN_FULL_94_SEMANTIC_PASS_PRE_PRICE_GATE",
+  "implementation": {
+    "path": "research/sc001/sc001_b15p2_announcement_body_semantic_audit_v0_1_8.py",
+    "sha256": "c58d6c31f56c41d593ea5156d0e8ea407f9dfea1e515aa613a0d5113f5a0f9fa"
+  },
+  "canonical_result": {
+    "path": "docs/research/sc001-b15p2-announcement-body-semantic-audit-v018-result-v0.1.json",
+    "sha256": "440b3f53b2ead7a96ccc5522dd054c33264ea1e37a62bd9214bc3f1416bb0216"
+  },
+  "frozen_event_set_sha256": "1063695ec003a0d6789270659822f50577e6a0f07059d88ac03a5be4288ed1a2",
+  "event_count": 94,
+  "hydration_schema_counts": {
+    "BLT_RICHTEXT": 76,
+    "DOUBLE_DASH_ART_HTML": 18
+  },
+  "semantic_classes": {
+    "exact_time_match": 94,
+    "trading_stop_explicit": 94,
+    "active_orders_auto_cancel_explicit": 94,
+    "open_positions_auto_close_explicit": 94,
+    "closing_price_basis_AVERAGE_INDEX_PRICE_WINDOW": 94,
+    "closing_price_window_minutes_30": 94,
+    "funding_not_stated": 94,
+    "no_revision_or_postponement_wording": 94,
+    "semantic_resolved": 94
+  },
+  "acquisition": {
+    "executor": "BotMarketplace Test Executor",
+    "job_id": "job_20260929T131756Z_0f3706bf",
+    "network_profile": "public_research",
+    "exit_code": 0,
+    "timed_out": false,
+    "log_sha256": "001bb716ed6f1e373174101e3bc2e114715b66c6e0cdee027cf2015008b40e56"
+  },
+  "firewalls": {
+    "price_accessed": false,
+    "external_reference_price_accessed": false,
+    "index_values_accessed": false,
+    "basis_calculated": false,
+    "returns_calculated": false,
+    "pnl_calculated": false,
+    "event_ranked_by_outcome": false,
+    "trading": false
+  },
+  "next_state": "RUN_PRE_PRICE_STRATEGY_GATE"
+}
