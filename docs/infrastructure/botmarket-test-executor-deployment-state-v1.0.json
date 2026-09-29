@@ -1,7 +1,7 @@
 {
   "schema": "botmarket.test_executor_deployment_state.v1.0",
   "date": "2026-09-29",
-  "status": "LOCAL_EXECUTOR_PASS_TUNNEL_PENDING",
+  "status": "LOCAL_EXECUTOR_PASS_TUNNEL_CREATED_INSTALL_PENDING",
   "git_head": "f873606a0e0aa596eadd8e201737b2ff0dad1c46",
   "installation_freeze": {
     "path": "docs/infrastructure/botmarket-test-executor-installation-freeze-v1.0.2.json",
@@ -32,5 +32,13 @@
     "research_runner_modified": false,
     "github_control_modified": false
   },
-  "next_state": "CREATE_DEDICATED_OPENAI_TUNNEL_AND_CONNECT_TEST_EXECUTOR_APP"
+  "next_state": "INSTALL_AND_VALIDATE_DEDICATED_OPENAI_TUNNEL",
+  "tunnel": {
+    "id": "tunnel_6abb7a5d33908191a1a58705afd5176a",
+    "name": "BotMarketplace Test Executor",
+    "local_mcp": "http://127.0.0.1:8769/mcp",
+    "planned_health": "http://127.0.0.1:8083",
+    "service": "botmarket-test-executor-tunnel.service",
+    "installation_status": "PENDING"
+  }
 }
