@@ -1,0 +1,53 @@
+{
+  "schema": "sc001.b15p2_p0_price_index_basis_execution_approval.v0.1",
+  "date": "2026-09-29",
+  "status": "AUTHORIZED_LIMITED_P0_SCOPE",
+  "authorization_source": "EXPLICIT_USER_APPROVAL_IN_CHAT",
+  "frozen_boundaries": {
+    "event_set_sha256": "1063695ec003a0d6789270659822f50577e6a0f07059d88ac03a5be4288ed1a2",
+    "causal_clock_freeze": {
+      "path": "docs/research/sc001-b15p2-causal-event-clock-freeze-v0.1.json",
+      "sha256": "9e4f6db4ce173cf9d5fa590a1acd1a56fa6a9f465c001c88de47b2542a172d70"
+    },
+    "experiment_spec": {
+      "path": "docs/research/sc001-b15p2-pre-registered-price-experiment-spec-v0.1.json",
+      "sha256": "1dc79403307177c1f9785090fa6f31aac0322ccb10864c509846e8da415856a7"
+    },
+    "experiment_freeze": {
+      "path": "docs/research/sc001-b15p2-p0-price-experiment-freeze-v0.1.json",
+      "sha256": "732a5946f72a18210268e26e42d38ef7d8a3886c819fb2ca68bdb6ff2e0baccf"
+    }
+  },
+  "authorized": [
+    "AFFECTED_CONTRACT_1M_KLINE_CLOSE_VOLUME_TURNOVER_AT_REGISTERED_SNAPSHOTS",
+    "OFFICIAL_BYBIT_INDEX_1M_KLINE_CLOSE_AT_REGISTERED_SNAPSHOTS",
+    "DERIVED_PERPETUAL_MINUS_INDEX_BASIS_AT_REGISTERED_SNAPSHOTS",
+    "PRE_REGISTERED_P0_CLUSTER_AND_MONTH_AGGREGATION"
+  ],
+  "still_forbidden": [
+    "RETURNS",
+    "PNL",
+    "ORDER_BOOK_L1_L2",
+    "INDIVIDUAL_TRADE_BODY",
+    "FUNDING_VALUE",
+    "MARK_PRICE",
+    "PREMIUM_INDEX",
+    "SPOT_PRICE",
+    "EXTERNAL_VENUE_PRICE",
+    "ALTERNATE_HORIZON_SEARCH",
+    "SYMBOL_SUBSET_SEARCH",
+    "BASIS_THRESHOLD_SEARCH",
+    "OUTCOME_RANKING",
+    "TRADING_OR_ORDER_EXECUTION"
+  ],
+  "execution_plane": "BotMarketplace Test Executor",
+  "required_sequence": [
+    "STATIC_REVIEW",
+    "OFFLINE_DYNAMIC_SELF_TEST",
+    "FREEZE_EXACT_IMPLEMENTATION",
+    "FULL_REGISTERED_P0_PUBLIC_RESEARCH_RUN"
+  ],
+  "public_smoke_before_full_outcome_run": false,
+  "rationale_for_no_partial_outcome_smoke": "Avoid partial outcome exposure followed by implementation changes; after offline validation, execute the exact frozen full P0 once.",
+  "next_state": "OFFLINE_VALIDATE_IMPLEMENTATION_BEFORE_ANY_PRICE_ACCESS"
+}

@@ -8,11 +8,11 @@
   "baseline_git_head": "94bf690f5c273c98b4a5e58d4bb2fe6ea7f9cf91",
   "last_strategy_review_head": "002f8bf9258058f8e14775472d315a69a53da031",
   "binding_refs": {
-    "roadmap": "docs/research/sc001-current-roadmap-and-stop-rules-v5.202.md",
+    "roadmap": "docs/research/sc001-current-roadmap-and-stop-rules-v5.203.md",
     "governance": "docs/research/sc001-midcourse-research-strategy-audit-and-governance-amendment-v0.2.md",
     "reusable_policy": "docs/research/sc001-terminal-experiment-reusable-block-extraction-policy-v0.1.md",
     "reusable_registry": "docs/research/sc001-reusable-market-building-blocks-registry-v0.9.md",
-    "contamination_registry": "docs/research/sc001-contamination-registry-v0.31.json",
+    "contamination_registry": "docs/research/sc001-contamination-registry-v0.32.json",
     "strategy_charter": "docs/research/sc001-research-strategy-agent-charter-v0.1.md",
     "worker_manifest_schema": "docs/research/sc001-worker-result-manifest-schema-v0.1.json",
     "automation_watch": "docs/research/sc001-research-strategy-automation-watch-v0.1.md"
@@ -25,7 +25,7 @@
       "mutation_allowed": false
     },
     "B15-P2": {
-      "state": "P0_PRICE_EXPERIMENT_PREREGISTERED_AWAITING_LIMITED_PRICE_FIREWALL_AUTHORIZATION",
+      "state": "P0_LIMITED_PRICE_INDEX_BASIS_AUTHORIZED_IMPLEMENTATION_OFFLINE_VALIDATION_PENDING",
       "price_outcome_authorized": false,
       "frozen_event_count": 94,
       "event_set_sha256": "1063695ec003a0d6789270659822f50577e6a0f07059d88ac03a5be4288ed1a2",
@@ -46,7 +46,7 @@
       "engineering_stabilization_rule": "THREE_LAYER_PREFREEZE_CHECK_PLUS_EXACT_STAGE",
       "hydration_stop_rule": "STOP_AFTER_V04_IF_NO_STABLE_COMMON_HIGH_CONFIDENCE_BODY_IDENTITY",
       "strategy_review_required_now": false,
-      "next_allowed_action": "OBTAIN_EXPLICIT_AUTHORIZATION_FOR_P0_AFFECTED_CONTRACT_PRICE_OFFICIAL_INDEX_AND_DERIVED_BASIS_ONLY",
+      "next_allowed_action": "OFFLINE_DYNAMIC_VALIDATE_P0_IMPLEMENTATION_THEN_FREEZE_BEFORE_ANY_PRICE_ACCESS",
       "next_data_probe_execution_started": false,
       "execution_approval": "docs/research/sc001-b15p2-next-data-structure-probe-v04-execution-approval-v0.1.json",
       "delegated_engineering_iteration_budget": {
@@ -90,7 +90,7 @@
       "primary_body_path": "$.props.pageProps.articleDetail.content.json.children",
       "secondary_consistency_path": "$.props.pageProps.articleDetail.entry.entryKey.children",
       "semantic_network_authorized": false,
-      "authorization_basis": "EXPLICIT_USER_APPROVAL_FULL_FROZEN_94_SEMANTIC_RERUN_V018_2026_09_29",
+      "authorization_basis": "EXPLICIT_USER_APPROVAL_B15P2_P0_PRICE_INDEX_BASIS_FROZEN_SPEC_V0_1",
       "execution_started": false,
       "strategy_review_required_after_terminal_full_semantic_result": true,
       "last_observed_runtime_state": {
@@ -164,15 +164,24 @@
       "price_experiment_design_review": "docs/research/sc001-b15p2-price-experiment-design-review-v0.1.md",
       "price_experiment_design_review_sha256": "91089cd45376792ddb68b63f36eee70bf5ffa5499431a7f0e86c2e1ad46c68e2",
       "p0_authorization_scope": {
-        "affected_contract_1m_price": false,
-        "official_bybit_index_1m_value": false,
-        "derived_basis": false,
+        "affected_contract_1m_price": true,
+        "official_bybit_index_1m_value": true,
+        "derived_basis": true,
         "returns": false,
         "pnl": false,
         "l1_l2": false,
         "individual_trades": false,
+        "funding_value": false,
+        "mark_price": false,
+        "premium_index": false,
+        "spot_price": false,
+        "external_venue_price": false,
         "trading": false
-      }
+      },
+      "p0_execution_approval": "docs/research/sc001-b15p2-p0-price-index-basis-execution-approval-v0.1.json",
+      "p0_execution_approval_sha256": "27a4f094767f19a9c992e3b777ceea9b2b1eb5cf12d9b5e6a3230f81e007b7fc",
+      "p0_implementation_candidate": "research/sc001/sc001_b15p2_p0_basis_convergence_v0_1.py",
+      "p0_implementation_candidate_sha256": "174ec018ded618385da41d062392c792ce3f6f76927b1f9274983952a4333307"
     }
   },
   "deferred_branches": {
@@ -239,9 +248,7 @@
     "strategy_project_role": "INTERACTIVE_PROJECT_ONLY_MEMORY_STRATEGY_WORKSPACE",
     "work_required_inside_strategy_project": false
   },
-  "open_strategy_decisions": [
-    "AUTHORIZE_B15P2_P0_PRICE_INDEX_BASIS_ACCESS_ONLY"
-  ],
+  "open_strategy_decisions": [],
   "next_strategy_review_trigger": [
     "NEW_OUTCOME_MECHANISM_GATE",
     "TERMINAL_REJECT_DEFER",
