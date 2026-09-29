@@ -1,0 +1,245 @@
+{
+  "schema": "sc001.b15p2_pre_registered_price_experiment_spec.v0.1",
+  "date": "2026-09-29",
+  "status": "FROZEN_DESIGN_PRICE_FIREWALL_NOT_AUTHORIZED",
+  "scope": "SCALPING_RESEARCH_SC001_B15P2_P0_STRUCTURAL_HEADROOM_SENTINEL",
+  "lineage": {
+    "frozen_event_set_sha256": "1063695ec003a0d6789270659822f50577e6a0f07059d88ac03a5be4288ed1a2",
+    "semantic_freeze": {
+      "path": "docs/research/sc001-b15p2-semantic-classes-freeze-v0.1.json",
+      "sha256": "77dbf177df2c5a91e225f394cd65827ac547ec0031d90fa11f78908ebc322c07"
+    },
+    "mechanism_fingerprint": {
+      "path": "docs/research/sc001-b15p2-mechanism-fingerprint-v0.1.json",
+      "sha256": "d4bb377d49a24cc9d0ac27b3035c9eb97553d01aabda9745a8ce10025ee03dea"
+    },
+    "causal_clock_freeze": {
+      "path": "docs/research/sc001-b15p2-causal-event-clock-freeze-v0.1.json",
+      "sha256": "9e4f6db4ce173cf9d5fa590a1acd1a56fa6a9f465c001c88de47b2542a172d70"
+    }
+  },
+  "hypothesis": {
+    "family": "FORCED_CLOSE_WINDOW_BASIS_CONVERGENCE",
+    "primary_statement": "The absolute Bybit perpetual-vs-official-index basis contracts more strongly during the mechanism-defined T-30m to T-5m window than during the equal-length immediately preceding control window T-55m to T-30m.",
+    "direction_rule_for_future_execution": "At T-30m, future execution direction is fixed causally as SHORT perpetual if basis>0, LONG perpetual if basis<0, and NO_DIRECTION if basis=0. This rule is frozen before outcome access.",
+    "profitability_claim": false,
+    "p0_is_pnl_test": false
+  },
+  "causal_observability": {
+    "notice_timestamp_field": "first_notice_ms",
+    "notice_source": "Frozen Bybit announcement API source census",
+    "minimum_frozen_notice_lead_hours": 4.971666666666667,
+    "registered_observation_points_are_after_notice": true,
+    "no_future_information": true
+  },
+  "p0_access_boundary": {
+    "newly_requested_if_authorized": [
+      "AFFECTED_CONTRACT_1M_KLINE_PRICE_FIELDS",
+      "OFFICIAL_BYBIT_INDEX_1M_KLINE_PRICE_FIELDS",
+      "DERIVED_CONTRACT_MINUS_INDEX_BASIS"
+    ],
+    "still_forbidden": [
+      "RETURNS",
+      "PNL",
+      "ORDER_BOOK_L1_L2",
+      "INDIVIDUAL_TRADE_BODY",
+      "FUNDING_VALUE",
+      "MARK_PRICE",
+      "PREMIUM_INDEX",
+      "SPOT_PRICE",
+      "EXTERNAL_VENUE_PRICE",
+      "OUTCOME_RANKING",
+      "TRADING_OR_ORDER_EXECUTION"
+    ]
+  },
+  "data_sources": {
+    "affected_contract": {
+      "authority": "Bybit official public V5 Market API",
+      "endpoint": "/v5/market/kline",
+      "category": "linear",
+      "interval": "1",
+      "symbol": "EXACT_FROZEN_EVENT_SYMBOL",
+      "required_response_fields": [
+        "list[0]=startTime",
+        "list[4]=closePrice",
+        "list[5]=volume",
+        "list[6]=turnover"
+      ],
+      "purpose": "Affected perpetual price snapshot plus nonzero-activity integrity check."
+    },
+    "official_index": {
+      "authority": "Bybit official public V5 Market API",
+      "endpoint": "/v5/market/index-price-kline",
+      "category": "linear",
+      "interval": "1",
+      "symbol": "EXACT_FROZEN_EVENT_SYMBOL",
+      "required_response_fields": [
+        "list[0]=startTime",
+        "list[4]=closePrice"
+      ],
+      "purpose": "Official contemporaneous index reference."
+    },
+    "source_substitution_rule": "No alternate venue, third-party archive, mark price, premium index, spot proxy or reconstructed index may replace a missing primary source without a new pre-registration before any such substitute values are read."
+  },
+  "sampling": {
+    "registered_target_offsets_minutes": [
+      -55,
+      -30,
+      -5
+    ],
+    "candle_rule": "For target time t, use only the exact fully closed 1-minute candle with startTime=t-60000 ms and therefore ending at t. No nearest-neighbor substitution, interpolation, forward fill, backward fill or later candle is allowed.",
+    "contract_and_index_alignment": "Exact same candle startTime required for contract and index.",
+    "control_window": "T-55m to T-30m (25 minutes)",
+    "mechanism_window": "T-30m to T-5m (25 minutes)",
+    "final_5_minutes": "Excluded from the primary P0 sentinel to avoid confounding by terminal trading-stop/cancel mechanics. No alternate last-minute horizon may be selected after outcomes."
+  },
+  "event_eligibility": {
+    "required": [
+      "event is one of the exact frozen 94",
+      "all six registered candles exist: contract+index at -55m,-30m,-5m",
+      "all exact startTime identities match the registered minute",
+      "contract volume>0 and turnover>0 for all three registered contract candles",
+      "all numeric fields are finite and positive"
+    ],
+    "forbidden_filters": [
+      "no filter based on observed return",
+      "no filter based on basis magnitude",
+      "no winner-symbol filtering",
+      "no post-hoc liquidity threshold",
+      "no removal of extreme outcomes"
+    ],
+    "missing_data_handling": "Ineligible events are retained in the audit ledger as SOURCE_MISSING/INVALID and are never silently dropped."
+  },
+  "derived_metrics": {
+    "basis_bps": "B(t)=10000*(contract_close(t)/index_close(t)-1)",
+    "absolute_basis_bps": "A(t)=abs(B(t))",
+    "control_contraction_bps": "C_control=A(T-55m)-A(T-30m)",
+    "mechanism_contraction_bps": "C_event=A(T-30m)-A(T-5m)",
+    "incremental_mechanism_effect_bps": "D=C_event-C_control",
+    "future_execution_side": "side=-sign(B(T-30m)); zero basis => no direction"
+  },
+  "inference": {
+    "raw_event_count": 94,
+    "primary_dependence_unit": "delivery_ms cluster",
+    "frozen_unique_delivery_timestamp_count": 37,
+    "max_simultaneous_event_count": 5,
+    "cluster_metric": "median of constituent eligible event metric",
+    "cross_cluster_weighting": "equal weight per delivery timestamp cluster",
+    "monthly_breadth": "calendar month of T; report cluster-median D by each frozen month 2026-01 through 2026-09",
+    "primary_estimator": "median of 37-or-eligible delivery-cluster D values",
+    "uncertainty": "nonparametric bootstrap resampling delivery clusters with replacement",
+    "bootstrap_replications": 10000,
+    "bootstrap_seed": 1502,
+    "interval": "two-sided 90% percentile bootstrap interval",
+    "event_level_statistics_role": "descriptive only; not IID inferential units"
+  },
+  "fee_and_headroom_precommitment": {
+    "purpose": "Screen whether the mechanism has enough gross basis-convergence scale to justify a later L1 execution study; this is not PnL.",
+    "official_reference_date": "2026-09-29",
+    "official_reference_note": "Bybit official fee documentation lists VIP0 standard perpetual/futures taker fee 0.055% (5.5 bps) per side and higher special-zone taker fees can reach 0.11% (11 bps) per side; actual rates may vary by region/VIP.",
+    "standard_fee_only_roundtrip_floor_bps": 11,
+    "high_fee_zone_roundtrip_reference_bps": 22,
+    "strong_structural_headroom_threshold_bps": 30,
+    "rule": "The 30 bps threshold is a conservative research-screen hurdle, not an assumed realized cost and not a profitability claim.",
+    "official_references": [
+      {
+        "title": "Bybit Trading Fee Structure",
+        "url": "https://www.bybit.com/en/help-center/article/Trading-Fee-Structure",
+        "retrieved_context_date": "2026-09-29",
+        "relevant_facts": "VIP0 standard perpetual/futures taker 0.055% per side; special perpetual zones may have higher taker rates; actual rates may vary by region/VIP."
+      },
+      {
+        "title": "Bybit Futures Contracts: Fees Explained",
+        "url": "https://www.bybit.com/en/help-center/article/Futures-Contracts-Fees-Explained",
+        "retrieved_context_date": "2026-09-29",
+        "relevant_facts": "USDT perpetual/futures standard taker example 0.055% per side; delisting/settlement fee treatment may differ from ordinary trading and is not assumed in P0."
+      }
+    ]
+  },
+  "decision_gates": {
+    "source_gate": {
+      "pass_if": [
+        "eligible_event_count >= 90",
+        "eligible_delivery_cluster_count >= 35",
+        "at least one eligible delivery cluster in each frozen delivery month"
+      ],
+      "fail_state": "DEFER_SOURCE_COVERAGE",
+      "substitution_allowed": false
+    },
+    "timing_specificity_gate": {
+      "pass_if": [
+        "primary cluster-level median D > 0",
+        "90% bootstrap lower bound for cluster-level median D > 0",
+        "fraction of eligible delivery clusters with D>0 >= 0.60",
+        "monthly median D > 0 in at least 6 of 9 frozen months"
+      ],
+      "fail_state": "REJECT_MECHANISM_TIMING_SPECIFICITY"
+    },
+    "economic_scale_gate": {
+      "ordered_rule": [
+        "If cluster-level median C_event <= 11 bps: REJECT_STRUCTURAL_ECONOMIC_SCALE.",
+        "If 11 bps < cluster-level median C_event < 30 bps: DEFER_COST_HEADROOM; do not build a complex L1 simulator yet.",
+        "If cluster-level median C_event >= 30 bps and timing_specificity_gate passes: PASS_TO_P1_EXECUTION_FEASIBILITY."
+      ]
+    }
+  },
+  "required_outputs": {
+    "structured_result": true,
+    "per_event_ledger": true,
+    "per_cluster_ledger": true,
+    "per_month_summary": true,
+    "source_missing_ledger": true,
+    "report": [
+      "eligible event/cluster/month coverage",
+      "A(-55),A(-30),A(-5) summaries",
+      "C_control, C_event, D summaries",
+      "cluster positive share",
+      "bootstrap interval",
+      "monthly breadth",
+      "gate-by-gate verdict"
+    ],
+    "forbidden_outputs": [
+      "PnL",
+      "trade return",
+      "Sharpe",
+      "event ranking by outcome",
+      "best symbol",
+      "best alternate horizon"
+    ]
+  },
+  "contamination_and_stop_rules": {
+    "adaptive_discovery_generated": true,
+    "frozen_horizon_count": 1,
+    "control_window_is_not_second_trading_horizon": true,
+    "alternate_horizon_search": false,
+    "symbol_subset_search": false,
+    "basis_threshold_search": false,
+    "feature_augmentation": false,
+    "same_evidence_rescue": false,
+    "if_reject": "Terminal for this P0 basis-convergence architecture on the frozen 94-event evidence. Reusable findings may be extracted, but no rescue-tuning on the same outcomes.",
+    "if_pass": "Design a separate P1 execution-feasibility specification using L1/trade data and actual cost/latency assumptions before any PnL claim.",
+    "if_defer": "Resolve source/cost feasibility without selecting events or horizons by observed outcomes."
+  },
+  "p1_boundary_if_p0_passes": {
+    "not_authorized_by_this_spec": true,
+    "intended_primary_hold": "T-30m decision to T-5m exit decision, approximately 25 minutes",
+    "intended_side_rule": "convergence side fixed by sign of B(T-30m)",
+    "required_before_p1": [
+      "historical executable L1 or equivalent defensible execution source",
+      "account/region fee-rate assumption frozen independently of P0 outcomes",
+      "latency model",
+      "spread/slippage/depth model",
+      "position-size/capacity grid frozen",
+      "capital-time accounting",
+      "separate explicit authorization for returns/PnL"
+    ]
+  },
+  "current_authorization": {
+    "price_access": false,
+    "index_value_access": false,
+    "basis_calculation": false,
+    "returns": false,
+    "pnl": false,
+    "trading": false
+  }
+}

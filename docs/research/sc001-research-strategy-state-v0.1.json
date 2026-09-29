@@ -8,11 +8,11 @@
   "baseline_git_head": "94bf690f5c273c98b4a5e58d4bb2fe6ea7f9cf91",
   "last_strategy_review_head": "002f8bf9258058f8e14775472d315a69a53da031",
   "binding_refs": {
-    "roadmap": "docs/research/sc001-current-roadmap-and-stop-rules-v5.201.md",
+    "roadmap": "docs/research/sc001-current-roadmap-and-stop-rules-v5.202.md",
     "governance": "docs/research/sc001-midcourse-research-strategy-audit-and-governance-amendment-v0.2.md",
     "reusable_policy": "docs/research/sc001-terminal-experiment-reusable-block-extraction-policy-v0.1.md",
     "reusable_registry": "docs/research/sc001-reusable-market-building-blocks-registry-v0.9.md",
-    "contamination_registry": "docs/research/sc001-contamination-registry-v0.30.json",
+    "contamination_registry": "docs/research/sc001-contamination-registry-v0.31.json",
     "strategy_charter": "docs/research/sc001-research-strategy-agent-charter-v0.1.md",
     "worker_manifest_schema": "docs/research/sc001-worker-result-manifest-schema-v0.1.json",
     "automation_watch": "docs/research/sc001-research-strategy-automation-watch-v0.1.md"
@@ -25,7 +25,7 @@
       "mutation_allowed": false
     },
     "B15-P2": {
-      "state": "PRE_PRICE_STRATEGY_GATE_PASS_PRICE_EXPERIMENT_SPEC_REQUIRED",
+      "state": "P0_PRICE_EXPERIMENT_PREREGISTERED_AWAITING_LIMITED_PRICE_FIREWALL_AUTHORIZATION",
       "price_outcome_authorized": false,
       "frozen_event_count": 94,
       "event_set_sha256": "1063695ec003a0d6789270659822f50577e6a0f07059d88ac03a5be4288ed1a2",
@@ -46,7 +46,7 @@
       "engineering_stabilization_rule": "THREE_LAYER_PREFREEZE_CHECK_PLUS_EXACT_STAGE",
       "hydration_stop_rule": "STOP_AFTER_V04_IF_NO_STABLE_COMMON_HIGH_CONFIDENCE_BODY_IDENTITY",
       "strategy_review_required_now": false,
-      "next_allowed_action": "DESIGN_AND_FREEZE_PRE_REGISTERED_PRICE_EXPERIMENT_SPEC_WITHOUT_OUTCOME_ACCESS",
+      "next_allowed_action": "OBTAIN_EXPLICIT_AUTHORIZATION_FOR_P0_AFFECTED_CONTRACT_PRICE_OFFICIAL_INDEX_AND_DERIVED_BASIS_ONLY",
       "next_data_probe_execution_started": false,
       "execution_approval": "docs/research/sc001-b15p2-next-data-structure-probe-v04-execution-approval-v0.1.json",
       "delegated_engineering_iteration_budget": {
@@ -156,7 +156,23 @@
       "mechanism_fingerprint": "docs/research/sc001-b15p2-mechanism-fingerprint-v0.1.json",
       "mechanism_fingerprint_sha256": "d4bb377d49a24cc9d0ac27b3035c9eb97553d01aabda9745a8ce10025ee03dea",
       "pre_price_strategy_gate": "docs/research/sc001-b15p2-pre-price-strategy-gate-v0.1.md",
-      "pre_price_strategy_gate_sha256": "31e802c49b9ddc0dfb193b6586c7c07a8d72ff4e8364c72f00da33828a11e4ca"
+      "pre_price_strategy_gate_sha256": "31e802c49b9ddc0dfb193b6586c7c07a8d72ff4e8364c72f00da33828a11e4ca",
+      "causal_event_clock_freeze": "docs/research/sc001-b15p2-causal-event-clock-freeze-v0.1.json",
+      "causal_event_clock_freeze_sha256": "9e4f6db4ce173cf9d5fa590a1acd1a56fa6a9f465c001c88de47b2542a172d70",
+      "pre_registered_price_experiment_spec": "docs/research/sc001-b15p2-pre-registered-price-experiment-spec-v0.1.json",
+      "pre_registered_price_experiment_spec_sha256": "1dc79403307177c1f9785090fa6f31aac0322ccb10864c509846e8da415856a7",
+      "price_experiment_design_review": "docs/research/sc001-b15p2-price-experiment-design-review-v0.1.md",
+      "price_experiment_design_review_sha256": "91089cd45376792ddb68b63f36eee70bf5ffa5499431a7f0e86c2e1ad46c68e2",
+      "p0_authorization_scope": {
+        "affected_contract_1m_price": false,
+        "official_bybit_index_1m_value": false,
+        "derived_basis": false,
+        "returns": false,
+        "pnl": false,
+        "l1_l2": false,
+        "individual_trades": false,
+        "trading": false
+      }
     }
   },
   "deferred_branches": {
@@ -196,11 +212,11 @@
     "structured_fingerprint_required": true,
     "historical_fingerprint_backfill_required": false,
     "B15-P2": {
-      "fingerprint_status": "REQUIRED_BEFORE_ANY_PRICE_OUTCOME",
-      "mechanism_timescale_status": "REQUIRED_BEFORE_ANY_PRICE_OUTCOME",
-      "edge_to_fill_status": "REQUIRED_BEFORE_ANY_PRICE_OUTCOME",
-      "minimum_viable_horizon_status": "REQUIRED_BEFORE_ANY_PRICE_OUTCOME",
-      "capital_time_status": "REQUIRED_BEFORE_ANY_PRICE_OUTCOME"
+      "fingerprint_status": "FROZEN",
+      "mechanism_timescale_status": "FROZEN_P0_CONTROL_T_MINUS_55_TO_30_MECHANISM_T_MINUS_30_TO_5",
+      "edge_to_fill_status": "P0_COST_HEADROOM_SCREEN_FROZEN_P1_EXECUTION_MODEL_PENDING_IF_P0_PASS",
+      "minimum_viable_horizon_status": "EVENT_CONDITIONED_PRIMARY_25_MIN_MECHANISM_WINDOW_FROZEN",
+      "capital_time_status": "PRIMARY_P1_HOLD_INTENT_25_MIN_FROZEN_CAPACITY_ACCOUNTING_REQUIRED_IF_P0_PASS"
     }
   },
   "manager_access_policy": {
@@ -224,7 +240,7 @@
     "work_required_inside_strategy_project": false
   },
   "open_strategy_decisions": [
-    "AUTHORIZE_PRICE_OUTCOME_FIREWALL_ONLY_AFTER_PRE_REGISTERED_EXPERIMENT_SPEC_FREEZE"
+    "AUTHORIZE_B15P2_P0_PRICE_INDEX_BASIS_ACCESS_ONLY"
   ],
   "next_strategy_review_trigger": [
     "NEW_OUTCOME_MECHANISM_GATE",

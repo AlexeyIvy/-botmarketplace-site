@@ -1,0 +1,65 @@
+{
+  "schema": "sc001.worker_result_manifest.v0.1",
+  "project": "SC001",
+  "experiment_id": "B15-P2",
+  "stage": "P0_PRICE_EXPERIMENT_PREREGISTRATION",
+  "date": "2026-09-29",
+  "status": "PREREGISTERED_AWAITING_LIMITED_PRICE_FIREWALL_AUTHORIZATION",
+  "strategy_triggers": [
+    "CONTAMINATION_CHANGE",
+    "ROADMAP_GOVERNANCE_CHANGE"
+  ],
+  "canonical_result": {
+    "path": "docs/research/sc001-b15p2-pre-registered-price-experiment-spec-v0.1.json",
+    "sha256": "1dc79403307177c1f9785090fa6f31aac0322ccb10864c509846e8da415856a7"
+  },
+  "protocol": null,
+  "implementation": null,
+  "execution": {
+    "mode": "NONE",
+    "bundle_id": null,
+    "bundle_sha256": null,
+    "job_id": null
+  },
+  "mechanism": {
+    "fingerprint_ref": "docs/research/sc001-b15p2-mechanism-fingerprint-v0.1.json",
+    "disposition": "NOT_APPLICABLE_PRE_OUTCOME",
+    "adaptive_discovery_generated": true
+  },
+  "evidence": {
+    "class": "PRE_OUTCOME_PREREGISTRATION",
+    "promotional": false,
+    "outcome_accessed": false,
+    "window": "2026-01..2026-09 frozen event family; no price values opened",
+    "contamination_registry_ref": "docs/research/sc001-contamination-registry-v0.31.json"
+  },
+  "key_metrics": {
+    "frozen_event_count": 94,
+    "delivery_cluster_count": 37,
+    "registered_snapshot_count": 3,
+    "primary_horizon_minutes": 25,
+    "control_horizon_minutes": 25,
+    "standard_fee_floor_bps": 11,
+    "strong_headroom_screen_bps": 30
+  },
+  "decision": {
+    "class": "HOLD",
+    "summary": "B15-P2 P0 basis-convergence experiment is pre-registered before price access. It uses only three exact 1-minute contract/index snapshots, a single mechanism-derived 25-minute horizon, cluster-aware inference, fixed source/contamination rules, and precommitted source/timing/economic gates.",
+    "failed_gate": null,
+    "allowed_claims": [
+      "P0 design is frozen before price outcome access",
+      "Causal clocks are frozen for all 94 events",
+      "Primary inference unit is 37 delivery-time clusters",
+      "Only official Bybit contract and index 1-minute klines are registered for P0"
+    ],
+    "forbidden_reuse": [
+      "Do not read price/index/basis values without fresh explicit authorization",
+      "Do not calculate returns or PnL in P0",
+      "Do not search alternate horizons after outcomes",
+      "Do not select symbols or thresholds from outcomes",
+      "Do not substitute alternate price sources without new preregistration"
+    ],
+    "next_allowed_action": "Obtain explicit user authorization for the registered P0 affected-contract price + official Bybit index + derived basis scope only."
+  },
+  "reusable_blocks": []
+}

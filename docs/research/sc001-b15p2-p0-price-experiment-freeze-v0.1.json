@@ -1,0 +1,51 @@
+{
+  "schema": "sc001.b15p2_p0_price_experiment_freeze.v0.1",
+  "date": "2026-09-29",
+  "status": "FROZEN_AWAITING_EXPLICIT_LIMITED_PRICE_FIREWALL_AUTHORIZATION",
+  "frozen_event_set_sha256": "1063695ec003a0d6789270659822f50577e6a0f07059d88ac03a5be4288ed1a2",
+  "semantic_classes": {
+    "path": "docs/research/sc001-b15p2-semantic-classes-freeze-v0.1.json",
+    "sha256": "77dbf177df2c5a91e225f394cd65827ac547ec0031d90fa11f78908ebc322c07"
+  },
+  "mechanism_fingerprint": {
+    "path": "docs/research/sc001-b15p2-mechanism-fingerprint-v0.1.json",
+    "sha256": "d4bb377d49a24cc9d0ac27b3035c9eb97553d01aabda9745a8ce10025ee03dea"
+  },
+  "causal_clock_freeze": {
+    "path": "docs/research/sc001-b15p2-causal-event-clock-freeze-v0.1.json",
+    "sha256": "9e4f6db4ce173cf9d5fa590a1acd1a56fa6a9f465c001c88de47b2542a172d70"
+  },
+  "experiment_spec": {
+    "path": "docs/research/sc001-b15p2-pre-registered-price-experiment-spec-v0.1.json",
+    "sha256": "1dc79403307177c1f9785090fa6f31aac0322ccb10864c509846e8da415856a7"
+  },
+  "design_review": {
+    "path": "docs/research/sc001-b15p2-price-experiment-design-review-v0.1.md",
+    "sha256": "91089cd45376792ddb68b63f36eee70bf5ffa5499431a7f0e86c2e1ad46c68e2"
+  },
+  "contamination_registry": {
+    "path": "docs/research/sc001-contamination-registry-v0.31.json",
+    "sha256": "3f4cc66ec092b24da978ca0d74d468193ea9f72688dceb021793660c564413d9"
+  },
+  "registered_p0_scope": {
+    "affected_contract_endpoint": "/v5/market/kline",
+    "official_index_endpoint": "/v5/market/index-price-kline",
+    "interval_minutes": 1,
+    "target_offsets_minutes": [
+      -55,
+      -30,
+      -5
+    ],
+    "primary_inference_unit": "delivery_ms cluster",
+    "cluster_count": 37,
+    "price_access_authorized": false,
+    "index_value_access_authorized": false,
+    "basis_calculation_authorized": false,
+    "returns_authorized": false,
+    "pnl_authorized": false,
+    "l1_l2_authorized": false,
+    "trading_authorized": false
+  },
+  "mutation_rule": "Any change to source, registered timestamp, metric, horizon, threshold, weighting, missing-data rule or decision gate after outcome access invalidates this freeze and must be marked exploratory/contaminated unless supported by fresh evidence.",
+  "next_state": "AWAIT_EXPLICIT_USER_AUTHORIZATION_FOR_REGISTERED_P0_PRICE_INDEX_BASIS_SCOPE"
+}
