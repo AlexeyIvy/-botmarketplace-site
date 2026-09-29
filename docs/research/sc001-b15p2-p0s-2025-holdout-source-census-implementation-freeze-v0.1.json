@@ -1,0 +1,51 @@
+{
+  "schema": "sc001.b15p2_p0s_2025_holdout_source_census_implementation_freeze.v0.1",
+  "date": "2026-09-29",
+  "status": "FROZEN_BEFORE_ANY_P0S_PRICE_INDEX_BASIS_ACCESS",
+  "lineage": {
+    "source_coverage_review": {
+      "path": "docs/research/sc001-b15p2-p0-official-source-coverage-review-v0.1.md",
+      "sha256": "8e07fc018e908341d0ca37c5ba6a7bc60491d8ad972187deb798f79594ddef22"
+    },
+    "protocol": {
+      "path": "docs/research/sc001-b15p2-p0s-2025-holdout-source-census-protocol-v0.1.md",
+      "sha256": "b8d5f3d746b1babcd82a0a3d7746d4acd7af8ab2a4ce11f3acffc5e1170b85a2"
+    },
+    "reused_parser_lineage": {
+      "path": "research/sc001/sc001_b15p2_bybit_delisting_source_census_v0_1_1.py",
+      "sha256": "7da36641ed71e0195320f0cc7cc389d629d4f843a646f64c41c1739fc0cd6b35",
+      "note": "Same fail-closed source parser logic; successor changes stage identity, fixed disjoint window, output path and self-test fixture year only."
+    }
+  },
+  "implementation": {
+    "path": "research/sc001/sc001_b15p2_p0s_2025_holdout_source_census_v0_1.py",
+    "sha256": "0c0bd46961cfebb17ecf74dde8822c496c0f73198dae97681d0658abb776355d"
+  },
+  "fixed_window": {
+    "start_utc": "2025-01-01T00:00:00Z",
+    "end_exclusive_utc": "2026-01-01T00:00:00Z"
+  },
+  "network_scope": {
+    "host": "api.bybit.com",
+    "endpoints": [
+      "/v5/announcements/index?locale=en-US&type=delistings",
+      "/v5/market/instruments-info?category=linear&status=Closed"
+    ],
+    "public_read_only": true
+  },
+  "firewalls": {
+    "affected_contract_price": false,
+    "index_value": false,
+    "basis": false,
+    "returns": false,
+    "pnl": false,
+    "l1_l2": false,
+    "individual_trades": false,
+    "funding": false,
+    "mark_premium_spot": false,
+    "external_venue": false,
+    "trading": false
+  },
+  "expected_selftest_pass": "B15P2_P0S_2025_HOLDOUT_SOURCE_CENSUS_V01_SELF_TEST_PASS",
+  "next_after_offline_pass": "RUN_ONCE_VIA_TEST_EXECUTOR_PUBLIC_RESEARCH_IF_ROLLING_HOUR_SLOT_FREE"
+}
