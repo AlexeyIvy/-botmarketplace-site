@@ -8,7 +8,7 @@
   "baseline_git_head": "94bf690f5c273c98b4a5e58d4bb2fe6ea7f9cf91",
   "last_strategy_review_head": "002f8bf9258058f8e14775472d315a69a53da031",
   "binding_refs": {
-    "roadmap": "docs/research/sc001-current-roadmap-and-stop-rules-v5.197.md",
+    "roadmap": "docs/research/sc001-current-roadmap-and-stop-rules-v5.198.md",
     "governance": "docs/research/sc001-midcourse-research-strategy-audit-and-governance-amendment-v0.2.md",
     "reusable_policy": "docs/research/sc001-terminal-experiment-reusable-block-extraction-policy-v0.1.md",
     "reusable_registry": "docs/research/sc001-reusable-market-building-blocks-registry-v0.9.md",
@@ -25,7 +25,7 @@
       "mutation_allowed": false
     },
     "B15-P2": {
-      "state": "DUAL_SCHEMA_SEMANTIC_FINAL_RECOVERY_ITERATION_5_PREPARED_AWAITING_HOST_EXECUTION",
+      "state": "RECOVERY_BUDGET_EXHAUSTED_JOINT_REVIEW_REQUIRED",
       "price_outcome_authorized": false,
       "frozen_event_count": 94,
       "event_set_sha256": "1063695ec003a0d6789270659822f50577e6a0f07059d88ac03a5be4288ed1a2",
@@ -46,7 +46,7 @@
       "engineering_stabilization_rule": "THREE_LAYER_PREFREEZE_CHECK_PLUS_EXACT_STAGE",
       "hydration_stop_rule": "STOP_AFTER_V04_IF_NO_STABLE_COMMON_HIGH_CONFIDENCE_BODY_IDENTITY",
       "strategy_review_required_now": true,
-      "next_allowed_action": "RUN_FINAL_RECOVERY_ITERATION_5_DUAL_SCHEMA_FULL_94_SEMANTIC_AUDIT_V017",
+      "next_allowed_action": "JOINT_REVIEW_REQUIRED_BEFORE_ANY_FURTHER_EXECUTION",
       "next_data_probe_execution_started": false,
       "execution_approval": "docs/research/sc001-b15p2-next-data-structure-probe-v04-execution-approval-v0.1.json",
       "delegated_engineering_iteration_budget": {
@@ -70,11 +70,11 @@
           "NEW_SEALED_RUNNER_BUNDLE_REQUIRING_EXACT_APPROVAL"
         ],
         "stop_after_failed_iterations": 5,
-        "iterations_consumed": 4,
+        "iterations_consumed": 5,
         "pre_iteration_requirement": "FULL_PROGRAMMER_EXPERT_REVIEW_BEFORE_EACH_EXECUTED_ITERATION",
         "iteration_accounting": "COUNT_ONLY_MATERIALLY_CHANGED_REEXECUTION_AFTER_TECHNICAL_FAILURE",
-        "prepared_iteration": 5,
-        "prepared_iteration_scope": "FINAL_CANONICAL_REFERENCE_PREFLIGHT_FIX_THEN_DUAL_SCHEMA_FULL_94_SAME_FROZEN_SCOPE",
+        "prepared_iteration": null,
+        "prepared_iteration_scope": null,
         "after_iteration_5_failure": "STOP_AUTOMATIC_REPAIR_AND_RETURN_TO_USER_FOR_JOINT_REVIEW"
       },
       "runtime_output_policy": {
@@ -110,14 +110,17 @@
       "strategy_review_required_after_terminal_full_semantic_result": true,
       "last_observed_runtime_state": {
         "implementation": "v0.1.7",
-        "wrapper": "v0.2",
-        "phase": "PREFLIGHT",
+        "wrapper": "v0.3",
+        "phase": "SELF_TEST",
+        "preflight_passed": true,
         "network_started": false,
         "smoke_created": false,
         "terminal_result_created": false,
-        "failure_class": "IMPLEMENTATION_FREEZE_REFERENCE_KEY_MISMATCH",
-        "diagnostic_runtime": "docs/research/runtime-inbox/sc001-b15p2-dual-schema-semantic-v0.1.7-prelaunch-diagnostic.json",
-        "diagnostic_canonical": "docs/research/sc001-b15p2-v017-preflight-canonical-ref-mismatch-diagnostic-v0.1.json"
+        "failure_class": "INVALID_SYNTHETIC_SCRIPT_CONTEXT_SERIALIZATION",
+        "selftest_stage": "SCHEMA_B_SCRIPT_STYLE_EXCLUSION",
+        "error": "NEXT_DATA_JSON:JSONDecodeError:Unterminated string starting at: line 1 column 135 (char 134)",
+        "runtime_diagnostic": "docs/research/runtime-inbox/sc001-b15p2-dual-schema-semantic-v0.1.7-prelaunch-diagnostic.json",
+        "canonical_diagnostic": "docs/research/sc001-b15p2-final-recovery-v017-invalid-script-context-fixture-diagnostic-v0.1.json"
       },
       "semantic_live_helper": "scripts/research/run-b15p2-semantic-live-helper-v0.1.sh",
       "semantic_live_helper_sha256": "ce3d20648a6c835295ae3c2e49d1d5f22a9f12860ccaaf5cf363d7fb68317ca1",

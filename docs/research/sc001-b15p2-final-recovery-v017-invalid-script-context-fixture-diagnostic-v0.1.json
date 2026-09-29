@@ -1,0 +1,66 @@
+{
+  "schema": "sc001.b15p2_final_recovery_v017_invalid_script_context_fixture_diagnostic.v0.1",
+  "date": "2026-09-29",
+  "status": "RECOVERY_BUDGET_EXHAUSTED_OFFLINE_SELFTEST_FIXTURE_FAILURE",
+  "runtime_diagnostic": {
+    "path": "docs/research/runtime-inbox/sc001-b15p2-dual-schema-semantic-v0.1.7-prelaunch-diagnostic.json",
+    "sha256": "d4e0c208d1134b9e6d0ce3e451b1063f9b3132f3b7432b7ac0975ddf2ec4b109",
+    "phase": "SELF_TEST",
+    "code": "SELF_TEST_EXIT_NONZERO",
+    "network_started": false
+  },
+  "failure": {
+    "selftest_stage": "SCHEMA_B_SCRIPT_STYLE_EXCLUSION",
+    "error": "NEXT_DATA_JSON:JSONDecodeError:Unterminated string starting at: line 1 column 135 (char 134)",
+    "root_cause_class": "INVALID_SYNTHETIC_SCRIPT_CONTEXT_SERIALIZATION"
+  },
+  "mechanism": {
+    "synthetic_test_action": "Append literal <script>...</script><style>...</style> markup to content_html, JSON-serialize it, then embed that JSON verbatim inside an outer <script id=__NEXT_DATA__ type=application/json> element.",
+    "html_raw_text_rule": "A literal </script> sequence terminates the surrounding HTML script raw-text element regardless of JSON string quoting.",
+    "observed_effect": "ScriptJSONParser receives truncated __NEXT_DATA__ text. json.loads then raises JSONDecodeError before the content_html fragment sanitizer is exercised.",
+    "production_extractor_implication": "This failure does not demonstrate a production dual-schema extraction defect. Real frozen BLT pages and all 18 ART census pages had parseable __NEXT_DATA__ documents. The failure is in the synthetic fixture construction for this specific self-test."
+  },
+  "strategic_process_failure": {
+    "primary": "We used the user-triggered host wrapper as the first dynamic execution of newly modified offline self-tests. Static review cannot prove runtime behavior of synthetic HTML/JSON fixtures.",
+    "secondary": "The self-test coupled three layers in one fixture: outer HTML script parsing, JSON hydration parsing, and inner content_html sanitization. A test intended for the innermost sanitizer failed in the outer serialization layer.",
+    "tertiary": "Earlier shared-worktree canonicalization changes also created reference-key drift. Execution-boundary documents should be single-writer/frozen before any host command is handed to the user."
+  },
+  "recommended_next_architecture": {
+    "automatic_host_retry_allowed": false,
+    "joint_user_review_required": true,
+    "if_user_approves_further_work": [
+      "Create a new version only after offline dynamic validation outside the networked host boundary.",
+      "Use an HTML-script-safe JSON serializer for synthetic __NEXT_DATA__ fixtures, escaping HTML-sensitive characters such as <, >, and & before embedding.",
+      "Test visible_text_fragment script/style exclusion directly as a separate layer test, independent of outer __NEXT_DATA__ serialization.",
+      "Keep an end-to-end SCHEMA_B fixture test, but serialize it with script-context-safe JSON so json.loads reconstructs the intended content_html.",
+      "Run the full self-test dynamically in the offline Research Runner before asking the user to run any VPS command.",
+      "Only after offline PASS, freeze exact bytes and perform a small network smoke before any full 94-event rerun.",
+      "Use one canonical execution-boundary writer and no concurrent edits to the same freeze/contract/state files."
+    ]
+  },
+  "research_evidence_status": {
+    "blt_semantic_resolved_events": 76,
+    "art_schema_census_events": 18,
+    "art_schema_b_body_path": "$.props.pageProps.articleDetail.content_html",
+    "art_schema_b_coverage": "18/18",
+    "semantic_classifier_invalidated": false,
+    "dual_schema_routing_invalidated": false,
+    "frozen_event_set_invalidated": false,
+    "economic_result_observed": false
+  },
+  "firewalls": {
+    "price_accessed": false,
+    "external_reference_price_accessed": false,
+    "index_value_accessed": false,
+    "basis_accessed": false,
+    "returns_accessed": false,
+    "pnl_accessed": false,
+    "trading": false
+  },
+  "recovery_budget": {
+    "max_iterations": 5,
+    "iterations_consumed": 5,
+    "automatic_repair_stopped": true
+  },
+  "next_state": "JOINT_REVIEW_REQUIRED_BEFORE_ANY_FURTHER_EXECUTION"
+}

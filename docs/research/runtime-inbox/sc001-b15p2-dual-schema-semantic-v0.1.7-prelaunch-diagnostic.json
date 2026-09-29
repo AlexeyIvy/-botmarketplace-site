@@ -1,17 +1,17 @@
 {
   "basis_access_authorized": false,
-  "code": "CONTRACT_PREFLIGHT_FAILED",
-  "detail": "PRECHECK_FAILED:IMPL_ROUTE_PATH",
-  "exit_code": 1,
+  "code": "SELF_TEST_EXIT_NONZERO",
+  "detail": "B15P2_ANNOUNCEMENT_BODY_SEMANTIC_AUDIT_V017_SELF_TEST_REVIEW\nstage = SCHEMA_B_SCRIPT_STYLE_EXCLUSION\nerror = RuntimeError: NEXT_DATA_JSON:JSONDecodeError:Unterminated string starting at: line 1 column 135 (char 134)",
+  "exit_code": 2,
   "external_reference_price_access_authorized": false,
   "implementation_freeze_sha256": "4e5707ad33a48234fe8a48f8920e75754e1812b7a30f0a36be1428199ee02c14",
   "implementation_sha256": "f83e34263fe8716c235a76be1c94ee2049c38a4c3fdc8a064f1d99ed327ef4cc",
   "index_value_access_authorized": false,
   "network_started": false,
-  "phase": "PREFLIGHT",
+  "phase": "SELF_TEST",
   "pnl_access_authorized": false,
   "price_access_authorized": false,
-  "published_utc": "2026-09-29T07:10:05.902019+00:00",
+  "published_utc": "2026-09-29T07:20:29.601048+00:00",
   "returns_access_authorized": false,
-  "schema": "sc001.b15p2_dual_schema_prelaunch_diagnostic.v0.1"
+  "schema": "sc001.b15p2_dual_schema_prelaunch_diagnostic.v0.2"
 }
