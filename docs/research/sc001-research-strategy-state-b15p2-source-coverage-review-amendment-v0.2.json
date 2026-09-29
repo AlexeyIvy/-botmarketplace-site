@@ -1,0 +1,31 @@
+{
+  "schema": "sc001.research_strategy_state.b15p2_source_coverage_review_amendment.v0.2",
+  "date": "2026-09-29",
+  "status": "CANONICAL_STATE_SYNC_PENDING",
+  "scope": "SCALPING_RESEARCH_SC001_B15P2",
+  "applies_to": "docs/research/sc001-research-strategy-state-v0.1.json",
+  "base_state_sha256": "46496075d7445256907c1a4de09b2f74689d26c36680b66ac1221f97ba53caa9",
+  "supersedes_amendment": "docs/research/sc001-research-strategy-state-b15p2-p0-defer-amendment-v0.1.json",
+  "state": "P0_SOURCE_COVERAGE_REVIEW_COMPLETE",
+  "p0_verdict": "DEFER_SOURCE_COVERAGE",
+  "source_coverage_review": {
+    "path": "docs/research/sc001-b15p2-p0-official-source-coverage-review-v0.1.md",
+    "sha256": "8e07fc018e908341d0ca37c5ba6a7bc60491d8ad972187deb798f79594ddef22",
+    "result": "OFFICIAL_SOURCE_PRESENT_BUT_EXACT_1M_ACTIVITY_COVERAGE_INSUFFICIENT"
+  },
+  "roadmap": {
+    "path": "docs/research/sc001-current-roadmap-and-stop-rules-v5.206.md",
+    "sha256": "30d53235fe044de6569dd1458605e8d8e072757b37ddbe0a6cb0e84396c94996"
+  },
+  "contamination_registry": {
+    "path": "docs/research/sc001-contamination-registry-v0.35.json",
+    "sha256": "62c3a5184432f5ded7cf274398a2a9e8d025ebce0fc21421304a1872e6cd24c3"
+  },
+  "frozen_p0_result": {
+    "path": "docs/research/sc001-b15p2-p0-basis-convergence-result-v0.1.json",
+    "sha256": "e2554fcf95992e64d58ffcdac85faf68edff45f5320a596a5249256176bd13a3"
+  },
+  "same_evidence_rescue_authorized": false,
+  "new_outcome_bearing_run_authorized": false,
+  "next_allowed_action": "DESIGN_FRESH_B15P2_SOURCE_ROBUST_SUCCESSOR_PREREGISTRATION"
+}
