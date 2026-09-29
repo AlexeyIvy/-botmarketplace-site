@@ -1,0 +1,43 @@
+{
+  "schema": "sc001.b15p2_p0_offline_selftest_failure_diagnostic.v0.1",
+  "date": "2026-09-29",
+  "status": "OFFLINE_SELFTEST_TECHNICAL_FAILURE_LOCALIZED_BEFORE_PRICE_ACCESS",
+  "job_id": "job_20260929T135830Z_c00cff26",
+  "failed_candidate": {
+    "path": "research/sc001/sc001_b15p2_p0_basis_convergence_v0_1.py",
+    "sha256": "174ec018ded618385da41d062392c792ce3f6f76927b1f9274983952a4333307",
+    "repo_head": "32183daff66522a61f98c09fb13d984ad0bfff8e"
+  },
+  "failure": {
+    "phase": "OFFLINE_SELF_TEST",
+    "error": "KeyError: a_minus55_bps",
+    "root_cause_class": "CLUSTER_SUMMARY_KEY_NAMESPACE_MISMATCH",
+    "description": "aggregate() correctly created cluster keys a_minus55_median_bps/a_minus30_median_bps/a_minus5_median_bps but summary extraction referenced obsolete event-level names."
+  },
+  "adjacent_review": {
+    "c_control_key_consistent": true,
+    "c_event_key_consistent": true,
+    "d_key_consistent": true,
+    "gate_logic_changed": false,
+    "network_logic_changed": false,
+    "source_scope_changed": false
+  },
+  "correction": {
+    "three_summary_keys_corrected_to_cluster_median_namespace": true,
+    "regression_summary_assertions_added": true,
+    "frozen_spec_changed": false,
+    "registered_horizons_changed": false,
+    "thresholds_changed": false
+  },
+  "firewalls": {
+    "affected_contract_price_accessed": false,
+    "official_index_value_accessed": false,
+    "basis_calculated": false,
+    "returns_calculated": false,
+    "pnl_calculated": false,
+    "l1_l2_accessed": false,
+    "trading": false
+  },
+  "corrected_candidate_sha256": "dc52b2fb4914ea29bc6bc85a9cfc8aa27f327d8dd160e6c4aa9feeab5e328945",
+  "next_state": "REPEAT_OFFLINE_SELFTEST_ON_CORRECTED_CANDIDATE"
+}

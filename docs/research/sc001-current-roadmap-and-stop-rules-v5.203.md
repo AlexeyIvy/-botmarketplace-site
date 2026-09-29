@@ -45,7 +45,7 @@ Candidate:
 
 SHA256:
 
-`174ec018ded618385da41d062392c792ce3f6f76927b1f9274983952a4333307`
+`dc52b2fb4914ea29bc6bc85a9cfc8aa27f327d8dd160e6c4aa9feeab5e328945`
 
 The candidate contains only:
 
@@ -89,3 +89,25 @@ Still CLOSED:
 ## Next state
 
 `OFFLINE_VALIDATE_P0_IMPLEMENTATION_BEFORE_PRICE_ACCESS`
+
+
+## Offline iteration 1 diagnostic
+
+First real Test Executor self-test:
+
+- job: `job_20260929T135830Z_c00cff26`;
+- profile: `offline`;
+- outcome data accessed: NO;
+- failure: cluster summary key namespace mismatch;
+- diagnostic:
+  `docs/research/sc001-b15p2-p0-offline-selftest-failure-diagnostic-v0.1.json`.
+
+Corrected candidate SHA256:
+
+`dc52b2fb4914ea29bc6bc85a9cfc8aa27f327d8dd160e6c4aa9feeab5e328945`
+
+No frozen hypothesis, horizon, threshold, source, or firewall changed.
+
+Next:
+
+`REPEAT_OFFLINE_SELFTEST_CORRECTED_CANDIDATE`

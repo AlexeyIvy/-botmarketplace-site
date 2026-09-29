@@ -89,7 +89,12 @@
     },
     "implementation_candidate": {
       "path": "research/sc001/sc001_b15p2_p0_basis_convergence_v0_1.py",
-      "sha256": "174ec018ded618385da41d062392c792ce3f6f76927b1f9274983952a4333307"
+      "sha256": "dc52b2fb4914ea29bc6bc85a9cfc8aa27f327d8dd160e6c4aa9feeab5e328945"
+    },
+    "first_offline_selftest": {
+      "job_id": "job_20260929T135830Z_c00cff26",
+      "status": "TECHNICAL_FAIL_NO_OUTCOME_ACCESS",
+      "diagnostic": "docs/research/sc001-b15p2-p0-offline-selftest-failure-diagnostic-v0.1.json"
     }
   }
 }

@@ -46,7 +46,7 @@
       "engineering_stabilization_rule": "THREE_LAYER_PREFREEZE_CHECK_PLUS_EXACT_STAGE",
       "hydration_stop_rule": "STOP_AFTER_V04_IF_NO_STABLE_COMMON_HIGH_CONFIDENCE_BODY_IDENTITY",
       "strategy_review_required_now": false,
-      "next_allowed_action": "OFFLINE_DYNAMIC_VALIDATE_P0_IMPLEMENTATION_THEN_FREEZE_BEFORE_ANY_PRICE_ACCESS",
+      "next_allowed_action": "REPEAT_OFFLINE_DYNAMIC_SELFTEST_ON_CORRECTED_P0_CANDIDATE",
       "next_data_probe_execution_started": false,
       "execution_approval": "docs/research/sc001-b15p2-next-data-structure-probe-v04-execution-approval-v0.1.json",
       "delegated_engineering_iteration_budget": {
@@ -181,7 +181,8 @@
       "p0_execution_approval": "docs/research/sc001-b15p2-p0-price-index-basis-execution-approval-v0.1.json",
       "p0_execution_approval_sha256": "27a4f094767f19a9c992e3b777ceea9b2b1eb5cf12d9b5e6a3230f81e007b7fc",
       "p0_implementation_candidate": "research/sc001/sc001_b15p2_p0_basis_convergence_v0_1.py",
-      "p0_implementation_candidate_sha256": "174ec018ded618385da41d062392c792ce3f6f76927b1f9274983952a4333307"
+      "p0_implementation_candidate_sha256": "dc52b2fb4914ea29bc6bc85a9cfc8aa27f327d8dd160e6c4aa9feeab5e328945",
+      "last_p0_engineering_diagnostic": "docs/research/sc001-b15p2-p0-offline-selftest-failure-diagnostic-v0.1.json"
     }
   },
   "deferred_branches": {

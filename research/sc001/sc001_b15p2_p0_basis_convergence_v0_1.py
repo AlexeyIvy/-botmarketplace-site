@@ -416,9 +416,9 @@ def aggregate(
         "positive_month_median_d_count": positive_months,
         "cluster_median_c_event_bps": median_c_event,
         "bootstrap_cluster_median_d_90pct": bootstrap,
-        "a_minus55_summary_bps": summarize_numeric([r["a_minus55_bps"] for r in cluster_rows]),
-        "a_minus30_summary_bps": summarize_numeric([r["a_minus30_bps"] for r in cluster_rows]),
-        "a_minus5_summary_bps": summarize_numeric([r["a_minus5_bps"] for r in cluster_rows]),
+        "a_minus55_summary_bps": summarize_numeric([r["a_minus55_median_bps"] for r in cluster_rows]),
+        "a_minus30_summary_bps": summarize_numeric([r["a_minus30_median_bps"] for r in cluster_rows]),
+        "a_minus5_summary_bps": summarize_numeric([r["a_minus5_median_bps"] for r in cluster_rows]),
         "c_control_summary_bps": summarize_numeric([r["c_control_median_bps"] for r in cluster_rows]),
         "c_event_summary_bps": summarize_numeric(c_event_cluster),
         "d_summary_bps": summarize_numeric(d_cluster),
@@ -663,6 +663,9 @@ def selftest() -> int:
     assert a["verdict"] == "PASS_TO_P1_EXECUTION_FEASIBILITY"
     assert a["cluster_median_c_event_bps"] == 33.0
     assert a["cluster_median_d_bps"] == 28.0
+    assert a["a_minus55_summary_bps"]["median"] == 40.0
+    assert a["a_minus30_summary_bps"]["median"] == 35.0
+    assert a["a_minus5_summary_bps"]["median"] == 2.0
     assert a["bootstrap_cluster_median_d_90pct"]["p05"] == 28.0
 
     low = [dict(x, c_event_bps=8.0, d_bps=3.0) for x in fixture_rows]
