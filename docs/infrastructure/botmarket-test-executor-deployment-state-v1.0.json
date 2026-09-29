@@ -1,8 +1,8 @@
 {
   "schema": "botmarket.test_executor_deployment_state.v1.0",
   "date": "2026-09-29",
-  "status": "APP_CONNECTED_FIRST_MCP_RUN_DIAGNOSTIC_FIX_READY_REDEPLOY_PENDING",
-  "git_head": "ebb727376e8423cf528817661fbc4ded116a6d8b",
+  "status": "E2E_PASS_OPERATIONAL",
+  "git_head": "84b6a6ffa2b238c1f73c0da5502c624ed4c5cb13",
   "installation_freeze": {
     "path": "docs/infrastructure/botmarket-test-executor-installation-freeze-v1.0.3.json",
     "sha256": "a8a3a98982dcc97f2e722d3e698d22505c1407a5af0d28005c80e183946ddab8"
@@ -12,6 +12,7 @@
     "github_write": "DENIED_AS_REQUIRED",
     "arbitrary_root_sudo": "DENIED_AS_REQUIRED",
     "server_python_compile": "PASS",
+    "mcp_service_filesystem_boundary_self_test": "PASS",
     "mcp_service_restricted_sudo_bridge_self_test": "PASS",
     "isolated_offline_job_self_test": "PASS",
     "public_research_network_sandbox_self_test": "PASS",
@@ -32,7 +33,49 @@
     "research_runner_modified": false,
     "github_control_modified": false
   },
-  "next_state": "REDEPLOY_MAIN_EXECUTOR_V1_0_3_THEN_REPEAT_MCP_E2E_TEST",
+  "runtime_e2e": {
+    "status": "PASS",
+    "active_runtime_head": "84b6a6ffa2b238c1f73c0da5502c624ed4c5cb13",
+    "get_test_executor_info": {
+      "status": "PASS",
+      "filesystem_boundary_ok": true,
+      "privilege_bridge_ok": true,
+      "repo_write": false,
+      "arbitrary_shell_tool": false,
+      "trading_credentials_available_to_jobs": false
+    },
+    "refresh_repo": {
+      "status": "PASS",
+      "before": "84b6a6ffa2b238c1f73c0da5502c624ed4c5cb13",
+      "after": "84b6a6ffa2b238c1f73c0da5502c624ed4c5cb13",
+      "origin": "84b6a6ffa2b238c1f73c0da5502c624ed4c5cb13",
+      "worktree_clean": true
+    },
+    "harmless_offline_job": {
+      "status": "PASS",
+      "job_id": "job_20260929T102633Z_02510730",
+      "repo_head": "84b6a6ffa2b238c1f73c0da5502c624ed4c5cb13",
+      "entrypoint": "research/r001/test_option_selector.py",
+      "entrypoint_sha256": "8809dfd659035bb45536612f5edd1c6ab832a27d548e3968f79ef059ac068ac0",
+      "network_profile": "offline",
+      "timeout_seconds": 60,
+      "snapshot_file_count": 2524,
+      "snapshot_bytes": 19473976,
+      "exit_code": 0,
+      "timed_out": false,
+      "result_error": null,
+      "log_sha256": "0186ccafb49c0ab3dcca7a5619fcbb817c86a929d3253c3737ecddf558af9a00",
+      "log_text": "option_selector tests: OK"
+    }
+  },
+  "redeploy_observation": {
+    "status": "FOLLOWUP_ENGINEERING_ITEM",
+    "finding": "Installer v1.0.3 writes the corrected service code but systemctl enable --now does not restart an already-running service, so an explicit service restart was required before the connected MCP endpoint loaded the new runtime.",
+    "security_impact_observed": false,
+    "research_execution_impact_observed": false,
+    "recommended_followup": "Programmer-expert review and separately validated installer redeploy/restart semantics before changing the installer."
+  },
+  "next_state": "RETURN_TO_B15P2_JOINT_REVIEW_AND_PROPOSE_NEW_ENGINEERING_BUDGET",
   "tunnel": {
     "id": "tunnel_6abb7a5d33908191a1a58705afd5176a",
     "name": "BotMarketplace Test Executor",
@@ -49,7 +92,9 @@
     "test_executor_tools_visible": true,
     "get_test_executor_info": "PASS",
     "refresh_repo": "PASS",
-    "run_repo_test": "PRE_MANIFEST_FAILURE_LOCALIZED"
+    "run_repo_test": "PASS",
+    "get_job_status": "PASS",
+    "read_job_log": "PASS"
   },
   "first_mcp_run_diagnostic": {
     "path": "docs/infrastructure/botmarket-test-executor-first-mcp-run-diagnostic-v0.1.json",
