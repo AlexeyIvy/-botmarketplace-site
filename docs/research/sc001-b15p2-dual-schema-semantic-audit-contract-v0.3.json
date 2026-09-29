@@ -1,0 +1,87 @@
+{
+  "schema": "sc001.b15p2_dual_schema_semantic_audit_contract.v0.3",
+  "date": "2026-09-29",
+  "status": "AUTHORIZED_FINAL_RECOVERY_ITERATION_5_PREPARED_AWAITING_HOST_EXECUTION",
+  "authorization_basis": {
+    "type": "USER_STANDING_DELEGATION_CURRENT_B15P2_ENGINEERING_CONTOUR",
+    "max_recovery_iterations": 5,
+    "iterations_consumed": 4,
+    "prepared_iteration": 5,
+    "scope_expansion": false,
+    "new_data_source": false,
+    "price_or_outcome_access": false,
+    "stop_if_this_iteration_fails": true
+  },
+  "previous_failure": {
+    "path": "docs/research/sc001-b15p2-v017-preflight-canonical-ref-mismatch-diagnostic-v0.1.json",
+    "sha256": "e182f687479c7a508bd00f484f2a710512efa2b22d05ee39cf7feadd100a1646",
+    "class": "IMPLEMENTATION_FREEZE_REFERENCE_KEY_MISMATCH",
+    "network_started": false
+  },
+  "implementation": {
+    "path": "research/sc001/sc001_b15p2_announcement_body_semantic_audit_v0_1_7.py",
+    "sha256": "f83e34263fe8716c235a76be1c94ee2049c38a4c3fdc8a064f1d99ed327ef4cc",
+    "changed_from_iteration_4": false
+  },
+  "wrapper": {
+    "path": "scripts/research/run-b15p2-dual-schema-semantic-audit-v0.3.sh",
+    "sha256": "135b4965cf1ca28d112cae2cc4e486236354f0e89da07a98952a78fe1edfc336",
+    "run_mode": "--run",
+    "preflight_mode": "--preflight",
+    "status_mode": "--status",
+    "execution": "SYNCHRONOUS_HOST_WRAPPER"
+  },
+  "implementation_freeze": {
+    "path": "docs/research/sc001-b15p2-announcement-body-semantic-audit-implementation-freeze-v0.1.7.json",
+    "sha256": "4e5707ad33a48234fe8a48f8920e75754e1812b7a30f0a36be1428199ee02c14"
+  },
+  "routing_freeze": {
+    "path": "docs/research/sc001-b15p2-hydration-dual-schema-routing-freeze-v0.1.json",
+    "sha256": "5a58a4289aa73b6a510a8cdaade586c56433da20b35472b526e43174789c929f",
+    "schema_a_count": 76,
+    "schema_b_count": 18
+  },
+  "schema_b_census": {
+    "path": "docs/research/sc001-b15p2-art-generation-schema-census-result-v0.1.json",
+    "sha256": "44c7494b7ab125a83ce895ea93646af3ffae34d7a8c188e2e6415487d1bc3712",
+    "coverage": "18/18"
+  },
+  "preflight_reference_correction": {
+    "implementation_freeze_route_key": "canonical_routing",
+    "implementation_freeze_census_key": "canonical_art_census",
+    "references_compared_against_wrapper_variables": true,
+    "duplicated_hardcoded_reference_paths_removed": true
+  },
+  "pre_run_review": {
+    "full_programmer_expert_review_pass": true,
+    "additional_static_issues_found": 0,
+    "stale_reference_keys_absent": true,
+    "seven_file_read_only_stage": true,
+    "corrected_selftest_present": true,
+    "preflight_diagnostic_relay_present": true,
+    "selftest_diagnostic_relay_present": true,
+    "dual_schema_smoke_validator_present": true,
+    "terminal_94_event_validator_present": true,
+    "result_smoke_log_runtime_relay_present": true,
+    "systemd_used": false,
+    "generated_helper_used": false
+  },
+  "runtime_output": {
+    "prelaunch_diagnostic_target": "docs/research/runtime-inbox/sc001-b15p2-dual-schema-semantic-v0.1.7-prelaunch-diagnostic.json",
+    "terminal_result_target": "docs/research/runtime-inbox/sc001-b15p2-semantic-audit-v0.1.7-latest.json",
+    "smoke_target": "docs/research/runtime-inbox/sc001-b15p2-dual-schema-smoke-v0.1.7-latest.json",
+    "log_target": "docs/research/runtime-inbox/sc001-b15p2-semantic-audit-v0.1.7-latest.log"
+  },
+  "forbidden": [
+    "PRICE_ACCESS",
+    "EXTERNAL_REFERENCE_PRICE_ACCESS",
+    "INDEX_VALUE_ACCESS",
+    "BASIS_OR_SPREAD_ACCESS",
+    "RETURN_ACCESS",
+    "PNL_ACCESS",
+    "EVENT_OUTCOME_RANKING",
+    "OUTCOME_DRIVEN_ROUTING",
+    "PAGE_SPECIFIC_FALLBACK",
+    "TRADING"
+  ]
+}

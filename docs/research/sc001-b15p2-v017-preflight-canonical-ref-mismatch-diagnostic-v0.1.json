@@ -1,0 +1,69 @@
+{
+  "schema": "sc001.b15p2_v017_preflight_canonical_ref_mismatch_diagnostic.v0.1",
+  "date": "2026-09-29",
+  "status": "PREFLIGHT_REFERENCE_SCHEMA_MISMATCH_NETWORK_NOT_STARTED",
+  "runtime_diagnostic": {
+    "path": "docs/research/runtime-inbox/sc001-b15p2-dual-schema-semantic-v0.1.7-prelaunch-diagnostic.json",
+    "sha256": "50bb1540f8343c75923eae21b2ec90b698157fffddcfe63e5c5386eba346f0e8"
+  },
+  "observed": {
+    "phase": "PREFLIGHT",
+    "code": "CONTRACT_PREFLIGHT_FAILED",
+    "detail": "PRECHECK_FAILED:IMPL_ROUTE_PATH",
+    "exit_code": 1,
+    "network_started": false
+  },
+  "root_cause": {
+    "class": "IMPLEMENTATION_FREEZE_REFERENCE_KEY_MISMATCH",
+    "implementation_freeze_keys": [
+      "canonical_routing",
+      "canonical_art_census"
+    ],
+    "wrapper_v0_2_stale_keys": [
+      "dual_schema_routing",
+      "schema_b_census"
+    ],
+    "description": "The implementation freeze v0.1.7 was normalized to canonical_routing/canonical_art_census, while wrapper v0.2 retained the pre-normalization key names. All referenced paths and SHA256 values were otherwise consistent."
+  },
+  "full_programmer_expert_review": {
+    "performed_before_next_iteration": true,
+    "checked": [
+      "all exact source SHA bindings",
+      "implementation freeze canonical routing/census references",
+      "dual-schema route counts and integrity gates",
+      "corrected offline self-test expectation",
+      "read-only seven-file staging",
+      "preflight and self-test diagnostic relay",
+      "four-page dual-schema smoke validator",
+      "full 94-event terminal validator",
+      "runtime-inbox result/smoke/log relay",
+      "absence of systemd/generated-helper complexity",
+      "absence of market endpoints or outcome access"
+    ],
+    "additional_static_issues_found": 0
+  },
+  "correction": {
+    "wrapper_v0_3_uses": [
+      "canonical_routing",
+      "canonical_art_census"
+    ],
+    "reference_validation": "Compare implementation-freeze references against the wrapper's own canonical path/SHA variables passed into preflight, avoiding duplicated hardcoded references.",
+    "implementation_changed": false,
+    "semantic_classifier_changed": false,
+    "extractor_changed": false,
+    "routing_changed": false,
+    "frozen_event_set_changed": false
+  },
+  "research_consequence": "NONE",
+  "price_accessed": false,
+  "external_reference_price_accessed": false,
+  "index_value_accessed": false,
+  "basis_accessed": false,
+  "returns_accessed": false,
+  "pnl_accessed": false,
+  "recovery_iteration": {
+    "iteration_number": 4,
+    "consumed": true
+  },
+  "next_state": "PREPARE_FINAL_RECOVERY_ITERATION_5_WRAPPER_V03"
+}

@@ -8,7 +8,7 @@
   "baseline_git_head": "94bf690f5c273c98b4a5e58d4bb2fe6ea7f9cf91",
   "last_strategy_review_head": "002f8bf9258058f8e14775472d315a69a53da031",
   "binding_refs": {
-    "roadmap": "docs/research/sc001-current-roadmap-and-stop-rules-v5.196.md",
+    "roadmap": "docs/research/sc001-current-roadmap-and-stop-rules-v5.197.md",
     "governance": "docs/research/sc001-midcourse-research-strategy-audit-and-governance-amendment-v0.2.md",
     "reusable_policy": "docs/research/sc001-terminal-experiment-reusable-block-extraction-policy-v0.1.md",
     "reusable_registry": "docs/research/sc001-reusable-market-building-blocks-registry-v0.9.md",
@@ -25,7 +25,7 @@
       "mutation_allowed": false
     },
     "B15-P2": {
-      "state": "DUAL_SCHEMA_SEMANTIC_ITERATION_4_PREPARED_AWAITING_HOST_EXECUTION",
+      "state": "DUAL_SCHEMA_SEMANTIC_FINAL_RECOVERY_ITERATION_5_PREPARED_AWAITING_HOST_EXECUTION",
       "price_outcome_authorized": false,
       "frozen_event_count": 94,
       "event_set_sha256": "1063695ec003a0d6789270659822f50577e6a0f07059d88ac03a5be4288ed1a2",
@@ -46,7 +46,7 @@
       "engineering_stabilization_rule": "THREE_LAYER_PREFREEZE_CHECK_PLUS_EXACT_STAGE",
       "hydration_stop_rule": "STOP_AFTER_V04_IF_NO_STABLE_COMMON_HIGH_CONFIDENCE_BODY_IDENTITY",
       "strategy_review_required_now": true,
-      "next_allowed_action": "RUN_RECOVERY_ITERATION_4_DUAL_SCHEMA_FULL_94_SEMANTIC_AUDIT_V017",
+      "next_allowed_action": "RUN_FINAL_RECOVERY_ITERATION_5_DUAL_SCHEMA_FULL_94_SEMANTIC_AUDIT_V017",
       "next_data_probe_execution_started": false,
       "execution_approval": "docs/research/sc001-b15p2-next-data-structure-probe-v04-execution-approval-v0.1.json",
       "delegated_engineering_iteration_budget": {
@@ -70,11 +70,12 @@
           "NEW_SEALED_RUNNER_BUNDLE_REQUIRING_EXACT_APPROVAL"
         ],
         "stop_after_failed_iterations": 5,
-        "iterations_consumed": 3,
+        "iterations_consumed": 4,
         "pre_iteration_requirement": "FULL_PROGRAMMER_EXPERT_REVIEW_BEFORE_EACH_EXECUTED_ITERATION",
         "iteration_accounting": "COUNT_ONLY_MATERIALLY_CHANGED_REEXECUTION_AFTER_TECHNICAL_FAILURE",
-        "prepared_iteration": 4,
-        "prepared_iteration_scope": "CORRECTED_OFFLINE_SELFTEST_THEN_DUAL_SCHEMA_FULL_94_SAME_FROZEN_SCOPE"
+        "prepared_iteration": 5,
+        "prepared_iteration_scope": "FINAL_CANONICAL_REFERENCE_PREFLIGHT_FIX_THEN_DUAL_SCHEMA_FULL_94_SAME_FROZEN_SCOPE",
+        "after_iteration_5_failure": "STOP_AUTOMATIC_REPAIR_AND_RETURN_TO_USER_FOR_JOINT_REVIEW"
       },
       "runtime_output_policy": {
         "binding_policy": "docs/research/sc001-engineering-iteration-and-runtime-output-policy-v0.1.md",
@@ -93,10 +94,10 @@
       },
       "semantic_audit_implementation": "research/sc001/sc001_b15p2_announcement_body_semantic_audit_v0_1_7.py",
       "semantic_audit_implementation_sha256": "f83e34263fe8716c235a76be1c94ee2049c38a4c3fdc8a064f1d99ed327ef4cc",
-      "semantic_audit_wrapper": "scripts/research/run-b15p2-dual-schema-semantic-audit-v0.2.sh",
-      "semantic_audit_wrapper_sha256": "bce2bb8733a3042df52c1b3a7a062610a4201dad9a8eec07c5371d4df70bcae9",
-      "semantic_audit_contract": "docs/research/sc001-b15p2-dual-schema-semantic-audit-contract-v0.2.json",
-      "semantic_audit_contract_sha256": "0447e1d0e076eee40969b93ff545fc44f425d69d85ac4560b8ea54ef15d94fe0",
+      "semantic_audit_wrapper": "scripts/research/run-b15p2-dual-schema-semantic-audit-v0.3.sh",
+      "semantic_audit_wrapper_sha256": "135b4965cf1ca28d112cae2cc4e486236354f0e89da07a98952a78fe1edfc336",
+      "semantic_audit_contract": "docs/research/sc001-b15p2-dual-schema-semantic-audit-contract-v0.3.json",
+      "semantic_audit_contract_sha256": "60adcb2d08e5ac6e26f5a0c22ed179a3b80ed41cbe700dc1d913afd97e10a150",
       "hydration_selection_freeze": "docs/research/sc001-b15p2-hydration-body-selection-freeze-v0.1.json",
       "hydration_selection_sha256": "ba2ccfa336a70e0592a9e4ce1742161e518060ceb5da090b37c666bc34c2c033",
       "hydration_mapper_result": "docs/research/sc001-b15p2-generic-hydration-mapper-v04-result-v0.1.json",
@@ -108,16 +109,15 @@
       "execution_started": false,
       "strategy_review_required_after_terminal_full_semantic_result": true,
       "last_observed_runtime_state": {
-        "implementation": "v0.1.6",
-        "wrapper": "v0.1",
+        "implementation": "v0.1.7",
+        "wrapper": "v0.2",
+        "phase": "PREFLIGHT",
         "network_started": false,
         "smoke_created": false,
         "terminal_result_created": false,
-        "failure_class": "OVERLY_SPECIFIC_SELFTEST_EXPECTATION",
-        "selftest_stage": "NO_CROSS_SCHEMA_FALLBACK",
-        "actual_fail_closed_error": "SCHEMA_B_RAW_HTML_TOO_SHORT",
-        "incorrect_expected_error": "SCHEMA_B_CONTENT_HTML_PATH",
-        "diagnostic": "docs/research/sc001-b15p2-dual-schema-v016-selftest-failure-diagnostic-v0.1.json"
+        "failure_class": "IMPLEMENTATION_FREEZE_REFERENCE_KEY_MISMATCH",
+        "diagnostic_runtime": "docs/research/runtime-inbox/sc001-b15p2-dual-schema-semantic-v0.1.7-prelaunch-diagnostic.json",
+        "diagnostic_canonical": "docs/research/sc001-b15p2-v017-preflight-canonical-ref-mismatch-diagnostic-v0.1.json"
       },
       "semantic_live_helper": "scripts/research/run-b15p2-semantic-live-helper-v0.1.sh",
       "semantic_live_helper_sha256": "ce3d20648a6c835295ae3c2e49d1d5f22a9f12860ccaaf5cf363d7fb68317ca1",
