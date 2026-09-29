@@ -1,0 +1,74 @@
+{
+  "schema": "sc001.b15p2_p0s_2025_cross_type_index_audit_implementation_prefreeze.v0.1",
+  "date": "2026-09-29",
+  "status": "PREFROZEN_AWAITING_TEST_EXECUTOR_OFFLINE_SELFTEST",
+  "scope": "SCALPING_RESEARCH_SC001_B15P2_P0S_SOURCE_ONLY",
+  "protocol": {
+    "path": "docs/research/sc001-b15p2-p0s-2025-unmatched-announcement-index-cross-type-audit-protocol-v0.1.md",
+    "sha256": "0bb6b61988041a54873dace0c68ce253e3dc246e7b4e197e5c8def61a0297e1d"
+  },
+  "canonical_input": {
+    "path": "docs/research/sc001-b15p2-p0s-2025-holdout-source-census-result-v0.1.json",
+    "sha256": "706cc5696e863ad7cd6e81efabe1629b2f9013e2ad9cbeacad46345f17ee1c36",
+    "unmatched_count": 34,
+    "unmatched_list_sha256": "12478369be90bc7f20cb93bd952dffb7068c165f5f33ba4a91e7f00bf73a2847"
+  },
+  "implementation": {
+    "path": "research/sc001/sc001_b15p2_p0s_2025_cross_type_index_audit_v0_1.py",
+    "sha256": "2ab1203788747e857d1fb89a3e849e0d8eb47b6cdd000e13875cf683811fb2a2"
+  },
+  "dependency": {
+    "path": "research/sc001/sc001_b15p2_bybit_delisting_source_census_v0_1_1.py",
+    "sha256": "7da36641ed71e0195320f0cc7cc389d629d4f843a646f64c41c1739fc0cd6b35",
+    "role": "reuse hardened official Bybit JSON transport only; 2026 date constants and original census normalizer are not reused for the 2025 target reconstruction"
+  },
+  "source_scope": {
+    "endpoints": [
+      "/v5/announcements/index?locale=en-US",
+      "/v5/market/instruments-info?category=linear&status=Closed"
+    ],
+    "announcement_type_filter": null,
+    "official_type_schema": [
+      "new_crypto",
+      "latest_bybit_news",
+      "delistings",
+      "latest_activities",
+      "product_updates",
+      "maintenance_updates",
+      "new_fiat_listings",
+      "other"
+    ],
+    "article_body_hydration": false
+  },
+  "decision_arithmetic": {
+    "original_closed": 154,
+    "original_admitted": 120,
+    "unchanged_coverage_gate": 0.8,
+    "required_admitted": 124,
+    "minimum_distinct_recoveries": 4
+  },
+  "static_review": {
+    "exact_input_sha_check": true,
+    "exact_unmatched_identity_check": true,
+    "dependency_sha_check": true,
+    "allowed_network_endpoint_count": 2,
+    "forbidden_market_endpoint_literal_hits": 0,
+    "dateTimestamp_publish_fallback": false,
+    "source_gate_threshold_changed": false
+  },
+  "firewalls": {
+    "affected_contract_price": false,
+    "index_value": false,
+    "basis": false,
+    "returns": false,
+    "pnl": false,
+    "l1_l2": false,
+    "individual_trades": false,
+    "funding": false,
+    "mark_premium_spot": false,
+    "external_venue": false,
+    "trading": false
+  },
+  "execution_authorized": false,
+  "next_state": "WAIT_FOR_TEST_EXECUTOR_DAILY_SLOT_THEN_RUN_ONE_OFFLINE_SELFTEST"
+}

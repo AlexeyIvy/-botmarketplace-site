@@ -1,0 +1,47 @@
+{
+  "schema": "sc001.research_strategy_state.b15p2_p0s_cross_type_audit_prefreeze_amendment.v0.4",
+  "date": "2026-09-29",
+  "status": "CANONICAL_STATE_SYNC_PENDING",
+  "scope": "SCALPING_RESEARCH_SC001_B15P2",
+  "applies_to": "docs/research/sc001-research-strategy-state-v0.1.json",
+  "base_state_sha256": "46496075d7445256907c1a4de09b2f74689d26c36680b66ac1221f97ba53caa9",
+  "supersedes_amendment": "docs/research/sc001-research-strategy-state-b15p2-p0s-2025-source-census-review-amendment-v0.3.json",
+  "state": "P0S_CROSS_TYPE_INDEX_AUDIT_PREFROZEN_WAIT_EXECUTOR_SLOT",
+  "original_p0_state": "DEFER_SOURCE_COVERAGE",
+  "source_successor_state": "P0S_2025_HOLDOUT_SOURCE_CENSUS_REVIEW",
+  "audit": {
+    "protocol": {
+      "path": "docs/research/sc001-b15p2-p0s-2025-unmatched-announcement-index-cross-type-audit-protocol-v0.1.md",
+      "sha256": "0bb6b61988041a54873dace0c68ce253e3dc246e7b4e197e5c8def61a0297e1d"
+    },
+    "implementation": {
+      "path": "research/sc001/sc001_b15p2_p0s_2025_cross_type_index_audit_v0_1.py",
+      "sha256": "2ab1203788747e857d1fb89a3e849e0d8eb47b6cdd000e13875cf683811fb2a2"
+    },
+    "prefreeze": {
+      "path": "docs/research/sc001-b15p2-p0s-2025-cross-type-index-audit-implementation-prefreeze-v0.1.json",
+      "sha256": "c32c3951483aa2320e9a5fca5f833eabe8668e8fb3720f77177bd3a066de683d"
+    },
+    "design_review": {
+      "path": "docs/research/sc001-b15p2-p0s-2025-cross-type-index-audit-design-review-v0.1.md",
+      "sha256": "c81f8a3b4ecef069ee4b7d73645bf17988000e72fbe7dde5bdaf95fe0c9b102a"
+    },
+    "execution_authorized": false
+  },
+  "roadmap": {
+    "path": "docs/research/sc001-current-roadmap-and-stop-rules-v5.209.md",
+    "sha256": "5f733136bd37d491163cce33be471b7bdfe9992f93de304efd5b3ac75efe7902"
+  },
+  "contamination_registry": {
+    "path": "docs/research/sc001-contamination-registry-v0.37.json",
+    "sha256": "68d03aeb4127fbcc0e86525aaf082086bb6289390568de91f5adb533f4dbf618"
+  },
+  "test_executor_rate_state": {
+    "rolling_hour": 2,
+    "utc_day": 10,
+    "max_runs_per_rolling_hour": 3,
+    "max_runs_per_utc_day": 10,
+    "bypass_authorized": false
+  },
+  "next_allowed_action": "WAIT_FOR_TEST_EXECUTOR_DAILY_SLOT_THEN_OFFLINE_VALIDATE_CROSS_TYPE_INDEX_AUDIT_V01"
+}
