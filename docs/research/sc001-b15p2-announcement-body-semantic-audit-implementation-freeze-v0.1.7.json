@@ -1,0 +1,53 @@
+{
+  "schema": "sc001.b15p2_announcement_body_semantic_audit_implementation_freeze.v0.1.7",
+  "date": "2026-09-29",
+  "status": "FROZEN_SELFTEST_CORRECTION_BEFORE_RECOVERY_ITERATION_4",
+  "supersedes": "docs/research/sc001-b15p2-announcement-body-semantic-audit-implementation-freeze-v0.1.6.json",
+  "entrypoint": {
+    "path": "research/sc001/sc001_b15p2_announcement_body_semantic_audit_v0_1_7.py",
+    "sha256": "f83e34263fe8716c235a76be1c94ee2049c38a4c3fdc8a064f1d99ed327ef4cc"
+  },
+  "protocol": {
+    "path": "docs/research/sc001-b15p2-announcement-body-semantic-audit-protocol-v0.1.md",
+    "sha256": "4209779876e3796feff16a8310af93324cd1927862874524fb90ebf95d51d84f",
+    "changed": false
+  },
+  "canonical_routing": {
+    "path": "docs/research/sc001-b15p2-hydration-dual-schema-routing-freeze-v0.1.json",
+    "sha256": "5a58a4289aa73b6a510a8cdaade586c56433da20b35472b526e43174789c929f"
+  },
+  "canonical_art_census": {
+    "path": "docs/research/sc001-b15p2-art-generation-schema-census-result-v0.1.json",
+    "sha256": "44c7494b7ab125a83ce895ea93646af3ffae34d7a8c188e2e6415487d1bc3712"
+  },
+  "semantic_invariants": {
+    "classify_text_unchanged_from_v0_1_6": true,
+    "parse_announcement_time_unchanged_from_v0_1_6": true,
+    "frozen_input_validation_unchanged_from_v0_1_6": true,
+    "curl_transport_unchanged_from_v0_1_6": true,
+    "extract_hydration_article_unchanged_from_v0_1_6": true,
+    "dual_schema_routing_unchanged": true,
+    "event_set_unchanged": true
+  },
+  "selftest_change": {
+    "stage": "NO_CROSS_SCHEMA_FALLBACK",
+    "old_incorrect_expectation": "SCHEMA_B_CONTENT_HTML_PATH",
+    "new_expected_fail_closed_error": "SCHEMA_B_RAW_HTML_TOO_SHORT",
+    "reason": "The SCHEMA_A synthetic fixture intentionally contains content_html as an empty string. When routed as SCHEMA_B, correct fail-closed behavior is to reject that present-but-empty SCHEMA_B field rather than fall back to SCHEMA_A.",
+    "additional_assertions": [
+      "SCHEMA_A raw_body_html_tag_count is null",
+      "SCHEMA_A raw_body_length is null",
+      "SCHEMA_B primary_text_leaf_count is null",
+      "SCHEMA_B secondary_match is null"
+    ]
+  },
+  "expected_selftest_pass": "B15P2_ANNOUNCEMENT_BODY_SEMANTIC_AUDIT_V017_SELF_TEST_PASS",
+  "expected_smoke_pass": "B15P2_ANNOUNCEMENT_BODY_DUAL_SCHEMA_SMOKE_V017_PASS",
+  "price_access_authorized": false,
+  "external_reference_price_access_authorized": false,
+  "index_value_access_authorized": false,
+  "basis_access_authorized": false,
+  "returns_access_authorized": false,
+  "pnl_access_authorized": false,
+  "event_outcome_ranking_authorized": false
+}

@@ -1,0 +1,88 @@
+{
+  "schema": "sc001.b15p2_dual_schema_semantic_audit_contract.v0.2",
+  "date": "2026-09-29",
+  "status": "AUTHORIZED_RECOVERY_ITERATION_4_PREPARED_AWAITING_HOST_EXECUTION",
+  "authorization_basis": {
+    "type": "USER_STANDING_DELEGATION_CURRENT_B15P2_ENGINEERING_CONTOUR",
+    "max_recovery_iterations": 5,
+    "iterations_consumed": 3,
+    "prepared_iteration": 4,
+    "scope_expansion": false,
+    "new_data_source": false,
+    "price_or_outcome_access": false
+  },
+  "previous_failure": {
+    "path": "docs/research/sc001-b15p2-dual-schema-v016-selftest-failure-diagnostic-v0.1.json",
+    "sha256": "b47b23dab639c4265a72c18a2c10610117eae1115b77f7fd35f4c8f7f1f004f4",
+    "class": "OVERLY_SPECIFIC_SELFTEST_EXPECTATION",
+    "network_started": false
+  },
+  "implementation": {
+    "path": "research/sc001/sc001_b15p2_announcement_body_semantic_audit_v0_1_7.py",
+    "sha256": "f83e34263fe8716c235a76be1c94ee2049c38a4c3fdc8a064f1d99ed327ef4cc"
+  },
+  "wrapper": {
+    "path": "scripts/research/run-b15p2-dual-schema-semantic-audit-v0.2.sh",
+    "sha256": "bce2bb8733a3042df52c1b3a7a062610a4201dad9a8eec07c5371d4df70bcae9",
+    "run_mode": "--run",
+    "preflight_mode": "--preflight",
+    "status_mode": "--status",
+    "execution": "SYNCHRONOUS_HOST_WRAPPER"
+  },
+  "implementation_freeze": {
+    "path": "docs/research/sc001-b15p2-announcement-body-semantic-audit-implementation-freeze-v0.1.7.json",
+    "sha256": "4e5707ad33a48234fe8a48f8920e75754e1812b7a30f0a36be1428199ee02c14"
+  },
+  "routing_freeze": {
+    "path": "docs/research/sc001-b15p2-hydration-dual-schema-routing-freeze-v0.1.json",
+    "sha256": "5a58a4289aa73b6a510a8cdaade586c56433da20b35472b526e43174789c929f",
+    "schema_a_count": 76,
+    "schema_b_count": 18
+  },
+  "schema_b_census": {
+    "path": "docs/research/sc001-b15p2-art-generation-schema-census-result-v0.1.json",
+    "sha256": "44c7494b7ab125a83ce895ea93646af3ffae34d7a8c188e2e6415487d1bc3712",
+    "coverage": "18/18"
+  },
+  "selftest_correction": {
+    "extractor_changed": false,
+    "semantic_classifier_changed": false,
+    "routing_changed": false,
+    "old_incorrect_expected_error": "SCHEMA_B_CONTENT_HTML_PATH",
+    "correct_expected_error_for_present_but_empty_content_html": "SCHEMA_B_RAW_HTML_TOO_SHORT",
+    "additional_branch_metadata_assertions": true
+  },
+  "early_observability": {
+    "preflight_and_selftest_diagnostic_target": "docs/research/runtime-inbox/sc001-b15p2-dual-schema-semantic-v0.1.7-prelaunch-diagnostic.json",
+    "network_started_false_in_diagnostic": true
+  },
+  "runtime_output": {
+    "terminal_result_target": "docs/research/runtime-inbox/sc001-b15p2-semantic-audit-v0.1.7-latest.json",
+    "smoke_target": "docs/research/runtime-inbox/sc001-b15p2-dual-schema-smoke-v0.1.7-latest.json",
+    "log_target": "docs/research/runtime-inbox/sc001-b15p2-semantic-audit-v0.1.7-latest.log"
+  },
+  "execution_sequence": [
+    "capture and validate exact contract preflight",
+    "publish diagnostic on preflight failure",
+    "stage exact read-only files",
+    "run corrected offline v0.1.7 self-test",
+    "publish diagnostic on self-test failure or missing pass token",
+    "run four-page dual-schema smoke",
+    "validate both schema branches",
+    "run full frozen 94-event semantic audit synchronously",
+    "validate terminal result",
+    "publish smoke, result, and persistent log to GitHub runtime inbox"
+  ],
+  "forbidden": [
+    "PRICE_ACCESS",
+    "EXTERNAL_REFERENCE_PRICE_ACCESS",
+    "INDEX_VALUE_ACCESS",
+    "BASIS_OR_SPREAD_ACCESS",
+    "RETURN_ACCESS",
+    "PNL_ACCESS",
+    "EVENT_OUTCOME_RANKING",
+    "OUTCOME_DRIVEN_ROUTING",
+    "PAGE_SPECIFIC_FALLBACK",
+    "TRADING"
+  ]
+}

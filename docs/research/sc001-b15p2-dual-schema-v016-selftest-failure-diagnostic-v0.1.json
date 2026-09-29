@@ -1,0 +1,54 @@
+{
+  "schema": "sc001.b15p2_dual_schema_v016_selftest_failure_diagnostic.v0.1",
+  "date": "2026-09-29",
+  "status": "OFFLINE_SELFTEST_FAILURE_NETWORK_NOT_STARTED",
+  "executed_boundary": {
+    "implementation": {
+      "path": "research/sc001/sc001_b15p2_announcement_body_semantic_audit_v0_1_6.py",
+      "sha256": "1bc02d6e13ad919dbfa405f92b12f80d8c36271b294ed6845968c9dcac96315c"
+    },
+    "wrapper": {
+      "path": "scripts/research/run-b15p2-dual-schema-semantic-audit-v0.1.sh",
+      "sha256": "24e8cb382e026852178d26da9c9006c784dd437291e6836b426f0104ed321cbd"
+    }
+  },
+  "runtime_observation": {
+    "v017_or_v016_runtime_inbox_artifacts_created": false,
+    "network_smoke_result_created": false,
+    "terminal_semantic_result_created": false
+  },
+  "preflight_reconstruction": {
+    "all_committed_contract_logic_checks_pass": true,
+    "exact_source_sha256": "c28aeb2b1ac0a23fb0e4420ced943fd619dd0a60e3fdcf5820299579cb94206c",
+    "exact_event_freeze_sha256": "81952c83e7397481035cc00354388dfe3470ad17993c6e80665a7d376be907ed",
+    "partition": {
+      "BLT_RICHTEXT": 76,
+      "DOUBLE_DASH_ART_HTML": 18
+    }
+  },
+  "deterministic_first_failure": {
+    "selftest_stage": "NO_CROSS_SCHEMA_FALLBACK",
+    "fixture": "SCHEMA_A synthetic page routed intentionally as SCHEMA_B",
+    "fixture_content_html": "empty string",
+    "extractor_expected_behavior": "fail closed before any cross-schema fallback",
+    "actual_exception": "SCHEMA_B_RAW_HTML_TOO_SHORT",
+    "incorrect_selftest_expectation": "SCHEMA_B_CONTENT_HTML_PATH",
+    "root_cause": "The extractor correctly rejected the empty SCHEMA_B content_html field, but the self-test asserted an overly specific missing-path error code. The test failed even though the fail-closed routing behavior was correct."
+  },
+  "research_consequence": "NONE",
+  "semantic_classifier_changed": false,
+  "dual_schema_routing_changed": false,
+  "frozen_event_set_changed": false,
+  "network_calls_performed_by_failed_attempt": false,
+  "price_accessed": false,
+  "external_reference_price_accessed": false,
+  "index_value_accessed": false,
+  "basis_accessed": false,
+  "returns_accessed": false,
+  "pnl_accessed": false,
+  "recovery_iteration": {
+    "iteration_number": 3,
+    "consumed": true
+  },
+  "next_state": "PREPARE_RECOVERY_ITERATION_4_WITH_CORRECTED_SELFTEST_AND_EARLY_DIAGNOSTIC_RELAY"
+}
