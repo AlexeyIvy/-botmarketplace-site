@@ -1,0 +1,80 @@
+{
+  "schema": "botmarket.test_executor_installation_freeze.v1.0",
+  "date": "2026-09-29",
+  "status": "READY_FOR_FIRST_DEPLOYMENT_NOT_YET_INSTALLED",
+  "source_head_before_commit": "66e26721b0841cc3ae7fbe3264a2f0caf5db329d",
+  "artifacts": {
+    "main_installer": {
+      "path": "scripts/mcp/install-botmarket-test-executor-v1.sh",
+      "sha256": "1d19127a3bb648c5e57820393e8a73143d03382fbb0feae7244b2d8a0fa7f609"
+    },
+    "tunnel_installer": {
+      "path": "scripts/mcp/install-botmarket-test-executor-tunnel-v1.sh",
+      "sha256": "e18062946fbefde2b3c6dd6e6314578c661067e983aa3f15c5c6ac5a28d1a1c9"
+    },
+    "runbook": {
+      "path": "docs/infrastructure/botmarket-test-executor-v1.0.md",
+      "sha256": "b4062020b89a81dd4f7693c38251aa7be8ad88948a9aa97ba313b9ff34a14490"
+    }
+  },
+  "planned_endpoints": {
+    "local_mcp": "127.0.0.1:8769/mcp",
+    "tunnel_health": "127.0.0.1:8083"
+  },
+  "planned_services": [
+    "botmarket-test-executor.service",
+    "botmarket-test-executor-tunnel.service"
+  ],
+  "security_invariants": {
+    "separate_control_and_job_users": true,
+    "dedicated_read_only_github_key": true,
+    "repo_write_available": false,
+    "arbitrary_shell_mcp_tool": false,
+    "committed_exact_head_only": true,
+    "allowed_entrypoint_prefixes": [
+      "research/",
+      "scripts/research/",
+      "tests/"
+    ],
+    "trading_credentials_available_to_jobs": false,
+    "offline_profile_available": true,
+    "public_research_profile_blocks_loopback_private_link_local": true,
+    "public_research_is_domain_allowlisted": false,
+    "max_concurrent_jobs": 1,
+    "max_runs_per_rolling_hour": 3,
+    "max_runs_per_utc_day": 10,
+    "max_timeout_seconds": 900
+  },
+  "review_rounds": [
+    {
+      "round": 1,
+      "focus": "ARCHITECTURE_SECURITY",
+      "result": "PASS_AFTER_CORRECTIONS"
+    },
+    {
+      "round": 2,
+      "focus": "UNIX_RUNTIME_SYSTEMD",
+      "result": "PASS_AFTER_CORRECTIONS"
+    },
+    {
+      "round": 3,
+      "focus": "OPERATIONS_OBSERVABILITY",
+      "result": "PASS_AFTER_CORRECTIONS"
+    }
+  ],
+  "consolidation_audit": "PASS",
+  "deployment_gate": [
+    "Run main installer",
+    "Authorize generated GitHub deploy key as READ ONLY with Allow write access disabled",
+    "Rerun main installer",
+    "Require offline isolated job self-test PASS",
+    "Require public-research sandbox self-test PASS",
+    "Create dedicated OpenAI tunnel",
+    "Run tunnel installer",
+    "Connect Test Executor app in ChatGPT",
+    "Perform end-to-end MCP harmless test before declaring operational"
+  ],
+  "research_runner_modified": false,
+  "github_control_modified": false,
+  "trading_boundary_modified": false
+}
