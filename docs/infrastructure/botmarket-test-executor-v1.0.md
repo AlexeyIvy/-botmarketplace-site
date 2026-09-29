@@ -1,7 +1,7 @@
 # BotMarketplace Test Executor MCP v1.0
 
 Date: 2026-09-29  
-Status: **FIRST BOOTSTRAP VALIDATION FIXED / INSTALLATION FREEZE v1.0.1 READY / NOT YET OPERATIONAL**
+Status: **HOST SANDBOX COMPATIBILITY LOCALIZED / INSTALLATION FREEZE v1.0.2 READY / NOT YET OPERATIONAL**
 
 ## Purpose
 
@@ -349,7 +349,7 @@ Consolidation result:
 
 Current installation freeze:
 
-`docs/infrastructure/botmarket-test-executor-installation-freeze-v1.0.1.json`
+`docs/infrastructure/botmarket-test-executor-installation-freeze-v1.0.2.json`
 
 Main installer:
 
@@ -387,6 +387,39 @@ For new research code:
 `STATIC REVIEW -> TEST EXECUTOR OFFLINE RUN -> FIX IF NEEDED -> OPTIONAL PUBLIC-RESEARCH SMOKE -> FREEZE -> RESEARCH EXECUTION`
 
 The user should not be used as the normal command runner for software debugging.
+
+## VPS namespace compatibility result
+
+The first isolated worker-job bootstrap exposed one host-specific systemd incompatibility:
+
+`InaccessiblePaths=/run/systemd`
+
+The compatibility diagnostic proved:
+
+- all worker identity/resource controls PASS;
+- `NoNewPrivileges`, private tmp/devices and system/kernel/proc restrictions PASS;
+- empty capabilities PASS;
+- read-only/read-write mount rules PASS;
+- all BotMarketplace secret/config/state masks PASS through `/var/lib/botmarket-tunnel`;
+- `InaccessiblePaths=/run/systemd` alone causes `226/NAMESPACE`;
+- targeted `InaccessiblePaths=/run/systemd/private` PASS;
+- `/run/dbus` mask PASS;
+- offline network namespace PASS;
+- AF_UNIX-only offline profile PASS;
+- the real installed `job_runner.py` PASS in the intended `jobs/<job_id>` layout;
+- the complete `public_research` systemd property set PASS.
+
+The final public-network smoke reached the external Bybit announcements site and received HTTP 403. This is considered transport success for the compatibility gate because DNS/TCP/TLS/HTTP completed successfully; the installer still separately requires localhost MCP access to be denied.
+
+Installer v1.0.2 therefore:
+
+- replaces the broad `/run/systemd` mask with the narrow `/run/systemd/private` socket mask when present;
+- treats curl transport success plus any valid HTTP status 100–599 as public HTTPS egress PASS;
+- retains every other passing sandbox property.
+
+Canonical compatibility result:
+
+`docs/infrastructure/botmarket-test-executor-compatibility-v2-result-v0.1.json`
 
 ## Residual limitations
 

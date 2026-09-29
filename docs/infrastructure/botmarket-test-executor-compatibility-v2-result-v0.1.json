@@ -1,0 +1,41 @@
+{
+  "schema": "botmarket.test_executor_compatibility_v2_result.v0.1",
+  "date": "2026-09-29",
+  "status": "SANDBOX_COMPATIBILITY_PASS_WITH_PUBLIC_HTTP_403",
+  "runtime_result": {
+    "path": "docs/research/runtime-inbox/botmarket-test-executor-compatibility-v2.json",
+    "sha256": "1b9f7c445658b0f865adc71767a964694ed5911a2ab852c79f81591a096141ca",
+    "size_bytes": 6784
+  },
+  "checks": {
+    "base_without_run_systemd": "PASS",
+    "mask_systemd_private_socket": "PASS",
+    "mask_run_dbus": "PASS",
+    "offline_private_network": "PASS",
+    "offline_af_unix": "PASS",
+    "real_job_runner_offline": "PASS",
+    "public_profile_properties": "PASS",
+    "public_research_network_smoke": "HTTP_403_REMOTE_REACHED"
+  },
+  "interpretation": {
+    "broad_run_systemd_mask_incompatible": true,
+    "targeted_run_systemd_private_mask_compatible": true,
+    "real_job_runner_offline_compatible": true,
+    "public_profile_systemd_properties_compatible": true,
+    "public_https_transport_working": true,
+    "public_http_status": 403,
+    "public_http_403_is_transport_success": true,
+    "why_403_is_acceptable_for_network_smoke": "The diagnostic purpose is to prove DNS/TCP/TLS/HTTP egress. curl completed and received a valid remote HTTP response. Authorization/content policy at the remote site is outside the network-sandbox compatibility gate.",
+    "loopback_mcp_boundary": "The dedicated installer smoke continues to require localhost MCP access to be denied."
+  },
+  "installer_changes_authorized": [
+    "replace InaccessiblePaths=/run/systemd with conditional InaccessiblePaths=/run/systemd/private",
+    "treat successful curl transport plus any valid HTTP status 100-599 as public HTTPS egress PASS",
+    "retain the negative localhost MCP reachability check",
+    "retain all other previously passing hardening properties"
+  ],
+  "security_scope_changed": false,
+  "trading_boundary_changed": false,
+  "network_profile_changed": false,
+  "next_state": "RERUN_MAIN_INSTALLER_USING_FREEZE_V1_0_2"
+}

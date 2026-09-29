@@ -1,0 +1,65 @@
+{
+  "schema": "botmarket.test_executor_installation_freeze.v1.0.2",
+  "date": "2026-09-29",
+  "status": "READY_FOR_DEPLOYMENT_AFTER_VPS_NAMESPACE_COMPATIBILITY_VALIDATION",
+  "supersedes": "docs/infrastructure/botmarket-test-executor-installation-freeze-v1.0.1.json",
+  "base_git_head": "28a4089892e441a8f670090f967c39f992bcc5df",
+  "artifacts": {
+    "main_installer": {
+      "path": "scripts/mcp/install-botmarket-test-executor-v1.sh",
+      "sha256": "ebaa2e8e55a36263b255c7162adfcdac4b084080f653bfeab17fc8892db053ae"
+    },
+    "tunnel_installer": {
+      "path": "scripts/mcp/install-botmarket-test-executor-tunnel-v1.sh",
+      "sha256": "e18062946fbefde2b3c6dd6e6314578c661067e983aa3f15c5c6ac5a28d1a1c9"
+    },
+    "runbook": {
+      "path": "docs/infrastructure/botmarket-test-executor-v1.0.md",
+      "sha256": "9c995edba19d741465e751f2e95109735c0ead202c35bad3a8e8d855271c7e5c"
+    },
+    "compatibility_result": {
+      "path": "docs/infrastructure/botmarket-test-executor-compatibility-v2-result-v0.1.json",
+      "sha256": "43aecdc3fa9bef3de43b426d167a7310ed8e7e7f4dee9378c9db50d57d90f239"
+    }
+  },
+  "vps_compatibility_findings": {
+    "incompatible_property": "InaccessiblePaths=/run/systemd",
+    "replacement_property": "InaccessiblePaths=/run/systemd/private",
+    "replacement_validated": true,
+    "offline_job_runner_validated": true,
+    "public_profile_systemd_properties_validated": true,
+    "public_https_transport_observed": true,
+    "public_https_observed_status": 403,
+    "http_403_interpreted_as_transport_success": true,
+    "localhost_mcp_negative_check_retained": true
+  },
+  "security_invariants": {
+    "dedicated_read_only_github_key": true,
+    "repo_write_available": false,
+    "arbitrary_shell_mcp_tool": false,
+    "trading_credentials_available_to_jobs": false,
+    "control_service_exact_sudo_bridge_only": true,
+    "worker_jobs_no_new_privileges": true,
+    "worker_jobs_empty_capability_set": true,
+    "worker_private_devices": true,
+    "worker_protect_system_strict": true,
+    "worker_protect_proc_invisible": true,
+    "offline_profile_private_network": true,
+    "public_profile_blocks_loopback_private_link_local": true,
+    "max_concurrent_jobs": 1,
+    "max_runs_per_rolling_hour": 3,
+    "max_runs_per_utc_day": 10,
+    "max_timeout_seconds": 900
+  },
+  "installer_selftests_required": [
+    "GITHUB_READ=PASS",
+    "GITHUB_WRITE=DENIED_AS_REQUIRED",
+    "ARBITRARY_ROOT_SUDO=DENIED_AS_REQUIRED",
+    "MCP service restricted sudo bridge self-test: PASS",
+    "ISOLATED_JOB_SELFTEST=PASS",
+    "PUBLIC_NETWORK_SANDBOX_SELFTEST=PASS"
+  ],
+  "research_runner_modified": false,
+  "github_control_modified": false,
+  "trading_boundary_modified": false
+}

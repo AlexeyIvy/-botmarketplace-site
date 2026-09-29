@@ -585,7 +585,7 @@ for p in (
     "/var/lib/botmarket-runner",
     "/var/lib/botmarket-runner-probe",
     "/var/lib/botmarket-tunnel",
-    "/run/systemd",
+    "/run/systemd/private",
     "/run/dbus",
     "/var/run/docker.sock",
     "/run/containerd",
@@ -1415,8 +1415,15 @@ install -d -m0770 -o "$CTL_USER" -g "$JOB_GROUP" "$PUBLIC_DIR/output"
 cat > "$PUBLIC_DIR/package/public_test.sh" <<'SH'
 #!/usr/bin/env bash
 set -Eeuo pipefail
-code="$(curl -4 --http1.1 -sS --max-time 15 -o /dev/null -w '%{http_code}' https://announcements.bybit.com/en-US/)"
-[[ "$code" =~ ^[23] ]] || { echo "PUBLIC_HTTP_CODE=$code"; exit 9; }
+set +e
+code="$(curl -4 --http1.1 -sS --max-time 15 -o /dev/null -w '%{http_code}' https://announcements.bybit.com/en-US/ 2>/dev/null)"
+curl_rc=$?
+set -e
+if [[ $curl_rc -ne 0 || ! "$code" =~ ^[1-5][0-9][0-9]$ ]]; then
+  echo "PUBLIC_HTTPS_TRANSPORT_FAILED rc=$curl_rc code=$code"
+  exit 9
+fi
+echo "PUBLIC_HTTP_CODE=$code"
 if curl -sS --max-time 2 http://127.0.0.1:8768/mcp >/dev/null 2>&1; then
   echo "LOOPBACK_MCP_UNEXPECTEDLY_REACHABLE"
   exit 10

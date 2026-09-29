@@ -1,0 +1,81 @@
+{
+  "checks": [
+    {
+      "exec_main_status": "0",
+      "exit_code": 0,
+      "journal_tail": "Starting botmarket-test-compat2-20260929T083027Z-base_without_run_systemd.service - /usr/bin/true...\nStarted botmarket-test-compat2-20260929T083027Z-base_without_run_systemd.service - /usr/bin/true.\nbotmarket-test-compat2-20260929T083027Z-base_without_run_systemd.service: Deactivated successfully.",
+      "name": "base_without_run_systemd",
+      "output": "Running as unit: botmarket-test-compat2-20260929T083027Z-base_without_run_systemd.service; invocation ID: 523484b1c4fd46fa892fe38ee0ec10a5\nFinished with result: success\nMain processes terminated with: code=exited/status=0\nService runtime: 46ms\nCPU time consumed: 43ms",
+      "pass": true,
+      "result": "success"
+    },
+    {
+      "exec_main_status": "0",
+      "exit_code": 0,
+      "journal_tail": "Starting botmarket-test-compat2-20260929T083027Z-mask_systemd_private_socket.service - /usr/bin/true...\nStarted botmarket-test-compat2-20260929T083027Z-mask_systemd_private_socket.service - /usr/bin/true.\nbotmarket-test-compat2-20260929T083027Z-mask_systemd_private_socket.service: Deactivated successfully.",
+      "name": "mask_systemd_private_socket",
+      "output": "Running as unit: botmarket-test-compat2-20260929T083027Z-mask_systemd_private_socket.service; invocation ID: e2fd800d14f24bef95ffc4c81fc0e341\nFinished with result: success\nMain processes terminated with: code=exited/status=0\nService runtime: 49ms\nCPU time consumed: 47ms",
+      "pass": true,
+      "result": "success"
+    },
+    {
+      "exec_main_status": "0",
+      "exit_code": 0,
+      "journal_tail": "Starting botmarket-test-compat2-20260929T083027Z-mask_run_dbus.service - /usr/bin/true...\nStarted botmarket-test-compat2-20260929T083027Z-mask_run_dbus.service - /usr/bin/true.\nbotmarket-test-compat2-20260929T083027Z-mask_run_dbus.service: Deactivated successfully.",
+      "name": "mask_run_dbus",
+      "output": "Running as unit: botmarket-test-compat2-20260929T083027Z-mask_run_dbus.service; invocation ID: bccfc6f87bb14265915b59329c732729\nFinished with result: success\nMain processes terminated with: code=exited/status=0\nService runtime: 54ms\nCPU time consumed: 52ms",
+      "pass": true,
+      "result": "success"
+    },
+    {
+      "exec_main_status": "0",
+      "exit_code": 0,
+      "journal_tail": "Starting botmarket-test-compat2-20260929T083027Z-offline_private_network.service - /usr/bin/true...\nStarted botmarket-test-compat2-20260929T083027Z-offline_private_network.service - /usr/bin/true.\nbotmarket-test-compat2-20260929T083027Z-offline_private_network.service: Deactivated successfully.",
+      "name": "offline_private_network",
+      "output": "Running as unit: botmarket-test-compat2-20260929T083027Z-offline_private_network.service; invocation ID: e7b15741364c45b68200660ad166cc2b\nFinished with result: success\nMain processes terminated with: code=exited/status=0\nService runtime: 57ms\nCPU time consumed: 54ms",
+      "pass": true,
+      "result": "success"
+    },
+    {
+      "exec_main_status": "0",
+      "exit_code": 0,
+      "journal_tail": "Starting botmarket-test-compat2-20260929T083027Z-offline_af_unix.service - /usr/bin/true...\nStarted botmarket-test-compat2-20260929T083027Z-offline_af_unix.service - /usr/bin/true.\nbotmarket-test-compat2-20260929T083027Z-offline_af_unix.service: Deactivated successfully.",
+      "name": "offline_af_unix",
+      "output": "Running as unit: botmarket-test-compat2-20260929T083027Z-offline_af_unix.service; invocation ID: d0cb1b15a87d42a78cb7ed1e55bad455\nFinished with result: success\nMain processes terminated with: code=exited/status=0\nService runtime: 58ms\nCPU time consumed: 57ms",
+      "pass": true,
+      "result": "success"
+    },
+    {
+      "exec_main_status": "0",
+      "exit_code": 0,
+      "journal_tail": "Starting botmarket-test-compat2-20260929T083027Z-real-runner.service - /opt/botmarket-research/venv/bin/python /opt/botmarket-test-executor/job_runner.py job_20260929T000000Z_abcdef12...\nStarted botmarket-test-compat2-20260929T083027Z-real-runner.service - /opt/botmarket-research/venv/bin/python /opt/botmarket-test-executor/job_runner.py job_20260929T000000Z_abcdef12.\nbotmarket-test-compat2-20260929T083027Z-real-runner.service: Deactivated successfully.",
+      "name": "real_job_runner_offline",
+      "output": "Running as unit: botmarket-test-compat2-20260929T083027Z-real-runner.service; invocation ID: d21a5b9c883b4381a67042963298a64d\nFinished with result: success\nMain processes terminated with: code=exited/status=0\nService runtime: 143ms\nCPU time consumed: 128ms\nMemory peak: 972.0K\nMemory swap peak: 0B",
+      "pass": true,
+      "result": "success"
+    },
+    {
+      "exec_main_status": "0",
+      "exit_code": 0,
+      "journal_tail": "Starting botmarket-test-compat2-20260929T083027Z-public-props.service - /usr/bin/true...\nStarted botmarket-test-compat2-20260929T083027Z-public-props.service - /usr/bin/true.\nbotmarket-test-compat2-20260929T083027Z-public-props.service: Deactivated successfully.",
+      "name": "public_profile_properties",
+      "output": "Running as unit: botmarket-test-compat2-20260929T083027Z-public-props.service; invocation ID: 33bc455fa1d347058d49fb8d83208647\nFinished with result: success\nMain processes terminated with: code=exited/status=0\nService runtime: 53ms\nCPU time consumed: 51ms",
+      "pass": true,
+      "result": "success"
+    },
+    {
+      "exec_main_status": "11",
+      "exit_code": 11,
+      "journal_tail": "Starting botmarket-test-compat2-20260929T083027Z-public-net.service - /usr/bin/bash /var/lib/botmarket-test-executor/jobs/job_20260929T000000Z_abcdef12/package/public_probe.sh...\nStarted botmarket-test-compat2-20260929T083027Z-public-net.service - /usr/bin/bash /var/lib/botmarket-test-executor/jobs/job_20260929T000000Z_abcdef12/package/public_probe.sh.\nPUBLIC_HTTP_CODE=403\nbotmarket-test-compat2-20260929T083027Z-public-net.service: Main process exited, code=exited, status=11/n/a\nbotmarket-test-compat2-20260929T083027Z-public-net.service: Failed with result 'exit-code'.",
+      "name": "public_research_network_smoke",
+      "output": "Running as unit: botmarket-test-compat2-20260929T083027Z-public-net.service; invocation ID: ddf6afb7a29144bb8a3dccca31196107\nFinished with result: exit-code\nMain processes terminated with: code=exited/status=11\nService runtime: 218ms\nCPU time consumed: 111ms\nMemory peak: 1.0M\nMemory swap peak: 0B",
+      "pass": false,
+      "result": "exit-code"
+    }
+  ],
+  "failure_stage": "public_research_network_smoke",
+  "network_access_performed_only_in_public_smoke": true,
+  "project_code_executed": false,
+  "schema": "botmarket.test_executor_compatibility_v2",
+  "status": "REVIEW"
+}
