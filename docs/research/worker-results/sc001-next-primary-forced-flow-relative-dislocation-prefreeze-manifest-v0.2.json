@@ -1,0 +1,84 @@
+{
+  "schema": "sc001.worker_result_manifest.v0.1",
+  "project": "SC001",
+  "experiment_id": "SC001-NEXT-PRIMARY-PREFREEZE-01",
+  "stage": "VENUE_LOCAL_FORCED_FLOW_RELATIVE_DISLOCATION_PREFREEZE_QUALIFICATION",
+  "date": "2026-09-29",
+  "status": "PREFREEZE_READY_FOR_STRATEGY/USER_GATE",
+  "strategy_triggers": [
+    "NEW_OUTCOME_MECHANISM_GATE",
+    "CONTAMINATION_CHANGE",
+    "ROADMAP_GOVERNANCE_CHANGE"
+  ],
+  "canonical_result": {
+    "path": "docs/research/sc001-next-primary-forced-flow-relative-dislocation-feasibility-card-v0.2.md",
+    "sha256": "1fa899bbc73b9b0cbf5a5eeb2ce700fe343a8bc34155c2fca4b84b14605d72ac"
+  },
+  "protocol": {
+    "path": "docs/research/sc001-next-primary-forced-flow-relative-dislocation-s0-protocol-v0.2.md",
+    "sha256": "331bc684246ed03470c2cb0008e167e7dd01c2efad41a37aa09d2b1122cf7f96"
+  },
+  "implementation": null,
+  "execution": {
+    "mode": "NONE",
+    "bundle_id": null,
+    "bundle_sha256": null,
+    "job_id": null
+  },
+  "mechanism": {
+    "fingerprint_ref": "docs/research/sc001-next-primary-forced-flow-relative-dislocation-mechanism-fingerprint-v0.2.json",
+    "disposition": "RELATED_BUT_MATERIALLY_DIFFERENT_ARCHITECTURE",
+    "adaptive_discovery_generated": true
+  },
+  "evidence": {
+    "class": "PRE_OUTCOME_PREFREEZE_QUALIFICATION_ONLY",
+    "promotional": false,
+    "outcome_accessed": false,
+    "window": "2026-09-30T00:00:00Z..2026-10-07T00:00:00Z fixed; no S0 outcome opened and no window reconstruction authorized",
+    "contamination_registry_ref": "docs/research/sc001-contamination-registry-v0.39.json"
+  },
+  "key_metrics": {
+    "frozen_symbol_count": 12,
+    "structural_fill_count": 2,
+    "conservative_fee_bps_per_fill": 11,
+    "two_fill_fee_floor_bps": 22,
+    "spread_depth_reference_bps": 10,
+    "execution_model_reserve_bps": 10,
+    "two_fill_structural_burden_bps": 42,
+    "headroom_hurdle_bps": 52,
+    "frozen_utc_date_denominator": 7,
+    "positive_day_requirement": "5/7",
+    "positive_symbol_requirement": "6/12",
+    "operational_continuity_established": false
+  },
+  "decision": {
+    "class": "HOLD",
+    "summary": "Prefreeze corrections are committed without outcome access: conservative product/zone fee freeze is 11 bps/fill across the 12 frozen Bybit linear-USDT perpetuals, yielding two-fill burden 42 bps and H=52 bps; day breadth is fixed at 7 dates with null zero-cluster days nonpositive; symbol breadth is fixed at 12 with unrepresented symbols nonpositive. Current read-only surfaces do not establish B13-C collector continuity at the fresh-window boundary, so S0 remains unauthorized.",
+    "failed_gate": "OPERATIONAL_SOURCE_CONTINUITY_LIVE_VERIFICATION_PENDING",
+    "allowed_claims": [
+      "Prefreeze package is substantively corrected before S0 outcome access",
+      "Common conservative product/zone fee reference is frozen at 11 bps/fill",
+      "Two-fill structural burden is frozen at 42 bps and H at 52 bps",
+      "All 7 frozen dates remain in the day-breadth denominator",
+      "All 12 frozen symbols remain in the symbol-breadth denominator",
+      "No S0 price/outcome evidence was accessed",
+      "B15-P2 remains secondary/source branch and frozen P0 is unchanged"
+    ],
+    "forbidden_reuse": [
+      "Do not execute S0 until source-semantic qualification, implementation handshake, continuity verification and explicit Strategy/User authorization",
+      "Do not move or reconstruct the fresh window",
+      "Do not lower the 11 bps/fill conservative fee freeze or H=52 using outcomes",
+      "Do not reduce day or symbol breadth denominators",
+      "Do not use B13-C protected outcome interval for threshold/horizon/symbol design",
+      "Do not mutate or replace the B13-C collector in this qualification",
+      "Do not run Candidate 2 or Candidate 3 outcome research in parallel",
+      "Do not change frozen B15-P2 P0"
+    ],
+    "next_allowed_action": "Return to Strategy/User gate. Establish B13-C fresh-window continuity read-only, complete source-semantic/economic-identity qualification and implementation handshake, then obtain separate explicit S0 execution authorization."
+  },
+  "reusable_blocks": [
+    "RB021",
+    "RB011",
+    "RB012"
+  ]
+}
