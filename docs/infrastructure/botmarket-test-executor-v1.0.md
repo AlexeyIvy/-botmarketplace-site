@@ -1,7 +1,7 @@
 # BotMarketplace Test Executor MCP v1.0
 
 Date: 2026-09-29  
-Status: **DESIGN + INSTALLERS FROZEN FOR FIRST DEPLOYMENT / NOT YET DEPLOYED**
+Status: **FIRST BOOTSTRAP VALIDATION FIXED / INSTALLATION FREEZE v1.0.1 READY / NOT YET OPERATIONAL**
 
 ## Purpose
 
@@ -186,6 +186,54 @@ A job runs as the unprivileged `botmarket-testjob` user with:
 
 The future Trading Executor, if ever created, remains a separate component and separate authorization boundary.
 
+## Restricted root bridge
+
+The Test Executor control MCP must launch and cancel jobs through exactly two root-owned helpers:
+
+- `/usr/local/sbin/botmarket-test-launch`
+- `/usr/local/sbin/botmarket-test-cancel`
+
+The `botmarket-testctl` sudoers policy grants passwordless root execution **only** for these two exact command paths.
+
+Important systemd distinction:
+
+- the **control MCP service** must be allowed to traverse this exact sudo/setuid bridge;
+- the **test jobs themselves** keep `NoNewPrivileges=yes`, empty capability sets, and the full sandbox restrictions.
+
+Therefore do **not** add `NoNewPrivileges=true` or an empty `CapabilityBoundingSet=` to `botmarket-test-executor.service` unless the root broker architecture is redesigned. Doing so prevents the service from using the restricted sudo bridge.
+
+The MCP server performs `launcher --self-test` through sudo during its own startup. If the bridge is unavailable from the real systemd sandbox, the service fails closed and does not become operational.
+
+The installer also verifies:
+
+- launcher escalation works;
+- cancel-helper escalation works;
+- an unrelated root command (`/usr/bin/id -u`) is denied.
+
+## First-bootstrap validation finding
+
+The first deployment attempt on 2026-09-29 correctly passed:
+
+- GitHub read access;
+- GitHub write denial;
+- policy/runner/helper installation.
+
+It then stopped at:
+
+`TEST_LAUNCH_REVIEW:ROOT_REQUIRED`
+
+Root cause: installer self-tests used `sudo -u botmarket-testctl <root-helper>`, which deliberately ran the helper *as* the unprivileged user. The intended production path is:
+
+`root installer -> runuser botmarket-testctl -> sudo NOPASSWD -> exact root helper`
+
+All occurrences of the incorrect self-test path were replaced with one shared `as_testctl_root` helper. The offline and public-network installation smokes now use the same privilege path as the MCP server.
+
+A follow-up review also found that the MCP service's original `NoNewPrivileges=true` / empty capability bounding set would have blocked the same restricted sudo bridge at runtime. The control-service sandbox was corrected, while the worker-job sandbox remains unchanged and strict.
+
+Targeted post-fix audit result:
+
+**PASS.**
+
 ## Resource limits
 
 v1 policy:
@@ -298,6 +346,10 @@ Consolidation result:
 **PASS.**
 
 ## Installation files
+
+Current installation freeze:
+
+`docs/infrastructure/botmarket-test-executor-installation-freeze-v1.0.1.json`
 
 Main installer:
 

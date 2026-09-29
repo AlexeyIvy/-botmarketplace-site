@@ -38,6 +38,10 @@ BACKUP="/root/botmarket-test-executor-backups/$TS"
 log(){ printf '\n[%s] %s\n' "$1" "$2"; }
 die(){ echo "[FAIL] $*" >&2; exit 1; }
 
+as_testctl_root() {
+  runuser -u "$CTL_USER" -- sudo -n -- "$@"
+}
+
 [[ "${EUID:-$(id -u)}" -eq 0 ]] || die "Run as root"
 
 log STEP "Preflight"
@@ -662,8 +666,18 @@ EOF
 chmod 0440 "$SUDOERS"
 visudo -cf "$SUDOERS" >/dev/null
 
-sudo -u "$CTL_USER" -n "$LAUNCHER" --self-test | grep -qx 'BOTMARKET_TEST_LAUNCHER_SELFTEST_PASS'   || die "Launcher sudo self-test failed"
-sudo -u "$CTL_USER" -n "$CANCELER" --self-test | grep -qx 'BOTMARKET_TEST_CANCEL_SELFTEST_PASS'   || die "Cancel sudo self-test failed"
+as_testctl_root "$LAUNCHER" --self-test | grep -qx 'BOTMARKET_TEST_LAUNCHER_SELFTEST_PASS' || die "Launcher sudo escalation self-test failed"
+as_testctl_root "$CANCELER" --self-test | grep -qx 'BOTMARKET_TEST_CANCEL_SELFTEST_PASS' || die "Cancel sudo escalation self-test failed"
+
+set +e
+ARBITRARY_ROOT_PROBE="$(runuser -u "$CTL_USER" -- sudo -n -- /usr/bin/id -u 2>&1)"
+ARBITRARY_ROOT_RC=$?
+set -e
+if [[ $ARBITRARY_ROOT_RC -eq 0 ]]; then
+  echo "$ARBITRARY_ROOT_PROBE"
+  die "Test Executor control user unexpectedly has arbitrary sudo"
+fi
+echo "ARBITRARY_ROOT_SUDO=DENIED_AS_REQUIRED"
 
 log STEP "Install MCP server"
 cat > "$APP/server.py" <<'PY'
@@ -982,6 +996,19 @@ def read_text_file(path:Path,offset:int,max_bytes:int)->dict[str,Any]:
         "next_offset_bytes":None if nxt>=len(data) else nxt,
     }
 
+def privilege_bridge_selftest()->dict[str,Any]:
+    p=subprocess.run(
+        ["sudo","-n",LAUNCHER,"--self-test"],
+        text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=15,
+    )
+    ok=(p.returncode==0 and p.stdout.strip()=="BOTMARKET_TEST_LAUNCHER_SELFTEST_PASS")
+    return {
+        "ok":ok,
+        "returncode":p.returncode,
+        "stdout":p.stdout.strip()[:500],
+        "stderr":p.stderr.strip()[:500],
+    }
+
 @mcp.tool()
 def get_test_executor_info()->dict[str,Any]:
     p=policy()
@@ -1026,6 +1053,7 @@ def get_test_executor_info()->dict[str,Any]:
             "max_retained_jobs":p["max_retained_jobs"],
         },
         "current_counts":counts,
+        "privilege_bridge":privilege_bridge_selftest(),
     }
 
 @mcp.tool()
@@ -1230,6 +1258,9 @@ def cancel_job(job_id:str)->dict[str,Any]:
     return {"job_id":job_id,"cancelled":True,"unit_state":unit_state(job_id)}
 
 if __name__=="__main__":
+    bridge=privilege_bridge_selftest()
+    if not bridge["ok"]:
+        raise SystemExit("PRIVILEGE_BRIDGE_SELFTEST_FAILED:"+json.dumps(bridge,sort_keys=True))
     try:
         mcp.run(
             transport="streamable-http",
@@ -1273,7 +1304,9 @@ Restart=on-failure
 RestartSec=3
 TimeoutStopSec=20
 UMask=0027
-NoNewPrivileges=true
+# Deliberately NOT using NoNewPrivileges/empty CapabilityBoundingSet here:
+# this control service must traverse the exact sudoers bridge to the two
+# root-owned helpers. The helpers themselves create tightly sandboxed jobs.
 PrivateTmp=true
 PrivateDevices=true
 ProtectSystem=strict
@@ -1284,8 +1317,6 @@ ProtectControlGroups=true
 ProtectKernelLogs=true
 RestrictSUIDSGID=true
 LockPersonality=true
-CapabilityBoundingSet=
-AmbientCapabilities=
 RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
 ReadWritePaths=$REPODIR $JOBS
 ReadOnlyPaths=$ENVF $POLICY $APP $SSHDIR $STATE/public-resolv.conf
@@ -1344,7 +1375,7 @@ EOF
 chown "$CTL_USER:$JOB_GROUP" "$SELF_DIR/job.json"
 chmod 0440 "$SELF_DIR/job.json"
 
-sudo -u "$CTL_USER" -n "$LAUNCHER" "$SELF_ID" >/tmp/bm-test-launch.$$
+as_testctl_root "$LAUNCHER" "$SELF_ID" >/dev/null
 READY=0
 for _ in $(seq 1 40); do
   if [[ -f "$SELF_DIR/output/job_result.json" ]]; then
@@ -1372,7 +1403,7 @@ PY
 
 systemctl stop "botmarket-test-job-$SELF_ID.service" >/dev/null 2>&1 || true
 systemctl reset-failed "botmarket-test-job-$SELF_ID.service" >/dev/null 2>&1 || true
-rm -rf "$SELF_DIR" /tmp/bm-test-launch.$
+rm -rf "$SELF_DIR"
 
 log STEP "Run isolated public-research network self-test"
 PUBLIC_ID="job_$(date -u +%Y%m%dT%H%M%SZ)_cafebabe"
@@ -1416,7 +1447,7 @@ EOF
 chown "$CTL_USER:$JOB_GROUP" "$PUBLIC_DIR/job.json"
 chmod 0440 "$PUBLIC_DIR/job.json"
 
-sudo -u "$CTL_USER" -n "$LAUNCHER" "$PUBLIC_ID" >/tmp/bm-test-public-launch.$
+as_testctl_root "$LAUNCHER" "$PUBLIC_ID" >/dev/null
 PUBLIC_READY=0
 for _ in $(seq 1 60); do
   if [[ -f "$PUBLIC_DIR/output/job_result.json" ]]; then
@@ -1442,7 +1473,7 @@ print("PUBLIC_NETWORK_SANDBOX_SELFTEST=PASS")
 PY
 systemctl stop "botmarket-test-job-$PUBLIC_ID.service" >/dev/null 2>&1 || true
 systemctl reset-failed "botmarket-test-job-$PUBLIC_ID.service" >/dev/null 2>&1 || true
-rm -rf "$PUBLIC_DIR" /tmp/bm-test-public-launch.$
+rm -rf "$PUBLIC_DIR"
 
 log STEP "Probe local MCP"
 set +e
@@ -1459,6 +1490,7 @@ echo
 echo "=== BOTMARKETPLACE TEST EXECUTOR V1 INSTALLED ==="
 echo "Repository read: PASS"
 echo "Repository write: DENIED_AS_REQUIRED"
+echo "MCP service restricted sudo bridge self-test: PASS"
 echo "Isolated offline job self-test: PASS"
 echo "Public research network sandbox self-test: PASS"
 echo "Local MCP: http://$HOST:$PORT/mcp"

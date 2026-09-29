@@ -1,0 +1,83 @@
+{
+  "schema": "botmarket.test_executor_installation_freeze.v1.0.1",
+  "date": "2026-09-29",
+  "status": "READY_FOR_FIRST_SUCCESSFUL_DEPLOYMENT_AFTER_BOOTSTRAP_FIX",
+  "supersedes": "docs/infrastructure/botmarket-test-executor-installation-freeze-v1.0.json",
+  "base_git_head": "4b8e14dbec91233559b1d56bc7ad852532520e61",
+  "artifacts": {
+    "main_installer": {
+      "path": "scripts/mcp/install-botmarket-test-executor-v1.sh",
+      "sha256": "ed49e9ab691f891ea0e5908e4092030804a5d565963085e663e67d7fc963522b"
+    },
+    "tunnel_installer": {
+      "path": "scripts/mcp/install-botmarket-test-executor-tunnel-v1.sh",
+      "sha256": "e18062946fbefde2b3c6dd6e6314578c661067e983aa3f15c5c6ac5a28d1a1c9"
+    },
+    "runbook": {
+      "path": "docs/infrastructure/botmarket-test-executor-v1.0.md",
+      "sha256": "be20a3b892decfe77cedf59a2597c727511a73ce923d7b2ade31ac446da9842d"
+    }
+  },
+  "bootstrap_fix": {
+    "observed_failure": "TEST_LAUNCH_REVIEW:ROOT_REQUIRED",
+    "root_cause": "Installer self-tests used sudo -u botmarket-testctl to execute root-only helpers, which intentionally dropped privileges instead of traversing the configured NOPASSWD sudo bridge.",
+    "corrections": [
+      "centralized root-helper invocation through as_testctl_root: runuser botmarket-testctl -> sudo -n -> exact helper",
+      "updated launcher self-test",
+      "updated cancel-helper self-test",
+      "updated offline isolated-job smoke launch",
+      "updated public-research sandbox smoke launch",
+      "removed fragile launch temp redirect paths",
+      "added negative arbitrary-root-sudo probe",
+      "added MCP-service startup privilege-bridge self-test",
+      "removed NoNewPrivileges and empty CapabilityBoundingSet only from the control MCP service because they would block the exact sudo bridge",
+      "kept NoNewPrivileges and empty capabilities on isolated worker jobs"
+    ]
+  },
+  "targeted_post_fix_audit": {
+    "result": "PASS",
+    "checked": [
+      "read-only GitHub deploy key enforcement",
+      "exact sudoers helper paths",
+      "positive launcher sudo bridge",
+      "positive cancel sudo bridge",
+      "negative arbitrary root sudo",
+      "MCP service startup privilege bridge",
+      "worker NoNewPrivileges",
+      "worker empty capability set",
+      "offline smoke privilege path",
+      "public-research smoke privilege path",
+      "setgid package/output permissions",
+      "executable-bit preservation",
+      "public DNS isolation",
+      "loopback/private network denial",
+      "rate limits",
+      "retention",
+      "exact committed HEAD enforcement"
+    ]
+  },
+  "planned_endpoints": {
+    "local_mcp": "127.0.0.1:8769/mcp",
+    "tunnel_health": "127.0.0.1:8083"
+  },
+  "limits": {
+    "max_concurrent_jobs": 1,
+    "max_runs_per_rolling_hour": 3,
+    "max_runs_per_utc_day": 10,
+    "max_timeout_seconds": 900
+  },
+  "security_invariants": {
+    "dedicated_read_only_github_key": true,
+    "repo_write_available": false,
+    "arbitrary_shell_mcp_tool": false,
+    "trading_credentials_available_to_jobs": false,
+    "offline_profile_available": true,
+    "public_research_profile_blocks_loopback_private_link_local": true,
+    "control_service_uses_only_exact_sudo_bridge": true,
+    "worker_jobs_no_new_privileges": true,
+    "worker_jobs_empty_capability_set": true
+  },
+  "research_runner_modified": false,
+  "github_control_modified": false,
+  "trading_boundary_modified": false
+}
