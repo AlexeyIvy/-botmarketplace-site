@@ -1,0 +1,195 @@
+{
+  "stage": "SC001-CONTAMINATION-REGISTRY",
+  "version": "0.36",
+  "date": "2026-09-29",
+  "status": "B15P2_P0S_2025_SOURCE_CENSUS_REVIEW_PRICE_FIREWALL_CLOSED",
+  "scope": "SCALPING_RESEARCH_SC001",
+  "supersedes": "docs/research/sc001-contamination-registry-v0.35.json",
+  "inherited_registry": "docs/research/sc001-contamination-registry-v0.33.json",
+  "b13c_s0_terminal": {
+    "classification": "B13C_S0_SIMPLE_REVERSAL_HEADROOM_REJECT",
+    "protected_interval": "2026-09-19T06:47:38.969Z..2026-09-26T21:05:32.973Z",
+    "reusable_block": "RB021",
+    "same_interval_rescue_authorized": false,
+    "future_successor_requires_fresh_post_definition_evidence": true
+  },
+  "b14b_fresh_persistent_funding_screen": {
+    "classification": "FRESH_NONPROMOTIONAL_STRUCTURAL_SCREEN",
+    "window_start_utc": "2026-07-01T00:00:00Z",
+    "window_end_exclusive_utc": "2026-09-27T00:00:00Z",
+    "venues": [
+      "OKX",
+      "BYBIT"
+    ],
+    "symbols": [
+      "BTC",
+      "ETH",
+      "SOL",
+      "DOGE",
+      "ORDI",
+      "FIL",
+      "UNI",
+      "XRP",
+      "LTC",
+      "OP",
+      "BCH",
+      "SUI"
+    ],
+    "funding_value_access_authorized": true,
+    "funding_timestamp_access_authorized": true,
+    "fresh_relative_to_b13a_h1_2025": true,
+    "price_access_authorized": false,
+    "basis_access_authorized": false,
+    "trade_body_access_authorized": false,
+    "l2_access_authorized": false,
+    "strategy_price_pnl_authorized": false,
+    "promotional_evidence_authorized": false,
+    "hold_horizon_days": 7,
+    "trailing_same_sign_matched_differentials": 3,
+    "funding_magnitude_threshold": null,
+    "alternate_horizon_search_authorized": false,
+    "symbol_selection_authorized": false
+  },
+  "b15p2_p0_basis_convergence_preregistration": {
+    "classification": "ADAPTIVE_DISCOVERY_GENERATED_PRE_REGISTERED_P0_SENTINEL",
+    "frozen_event_count": 94,
+    "frozen_event_set_sha256": "1063695ec003a0d6789270659822f50577e6a0f07059d88ac03a5be4288ed1a2",
+    "unique_delivery_timestamp_count": 37,
+    "causal_clock_freeze": {
+      "path": "docs/research/sc001-b15p2-causal-event-clock-freeze-v0.1.json",
+      "sha256": "9e4f6db4ce173cf9d5fa590a1acd1a56fa6a9f465c001c88de47b2542a172d70"
+    },
+    "price_experiment_spec": {
+      "path": "docs/research/sc001-b15p2-pre-registered-price-experiment-spec-v0.1.json",
+      "sha256": "1dc79403307177c1f9785090fa6f31aac0322ccb10864c509846e8da415856a7"
+    },
+    "registered_offsets_minutes": [
+      -55,
+      -30,
+      -5
+    ],
+    "primary_metric": "delivery-cluster median D where D=(|B_-30|-|B_-5|)-(|B_-55|-|B_-30|)",
+    "horizon_search_authorized": false,
+    "symbol_selection_authorized": false,
+    "basis_threshold_search_authorized": false,
+    "feature_augmentation_authorized": false,
+    "price_access_authorized": true,
+    "official_index_value_access_authorized": true,
+    "basis_calculation_authorized": true,
+    "returns_authorized": false,
+    "pnl_authorized": false,
+    "l1_l2_authorized": false,
+    "trade_body_authorized": false,
+    "trading_authorized": false,
+    "same_evidence_rescue_authorized": false,
+    "next_valid_action": "DESIGN_FRESH_B15P2_SOURCE_ROBUST_SUCCESSOR_PREREGISTRATION",
+    "execution_approval": {
+      "path": "docs/research/sc001-b15p2-p0-price-index-basis-execution-approval-v0.1.json",
+      "sha256": "27a4f094767f19a9c992e3b777ceea9b2b1eb5cf12d9b5e6a3230f81e007b7fc"
+    },
+    "implementation_candidate": {
+      "path": "research/sc001/sc001_b15p2_p0_basis_convergence_v0_1.py",
+      "sha256": "dc52b2fb4914ea29bc6bc85a9cfc8aa27f327d8dd160e6c4aa9feeab5e328945"
+    },
+    "first_offline_selftest": {
+      "job_id": "job_20260929T135830Z_c00cff26",
+      "status": "TECHNICAL_FAIL_NO_OUTCOME_ACCESS",
+      "diagnostic": "docs/research/sc001-b15p2-p0-offline-selftest-failure-diagnostic-v0.1.json"
+    },
+    "implementation_freeze": {
+      "path": "docs/research/sc001-b15p2-p0-implementation-freeze-v0.1.json",
+      "sha256": "8e4af2f3195a08265a8eaa9fed8092f22dfa78aba8b1988d7bfa8018c3e9f33b"
+    },
+    "corrected_offline_selftest": {
+      "job_id": "job_20260929T140157Z_aa541296",
+      "status": "PASS",
+      "entrypoint_sha256": "dc52b2fb4914ea29bc6bc85a9cfc8aa27f327d8dd160e6c4aa9feeab5e328945",
+      "price_accessed": false,
+      "index_value_accessed": false,
+      "basis_calculated": false
+    },
+    "outcome_accessed": true,
+    "full_p0_execution": {
+      "job_id": "job_20260929T142359Z_85d4a91d",
+      "repo_head": "b20b76e4d1911efae9923615871b9fe78fc728b0",
+      "network_profile": "public_research",
+      "entrypoint_sha256": "dc52b2fb4914ea29bc6bc85a9cfc8aa27f327d8dd160e6c4aa9feeab5e328945",
+      "exit_code": 0,
+      "timed_out": false,
+      "result": "DEFER_SOURCE_COVERAGE"
+    },
+    "canonical_result": {
+      "path": "docs/research/sc001-b15p2-p0-basis-convergence-result-v0.1.json",
+      "sha256": "e2554fcf95992e64d58ffcdac85faf68edff45f5320a596a5249256176bd13a3"
+    },
+    "canonical_log": {
+      "path": "docs/research/runtime-inbox/sc001-b15p2-p0-basis-convergence-full-run-v0.1.log",
+      "sha256": "38e6eb061b130e7630c462d380fcf5a204957e748d21aa2e603554d713cd5205"
+    },
+    "three_role_review": {
+      "path": "docs/research/sc001-b15p2-p0-defer-source-coverage-three-role-review-v0.1.md",
+      "sha256": "27b0b76c7f66b38c9cbb0d64057746a00ac136e2842ccbe530cf9239c25993d0"
+    },
+    "source_gate": {
+      "eligible_event_count": 23,
+      "raw_event_count": 94,
+      "eligible_delivery_cluster_count": 18,
+      "frozen_delivery_cluster_count": 37,
+      "eligible_month_count": 8,
+      "required_month_count": 9,
+      "pass": false
+    },
+    "source_error_census": {
+      "total_registered_snapshot_errors": 126,
+      "contract_zero_activity": 125,
+      "bybit_retcode_10016": 1
+    }
+  },
+  "b15p2_p0_source_coverage_review": {
+    "classification": "POST_OUTCOME_SOURCE_SEMANTICS_REVIEW_NO_RESCUE",
+    "review_path": "docs/research/sc001-b15p2-p0-official-source-coverage-review-v0.1.md",
+    "review_sha256": "8e07fc018e908341d0ca37c5ba6a7bc60491d8ad972187deb798f79594ddef22",
+    "result": "OFFICIAL_SOURCE_PRESENT_BUT_EXACT_1M_ACTIVITY_COVERAGE_INSUFFICIENT",
+    "total_registered_contract_snapshots": 282,
+    "positive_activity_exact_snapshots": 156,
+    "zero_activity_exact_snapshots": 125,
+    "api_service_errors": 1,
+    "zero_activity_by_offset_minutes": {
+      "-55": 45,
+      "-30": 48,
+      "-5": 32
+    },
+    "fully_eligible_events": 23,
+    "frozen_event_count": 94,
+    "eligible_delivery_clusters": 18,
+    "frozen_delivery_clusters": 37,
+    "same_94_event_outcome_rescue_authorized": false,
+    "changed_sampling_rule_requires_fresh_confirmatory_evidence": true,
+    "next_valid_action": "DESIGN_FRESH_B15P2_SOURCE_ROBUST_SUCCESSOR_PREREGISTRATION"
+  },
+  "b15p2_p0s_2025_holdout_source_census": {
+    "classification": "FRESH_DISJOINT_SOURCE_ONLY_HOLDOUT_CENSUS",
+    "window_start_utc": "2025-01-01T00:00:00Z",
+    "window_end_exclusive_utc": "2026-01-01T00:00:00Z",
+    "price_outcome_accessed": false,
+    "canonical_result": {
+      "path": "docs/research/sc001-b15p2-p0s-2025-holdout-source-census-result-v0.1.json",
+      "sha256": "706cc5696e863ad7cd6e81efabe1629b2f9013e2ad9cbeacad46345f17ee1c36"
+    },
+    "job_id": "job_20260929T152635Z_c6d1faee",
+    "status": "B15P2_P0S_2025_HOLDOUT_SOURCE_CENSUS_REVIEW",
+    "closed_in_scope": 154,
+    "admitted": 120,
+    "announcement_match_coverage": 0.7792207792207793,
+    "delivery_month_count": 12,
+    "source_integrity_issue_count": 1,
+    "unmatched_symbol_count": 34,
+    "source_gate_threshold_unchanged": 0.8,
+    "source_gate_relaxation_authorized": false,
+    "price_access_authorized": false,
+    "basis_access_authorized": false,
+    "returns_authorized": false,
+    "pnl_authorized": false,
+    "next_valid_action": "DESIGN_OFFICIAL_BYBIT_2025_UNMATCHED_ANNOUNCEMENT_STRUCTURE_AUDIT_NO_PRICE"
+  }
+}

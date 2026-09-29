@@ -1,0 +1,54 @@
+{
+  "schema": "sc001.worker_result_manifest.v0.1",
+  "project": "SC001",
+  "experiment_id": "B15-P2",
+  "stage": "P0S_2025_HOLDOUT_SOURCE_ONLY_CENSUS",
+  "date": "2026-09-29",
+  "status": "SOURCE_CENSUS_REVIEW",
+  "strategy_triggers": [
+    "EVIDENCE_MATURITY_CHANGE",
+    "CONTAMINATION_CHANGE",
+    "ROADMAP_GOVERNANCE_CHANGE"
+  ],
+  "canonical_result": {
+    "path": "docs/research/sc001-b15p2-p0s-2025-holdout-source-census-result-v0.1.json",
+    "sha256": "706cc5696e863ad7cd6e81efabe1629b2f9013e2ad9cbeacad46345f17ee1c36"
+  },
+  "protocol": {
+    "path": "docs/research/sc001-b15p2-p0s-2025-holdout-source-census-protocol-v0.1.md",
+    "sha256": "b8d5f3d746b1babcd82a0a3d7746d4acd7af8ab2a4ce11f3acffc5e1170b85a2"
+  },
+  "implementation": {
+    "path": "research/sc001/sc001_b15p2_p0s_2025_holdout_source_census_v0_1.py",
+    "sha256": "0c0bd46961cfebb17ecf74dde8822c496c0f73198dae97681d0658abb776355d"
+  },
+  "execution": {
+    "mode": "TEST_EXECUTOR_PUBLIC_RESEARCH",
+    "job_id": "job_20260929T152635Z_c6d1faee",
+    "repo_head": "a82e971ac291bda03e7bf9d29cfaa38c76428f8b",
+    "exit_code": 0,
+    "timed_out": false
+  },
+  "evidence": {
+    "class": "FRESH_DISJOINT_SOURCE_ONLY_CENSUS",
+    "promotional": false,
+    "outcome_accessed": false,
+    "window": "2025-01-01..2026-01-01",
+    "contamination_registry_ref": "docs/research/sc001-contamination-registry-v0.36.json"
+  },
+  "key_metrics": {
+    "closed_in_scope": 154,
+    "admitted_events": 120,
+    "announcement_match_coverage": 0.7792207792207793,
+    "delivery_months": 12,
+    "source_integrity_issues": 1,
+    "unmatched_symbols": 34
+  },
+  "decision": {
+    "class": "REVIEW",
+    "summary": "Fresh 2025 source-only holdout census found 154 in-scope closed USDT perpetuals and 120 admitted causal events across all 12 months. The frozen 80% announcement-match gate failed at 77.92%, and one legacy same-symbol missing-publishTime integrity issue remains. No price/index/basis/returns/PnL was accessed.",
+    "failed_gate": "SOURCE_MATCH_COVERAGE_AND_SOURCE_TIMESTAMP_INTEGRITY",
+    "next_allowed_action": "Design an official-Bybit announcement-structure audit for the 34 unmatched symbols while keeping price firewalls closed and the 80% gate unchanged."
+  },
+  "reusable_blocks": []
+}

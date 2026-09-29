@@ -1,0 +1,2030 @@
+{
+  "admitted_event_count": 120,
+  "announcement_match_coverage": 0.7792207792207793,
+  "announcement_source": {
+    "date_timestamp_is_never_publish_fallback": true,
+    "derivative_relevant_count": 271,
+    "endpoint": "/v5/announcements/index",
+    "invalid_publish_time_count": 0,
+    "locale": "en-US",
+    "missing_publish_time_count": 32,
+    "retrieved_count": 479,
+    "type": "delistings"
+  },
+  "basis_calculated": false,
+  "closed_in_scope_count": 154,
+  "delivery_months": [
+    "2025-01",
+    "2025-02",
+    "2025-03",
+    "2025-04",
+    "2025-05",
+    "2025-06",
+    "2025-07",
+    "2025-08",
+    "2025-09",
+    "2025-10",
+    "2025-11",
+    "2025-12"
+  ],
+  "event_ranked_by_outcome": false,
+  "events": [
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-darusdt-perpetual-contract-bltdcdb410baf90f8a0/"
+      ],
+      "delivery_month": "2025-01",
+      "delivery_ms": 1736132400000,
+      "delivery_utc": "2025-01-06T03:00:00+00:00",
+      "first_notice_ms": 1735801253000,
+      "last_pre_event_notice_ms": 1735801253000,
+      "lead_hours": 91.98527777777778,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "DARUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-ftmusdt-perpetual-contract-blt21e0f27baf3a4dcd/"
+      ],
+      "delivery_month": "2025-01",
+      "delivery_ms": 1736503200000,
+      "delivery_utc": "2025-01-10T10:00:00+00:00",
+      "first_notice_ms": 1735207801000,
+      "last_pre_event_notice_ms": 1735207801000,
+      "lead_hours": 359.8330555555556,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "FTMUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-1catusdt-perpetual-contract-blta6d48a3cd1cba5dd/"
+      ],
+      "delivery_month": "2025-01",
+      "delivery_ms": 1737536400000,
+      "delivery_utc": "2025-01-22T09:00:00+00:00",
+      "first_notice_ms": 1737104401000,
+      "last_pre_event_notice_ms": 1737104401000,
+      "lead_hours": 119.99972222222222,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "1CATUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-keyusdt-perpetual-contract-blt55cccf59da4908f8/"
+      ],
+      "delivery_month": "2025-01",
+      "delivery_ms": 1737536400000,
+      "delivery_utc": "2025-01-22T09:00:00+00:00",
+      "first_notice_ms": 1737104455000,
+      "last_pre_event_notice_ms": 1737104455000,
+      "lead_hours": 119.98472222222222,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "KEYUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-reefusdt-perpetual-contract-blt8befcd75d571e648/"
+      ],
+      "delivery_month": "2025-01",
+      "delivery_ms": 1737536400000,
+      "delivery_utc": "2025-01-22T09:00:00+00:00",
+      "first_notice_ms": 1737104426000,
+      "last_pre_event_notice_ms": 1737104426000,
+      "lead_hours": 119.99277777777777,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "REEFUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-ronusdt-perpetual-contract-blte464f2c4387939aa/"
+      ],
+      "delivery_month": "2025-01",
+      "delivery_ms": 1737882000000,
+      "delivery_utc": "2025-01-26T09:00:00+00:00",
+      "first_notice_ms": 1737538358000,
+      "last_pre_event_notice_ms": 1737538358000,
+      "lead_hours": 95.45611111111111,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "RONUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-bendogusdt-perpetual-contract-bltbb375575463790cf/"
+      ],
+      "delivery_month": "2025-01",
+      "delivery_ms": 1738227600000,
+      "delivery_utc": "2025-01-30T09:00:00+00:00",
+      "first_notice_ms": 1737715730000,
+      "last_pre_event_notice_ms": 1737715730000,
+      "lead_hours": 142.1861111111111,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "BENDOGUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-dop1usdt-perpetual-contract-bltdf7afef22029f43f/"
+      ],
+      "delivery_month": "2025-01",
+      "delivery_ms": 1738227600000,
+      "delivery_utc": "2025-01-30T09:00:00+00:00",
+      "first_notice_ms": 1737713831000,
+      "last_pre_event_notice_ms": 1737713831000,
+      "lead_hours": 142.7136111111111,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "DOP1USDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-ltousdt-perpetual-contract-blt04dce4f3e711bd6e/"
+      ],
+      "delivery_month": "2025-01",
+      "delivery_ms": 1738227600000,
+      "delivery_utc": "2025-01-30T09:00:00+00:00",
+      "first_notice_ms": 1737713456000,
+      "last_pre_event_notice_ms": 1737713456000,
+      "lead_hours": 142.8177777777778,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "LTOUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-pengusdt-perpetual-contract-blt760625dca726f466/"
+      ],
+      "delivery_month": "2025-01",
+      "delivery_ms": 1738227600000,
+      "delivery_utc": "2025-01-30T09:00:00+00:00",
+      "first_notice_ms": 1737712173000,
+      "last_pre_event_notice_ms": 1737712173000,
+      "lead_hours": 143.17416666666668,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "PENGUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-sillyusdt-perpetual-contract-blt7d4812424d10950e/"
+      ],
+      "delivery_month": "2025-01",
+      "delivery_ms": 1738227600000,
+      "delivery_utc": "2025-01-30T09:00:00+00:00",
+      "first_notice_ms": 1737713437000,
+      "last_pre_event_notice_ms": 1737713437000,
+      "lead_hours": 142.82305555555556,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "SILLYUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-billyusdt-perpetual-contract-blt6d4668b13feae626/"
+      ],
+      "delivery_month": "2025-02",
+      "delivery_ms": 1739959200000,
+      "delivery_utc": "2025-02-19T10:00:00+00:00",
+      "first_notice_ms": 1739355656000,
+      "last_pre_event_notice_ms": 1739355656000,
+      "lead_hours": 167.6511111111111,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "BILLYUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-fdusdusdt-perpetual-contract-blt63b4fb832587c2e0/"
+      ],
+      "delivery_month": "2025-02",
+      "delivery_ms": 1739959200000,
+      "delivery_utc": "2025-02-19T10:00:00+00:00",
+      "first_notice_ms": 1739357278000,
+      "last_pre_event_notice_ms": 1739357278000,
+      "lead_hours": 167.20055555555555,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "FDUSDUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-nyanusdt-perpetual-contract-bltc9b2cd051a0d1c10/"
+      ],
+      "delivery_month": "2025-02",
+      "delivery_ms": 1739959200000,
+      "delivery_utc": "2025-02-19T10:00:00+00:00",
+      "first_notice_ms": 1739354109000,
+      "last_pre_event_notice_ms": 1739354109000,
+      "lead_hours": 168.08083333333335,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "NYANUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-ambusdt-perpetual-contract-blt67cb6066192cfcba/"
+      ],
+      "delivery_month": "2025-02",
+      "delivery_ms": 1740304800000,
+      "delivery_utc": "2025-02-23T10:00:00+00:00",
+      "first_notice_ms": 1739939923000,
+      "last_pre_event_notice_ms": 1739939923000,
+      "lead_hours": 101.35472222222222,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "AMBUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-stmxusdt-perpetual-contract-bltad77582840f7043d/"
+      ],
+      "delivery_month": "2025-02",
+      "delivery_ms": 1740304800000,
+      "delivery_utc": "2025-02-23T10:00:00+00:00",
+      "first_notice_ms": 1739938718000,
+      "last_pre_event_notice_ms": 1739938718000,
+      "lead_hours": 101.68944444444445,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "STMXUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-renusdt-perpetual-contract-bltefc353d6aab7c37c/"
+      ],
+      "delivery_month": "2025-03",
+      "delivery_ms": 1741251600000,
+      "delivery_utc": "2025-03-06T09:00:00+00:00",
+      "first_notice_ms": 1740652202000,
+      "last_pre_event_notice_ms": 1740652202000,
+      "lead_hours": 166.49944444444444,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "RENUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-urousdt-perpetual-contract-blt788ea4ad6db833ae/"
+      ],
+      "delivery_month": "2025-03",
+      "delivery_ms": 1741251600000,
+      "delivery_utc": "2025-03-06T09:00:00+00:00",
+      "first_notice_ms": 1740650302000,
+      "last_pre_event_notice_ms": 1740650302000,
+      "lead_hours": 167.02722222222224,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "UROUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-bnxusdt-perpetual-contract-blt1c267cf07b340302/"
+      ],
+      "delivery_month": "2025-03",
+      "delivery_ms": 1742202000000,
+      "delivery_utc": "2025-03-17T09:00:00+00:00",
+      "first_notice_ms": 1740653257000,
+      "last_pre_event_notice_ms": 1740653257000,
+      "lead_hours": 430.2063888888889,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "BNXUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-laiusdt-perpetual-contract-bltb89411381184cccb/"
+      ],
+      "delivery_month": "2025-03",
+      "delivery_ms": 1742202000000,
+      "delivery_utc": "2025-03-17T09:00:00+00:00",
+      "first_notice_ms": 1742054391000,
+      "last_pre_event_notice_ms": 1742054391000,
+      "lead_hours": 41.0025,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "LAIUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-fireusdt-perpetual-contract-blt3c765674a5147043/"
+      ],
+      "delivery_month": "2025-03",
+      "delivery_ms": 1742288400000,
+      "delivery_utc": "2025-03-18T09:00:00+00:00",
+      "first_notice_ms": 1741770340000,
+      "last_pre_event_notice_ms": 1741770340000,
+      "lead_hours": 143.90555555555557,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "FIREUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-motherusdt-perpetual-contract-blt13bb02d1d2a07229/"
+      ],
+      "delivery_month": "2025-03",
+      "delivery_ms": 1742288400000,
+      "delivery_utc": "2025-03-18T09:00:00+00:00",
+      "first_notice_ms": 1741770173000,
+      "last_pre_event_notice_ms": 1741770173000,
+      "lead_hours": 143.95194444444445,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "MOTHERUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-gemsusdt-perpetual-contract-blt38ff7eb69a5dd05f/"
+      ],
+      "delivery_month": "2025-03",
+      "delivery_ms": 1742893200000,
+      "delivery_utc": "2025-03-25T09:00:00+00:00",
+      "first_notice_ms": 1742370092000,
+      "last_pre_event_notice_ms": 1742370092000,
+      "lead_hours": 145.30777777777777,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "GEMSUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-gmeusdt-perpetual-contract-blt1118b4f7425e9c80/"
+      ],
+      "delivery_month": "2025-03",
+      "delivery_ms": 1742893200000,
+      "delivery_utc": "2025-03-25T09:00:00+00:00",
+      "first_notice_ms": 1742370065000,
+      "last_pre_event_notice_ms": 1742370065000,
+      "lead_hours": 145.31527777777777,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "GMEUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-pirateusdt-perpetual-contract-bltea5b11e70740b2ec/"
+      ],
+      "delivery_month": "2025-03",
+      "delivery_ms": 1742893200000,
+      "delivery_utc": "2025-03-25T09:00:00+00:00",
+      "first_notice_ms": 1742370140000,
+      "last_pre_event_notice_ms": 1742370140000,
+      "lead_hours": 145.29444444444445,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "PIRATEUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-combousdt-perpetual-contract-blt225283d9c635ad24/"
+      ],
+      "delivery_month": "2025-03",
+      "delivery_ms": 1743066000000,
+      "delivery_utc": "2025-03-27T09:00:00+00:00",
+      "first_notice_ms": 1742550942000,
+      "last_pre_event_notice_ms": 1742550942000,
+      "lead_hours": 143.07166666666666,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "COMBOUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-linausdt-perpetual-contract-blteb6a859099608ee1/"
+      ],
+      "delivery_month": "2025-03",
+      "delivery_ms": 1743066000000,
+      "delivery_utc": "2025-03-27T09:00:00+00:00",
+      "first_notice_ms": 1742550958000,
+      "last_pre_event_notice_ms": 1742550958000,
+      "lead_hours": 143.06722222222223,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "LINAUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-blueusdt-perpetual-contract-bltb1fe6229473b540e/"
+      ],
+      "delivery_month": "2025-04",
+      "delivery_ms": 1744016400000,
+      "delivery_utc": "2025-04-07T09:00:00+00:00",
+      "first_notice_ms": 1743577680000,
+      "last_pre_event_notice_ms": 1743577680000,
+      "lead_hours": 121.86666666666666,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "BLUEUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-rifsolusdt-perpetual-contract-bltfd0d3cadc9c9f89a/"
+      ],
+      "delivery_month": "2025-04",
+      "delivery_ms": 1744016400000,
+      "delivery_utc": "2025-04-07T09:00:00+00:00",
+      "first_notice_ms": 1743498231000,
+      "last_pre_event_notice_ms": 1743498231000,
+      "lead_hours": 143.93583333333333,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "RIFSOLUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-nulsusdt-perpetual-contract-blt881554acea800822/"
+      ],
+      "delivery_month": "2025-04",
+      "delivery_ms": 1744621200000,
+      "delivery_utc": "2025-04-14T09:00:00+00:00",
+      "first_notice_ms": 1744189284000,
+      "last_pre_event_notice_ms": 1744189284000,
+      "lead_hours": 119.97666666666667,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "NULSUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-troyusdt-perpetual-contract-blta1168d62be8c0c4e/"
+      ],
+      "delivery_month": "2025-04",
+      "delivery_ms": 1744621200000,
+      "delivery_utc": "2025-04-14T09:00:00+00:00",
+      "first_notice_ms": 1744189369000,
+      "last_pre_event_notice_ms": 1744189369000,
+      "lead_hours": 119.95305555555555,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "TROYUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-prosusdt-perpetual-contract-blt4a92fe6877fefb5b/"
+      ],
+      "delivery_month": "2025-04",
+      "delivery_ms": 1744772400000,
+      "delivery_utc": "2025-04-16T03:00:00+00:00",
+      "first_notice_ms": 1744530922000,
+      "last_pre_event_notice_ms": 1744530922000,
+      "lead_hours": 67.07722222222222,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "PROSUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-vidtusdt-perpetual-contract-bltda02c6053dd69a75/"
+      ],
+      "delivery_month": "2025-04",
+      "delivery_ms": 1744772400000,
+      "delivery_utc": "2025-04-16T03:00:00+00:00",
+      "first_notice_ms": 1744531082000,
+      "last_pre_event_notice_ms": 1744531082000,
+      "lead_hours": 67.03277777777778,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "VIDTUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-jailstoolusdt-perpetual-contract-blt1813c0d739a1fa1b/"
+      ],
+      "delivery_month": "2025-04",
+      "delivery_ms": 1744794000000,
+      "delivery_utc": "2025-04-16T09:00:00+00:00",
+      "first_notice_ms": 1744362287000,
+      "last_pre_event_notice_ms": 1744362287000,
+      "lead_hours": 119.92027777777778,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "JAILSTOOLUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-buzzusdt-perpetual-contract-blta9ee65c448a69c37/"
+      ],
+      "delivery_month": "2025-04",
+      "delivery_ms": 1745031600000,
+      "delivery_utc": "2025-04-19T03:00:00+00:00",
+      "first_notice_ms": 1744884180000,
+      "last_pre_event_notice_ms": 1744884180000,
+      "lead_hours": 40.95,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "BUZZUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-10000000aidogeusdt-perpetual-contract-blt411c241bf1cf6b3f/"
+      ],
+      "delivery_month": "2025-04",
+      "delivery_ms": 1745809200000,
+      "delivery_utc": "2025-04-28T03:00:00+00:00",
+      "first_notice_ms": 1745571555000,
+      "last_pre_event_notice_ms": 1745571555000,
+      "lead_hours": 66.0125,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "10000000AIDOGEUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-luceusdt-perpetual-contract-blt78e69713d7b6c9fc/"
+      ],
+      "delivery_month": "2025-04",
+      "delivery_ms": 1745809200000,
+      "delivery_utc": "2025-04-28T03:00:00+00:00",
+      "first_notice_ms": 1745571545000,
+      "last_pre_event_notice_ms": 1745571545000,
+      "lead_hours": 66.01527777777778,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "LUCEUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-manekiusdt-perpetual-contract-blt274c012b0d204d82/"
+      ],
+      "delivery_month": "2025-04",
+      "delivery_ms": 1745809200000,
+      "delivery_utc": "2025-04-28T03:00:00+00:00",
+      "first_notice_ms": 1745571565000,
+      "last_pre_event_notice_ms": 1745571565000,
+      "lead_hours": 66.00972222222222,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "MANEKIUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-maxusdt-perpetual-contract-blt08b37daaf6db3163/"
+      ],
+      "delivery_month": "2025-04",
+      "delivery_ms": 1745830800000,
+      "delivery_utc": "2025-04-28T09:00:00+00:00",
+      "first_notice_ms": 1745484936000,
+      "last_pre_event_notice_ms": 1745484936000,
+      "lead_hours": 96.07333333333334,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "MAXUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-alpacausdt-perpetual-contract-blt79ff7b79e01b7bff/"
+      ],
+      "delivery_month": "2025-04",
+      "delivery_ms": 1746003600000,
+      "delivery_utc": "2025-04-30T09:00:00+00:00",
+      "first_notice_ms": 1745484919000,
+      "last_pre_event_notice_ms": 1745484919000,
+      "lead_hours": 144.07805555555555,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "ALPACAUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-memefiusdt-perpetual-contract-bltd571fcb940055d6c/"
+      ],
+      "delivery_month": "2025-05",
+      "delivery_ms": 1747040400000,
+      "delivery_utc": "2025-05-12T09:00:00+00:00",
+      "first_notice_ms": 1746808257000,
+      "last_pre_event_notice_ms": 1746808257000,
+      "lead_hours": 64.48416666666667,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "MEMEFIUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-vrausdt-perpetual-contract-blt634b36761d5d96de/"
+      ],
+      "delivery_month": "2025-05",
+      "delivery_ms": 1747040400000,
+      "delivery_utc": "2025-05-12T09:00:00+00:00",
+      "first_notice_ms": 1746808153000,
+      "last_pre_event_notice_ms": 1746808153000,
+      "lead_hours": 64.51305555555555,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "VRAUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-stptusdt-perpetual-contract-bltf13ab1df442e7cd0/"
+      ],
+      "delivery_month": "2025-05",
+      "delivery_ms": 1747465200000,
+      "delivery_utc": "2025-05-17T07:00:00+00:00",
+      "first_notice_ms": 1747292332000,
+      "last_pre_event_notice_ms": 1747292332000,
+      "lead_hours": 48.01888888888889,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "STPTUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-foxyusdt-perpetual-contract-blt0cef0a6e32e18819/"
+      ],
+      "delivery_month": "2025-05",
+      "delivery_ms": 1747904400000,
+      "delivery_utc": "2025-05-22T09:00:00+00:00",
+      "first_notice_ms": 1747731438000,
+      "last_pre_event_notice_ms": 1747731438000,
+      "lead_hours": 48.045,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "FOXYUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-omgusdt-perpetual-contract-blta682a6da3cb1773a/"
+      ],
+      "delivery_month": "2025-06",
+      "delivery_ms": 1748941200000,
+      "delivery_utc": "2025-06-03T09:00:00+00:00",
+      "first_notice_ms": 1748600933000,
+      "last_pre_event_notice_ms": 1748600933000,
+      "lead_hours": 94.51861111111111,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "OMGUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-gominingusdt-perpetual-contract-bltc5f1879d80c214fe/"
+      ],
+      "delivery_month": "2025-06",
+      "delivery_ms": 1749200400000,
+      "delivery_utc": "2025-06-06T09:00:00+00:00",
+      "first_notice_ms": 1748941990000,
+      "last_pre_event_notice_ms": 1748941990000,
+      "lead_hours": 71.78055555555555,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "GOMININGUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-1000mumuusdt-perpetual-contract-bltce6128e542016f27/"
+      ],
+      "delivery_month": "2025-06",
+      "delivery_ms": 1749718800000,
+      "delivery_utc": "2025-06-12T09:00:00+00:00",
+      "first_notice_ms": 1749459916000,
+      "last_pre_event_notice_ms": 1749459916000,
+      "lead_hours": 71.91222222222223,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "1000MUMUUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-zkjusdt-perpetual-contract-blt5ba66864287a3ba8/"
+      ],
+      "delivery_month": "2025-06",
+      "delivery_ms": 1750260600000,
+      "delivery_utc": "2025-06-18T15:30:00+00:00",
+      "first_notice_ms": 1750061870000,
+      "last_pre_event_notice_ms": 1750061870000,
+      "lead_hours": 55.202777777777776,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "ZKJUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-ftnusdt-perpetual-contract-blt22675c7e0cfd48a3/"
+      ],
+      "delivery_month": "2025-06",
+      "delivery_ms": 1750669200000,
+      "delivery_utc": "2025-06-23T09:00:00+00:00",
+      "first_notice_ms": 1750409882000,
+      "last_pre_event_notice_ms": 1750409882000,
+      "lead_hours": 72.03277777777778,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "FTNUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-michiusdt-perpetual-contract-blt1df020c0f569ad4c/"
+      ],
+      "delivery_month": "2025-06",
+      "delivery_ms": 1751014800000,
+      "delivery_utc": "2025-06-27T09:00:00+00:00",
+      "first_notice_ms": 1750670149000,
+      "last_pre_event_notice_ms": 1750670149000,
+      "lead_hours": 95.73638888888888,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "MICHIUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-darkusdt-perpetual-contract-blt11296e6ee370054e/"
+      ],
+      "delivery_month": "2025-07",
+      "delivery_ms": 1751360400000,
+      "delivery_utc": "2025-07-01T09:00:00+00:00",
+      "first_notice_ms": 1751015611000,
+      "last_pre_event_notice_ms": 1751015611000,
+      "lead_hours": 95.77472222222222,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "DARKUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-leverusdt-perpetual-contract-bltb7ebf82b68ebcee1/"
+      ],
+      "delivery_month": "2025-07",
+      "delivery_ms": 1751360400000,
+      "delivery_utc": "2025-07-01T09:00:00+00:00",
+      "first_notice_ms": 1751187455000,
+      "last_pre_event_notice_ms": 1751187455000,
+      "lead_hours": 48.040277777777774,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "LEVERUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-mdtusdt-perpetual-contract-blt5bca4db35473d74a/"
+      ],
+      "delivery_month": "2025-07",
+      "delivery_ms": 1751619600000,
+      "delivery_utc": "2025-07-04T09:00:00+00:00",
+      "first_notice_ms": 1751361598000,
+      "last_pre_event_notice_ms": 1751361598000,
+      "lead_hours": 71.66722222222222,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "MDTUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-1000catsusdt-perpetual-contract-bltf5bf1b358e11e490/"
+      ],
+      "delivery_month": "2025-07",
+      "delivery_ms": 1751706000000,
+      "delivery_utc": "2025-07-05T09:00:00+00:00",
+      "first_notice_ms": 1751454225000,
+      "last_pre_event_notice_ms": 1751454225000,
+      "lead_hours": 69.9375,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "1000CATSUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-ncusdt-perpetual-contract-blt59b8ab4493e2469e/"
+      ],
+      "delivery_month": "2025-07",
+      "delivery_ms": 1751706000000,
+      "delivery_utc": "2025-07-05T09:00:00+00:00",
+      "first_notice_ms": 1751454437000,
+      "last_pre_event_notice_ms": 1751454437000,
+      "lead_hours": 69.87861111111111,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "NCUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-praiusdt-perpetual-contract-blte42ce21355902039/"
+      ],
+      "delivery_month": "2025-07",
+      "delivery_ms": 1751706000000,
+      "delivery_utc": "2025-07-05T09:00:00+00:00",
+      "first_notice_ms": 1751454590000,
+      "last_pre_event_notice_ms": 1751454590000,
+      "lead_hours": 69.83611111111111,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "PRAIUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-1000apuusdt-perpetual-contract-blt6a583ef162d95f5e/"
+      ],
+      "delivery_month": "2025-07",
+      "delivery_ms": 1752224400000,
+      "delivery_utc": "2025-07-11T09:00:00+00:00",
+      "first_notice_ms": 1751965473000,
+      "last_pre_event_notice_ms": 1751965473000,
+      "lead_hours": 71.92416666666666,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "1000APUUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-xrdusdt-perpetual-contract-bltacc1b96e5a16bcb7/"
+      ],
+      "delivery_month": "2025-07",
+      "delivery_ms": 1752224400000,
+      "delivery_utc": "2025-07-11T09:00:00+00:00",
+      "first_notice_ms": 1751965357000,
+      "last_pre_event_notice_ms": 1751965357000,
+      "lead_hours": 71.9563888888889,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "XRDUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-komausdt-perpetual-contract-blt8a1f19a4f5b844dc/"
+      ],
+      "delivery_month": "2025-08",
+      "delivery_ms": 1754038800000,
+      "delivery_utc": "2025-08-01T09:00:00+00:00",
+      "first_notice_ms": 1753780958000,
+      "last_pre_event_notice_ms": 1753780958000,
+      "lead_hours": 71.62277777777778,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "KOMAUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-mobileusdt-perpetual-contract-blt0de8fa6d66f9905b/"
+      ],
+      "delivery_month": "2025-08",
+      "delivery_ms": 1754038800000,
+      "delivery_utc": "2025-08-01T09:00:00+00:00",
+      "first_notice_ms": 1753780208000,
+      "last_pre_event_notice_ms": 1753780208000,
+      "lead_hours": 71.83111111111111,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "MOBILEUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-mkrusdt-perpetual-contract-blt714a73dcdc9502f1/"
+      ],
+      "delivery_month": "2025-08",
+      "delivery_ms": 1755507600000,
+      "delivery_utc": "2025-08-18T09:00:00+00:00",
+      "first_notice_ms": 1754989786000,
+      "last_pre_event_notice_ms": 1754989786000,
+      "lead_hours": 143.8372222222222,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "MKRUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-10000whyusdt-perpetual-contract-bltef59f7d838950f41/"
+      ],
+      "delivery_month": "2025-09",
+      "delivery_ms": 1756890000000,
+      "delivery_utc": "2025-09-03T09:00:00+00:00",
+      "first_notice_ms": 1756458592000,
+      "last_pre_event_notice_ms": 1756458592000,
+      "lead_hours": 119.83555555555556,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "10000WHYUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-fbusdt-perpetual-contract-bltcee6d2776cd4e857/"
+      ],
+      "delivery_month": "2025-09",
+      "delivery_ms": 1756890000000,
+      "delivery_utc": "2025-09-03T09:00:00+00:00",
+      "first_notice_ms": 1756458444000,
+      "last_pre_event_notice_ms": 1756458444000,
+      "lead_hours": 119.87666666666667,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "FBUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-mblusdt-perpetual-contract-blt947319d6ec1ea8e0/"
+      ],
+      "delivery_month": "2025-09",
+      "delivery_ms": 1756890000000,
+      "delivery_utc": "2025-09-03T09:00:00+00:00",
+      "first_notice_ms": 1756458572000,
+      "last_pre_event_notice_ms": 1756458572000,
+      "lead_hours": 119.8411111111111,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "MBLUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-neiroethusdt-perpetual-contract-blt42ebc8032f9f52ab/"
+      ],
+      "delivery_month": "2025-09",
+      "delivery_ms": 1757415600000,
+      "delivery_utc": "2025-09-09T11:00:00+00:00",
+      "first_notice_ms": 1757062269000,
+      "last_pre_event_notice_ms": 1757062269000,
+      "lead_hours": 98.1475,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "NEIROETHUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-slfusdt-perpetual-contract-blt0d4c9f1daa14cdea/"
+      ],
+      "delivery_month": "2025-09",
+      "delivery_ms": 1758272400000,
+      "delivery_utc": "2025-09-19T09:00:00+00:00",
+      "first_notice_ms": 1758099672000,
+      "last_pre_event_notice_ms": 1758099672000,
+      "lead_hours": 47.98,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "SLFUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-omniusdt-perpetual-contract-blt0b6ea1915a6a7f47/"
+      ],
+      "delivery_month": "2025-09",
+      "delivery_ms": 1758704400000,
+      "delivery_utc": "2025-09-24T09:00:00+00:00",
+      "first_notice_ms": 1758532222000,
+      "last_pre_event_notice_ms": 1758532222000,
+      "lead_hours": 47.827222222222225,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "OMNIUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-uxlinkusdt-perpetual-contract-blt21fd40245b33ca0d/"
+      ],
+      "delivery_month": "2025-09",
+      "delivery_ms": 1758877200000,
+      "delivery_utc": "2025-09-26T09:00:00+00:00",
+      "first_notice_ms": 1758705248000,
+      "last_pre_event_notice_ms": 1758705248000,
+      "lead_hours": 47.76444444444444,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "UXLINKUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-bswusdt-perpetual-contract-blt0c213cbb816714e3/"
+      ],
+      "delivery_month": "2025-10",
+      "delivery_ms": 1759309200000,
+      "delivery_utc": "2025-10-01T09:00:00+00:00",
+      "first_notice_ms": 1759136805000,
+      "last_pre_event_notice_ms": 1759136805000,
+      "lead_hours": 47.8875,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "BSWUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-slerfusdt-perpetual-contract-blt88e2f744e4065cb5/"
+      ],
+      "delivery_month": "2025-10",
+      "delivery_ms": 1759395600000,
+      "delivery_utc": "2025-10-02T09:00:00+00:00",
+      "first_notice_ms": 1759222983000,
+      "last_pre_event_notice_ms": 1759222983000,
+      "lead_hours": 47.94916666666666,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "SLERFUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-10000ladysusdt-perpetual-contract-bltad34766fa279a898/"
+      ],
+      "delivery_month": "2025-10",
+      "delivery_ms": 1759741200000,
+      "delivery_utc": "2025-10-06T09:00:00+00:00",
+      "first_notice_ms": 1759311228000,
+      "last_pre_event_notice_ms": 1759311228000,
+      "lead_hours": 119.43666666666667,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "10000LADYSUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-atausdt-perpetual-contract-blt54c3d4eb24789bbe/"
+      ],
+      "delivery_month": "2025-10",
+      "delivery_ms": 1759741200000,
+      "delivery_utc": "2025-10-06T09:00:00+00:00",
+      "first_notice_ms": 1759311205000,
+      "last_pre_event_notice_ms": 1759311205000,
+      "lead_hours": 119.44305555555556,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "ATAUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-myriausdt-perpetual-contract-blt4520508ba1343c17/"
+      ],
+      "delivery_month": "2025-10",
+      "delivery_ms": 1759741200000,
+      "delivery_utc": "2025-10-06T09:00:00+00:00",
+      "first_notice_ms": 1759311215000,
+      "last_pre_event_notice_ms": 1759311215000,
+      "lead_hours": 119.44027777777778,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "MYRIAUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-specusdt-perpetual-contract-blt6f05eaea254aeb0d/"
+      ],
+      "delivery_month": "2025-10",
+      "delivery_ms": 1759741200000,
+      "delivery_utc": "2025-10-06T09:00:00+00:00",
+      "first_notice_ms": 1759311195000,
+      "last_pre_event_notice_ms": 1759311195000,
+      "lead_hours": 119.44583333333334,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "SPECUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-10000coqusdt-perpetual-contract-blt7db14a8144fecf05/"
+      ],
+      "delivery_month": "2025-10",
+      "delivery_ms": 1759744800000,
+      "delivery_utc": "2025-10-06T10:00:00+00:00",
+      "first_notice_ms": 1759311248000,
+      "last_pre_event_notice_ms": 1759311248000,
+      "lead_hours": 120.43111111111111,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "10000COQUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-primeusdt-perpetual-contract-blt285590c4256eeda8/"
+      ],
+      "delivery_month": "2025-10",
+      "delivery_ms": 1759744800000,
+      "delivery_utc": "2025-10-06T10:00:00+00:00",
+      "first_notice_ms": 1759311238000,
+      "last_pre_event_notice_ms": 1759311238000,
+      "lead_hours": 120.43388888888889,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "PRIMEUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-qiusdt-perpetual-contract-bltd5499ba1100fe579/"
+      ],
+      "delivery_month": "2025-10",
+      "delivery_ms": 1759744800000,
+      "delivery_utc": "2025-10-06T10:00:00+00:00",
+      "first_notice_ms": 1759311270000,
+      "last_pre_event_notice_ms": 1759311270000,
+      "lead_hours": 120.425,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "QIUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-xemusdt-perpetual-contract-blte630ad686dbee0cb/"
+      ],
+      "delivery_month": "2025-10",
+      "delivery_ms": 1759744800000,
+      "delivery_utc": "2025-10-06T10:00:00+00:00",
+      "first_notice_ms": 1759311259000,
+      "last_pre_event_notice_ms": 1759311259000,
+      "lead_hours": 120.42805555555556,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "XEMUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-bakeusdt-perpetual-contract-bltc3b6dcc0c6e75e86/"
+      ],
+      "delivery_month": "2025-10",
+      "delivery_ms": 1759748400000,
+      "delivery_utc": "2025-10-06T11:00:00+00:00",
+      "first_notice_ms": 1759482696000,
+      "last_pre_event_notice_ms": 1759482696000,
+      "lead_hours": 73.80666666666667,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "BAKEUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-vthousdt-perpetual-contract-blt9cc4c460d26727a8/"
+      ],
+      "delivery_month": "2025-10",
+      "delivery_ms": 1760086800000,
+      "delivery_utc": "2025-10-10T09:00:00+00:00",
+      "first_notice_ms": 1759914280000,
+      "last_pre_event_notice_ms": 1759914280000,
+      "lead_hours": 47.922222222222224,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "VTHOUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-rexusdt-perpetual-contract-bltf0d2f34434e185cc/"
+      ],
+      "delivery_month": "2025-10",
+      "delivery_ms": 1760346000000,
+      "delivery_utc": "2025-10-13T09:00:00+00:00",
+      "first_notice_ms": 1760173381000,
+      "last_pre_event_notice_ms": 1760173381000,
+      "lead_hours": 47.94972222222222,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "REXUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-duckusdt-perpetual-contract-blt4f6844a9b6bf4f30/"
+      ],
+      "delivery_month": "2025-10",
+      "delivery_ms": 1760432400000,
+      "delivery_utc": "2025-10-14T09:00:00+00:00",
+      "first_notice_ms": 1760260044000,
+      "last_pre_event_notice_ms": 1760260044000,
+      "lead_hours": 47.876666666666665,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "DUCKUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-alphausdt-perpetual-contract-bltbb8c3e6ca68f3a04/"
+      ],
+      "delivery_month": "2025-10",
+      "delivery_ms": 1760518800000,
+      "delivery_utc": "2025-10-15T09:00:00+00:00",
+      "first_notice_ms": 1760347639000,
+      "last_pre_event_notice_ms": 1760347639000,
+      "lead_hours": 47.54472222222222,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "ALPHAUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-hotusdt-perpetual-contract-blt56d898b437999bde/"
+      ],
+      "delivery_month": "2025-10",
+      "delivery_ms": 1760518800000,
+      "delivery_utc": "2025-10-15T09:00:00+00:00",
+      "first_notice_ms": 1760347655000,
+      "last_pre_event_notice_ms": 1760347655000,
+      "lead_hours": 47.540277777777774,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "HOTUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-1000000peipeiusdt-perpetual-contract-blt1af690e99d6f910e/"
+      ],
+      "delivery_month": "2025-10",
+      "delivery_ms": 1760706000000,
+      "delivery_utc": "2025-10-17T13:00:00+00:00",
+      "first_notice_ms": 1760534034000,
+      "last_pre_event_notice_ms": 1760534034000,
+      "lead_hours": 47.76833333333333,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "1000000PEIPEIUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-jusdt-perpetual-contract-bltc40e34b175efd810/"
+      ],
+      "delivery_month": "2025-10",
+      "delivery_ms": 1760706000000,
+      "delivery_utc": "2025-10-17T13:00:00+00:00",
+      "first_notice_ms": 1760534021000,
+      "last_pre_event_notice_ms": 1760534021000,
+      "lead_hours": 47.77194444444444,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "JUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-vrusdt-perpetual-contract-blt79c415e64092600a/"
+      ],
+      "delivery_month": "2025-10",
+      "delivery_ms": 1760706000000,
+      "delivery_utc": "2025-10-17T13:00:00+00:00",
+      "first_notice_ms": 1760534050000,
+      "last_pre_event_notice_ms": 1760534050000,
+      "lead_hours": 47.763888888888886,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "VRUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-10000wenusdt-perpetual-contract-blt0fc799458c8b52cb/"
+      ],
+      "delivery_month": "2025-10",
+      "delivery_ms": 1760707800000,
+      "delivery_utc": "2025-10-17T13:30:00+00:00",
+      "first_notice_ms": 1760534077000,
+      "last_pre_event_notice_ms": 1760534077000,
+      "lead_hours": 48.256388888888885,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "10000WENUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-rheausdt-perpetual-contract-blt10c63012baeebd6a/"
+      ],
+      "delivery_month": "2025-10",
+      "delivery_ms": 1760707800000,
+      "delivery_utc": "2025-10-17T13:30:00+00:00",
+      "first_notice_ms": 1760534150000,
+      "last_pre_event_notice_ms": 1760534150000,
+      "lead_hours": 48.236111111111114,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "RHEAUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-solousdt-perpetual-contract-bltd20d431b871fb9e2/"
+      ],
+      "delivery_month": "2025-10",
+      "delivery_ms": 1760707800000,
+      "delivery_utc": "2025-10-17T13:30:00+00:00",
+      "first_notice_ms": 1760534117000,
+      "last_pre_event_notice_ms": 1760534117000,
+      "lead_hours": 48.24527777777778,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "SOLOUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-cpoolusdt-perpetual-contract-bltc1af4248107b5500/"
+      ],
+      "delivery_month": "2025-10",
+      "delivery_ms": 1760778000000,
+      "delivery_utc": "2025-10-18T09:00:00+00:00",
+      "first_notice_ms": 1760606338000,
+      "last_pre_event_notice_ms": 1760606338000,
+      "lead_hours": 47.68388888888889,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "CPOOLUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-masausdt-perpetual-contract-blt42c9d8008f4e4b8c/"
+      ],
+      "delivery_month": "2025-10",
+      "delivery_ms": 1760778000000,
+      "delivery_utc": "2025-10-18T09:00:00+00:00",
+      "first_notice_ms": 1760606328000,
+      "last_pre_event_notice_ms": 1760606328000,
+      "lead_hours": 47.68666666666667,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "MASAUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-rfcusdt-perpetual-contract-blt0327de3fa5fd1d86/"
+      ],
+      "delivery_month": "2025-10",
+      "delivery_ms": 1760778000000,
+      "delivery_utc": "2025-10-18T09:00:00+00:00",
+      "first_notice_ms": 1760606307000,
+      "last_pre_event_notice_ms": 1760606307000,
+      "lead_hours": 47.6925,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "RFCUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-sendusdt-perpetual-contract-blt2264a043c735f467/"
+      ],
+      "delivery_month": "2025-10",
+      "delivery_ms": 1760778000000,
+      "delivery_utc": "2025-10-18T09:00:00+00:00",
+      "first_notice_ms": 1760606317000,
+      "last_pre_event_notice_ms": 1760606317000,
+      "lead_hours": 47.68972222222222,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "SENDUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-xterusdt-perpetual-contract-blt8bf7467c05e8b625/"
+      ],
+      "delivery_month": "2025-10",
+      "delivery_ms": 1760778000000,
+      "delivery_utc": "2025-10-18T09:00:00+00:00",
+      "first_notice_ms": 1760606297000,
+      "last_pre_event_notice_ms": 1760606297000,
+      "lead_hours": 47.695277777777775,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "XTERUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-mvlusdt-perpetual-contract-blt87f4421a0e866e56/"
+      ],
+      "delivery_month": "2025-10",
+      "delivery_ms": 1760779800000,
+      "delivery_utc": "2025-10-18T09:30:00+00:00",
+      "first_notice_ms": 1760606349000,
+      "last_pre_event_notice_ms": 1760606349000,
+      "lead_hours": 48.18083333333333,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "MVLUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-seraphusdt-perpetual-contract-blt5ec8d8453c30ade7/"
+      ],
+      "delivery_month": "2025-10",
+      "delivery_ms": 1760779800000,
+      "delivery_utc": "2025-10-18T09:30:00+00:00",
+      "first_notice_ms": 1760606359000,
+      "last_pre_event_notice_ms": 1760606359000,
+      "lead_hours": 48.17805555555555,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "SERAPHUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-kusdt-perpetual-contract-blt549b62a27248d83e/"
+      ],
+      "delivery_month": "2025-10",
+      "delivery_ms": 1760880600000,
+      "delivery_utc": "2025-10-19T13:30:00+00:00",
+      "first_notice_ms": 1760793870000,
+      "last_pre_event_notice_ms": 1760793870000,
+      "lead_hours": 24.091666666666665,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "KUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-dogsusdt-perpetual-contract-bltcdf69f658ec32b57/"
+      ],
+      "delivery_month": "2025-10",
+      "delivery_ms": 1761296400000,
+      "delivery_utc": "2025-10-24T09:00:00+00:00",
+      "first_notice_ms": 1761037950000,
+      "last_pre_event_notice_ms": 1761037950000,
+      "lead_hours": 71.79166666666667,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "DOGSUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-kdausdt-perpetual-contract-blt3a62206f9123999f/"
+      ],
+      "delivery_month": "2025-10",
+      "delivery_ms": 1761314400000,
+      "delivery_utc": "2025-10-24T14:00:00+00:00",
+      "first_notice_ms": 1761139908000,
+      "last_pre_event_notice_ms": 1761139908000,
+      "lead_hours": 48.47,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "KDAUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-badgerusdt-perpetual-contract-bltd3864a04a72e82b5/"
+      ],
+      "delivery_month": "2025-10",
+      "delivery_ms": 1761382800000,
+      "delivery_utc": "2025-10-25T09:00:00+00:00",
+      "first_notice_ms": 1761210500000,
+      "last_pre_event_notice_ms": 1761210500000,
+      "lead_hours": 47.861111111111114,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "BADGERUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-chessusdt-perpetual-contract-blt1722d79417a9f131/"
+      ],
+      "delivery_month": "2025-10",
+      "delivery_ms": 1761814800000,
+      "delivery_utc": "2025-10-30T09:00:00+00:00",
+      "first_notice_ms": 1761644042000,
+      "last_pre_event_notice_ms": 1761644042000,
+      "lead_hours": 47.43277777777778,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "CHESSUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-hifiusdt-perpetual-contract-blt957f65503fcb78e9/"
+      ],
+      "delivery_month": "2025-10",
+      "delivery_ms": 1761814800000,
+      "delivery_utc": "2025-10-30T09:00:00+00:00",
+      "first_notice_ms": 1761644063000,
+      "last_pre_event_notice_ms": 1761644063000,
+      "lead_hours": 47.426944444444445,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "HIFIUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-voxelusdt-perpetual-contract-blt6b4f10320c8e93b1/"
+      ],
+      "delivery_month": "2025-10",
+      "delivery_ms": 1761814800000,
+      "delivery_utc": "2025-10-30T09:00:00+00:00",
+      "first_notice_ms": 1761644023000,
+      "last_pre_event_notice_ms": 1761644023000,
+      "lead_hours": 47.43805555555556,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "VOXELUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-flmusdt-perpetual-contract-blt6f74958fd8d10aca/"
+      ],
+      "delivery_month": "2025-11",
+      "delivery_ms": 1761987600000,
+      "delivery_utc": "2025-11-01T09:00:00+00:00",
+      "first_notice_ms": 1761818274000,
+      "last_pre_event_notice_ms": 1761818274000,
+      "lead_hours": 47.035,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "FLMUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-ai16zusdt-perpetual-contract-blt17c11f33599586df/"
+      ],
+      "delivery_month": "2025-11",
+      "delivery_ms": 1762419600000,
+      "delivery_utc": "2025-11-06T09:00:00+00:00",
+      "first_notice_ms": 1762248628000,
+      "last_pre_event_notice_ms": 1762248628000,
+      "lead_hours": 47.492222222222225,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "AI16ZUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-aiusdt-perpetual-contract-bltf553f12467c7424e/"
+      ],
+      "delivery_month": "2025-11",
+      "delivery_ms": 1763114400000,
+      "delivery_utc": "2025-11-14T10:00:00+00:00",
+      "first_notice_ms": 1762942366000,
+      "last_pre_event_notice_ms": 1762942366000,
+      "lead_hours": 47.78722222222222,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "AIUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-audiousdt-perpetual-contract-blt4c37ceae500d314c/"
+      ],
+      "delivery_month": "2025-11",
+      "delivery_ms": 1763114400000,
+      "delivery_utc": "2025-11-14T10:00:00+00:00",
+      "first_notice_ms": 1762942376000,
+      "last_pre_event_notice_ms": 1762942376000,
+      "lead_hours": 47.784444444444446,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "AUDIOUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-forthusdt-perpetual-contract-bltc612a50e8386a993/"
+      ],
+      "delivery_month": "2025-11",
+      "delivery_ms": 1763114400000,
+      "delivery_utc": "2025-11-14T10:00:00+00:00",
+      "first_notice_ms": 1762942387000,
+      "last_pre_event_notice_ms": 1762942387000,
+      "lead_hours": 47.78138888888889,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "FORTHUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-joeusdt-perpetual-contract-bltc06270fc6133262e/"
+      ],
+      "delivery_month": "2025-11",
+      "delivery_ms": 1763114400000,
+      "delivery_utc": "2025-11-14T10:00:00+00:00",
+      "first_notice_ms": 1762942396000,
+      "last_pre_event_notice_ms": 1762942396000,
+      "lead_hours": 47.778888888888886,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "JOEUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-milkusdt-perpetual-contract-blt152f7d2bf7a46b83/"
+      ],
+      "delivery_month": "2025-12",
+      "delivery_ms": 1764579600000,
+      "delivery_utc": "2025-12-01T09:00:00+00:00",
+      "first_notice_ms": 1764322013000,
+      "last_pre_event_notice_ms": 1764322013000,
+      "lead_hours": 71.55194444444444,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "MILKUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-myrousdt-perpetual-contract-blt7ab5ccf57ad595d7/"
+      ],
+      "delivery_month": "2025-12",
+      "delivery_ms": 1764579600000,
+      "delivery_utc": "2025-12-01T09:00:00+00:00",
+      "first_notice_ms": 1764322053000,
+      "last_pre_event_notice_ms": 1764322053000,
+      "lead_hours": 71.54083333333334,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "MYROUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-quickusdt-perpetual-contract-bltd28b62cc944186fe/"
+      ],
+      "delivery_month": "2025-12",
+      "delivery_ms": 1764579600000,
+      "delivery_utc": "2025-12-01T09:00:00+00:00",
+      "first_notice_ms": 1764322024000,
+      "last_pre_event_notice_ms": 1764322024000,
+      "lead_hours": 71.54888888888888,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "QUICKUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-rifusdt-perpetual-contract-bltc40d3ed17413ed82/"
+      ],
+      "delivery_month": "2025-12",
+      "delivery_ms": 1764579600000,
+      "delivery_utc": "2025-12-01T09:00:00+00:00",
+      "first_notice_ms": 1764322035000,
+      "last_pre_event_notice_ms": 1764322035000,
+      "lead_hours": 71.54583333333333,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "RIFUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-elxusdt-perpetual-contract-blt0dd8b75ad640e0c3/"
+      ],
+      "delivery_month": "2025-12",
+      "delivery_ms": 1764838800000,
+      "delivery_utc": "2025-12-04T09:00:00+00:00",
+      "first_notice_ms": 1764666447000,
+      "last_pre_event_notice_ms": 1764666447000,
+      "lead_hours": 47.87583333333333,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "ELXUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-piggyusdt-perpetual-contract-bltb228c954c7f81751/"
+      ],
+      "delivery_month": "2025-12",
+      "delivery_ms": 1765098000000,
+      "delivery_utc": "2025-12-07T09:00:00+00:00",
+      "first_notice_ms": 1764942619000,
+      "last_pre_event_notice_ms": 1764942619000,
+      "lead_hours": 43.16138888888889,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "PIGGYUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-obolusdt-perpetual-contract-blt4424bdebc4e1ac84/"
+      ],
+      "delivery_month": "2025-12",
+      "delivery_ms": 1765530000000,
+      "delivery_utc": "2025-12-12T09:00:00+00:00",
+      "first_notice_ms": 1765357489000,
+      "last_pre_event_notice_ms": 1765357489000,
+      "lead_hours": 47.91972222222222,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "OBOLUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-aiausdt-perpetual-contract-bltb5053084c95289ae/"
+      ],
+      "delivery_month": "2025-12",
+      "delivery_ms": 1765616400000,
+      "delivery_utc": "2025-12-13T09:00:00+00:00",
+      "first_notice_ms": 1765466617000,
+      "last_pre_event_notice_ms": 1765466617000,
+      "lead_hours": 41.60638888888889,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "AIAUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-prclusdt-perpetual-contract-blt935cc0b75e0fb243/"
+      ],
+      "delivery_month": "2025-12",
+      "delivery_ms": 1766739600000,
+      "delivery_utc": "2025-12-26T09:00:00+00:00",
+      "first_notice_ms": 1766567278000,
+      "last_pre_event_notice_ms": 1766567278000,
+      "lead_hours": 47.867222222222225,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "PRCLUSDT",
+      "venue": "BYBIT"
+    },
+    {
+      "announcement_urls": [
+        "https://announcements.bybit.com/en-US/article/delisting-of-zentusdt-perpetual-contract-blt7edc1f5ce99c746f/"
+      ],
+      "delivery_month": "2025-12",
+      "delivery_ms": 1766739600000,
+      "delivery_utc": "2025-12-26T09:00:00+00:00",
+      "first_notice_ms": 1766567289000,
+      "last_pre_event_notice_ms": 1766567289000,
+      "lead_hours": 47.86416666666667,
+      "notice_count": 1,
+      "post_delivery_match_count": 0,
+      "pre_launch_match_count": 0,
+      "symbol": "ZENTUSDT",
+      "venue": "BYBIT"
+    }
+  ],
+  "gates": {
+    "admitted_events_ge5": true,
+    "all_admitted_positive_lead": true,
+    "announcement_match_coverage_ge80pct": false,
+    "closed_perpetuals_ge5": true,
+    "delivery_months_ge3": true,
+    "matched_source_timestamp_integrity": false
+  },
+  "instrument_source": {
+    "category": "linear",
+    "endpoint": "/v5/market/instruments-info",
+    "in_scope_count": 154,
+    "status": "Closed"
+  },
+  "lead_hours": {
+    "max": 430.2063888888889,
+    "median": 71.55041666666666,
+    "min": 24.091666666666665,
+    "p25": 47.87645833333333,
+    "p75": 119.97868055555556
+  },
+  "next_state": "REVIEW_MATCHED_SOURCE_TIMESTAMP_INTEGRITY_WITHOUT_OPENING_PRICES",
+  "pnl_calculated": false,
+  "price_accessed": false,
+  "settlement_semantics_interpreted": false,
+  "source_integrity_issue_count": 1,
+  "source_integrity_issues": [
+    {
+      "date_ms_diagnostic_only": 1676374879000,
+      "issue": "MISSING",
+      "symbol": "BNXUSDT",
+      "url": "https://announcements.bybit.com/en-US/article/delisting-of-bnxusdt-perpetual-contract-blt8efa3ed073235940"
+    }
+  ],
+  "stage": "SC001-B15P2-P0S-2025-HOLDOUT-SOURCE-CENSUS-V0.1",
+  "status": "B15P2_P0S_2025_HOLDOUT_SOURCE_CENSUS_REVIEW",
+  "unmatched_symbols": [
+    "A8USDT",
+    "AGTUSDT",
+    "AVAILUSDT",
+    "BALUSDT",
+    "BDXNUSDT",
+    "CELRUSDT",
+    "COSUSDT",
+    "DMCUSDT",
+    "EOSUSDT",
+    "ETHWUSDT",
+    "FISUSDT",
+    "FRAGUSDT",
+    "FUELUSDT",
+    "GLMRUSDT",
+    "GORKUSDT",
+    "GTCUSDT",
+    "GUSDT",
+    "LAUNCHCOINUSDT",
+    "LOOKSUSDT",
+    "MAJORUSDT",
+    "NODEUSDT",
+    "OSMOUSDT",
+    "PERPUSDT",
+    "PUMPUSDT",
+    "RADUSDT",
+    "RSS3USDT",
+    "SCAUSDT",
+    "SKATEUSDT",
+    "SUNDOGUSDT",
+    "SWEATUSDT",
+    "SWELLUSDT",
+    "TANSSIUSDT",
+    "TOKENUSDT",
+    "ZRCUSDT"
+  ],
+  "version": "0.1",
+  "window": {
+    "end_exclusive_ms": 1767225600000,
+    "start_ms": 1735689600000
+  }
+}

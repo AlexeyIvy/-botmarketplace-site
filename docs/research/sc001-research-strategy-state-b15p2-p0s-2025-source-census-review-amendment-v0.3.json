@@ -1,0 +1,39 @@
+{
+  "schema": "sc001.research_strategy_state.b15p2_p0s_2025_source_census_review_amendment.v0.3",
+  "date": "2026-09-29",
+  "status": "CANONICAL_STATE_SYNC_PENDING",
+  "scope": "SCALPING_RESEARCH_SC001_B15P2",
+  "applies_to": "docs/research/sc001-research-strategy-state-v0.1.json",
+  "base_state_sha256": "46496075d7445256907c1a4de09b2f74689d26c36680b66ac1221f97ba53caa9",
+  "supersedes_amendment": "docs/research/sc001-research-strategy-state-b15p2-source-coverage-review-amendment-v0.2.json",
+  "state": "P0S_2025_HOLDOUT_SOURCE_CENSUS_REVIEW",
+  "original_p0_state": "DEFER_SOURCE_COVERAGE",
+  "successor_source_census": {
+    "result_path": "docs/research/sc001-b15p2-p0s-2025-holdout-source-census-result-v0.1.json",
+    "result_sha256": "706cc5696e863ad7cd6e81efabe1629b2f9013e2ad9cbeacad46345f17ee1c36",
+    "review_path": "docs/research/sc001-b15p2-p0s-2025-holdout-source-census-review-v0.1.md",
+    "review_sha256": "b85b713ff4981ed00cbf8fb159e5059fdd64557917fe99d7b85d07c5d879fefb",
+    "closed_in_scope": 154,
+    "admitted": 120,
+    "coverage": 0.7792207792207793,
+    "source_integrity_issues": 1,
+    "unmatched_symbols": 34,
+    "price_outcome_accessed": false
+  },
+  "roadmap": {
+    "path": "docs/research/sc001-current-roadmap-and-stop-rules-v5.208.md",
+    "sha256": "f539113666ec9d7db7e7d688599e554c6ad835e48c365947d6362871b048f09d"
+  },
+  "contamination_registry": {
+    "path": "docs/research/sc001-contamination-registry-v0.36.json",
+    "sha256": "7d0fdc57a0c0eadc94a71b8b0b63ccfe24a3465a2305ff4f971889b59f7df028"
+  },
+  "test_executor_rate_state": {
+    "rolling_hour": 2,
+    "utc_day": 10,
+    "max_runs_per_rolling_hour": 3,
+    "max_runs_per_utc_day": 10,
+    "bypass_authorized": false
+  },
+  "next_allowed_action": "DESIGN_OFFICIAL_BYBIT_2025_UNMATCHED_ANNOUNCEMENT_STRUCTURE_AUDIT_NO_PRICE"
+}
