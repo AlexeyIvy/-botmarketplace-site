@@ -1,0 +1,41 @@
+{
+  "schema": "sc001.research_strategy_state.b15p2_p0_defer_amendment.v0.1",
+  "date": "2026-09-29",
+  "status": "CANONICAL_STATE_SYNC_PENDING",
+  "scope": "SCALPING_RESEARCH_SC001_B15P2",
+  "applies_to": "docs/research/sc001-research-strategy-state-v0.1.json",
+  "base_state_sha256": "46496075d7445256907c1a4de09b2f74689d26c36680b66ac1221f97ba53caa9",
+  "state": "P0_DEFER_SOURCE_COVERAGE",
+  "full_run": {
+    "job_id": "job_20260929T142359Z_85d4a91d",
+    "result": "DEFER_SOURCE_COVERAGE",
+    "eligible_events": 23,
+    "raw_events": 94,
+    "eligible_clusters": 18,
+    "frozen_clusters": 37,
+    "eligible_months": 8,
+    "required_months": 9
+  },
+  "canonical_result": {
+    "path": "docs/research/sc001-b15p2-p0-basis-convergence-result-v0.1.json",
+    "sha256": "e2554fcf95992e64d58ffcdac85faf68edff45f5320a596a5249256176bd13a3"
+  },
+  "roadmap": {
+    "path": "docs/research/sc001-current-roadmap-and-stop-rules-v5.205.md",
+    "sha256": "81148cd351a3a7cd17991706145a8a0f9cde5a57b70844852defba8542845976"
+  },
+  "contamination_registry": {
+    "path": "docs/research/sc001-contamination-registry-v0.34.json",
+    "sha256": "2746747bacbe1544265f98d74c7b504c665ed7426fc088aeb466b2267031c3e7"
+  },
+  "worker_manifest": {
+    "path": "docs/research/worker-results/sc001-b15p2-p0-defer-source-coverage-manifest-v0.1.json",
+    "sha256": "a86b59330de823eb29988507e4fbc8806b984d575be34d0ffdf00b97689501f4"
+  },
+  "three_role_review": {
+    "path": "docs/research/sc001-b15p2-p0-defer-source-coverage-three-role-review-v0.1.md",
+    "sha256": "27b0b76c7f66b38c9cbb0d64057746a00ac136e2842ccbe530cf9239c25993d0"
+  },
+  "next_allowed_action": "REVIEW_OFFICIAL_BYBIT_SOURCE_COVERAGE_WITHOUT_SOURCE_SUBSTITUTION_OR_OUTCOME_RESCUE",
+  "note": "This amendment records the post-run B15-P2 state because the canonical strategy-state file could not be pushed in this automation run."
+}
