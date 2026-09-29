@@ -1,0 +1,59 @@
+{
+  "schema": "botmarket.test_executor_installation_freeze.v1.0.3",
+  "date": "2026-09-29",
+  "status": "READY_FOR_REDEPLOY_AFTER_FIRST_MCP_RUN_DIAGNOSTIC",
+  "supersedes": "docs/infrastructure/botmarket-test-executor-installation-freeze-v1.0.2.json",
+  "base_git_head": "ebb727376e8423cf528817661fbc4ded116a6d8b",
+  "artifacts": {
+    "main_installer": {
+      "path": "scripts/mcp/install-botmarket-test-executor-v1.sh",
+      "sha256": "029bea20efa5a777ff373a5a4b96dcc0321d0940ac3fc7cfbaa8455a61582013"
+    },
+    "tunnel_installer": {
+      "path": "scripts/mcp/install-botmarket-test-executor-tunnel-v1.sh",
+      "sha256": "e18062946fbefde2b3c6dd6e6314578c661067e983aa3f15c5c6ac5a28d1a1c9"
+    },
+    "runbook": {
+      "path": "docs/infrastructure/botmarket-test-executor-v1.0.md",
+      "sha256": "9ed51e6287d724009c7f4810ab9d3e46f40e0637b875d0edf69eab11cbe83723"
+    },
+    "first_mcp_run_diagnostic": {
+      "path": "docs/infrastructure/botmarket-test-executor-first-mcp-run-diagnostic-v0.1.json",
+      "sha256": "f6b5707618c09722b9b8c0e5cdf044f291d2fc5a0853064763fba1d35928d110"
+    }
+  },
+  "root_cause": {
+    "class": "CONTROL_SERVICE_RESTRICT_SUIDSGID_VS_RUNTIME_SETGID_CHMOD",
+    "run_repo_test_failed_before_manifest": true,
+    "repo_snapshot_safety_gates_passed_statically": true
+  },
+  "runtime_fix": {
+    "retain_control_service_RestrictSUIDSGID": true,
+    "remove_runtime_setgid_chmod": true,
+    "explicit_job_group_assignment": "botmarket-test-jobs",
+    "job_mode": "0750",
+    "package_dir_mode": "0750",
+    "package_file_modes": ["0440","0550"],
+    "output_mode": "0770",
+    "manifest_mode": "0440",
+    "startup_filesystem_boundary_selftest": true,
+    "orphan_manifestless_job_cleanup_seconds": 3600
+  },
+  "worker_security_unchanged": {
+    "NoNewPrivileges": true,
+    "RestrictSUIDSGID": true,
+    "CapabilityBoundingSet_empty": true,
+    "AmbientCapabilities_empty": true,
+    "ProtectSystem_strict": true,
+    "offline_and_public_research_profiles_unchanged": true,
+    "trading_credentials_available": false
+  },
+  "post_redeploy_gate": [
+    "MCP service filesystem boundary self-test PASS",
+    "MCP service restricted sudo bridge self-test PASS",
+    "ChatGPT get_test_executor_info PASS",
+    "ChatGPT refresh_repo PASS",
+    "ChatGPT run_repo_test harmless offline PASS",
+    "ChatGPT read_job_log PASS"
+  ]
+}

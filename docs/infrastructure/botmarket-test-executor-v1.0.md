@@ -1,7 +1,7 @@
 # BotMarketplace Test Executor MCP v1.0
 
 Date: 2026-09-29  
-Status: **LOCAL EXECUTOR DEPLOYMENT PASS / OPENAI TUNNEL + APP CONNECTION PENDING**
+Status: **APP CONNECTED / FIRST MCP RUN DIAGNOSTIC FIXED / INSTALLATION FREEZE v1.0.3 READY**
 
 ## Purpose
 
@@ -349,7 +349,7 @@ Consolidation result:
 
 Current installation freeze:
 
-`docs/infrastructure/botmarket-test-executor-installation-freeze-v1.0.2.json`
+`docs/infrastructure/botmarket-test-executor-installation-freeze-v1.0.3.json`
 
 Main installer:
 
@@ -441,6 +441,47 @@ Installer v1.0.2 therefore:
 Canonical compatibility result:
 
 `docs/infrastructure/botmarket-test-executor-compatibility-v2-result-v0.1.json`
+
+## First MCP end-to-end run finding
+
+After the tunnel/app connection, ChatGPT successfully called:
+
+- `get_test_executor_info`;
+- `refresh_repo`.
+
+The Test Executor clone advanced from the installer-era commit to the then-current canonical GitHub HEAD and remained clean.
+
+The first two `run_repo_test` attempts failed before a new `job.json` appeared.
+
+Static reconstruction of the exact committed tree ruled out snapshot safety gates:
+
+- 2713 total Git-tree entries;
+- 2521 blobs;
+- 0 symlinks;
+- 0 submodules;
+- 0 tracked secret-like filenames;
+- about 19.5 MB of blob content;
+- all below configured snapshot limits.
+
+The deterministic control-service conflict was runtime directory creation:
+
+- `botmarket-test-executor.service` correctly keeps `RestrictSUIDSGID=true`;
+- server code attempted `chmod(02750/02770)` while creating jobs/packages/output;
+- that setgid operation is forbidden by the control-service sandbox and happens before manifest creation.
+
+v1.0.3 fixes the implementation without weakening the policy:
+
+- no runtime setgid chmod/mkdir in the MCP service;
+- all job/package/snapshot/manifest paths receive group `botmarket-test-jobs` explicitly;
+- worker-readable package files remain `0440/0550`;
+- output remains group-writable `0770`;
+- worker sandbox retains `RestrictSUIDSGID`, `NoNewPrivileges`, empty capabilities and all previously validated namespace protections;
+- manifestless orphan job directories older than one hour are pruned;
+- the MCP service performs a filesystem-boundary self-test at startup from its actual systemd sandbox and refuses to start if group/layout permissions are not usable.
+
+Canonical diagnostic:
+
+`docs/infrastructure/botmarket-test-executor-first-mcp-run-diagnostic-v0.1.json`
 
 ## Residual limitations
 

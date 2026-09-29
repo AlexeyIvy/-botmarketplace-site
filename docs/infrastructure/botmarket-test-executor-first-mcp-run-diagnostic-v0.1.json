@@ -1,0 +1,58 @@
+{
+  "schema": "botmarket.test_executor_first_mcp_run_diagnostic.v0.1",
+  "date": "2026-09-29",
+  "status": "MCP_CONNECTED_REFRESH_PASS_RUN_REPO_TEST_PRE_MANIFEST_FAILURE_LOCALIZED",
+  "observed": {
+    "plugin_connected": true,
+    "get_test_executor_info": "PASS",
+    "privilege_bridge": "PASS",
+    "repo_refresh": {
+      "before": "f873606a0e0aa596eadd8e201737b2ff0dad1c46",
+      "after": "ebb727376e8423cf528817661fbc4ded116a6d8b",
+      "origin": "ebb727376e8423cf528817661fbc4ded116a6d8b",
+      "worktree_clean": true
+    },
+    "run_repo_test": "INVALID_ARGUMENT_GENERIC_MCP_ERROR",
+    "new_job_manifest_created": false
+  },
+  "repository_snapshot_static_checks": {
+    "git_tree_entries": 2713,
+    "blob_count": 2521,
+    "tree_count": 192,
+    "symlink_count": 0,
+    "submodule_count": 0,
+    "secret_like_path_count": 0,
+    "total_blob_bytes": 19455453,
+    "max_snapshot_files_policy": 6000,
+    "max_snapshot_bytes_policy": 134217728,
+    "snapshot_safety_limits_satisfied": true
+  },
+  "root_cause": {
+    "class": "CONTROL_SERVICE_RESTRICT_SUIDSGID_VS_RUNTIME_SETGID_CHMOD",
+    "description": "The MCP control service intentionally runs with RestrictSUIDSGID=true. run_repo_test attempted to create/chmod job, package, nested package directories and output using setgid modes 02750/02770. This is incompatible with the control-service policy and occurs before job.json is written, matching the observed absence of a new job manifest.",
+    "security_policy_is_correct": true,
+    "runtime_directory_implementation_is_wrong": true
+  },
+  "correction": {
+    "remove_runtime_setgid_chmod": true,
+    "retain_control_service_RestrictSUIDSGID": true,
+    "explicitly_assign_botmarket_test_jobs_group": true,
+    "job_mode": "0750",
+    "package_directory_mode": "0750",
+    "snapshot_file_modes": "0440 or 0550",
+    "output_mode": "0770",
+    "manifest_mode": "0440",
+    "startup_filesystem_boundary_selftest": true,
+    "orphan_manifestless_job_cleanup_after_seconds": 3600
+  },
+  "worker_security_unchanged": {
+    "NoNewPrivileges": true,
+    "RestrictSUIDSGID": true,
+    "CapabilityBoundingSet_empty": true,
+    "AmbientCapabilities_empty": true,
+    "ProtectSystem_strict": true,
+    "network_profiles_unchanged": true,
+    "trading_credentials_available": false
+  },
+  "next_state": "REDEPLOY_MAIN_EXECUTOR_V1_0_3_THEN_REPEAT_MCP_E2E_TEST"
+}

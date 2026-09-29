@@ -1,11 +1,11 @@
 {
   "schema": "botmarket.test_executor_deployment_state.v1.0",
   "date": "2026-09-29",
-  "status": "LOCAL_EXECUTOR_AND_TUNNEL_PASS_APP_CONNECTION_PENDING",
-  "git_head": "9025df0a91d185b60821433f2c32d0078ed99f8d",
+  "status": "APP_CONNECTED_FIRST_MCP_RUN_DIAGNOSTIC_FIX_READY_REDEPLOY_PENDING",
+  "git_head": "ebb727376e8423cf528817661fbc4ded116a6d8b",
   "installation_freeze": {
-    "path": "docs/infrastructure/botmarket-test-executor-installation-freeze-v1.0.2.json",
-    "sha256": "c2952ea6d01d4e31652c0b2d22467a1cac8da0ad7f5a880c8b9ff190624796e6"
+    "path": "docs/infrastructure/botmarket-test-executor-installation-freeze-v1.0.3.json",
+    "sha256": "a8a3a98982dcc97f2e722d3e698d22505c1407a5af0d28005c80e183946ddab8"
   },
   "observed_installation_result": {
     "github_read": "PASS",
@@ -32,7 +32,7 @@
     "research_runner_modified": false,
     "github_control_modified": false
   },
-  "next_state": "CREATE_AND_CONNECT_CHATGPT_DEVELOPER_MODE_APP",
+  "next_state": "REDEPLOY_MAIN_EXECUTOR_V1_0_3_THEN_REPEAT_MCP_E2E_TEST",
   "tunnel": {
     "id": "tunnel_6abb7a5d33908191a1a58705afd5176a",
     "name": "BotMarketplace Test Executor",
@@ -43,5 +43,16 @@
     "readiness": "PASS",
     "research_runner_modified": false,
     "github_control_modified": false
+  },
+  "app_connection": {
+    "status": "CONNECTED",
+    "test_executor_tools_visible": true,
+    "get_test_executor_info": "PASS",
+    "refresh_repo": "PASS",
+    "run_repo_test": "PRE_MANIFEST_FAILURE_LOCALIZED"
+  },
+  "first_mcp_run_diagnostic": {
+    "path": "docs/infrastructure/botmarket-test-executor-first-mcp-run-diagnostic-v0.1.json",
+    "sha256": "f6b5707618c09722b9b8c0e5cdf044f291d2fc5a0853064763fba1d35928d110"
   }
 }

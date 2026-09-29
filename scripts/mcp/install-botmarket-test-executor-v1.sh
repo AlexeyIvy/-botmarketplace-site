@@ -233,6 +233,7 @@ BM_TEST_POLICY=$POLICY
 BM_TEST_HOST=$HOST
 BM_TEST_PORT=$PORT
 BM_TEST_PYTHON=$PY
+BM_TEST_JOB_GROUP=$JOB_GROUP
 BM_TEST_MAX_TEXT_BYTES=262144
 EOF
 chown root:"$CTL_GROUP" "$ENVF"
@@ -683,6 +684,7 @@ log STEP "Install MCP server"
 cat > "$APP/server.py" <<'PY'
 from __future__ import annotations
 
+import grp
 import hashlib
 import io
 import json
@@ -713,6 +715,8 @@ POLICY_PATH=Path(os.environ["BM_TEST_POLICY"])
 HOST=os.getenv("BM_TEST_HOST","127.0.0.1")
 PORT=int(os.getenv("BM_TEST_PORT","8769"))
 TARGET_PY=os.environ["BM_TEST_PYTHON"]
+JOB_GROUP_NAME=os.environ["BM_TEST_JOB_GROUP"]
+JOB_GID=grp.getgrnam(JOB_GROUP_NAME).gr_gid
 MAX_TEXT=int(os.getenv("BM_TEST_MAX_TEXT_BYTES","262144"))
 
 LAUNCHER="/usr/local/sbin/botmarket-test-launch"
@@ -781,6 +785,12 @@ def atomic_json(path:Path,obj:dict[str,Any])->None:
     tmp=path.with_name(path.name+".tmp")
     tmp.write_text(json.dumps(obj,indent=2,sort_keys=True)+"\n",encoding="utf-8")
     os.replace(tmp,path)
+
+def set_job_group(path:Path)->None:
+    # Control user owns the path and is a supplementary member of JOB_GROUP.
+    # This avoids setgid chmod operations, which are intentionally blocked by
+    # RestrictSUIDSGID=true on the MCP control service.
+    os.chown(path,-1,JOB_GID)
 
 def validate_entrypoint(path:str)->str:
     if not isinstance(path,str) or not path or "\x00" in path or Path(path).is_absolute():
@@ -868,6 +878,25 @@ def prune_completed_jobs()->dict[str,int]:
                 pass
     return {"removed":removed}
 
+def prune_orphan_jobs()->dict[str,int]:
+    now=utc_now().timestamp()
+    removed=0
+    if not JOBS.exists():
+        return {"removed":0}
+    for d in JOBS.iterdir():
+        if not d.is_dir() or not JOB_RE.fullmatch(d.name):
+            continue
+        if (d/"job.json").exists():
+            continue
+        try:
+            age=max(0.0,now-d.stat().st_mtime)
+        except FileNotFoundError:
+            continue
+        if age>=3600:
+            shutil.rmtree(d,ignore_errors=True)
+            removed+=1
+    return {"removed":removed}
+
 def rate_limit_check()->dict[str,int]:
     p=policy()
     now=utc_now()
@@ -917,14 +946,16 @@ def snapshot_repo(head:str,package:Path)->dict[str,int]:
         path.relative_to(package.resolve())
         rel=path.relative_to(package.resolve())
         cur=package.resolve()
-        cur.chmod(0o2750)
+        set_job_group(cur)
+        cur.chmod(0o750)
         for part in rel.parts:
             cur=cur/part
             if not cur.exists():
-                cur.mkdir(mode=0o2750)
+                cur.mkdir(mode=0o750)
             if not cur.is_dir() or cur.is_symlink():
                 raise ValueError(f"REPO_DIR_INVALID:{cur}")
-            cur.chmod(0o2750)
+            set_job_group(cur)
+            cur.chmod(0o750)
     raw=subprocess.run(
         ["git","-C",str(REPO),"archive","--format=tar",head],
         stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=120,
@@ -963,6 +994,7 @@ def snapshot_repo(head:str,package:Path)->dict[str,int]:
                 raise ValueError("REPO_EXTRACTED_TOO_LARGE")
             ensure_package_dir(target.parent)
             target.write_bytes(data)
+            set_job_group(target)
             # Preserve only the executable semantic from Git; never preserve
             # owner/group/world write bits from the repository archive.
             target.chmod(0o550 if (m.mode & 0o111) else 0o440)
@@ -995,6 +1027,41 @@ def read_text_file(path:Path,offset:int,max_bytes:int)->dict[str,Any]:
         "text":text,
         "next_offset_bytes":None if nxt>=len(data) else nxt,
     }
+
+def filesystem_boundary_selftest()->dict[str,Any]:
+    probe=(JOBS/f".service-fs-selftest-{os.getpid()}").resolve()
+    try:
+        probe.relative_to(JOBS)
+        package=probe/"package"
+        output=probe/"output"
+        manifest=probe/"job.json"
+        probe.mkdir(mode=0o750,exist_ok=False)
+        package.mkdir(mode=0o750)
+        output.mkdir(mode=0o770)
+        for pth,mode in ((probe,0o750),(package,0o750),(output,0o770)):
+            set_job_group(pth)
+            pth.chmod(mode)
+        sample=package/"sample.py"
+        sample.write_text("print('ok')\n",encoding="utf-8")
+        set_job_group(sample)
+        sample.chmod(0o440)
+        atomic_json(manifest,{"schema":"botmarket.service_fs_selftest.v1"})
+        set_job_group(manifest)
+        manifest.chmod(0o440)
+        checks={
+            "probe_gid":probe.stat().st_gid,
+            "package_gid":package.stat().st_gid,
+            "output_gid":output.stat().st_gid,
+            "sample_gid":sample.stat().st_gid,
+            "manifest_gid":manifest.stat().st_gid,
+            "output_group_writable":bool(output.stat().st_mode & 0o020),
+        }
+        ok=all(checks[k]==JOB_GID for k in ("probe_gid","package_gid","output_gid","sample_gid","manifest_gid")) and checks["output_group_writable"]
+        return {"ok":ok,**checks}
+    except Exception as exc:
+        return {"ok":False,"error":f"{type(exc).__name__}:{exc}"}
+    finally:
+        shutil.rmtree(probe,ignore_errors=True)
 
 def privilege_bridge_selftest()->dict[str,Any]:
     p=subprocess.run(
@@ -1054,6 +1121,7 @@ def get_test_executor_info()->dict[str,Any]:
         },
         "current_counts":counts,
         "privilege_bridge":privilege_bridge_selftest(),
+        "filesystem_boundary":filesystem_boundary_selftest(),
     }
 
 @mcp.tool()
@@ -1102,6 +1170,7 @@ def run_repo_test(
     if timeout<1 or timeout>int(p["max_timeout_seconds"]):
         raise ValueError("TIMEOUT")
 
+    prune_orphan_jobs()
     prune_completed_jobs()
     counts=rate_limit_check()
 
@@ -1109,14 +1178,12 @@ def run_repo_test(
     job=resolve_job(job_id)
     package=job/"package"
     output=job/"output"
-    job.mkdir(mode=0o2750,parents=False,exist_ok=False)
-    package.mkdir(mode=0o2750)
+    job.mkdir(mode=0o750,parents=False,exist_ok=False)
+    package.mkdir(mode=0o750)
     output.mkdir(mode=0o770)
-    # Service UMask=0027 would otherwise reduce group write permission.
-    # chmod is not affected by umask and restores the intended worker-write boundary.
-    job.chmod(0o2750)
-    package.chmod(0o2750)
-    output.chmod(0o2770)
+    for pth,mode in ((job,0o750),(package,0o750),(output,0o770)):
+        set_job_group(pth)
+        pth.chmod(mode)
 
     try:
         snap=snapshot_repo(local,package)
@@ -1140,6 +1207,7 @@ def run_repo_test(
             "trading_credentials_available":False,
         }
         atomic_json(job/"job.json",manifest)
+        set_job_group(job/"job.json")
         os.chmod(job/"job.json",0o440)
 
         launch=subprocess.run(
@@ -1258,6 +1326,9 @@ def cancel_job(job_id:str)->dict[str,Any]:
     return {"job_id":job_id,"cancelled":True,"unit_state":unit_state(job_id)}
 
 if __name__=="__main__":
+    fscheck=filesystem_boundary_selftest()
+    if not fscheck["ok"]:
+        raise SystemExit("FILESYSTEM_BOUNDARY_SELFTEST_FAILED:"+json.dumps(fscheck,sort_keys=True))
     bridge=privilege_bridge_selftest()
     if not bridge["ok"]:
         raise SystemExit("PRIVILEGE_BRIDGE_SELFTEST_FAILED:"+json.dumps(bridge,sort_keys=True))
@@ -1497,6 +1568,7 @@ echo
 echo "=== BOTMARKETPLACE TEST EXECUTOR V1 INSTALLED ==="
 echo "Repository read: PASS"
 echo "Repository write: DENIED_AS_REQUIRED"
+echo "MCP service filesystem boundary self-test: PASS"
 echo "MCP service restricted sudo bridge self-test: PASS"
 echo "Isolated offline job self-test: PASS"
 echo "Public research network sandbox self-test: PASS"
