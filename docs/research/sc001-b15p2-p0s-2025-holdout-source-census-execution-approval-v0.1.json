@@ -1,0 +1,55 @@
+{
+  "schema": "sc001.b15p2_p0s_2025_holdout_source_census_execution_approval.v0.1",
+  "date": "2026-09-29",
+  "status": "AUTHORIZED_SOURCE_ONLY_SINGLE_RUN",
+  "basis": {
+    "roadmap": "docs/research/sc001-current-roadmap-and-stop-rules-v5.206.md",
+    "source_coverage_review": "docs/research/sc001-b15p2-p0-official-source-coverage-review-v0.1.md",
+    "protocol": {
+      "path": "docs/research/sc001-b15p2-p0s-2025-holdout-source-census-protocol-v0.1.md",
+      "sha256": "b8d5f3d746b1babcd82a0a3d7746d4acd7af8ab2a4ce11f3acffc5e1170b85a2"
+    },
+    "implementation_freeze": {
+      "path": "docs/research/sc001-b15p2-p0s-2025-holdout-source-census-implementation-freeze-v0.1.json",
+      "sha256": "749b5911fa529deaef11375f340817a3f09e2f2d4f517562123aabc62a8d3ad8"
+    },
+    "offline_selftest": {
+      "path": "docs/research/sc001-b15p2-p0s-2025-holdout-source-census-offline-selftest-result-v0.1.json",
+      "sha256": "9afe6761df3534079cdef01d40b380ade2745f2d17a2673ebf4570d5c524d179",
+      "job_id": "job_20260929T152520Z_cda39f3d",
+      "result": "PASS"
+    }
+  },
+  "authorized_execution": {
+    "execution_plane": "BotMarketplace Test Executor",
+    "network_profile": "public_research",
+    "entrypoint": "research/sc001/sc001_b15p2_p0s_2025_holdout_source_census_v0_1.py",
+    "entrypoint_sha256": "0c0bd46961cfebb17ecf74dde8822c496c0f73198dae97681d0658abb776355d",
+    "args": [
+      "--mode",
+      "live"
+    ],
+    "timeout_seconds": 900,
+    "max_runs": 1,
+    "rate_limit_bypass": false
+  },
+  "allowed_sources": [
+    "official Bybit /v5/announcements/index delistings",
+    "official Bybit /v5/market/instruments-info closed linear metadata"
+  ],
+  "forbidden": [
+    "market kline",
+    "index price kline",
+    "mark or premium",
+    "spot or external venue",
+    "returns",
+    "PnL",
+    "L1/L2",
+    "individual trades",
+    "funding",
+    "outcome ranking",
+    "trading"
+  ],
+  "on_rate_slot_closed": "DO_NOT_BYPASS; ENTER_OPERATIONAL_WAIT_STATE",
+  "on_success": "CANONICALIZE_EXACT_SOURCE_ONLY_RESULT_AND_FREEZE_EVENT_SET"
+}

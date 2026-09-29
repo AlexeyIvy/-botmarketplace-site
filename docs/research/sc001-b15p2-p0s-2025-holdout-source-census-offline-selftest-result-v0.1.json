@@ -1,0 +1,24 @@
+{
+  "schema": "sc001.b15p2_p0s_2025_holdout_source_census_offline_selftest_result.v0.1",
+  "date": "2026-09-29",
+  "status": "B15P2_P0S_2025_HOLDOUT_SOURCE_CENSUS_V01_SELF_TEST_PASS",
+  "job_id": "job_20260929T152520Z_cda39f3d",
+  "repo_head": "12ad7636ed790dc1fc83e330c5d8753b335d8551",
+  "network_profile": "offline",
+  "entrypoint": "research/sc001/sc001_b15p2_p0s_2025_holdout_source_census_v0_1.py",
+  "entrypoint_sha256": "0c0bd46961cfebb17ecf74dde8822c496c0f73198dae97681d0658abb776355d",
+  "exit_code": 0,
+  "timed_out": false,
+  "log_sha256": "eb72e75a13a7d22634b8dbc9cc446395b2c05e7cd89ab47cc8f00bb2ea00b690",
+  "pass_token": "B15P2_P0S_2025_HOLDOUT_SOURCE_CENSUS_V01_SELF_TEST_PASS",
+  "firewalls": {
+    "network_access": false,
+    "affected_contract_price": false,
+    "index_value": false,
+    "basis": false,
+    "returns": false,
+    "pnl": false,
+    "trading": false
+  },
+  "next_state": "AUTHORIZE_ONE_PUBLIC_RESEARCH_SOURCE_ONLY_CENSUS_IF_RATE_SLOT_AVAILABLE"
+}
