@@ -1,0 +1,72 @@
+{
+  "schema": "sc001.b15p2_p0_implementation_freeze.v0.1",
+  "date": "2026-09-29",
+  "status": "FROZEN_AFTER_REAL_OFFLINE_TEST_EXECUTOR_PASS_BEFORE_PRICE_ACCESS",
+  "implementation": {
+    "path": "research/sc001/sc001_b15p2_p0_basis_convergence_v0_1.py",
+    "sha256": "dc52b2fb4914ea29bc6bc85a9cfc8aa27f327d8dd160e6c4aa9feeab5e328945"
+  },
+  "preregistration": {
+    "spec": {
+      "path": "docs/research/sc001-b15p2-pre-registered-price-experiment-spec-v0.1.json",
+      "sha256": "1dc79403307177c1f9785090fa6f31aac0322ccb10864c509846e8da415856a7"
+    },
+    "experiment_freeze": {
+      "path": "docs/research/sc001-b15p2-p0-price-experiment-freeze-v0.1.json",
+      "sha256": "732a5946f72a18210268e26e42d38ef7d8a3886c819fb2ca68bdb6ff2e0baccf"
+    },
+    "causal_clock": {
+      "path": "docs/research/sc001-b15p2-causal-event-clock-freeze-v0.1.json",
+      "sha256": "9e4f6db4ce173cf9d5fa590a1acd1a56fa6a9f465c001c88de47b2542a172d70"
+    },
+    "execution_approval": {
+      "path": "docs/research/sc001-b15p2-p0-price-index-basis-execution-approval-v0.1.json",
+      "sha256": "27a4f094767f19a9c992e3b777ceea9b2b1eb5cf12d9b5e6a3230f81e007b7fc"
+    }
+  },
+  "offline_validation": {
+    "first_attempt": {
+      "job_id": "job_20260929T135830Z_c00cff26",
+      "status": "TECHNICAL_FAIL_NO_OUTCOME_ACCESS",
+      "diagnostic": "docs/research/sc001-b15p2-p0-offline-selftest-failure-diagnostic-v0.1.json"
+    },
+    "corrected_attempt": {
+      "job_id": "job_20260929T140157Z_aa541296",
+      "repo_head": "2005b692ea8af64fb2e3c83e0da75f081a97da8a",
+      "network_profile": "offline",
+      "entrypoint_sha256": "dc52b2fb4914ea29bc6bc85a9cfc8aa27f327d8dd160e6c4aa9feeab5e328945",
+      "exit_code": 0,
+      "timed_out": false,
+      "log_sha256": "20c5ca6e8f2842ff6c5f45d649103d2da460bce4c7eb7bf4513861cd1ad99bd5",
+      "pass_token": "B15P2_P0_BASIS_CONVERGENCE_V01_SELF_TEST_PASS",
+      "trading_credentials_available": false
+    }
+  },
+  "implementation_scope": {
+    "endpoints": [
+      "/v5/market/kline",
+      "/v5/market/index-price-kline"
+    ],
+    "host": "api.bybit.com",
+    "registered_offsets_minutes": [
+      -55,
+      -30,
+      -5
+    ],
+    "cluster_count": 37,
+    "bootstrap_replications": 10000,
+    "bootstrap_seed": 1502
+  },
+  "firewalls": {
+    "price_access_authorized": true,
+    "official_index_value_access_authorized": true,
+    "basis_calculation_authorized": true,
+    "returns_authorized": false,
+    "pnl_authorized": false,
+    "l1_l2_authorized": false,
+    "individual_trades_authorized": false,
+    "trading_authorized": false
+  },
+  "mutation_rule": "Do not modify implementation after this freeze before the full registered P0 outcome run. Any post-outcome change is exploratory/contaminated unless supported by fresh preregistration/evidence.",
+  "next_state": "FULL_REGISTERED_P0_PUBLIC_RESEARCH_RUN"
+}

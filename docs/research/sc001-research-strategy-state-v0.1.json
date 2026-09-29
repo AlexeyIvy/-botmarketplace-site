@@ -8,11 +8,11 @@
   "baseline_git_head": "94bf690f5c273c98b4a5e58d4bb2fe6ea7f9cf91",
   "last_strategy_review_head": "002f8bf9258058f8e14775472d315a69a53da031",
   "binding_refs": {
-    "roadmap": "docs/research/sc001-current-roadmap-and-stop-rules-v5.203.md",
+    "roadmap": "docs/research/sc001-current-roadmap-and-stop-rules-v5.204.md",
     "governance": "docs/research/sc001-midcourse-research-strategy-audit-and-governance-amendment-v0.2.md",
     "reusable_policy": "docs/research/sc001-terminal-experiment-reusable-block-extraction-policy-v0.1.md",
     "reusable_registry": "docs/research/sc001-reusable-market-building-blocks-registry-v0.9.md",
-    "contamination_registry": "docs/research/sc001-contamination-registry-v0.32.json",
+    "contamination_registry": "docs/research/sc001-contamination-registry-v0.33.json",
     "strategy_charter": "docs/research/sc001-research-strategy-agent-charter-v0.1.md",
     "worker_manifest_schema": "docs/research/sc001-worker-result-manifest-schema-v0.1.json",
     "automation_watch": "docs/research/sc001-research-strategy-automation-watch-v0.1.md"
@@ -25,7 +25,7 @@
       "mutation_allowed": false
     },
     "B15-P2": {
-      "state": "P0_LIMITED_PRICE_INDEX_BASIS_AUTHORIZED_IMPLEMENTATION_OFFLINE_VALIDATION_PENDING",
+      "state": "P0_IMPLEMENTATION_FROZEN_OFFLINE_PASS_READY_FOR_FULL_OUTCOME_RUN",
       "price_outcome_authorized": false,
       "frozen_event_count": 94,
       "event_set_sha256": "1063695ec003a0d6789270659822f50577e6a0f07059d88ac03a5be4288ed1a2",
@@ -46,7 +46,7 @@
       "engineering_stabilization_rule": "THREE_LAYER_PREFREEZE_CHECK_PLUS_EXACT_STAGE",
       "hydration_stop_rule": "STOP_AFTER_V04_IF_NO_STABLE_COMMON_HIGH_CONFIDENCE_BODY_IDENTITY",
       "strategy_review_required_now": false,
-      "next_allowed_action": "REPEAT_OFFLINE_DYNAMIC_SELFTEST_ON_CORRECTED_P0_CANDIDATE",
+      "next_allowed_action": "RUN_EXACT_FROZEN_P0_V0_1_VIA_TEST_EXECUTOR_PUBLIC_RESEARCH",
       "next_data_probe_execution_started": false,
       "execution_approval": "docs/research/sc001-b15p2-next-data-structure-probe-v04-execution-approval-v0.1.json",
       "delegated_engineering_iteration_budget": {
@@ -182,7 +182,16 @@
       "p0_execution_approval_sha256": "27a4f094767f19a9c992e3b777ceea9b2b1eb5cf12d9b5e6a3230f81e007b7fc",
       "p0_implementation_candidate": "research/sc001/sc001_b15p2_p0_basis_convergence_v0_1.py",
       "p0_implementation_candidate_sha256": "dc52b2fb4914ea29bc6bc85a9cfc8aa27f327d8dd160e6c4aa9feeab5e328945",
-      "last_p0_engineering_diagnostic": "docs/research/sc001-b15p2-p0-offline-selftest-failure-diagnostic-v0.1.json"
+      "last_p0_engineering_diagnostic": "docs/research/sc001-b15p2-p0-offline-selftest-failure-diagnostic-v0.1.json",
+      "p0_implementation_freeze": "docs/research/sc001-b15p2-p0-implementation-freeze-v0.1.json",
+      "p0_implementation_freeze_sha256": "8e4af2f3195a08265a8eaa9fed8092f22dfa78aba8b1988d7bfa8018c3e9f33b",
+      "last_p0_offline_validation": {
+        "job_id": "job_20260929T140157Z_aa541296",
+        "result": "PASS",
+        "price_accessed": false,
+        "index_value_accessed": false,
+        "basis_calculated": false
+      }
     }
   },
   "deferred_branches": {
