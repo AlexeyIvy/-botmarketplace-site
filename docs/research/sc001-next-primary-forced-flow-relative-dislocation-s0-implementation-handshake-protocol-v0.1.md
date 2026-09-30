@@ -112,6 +112,8 @@ Without that authorization file, analyze mode must fail closed before opening re
 
 No such authorization exists in this handshake stage.
 
+Additionally, real analyze mode must fail closed before `2026-10-07T00:00:00Z`, because the frozen evidence window consists of seven complete UTC days. This time lock must be checked before opening real cluster or coactive-price inputs.
+
 ## Handshake requirements
 
 Offline self-test must PASS:
@@ -132,6 +134,7 @@ Offline self-test must PASS:
 - fixed 12-symbol null denominator;
 - malformed/duplicate input fixture rejection;
 - analyze mode refuses missing authorization;
+- analyze mode refuses any outcome access before 2026-10-07T00:00:00Z;
 - output path collision check is active.
 
 PASS token:
