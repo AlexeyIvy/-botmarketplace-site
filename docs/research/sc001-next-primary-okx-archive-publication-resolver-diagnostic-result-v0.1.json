@@ -1,0 +1,126 @@
+{
+  "archive_body_accessed": false,
+  "instrument_family": "BTC-USDT",
+  "mode": "live",
+  "price_accessed": false,
+  "rows": [
+    {
+      "attempts": [
+        {
+          "code": "0",
+          "data_shape": [
+            "begin",
+            "ccyList",
+            "dateAggrType",
+            "details",
+            "end",
+            "exportTime",
+            "instrumentList",
+            "totalSizeMB"
+          ],
+          "domain": "https://www.okx.com",
+          "exact_trusted_url_count": 0,
+          "top_level_keys": [
+            "code",
+            "data",
+            "msg"
+          ]
+        },
+        {
+          "code": "0",
+          "data_shape": [
+            "begin",
+            "ccyList",
+            "dateAggrType",
+            "details",
+            "end",
+            "exportTime",
+            "instrumentList",
+            "totalSizeMB"
+          ],
+          "domain": "https://us.okx.com",
+          "exact_trusted_url_count": 0,
+          "top_level_keys": [
+            "code",
+            "data",
+            "msg"
+          ]
+        }
+      ],
+      "date": "2026-09-29",
+      "filename": "BTC-USDT-SWAP-trades-2026-09-29.zip",
+      "resolved": false,
+      "structurally_valid_success_payload": true
+    },
+    {
+      "attempts": [
+        {
+          "code": "0",
+          "data_shape": [
+            "begin",
+            "ccyList",
+            "dateAggrType",
+            "details",
+            "end",
+            "exportTime",
+            "instrumentList",
+            "totalSizeMB"
+          ],
+          "domain": "https://www.okx.com",
+          "exact_trusted_url_count": 1,
+          "top_level_keys": [
+            "code",
+            "data",
+            "msg"
+          ]
+        }
+      ],
+      "date": "2026-09-28",
+      "filename": "BTC-USDT-SWAP-trades-2026-09-28.zip",
+      "head": {
+        "content_length": 17599557,
+        "host": "static.okx.com",
+        "http_status": 200
+      },
+      "resolved": true,
+      "structurally_valid_success_payload": true
+    },
+    {
+      "attempts": [
+        {
+          "code": "0",
+          "data_shape": [
+            "begin",
+            "ccyList",
+            "dateAggrType",
+            "details",
+            "end",
+            "exportTime",
+            "instrumentList",
+            "totalSizeMB"
+          ],
+          "domain": "https://www.okx.com",
+          "exact_trusted_url_count": 1,
+          "top_level_keys": [
+            "code",
+            "data",
+            "msg"
+          ]
+        }
+      ],
+      "date": "2026-09-23",
+      "filename": "BTC-USDT-SWAP-trades-2026-09-23.zip",
+      "head": {
+        "content_length": 19459479,
+        "host": "static.okx.com",
+        "http_status": 200
+      },
+      "resolved": true,
+      "structurally_valid_success_payload": true
+    }
+  ],
+  "s0_executed": false,
+  "schema": "sc001.okx_archive_publication_resolver_diagnostic.v0.1",
+  "status": "OKX_ARCHIVE_DIAGNOSTIC_RECENT_PUBLICATION_LAG",
+  "trade_rows_accessed": false
+}
