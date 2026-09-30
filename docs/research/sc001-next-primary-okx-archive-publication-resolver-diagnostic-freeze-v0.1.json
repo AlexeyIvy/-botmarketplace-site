@@ -7,7 +7,7 @@
   "protocol_path": "docs/research/sc001-next-primary-okx-archive-publication-resolver-diagnostic-protocol-v0.1.md",
   "protocol_git_blob_sha": "e183c3beffc94d52d71b8c68fbc8bee009d93256",
   "runner_path": "research/sc001/sc001_okx_archive_publication_resolver_diagnostic_v0_1.py",
-  "runner_git_blob_sha": "620def2961a4a27d112b3e5db36c4f882bdd802f",
+  "runner_git_blob_sha": "f13c822e364e86fa3e0bf18672e9849b3071c53d",
   "frozen_instrument_family": "BTC-USDT",
   "frozen_dates": [
     "2026-09-29",
