@@ -169,7 +169,7 @@ def write_result(out_dir:Path,obj:dict)->None:
 def main()->int:
     ap=argparse.ArgumentParser()
     ap.add_argument("--mode",choices=["self-test","live"],required=True)
-    ap.add_argument("--out-dir",default=os.environ.get("OUTPUT_DIR","/work/run/output"))
+    ap.add_argument("--out-dir",default=os.environ.get("BM_TEST_OUTPUT_DIR",os.environ.get("OUTPUT_DIR",str(Path.cwd()/"test-output"))))
     a=ap.parse_args()
     try:
         require_freeze()
