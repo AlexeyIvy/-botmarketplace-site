@@ -5,9 +5,9 @@
   "status": "FROZEN_BEFORE_FORCED_FLOW_S0_IMPLEMENTATION_HANDSHAKE",
   "task_id": "SC001-NEXT-PRIMARY-PREFREEZE-01",
   "protocol_path": "docs/research/sc001-next-primary-forced-flow-relative-dislocation-s0-implementation-handshake-protocol-v0.1.md",
-  "protocol_git_blob_sha": "e2fbd55ece3628842cf66ba66866307d90266bc7",
+  "protocol_git_blob_sha": "a7c68e803fae6b7ad51bafa717c63430fa4f5ea5",
   "runner_path": "research/sc001/sc001_forced_flow_s0_analyzer_v0_1.py",
-  "runner_git_blob_sha": "cefa24dedc3124aa281178bf82dc22a456c4875f",
+  "runner_git_blob_sha": "0fbbe93d927ef3972e26768d2822b02012d5587f",
   "parents": [
     {
       "path": "docs/research/sc001-next-primary-forced-flow-relative-dislocation-s0-protocol-v0.2.md",
@@ -62,5 +62,7 @@
   "pass_token": "FORCED_FLOW_S0_IMPLEMENTATION_HANDSHAKE_PASS",
   "review_token": "FORCED_FLOW_S0_IMPLEMENTATION_HANDSHAKE_REVIEW",
   "next_if_pass": "RETURN_TO_STRATEGY_USER_GATE_FOR_SEPARATE_S0_EXECUTION_AUTHORIZATION_AND_INPUT_PROVENANCE_FREEZE",
-  "next_if_review": "FIX_ENGINEERING_ONLY_WITHOUT_REAL_INPUT_ACCESS"
+  "next_if_review": "FIX_ENGINEERING_ONLY_WITHOUT_REAL_INPUT_ACCESS",
+  "analyze_not_before_utc": "2026-10-07T00:00:00Z",
+  "pre_window_outcome_access_authorized": false
 }
