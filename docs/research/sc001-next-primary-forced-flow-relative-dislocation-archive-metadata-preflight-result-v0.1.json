@@ -1,0 +1,216 @@
+{
+  "archive_body_accessed": false,
+  "cross_venue_ratio_calculated": false,
+  "failed_bases": [
+    "BTC",
+    "ETH",
+    "SOL",
+    "DOGE",
+    "ORDI",
+    "FIL",
+    "UNI",
+    "XRP",
+    "LTC",
+    "OP",
+    "BCH",
+    "SUI"
+  ],
+  "mode": "live",
+  "network_scope": [
+    "BYBIT_ARCHIVE_HEAD",
+    "OKX_HISTORICAL_METADATA_RESOLVER",
+    "OKX_ARCHIVE_HEAD"
+  ],
+  "pair_count": 12,
+  "passed_pair_count": 0,
+  "pnl_calculated": false,
+  "price_accessed": false,
+  "qualification_date": "2026-09-29",
+  "returns_calculated": false,
+  "rows": [
+    {
+      "base": "BTC",
+      "bybit": {
+        "content_length": 61142198,
+        "filename": "BTCUSDT2026-09-29.csv.gz",
+        "host": "public.bybit.com",
+        "pass": true,
+        "symbol": "BTCUSDT"
+      },
+      "okx": {
+        "error": "RuntimeError: OKX exact archive unresolved: [{'domain': 'https://www.okx.com', 'exact_trusted_url_count': 0}, {'domain': 'https://us.okx.com', 'exact_trusted_url_count': 0}]",
+        "pass": false
+      },
+      "pass": false
+    },
+    {
+      "base": "ETH",
+      "bybit": {
+        "content_length": 83038192,
+        "filename": "ETHUSDT2026-09-29.csv.gz",
+        "host": "public.bybit.com",
+        "pass": true,
+        "symbol": "ETHUSDT"
+      },
+      "okx": {
+        "error": "RuntimeError: OKX exact archive unresolved: [{'domain': 'https://www.okx.com', 'exact_trusted_url_count': 0}, {'domain': 'https://us.okx.com', 'exact_trusted_url_count': 0}]",
+        "pass": false
+      },
+      "pass": false
+    },
+    {
+      "base": "SOL",
+      "bybit": {
+        "content_length": 22668294,
+        "filename": "SOLUSDT2026-09-29.csv.gz",
+        "host": "public.bybit.com",
+        "pass": true,
+        "symbol": "SOLUSDT"
+      },
+      "okx": {
+        "error": "RuntimeError: OKX exact archive unresolved: [{'domain': 'https://www.okx.com', 'exact_trusted_url_count': 0}, {'domain': 'https://us.okx.com', 'exact_trusted_url_count': 0}]",
+        "pass": false
+      },
+      "pass": false
+    },
+    {
+      "base": "DOGE",
+      "bybit": {
+        "content_length": 16367187,
+        "filename": "DOGEUSDT2026-09-29.csv.gz",
+        "host": "public.bybit.com",
+        "pass": true,
+        "symbol": "DOGEUSDT"
+      },
+      "okx": {
+        "error": "RuntimeError: OKX exact archive unresolved: [{'domain': 'https://www.okx.com', 'exact_trusted_url_count': 0}, {'domain': 'https://us.okx.com', 'exact_trusted_url_count': 0}]",
+        "pass": false
+      },
+      "pass": false
+    },
+    {
+      "base": "ORDI",
+      "bybit": {
+        "content_length": 1309030,
+        "filename": "ORDIUSDT2026-09-29.csv.gz",
+        "host": "public.bybit.com",
+        "pass": true,
+        "symbol": "ORDIUSDT"
+      },
+      "okx": {
+        "error": "RuntimeError: OKX exact archive unresolved: [{'domain': 'https://www.okx.com', 'exact_trusted_url_count': 0}, {'domain': 'https://us.okx.com', 'exact_trusted_url_count': 0}]",
+        "pass": false
+      },
+      "pass": false
+    },
+    {
+      "base": "FIL",
+      "bybit": {
+        "content_length": 8457295,
+        "filename": "FILUSDT2026-09-29.csv.gz",
+        "host": "public.bybit.com",
+        "pass": true,
+        "symbol": "FILUSDT"
+      },
+      "okx": {
+        "error": "RuntimeError: OKX exact archive unresolved: [{'domain': 'https://www.okx.com', 'exact_trusted_url_count': 0}, {'domain': 'https://us.okx.com', 'exact_trusted_url_count': 0}]",
+        "pass": false
+      },
+      "pass": false
+    },
+    {
+      "base": "UNI",
+      "bybit": {
+        "content_length": 15896787,
+        "filename": "UNIUSDT2026-09-29.csv.gz",
+        "host": "public.bybit.com",
+        "pass": true,
+        "symbol": "UNIUSDT"
+      },
+      "okx": {
+        "error": "RuntimeError: OKX exact archive unresolved: [{'domain': 'https://www.okx.com', 'exact_trusted_url_count': 0}, {'domain': 'https://us.okx.com', 'exact_trusted_url_count': 0}]",
+        "pass": false
+      },
+      "pass": false
+    },
+    {
+      "base": "XRP",
+      "bybit": {
+        "content_length": 39993920,
+        "filename": "XRPUSDT2026-09-29.csv.gz",
+        "host": "public.bybit.com",
+        "pass": true,
+        "symbol": "XRPUSDT"
+      },
+      "okx": {
+        "error": "RuntimeError: OKX exact archive unresolved: [{'domain': 'https://www.okx.com', 'exact_trusted_url_count': 0}, {'domain': 'https://us.okx.com', 'exact_trusted_url_count': 0}]",
+        "pass": false
+      },
+      "pass": false
+    },
+    {
+      "base": "LTC",
+      "bybit": {
+        "content_length": 5744842,
+        "filename": "LTCUSDT2026-09-29.csv.gz",
+        "host": "public.bybit.com",
+        "pass": true,
+        "symbol": "LTCUSDT"
+      },
+      "okx": {
+        "error": "RuntimeError: OKX exact archive unresolved: [{'domain': 'https://www.okx.com', 'exact_trusted_url_count': 0}, {'domain': 'https://us.okx.com', 'exact_trusted_url_count': 0}]",
+        "pass": false
+      },
+      "pass": false
+    },
+    {
+      "base": "OP",
+      "bybit": {
+        "content_length": 10945327,
+        "filename": "OPUSDT2026-09-29.csv.gz",
+        "host": "public.bybit.com",
+        "pass": true,
+        "symbol": "OPUSDT"
+      },
+      "okx": {
+        "error": "RuntimeError: OKX exact archive unresolved: [{'domain': 'https://www.okx.com', 'exact_trusted_url_count': 0}, {'domain': 'https://us.okx.com', 'exact_trusted_url_count': 0}]",
+        "pass": false
+      },
+      "pass": false
+    },
+    {
+      "base": "BCH",
+      "bybit": {
+        "content_length": 3136407,
+        "filename": "BCHUSDT2026-09-29.csv.gz",
+        "host": "public.bybit.com",
+        "pass": true,
+        "symbol": "BCHUSDT"
+      },
+      "okx": {
+        "error": "RuntimeError: OKX exact archive unresolved: [{'domain': 'https://www.okx.com', 'exact_trusted_url_count': 0}, {'domain': 'https://us.okx.com', 'exact_trusted_url_count': 0}]",
+        "pass": false
+      },
+      "pass": false
+    },
+    {
+      "base": "SUI",
+      "bybit": {
+        "content_length": 18572076,
+        "filename": "SUIUSDT2026-09-29.csv.gz",
+        "host": "public.bybit.com",
+        "pass": true,
+        "symbol": "SUIUSDT"
+      },
+      "okx": {
+        "error": "RuntimeError: OKX exact archive unresolved: [{'domain': 'https://www.okx.com', 'exact_trusted_url_count': 0}, {'domain': 'https://us.okx.com', 'exact_trusted_url_count': 0}]",
+        "pass": false
+      },
+      "pass": false
+    }
+  ],
+  "s0_executed": false,
+  "schema": "sc001.forced_flow_archive_metadata_preflight.v0.1",
+  "status": "FORCED_FLOW_ARCHIVE_METADATA_PREFLIGHT_REVIEW",
+  "trade_rows_accessed": false
+}
