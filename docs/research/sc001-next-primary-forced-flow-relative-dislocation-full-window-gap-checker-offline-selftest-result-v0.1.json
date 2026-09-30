@@ -1,0 +1,20 @@
+{
+  "schema": "sc001.forced_flow_full_window_gap_checker_offline_selftest_result.v0.1",
+  "date": "2026-09-30",
+  "status": "FORCED_FLOW_FULL_WINDOW_GAP_LEDGER_PASS",
+  "job_id": "job_20260930T190111Z_aa0d0d56",
+  "repo_head": "4bb0151568ce2eae513ab1effda396071d17d1ca",
+  "network_profile": "offline",
+  "exit_code": 0,
+  "checks": {
+    "opening_state_pass": true,
+    "disconnect_gap_pass": true,
+    "process_gap_merge_pass": true,
+    "closing_boundary_gate_pass": true
+  },
+  "real_window_inputs_opened": false,
+  "liquidation_event_rows_opened": false,
+  "trade_archives_opened": false,
+  "prices_opened": false,
+  "s0_executed": false
+}
