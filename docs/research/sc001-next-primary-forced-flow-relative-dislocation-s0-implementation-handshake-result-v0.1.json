@@ -1,0 +1,26 @@
+{
+  "checks": {
+    "current_second_exclusion_pass": true,
+    "duplicate_fixture_rejected": true,
+    "exact_observation_bucket_pass": true,
+    "fixed_12_symbol_denominator_pass": true,
+    "fixed_7_day_denominator_pass": true,
+    "freeze_handshake_pass": true,
+    "malformed_fixture_rejected": true,
+    "minimum_120_gate_pass": true,
+    "missing_authorization_rejected": true,
+    "output_collision_check_active": true,
+    "pre_window_outcome_lock_pass": true,
+    "synthetic_causal_baseline_pass": true,
+    "synthetic_pressure_sign_pass": true
+  },
+  "mode": "self-test",
+  "network_calls_performed": false,
+  "pnl_calculated": false,
+  "price_outcome_accessed": false,
+  "real_input_opened": false,
+  "return_calculated": false,
+  "s0_executed": false,
+  "schema": "sc001.forced_flow_s0_implementation_handshake.v0.1",
+  "status": "FORCED_FLOW_S0_IMPLEMENTATION_HANDSHAKE_PASS"
+}
