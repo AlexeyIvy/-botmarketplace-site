@@ -1,0 +1,93 @@
+{
+  "stage": "SC001-NEXT-PRIMARY-FORCED-FLOW-SOURCE-SEMANTIC-QUALIFICATION",
+  "version": "0.1",
+  "date": "2026-09-30",
+  "status": "FROZEN_BEFORE_FORCED_FLOW_SOURCE_SEMANTIC_PREFLIGHT",
+  "task_id": "SC001-NEXT-PRIMARY-PREFREEZE-01",
+  "protocol_path": "docs/research/sc001-next-primary-forced-flow-relative-dislocation-source-semantic-qualification-protocol-v0.1.md",
+  "protocol_git_blob_sha": "bbc334292e7aad56aba2c1d1dc35dc8e52f50720",
+  "runner_path": "research/sc001/sc001_forced_flow_source_semantic_preflight_v0_1.py",
+  "runner_git_blob_sha": "ce20a5a3d6b932656f92c237c8e86fda3bf2db33",
+  "frozen_pairs": [
+    [
+      "BTC",
+      "BTCUSDT",
+      "BTC-USDT-SWAP"
+    ],
+    [
+      "ETH",
+      "ETHUSDT",
+      "ETH-USDT-SWAP"
+    ],
+    [
+      "SOL",
+      "SOLUSDT",
+      "SOL-USDT-SWAP"
+    ],
+    [
+      "DOGE",
+      "DOGEUSDT",
+      "DOGE-USDT-SWAP"
+    ],
+    [
+      "ORDI",
+      "ORDIUSDT",
+      "ORDI-USDT-SWAP"
+    ],
+    [
+      "FIL",
+      "FILUSDT",
+      "FIL-USDT-SWAP"
+    ],
+    [
+      "UNI",
+      "UNIUSDT",
+      "UNI-USDT-SWAP"
+    ],
+    [
+      "XRP",
+      "XRPUSDT",
+      "XRP-USDT-SWAP"
+    ],
+    [
+      "LTC",
+      "LTCUSDT",
+      "LTC-USDT-SWAP"
+    ],
+    [
+      "OP",
+      "OPUSDT",
+      "OP-USDT-SWAP"
+    ],
+    [
+      "BCH",
+      "BCHUSDT",
+      "BCH-USDT-SWAP"
+    ],
+    [
+      "SUI",
+      "SUIUSDT",
+      "SUI-USDT-SWAP"
+    ]
+  ],
+  "allowed_network_scope": [
+    "BYBIT_INSTRUMENT_METADATA",
+    "OKX_INSTRUMENT_METADATA"
+  ],
+  "trade_body_authorized": false,
+  "price_outcome_authorized": false,
+  "cross_venue_price_ratio_authorized": false,
+  "return_authorized": false,
+  "pnl_authorized": false,
+  "l1_l2_authorized": false,
+  "mark_index_premium_authorized": false,
+  "funding_authorized": false,
+  "trading_authorized": false,
+  "candidate_2_3_parallel_outcome_authorized": false,
+  "b13c_collector_mutation_authorized": false,
+  "s0_execution_authorized": false,
+  "pass_token": "FORCED_FLOW_SOURCE_SEMANTIC_PREFLIGHT_PASS",
+  "review_token": "FORCED_FLOW_SOURCE_SEMANTIC_PREFLIGHT_REVIEW",
+  "next_if_pass": "COMPLETE_PREOUTCOME_IMPLEMENTATION_HANDSHAKE_AND_READONLY_B13C_CONTINUITY_GATE",
+  "next_if_review": "RETURN_TO_STRATEGY_USER_GATE_NO_S0"
+}
