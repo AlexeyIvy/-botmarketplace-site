@@ -1,0 +1,28 @@
+{
+  "stage": "SC001-NEXT-PRIMARY-OKX-ARCHIVE-PUBLICATION-RESOLVER-DIAGNOSTIC",
+  "version": "0.1",
+  "date": "2026-09-30",
+  "status": "FROZEN_BEFORE_OKX_ARCHIVE_DIAGNOSTIC",
+  "task_id": "SC001-NEXT-PRIMARY-PREFREEZE-01",
+  "protocol_path": "docs/research/sc001-next-primary-okx-archive-publication-resolver-diagnostic-protocol-v0.1.md",
+  "protocol_git_blob_sha": "e183c3beffc94d52d71b8c68fbc8bee009d93256",
+  "runner_path": "research/sc001/sc001_okx_archive_publication_resolver_diagnostic_v0_1.py",
+  "runner_git_blob_sha": "620def2961a4a27d112b3e5db36c4f882bdd802f",
+  "frozen_instrument_family": "BTC-USDT",
+  "frozen_dates": [
+    "2026-09-29",
+    "2026-09-28",
+    "2026-09-23"
+  ],
+  "live_run_authorized": false,
+  "archive_body_access_authorized": false,
+  "trade_rows_access_authorized": false,
+  "price_access_authorized": false,
+  "s0_execution_authorized": false,
+  "terminal_states": [
+    "OKX_ARCHIVE_DIAGNOSTIC_PASS",
+    "OKX_ARCHIVE_DIAGNOSTIC_RECENT_PUBLICATION_LAG",
+    "OKX_ARCHIVE_DIAGNOSTIC_RESOLVER_CONTRACT_REVIEW",
+    "OKX_ARCHIVE_DIAGNOSTIC_SOURCE_REVIEW"
+  ]
+}
