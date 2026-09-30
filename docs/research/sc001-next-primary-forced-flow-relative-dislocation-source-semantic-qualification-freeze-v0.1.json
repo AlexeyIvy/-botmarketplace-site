@@ -7,7 +7,7 @@
   "protocol_path": "docs/research/sc001-next-primary-forced-flow-relative-dislocation-source-semantic-qualification-protocol-v0.1.md",
   "protocol_git_blob_sha": "bbc334292e7aad56aba2c1d1dc35dc8e52f50720",
   "runner_path": "research/sc001/sc001_forced_flow_source_semantic_preflight_v0_1.py",
-  "runner_git_blob_sha": "ce20a5a3d6b932656f92c237c8e86fda3bf2db33",
+  "runner_git_blob_sha": "c14e443c7ad0f8a700af0cb6ebb3f9ade35aac12",
   "frozen_pairs": [
     [
       "BTC",
