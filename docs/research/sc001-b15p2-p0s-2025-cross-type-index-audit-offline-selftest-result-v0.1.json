@@ -1,0 +1,28 @@
+{
+  "schema": "sc001.b15p2_p0s_2025_cross_type_index_audit_offline_selftest_result.v0.1",
+  "date": "2026-09-30",
+  "status": "PASS",
+  "scope": "SCALPING_RESEARCH_SC001_B15P2_P0S_SOURCE_ONLY",
+  "test_executor_job": {
+    "job_id": "job_20260930T001448Z_a4175115",
+    "repo_head": "de6695c60ec212820f0f735824fae9f14628b93a",
+    "entrypoint": "research/sc001/sc001_b15p2_p0s_2025_cross_type_index_audit_v0_1.py",
+    "entrypoint_sha256": "2ab1203788747e857d1fb89a3e849e0d8eb47b6cdd000e13875cf683811fb2a2",
+    "args": ["--mode", "self-test"],
+    "network_profile": "offline",
+    "exit_code": 0,
+    "timed_out": false,
+    "log_sha256": "64d5542ed8663c9e59917cd9261b20226d705af8448ede9b0637c97b22255bf2",
+    "expected_pass_line": "B15P2_P0S_2025_CROSS_TYPE_INDEX_AUDIT_V01_SELF_TEST_PASS"
+  },
+  "protocol": {
+    "path": "docs/research/sc001-b15p2-p0s-2025-unmatched-announcement-index-cross-type-audit-protocol-v0.1.md",
+    "sha256": "0bb6b61988041a54873dace0c68ce253e3dc246e7b4e197e5c8def61a0297e1d"
+  },
+  "implementation_prefreeze": {
+    "path": "docs/research/sc001-b15p2-p0s-2025-cross-type-index-audit-implementation-prefreeze-v0.1.json",
+    "sha256": "c32c3951483aa2320e9a5fca5f833eabe8668e8fb3720f77177bd3a066de683d"
+  },
+  "price_outcome_accessed": false,
+  "next_state": "ELIGIBLE_FOR_SEPARATE_ONE_RUN_SOURCE_ONLY_PUBLIC_RESEARCH_APPROVAL"
+}

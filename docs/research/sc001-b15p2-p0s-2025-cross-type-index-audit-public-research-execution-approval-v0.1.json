@@ -1,0 +1,44 @@
+{
+  "schema": "sc001.b15p2_p0s_2025_cross_type_index_audit_public_research_execution_approval.v0.1",
+  "date": "2026-09-30",
+  "status": "ONE_RUN_SOURCE_ONLY_APPROVED",
+  "scope": "SCALPING_RESEARCH_SC001_B15P2_P0S_SOURCE_ONLY",
+  "user_authorization": "Explicit authorization received in the current BotMarketplace / SC001 / B15-P2 instruction to proceed after offline PASS only if Test Executor rate counters lawfully permit one run.",
+  "offline_validation": {
+    "path": "docs/research/sc001-b15p2-p0s-2025-cross-type-index-audit-offline-selftest-result-v0.1.json",
+    "expected_status": "PASS"
+  },
+  "protocol": {
+    "path": "docs/research/sc001-b15p2-p0s-2025-unmatched-announcement-index-cross-type-audit-protocol-v0.1.md",
+    "sha256": "0bb6b61988041a54873dace0c68ce253e3dc246e7b4e197e5c8def61a0297e1d"
+  },
+  "implementation": {
+    "path": "research/sc001/sc001_b15p2_p0s_2025_cross_type_index_audit_v0_1.py",
+    "sha256": "2ab1203788747e857d1fb89a3e849e0d8eb47b6cdd000e13875cf683811fb2a2"
+  },
+  "execution": {
+    "execution_plane": "BotMarketplace Test Executor",
+    "network_profile": "public_research",
+    "maximum_runs": 1,
+    "rate_limit_bypass_authorized": false,
+    "alternate_execution_plane_authorized": false
+  },
+  "allowed_sources": [
+    "official Bybit /v5/announcements/index metadata with locale=en-US and no announcement type filter",
+    "official Bybit /v5/market/instruments-info metadata with category=linear and status=Closed"
+  ],
+  "firewalls": {
+    "affected_contract_price": false,
+    "index_value": false,
+    "basis": false,
+    "returns": false,
+    "pnl": false,
+    "l1_l2": false,
+    "individual_trades": false,
+    "funding": false,
+    "mark_premium_spot": false,
+    "external_venues": false,
+    "order_or_trade_execution": false
+  },
+  "execution_started": false
+}
