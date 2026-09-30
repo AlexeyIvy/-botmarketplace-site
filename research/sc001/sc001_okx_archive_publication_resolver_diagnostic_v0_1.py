@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
-import argparse, json, os, time, urllib.parse, urllib.request
+import argparse, json, os, subprocess, time, urllib.parse, urllib.request
 from pathlib import Path
 
 DATES=("2026-09-29","2026-09-28","2026-09-23")
@@ -16,6 +16,8 @@ INST_FAMILY="BTC-USDT"
 TIMEOUT=45
 RETRIES=2
 MAX_BYTES=4_000_000
+ROOT=Path(__file__).resolve().parents[2]
+FREEZE=ROOT/"docs/research/sc001-next-primary-okx-archive-publication-resolver-diagnostic-freeze-v0.1.json"
 
 PASS="OKX_ARCHIVE_DIAGNOSTIC_PASS"
 LAG="OKX_ARCHIVE_DIAGNOSTIC_RECENT_PUBLICATION_LAG"
@@ -23,6 +25,20 @@ CONTRACT="OKX_ARCHIVE_DIAGNOSTIC_RESOLVER_CONTRACT_REVIEW"
 REVIEW="OKX_ARCHIVE_DIAGNOSTIC_SOURCE_REVIEW"
 
 def fail(msg:str)->None: raise RuntimeError(msg)
+
+def git_blob(p:Path)->str:
+    return subprocess.check_output(["git","-C",str(ROOT),"hash-object",str(p.relative_to(ROOT))],text=True).strip()
+
+def require_freeze()->dict:
+    if not FREEZE.is_file() or FREEZE.is_symlink(): fail("freeze missing/invalid")
+    fr=json.loads(FREEZE.read_text(encoding="utf-8"))
+    if fr.get("status")!="FROZEN_BEFORE_OKX_ARCHIVE_DIAGNOSTIC": fail("freeze status mismatch")
+    if fr.get("runner_git_blob_sha")!=git_blob(Path(__file__).resolve()): fail("runner blob mismatch")
+    if tuple(fr.get("frozen_dates") or ())!=DATES: fail("date freeze mismatch")
+    if fr.get("frozen_instrument_family")!=INST_FAMILY: fail("instrument freeze mismatch")
+    if fr.get("live_run_authorized") is not False: fail("live authorization firewall mismatch")
+    if fr.get("archive_body_access_authorized") is not False: fail("archive body firewall mismatch")
+    return fr
 
 def walk(node):
     if isinstance(node,dict):
@@ -122,6 +138,7 @@ def main()->int:
     a=ap.parse_args()
     out=Path(a.out_dir); out.mkdir(parents=True,exist_ok=True)
     try:
+        require_freeze()
         selftest()
         if a.mode=="self-test":
             result={"schema":"sc001.okx_archive_publication_resolver_diagnostic.v0.1","mode":"self-test","status":PASS,"network_calls_performed":False,"archive_body_accessed":False}
