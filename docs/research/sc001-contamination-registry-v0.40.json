@@ -1,0 +1,39 @@
+{
+  "stage": "SC001-CONTAMINATION-REGISTRY",
+  "version": "0.40",
+  "date": "2026-09-30",
+  "status": "B15P2_SOURCE_STRUCTURE_STOP_FROZEN_SECONDARY",
+  "scope": "SCALPING_RESEARCH_SC001",
+  "supersedes": "docs/research/sc001-contamination-registry-v0.39.json",
+  "inherited_registry": "docs/research/sc001-contamination-registry-v0.39.json",
+  "b15p2_source_structure_stop": {
+    "task_id": "SC001-B15P2-P0S-2025-CROSS-TYPE-INDEX-AUDIT",
+    "classification": "FRESH_SOURCE_ONLY_AUDIT_TERMINATED_ON_PREFROZEN_SCHEMA_REVIEW",
+    "live_job_id": "job_20260930T033315Z_83502e67",
+    "implementation_sha256": "2ab1203788747e857d1fb89a3e849e0d8eb47b6cdd000e13875cf683811fb2a2",
+    "canonical_result": {
+      "path": "docs/research/sc001-b15p2-p0s-2025-cross-type-index-audit-result-v0.1.json",
+      "sha256": "79dc9be3dcc8b9334518cc9653025bbd8a55e086cad85aa19f988a7fab7aec7a"
+    },
+    "observed_source_feature": "UNKNOWN_ANNOUNCEMENT_TYPE:Earn",
+    "coverage_gate": 0.8,
+    "coverage_gate_changed": false,
+    "recovery_count_observed": null,
+    "price_outcome_accessed": false,
+    "index_value_accessed": false,
+    "basis_accessed": false,
+    "returns_accessed": false,
+    "pnl_accessed": false,
+    "trading_accessed": false,
+    "promotional_evidence": false,
+    "same_evidence_rescue_authorized": false,
+    "enum_adaptation_and_rerun_authorized": false,
+    "article_body_fallback_authorized": false,
+    "additional_b15p2_live_run_authorized": false,
+    "branch_disposition": "FROZEN_SECONDARY",
+    "p0_verdict_remains": "DEFER_SOURCE_COVERAGE",
+    "next_allowed_action": "RETURN_TO_STRATEGY_USER_GATE_WITH_B15P2_FROZEN_SECONDARY"
+  },
+  "next_primary_forced_flow_state": "INHERITED_UNCHANGED_FROM_V0.39_NO_AUTOMATIC_OUTCOME_AUTHORIZATION",
+  "selection_rule": "Anything inspected for feature choice, threshold, horizon, asset subset, execution mode, event definition or candidate selection is nonpromotional for that implementation."
+}

@@ -1,0 +1,18 @@
+{
+  "article_body_hydration_performed": false,
+  "date": "2026-09-29",
+  "error_message": "UNKNOWN_ANNOUNCEMENT_TYPE:Earn",
+  "error_type": "RuntimeError",
+  "firewalls": {
+    "affected_contract_price_accessed": false,
+    "basis_calculated": false,
+    "index_value_accessed": false,
+    "pnl_calculated": false,
+    "returns_calculated": false,
+    "trading": false
+  },
+  "next_state": "TECHNICAL_SOURCE_AUDIT_REVIEW_NO_PRICE",
+  "schema": "sc001.b15p2_p0s_2025_cross_type_index_audit_result.v0.1",
+  "stage": "SC001-B15P2-P0S-2025-CROSS-TYPE-INDEX-AUDIT-V0.1",
+  "status": "B15P2_P0S_2025_CROSS_TYPE_INDEX_AUDIT_REVIEW"
+}

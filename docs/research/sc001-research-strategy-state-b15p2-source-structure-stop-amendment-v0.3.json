@@ -1,0 +1,45 @@
+{
+  "schema": "sc001.research_strategy_state.b15p2_source_structure_stop_amendment.v0.3",
+  "date": "2026-09-30",
+  "status": "CANONICAL_STATE_SYNC_PENDING",
+  "scope": "SCALPING_RESEARCH_SC001_B15P2",
+  "applies_to": "docs/research/sc001-research-strategy-state-v0.1.json",
+  "base_state_sha256": "46496075d7445256907c1a4de09b2f74689d26c36680b66ac1221f97ba53caa9",
+  "supersedes_amendment": "docs/research/sc001-research-strategy-state-b15p2-source-coverage-review-amendment-v0.2.json",
+  "state": "B15P2_SOURCE_STRUCTURE_STOP_FROZEN_SECONDARY",
+  "p0_verdict": "DEFER_SOURCE_COVERAGE",
+  "cross_type_source_audit": {
+    "canonical_result": {
+      "path": "docs/research/sc001-b15p2-p0s-2025-cross-type-index-audit-result-v0.1.json",
+      "sha256": "79dc9be3dcc8b9334518cc9653025bbd8a55e086cad85aa19f988a7fab7aec7a"
+    },
+    "canonical_log": {
+      "path": "docs/research/runtime-inbox/sc001-b15p2-p0s-2025-cross-type-index-audit-v0.1.log.txt",
+      "sha256": "95eaa50989f3dbe53725472a3d88eae71e1f0aa848d5d0fb852131cfcc1b1bb6"
+    },
+    "live_job_id": "job_20260930T033315Z_83502e67",
+    "implementation_sha256": "2ab1203788747e857d1fb89a3e849e0d8eb47b6cdd000e13875cf683811fb2a2",
+    "terminal_status": "B15P2_P0S_2025_CROSS_TYPE_INDEX_AUDIT_REVIEW",
+    "terminal_reason": "UNKNOWN_ANNOUNCEMENT_TYPE:Earn",
+    "recovery_count_observed": null,
+    "minimum_recoveries_required": 4,
+    "source_gate_demonstrated": false
+  },
+  "review": {
+    "path": "docs/research/sc001-b15p2-p0s-2025-cross-type-index-audit-review-v0.1.md",
+    "sha256": "f9c498942ca0b615f2094a16909d517141f463d160b0bf502bf54840e9c6277b"
+  },
+  "roadmap": {
+    "path": "docs/research/sc001-current-roadmap-and-stop-rules-v5.210.md",
+    "sha256": "92246374ebd6c6780e8754d15ae50c0614033f3f43645264e91f8a6e696fd6d2"
+  },
+  "contamination_registry": {
+    "path": "docs/research/sc001-contamination-registry-v0.40.json",
+    "sha256": "6bc1af6e94e8de941b839782134029e6ba5f34c058ea2e4c9b8367367a838334"
+  },
+  "same_evidence_rescue_authorized": false,
+  "additional_b15p2_live_run_authorized": false,
+  "new_b15p2_price_outcome_authorized": false,
+  "branch_priority": "SECONDARY_FROZEN",
+  "next_allowed_action": "RETURN_TO_STRATEGY_USER_GATE_WITH_B15P2_FROZEN_SECONDARY"
+}

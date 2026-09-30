@@ -1,0 +1,99 @@
+{
+  "schema": "sc001.worker_result_manifest.v0.1",
+  "project": "SC001",
+  "experiment_id": "B15-P2",
+  "stage": "P0S_2025_CROSS_TYPE_INDEX_SOURCE_AUDIT_STOP",
+  "date": "2026-09-30",
+  "status": "B15P2_SOURCE_STRUCTURE_STOP_FROZEN_SECONDARY",
+  "strategy_triggers": [
+    "TERMINAL_REJECT_DEFER",
+    "EVIDENCE_MATURITY_CHANGE",
+    "CONTAMINATION_CHANGE",
+    "ROADMAP_GOVERNANCE_CHANGE"
+  ],
+  "canonical_result": {
+    "path": "docs/research/sc001-b15p2-p0s-2025-cross-type-index-audit-result-v0.1.json",
+    "sha256": "79dc9be3dcc8b9334518cc9653025bbd8a55e086cad85aa19f988a7fab7aec7a"
+  },
+  "canonical_log": {
+    "path": "docs/research/runtime-inbox/sc001-b15p2-p0s-2025-cross-type-index-audit-v0.1.log.txt",
+    "sha256": "95eaa50989f3dbe53725472a3d88eae71e1f0aa848d5d0fb852131cfcc1b1bb6"
+  },
+  "protocol": {
+    "path": "docs/research/sc001-b15p2-p0s-2025-unmatched-announcement-index-cross-type-audit-protocol-v0.1.md",
+    "sha256": "0bb6b61988041a54873dace0c68ce253e3dc246e7b4e197e5c8def61a0297e1d"
+  },
+  "implementation": {
+    "path": "research/sc001/sc001_b15p2_p0s_2025_cross_type_index_audit_v0_1.py",
+    "sha256": "2ab1203788747e857d1fb89a3e849e0d8eb47b6cdd000e13875cf683811fb2a2"
+  },
+  "offline_validation": {
+    "path": "docs/research/sc001-b15p2-p0s-2025-cross-type-index-audit-offline-selftest-result-v0.1.json",
+    "sha256": "c0acf4ba896cd23ae123de0f3f728af2e067552e77bac5a6feaa1ef9f09124bf",
+    "job_id": "job_20260930T001448Z_a4175115",
+    "status": "PASS"
+  },
+  "execution_approval": {
+    "path": "docs/research/sc001-b15p2-p0s-2025-cross-type-index-audit-public-research-execution-approval-v0.1.json",
+    "sha256": "bca59dd79164d3aa7faa3bfa6107b1fc099bc2205a216d5e7b9d3eb5646a43e9",
+    "maximum_runs": 1
+  },
+  "execution": {
+    "mode": "TEST_EXECUTOR_PUBLIC_RESEARCH",
+    "job_id": "job_20260930T033315Z_83502e67",
+    "repo_head": "f749565e513d322a2ba815a050528b06689595df",
+    "exit_code": 2,
+    "timed_out": false,
+    "runs_consumed": 1,
+    "runs_authorized": 1
+  },
+  "evidence": {
+    "class": "FRESH_SOURCE_ONLY_CROSS_TYPE_AUDIT",
+    "promotional": false,
+    "outcome_accessed": false,
+    "contamination_registry_ref": "docs/research/sc001-contamination-registry-v0.40.json",
+    "review_ref": "docs/research/sc001-b15p2-p0s-2025-cross-type-index-audit-review-v0.1.md"
+  },
+  "key_metrics": {
+    "original_closed_in_scope": 154,
+    "original_admitted_events": 120,
+    "original_coverage": 0.7792207792207793,
+    "original_unmatched_symbols": 34,
+    "minimum_recoveries_for_80pct": 4,
+    "recovered_symbol_count": null,
+    "coverage_analysis_completed": false,
+    "source_schema_error": "UNKNOWN_ANNOUNCEMENT_TYPE:Earn",
+    "price_outcome_accessed": false
+  },
+  "decision": {
+    "class": "FREEZE_SECONDARY",
+    "summary": "The single authorized cross-type source-only live audit stopped fail-closed on UNKNOWN_ANNOUNCEMENT_TYPE:Earn before recovery counting. The 80% source gate was not demonstrated. No price/index/basis/returns/PnL/trading outcome was opened. Under the current stop objective, B15-P2 is frozen as a secondary branch with no rescue rerun.",
+    "failed_gate": "PREFROZEN_SOURCE_STRUCTURE_STABILITY",
+    "allowed_claims": [
+      "The frozen cross-type implementation passed its offline self-test.",
+      "Exactly one authorized public_research live run was performed.",
+      "The live official source exposed announcement type Earn outside the preregistered type schema.",
+      "The run stopped before recovery coverage was computed.",
+      "The unchanged 80% source gate was not demonstrated.",
+      "B15-P2 remains price-outcome closed and is frozen secondary."
+    ],
+    "forbidden_reuse": [
+      "Do not interpret the source REVIEW as evidence of positive or negative trading edge.",
+      "Do not add Earn or otherwise adapt the parser and rerun under this branch.",
+      "Do not launch article-body fallback as a rescue continuation.",
+      "Do not lower the 80% gate.",
+      "Do not open new B15-P2 price/index/basis outcomes.",
+      "Do not use another execution plane or bypass rate limits."
+    ],
+    "next_allowed_action": "RETURN_TO_STRATEGY_USER_GATE_WITH_B15P2_FROZEN_SECONDARY"
+  },
+  "roadmap": {
+    "path": "docs/research/sc001-current-roadmap-and-stop-rules-v5.210.md",
+    "sha256": "92246374ebd6c6780e8754d15ae50c0614033f3f43645264e91f8a6e696fd6d2"
+  },
+  "state_amendment": {
+    "path": "docs/research/sc001-research-strategy-state-b15p2-source-structure-stop-amendment-v0.3.json",
+    "sha256": "0839f51f4427e9463e2777c8186642f9f866a6ac908b5bf33f43b53d11eced8d"
+  },
+  "reusable_blocks": []
+}

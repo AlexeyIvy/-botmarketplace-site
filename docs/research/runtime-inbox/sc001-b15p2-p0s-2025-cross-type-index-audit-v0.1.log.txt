@@ -1,0 +1,4 @@
+B15P2_P0S_2025_CROSS_TYPE_INDEX_AUDIT_REVIEW
+error = RuntimeError: UNKNOWN_ANNOUNCEMENT_TYPE:Earn
+price/index/basis/returns/PnL/trading = CLOSED
+report = /var/lib/botmarket-test-executor/jobs/job_20260930T033315Z_83502e67/output/data/SC001_B15P2_P0S_2025_CROSS_TYPE_INDEX_AUDIT/sc001_b15p2_p0s_2025_cross_type_index_audit_v0_1.json
