@@ -1,0 +1,17 @@
+{
+  "schema": "sc001.okx_archive_publication_resolver_diagnostic_offline_selftest_result.v0.1",
+  "date": "2026-09-30",
+  "status": "OKX_ARCHIVE_DIAGNOSTIC_PASS",
+  "mode": "self-test",
+  "job_id": "job_20260930T190558Z_03340012",
+  "repo_head": "b40705cb75b891f63a9cc530ac42189175bf1f42",
+  "network_profile": "offline",
+  "exit_code": 0,
+  "freeze_path": "docs/research/sc001-next-primary-okx-archive-publication-resolver-diagnostic-freeze-v0.1.json",
+  "live_run_authorized": false,
+  "archive_body_accessed": false,
+  "trade_rows_accessed": false,
+  "price_accessed": false,
+  "s0_executed": false,
+  "next_allowed_action": "SEPARATE_USER_APPROVAL_FOR_ONE_LIVE_METADATA_ONLY_OKX_PUBLICATION_RESOLVER_DIAGNOSTIC"
+}
