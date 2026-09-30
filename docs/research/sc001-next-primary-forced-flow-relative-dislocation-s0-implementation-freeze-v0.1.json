@@ -1,0 +1,66 @@
+{
+  "stage": "SC001-NEXT-PRIMARY-FORCED-FLOW-S0-IMPLEMENTATION-HANDSHAKE",
+  "version": "0.1",
+  "date": "2026-09-30",
+  "status": "FROZEN_BEFORE_FORCED_FLOW_S0_IMPLEMENTATION_HANDSHAKE",
+  "task_id": "SC001-NEXT-PRIMARY-PREFREEZE-01",
+  "protocol_path": "docs/research/sc001-next-primary-forced-flow-relative-dislocation-s0-implementation-handshake-protocol-v0.1.md",
+  "protocol_git_blob_sha": "e2fbd55ece3628842cf66ba66866307d90266bc7",
+  "runner_path": "research/sc001/sc001_forced_flow_s0_analyzer_v0_1.py",
+  "runner_git_blob_sha": "cefa24dedc3124aa281178bf82dc22a456c4875f",
+  "parents": [
+    {
+      "path": "docs/research/sc001-next-primary-forced-flow-relative-dislocation-s0-protocol-v0.2.md",
+      "git_blob_sha": "439fbe6821e595998b10360c14eab6504dd2d0ef"
+    },
+    {
+      "path": "docs/research/sc001-next-primary-forced-flow-relative-dislocation-fee-qualification-v0.1.md",
+      "git_blob_sha": "951853cb541ceb5529ccfa1cad642e156ef1e918"
+    },
+    {
+      "path": "docs/research/sc001-next-primary-forced-flow-relative-dislocation-source-semantic-qualification-result-v0.1.json",
+      "git_blob_sha": "94f4b182e1261f1d9e5f46b789b50302c1bbbf11"
+    },
+    {
+      "path": "docs/research/sc001-next-primary-forced-flow-relative-dislocation-b13c-fresh-window-continuity-readonly-result-v0.1.json",
+      "git_blob_sha": "136ebeb2f29c4597e81197cc5454c70ea5e4f2bb"
+    },
+    {
+      "path": "docs/research/sc001-contamination-registry-v0.40.json",
+      "git_blob_sha": "1d933fffdbb925552925a56b40570df345641fd8"
+    }
+  ],
+  "frozen_symbols": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "DOGEUSDT",
+    "ORDIUSDT",
+    "FILUSDT",
+    "UNIUSDT",
+    "XRPUSDT",
+    "LTCUSDT",
+    "OPUSDT",
+    "BCHUSDT",
+    "SUIUSDT"
+  ],
+  "window_start_ms": 1790726400000,
+  "window_end_ms": 1791331200000,
+  "H_bps": 52,
+  "minimum_valid_clusters": 300,
+  "minimum_represented_symbols": 8,
+  "minimum_represented_days": 5,
+  "positive_symbol_requirement": "6/12",
+  "positive_day_requirement": "5/7",
+  "s0_execution_authorized": false,
+  "real_input_open_authorized": false,
+  "synthetic_only_handshake": true,
+  "analyzer_network_calls_authorized": false,
+  "returns_authorized": false,
+  "pnl_authorized": false,
+  "trading_authorized": false,
+  "pass_token": "FORCED_FLOW_S0_IMPLEMENTATION_HANDSHAKE_PASS",
+  "review_token": "FORCED_FLOW_S0_IMPLEMENTATION_HANDSHAKE_REVIEW",
+  "next_if_pass": "RETURN_TO_STRATEGY_USER_GATE_FOR_SEPARATE_S0_EXECUTION_AUTHORIZATION_AND_INPUT_PROVENANCE_FREEZE",
+  "next_if_review": "FIX_ENGINEERING_ONLY_WITHOUT_REAL_INPUT_ACCESS"
+}
