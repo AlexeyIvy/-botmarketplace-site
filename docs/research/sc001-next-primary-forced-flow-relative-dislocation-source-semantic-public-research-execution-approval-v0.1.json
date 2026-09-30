@@ -1,0 +1,36 @@
+{
+  "schema": "sc001.forced_flow_source_semantic_public_research_execution_approval.v0.1",
+  "date": "2026-09-30",
+  "task_id": "SC001-NEXT-PRIMARY-PREFREEZE-01",
+  "status": "ONE_METADATA_ONLY_RUN_APPROVED_PRE_OUTCOME",
+  "implementation_path": "research/sc001/sc001_forced_flow_source_semantic_preflight_v0_1.py",
+  "implementation_git_blob_sha": "c14e443c7ad0f8a700af0cb6ebb3f9ade35aac12",
+  "freeze_path": "docs/research/sc001-next-primary-forced-flow-relative-dislocation-source-semantic-qualification-freeze-v0.1.json",
+  "offline_selftest_path": "docs/research/sc001-next-primary-forced-flow-relative-dislocation-source-semantic-offline-selftest-result-v0.1.json",
+  "maximum_public_research_runs": 1,
+  "required_args": [
+    "--mode",
+    "live"
+  ],
+  "allowed_network_profile": "public_research",
+  "allowed_network_scope": [
+    "Bybit GET /v5/market/instruments-info for exact frozen symbols only",
+    "OKX GET /api/v5/public/instruments for exact frozen SWAP instIds only"
+  ],
+  "forbidden_network_scope": [
+    "trade/recent-trade bodies",
+    "L1/L2/order book",
+    "mark/index/premium",
+    "funding",
+    "historical trade body",
+    "trading/order endpoints"
+  ],
+  "price_outcome_access_authorized": false,
+  "cross_venue_price_ratio_authorized": false,
+  "returns_authorized": false,
+  "pnl_authorized": false,
+  "s0_execution_authorized": false,
+  "candidate_2_3_parallel_outcome_authorized": false,
+  "on_pass": "CANONICALIZE_SOURCE_SEMANTIC_QUALIFICATION_THEN_COMPLETE_IMPLEMENTATION_HANDSHAKE_AND_B13C_CONTINUITY_GATE",
+  "on_review": "RETURN_TO_STRATEGY_USER_GATE_NO_S0"
+}
