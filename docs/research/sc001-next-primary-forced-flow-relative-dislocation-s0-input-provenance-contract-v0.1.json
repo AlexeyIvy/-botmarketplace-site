@@ -1,0 +1,65 @@
+{
+  "schema": "sc001.forced_flow_s0_input_provenance_contract.v0.1",
+  "date": "2026-09-30",
+  "status": "FROZEN_DESIGN_NO_REAL_MATERIALIZATION_AUTHORIZED",
+  "task_id": "SC001-NEXT-PRIMARY-PREFREEZE-01",
+  "event_window": {
+    "start_utc": "2026-09-30T00:00:00Z",
+    "end_exclusive_utc": "2026-10-07T00:00:00Z",
+    "event_dates": [
+      "2026-09-30",
+      "2026-10-01",
+      "2026-10-02",
+      "2026-10-03",
+      "2026-10-04",
+      "2026-10-05",
+      "2026-10-06"
+    ]
+  },
+  "trade_archive_dates": [
+    "2026-09-29",
+    "2026-09-30",
+    "2026-10-01",
+    "2026-10-02",
+    "2026-10-03",
+    "2026-10-04",
+    "2026-10-05",
+    "2026-10-06",
+    "2026-10-07"
+  ],
+  "frozen_symbols": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "DOGEUSDT",
+    "ORDIUSDT",
+    "FILUSDT",
+    "UNIUSDT",
+    "XRPUSDT",
+    "LTCUSDT",
+    "OPUSDT",
+    "BCHUSDT",
+    "SUIUSDT"
+  ],
+  "b13c_inputs": [
+    "SC001_B13C_PROSPECTIVE_LIQUIDATIONS/collector_state.json",
+    "SC001_B13C_PROSPECTIVE_LIQUIDATIONS/connection/connection_events.jsonl",
+    "SC001_B13C_PROSPECTIVE_LIQUIDATIONS/events/2026-09-30.jsonl",
+    "SC001_B13C_PROSPECTIVE_LIQUIDATIONS/events/2026-10-01.jsonl",
+    "SC001_B13C_PROSPECTIVE_LIQUIDATIONS/events/2026-10-02.jsonl",
+    "SC001_B13C_PROSPECTIVE_LIQUIDATIONS/events/2026-10-03.jsonl",
+    "SC001_B13C_PROSPECTIVE_LIQUIDATIONS/events/2026-10-04.jsonl",
+    "SC001_B13C_PROSPECTIVE_LIQUIDATIONS/events/2026-10-05.jsonl",
+    "SC001_B13C_PROSPECTIVE_LIQUIDATIONS/events/2026-10-06.jsonl"
+  ],
+  "deterministic_trade_scope_reason": {
+    "prior_bootstrap_day": "2026-09-29 is required for the 300-second causal baseline at the opening boundary",
+    "post_window_day": "2026-10-07 is required for the +1s/<+2s observation bucket of clusters ending immediately before window close"
+  },
+  "materialization_authorized": false,
+  "archive_body_get_authorized": false,
+  "trade_row_access_authorized": false,
+  "price_outcome_access_authorized": false,
+  "s0_execution_authorized": false,
+  "next_allowed_action": "SYNTHETIC_VALIDATE_PROVENANCE_AND_FULL_WINDOW_GAP_READOUT; REAL INPUT MATERIALIZATION ONLY AFTER WINDOW CLOSE_AND_EXPLICIT_AUTHORIZATION"
+}
