@@ -1,0 +1,68 @@
+{
+  "schema": "sc001.b13c_fresh_window_continuity_readonly.canonical_result.v0.1",
+  "date": "2026-09-30",
+  "task_id": "SC001-NEXT-PRIMARY-PREFREEZE-01",
+  "status": "B13C_FRESH_WINDOW_CONTINUITY_READONLY_PASS",
+  "scope": "PRE_OUTCOME_OPERATIONAL_SOURCE_CONTINUITY_ONLY",
+  "fresh_window": {
+    "start_utc": "2026-09-30T00:00:00Z",
+    "end_exclusive_utc": "2026-10-07T00:00:00Z"
+  },
+  "execution": {
+    "mode": "OFFLINE_RUNNER_READ_ONLY_INPUT",
+    "bundle_id": "bundle_20260930T035359Z_3143b498",
+    "bundle_sha256": "7f0781661da454bac3254151c3fda82a090ebc3dce1be1af1d434491018084e7",
+    "approval_code": "BM-7F0781661DA4",
+    "job_id": "job_20260930T094751Z_40e5dafd",
+    "exit_code": 0,
+    "package_integrity_ok": true,
+    "artifact_path": "b13c_fresh_window_continuity_readonly_result.json",
+    "artifact_sha256": "86fa607c6154fd49279c3e983de0a66694615e314831da51cba0105e19e01d99"
+  },
+  "checks": {
+    "collector_started_before_fresh_window": true,
+    "connection_connected": true,
+    "heartbeat_at_or_after_fresh_window_start": true,
+    "heartbeat_exists": true,
+    "heartbeat_fresh_within_5m": true,
+    "heartbeat_not_in_future": true,
+    "source_qualified_symbols_12": true,
+    "stage_allowed": true,
+    "status_running": true,
+    "strategy_outcomes_not_calculated": true
+  },
+  "collector": {
+    "collector_start_utc": "2026-09-19T06:47:38.969000+00:00",
+    "connection_status": "CONNECTED",
+    "cumulative_connection_gap_ms": 272111,
+    "cumulative_process_gap_ms": 18183,
+    "heartbeat_staleness_ms": 9003,
+    "invalid_event_count": 0,
+    "last_heartbeat_utc": "2026-09-30T09:47:42.422000+00:00",
+    "process_restart_count": 1,
+    "reconnect_count": 14,
+    "source_qualified_symbols": 12,
+    "stage": "SC001-B13C-BYBIT-PROSPECTIVE-LIQUIDATION-COLLECTOR-V0.3",
+    "status": "B13C_COLLECTION_RUNNING",
+    "version": "0.3"
+  },
+  "firewalls": {
+    "cluster_outcome_read": false,
+    "collector_mutation_performed": false,
+    "liquidation_size_distribution_read": false,
+    "network_calls_performed": false,
+    "per_symbol_frequency_read": false,
+    "pnl_read": false,
+    "price_read": false,
+    "return_read": false,
+    "trading_performed": false,
+    "s0_executed": false
+  },
+  "interpretation": [
+    "Existing frozen B13-C acquisition path was operationally healthy at the fresh-window start-period check.",
+    "PASS is a point-in-time continuity/health result, not proof that the entire seven-day window will remain gap-free.",
+    "Event-level source-gap censoring remains mandatory for any later S0.",
+    "Final full-window completeness/gap review remains required before interpreting the completed seven-day S0 sample."
+  ],
+  "s0_execution_authorized": false
+}
