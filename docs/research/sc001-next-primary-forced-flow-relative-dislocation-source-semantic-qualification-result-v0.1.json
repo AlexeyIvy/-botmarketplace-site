@@ -1,0 +1,740 @@
+{
+  "cross_venue_price_ratio_calculated": false,
+  "failed_bases": [],
+  "fixture_gate": {
+    "checks": {
+      "bybit_documented_trade_fixture": true,
+      "malformed_timestamp_rejected": true,
+      "okx_documented_trade_fixture": true,
+      "strict_coactive_no_carry_forward_frozen": true
+    },
+    "pass": true
+  },
+  "frozen_pair_count": 12,
+  "funding_accessed": false,
+  "l1_l2_accessed": false,
+  "mark_index_premium_accessed": false,
+  "mode": "live",
+  "network_scope": [
+    "BYBIT_INSTRUMENT_METADATA",
+    "OKX_INSTRUMENT_METADATA"
+  ],
+  "pairs": [
+    {
+      "base": "BTC",
+      "bybit": {
+        "baseCoin": "BTC",
+        "checks": {
+          "base_exact": true,
+          "contract_linear_perpetual": true,
+          "not_prelisting": true,
+          "quote_usdt": true,
+          "settle_usdt": true,
+          "status_trading": true,
+          "symbol_exact": true
+        },
+        "contractType": "LinearPerpetual",
+        "fullName": "Bitcoin",
+        "isPreListing": false,
+        "pass": true,
+        "quoteCoin": "USDT",
+        "settleCoin": "USDT",
+        "status": "Trading",
+        "symbolType": ""
+      },
+      "bybit_symbol": "BTCUSDT",
+      "okx": {
+        "checks": {
+          "ct_type_linear": true,
+          "ct_val_ccy_base": true,
+          "ct_val_positive": true,
+          "inst_family_exact": true,
+          "inst_id_exact": true,
+          "inst_type_swap": true,
+          "settle_usdt": true,
+          "state_live": true,
+          "uly_exact": true
+        },
+        "ctMult": "1",
+        "ctType": "linear",
+        "ctVal": "0.01",
+        "ctValCcy": "BTC",
+        "instFamily": "BTC-USDT",
+        "instId": "BTC-USDT-SWAP",
+        "instType": "SWAP",
+        "pass": true,
+        "settleCcy": "USDT",
+        "state": "live",
+        "uly": "BTC-USDT"
+      },
+      "okx_instId": "BTC-USDT-SWAP",
+      "pair_checks": {
+        "bybit_pass": true,
+        "linear_perpetual_compatible": true,
+        "okx_contract_value_currency_matches_base": true,
+        "okx_pass": true,
+        "same_base_official_metadata": true,
+        "standard_live_not_premarket": true,
+        "usdt_quote_settlement_compatible": true
+      },
+      "pass": true
+    },
+    {
+      "base": "ETH",
+      "bybit": {
+        "baseCoin": "ETH",
+        "checks": {
+          "base_exact": true,
+          "contract_linear_perpetual": true,
+          "not_prelisting": true,
+          "quote_usdt": true,
+          "settle_usdt": true,
+          "status_trading": true,
+          "symbol_exact": true
+        },
+        "contractType": "LinearPerpetual",
+        "fullName": "Ethereum",
+        "isPreListing": false,
+        "pass": true,
+        "quoteCoin": "USDT",
+        "settleCoin": "USDT",
+        "status": "Trading",
+        "symbolType": ""
+      },
+      "bybit_symbol": "ETHUSDT",
+      "okx": {
+        "checks": {
+          "ct_type_linear": true,
+          "ct_val_ccy_base": true,
+          "ct_val_positive": true,
+          "inst_family_exact": true,
+          "inst_id_exact": true,
+          "inst_type_swap": true,
+          "settle_usdt": true,
+          "state_live": true,
+          "uly_exact": true
+        },
+        "ctMult": "1",
+        "ctType": "linear",
+        "ctVal": "0.1",
+        "ctValCcy": "ETH",
+        "instFamily": "ETH-USDT",
+        "instId": "ETH-USDT-SWAP",
+        "instType": "SWAP",
+        "pass": true,
+        "settleCcy": "USDT",
+        "state": "live",
+        "uly": "ETH-USDT"
+      },
+      "okx_instId": "ETH-USDT-SWAP",
+      "pair_checks": {
+        "bybit_pass": true,
+        "linear_perpetual_compatible": true,
+        "okx_contract_value_currency_matches_base": true,
+        "okx_pass": true,
+        "same_base_official_metadata": true,
+        "standard_live_not_premarket": true,
+        "usdt_quote_settlement_compatible": true
+      },
+      "pass": true
+    },
+    {
+      "base": "SOL",
+      "bybit": {
+        "baseCoin": "SOL",
+        "checks": {
+          "base_exact": true,
+          "contract_linear_perpetual": true,
+          "not_prelisting": true,
+          "quote_usdt": true,
+          "settle_usdt": true,
+          "status_trading": true,
+          "symbol_exact": true
+        },
+        "contractType": "LinearPerpetual",
+        "fullName": "Solana",
+        "isPreListing": false,
+        "pass": true,
+        "quoteCoin": "USDT",
+        "settleCoin": "USDT",
+        "status": "Trading",
+        "symbolType": ""
+      },
+      "bybit_symbol": "SOLUSDT",
+      "okx": {
+        "checks": {
+          "ct_type_linear": true,
+          "ct_val_ccy_base": true,
+          "ct_val_positive": true,
+          "inst_family_exact": true,
+          "inst_id_exact": true,
+          "inst_type_swap": true,
+          "settle_usdt": true,
+          "state_live": true,
+          "uly_exact": true
+        },
+        "ctMult": "1",
+        "ctType": "linear",
+        "ctVal": "1",
+        "ctValCcy": "SOL",
+        "instFamily": "SOL-USDT",
+        "instId": "SOL-USDT-SWAP",
+        "instType": "SWAP",
+        "pass": true,
+        "settleCcy": "USDT",
+        "state": "live",
+        "uly": "SOL-USDT"
+      },
+      "okx_instId": "SOL-USDT-SWAP",
+      "pair_checks": {
+        "bybit_pass": true,
+        "linear_perpetual_compatible": true,
+        "okx_contract_value_currency_matches_base": true,
+        "okx_pass": true,
+        "same_base_official_metadata": true,
+        "standard_live_not_premarket": true,
+        "usdt_quote_settlement_compatible": true
+      },
+      "pass": true
+    },
+    {
+      "base": "DOGE",
+      "bybit": {
+        "baseCoin": "DOGE",
+        "checks": {
+          "base_exact": true,
+          "contract_linear_perpetual": true,
+          "not_prelisting": true,
+          "quote_usdt": true,
+          "settle_usdt": true,
+          "status_trading": true,
+          "symbol_exact": true
+        },
+        "contractType": "LinearPerpetual",
+        "fullName": "Dogecoin",
+        "isPreListing": false,
+        "pass": true,
+        "quoteCoin": "USDT",
+        "settleCoin": "USDT",
+        "status": "Trading",
+        "symbolType": ""
+      },
+      "bybit_symbol": "DOGEUSDT",
+      "okx": {
+        "checks": {
+          "ct_type_linear": true,
+          "ct_val_ccy_base": true,
+          "ct_val_positive": true,
+          "inst_family_exact": true,
+          "inst_id_exact": true,
+          "inst_type_swap": true,
+          "settle_usdt": true,
+          "state_live": true,
+          "uly_exact": true
+        },
+        "ctMult": "1",
+        "ctType": "linear",
+        "ctVal": "1000",
+        "ctValCcy": "DOGE",
+        "instFamily": "DOGE-USDT",
+        "instId": "DOGE-USDT-SWAP",
+        "instType": "SWAP",
+        "pass": true,
+        "settleCcy": "USDT",
+        "state": "live",
+        "uly": "DOGE-USDT"
+      },
+      "okx_instId": "DOGE-USDT-SWAP",
+      "pair_checks": {
+        "bybit_pass": true,
+        "linear_perpetual_compatible": true,
+        "okx_contract_value_currency_matches_base": true,
+        "okx_pass": true,
+        "same_base_official_metadata": true,
+        "standard_live_not_premarket": true,
+        "usdt_quote_settlement_compatible": true
+      },
+      "pass": true
+    },
+    {
+      "base": "ORDI",
+      "bybit": {
+        "baseCoin": "ORDI",
+        "checks": {
+          "base_exact": true,
+          "contract_linear_perpetual": true,
+          "not_prelisting": true,
+          "quote_usdt": true,
+          "settle_usdt": true,
+          "status_trading": true,
+          "symbol_exact": true
+        },
+        "contractType": "LinearPerpetual",
+        "fullName": "Ordinals",
+        "isPreListing": false,
+        "pass": true,
+        "quoteCoin": "USDT",
+        "settleCoin": "USDT",
+        "status": "Trading",
+        "symbolType": ""
+      },
+      "bybit_symbol": "ORDIUSDT",
+      "okx": {
+        "checks": {
+          "ct_type_linear": true,
+          "ct_val_ccy_base": true,
+          "ct_val_positive": true,
+          "inst_family_exact": true,
+          "inst_id_exact": true,
+          "inst_type_swap": true,
+          "settle_usdt": true,
+          "state_live": true,
+          "uly_exact": true
+        },
+        "ctMult": "1",
+        "ctType": "linear",
+        "ctVal": "0.1",
+        "ctValCcy": "ORDI",
+        "instFamily": "ORDI-USDT",
+        "instId": "ORDI-USDT-SWAP",
+        "instType": "SWAP",
+        "pass": true,
+        "settleCcy": "USDT",
+        "state": "live",
+        "uly": "ORDI-USDT"
+      },
+      "okx_instId": "ORDI-USDT-SWAP",
+      "pair_checks": {
+        "bybit_pass": true,
+        "linear_perpetual_compatible": true,
+        "okx_contract_value_currency_matches_base": true,
+        "okx_pass": true,
+        "same_base_official_metadata": true,
+        "standard_live_not_premarket": true,
+        "usdt_quote_settlement_compatible": true
+      },
+      "pass": true
+    },
+    {
+      "base": "FIL",
+      "bybit": {
+        "baseCoin": "FIL",
+        "checks": {
+          "base_exact": true,
+          "contract_linear_perpetual": true,
+          "not_prelisting": true,
+          "quote_usdt": true,
+          "settle_usdt": true,
+          "status_trading": true,
+          "symbol_exact": true
+        },
+        "contractType": "LinearPerpetual",
+        "fullName": "Filecoin",
+        "isPreListing": false,
+        "pass": true,
+        "quoteCoin": "USDT",
+        "settleCoin": "USDT",
+        "status": "Trading",
+        "symbolType": ""
+      },
+      "bybit_symbol": "FILUSDT",
+      "okx": {
+        "checks": {
+          "ct_type_linear": true,
+          "ct_val_ccy_base": true,
+          "ct_val_positive": true,
+          "inst_family_exact": true,
+          "inst_id_exact": true,
+          "inst_type_swap": true,
+          "settle_usdt": true,
+          "state_live": true,
+          "uly_exact": true
+        },
+        "ctMult": "1",
+        "ctType": "linear",
+        "ctVal": "0.1",
+        "ctValCcy": "FIL",
+        "instFamily": "FIL-USDT",
+        "instId": "FIL-USDT-SWAP",
+        "instType": "SWAP",
+        "pass": true,
+        "settleCcy": "USDT",
+        "state": "live",
+        "uly": "FIL-USDT"
+      },
+      "okx_instId": "FIL-USDT-SWAP",
+      "pair_checks": {
+        "bybit_pass": true,
+        "linear_perpetual_compatible": true,
+        "okx_contract_value_currency_matches_base": true,
+        "okx_pass": true,
+        "same_base_official_metadata": true,
+        "standard_live_not_premarket": true,
+        "usdt_quote_settlement_compatible": true
+      },
+      "pass": true
+    },
+    {
+      "base": "UNI",
+      "bybit": {
+        "baseCoin": "UNI",
+        "checks": {
+          "base_exact": true,
+          "contract_linear_perpetual": true,
+          "not_prelisting": true,
+          "quote_usdt": true,
+          "settle_usdt": true,
+          "status_trading": true,
+          "symbol_exact": true
+        },
+        "contractType": "LinearPerpetual",
+        "fullName": "Uniswap",
+        "isPreListing": false,
+        "pass": true,
+        "quoteCoin": "USDT",
+        "settleCoin": "USDT",
+        "status": "Trading",
+        "symbolType": ""
+      },
+      "bybit_symbol": "UNIUSDT",
+      "okx": {
+        "checks": {
+          "ct_type_linear": true,
+          "ct_val_ccy_base": true,
+          "ct_val_positive": true,
+          "inst_family_exact": true,
+          "inst_id_exact": true,
+          "inst_type_swap": true,
+          "settle_usdt": true,
+          "state_live": true,
+          "uly_exact": true
+        },
+        "ctMult": "1",
+        "ctType": "linear",
+        "ctVal": "1",
+        "ctValCcy": "UNI",
+        "instFamily": "UNI-USDT",
+        "instId": "UNI-USDT-SWAP",
+        "instType": "SWAP",
+        "pass": true,
+        "settleCcy": "USDT",
+        "state": "live",
+        "uly": "UNI-USDT"
+      },
+      "okx_instId": "UNI-USDT-SWAP",
+      "pair_checks": {
+        "bybit_pass": true,
+        "linear_perpetual_compatible": true,
+        "okx_contract_value_currency_matches_base": true,
+        "okx_pass": true,
+        "same_base_official_metadata": true,
+        "standard_live_not_premarket": true,
+        "usdt_quote_settlement_compatible": true
+      },
+      "pass": true
+    },
+    {
+      "base": "XRP",
+      "bybit": {
+        "baseCoin": "XRP",
+        "checks": {
+          "base_exact": true,
+          "contract_linear_perpetual": true,
+          "not_prelisting": true,
+          "quote_usdt": true,
+          "settle_usdt": true,
+          "status_trading": true,
+          "symbol_exact": true
+        },
+        "contractType": "LinearPerpetual",
+        "fullName": "XRP",
+        "isPreListing": false,
+        "pass": true,
+        "quoteCoin": "USDT",
+        "settleCoin": "USDT",
+        "status": "Trading",
+        "symbolType": ""
+      },
+      "bybit_symbol": "XRPUSDT",
+      "okx": {
+        "checks": {
+          "ct_type_linear": true,
+          "ct_val_ccy_base": true,
+          "ct_val_positive": true,
+          "inst_family_exact": true,
+          "inst_id_exact": true,
+          "inst_type_swap": true,
+          "settle_usdt": true,
+          "state_live": true,
+          "uly_exact": true
+        },
+        "ctMult": "1",
+        "ctType": "linear",
+        "ctVal": "100",
+        "ctValCcy": "XRP",
+        "instFamily": "XRP-USDT",
+        "instId": "XRP-USDT-SWAP",
+        "instType": "SWAP",
+        "pass": true,
+        "settleCcy": "USDT",
+        "state": "live",
+        "uly": "XRP-USDT"
+      },
+      "okx_instId": "XRP-USDT-SWAP",
+      "pair_checks": {
+        "bybit_pass": true,
+        "linear_perpetual_compatible": true,
+        "okx_contract_value_currency_matches_base": true,
+        "okx_pass": true,
+        "same_base_official_metadata": true,
+        "standard_live_not_premarket": true,
+        "usdt_quote_settlement_compatible": true
+      },
+      "pass": true
+    },
+    {
+      "base": "LTC",
+      "bybit": {
+        "baseCoin": "LTC",
+        "checks": {
+          "base_exact": true,
+          "contract_linear_perpetual": true,
+          "not_prelisting": true,
+          "quote_usdt": true,
+          "settle_usdt": true,
+          "status_trading": true,
+          "symbol_exact": true
+        },
+        "contractType": "LinearPerpetual",
+        "fullName": "Litecoin",
+        "isPreListing": false,
+        "pass": true,
+        "quoteCoin": "USDT",
+        "settleCoin": "USDT",
+        "status": "Trading",
+        "symbolType": ""
+      },
+      "bybit_symbol": "LTCUSDT",
+      "okx": {
+        "checks": {
+          "ct_type_linear": true,
+          "ct_val_ccy_base": true,
+          "ct_val_positive": true,
+          "inst_family_exact": true,
+          "inst_id_exact": true,
+          "inst_type_swap": true,
+          "settle_usdt": true,
+          "state_live": true,
+          "uly_exact": true
+        },
+        "ctMult": "1",
+        "ctType": "linear",
+        "ctVal": "1",
+        "ctValCcy": "LTC",
+        "instFamily": "LTC-USDT",
+        "instId": "LTC-USDT-SWAP",
+        "instType": "SWAP",
+        "pass": true,
+        "settleCcy": "USDT",
+        "state": "live",
+        "uly": "LTC-USDT"
+      },
+      "okx_instId": "LTC-USDT-SWAP",
+      "pair_checks": {
+        "bybit_pass": true,
+        "linear_perpetual_compatible": true,
+        "okx_contract_value_currency_matches_base": true,
+        "okx_pass": true,
+        "same_base_official_metadata": true,
+        "standard_live_not_premarket": true,
+        "usdt_quote_settlement_compatible": true
+      },
+      "pass": true
+    },
+    {
+      "base": "OP",
+      "bybit": {
+        "baseCoin": "OP",
+        "checks": {
+          "base_exact": true,
+          "contract_linear_perpetual": true,
+          "not_prelisting": true,
+          "quote_usdt": true,
+          "settle_usdt": true,
+          "status_trading": true,
+          "symbol_exact": true
+        },
+        "contractType": "LinearPerpetual",
+        "fullName": "Optimism",
+        "isPreListing": false,
+        "pass": true,
+        "quoteCoin": "USDT",
+        "settleCoin": "USDT",
+        "status": "Trading",
+        "symbolType": ""
+      },
+      "bybit_symbol": "OPUSDT",
+      "okx": {
+        "checks": {
+          "ct_type_linear": true,
+          "ct_val_ccy_base": true,
+          "ct_val_positive": true,
+          "inst_family_exact": true,
+          "inst_id_exact": true,
+          "inst_type_swap": true,
+          "settle_usdt": true,
+          "state_live": true,
+          "uly_exact": true
+        },
+        "ctMult": "1",
+        "ctType": "linear",
+        "ctVal": "1",
+        "ctValCcy": "OP",
+        "instFamily": "OP-USDT",
+        "instId": "OP-USDT-SWAP",
+        "instType": "SWAP",
+        "pass": true,
+        "settleCcy": "USDT",
+        "state": "live",
+        "uly": "OP-USDT"
+      },
+      "okx_instId": "OP-USDT-SWAP",
+      "pair_checks": {
+        "bybit_pass": true,
+        "linear_perpetual_compatible": true,
+        "okx_contract_value_currency_matches_base": true,
+        "okx_pass": true,
+        "same_base_official_metadata": true,
+        "standard_live_not_premarket": true,
+        "usdt_quote_settlement_compatible": true
+      },
+      "pass": true
+    },
+    {
+      "base": "BCH",
+      "bybit": {
+        "baseCoin": "BCH",
+        "checks": {
+          "base_exact": true,
+          "contract_linear_perpetual": true,
+          "not_prelisting": true,
+          "quote_usdt": true,
+          "settle_usdt": true,
+          "status_trading": true,
+          "symbol_exact": true
+        },
+        "contractType": "LinearPerpetual",
+        "fullName": "Bitcoin Cash",
+        "isPreListing": false,
+        "pass": true,
+        "quoteCoin": "USDT",
+        "settleCoin": "USDT",
+        "status": "Trading",
+        "symbolType": ""
+      },
+      "bybit_symbol": "BCHUSDT",
+      "okx": {
+        "checks": {
+          "ct_type_linear": true,
+          "ct_val_ccy_base": true,
+          "ct_val_positive": true,
+          "inst_family_exact": true,
+          "inst_id_exact": true,
+          "inst_type_swap": true,
+          "settle_usdt": true,
+          "state_live": true,
+          "uly_exact": true
+        },
+        "ctMult": "1",
+        "ctType": "linear",
+        "ctVal": "0.1",
+        "ctValCcy": "BCH",
+        "instFamily": "BCH-USDT",
+        "instId": "BCH-USDT-SWAP",
+        "instType": "SWAP",
+        "pass": true,
+        "settleCcy": "USDT",
+        "state": "live",
+        "uly": "BCH-USDT"
+      },
+      "okx_instId": "BCH-USDT-SWAP",
+      "pair_checks": {
+        "bybit_pass": true,
+        "linear_perpetual_compatible": true,
+        "okx_contract_value_currency_matches_base": true,
+        "okx_pass": true,
+        "same_base_official_metadata": true,
+        "standard_live_not_premarket": true,
+        "usdt_quote_settlement_compatible": true
+      },
+      "pass": true
+    },
+    {
+      "base": "SUI",
+      "bybit": {
+        "baseCoin": "SUI",
+        "checks": {
+          "base_exact": true,
+          "contract_linear_perpetual": true,
+          "not_prelisting": true,
+          "quote_usdt": true,
+          "settle_usdt": true,
+          "status_trading": true,
+          "symbol_exact": true
+        },
+        "contractType": "LinearPerpetual",
+        "fullName": "Sui",
+        "isPreListing": false,
+        "pass": true,
+        "quoteCoin": "USDT",
+        "settleCoin": "USDT",
+        "status": "Trading",
+        "symbolType": ""
+      },
+      "bybit_symbol": "SUIUSDT",
+      "okx": {
+        "checks": {
+          "ct_type_linear": true,
+          "ct_val_ccy_base": true,
+          "ct_val_positive": true,
+          "inst_family_exact": true,
+          "inst_id_exact": true,
+          "inst_type_swap": true,
+          "settle_usdt": true,
+          "state_live": true,
+          "uly_exact": true
+        },
+        "ctMult": "1",
+        "ctType": "linear",
+        "ctVal": "1",
+        "ctValCcy": "SUI",
+        "instFamily": "SUI-USDT",
+        "instId": "SUI-USDT-SWAP",
+        "instType": "SWAP",
+        "pass": true,
+        "settleCcy": "USDT",
+        "state": "live",
+        "uly": "SUI-USDT"
+      },
+      "okx_instId": "SUI-USDT-SWAP",
+      "pair_checks": {
+        "bybit_pass": true,
+        "linear_perpetual_compatible": true,
+        "okx_contract_value_currency_matches_base": true,
+        "okx_pass": true,
+        "same_base_official_metadata": true,
+        "standard_live_not_premarket": true,
+        "usdt_quote_settlement_compatible": true
+      },
+      "pass": true
+    }
+  ],
+  "passed_pair_count": 12,
+  "pnl_calculated": false,
+  "price_outcome_accessed": false,
+  "return_calculated": false,
+  "schema": "sc001.forced_flow_source_semantic_preflight.v0.1",
+  "status": "FORCED_FLOW_SOURCE_SEMANTIC_PREFLIGHT_PASS",
+  "trade_body_accessed": false,
+  "trading_accessed": false
+}
