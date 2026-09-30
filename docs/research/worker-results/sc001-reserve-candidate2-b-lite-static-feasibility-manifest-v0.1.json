@@ -1,0 +1,77 @@
+{
+  "schema": "sc001.worker_result_manifest.v0.1",
+  "project": "SC001",
+  "experiment_id": "SC001-RESERVE-CANDIDATE2-BLITE-STATIC-01",
+  "stage": "RESERVE_CANDIDATE2_STATIC_FEASIBILITY",
+  "date": "2026-09-30",
+  "status": "RESERVE_STATIC_FEASIBILITY_SURVIVE",
+  "strategy_triggers": [
+    "NEW_OUTCOME_MECHANISM_GATE",
+    "CONTAMINATION_CHANGE"
+  ],
+  "canonical_result": {
+    "path": "docs/research/sc001-reserve-candidate2-cross-venue-causal-flow-static-feasibility-card-v0.1.md",
+    "sha256": "f25c1a33d2ef750df8b0964dceb50e822e2a0df8ddd09d203ed0d67ef8d2818d"
+  },
+  "protocol": null,
+  "implementation": null,
+  "execution": {
+    "mode": "NONE",
+    "bundle_id": null,
+    "bundle_sha256": null,
+    "job_id": null
+  },
+  "mechanism": {
+    "fingerprint_ref": "docs/research/sc001-reserve-candidate2-cross-venue-causal-flow-mechanism-fingerprint-draft-v0.1.json",
+    "disposition": "RELATED_BUT_MATERIALLY_DIFFERENT_ARCHITECTURE",
+    "adaptive_discovery_generated": true
+  },
+  "evidence": {
+    "class": "STATIC_FEASIBILITY_SOURCE_ENGINEERING_CONTEXT_ONLY",
+    "promotional": false,
+    "outcome_accessed": false,
+    "window": null,
+    "contamination_registry_ref": "docs/research/sc001-contamination-registry-v0.41.json"
+  },
+  "key_metrics": {
+    "c_series_experiment_id_assigned": false,
+    "source_venue": "OKX",
+    "lagging_execution_venue": "BYBIT",
+    "structural_fill_count": 2,
+    "response_horizon_seconds": 2,
+    "maximum_decision_latency_seconds": 1,
+    "conservative_fee_bps_per_fill": 11,
+    "structural_burden_bps": 42,
+    "minimum_gross_movement_bps": 52,
+    "historical_candidate2_outcome_accessed": false,
+    "prospective_sentinel_authorized": false
+  },
+  "decision": {
+    "class": "HOLD",
+    "summary": "Candidate 2 B-Lite static feasibility survives as a reserve-only mechanism: fixed OKX source aggressive-flow impulse -> Bybit lagging directional response, two structural fills, exact 2-second response horizon, high but not yet disqualifying latency risk, and conservative 52 bps minimum gross-movement scale. No Candidate 2 response outcome was opened, no experiment ID was assigned, and no sentinel is authorized.",
+    "failed_gate": null,
+    "allowed_claims": [
+      "Candidate 2 remains a coherent reserve family for later fresh prospective consideration",
+      "Mechanism disposition is RELATED_BUT_MATERIALLY_DIFFERENT_ARCHITECTURE only under the fixed source-flow fingerprint",
+      "Existing strict-coactive 1-second clock/source machinery is reusable engineering context",
+      "A future live non-alpha p99 decision-latency gate of <=1.0 second is mandatory before outcome",
+      "No Candidate 2 outcome or PnL evidence was accessed"
+    ],
+    "forbidden_reuse": [
+      "Do not run Candidate 2 while Candidate 1 is the active outcome-bearing family",
+      "Do not use the 2025-01-15 C8 engineering day as Candidate 2 outcome evidence",
+      "Do not reuse C8B calibration outcome for Candidate 2 threshold, venue role, horizon or feasibility claims",
+      "Do not swap OKX/Bybit roles after response evidence",
+      "Do not search impulse thresholds or lag horizons",
+      "Do not lower the 52 bps gross requirement after outcome",
+      "Do not assign a C-series experiment ID yet",
+      "Do not consume Candidate 1 fresh-window outcomes",
+      "Do not start Candidate 3 outcome work"
+    ],
+    "next_allowed_action": "Strategy Manager review of B-Lite static disposition. If retained after Candidate 1 or a separate Strategy/User decision, perform source-only live latency qualification and prospective threshold/universe/evidence freeze before any Candidate 2 response outcome."
+  },
+  "reusable_blocks": [
+    "RB011",
+    "RB012"
+  ]
+}
