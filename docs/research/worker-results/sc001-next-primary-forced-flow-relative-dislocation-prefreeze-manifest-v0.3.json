@@ -1,0 +1,85 @@
+{
+  "schema": "sc001.worker_result_manifest.v0.1",
+  "project": "SC001",
+  "experiment_id": "SC001-NEXT-PRIMARY-PREFREEZE-01",
+  "stage": "VENUE_LOCAL_FORCED_FLOW_RELATIVE_DISLOCATION_PREOUTCOME_GATE_COMPLETION",
+  "date": "2026-09-30",
+  "status": "PREFREEZE_READY_FOR_STRATEGY/USER_GATE",
+  "strategy_triggers": [
+    "NEW_OUTCOME_MECHANISM_GATE",
+    "EVIDENCE_MATURITY_CHANGE"
+  ],
+  "canonical_result": {
+    "path": "docs/research/sc001-next-primary-forced-flow-relative-dislocation-s0-implementation-handshake-result-v0.1.json",
+    "sha256": "d38bbaa16e16f24bb530f670fb65780e37930294a445c132b7a836557b87b46e"
+  },
+  "protocol": {
+    "path": "docs/research/sc001-next-primary-forced-flow-relative-dislocation-s0-implementation-handshake-protocol-v0.1.md",
+    "sha256": "46a20d4045eddbb45040178c4a67b47f5d47967f185ae2647ab043e7a45a20a9"
+  },
+  "implementation": {
+    "path": "research/sc001/sc001_forced_flow_s0_analyzer_v0_1.py",
+    "sha256": "760096bd0572afa3b53d4b603ac6e33fbfa4b8fbc5934b3ba9061c9a69f171e3"
+  },
+  "execution": {
+    "mode": "NONE",
+    "bundle_id": null,
+    "bundle_sha256": null,
+    "job_id": null
+  },
+  "mechanism": {
+    "fingerprint_ref": "docs/research/sc001-next-primary-forced-flow-relative-dislocation-mechanism-fingerprint-v0.2.json",
+    "disposition": "RELATED_BUT_MATERIALLY_DIFFERENT_ARCHITECTURE",
+    "adaptive_discovery_generated": true
+  },
+  "evidence": {
+    "class": "PRE_OUTCOME_GATE_COMPLETE_NO_REAL_S0_INPUT",
+    "promotional": false,
+    "outcome_accessed": false,
+    "window": "2026-09-30T00:00:00Z..2026-10-07T00:00:00Z fixed seven-complete-UTC-day window; analyze hard-locked before 2026-10-07T00:00:00Z",
+    "contamination_registry_ref": "docs/research/sc001-contamination-registry-v0.40.json"
+  },
+  "key_metrics": {
+    "source_semantic_pairs_passed": 12,
+    "source_semantic_pairs_total": 12,
+    "acquisition_continuity_start_check": true,
+    "implementation_handshake_pass": true,
+    "conservative_fee_bps_per_fill": 11,
+    "structural_burden_bps": 42,
+    "headroom_hurdle_bps": 52,
+    "frozen_day_denominator": 7,
+    "frozen_symbol_denominator": 12,
+    "handshake_job_id": "job_20260930T095830Z_f0c3cdc2",
+    "earliest_outcome_access_utc": "2026-10-07T00:00:00Z",
+    "s0_executed": false
+  },
+  "decision": {
+    "class": "HOLD",
+    "summary": "All allowed pre-outcome qualification gates are now PASS without S0 outcome access: conservative fee qualification fixes H=52 bps; B13-C acquisition continuity was healthy at the fresh-window start-period check; official Bybit/OKX metadata qualified all 12/12 economic-identity pairs; and the frozen S0 analyzer passed its offline implementation handshake. The analyzer now hard-rejects real outcome access before 2026-10-07T00:00:00Z and also requires a future committed S0_EXECUTION_AUTHORIZED record bound to the exact implementation freeze and input provenance.",
+    "failed_gate": "FRESH_WINDOW_NOT_COMPLETE_AND_S0_AUTHORIZATION_PENDING",
+    "allowed_claims": [
+      "All 12 frozen Bybit/OKX derivative pairs passed source-semantic/economic-identity qualification",
+      "B13-C fresh-window acquisition continuity start-period check passed read-only",
+      "S0 implementation handshake passed on synthetic fixtures",
+      "H remains frozen at 52 bps",
+      "Real analyze mode is hard-locked until the seven-day window closes",
+      "No real S0 price/outcome evidence has been accessed"
+    ],
+    "forbidden_reuse": [
+      "Do not open real S0 inputs before 2026-10-07T00:00:00Z",
+      "Do not execute S0 without a committed authorization bound to exact implementation freeze and input provenance",
+      "Do not move or reconstruct the fresh window",
+      "Do not lower H=52 bps using outcomes",
+      "Do not reduce fixed 7-day or 12-symbol breadth denominators",
+      "Do not use B13-C protected interval for threshold/horizon/symbol design",
+      "Do not run Candidate 2 or Candidate 3 outcome research in parallel",
+      "Do not change frozen B15-P2 P0"
+    ],
+    "next_allowed_action": "Strategy Manager/User review of the completed pre-outcome gate package. No real S0 outcome access before 2026-10-07T00:00:00Z. After the window closes, freeze exact S0 input provenance/materialization and obtain separate explicit S0 execution authorization."
+  },
+  "reusable_blocks": [
+    "RB021",
+    "RB011",
+    "RB012"
+  ]
+}
