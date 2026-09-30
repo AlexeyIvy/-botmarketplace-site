@@ -1,0 +1,74 @@
+{
+  "schema": "sc001.worker_result_manifest.v0.1",
+  "project": "SC001",
+  "experiment_id": "SC001-NEXT-PRIMARY-PREFREEZE-01",
+  "stage": "OKX_ARCHIVE_PUBLICATION_RESOLVER_DIAGNOSTIC",
+  "date": "2026-09-30",
+  "status": "OKX_ARCHIVE_DIAGNOSTIC_RECENT_PUBLICATION_LAG",
+  "strategy_triggers": [
+    "EVIDENCE_MATURITY_CHANGE"
+  ],
+  "canonical_result": {
+    "path": "docs/research/sc001-next-primary-okx-archive-publication-resolver-diagnostic-result-v0.1.json",
+    "sha256": "eeded0e758410ac6f0c0581404fe96a9bb3f38b696e6842879aecca74a7676da"
+  },
+  "protocol": {
+    "path": "docs/research/sc001-next-primary-okx-archive-publication-resolver-diagnostic-protocol-v0.1.md",
+    "sha256": "46e5e0b8b76ccaeccde032e17a7df34baf4fab6e6cfb71e83cc915befea70f12"
+  },
+  "implementation": {
+    "path": "research/sc001/sc001_okx_archive_publication_resolver_diagnostic_v0_1.py",
+    "sha256": "f7284c7eac7e0f37e7a4d24c37bdb65dac1fc87228875dddca53359a1f0f6c44"
+  },
+  "execution": {
+    "mode": "NETWORKED_VPS",
+    "bundle_id": null,
+    "bundle_sha256": null,
+    "job_id": "job_20260930T191248Z_ab42053b"
+  },
+  "mechanism": {
+    "fingerprint_ref": "docs/research/sc001-next-primary-forced-flow-relative-dislocation-mechanism-fingerprint-v0.2.json",
+    "disposition": "NOT_APPLICABLE_PRE_OUTCOME",
+    "adaptive_discovery_generated": true
+  },
+  "evidence": {
+    "class": "SOURCE_TRANSPORT_METADATA_ONLY",
+    "promotional": false,
+    "outcome_accessed": false,
+    "window": "Diagnostic dates 2026-09-29, 2026-09-28, 2026-09-23; no price/outcome body opened",
+    "contamination_registry_ref": "docs/research/sc001-contamination-registry-v0.41.json"
+  },
+  "key_metrics": {
+    "recent_date_resolved": false,
+    "d2_resolved": true,
+    "d7_resolved": true,
+    "d2_content_length_bytes": 17599557,
+    "d7_content_length_bytes": 19459479,
+    "archive_body_accessed": false,
+    "price_accessed": false,
+    "s0_executed": false
+  },
+  "decision": {
+    "class": "PASS",
+    "summary": "Metadata-only diagnostic isolates the prior OKX 0/12 archive result as recent publication lag rather than resolver failure. 2026-09-29 was not yet exposed, while exact trusted BTC-USDT-SWAP archives for 2026-09-28 and 2026-09-23 resolved through the official resolver and passed static.okx.com HEAD checks. Primary strategy rules remain unchanged; post-window materialization must wait for exact required archive availability.",
+    "failed_gate": null,
+    "allowed_claims": [
+      "OKX official historical archive resolver contract is functional on older completed dates",
+      "Immediate prior-day archive availability cannot be assumed",
+      "Primary fresh window remains unchanged",
+      "No archive body or outcome evidence was opened"
+    ],
+    "forbidden_reuse": [
+      "Do not infer an exact publication timestamp from this three-date diagnostic",
+      "Do not move or shorten the primary fresh window",
+      "Do not use third-party mirrors",
+      "Do not download archive bodies before separate authorization",
+      "Do not launch S0 before exact required archive readiness and explicit authorization"
+    ],
+    "next_allowed_action": "Prepare and use a metadata-only exact archive readiness gate after the frozen window closes; materialize bodies only after every mechanically required archive identity is available and a separate Strategy/User authorization is committed."
+  },
+  "reusable_blocks": [
+    "RB011",
+    "RB012"
+  ]
+}
