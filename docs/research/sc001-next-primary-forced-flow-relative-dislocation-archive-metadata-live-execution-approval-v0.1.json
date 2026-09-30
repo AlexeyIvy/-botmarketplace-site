@@ -1,0 +1,37 @@
+{
+  "schema": "sc001.forced_flow_archive_metadata_live_execution_approval.v0.1",
+  "date": "2026-09-30",
+  "task_id": "SC001-NEXT-PRIMARY-PREFREEZE-01",
+  "status": "ONE_METADATA_ONLY_LIVE_RUN_USER_APPROVED",
+  "user_approval_context": "Explicit user approval in chat on 2026-09-30: 'Ок, разрешаю запускай'",
+  "protocol_path": "docs/research/sc001-next-primary-forced-flow-relative-dislocation-archive-metadata-preflight-protocol-v0.1.md",
+  "freeze_path": "docs/research/sc001-next-primary-forced-flow-relative-dislocation-archive-metadata-preflight-freeze-v0.1.json",
+  "implementation_path": "research/sc001/sc001_forced_flow_archive_metadata_preflight_v0_1.py",
+  "required_args": [
+    "--mode",
+    "live"
+  ],
+  "network_profile": "public_research",
+  "maximum_live_runs": 1,
+  "execution_plane": "BotMarketplace Test Executor",
+  "allowed_scope": [
+    "Bybit exact expected archive HEAD",
+    "OKX official historical-data metadata resolver",
+    "OKX exact resolved archive HEAD"
+  ],
+  "forbidden_scope": [
+    "archive body GET",
+    "decompression",
+    "trade row access",
+    "price access",
+    "cross-venue basis",
+    "returns",
+    "PnL",
+    "S0 execution",
+    "trading",
+    "alternate execution-plane rate-limit bypass"
+  ],
+  "current_blocker": "TEST_EXECUTOR_RATE_LIMIT_3_PER_HOUR_AND_10_PER_UTC_DAY",
+  "execute_after_rate_limit_reset": true,
+  "s0_execution_authorized": false
+}
