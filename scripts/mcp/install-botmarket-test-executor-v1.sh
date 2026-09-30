@@ -198,8 +198,8 @@ cat > "$POLICY" <<'JSON'
   ],
   "max_timeout_seconds": 900,
   "default_timeout_seconds": 180,
-  "max_runs_per_rolling_hour": 3,
-  "max_runs_per_utc_day": 10,
+  "max_runs_per_rolling_hour": 6,
+  "max_runs_per_utc_day": 30,
   "max_concurrent_jobs": 1,
   "max_args": 24,
   "max_arg_bytes": 512,
@@ -1577,7 +1577,7 @@ echo "Service: botmarket-test-executor.service"
 echo "Control user: $CTL_USER"
 echo "Job user: $JOB_USER"
 echo "Network profiles: offline, public_research"
-echo "Autonomous limit: 3 runs / rolling hour, 10 runs / UTC day, 1 concurrent"
+echo "Autonomous limit: 6 runs / rolling hour, 30 runs / UTC day, 1 concurrent"
 echo "Trading credentials available to jobs: NO"
 echo "Research Runner: NOT MODIFIED"
 echo "GitHub Control: NOT MODIFIED"
