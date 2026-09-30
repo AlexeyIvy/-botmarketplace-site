@@ -1,0 +1,77 @@
+{
+  "schema": "sc001.worker_result_manifest.v0.1",
+  "project": "SC001",
+  "experiment_id": "SC001-NEXT-PRIMARY-PREFREEZE-01",
+  "stage": "FORCED_FLOW_ARCHIVE_METADATA_PREFLIGHT",
+  "date": "2026-09-30",
+  "status": "FORCED_FLOW_ARCHIVE_METADATA_PREFLIGHT_REVIEW",
+  "strategy_triggers": [
+    "EVIDENCE_MATURITY_CHANGE"
+  ],
+  "canonical_result": {
+    "path": "docs/research/sc001-next-primary-forced-flow-relative-dislocation-archive-metadata-preflight-result-v0.1.json",
+    "sha256": "908cbda8ae5202e1d93bb8e2757da13532d0cfd8294b7f5b5525d2248073bfe6"
+  },
+  "protocol": {
+    "path": "docs/research/sc001-next-primary-forced-flow-relative-dislocation-archive-metadata-preflight-protocol-v0.1.md",
+    "sha256": "0016ab0589f6477c373c098ab506bedab5d6807025f197334e45b26d8348fb40"
+  },
+  "implementation": {
+    "path": "research/sc001/sc001_forced_flow_archive_metadata_preflight_v0_1.py",
+    "sha256": "e374c2a04461dfa38ee78ac24da4358d552a913687157ae13ec7e0c7a903a4c0"
+  },
+  "execution": {
+    "mode": "NETWORKED_VPS",
+    "bundle_id": null,
+    "bundle_sha256": null,
+    "job_id": "job_20260930T190128Z_c9756e2a"
+  },
+  "mechanism": {
+    "fingerprint_ref": "docs/research/sc001-next-primary-forced-flow-relative-dislocation-mechanism-fingerprint-v0.2.json",
+    "disposition": "NOT_APPLICABLE_PRE_OUTCOME",
+    "adaptive_discovery_generated": true
+  },
+  "evidence": {
+    "class": "SOURCE_MATERIALIZATION_METADATA_ONLY",
+    "promotional": false,
+    "outcome_accessed": false,
+    "window": "Qualification date 2026-09-29 UTC only; no fresh-window outcome opened",
+    "contamination_registry_ref": "docs/research/sc001-contamination-registry-v0.41.json"
+  },
+  "key_metrics": {
+    "qualification_date": "2026-09-29",
+    "bybit_archive_identities_passed": 12,
+    "bybit_archive_identities_total": 12,
+    "okx_archive_identities_resolved": 0,
+    "okx_archive_identities_total": 12,
+    "failed_bases_count": 12,
+    "archive_body_accessed": false,
+    "trade_rows_accessed": false,
+    "price_accessed": false,
+    "s0_executed": false
+  },
+  "decision": {
+    "class": "HOLD",
+    "summary": "The single authorized metadata-only live preflight returned REVIEW. Bybit exact daily archive identities passed 12/12 on 2026-09-29. The frozen official OKX historical-data resolver returned zero exact trusted daily SWAP archive URLs for all 12 bases. No archive bodies, trade rows, prices, returns, PnL or S0 outcomes were opened. This is a source/materialization feasibility issue, not a strategy verdict.",
+    "failed_gate": "OKX_EXACT_DAILY_ARCHIVE_METADATA_UNRESOLVED",
+    "allowed_claims": [
+      "Bybit 2026-09-29 exact daily archive identities passed 12/12",
+      "OKX exact daily SWAP archive URLs were unresolved under the frozen resolver contract for all 12 bases",
+      "No archive body or price/outcome evidence was opened",
+      "Primary strategy freeze and H=52 bps remain unchanged"
+    ],
+    "forbidden_reuse": [
+      "Do not interpret source REVIEW as evidence for or against strategy edge",
+      "Do not rerun the same live preflight automatically",
+      "Do not switch to third-party or alternate venue price data",
+      "Do not move the primary fresh window",
+      "Do not change frozen symbols, H, event rules or breadth denominators",
+      "Do not open archive bodies while investigating resolver semantics"
+    ],
+    "next_allowed_action": "Static/source-engineering investigation of official OKX historical archive publication/resolver semantics. Freeze any revised metadata-only transport contract prospectively and obtain separate user approval before another live run."
+  },
+  "reusable_blocks": [
+    "RB011",
+    "RB012"
+  ]
+}
