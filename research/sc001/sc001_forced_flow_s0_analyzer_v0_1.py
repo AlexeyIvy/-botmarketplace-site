@@ -200,6 +200,10 @@ def load_jsonl(path:Path)->list[dict]:
         out.append(obj)
     return out
 
+def require_window_complete(now_ms:int)->None:
+    if int(now_ms) < WINDOW_END_MS:
+        fail("fresh seven-day window incomplete; outcome access locked")
+
 def require_authorization(path:Path,fr:dict)->dict:
     auth=load_json(path)
     if auth.get("status")!="S0_EXECUTION_AUTHORIZED":
@@ -254,6 +258,11 @@ def self_test()->dict:
     except RuntimeError as e:
         if str(e)=="duplicate accepted": raise
     try:
+        require_window_complete(WINDOW_END_MS-1); fail("pre-window analyze accepted")
+    except RuntimeError as e:
+        if str(e)=="pre-window analyze accepted": raise
+    require_window_complete(WINDOW_END_MS)
+    try:
         require_authorization(Path("/definitely/missing/authorization.json"),fr)
         fail("missing authorization accepted")
     except RuntimeError as e:
@@ -264,7 +273,7 @@ def self_test()->dict:
       "minimum_120_gate_pass":True,"exact_observation_bucket_pass":True,
       "fixed_7_day_denominator_pass":True,"fixed_12_symbol_denominator_pass":True,
       "malformed_fixture_rejected":True,"duplicate_fixture_rejected":True,
-      "missing_authorization_rejected":True,"output_collision_check_active":True,
+      "pre_window_outcome_lock_pass":True,"missing_authorization_rejected":True,"output_collision_check_active":True,
     }
 
 def main()->int:
@@ -292,6 +301,8 @@ def main()->int:
 
         if not (a.clusters and a.coactive and a.authorization):
             fail("analyze requires clusters/coactive/authorization")
+        import time
+        require_window_complete(int(time.time()*1000))
         require_authorization(Path(a.authorization),fr)
         clusters=load_jsonl(Path(a.clusters))
         coactive=load_jsonl(Path(a.coactive))
