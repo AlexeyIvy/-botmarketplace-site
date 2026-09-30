@@ -1,0 +1,58 @@
+{
+  "schema": "sc001.reserve_candidate2.mechanism_fingerprint_draft.v0.1",
+  "date": "2026-09-30",
+  "family": "SAME_ASSET_CROSS_VENUE_CAUSAL_FLOW_PROPAGATION",
+  "experiment_id": null,
+  "status": "STATIC_DRAFT_UNAUTHORIZED",
+  "adaptive_discovery_generated": true,
+  "disposition": "RELATED_BUT_MATERIALLY_DIFFERENT_ARCHITECTURE",
+  "terminal_b_lite_state": "RESERVE_STATIC_FEASIBILITY_SURVIVE",
+  "economic_payer": "Venue-fragmented price discovery: a source-venue aggressive information-bearing flow is incorporated later by a lagging same-underlying venue.",
+  "roles": {
+    "source_venue": "OKX",
+    "lagging_execution_venue": "BYBIT",
+    "hedge_venue": null,
+    "structural_fills": 2
+  },
+  "causal_trigger": {
+    "clock": "COMPLETED_SOURCE_1S_BUCKET",
+    "object": "SIGNED_AGGRESSIVE_NOTIONAL_IMBALANCE",
+    "numeric_threshold": null,
+    "threshold_status": "MUST_BE_FROZEN_LATER_FROM_SOURCE_ONLY_NON_OUTCOME_SEMANTICS",
+    "price_only_lead_lag_fallback_authorized": false
+  },
+  "response": {
+    "object": "SIGNED_BYBIT_SAME_UNDERLYING_DIRECTIONAL_RESPONSE",
+    "horizon_seconds": 2,
+    "horizon_grid_authorized": false,
+    "leader_lag_swap_authorized": false
+  },
+  "latency": {
+    "latest_acceptable_decision_order_submission_seconds": 1,
+    "future_live_nonalpha_latency_gate_required": true,
+    "canonical_clock_ref": "docs/research/sc001-c8-d1e-strict-coactive-1s-pass-result-v0.1.md"
+  },
+  "edge_to_fill": {
+    "conservative_taker_fee_bps_per_fill": 11,
+    "two_fill_fee_floor_bps": 22,
+    "spread_slippage_depth_reserve_bps": 10,
+    "execution_model_reserve_bps": 10,
+    "structural_burden_bps": 42,
+    "minimum_gross_movement_bps": 52,
+    "maker_rebate_credit": false
+  },
+  "relationship_to_legacy": {
+    "c8a": "Legacy C8A was generic two-fill directional lag. This draft is eligible only as fixed OKX source-flow -> Bybit response architecture; generic price-only C8A revival is not this candidate.",
+    "c8b": "C8B is paired four-fill relative-basis convergence; Candidate 2 is one-sided two-fill causal flow propagation."
+  },
+  "evidence_firewall": {
+    "outcome_accessed": false,
+    "promotional": false,
+    "c8_engineering_day_outcome_authorized": false,
+    "c8b_calibration_outcome_authorized": false,
+    "candidate1_fresh_window_outcome_authorized": false,
+    "historical_lag_return_calculation_authorized": false,
+    "pnl_authorized": false
+  },
+  "future_evidence_requirement": "FRESH_PROSPECTIVE_AFTER_EXACT_THRESHOLD_LATENCY_UNIVERSE_AND_PROTOCOL_FREEZE"
+}
