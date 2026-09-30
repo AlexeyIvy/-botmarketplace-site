@@ -1,0 +1,16 @@
+{
+  "archive_body_accessed": false,
+  "fixture": {
+    "archive_body_accessed": false,
+    "date": "2026-09-29",
+    "frozen_base_count": 12,
+    "trusted_host_checks": true
+  },
+  "mode": "self-test",
+  "network_calls_performed": false,
+  "price_accessed": false,
+  "s0_executed": false,
+  "schema": "sc001.forced_flow_archive_metadata_preflight.v0.1",
+  "status": "FORCED_FLOW_ARCHIVE_METADATA_PREFLIGHT_PASS",
+  "trade_rows_accessed": false
+}
