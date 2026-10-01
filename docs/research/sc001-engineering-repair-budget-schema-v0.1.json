@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "sc001.engineering_repair_budget.v0.1",
+  "title": "SC001 Engineering Repair Budget v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "task_id",
+    "worker_id",
+    "repair_mode",
+    "max_repair_cycles",
+    "cycles_consumed",
+    "max_changed_task_local_files",
+    "outcome_accessed",
+    "protected_evidence_accessed",
+    "allowed_failure_classes",
+    "stop_conditions"
+  ],
+  "properties": {
+    "schema": {
+      "const": "sc001.engineering_repair_budget.v0.1"
+    },
+    "task_id": {
+      "type": "string"
+    },
+    "worker_id": {
+      "type": "string"
+    },
+    "repair_mode": {
+      "enum": [
+        "NONE",
+        "AUTO_PRE_OUTCOME"
+      ]
+    },
+    "max_repair_cycles": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 2
+    },
+    "cycles_consumed": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 2
+    },
+    "max_changed_task_local_files": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 4
+    },
+    "outcome_accessed": {
+      "type": "boolean"
+    },
+    "protected_evidence_accessed": {
+      "type": "boolean"
+    },
+    "allowed_failure_classes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "SYNTAX_IMPORT_DEFECT",
+          "TASK_LOCAL_PATH_OR_VERSION_POINTER_DEFECT",
+          "CLI_OR_OUTPUT_CONTRACT_DEFECT",
+          "SYNTHETIC_FIXTURE_OR_TEST_HARNESS_DEFECT",
+          "TASK_LOCAL_STATE_MACHINE_IMPLEMENTATION_DEFECT_AGAINST_ALREADY_FROZEN_RULE",
+          "TASK_LOCAL_ENVIRONMENT_CONFIGURATION_DEFECT",
+          "DETERMINISTIC_SERIALIZATION_OR_PARSING_IMPLEMENTATION_DEFECT"
+        ]
+      }
+    },
+    "stop_conditions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "failure_signature": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "failure_class": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "repair_branch": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "last_validated_head_sha": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "full_preflight_status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}
