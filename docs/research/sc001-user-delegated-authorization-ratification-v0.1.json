@@ -1,0 +1,32 @@
+{
+  "schema": "sc001.user_delegated_authorization_ratification.v0.1",
+  "project": "SC001",
+  "date": "2026-10-01",
+  "status": "ACTIVE",
+  "authorization_source": "EXPLICIT_USER_APPROVAL_IN_CURRENT_STRATEGY_CHAT",
+  "approved_policy": {
+    "path": "docs/research/sc001-delegated-user-authorization-policy-v0.2.md",
+    "sha256": "0ee60f6376876dc13cc42ad8ac8a6fef5d54fc50e8f8322a01e6d64a9cbe0178"
+  },
+  "binding_architecture": {
+    "path": "docs/research/sc001-execution-worker-routing-and-automation-architecture-v0.3.md",
+    "sha256": "51f7b9f931147026701265c170e246608a42c892e962904f570bda1a68a74ba2"
+  },
+  "repair_control": {
+    "path": "docs/research/sc001-implementation-debugging-and-repair-control-v0.1.md"
+  },
+  "resource_control": {
+    "path": "docs/research/sc001-shared-data-and-resource-coordination-v0.1.md"
+  },
+  "delegated_tiers": [
+    "T0",
+    "T1",
+    "T2"
+  ],
+  "explicit_user_gate_tier": "T3",
+  "default_outcome_concurrency": 1,
+  "user_intent": "Allow bounded routine research, data, execution and pre-outcome repair work to continue without repeated manual confirmations; retain explicit user approval for T3 actions.",
+  "revocable": true,
+  "revocation_path": "docs/research/sc001-user-delegated-authorization-revocation-v0.1.json",
+  "activation_head_before_ratification": "238a85c3200b4ad8e88305b7db39848e6222e315"
+}
