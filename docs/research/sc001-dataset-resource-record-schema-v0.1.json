@@ -1,0 +1,184 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "sc001.dataset_resource_record.v0.1",
+  "title": "SC001 Dataset Resource Record v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "resource_id",
+    "dataset_key",
+    "status",
+    "task_id",
+    "worker_id",
+    "authorization_class",
+    "claimed_at_utc",
+    "lease_until_utc",
+    "expected_bytes",
+    "estimated_peak_disk_bytes",
+    "network_hosts",
+    "max_requests_per_host",
+    "max_network_bytes",
+    "retry_budget",
+    "local_target_logical_path"
+  ],
+  "properties": {
+    "schema": {
+      "const": "sc001.dataset_resource_record.v0.1"
+    },
+    "resource_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "dataset_key": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_provider",
+        "source_host_or_endpoint_class",
+        "market_type",
+        "instrument_or_universe",
+        "data_kind",
+        "granularity_or_archive_class",
+        "utc_start",
+        "utc_end_exclusive",
+        "source_identity_rule"
+      ],
+      "properties": {
+        "source_provider": {
+          "type": "string"
+        },
+        "source_host_or_endpoint_class": {
+          "type": "string"
+        },
+        "market_type": {
+          "type": "string"
+        },
+        "instrument_or_universe": {
+          "type": "string"
+        },
+        "data_kind": {
+          "type": "string"
+        },
+        "granularity_or_archive_class": {
+          "type": "string"
+        },
+        "utc_start": {
+          "type": "string"
+        },
+        "utc_end_exclusive": {
+          "type": "string"
+        },
+        "source_identity_rule": {
+          "type": "string"
+        },
+        "source_semantic_version": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "status": {
+      "enum": [
+        "RESERVED",
+        "ACQUIRING",
+        "PRESENT_UNVERIFIED",
+        "VERIFIED",
+        "FAILED",
+        "QUARANTINED",
+        "LEGACY_PRESENT_UNRESOLVED"
+      ]
+    },
+    "task_id": {
+      "type": "string"
+    },
+    "worker_id": {
+      "type": "string"
+    },
+    "authorization_class": {
+      "type": "string"
+    },
+    "user_approval_ref": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "claimed_at_utc": {
+      "type": "string"
+    },
+    "lease_until_utc": {
+      "type": "string"
+    },
+    "expected_bytes": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "estimated_peak_disk_bytes": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "network_hosts": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "max_requests_per_host": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "max_network_bytes": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "retry_budget": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "local_target_logical_path": {
+      "type": "string"
+    },
+    "actual_bytes": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "sha256": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "verified_at_utc": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "canonical_dataset_record": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "notes": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}
