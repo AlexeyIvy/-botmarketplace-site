@@ -1,0 +1,201 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "sc001.delegated_task_authorization.v0.2",
+  "title": "SC001 Delegated Task Authorization v0.2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "task_id",
+    "worker_id",
+    "authorization_tier",
+    "authorization_source",
+    "policy_ref",
+    "ratification_ref",
+    "strategy_review_ref",
+    "evidence_class",
+    "promotional",
+    "outcome_access_authorized",
+    "allowed_data_classes",
+    "allowed_hosts_endpoints",
+    "network_profile",
+    "max_network_runs",
+    "max_outcome_runs",
+    "max_network_bytes",
+    "max_dataset_bytes",
+    "max_peak_workspace_increment",
+    "repair_mode",
+    "max_repair_cycles",
+    "max_changed_task_local_files",
+    "valid_until_utc",
+    "stop_rules"
+  ],
+  "properties": {
+    "schema": {
+      "const": "sc001.delegated_task_authorization.v0.2"
+    },
+    "task_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "worker_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "authorization_tier": {
+      "enum": [
+        "T1",
+        "T2"
+      ]
+    },
+    "authorization_source": {
+      "const": "USER_DELEGATED_POLICY_v0.2"
+    },
+    "policy_ref": {
+      "$ref": "#/$defs/file_ref"
+    },
+    "ratification_ref": {
+      "$ref": "#/$defs/file_ref"
+    },
+    "strategy_review_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "protocol_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/file_ref"
+      }
+    },
+    "implementation_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/file_ref"
+      }
+    },
+    "evidence_class": {
+      "type": "string"
+    },
+    "promotional": {
+      "type": "boolean"
+    },
+    "outcome_access_authorized": {
+      "type": "boolean"
+    },
+    "allowed_data_classes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "allowed_hosts_endpoints": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "network_profile": {
+      "enum": [
+        "offline",
+        "public_research",
+        "none"
+      ]
+    },
+    "max_network_runs": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "max_outcome_runs": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "max_network_bytes": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "max_dataset_bytes": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "max_peak_workspace_increment": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "repair_mode": {
+      "enum": [
+        "NONE",
+        "AUTO_PRE_OUTCOME"
+      ]
+    },
+    "max_repair_cycles": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 2
+    },
+    "max_changed_task_local_files": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 4
+    },
+    "repair_control_ref": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/file_ref"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "evidence_window": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "resource_reservation_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "automatic_continuation_chain": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "valid_until_utc": {
+      "type": "string"
+    },
+    "stop_rules": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "$defs": {
+    "file_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    }
+  }
+}
