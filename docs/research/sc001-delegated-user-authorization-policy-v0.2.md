@@ -7,7 +7,7 @@ Supersedes proposal: docs/research/sc001-delegated-user-authorization-policy-v0.
 
 Parents:
 - docs/research/sc001-research-strategy-agent-charter-v0.1.md
-- docs/research/sc001-execution-worker-routing-and-automation-architecture-v0.2.md
+- docs/research/sc001-execution-worker-routing-and-automation-architecture-v0.3.md
 - docs/research/sc001-shared-data-and-resource-coordination-v0.1.md
 - docs/research/sc001-implementation-debugging-and-repair-control-v0.1.md
 
