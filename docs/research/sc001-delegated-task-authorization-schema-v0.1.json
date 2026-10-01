@@ -1,0 +1,172 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "sc001.delegated_task_authorization.v0.1",
+  "title": "SC001 Delegated Task Authorization v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "task_id",
+    "worker_id",
+    "authorization_tier",
+    "authorization_source",
+    "policy_path",
+    "policy_sha256",
+    "strategy_review_ref",
+    "evidence_class",
+    "promotional",
+    "outcome_access_authorized",
+    "allowed_data_classes",
+    "allowed_hosts_endpoints",
+    "network_profile",
+    "max_network_runs",
+    "max_outcome_runs",
+    "max_network_bytes",
+    "max_dataset_bytes",
+    "max_peak_workspace_increment",
+    "valid_until_utc",
+    "stop_rules"
+  ],
+  "properties": {
+    "schema": {
+      "const": "sc001.delegated_task_authorization.v0.1"
+    },
+    "task_id": {
+      "type": "string"
+    },
+    "worker_id": {
+      "type": "string"
+    },
+    "authorization_tier": {
+      "enum": [
+        "T1",
+        "T2"
+      ]
+    },
+    "authorization_source": {
+      "const": "USER_DELEGATED_POLICY_v0.1"
+    },
+    "policy_path": {
+      "type": "string"
+    },
+    "policy_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "strategy_review_ref": {
+      "type": "string"
+    },
+    "protocol_refs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "path",
+          "sha256"
+        ],
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "implementation_refs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "path",
+          "sha256"
+        ],
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "evidence_class": {
+      "type": "string"
+    },
+    "promotional": {
+      "type": "boolean"
+    },
+    "outcome_access_authorized": {
+      "type": "boolean"
+    },
+    "allowed_data_classes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "allowed_hosts_endpoints": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "network_profile": {
+      "enum": [
+        "offline",
+        "public_research",
+        "none"
+      ]
+    },
+    "max_network_runs": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "max_outcome_runs": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "max_network_bytes": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "max_dataset_bytes": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "max_peak_workspace_increment": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "evidence_window": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "resource_reservation_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "valid_until_utc": {
+      "type": "string"
+    },
+    "stop_rules": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}
