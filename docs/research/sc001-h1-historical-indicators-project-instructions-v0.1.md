@@ -59,3 +59,9 @@ If a cross-asset/event-driven mechanism appears, record one CROSS_DOMAIN_REFERRA
 
 Communication:
 Keep durable facts/results in GitHub. The user should not have to carry state between projects manually.
+
+
+PR lifecycle boundary:
+- Never merge, close, retarget, auto-merge, or delete a task PR/branch unless the exact task manifest explicitly lists that lifecycle action in allowed_actions.
+- A terminal PASS/DONE comment is not merge authority.
+- Default completion is: persist allowed artifacts + terminal receipt, then stop for Strategy Manager review.
