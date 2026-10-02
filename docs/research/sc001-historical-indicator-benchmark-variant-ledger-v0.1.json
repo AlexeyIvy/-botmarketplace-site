@@ -1,9 +1,9 @@
 {
   "schema": "sc001.h1_historical_indicator_benchmark_variant_ledger.v0.1",
-  "task_id": "SC001-H1-001",
+  "task_id": "SC001-H1-001-CORRECTION",
   "worker_id": "H1_HISTORICAL_INDICATORS",
   "date": "2026-10-02",
-  "authorization_class": "DESIGN_ONLY",
+  "authorization_class": "DESIGN_ONLY_CORRECTION",
   "status": "PREFREEZE_DEFINED_ONLY",
   "experiment_id_created": false,
   "base_candidate_granularity": "1m completed bars",
@@ -52,13 +52,12 @@
       "economic_primitive": "recent signed movement balance",
       "exact_formula": "U=sum(max(r_i,0)), D=sum(max(-r_i,0)) for i=t-13..t; (U-D)/(U+D); U+D=0 => missing",
       "roles": [
-        "R2_STATE_REGIME",
-        "R1_CORE_SIGNAL_ONLY_IF_DIRECTION_FROZEN_PRE_OUTCOME"
+        "R2_STATE_REGIME"
       ],
       "warmup_completed_bars": 15,
       "signal_availability_clock": "after close/finalization of bar t",
       "candidate_position_horizon_minutes": 3,
-      "directional_hypothesis": "no standalone directional claim in v0.1 design; directional use requires pre-outcome freeze",
+      "directional_hypothesis": "none in v0.1; directional BAL14 use requires a new version/task and fresh evidence allocation",
       "relation_redundancy": [
         "same-family representation as H1-BM-P1-LOC20-v0.1"
       ],
@@ -66,7 +65,8 @@
         "close"
       ],
       "data_support_rule": "required in v0.1",
-      "initial_evidence_class": "DEFINED_ONLY"
+      "initial_evidence_class": "DEFINED_ONLY",
+      "horizon_role": "state observation only; the unchanged 3-minute horizon is not a directional position test"
     },
     {
       "feature_id": "H1-BM-P2-MASPREAD-8-32-v0.1",
@@ -178,7 +178,7 @@
       "required_inputs": [
         "causally_validated_quote_volume"
       ],
-      "data_support_rule": "if quote-volume semantics fail future source audit, mark DATA_UNSUPPORTED and omit; do not substitute another P4 proxy",
+      "data_support_rule": "reuse settled Q001 basic bar/quote-volume qualification; reopen semantics only for a concrete schema discrepancy; if exact-resource support fails, mark DATA_UNSUPPORTED and omit; no substitute P4 proxy",
       "initial_evidence_class": "DEFINED_ONLY"
     },
     {
@@ -222,7 +222,7 @@
     "pnl_in_this_task": false,
     "future_fill_hurdle_formula": "F_bps=round_trip_fee_bps+crossing_spread_bps+conservative_slippage_buffer_bps",
     "directional_gate": "before expensive PnL, predeclared signed gross response at fixed horizon must have conservative lower uncertainty bound > F_bps with nontrivial instrument-day breadth and no dominant single asset/day",
-    "state_filter_gate": "before expensive PnL, demonstrate predeclared incremental value on frozen base-opportunity denominator or explicit risk/execution value"
+    "state_filter_gate": "before any incremental evaluation, separately freeze the base-opportunity denominator under the Incremental Feature Testing Protocol; before expensive PnL demonstrate predeclared incremental or risk/execution value on that base; no standalone directional promotional claim"
   },
   "forbidden": [
     "historical alpha/return/PnL computation in this task",
@@ -245,5 +245,69 @@
     "vps_raw_data_read": false,
     "test_executor_job_launched": false,
     "runner_bundle_created": false
-  }
+  },
+  "parent_task_id": "SC001-H1-001",
+  "strategy_review": {
+    "pr_number": 425,
+    "comment_id": 5961492007,
+    "decision_token": "H1_PREFREEZE_SURVIVES_SOURCE_REUSE_CORRECTION"
+  },
+  "adaptive_discovery_generated": true,
+  "adaptive_classification_reason": "Generated after prior SC001 outcomes; no independently pre-frozen provenance demonstrated. A future positive Discovery remains adaptive and requires fresh chronological/prospective Confirmation.",
+  "source_prefreeze": {
+    "primary_source_class": "Binance USD-M perpetual 1m completed klines",
+    "source_reuse_refs": [
+      "docs/research/sc001-data-acquisition-protocol-v0.1.md",
+      "docs/research/sc001-data-q001-qualification-results-v0.1.md",
+      "docs/research/sc001-data-q002-results-v0.1.md"
+    ],
+    "universe_status": "UNRESOLVED_PENDING_SOURCE_PRIOR_USE_AUDIT",
+    "exact_instruments": null,
+    "utc_start": null,
+    "utc_end_exclusive": null,
+    "dataset_key": null,
+    "resource_id": null,
+    "coverage_limit": "BTCUSDT-only Q001/Q002 does NOT prove multi-symbol 120-day coverage. The long-history acquisition target is not proof of acquired or clean coverage.",
+    "next_source_only_audit_scope": [
+      "multi-symbol continuous coverage",
+      "outcome-blind exact 6-12 instrument universe",
+      "prior SC001 use/contamination",
+      "DATASET_KEY/RESOURCE_ID",
+      "local verified reuse and exact DERIVED_ID if applicable",
+      "evidence-block allocation and task-specific access eligibility"
+    ],
+    "settled_semantics_rule": "do not rerun single-day basic bar/quote-volume semantics absent a concrete schema discrepancy",
+    "alternate_venue_rule": "separate future mechanism-specific Strategy decision required",
+    "source_only_audit_authorized_by_this_task": false
+  },
+  "pre_outcome_multiplicity_gate": {
+    "status": "UNRESOLVED_BLOCKS_R1_OUTCOME",
+    "directional_r1_tests": [
+      "H1-BM-P1-LOC20-v0.1",
+      "H1-BM-P2-MASPREAD-8-32-v0.1",
+      "H1-BM-P2-SIGNPERSIST16-v0.1",
+      "H1-BM-P7-MEDDEV20-v0.1"
+    ],
+    "required_freeze": "exact family-wise multiplicity decision rule across all frozen directional R1 tests before any R1 outcome-bearing run; procedure, family-wise error level, hypotheses/orientations and dependence-aware inference must be predeclared",
+    "decision_rule": null,
+    "historical_winner_picking_allowed": false,
+    "separately_authorized_source_only_audit_may_precede_gate": true,
+    "source_only_condition": "no outcomes opened"
+  },
+  "state_only_feature_boundary": {
+    "applies_to": "all R2/R3/R4/R6-only roles",
+    "feature_ids": [
+      "H1-BM-P1-BAL14-v0.1",
+      "H1-BM-P3-RV20-v0.1",
+      "H1-BM-P3-RANGEEXP-5-20-v0.1",
+      "H1-BM-P4-RELACT20-v0.1"
+    ],
+    "standalone_directional_promotional_claim_allowed": false,
+    "incremental_protocol_ref": "docs/research/sc001-incremental-feature-testing-protocol-v0.1.md",
+    "incremental_evaluation_requires": "separately frozen base mechanism, base-opportunity denominator/ledger, comparator, feature role, effect metric, block/inference unit and stop rule before incremental outcomes",
+    "base_opportunity_denominator_frozen": false,
+    "descriptive_state_association_is_directional_promotion": false
+  },
+  "next_allowed_action": "Stop for Strategy Manager revalidation; Manager may merge reviewed package then dispatch one bounded Binance 1m source/prior-use audit. No outcome-bearing run yet.",
+  "merge_authorized": false
 }
