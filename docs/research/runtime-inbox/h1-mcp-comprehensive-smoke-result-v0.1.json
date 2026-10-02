@@ -1,0 +1,78 @@
+{
+  "schema": "sc001.h1_mcp_comprehensive_smoke_result.v0.1",
+  "task_id": "H1-MCP-COMPREHENSIVE-SMOKE-003",
+  "worker_id": "H1_HISTORICAL_INDICATORS",
+  "authorization_class": "INFRASTRUCTURE_SMOKE_ONLY",
+  "pr_number": 424,
+  "task_branch": "sc001/h1/H1-MCP-COMPREHENSIVE-SMOKE-003",
+  "dispatch_base_head": "e90337d39275090f1371653581b31c4c7e1e6315",
+  "pr_head_before_result_commit": "65f782a0d63794b99aee2824f60d91dececd9511",
+  "overall_status": "H1_MCP_COMPREHENSIVE_SMOKE_PASS",
+  "servers": [
+    {
+      "server": "GitHub",
+      "status": "PASS",
+      "actions_attempted": [
+        "read this PR/task",
+        "persist exactly one consolidated report file to this task branch",
+        "add one terminal PR comment"
+      ],
+      "observed_capability": "PR #424 and canonical task were readable; task-branch file persistence is available; terminal PR comment is the required post-commit terminal action.",
+      "write_tested": true,
+      "notes": "Exactly one repository file is created by this result commit. The terminal PR comment is emitted immediately after this commit, per the task sequence."
+    },
+    {
+      "server": "BotMarketplace GitHub Control",
+      "status": "PASS",
+      "actions_attempted": [
+        "get_github_control_info",
+        "get_repo_status"
+      ],
+      "observed_capability": "Read-only control metadata and repository status were returned; dedicated clone reported branch main, head e90337d39275090f1371653581b31c4c7e1e6315, clean worktree, and no changed paths.",
+      "write_tested": false,
+      "notes": "No GitHub Control mutation action was called."
+    },
+    {
+      "server": "BotMarketplace Test Executor",
+      "status": "PASS",
+      "actions_attempted": [
+        "get_test_executor_info",
+        "list_recent_jobs with limit 3"
+      ],
+      "observed_capability": "Executor capability metadata was returned and exactly three recent job metadata records were listed.",
+      "write_tested": false,
+      "notes": "No Test Executor job was launched; no job logs or job files were read."
+    },
+    {
+      "server": "BotMarketplace Runner Probe",
+      "status": "PASS",
+      "actions_attempted": [
+        "get_runner_info",
+        "get_runtime_info"
+      ],
+      "observed_capability": "Runner capability metadata and runtime metadata were returned; runner reported offline-research-v1 and Python 3.12.3.",
+      "write_tested": false,
+      "notes": "No bundle was created, modified, sealed, executed, or inspected; no Runner job/log/artifact action was called."
+    },
+    {
+      "server": "BotMarketplace VPS Reader",
+      "status": "PASS",
+      "actions_attempted": [
+        "list_roots only"
+      ],
+      "observed_capability": "The read-only root inventory was returned and exposed the approved logical root b15_identity_inventory.",
+      "write_tested": false,
+      "notes": "No VPS list_files or read_text action was called."
+    }
+  ],
+  "flags": {
+    "outcome_accessed": false,
+    "protected_evidence_accessed": false,
+    "network_research_executed": false,
+    "test_executor_job_launched": false,
+    "runner_bundle_created": false,
+    "runner_bundle_executed": false,
+    "vps_raw_file_read": false
+  },
+  "manual_confirmation_required": false
+}
