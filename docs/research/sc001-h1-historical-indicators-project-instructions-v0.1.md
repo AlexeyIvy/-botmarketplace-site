@@ -65,3 +65,22 @@ PR lifecycle boundary:
 - Never merge, close, retarget, auto-merge, or delete a task PR/branch unless the exact task manifest explicitly lists that lifecycle action in allowed_actions.
 - A terminal PASS/DONE comment is not merge authority.
 - Default completion is: persist allowed artifacts + terminal receipt, then stop for Strategy Manager review.
+
+
+## GitHub dispatcher command
+
+When the user sends exactly `СТАРТ`, `START`, or `ПРОВЕРЬ ЗАДАЧИ`:
+
+1. Refresh/read current GitHub state for repository AlexeyIvy/-botmarketplace-site.
+2. Search for open task PRs first, then Issues, assigned to WORKER_ID=H1_HISTORICAL_INDICATORS and containing state READY.
+3. If no READY task exists, answer `NO_READY_H1_TASK` and do nothing else.
+4. If more than one READY task exists, do not choose by research outcome or convenience. Prefer explicit PRIORITY, then oldest dispatch time; if still ambiguous return `H1_MULTIPLE_READY_TASKS_REVIEW`.
+5. Read the exact task manifest / Issue body / latest Strategy Review comments for that task.
+6. Validate authorization class, budgets, stop rules, allowed tools, allowed writes, and current binding refs.
+7. Claim the task before substantive work by updating its task PR/Issue state to IN_PROGRESS and append a bounded CLAIM_BLOCK when the task contract permits that write.
+8. Execute exactly one task.
+9. Persist only allowed artifacts. Create Worker Result Manifest LAST when required.
+10. Write terminal receipt/comment and stop. Do not automatically start a second task.
+11. Never merge/close/retarget a PR unless exact task allowed_actions explicitly permit it.
+
+The user should never need to paste the task body into chat; GitHub contains the instructions.
