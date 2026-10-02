@@ -1,0 +1,53 @@
+{
+  "schema": "sc001.project_worker_smoke_task.v0.1",
+  "task_id": "H1-PROJECT-WORK-SMOKE-002",
+  "worker_id": "H1_HISTORICAL_INDICATORS",
+  "authorization_class": "DESIGN_ONLY",
+  "execution_surface": "CHATGPT_WORK_INSIDE_H1_PROJECT",
+  "purpose": "Prove Work inside the H1 Project can use connected GitHub tooling and persist one harmless result to the assigned branch without research execution.",
+  "architecture_ref": "docs/research/sc001-pro-project-worker-pilot-v0.1.md",
+  "project_instructions_ref": "docs/research/sc001-h1-historical-indicators-project-instructions-v0.1.md",
+  "dispatch_base_head": "e90337d39275090f1371653581b31c4c7e1e6315",
+  "prerequisite": {
+    "stage_a_status": "H1_PROJECT_INTERACTIVE_WRITE_SMOKE_PASS",
+    "canonical_merge_sha": "e90337d39275090f1371653581b31c4c7e1e6315"
+  },
+  "allowed_reads": [
+    "docs/research/sc001-pro-project-worker-pilot-v0.1.md",
+    "docs/research/sc001-h1-historical-indicators-project-instructions-v0.1.md",
+    "docs/research/runtime-inbox/h1-project-smoke-result-v0.1.json"
+  ],
+  "allowed_actions": [
+    "read this task file and listed canonical documents",
+    "create exactly one result file on this branch",
+    "commit the result file",
+    "update this pull request body or add a pull request comment with the PASS token"
+  ],
+  "forbidden_actions": [
+    "market-data access",
+    "research outcome access",
+    "network research",
+    "Test Executor job launch",
+    "Runner Probe use",
+    "VPS Reader use",
+    "collector access or mutation",
+    "roadmap/governance/contamination/reusable-registry mutation",
+    "any file change other than the exact result path"
+  ],
+  "exact_result_path": "docs/research/runtime-inbox/h1-project-work-smoke-result-v0.1.json",
+  "exact_result_content": {
+    "schema": "sc001.h1_project_work_smoke_result.v0.1",
+    "task_id": "H1-PROJECT-WORK-SMOKE-002",
+    "worker_id": "H1_HISTORICAL_INDICATORS",
+    "execution_surface": "CHATGPT_WORK_INSIDE_H1_PROJECT",
+    "status": "H1_PROJECT_WORK_WRITE_SMOKE_PASS",
+    "outcome_accessed": false,
+    "network_accessed": false,
+    "protected_evidence_accessed": false,
+    "test_executor_job_launched": false
+  },
+  "terminal_pass_token": "H1_PROJECT_WORK_WRITE_SMOKE_PASS",
+  "max_new_files": 1,
+  "max_network_runs": 0,
+  "max_research_runs": 0
+}
