@@ -1,0 +1,104 @@
+{
+  "schema": "sc001.h1_mcp_comprehensive_smoke_task.v0.1",
+  "task_id": "H1-MCP-COMPREHENSIVE-SMOKE-003",
+  "worker_id": "H1_HISTORICAL_INDICATORS",
+  "authorization_class": "INFRASTRUCTURE_SMOKE_ONLY",
+  "purpose": "Verify the H1 Project can access every currently relevant BotMarketplace MCP/connector with one safe representative action per server, then persist one consolidated report.",
+  "dispatch_base_head": "e90337d39275090f1371653581b31c4c7e1e6315",
+  "required_probes": [
+    {
+      "server": "GitHub",
+      "actions": [
+        "read this PR/task",
+        "persist exactly one consolidated report file to this task branch",
+        "add one terminal PR comment"
+      ],
+      "mutation_allowed": true
+    },
+    {
+      "server": "BotMarketplace GitHub Control",
+      "actions": [
+        "get_github_control_info",
+        "get_repo_status"
+      ],
+      "mutation_allowed": false
+    },
+    {
+      "server": "BotMarketplace Test Executor",
+      "actions": [
+        "get_test_executor_info",
+        "list_recent_jobs with limit <= 3"
+      ],
+      "mutation_allowed": false,
+      "job_launch_allowed": false
+    },
+    {
+      "server": "BotMarketplace Runner Probe",
+      "actions": [
+        "get_runner_info",
+        "get_runtime_info"
+      ],
+      "mutation_allowed": false,
+      "bundle_creation_allowed": false,
+      "run_bundle_allowed": false
+    },
+    {
+      "server": "BotMarketplace VPS Reader",
+      "actions": [
+        "list_roots only"
+      ],
+      "mutation_allowed": false,
+      "raw_file_read_allowed": false,
+      "list_files_allowed": false
+    }
+  ],
+  "forbidden_actions": [
+    "run_repo_test",
+    "begin_bundle",
+    "put_text_file on Runner Probe",
+    "seal_bundle",
+    "run_bundle",
+    "cancel any job",
+    "read Runner job logs/artifacts",
+    "VPS list_files",
+    "VPS read_text",
+    "market-data access",
+    "protected/raw outcome access",
+    "collector access or mutation",
+    "network research",
+    "trading or credential use",
+    "roadmap/governance/Strategy State/contamination/reusable-registry mutation",
+    "any repository file change other than exact_result_path"
+  ],
+  "exact_result_path": "docs/research/runtime-inbox/h1-mcp-comprehensive-smoke-result-v0.1.json",
+  "result_requirements": {
+    "overall_status_values": [
+      "H1_MCP_COMPREHENSIVE_SMOKE_PASS",
+      "H1_MCP_COMPREHENSIVE_SMOKE_PARTIAL",
+      "H1_MCP_COMPREHENSIVE_SMOKE_BLOCKED"
+    ],
+    "per_server_fields": [
+      "server",
+      "status",
+      "actions_attempted",
+      "observed_capability",
+      "write_tested",
+      "notes"
+    ],
+    "required_flags": [
+      "outcome_accessed=false",
+      "protected_evidence_accessed=false",
+      "network_research_executed=false",
+      "test_executor_job_launched=false",
+      "runner_bundle_created=false",
+      "runner_bundle_executed=false",
+      "vps_raw_file_read=false"
+    ]
+  },
+  "terminal_pass_token": "H1_MCP_COMPREHENSIVE_SMOKE_PASS",
+  "max_new_files": 1,
+  "max_repository_commits_by_worker": 1,
+  "max_test_executor_jobs": 0,
+  "max_runner_bundles": 0,
+  "max_network_runs": 0
+}
