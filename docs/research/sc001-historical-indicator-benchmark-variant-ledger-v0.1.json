@@ -1,0 +1,249 @@
+{
+  "schema": "sc001.h1_historical_indicator_benchmark_variant_ledger.v0.1",
+  "task_id": "SC001-H1-001",
+  "worker_id": "H1_HISTORICAL_INDICATORS",
+  "date": "2026-10-02",
+  "authorization_class": "DESIGN_ONLY",
+  "status": "PREFREEZE_DEFINED_ONLY",
+  "experiment_id_created": false,
+  "base_candidate_granularity": "1m completed bars",
+  "common_signal_availability_clock": "feature value becomes available only after the source-finalized close of bar t; final OHLCV from an open bar is forbidden",
+  "common_missing_data_rule": "missing/invalid required input => feature missing at that timestamp; no hidden forward fill",
+  "multiplicity_budget": {
+    "primitive_families": 5,
+    "admitted_variants": 8,
+    "parameterizations": 8,
+    "alternate_horizons": 0,
+    "interactions": 0,
+    "composites": 0,
+    "symbol_subset_alternatives": 0,
+    "hour_session_filters": 0,
+    "venue_winner_search": 0
+  },
+  "variants": [
+    {
+      "feature_id": "H1-BM-P1-LOC20-v0.1",
+      "family": "P1_PRICE_RETURN_LOCATION",
+      "economic_primitive": "recent price location within completed rolling high-low range",
+      "exact_formula": "2*(C_t-min(L[t-19:t]))/(max(H[t-19:t])-min(L[t-19:t]))-1; denominator=0 => missing",
+      "roles": [
+        "R1_CORE_SIGNAL",
+        "R2_STATE_REGIME"
+      ],
+      "warmup_completed_bars": 20,
+      "signal_availability_clock": "after close/finalization of bar t",
+      "candidate_position_horizon_minutes": 3,
+      "directional_hypothesis": "reversion from extreme recent location; orientation frozen before outcomes",
+      "relation_redundancy": [
+        "same-family alternative to H1-BM-P1-BAL14-v0.1",
+        "overlaps H1-BM-P7-MEDDEV20-v0.1"
+      ],
+      "required_inputs": [
+        "high",
+        "low",
+        "close"
+      ],
+      "data_support_rule": "required in v0.1",
+      "initial_evidence_class": "DEFINED_ONLY"
+    },
+    {
+      "feature_id": "H1-BM-P1-BAL14-v0.1",
+      "family": "P1_PRICE_RETURN_LOCATION",
+      "economic_primitive": "recent signed movement balance",
+      "exact_formula": "U=sum(max(r_i,0)), D=sum(max(-r_i,0)) for i=t-13..t; (U-D)/(U+D); U+D=0 => missing",
+      "roles": [
+        "R2_STATE_REGIME",
+        "R1_CORE_SIGNAL_ONLY_IF_DIRECTION_FROZEN_PRE_OUTCOME"
+      ],
+      "warmup_completed_bars": 15,
+      "signal_availability_clock": "after close/finalization of bar t",
+      "candidate_position_horizon_minutes": 3,
+      "directional_hypothesis": "no standalone directional claim in v0.1 design; directional use requires pre-outcome freeze",
+      "relation_redundancy": [
+        "same-family representation as H1-BM-P1-LOC20-v0.1"
+      ],
+      "required_inputs": [
+        "close"
+      ],
+      "data_support_rule": "required in v0.1",
+      "initial_evidence_class": "DEFINED_ONLY"
+    },
+    {
+      "feature_id": "H1-BM-P2-MASPREAD-8-32-v0.1",
+      "family": "P2_TREND_PERSISTENCE",
+      "economic_primitive": "local trend level difference across fixed short/slow windows",
+      "exact_formula": "mean(ln(C[t-7:t]))-mean(ln(C[t-31:t]))",
+      "roles": [
+        "R1_CORE_SIGNAL",
+        "R2_STATE_REGIME"
+      ],
+      "warmup_completed_bars": 32,
+      "signal_availability_clock": "after close/finalization of bar t",
+      "candidate_position_horizon_minutes": 8,
+      "directional_hypothesis": "continuation in sign of fixed-window trend spread",
+      "relation_redundancy": [
+        "same-family comparator to H1-BM-P2-SIGNPERSIST16-v0.1"
+      ],
+      "required_inputs": [
+        "close"
+      ],
+      "data_support_rule": "required in v0.1",
+      "initial_evidence_class": "DEFINED_ONLY"
+    },
+    {
+      "feature_id": "H1-BM-P2-SIGNPERSIST16-v0.1",
+      "family": "P2_TREND_PERSISTENCE",
+      "economic_primitive": "persistence of one-minute return signs",
+      "exact_formula": "mean(sign(r_i)) for i=t-15..t, sign(0)=0",
+      "roles": [
+        "R1_CORE_SIGNAL",
+        "R2_STATE_REGIME"
+      ],
+      "warmup_completed_bars": 17,
+      "signal_availability_clock": "after close/finalization of bar t",
+      "candidate_position_horizon_minutes": 4,
+      "directional_hypothesis": "continuation in sign of recent return-sign persistence",
+      "relation_redundancy": [
+        "simpler same-family comparator to H1-BM-P2-MASPREAD-8-32-v0.1"
+      ],
+      "required_inputs": [
+        "close"
+      ],
+      "data_support_rule": "required in v0.1",
+      "initial_evidence_class": "DEFINED_ONLY"
+    },
+    {
+      "feature_id": "H1-BM-P3-RV20-v0.1",
+      "family": "P3_VOLATILITY_RANGE",
+      "economic_primitive": "realized close-to-close movement scale",
+      "exact_formula": "sqrt(mean(r_i^2)) for i=t-19..t",
+      "roles": [
+        "R2_STATE_REGIME",
+        "R4_SIZING_RISK",
+        "R6_REFERENCE_NORMALIZATION"
+      ],
+      "warmup_completed_bars": 21,
+      "signal_availability_clock": "after close/finalization of bar t",
+      "candidate_position_horizon_minutes": 5,
+      "directional_hypothesis": "none; scale/state only",
+      "relation_redundancy": [
+        "same broad scale primitive as H1-BM-P3-RANGEEXP-5-20-v0.1"
+      ],
+      "required_inputs": [
+        "close"
+      ],
+      "data_support_rule": "required in v0.1",
+      "initial_evidence_class": "DEFINED_ONLY"
+    },
+    {
+      "feature_id": "H1-BM-P3-RANGEEXP-5-20-v0.1",
+      "family": "P3_VOLATILITY_RANGE",
+      "economic_primitive": "short-versus-local true-range expansion",
+      "exact_formula": "mean(TR[t-4:t])/mean(TR[t-19:t])-1, TR_i=max(H_i-L_i,abs(H_i-C_(i-1)),abs(L_i-C_(i-1))); zero 20-bar mean => missing",
+      "roles": [
+        "R2_STATE_REGIME",
+        "R3_FILTER_VETO"
+      ],
+      "warmup_completed_bars": 21,
+      "signal_availability_clock": "after close/finalization of bar t",
+      "candidate_position_horizon_minutes": 5,
+      "directional_hypothesis": "none; expansion/compression state only",
+      "relation_redundancy": [
+        "same broad scale primitive as H1-BM-P3-RV20-v0.1"
+      ],
+      "required_inputs": [
+        "high",
+        "low",
+        "close"
+      ],
+      "data_support_rule": "required in v0.1",
+      "initial_evidence_class": "DEFINED_ONLY"
+    },
+    {
+      "feature_id": "H1-BM-P4-RELACT20-v0.1",
+      "family": "P4_VOLUME_ACTIVITY",
+      "economic_primitive": "relative completed-bar trading activity",
+      "exact_formula": "ln(Q_t/median(Q[t-19:t])); Q_t<=0 or median<=0 => missing",
+      "roles": [
+        "R2_STATE_REGIME",
+        "R3_FILTER_VETO"
+      ],
+      "warmup_completed_bars": 20,
+      "signal_availability_clock": "after close/finalization of bar t and validated quote-volume finalization",
+      "candidate_position_horizon_minutes": 3,
+      "directional_hypothesis": "none; activity state/filter only",
+      "relation_redundancy": [
+        "only admitted P4 v0.1 representation; no trade-count substitute on same evidence"
+      ],
+      "required_inputs": [
+        "causally_validated_quote_volume"
+      ],
+      "data_support_rule": "if quote-volume semantics fail future source audit, mark DATA_UNSUPPORTED and omit; do not substitute another P4 proxy",
+      "initial_evidence_class": "DEFINED_ONLY"
+    },
+    {
+      "feature_id": "H1-BM-P7-MEDDEV20-v0.1",
+      "family": "P7_REFERENCE_FAIR_VALUE",
+      "economic_primitive": "deviation from robust rolling local price reference",
+      "exact_formula": "ln(C_t/median(C[t-19:t]))",
+      "roles": [
+        "R1_DEVIATION_SIGNAL",
+        "R6_REFERENCE_NORMALIZATION"
+      ],
+      "warmup_completed_bars": 20,
+      "signal_availability_clock": "after close/finalization of bar t",
+      "candidate_position_horizon_minutes": 5,
+      "directional_hypothesis": "reversion toward the frozen rolling median reference",
+      "relation_redundancy": [
+        "overlaps P1 recent-location information",
+        "overlaps local-trend information in P2; not independent confirmation"
+      ],
+      "required_inputs": [
+        "close"
+      ],
+      "data_support_rule": "required in v0.1",
+      "initial_evidence_class": "DEFINED_ONLY"
+    }
+  ],
+  "evidence_allocation": {
+    "minimum_complete_utc_days": 120,
+    "minimum_assets": 6,
+    "maximum_assets": 12,
+    "asset_cap_rule": "normalized symbols sorted lexicographically; if >12, first 12 only",
+    "asset_holdout_rule": "after eligibility freeze, lexicographic positions 5,10,... are holdout; remainder are development",
+    "selection_fraction": 0.4,
+    "discovery_fraction": 0.2,
+    "asset_holdout_fraction": 0.2,
+    "chronological_confirmation_fraction": 0.2,
+    "block_rounding_rule": "whole UTC days from T0; remainder assigned to final Confirmation block",
+    "block_mutation_after_outcome": false
+  },
+  "edge_to_fill_prefilter": {
+    "pnl_in_this_task": false,
+    "future_fill_hurdle_formula": "F_bps=round_trip_fee_bps+crossing_spread_bps+conservative_slippage_buffer_bps",
+    "directional_gate": "before expensive PnL, predeclared signed gross response at fixed horizon must have conservative lower uncertainty bound > F_bps with nontrivial instrument-day breadth and no dominant single asset/day",
+    "state_filter_gate": "before expensive PnL, demonstrate predeclared incremental value on frozen base-opportunity denominator or explicit risk/execution value"
+  },
+  "forbidden": [
+    "historical alpha/return/PnL computation in this task",
+    "indicator leaderboard",
+    "parameter grid",
+    "horizon grid",
+    "best-symbol search",
+    "best-hour/session search",
+    "protected P1 prospective/raw outcome access",
+    "reuse of terminal SC001 outcome windows as promotional evidence",
+    "same-evidence rescue",
+    "collector mutation",
+    "network acquisition"
+  ],
+  "proposed_shared_state_change": [],
+  "flags": {
+    "outcome_accessed": false,
+    "protected_evidence_accessed": false,
+    "network_accessed": false,
+    "vps_raw_data_read": false,
+    "test_executor_job_launched": false,
+    "runner_bundle_created": false
+  }
+}
