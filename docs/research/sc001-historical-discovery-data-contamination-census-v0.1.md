@@ -1,14 +1,18 @@
 # SC001-H1-001 — Historical Discovery Data / Contamination Census v0.1
 
 Date: 2026-10-02
-Task: SC001-H1-001
+Task: SC001-H1-001-CORRECTION
+Parent task: SC001-H1-001
 Worker: H1_HISTORICAL_INDICATORS
-Authorization: DESIGN_ONLY
+Authorization: DESIGN_ONLY_CORRECTION
+Strategy review: PR #425 / comment 5961492007 / H1_PREFREEZE_SURVIVES_SOURCE_REUSE_CORRECTION
 Status: PREFREEZE CENSUS; NO DATA BODY OR OUTCOME ACCESS
 
 ## 1. Purpose and boundary
 
-This census identifies the smallest historical bar/trade data surface that could support a bounded indicator benchmark without asserting freshness that has not been audited.
+This census reuses the existing frozen SC001 Binance USD-M 1m backbone for the bounded indicator benchmark without asserting multi-symbol coverage or freshness that has not been audited.
+
+The package is ADAPTIVE_DISCOVERY_GENERATED: it was generated after prior SC001 outcomes and no independently pre-frozen provenance was demonstrated. A future positive Discovery remains adaptive and requires fresh chronological/prospective Confirmation. This correction opened no outcomes.
 
 This task did not:
 - open VPS/raw market data;
@@ -29,17 +33,24 @@ Canonical control context:
 - docs/research/sc001-contamination-registry-v0.41.json
 - docs/research/sc001-research-strategy-agent-charter-v0.1.md
 
+Source-reuse references, read as canonical qualification reports only:
+- docs/research/sc001-data-acquisition-protocol-v0.1.md
+- docs/research/sc001-data-q001-qualification-results-v0.1.md
+- docs/research/sc001-data-q002-results-v0.1.md
+
 The current contamination registry remains read-only. This document is task-local and does not mutate contamination state.
 
 ## 2. Candidate physical source census
 
-No row below is asserted to be clean Discovery evidence. Under DESIGN_ONLY, actual file presence, exact coverage and row semantics were intentionally not inspected.
+No row below is asserted to be clean Discovery evidence. Existing source qualification is reused from canonical reports; actual current file presence, multi-symbol coverage and market rows were not inspected.
 
 | Census ID | Venue / product | Data kind / granularity | Actual date coverage | Candidate asset breadth | Local availability | Remote/source availability | Evidence role already consumed | Conservative classification now | Intended benchmark support |
 |---|---|---|---|---|---|---|---|---|---|
-| H1-DATA-BAR-01 | OKX / USDT-margined perpetual swap, exact instruments not yet frozen | OHLCV bar / 1 minute | UNVERIFIED; proposed minimum eligible span is >=120 complete UTC days after source/clock validation | 6-12 mechanically eligible symbols; no outcome ranking | UNVERIFIED_BY_TASK; no VPS/raw read performed | NOT_NETWORK_CHECKED; future metadata-only source check may be proposed | UNKNOWN at resource identity level; no H1 evidence consumed by this task | CALIBRATION_ONLY_PENDING_PRIOR_USE_AUDIT | P1, P2, P3, P4 when volume semantics are valid, P7 |
-| H1-DATA-TRADE-01 | OKX / same USDT-margined perpetual swap universe | Public trades / event level | UNVERIFIED; only needed if exact trade-derived activity semantics are later authorized | Same mechanically frozen universe as H1-DATA-BAR-01 | UNVERIFIED_BY_TASK; no VPS/raw read performed | NOT_NETWORK_CHECKED; future metadata-only source check may be proposed | UNKNOWN at resource identity level; no H1 evidence consumed by this task | CALIBRATION_ONLY_PENDING_PRIOR_USE_AUDIT | Optional P4 activity validation or causal bar reconstruction; not required for v0.1 if canonical bars contain valid volume |
-| H1-DATA-DERIVED-01 | Same venue/product as verified parent resource | Existing verified derived 1-minute feature-neutral table, only if exact DERIVED_ID already exists | INHERIT_VERIFIED_PARENT; not inspected in this task | Must exactly match the frozen eligible universe | REUSE_ONLY_IF_VERIFIED_RECORD_EXISTS; existence not asserted here | No acquisition path under this task | Inherits parent evidence restrictions; task-specific access receipt still required | INHERIT_PARENT; never upgraded to untouched by physical reuse alone | Preferred reuse path to avoid duplicate normalization work |
+| H1-DATA-BAR-01 | Binance / USD-M perpetual; exact universe unresolved | Completed klines / 1 minute | Q001 qualified BTCUSDT on 2025-01-15 UTC (1,440 rows); acquisition protocol's 2020-01-01 through 2026-08-31 is a target, not proof of acquired coverage; multi-symbol >=120-day continuous span UNRESOLVED | 6-12 outcome-blind eligible instruments remain unfrozen pending source/prior-use audit; BTCUSDT is the qualified sample, not the selected H1 universe | Canonical Q001 sample qualification exists; current local verified reuse and resource identity UNVERIFIED_BY_THIS_TASK | Canonical Q001 download/checksum PASS; no new network check; current multi-symbol availability unresolved | Fixed day used for schema/access/storage qualification; prior SC001 use of other resources/windows unresolved; no H1 evidence consumed here | Qualified sample is engineering/calibration-only, non-promotional; unresolved legacy blocks CALIBRATION_ONLY_PENDING_PRIOR_USE_AUDIT | Primary source for P1/P2/P3/P4/P7 using completed OHLCV/quote-volume semantics |
+| H1-DATA-TRADE-01 | Binance / USD-M BTCUSDT perpetual qualification sample | aggTrades / event level | Q001/Q002 canonical fixed-day sample: 2025-01-15 UTC only | One qualified sample instrument; no multi-symbol trade claim | Canonical sample qualification exists; current local identity not checked | Prior checksum/schema qualification only; no new source check | Engineering/schema qualification; Q002 corrected transact_time field interpretation | ENGINEERING_CALIBRATION_ONLY_NONPROMOTIONAL | Not a v0.1 benchmark input; no trade acquisition/reconstruction or substitute P4 feature proposed |
+| H1-DATA-DERIVED-01 | Binance / USD-M perpetual; same verified parent universe | Existing verified derived 1-minute feature-neutral table, only if exact DERIVED_ID already exists | INHERIT_VERIFIED_PARENT; not inspected in this task | Must exactly match the future outcome-blind eligible universe | REUSE_ONLY_IF_VERIFIED_RECORD_EXISTS; existence not asserted here | No acquisition path under this task | Inherits parent evidence restrictions; task-specific access receipt still required | INHERIT_PARENT; never upgraded to untouched by physical reuse alone | Preferred reuse path if exact verified derived resource already exists |
+
+Q001/Q002 do NOT prove multi-symbol 120-day coverage. Q001 establishes basic BTCUSDT 1m bar/quote-volume fields and integrity for one fixed day; Q002's Binance recheck is of aggTrades, not multi-symbol kline history. Reuse settled qualification. Do not rerun single-day basic bar/quote-volume semantics absent a concrete schema discrepancy.
 
 ### Classification rule
 
@@ -71,14 +82,14 @@ No terminal SC001 outcome window may be recycled as promotional evidence for thi
 
 ## 4. Data eligibility rules for the future benchmark
 
-The benchmark source freeze should use one venue-local product class first to avoid venue-choice multiplicity. v0.1 therefore proposes OKX USDT-margined perpetual swaps as the candidate primary source class, subject to a later source-only audit. This is a source-design proposal, not a claim that the data are presently available or clean.
+The benchmark reuses the existing frozen Binance USD-M perpetual 1m completed-kline backbone. This is the Strategy-directed source-reuse correction, not venue selection by outcomes. Another venue requires a separate future mechanism-specific Strategy decision. The exact 6-12 instrument universe and continuous eligible interval remain unresolved until a separately dispatched source/prior-use audit.
 
 Eligibility must be outcome-blind:
 - normalize instrument names first;
 - require continuous source coverage across all four planned evidence blocks;
 - require causal OHLCV semantics;
 - require no unresolved timestamp duplication or bar-close ambiguity;
-- if P4 is enabled, require a causally defined volume field;
+- for P4, reuse canonical quote-volume qualification and verify applicability to the exact resource; reopen basic semantics only for a concrete schema discrepancy;
 - require at least 6 eligible instruments;
 - cap at 12 instruments by lexicographic normalized symbol order if more are eligible;
 - do not rank or filter instruments by return, alpha, volatility performance, historical profitability or feature effect.
@@ -99,20 +110,22 @@ Asset holdout membership is mechanical: sort eligible normalized symbols lexicog
 ## 6. Required future source-only audit before any outcome-bearing run
 
 A separate explicit task is required to resolve:
-- exact archive/source identity;
-- exact date coverage;
-- exact instrument breadth;
-- local verified-resource presence;
-- source clock and bar finalization semantics;
-- volume field semantics;
-- prior-use/contamination classification;
-- DATASET_KEY / RESOURCE_ID and, if applicable, DERIVED_ID.
+- exact Binance USD-M 1m archive/source identity;
+- multi-symbol continuous coverage meeting the unchanged >=120 complete UTC-day requirement;
+- exact outcome-blind 6-12 instrument universe;
+- prior SC001 use and task-specific contamination/evidence-role eligibility;
+- DATASET_KEY / RESOURCE_ID, verified local reuse and, if applicable, DERIVED_ID;
+- exact Selection / Discovery / Asset Holdout / Chronological Confirmation allocation and access boundaries.
+
+Reuse settled single-day basic bar/quote-volume qualification. A concrete schema discrepancy is required before reopening those semantics; do not repeat Q001/Q002 merely to create another smoke. Current local files and clean evidence blocks are not certified by these historical reports.
+
+This source-only audit may be separately dispatched before the R1 family-wise multiplicity decision rule is frozen because it opens no outcomes. Any R1 outcome-bearing run remains blocked until that exact rule is frozen. The audit itself is not authorized by this correction.
 
 Allowed future source checks may include bounded metadata/HEAD/source-availability checks only if explicitly authorized. This task executed none.
 
 ## 7. Census disposition
 
-Census conclusion: the benchmark can be pre-frozen, but no historical dataset is certified untouched by this DESIGN_ONLY task.
+Census conclusion: the corrected prefreeze reuses the existing Binance backbone, but multi-symbol 120-day coverage, local resource identity and clean evidence allocation remain unresolved. No historical dataset is certified untouched by this DESIGN_ONLY_CORRECTION task.
 
 Terminal design disposition:
 HISTORICAL_BENCHMARK_PREFREEZE_READY_FOR_STRATEGY
