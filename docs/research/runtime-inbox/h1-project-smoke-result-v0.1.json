@@ -1,0 +1,9 @@
+{
+  "schema": "sc001.h1_project_smoke_result.v0.1",
+  "task_id": "H1-PROJECT-SMOKE-001",
+  "worker_id": "H1_HISTORICAL_INDICATORS",
+  "status": "H1_PROJECT_INTERACTIVE_WRITE_SMOKE_PASS",
+  "outcome_accessed": false,
+  "network_accessed": false,
+  "protected_evidence_accessed": false
+}
