@@ -1,9 +1,11 @@
 # SC001-H1-001 — Historical Indicator Benchmark Batch Design v0.1
 
 Date: 2026-10-02
-Task: SC001-H1-001
+Task: SC001-H1-001-CORRECTION
+Parent task: SC001-H1-001
 Worker: H1_HISTORICAL_INDICATORS
-Authorization: DESIGN_ONLY
+Authorization: DESIGN_ONLY_CORRECTION
+Strategy review: PR #425 / comment 5961492007 / H1_PREFREEZE_SURVIVES_SOURCE_REUSE_CORRECTION
 Status: HISTORICAL_BENCHMARK_PREFREEZE_READY_FOR_STRATEGY
 
 ## 1. Objective
@@ -11,6 +13,8 @@ Status: HISTORICAL_BENCHMARK_PREFREEZE_READY_FOR_STRATEGY
 Freeze a small historical indicator benchmark that measures economic primitives rather than brand-name indicators, without opening historical outcomes.
 
 This document authorizes no execution. A new explicit Strategy/User task is required before any historical outcome-bearing run.
+
+Adaptive classification: ADAPTIVE_DISCOVERY_GENERATED. The package was generated after prior SC001 outcomes; independent pre-freezing was not demonstrated. Any future positive Discovery remains adaptive and requires fresh chronological/prospective Confirmation.
 
 Companion artifacts:
 - docs/research/sc001-historical-discovery-data-contamination-census-v0.1.md
@@ -48,10 +52,10 @@ v0.1 admits exactly eight single-feature variants across five required primitive
 **H1-BM-P1-BAL14-v0.1**
 - U = sum(max(r_i,0)) and D = sum(max(-r_i,0)) for i=t-13..t;
 - formula: (U-D)/(U+D); U+D=0 => missing;
-- roles: R2 state descriptor; R1 only if a later protocol explicitly freezes directional use before outcomes;
+- roles: R2_STATE_REGIME only in v0.1; any directional BAL14 use requires a new version/task and fresh evidence allocation;
 - warm-up: 15 completed bars;
 - hypothesis: recent signed movement balance measures directional pressure/location without claiming a standalone edge;
-- candidate state/position observation horizon: 3 minutes, fixed;
+- candidate state observation horizon: 3 minutes, fixed; this is not a directional position test;
 - redundancy: deliberately paired with LOC20 as a same-family representation, not an independent discovery.
 
 ### P2 — Trend / persistence
@@ -94,7 +98,7 @@ v0.1 admits exactly eight single-feature variants across five required primitive
 ### P4 — Volume / activity
 
 **H1-BM-P4-RELACT20-v0.1**
-- required field: causally finalized quote volume Q_t; if source audit cannot validate it, this feature is omitted rather than replaced post-hoc;
+- required field: causally finalized quote volume Q_t; reuse Q001's settled basic qualification, reopening it only for a concrete schema discrepancy; if exact-resource support fails, omit this feature rather than replace it post-hoc;
 - formula: ln(Q_t / median(Q_(t-19)..Q_t)); Q_t<=0 or median<=0 => missing;
 - roles: R2 state, R3 filter/veto;
 - warm-up: 20 completed bars;
@@ -131,9 +135,28 @@ No variant may be silently replaced if a field is unavailable. Any replacement i
 
 The eight variants are a benchmark panel, not a leaderboard. Discovery does not authorize selecting the top historical performer and discarding the rest while calling the winner clean.
 
+### Pre-outcome family-wise decision gate
+
+The directional R1 set is exactly:
+- H1-BM-P1-LOC20-v0.1;
+- H1-BM-P2-MASPREAD-8-32-v0.1;
+- H1-BM-P2-SIGNPERSIST16-v0.1;
+- H1-BM-P7-MEDDEV20-v0.1.
+
+BAL14 is excluded from directional R1 tests in v0.1. Related tests are not independent discoveries.
+
+Gate status: UNRESOLVED_BLOCKS_R1_OUTCOME. Before any R1 outcome-bearing run, freeze the exact family-wise multiplicity decision rule across these frozen directional tests, including the decision procedure, family-wise error level, hypothesis/orientation definitions and dependence-aware inference specification. This correction neither chooses that rule nor authorizes an outcome run. No historical winner-picking is permitted. A separately authorized source-only audit may proceed before this gate is resolved because it opens no outcomes.
+
 ## 5. Data and asset prefreeze
 
-The companion census proposes a single venue-local source class first: OKX USDT-margined perpetual swaps, subject to a future source-only audit.
+Primary source class: Binance USD-M perpetual 1m completed klines, reusing the existing SC001 frozen long-history backbone. Another venue requires a separate future mechanism-specific Strategy decision.
+
+Source-reuse references:
+- docs/research/sc001-data-acquisition-protocol-v0.1.md;
+- docs/research/sc001-data-q001-qualification-results-v0.1.md;
+- docs/research/sc001-data-q002-results-v0.1.md.
+
+BTCUSDT-only Q001/Q002 does NOT prove multi-symbol 120-day coverage. The exact 6-12 instrument universe remains outcome-blind and unresolved. A separate source/prior-use audit must resolve multi-symbol continuous coverage, prior SC001 use/contamination, DATASET_KEY/RESOURCE_ID, local verified reuse and evidence-block allocation. Reuse settled single-day basic bar/quote-volume qualification; do not repeat it absent a concrete schema discrepancy.
 
 Outcome-blind source eligibility:
 - >=120 complete UTC days after source/clock validation;
@@ -141,7 +164,7 @@ Outcome-blind source eligibility:
 - if >12 mechanically eligible instruments, retain the first 12 by normalized lexicographic symbol order;
 - no selection by historical return, feature effect, volatility profitability or best hour.
 
-If P4 quote-volume semantics fail audit, P4 is marked DATA_UNSUPPORTED and the remaining seven variants remain the only admissible v0.1 panel. No substitute P4 proxy is introduced on the same evidence.
+If a concrete schema discrepancy makes exact-resource P4 quote-volume support fail audit, P4 is marked DATA_UNSUPPORTED and the remaining seven variants remain the only admissible v0.1 panel. No substitute P4 proxy is introduced on the same evidence.
 
 ## 6. Evidence blocks
 
@@ -169,16 +192,19 @@ Discovery, Asset Holdout and Confirmation are opened sequentially under separate
 This task computes none of the following; it only freezes the contract.
 
 For R1 directional variants:
+- require the exact family-wise multiplicity decision rule in section 4 to be frozen before any outcome access;
 - freeze the sign/orientation before outcome access;
 - evaluate the signed forward response only at the single fixed horizon in the ledger;
 - use instrument-day/calendar-block inference rather than event rows as IID;
 - report breadth and concentration;
 - do not convert the benchmark into a best-feature ranking.
 
-For R2/R3/R4/R6 variants:
-- evaluate their predeclared descriptive/incremental role against a frozen base opportunity set when such a base is explicitly authorized;
-- filters must retain the original opportunity denominator;
-- state/risk/reference features receive no standalone directional claim merely because a conditioned mean differs.
+For R2/R3/R4/R6-only roles (including BAL14, P3 and P4):
+- no standalone directional promotional claim is allowed;
+- any incremental evaluation requires a separately frozen base-opportunity denominator under docs/research/sc001-incremental-feature-testing-protocol-v0.1.md;
+- freeze the base mechanism, opportunity ledger, comparator, feature role, effect metric, block/inference unit and stop rule in the separate authorized protocol before incremental outcomes;
+- filters retain the original opportunity denominator and report retained/rejected counts and effects per base opportunity as well as per executed trade;
+- descriptive state associations do not create directional promotion or implicitly authorize incremental evaluation. No base-opportunity denominator is established by this package.
 
 Redundancy diagnostics may use predeclared calibration-only correlation/rank-correlation/opportunity-overlap measures. They do not create promotional evidence.
 
@@ -191,7 +217,7 @@ F_bps = round_trip_fee_bps + crossing_spread_bps + conservative_slippage_buffer_
 
 For a directional R1 candidate, a later clean block must first show that the predeclared signed gross response at its single fixed horizon has a conservative lower uncertainty bound above F_bps, with nontrivial instrument-day breadth and without one-asset/one-day concentration. If not, stop before PnL.
 
-For R2/R3/R4/R6-only use, the feature must first demonstrate incremental value on the frozen base-opportunity denominator or a clearly predeclared risk/execution benefit. A higher conditional bps/trade caused only by deleting most opportunities is insufficient.
+For R2/R3/R4/R6-only use, first separately freeze the base-opportunity denominator under the Incremental Feature Testing Protocol. Any later incremental value or predeclared risk/execution benefit must be assessed on that frozen base; it creates no standalone directional promotional claim. A higher conditional bps/trade caused only by deleting most opportunities is insufficient.
 
 No fill hurdle, uncertainty threshold or cost assumption may be tuned after observing candidate PnL.
 
@@ -217,8 +243,12 @@ This package proposes no roadmap, governance, Strategy State, contamination-regi
 
 PROPOSED_SHARED_STATE_CHANGE: none.
 
-Next allowed action after Strategy review:
-- either approve the v0.1 prefreeze and dispatch a separate source-only metadata/prior-use audit;
-- or return bounded design edits without opening outcomes.
+Next allowed action after this correction:
+- Strategy Manager revalidates the corrected prefreeze and may merge the reviewed package;
+- Strategy Manager may then dispatch one bounded Binance 1m source/prior-use audit, with no outcomes; the worker does not start it in this task;
+- before any later R1 outcome-bearing run, separately freeze the unresolved family-wise multiplicity decision rule;
+- otherwise return bounded design edits without opening outcomes.
+
+MERGE_AUTHORIZED=false for this worker task. Persist the corrected four-artifact package and terminal receipt, leave PR #425 open, and stop for Strategy Manager review.
 
 No historical outcome-bearing run is authorized by this document.
