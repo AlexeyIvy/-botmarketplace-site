@@ -137,5 +137,15 @@
   "max_repair_cycles": 0,
   "end_revalidation_required": true,
   "manifest_last_completion_barrier": true,
-  "cross_domain_referral_allowed": true
+  "cross_domain_referral_allowed": true,
+  "variant_budget": {
+    "static_mechanism_families": 3,
+    "selected_future_candidates": 1,
+    "outcome_bearing_candidates": 0,
+    "parameterizations": 0,
+    "alternate_horizons": 0,
+    "best_pair_searches": 0,
+    "symbol_winner_searches": 0
+  },
+  "max_changed_task_local_files": 4
 }
