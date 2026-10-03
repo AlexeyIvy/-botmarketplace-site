@@ -1,0 +1,141 @@
+{
+  "schema": "sc001.x1_static_feasibility_task.v0.1",
+  "task_id": "SC001-X1-001",
+  "origin_issue": 419,
+  "worker_id": "X1_CROSS_ASSET_STRUCTURE",
+  "authorization_class": "DESIGN_ONLY",
+  "task_subclass": "CROSS_ASSET_STATIC_FEASIBILITY",
+  "priority": 1,
+  "dispatch_base_head": "0889832f94868537e6aa9487b0b8e9b50af7ab6e",
+  "architecture_version": "0.3",
+  "purpose": "Determine whether a genuinely under-covered cross-asset / cross-market information-transfer family is worth future historical Discovery, using static mechanism/source/clock feasibility only and no price/return outcomes.",
+  "core_principle": "Correlation alone is descriptive and is not a trading mechanism.",
+  "adaptive_discovery_generated": true,
+  "candidate_budget": {
+    "maximum_static_mechanism_families": 3,
+    "maximum_selected_future_candidates": 1,
+    "outcome_bearing_candidates": 0,
+    "parameterizations": 0,
+    "alternate_horizon_grid": 0,
+    "best_pair_search": 0,
+    "symbol_winner_search": 0
+  },
+  "canonical_refs": [
+    "docs/research/sc001-x1-cross-asset-project-instructions-v0.1.md",
+    "docs/research/sc001-x1-work-event-trigger-instructions-v0.1.md",
+    "docs/research/sc001-execution-worker-routing-and-automation-architecture-v0.3.md",
+    "docs/research/sc001-shared-data-and-resource-coordination-v0.1.md",
+    "docs/research/sc001-research-strategy-agent-charter-v0.1.md",
+    "docs/research/sc001-midcourse-research-strategy-audit-and-governance-amendment-v0.2.md",
+    "docs/research/sc001-contamination-registry-v0.41.json",
+    "docs/research/sc001-reusable-market-building-blocks-registry-v0.9.md",
+    "docs/research/sc001-feature-indicator-taxonomy-v0.1.md",
+    "docs/research/sc001-reserve-candidate2-cross-venue-causal-flow-static-feasibility-card-v0.1.md"
+  ],
+  "required_work": [
+    "Map at most three economically distinct cross-asset/cross-market information-transfer mechanism families.",
+    "For each family state economic payer/causal story, source and target objects, expected timescale, structural fill count, capital-time profile, opportunity-frequency prior, public-data feasibility, latency sensitivity and cheapest falsification.",
+    "Establish structured mechanism overlap against C4, C6, Candidate 2 and other terminal relatives using only the minimum canonical lineage needed.",
+    "Assess source/static feasibility from canonical source/clock knowledge without market-data acquisition or outcome computation.",
+    "Select at most one family as a future candidate for Strategy review, or reject/defer all.",
+    "If one survives, propose one future untouched historical evidence allocation and one mechanism-derived horizon without executing either."
+  ],
+  "allowed_tools": {
+    "github": {
+      "read": true,
+      "write_task_branch_only": true,
+      "allowed_writes": [
+        "expected canonical output paths",
+        "task PR claim block",
+        "task PR terminal state",
+        "one terminal receipt comment"
+      ]
+    },
+    "botmarketplace_github_control": {
+      "read_only": true,
+      "write_allowed": false
+    },
+    "botmarketplace_test_executor": {
+      "info_read_allowed": false,
+      "job_launch_allowed": false
+    },
+    "botmarketplace_runner_probe": {
+      "info_read_allowed": false,
+      "bundle_creation_allowed": false,
+      "bundle_execution_allowed": false,
+      "job_artifact_read_allowed": false
+    },
+    "botmarketplace_vps_reader": {
+      "list_roots_allowed": false,
+      "list_files_allowed": false,
+      "read_text_allowed": false
+    }
+  },
+  "forbidden_actions": [
+    "price/return/PnL outcome computation",
+    "correlation matrix for candidate selection on protected or terminal windows",
+    "lag-return computation",
+    "leader/lag horizon grid",
+    "best-asset-pair search",
+    "same-evidence rescue of C4/C6",
+    "Candidate 2 outcome access",
+    "protected P1 prospective/raw outcome access",
+    "networked source acquisition",
+    "market-data body access",
+    "Test Executor job launch",
+    "Runner bundle creation/sealing/execution",
+    "VPS raw or metadata browsing",
+    "collector access or mutation",
+    "new experiment ID creation",
+    "roadmap/governance/Strategy State/contamination/reusable-registry mutation",
+    "merge/close/retarget/auto-merge/branch deletion"
+  ],
+  "expected_outputs": {
+    "required": [
+      "docs/research/sc001-cross-asset-information-transfer-landscape-v0.1.md",
+      "docs/research/sc001-cross-asset-source-and-clock-feasibility-v0.1.md",
+      "docs/research/worker-results/sc001-x1-cross-asset-static-feasibility-manifest-v0.1.json"
+    ],
+    "conditional_if_one_family_survives": "docs/research/sc001-cross-asset-next-candidate-fingerprint-draft-v0.1.json"
+  },
+  "result_requirements": {
+    "mechanism_disposition_values": [
+      "INDEPENDENT_MECHANISM",
+      "RELATED_BUT_MATERIALLY_DIFFERENT_ARCHITECTURE",
+      "SAME_MECHANISM_VARIANT",
+      "DISGUISED_RESCUE_REJECT"
+    ],
+    "terminal_status_values": [
+      "CROSS_ASSET_STATIC_CANDIDATE_READY_FOR_STRATEGY",
+      "CROSS_ASSET_STATIC_REJECT_OVERLAP",
+      "CROSS_ASSET_STATIC_REJECT_ECONOMICS",
+      "CROSS_ASSET_STATIC_DEFER_SOURCE",
+      "STALE_CONTEXT_REVALIDATION_REQUIRED"
+    ],
+    "required_safety_receipts": [
+      "outcome_accessed=false",
+      "protected_evidence_accessed=false",
+      "network_accessed=false",
+      "market_rows_read=false",
+      "test_executor_job_launched=false",
+      "runner_bundle_created=false",
+      "runner_bundle_executed=false",
+      "vps_raw_data_read=false",
+      "collector_changed=false"
+    ]
+  },
+  "claim_rule": "On valid Work trigger, keep the PR title unchanged. Update only DISPATCH_STATE from READY to IN_PROGRESS and append one CLAIM_BLOCK with a 3-hour lease.",
+  "terminal_rule": "Persist all non-manifest outputs first, verify them, refresh/revalidate main and relevant binding references, then create/update the Worker Result Manifest LAST as the final repository artifact. After manifest persistence, update PR body DISPATCH_STATE to TERMINAL and add exactly one top-level PR comment whose first line starts exactly 'TERMINAL RECEIPT —' and whose body contains the exact line 'STRATEGY_REVIEW_REQUIRED: true'. The comment must include TASK_ID, WORKER_ID, TERMINAL_STATUS, MANIFEST_PATH and MANIFEST_SHA256. Stop after that comment; do not start a second task.",
+  "strategy_review_required": true,
+  "merge_authorized": false,
+  "shared_state_write_authorized": false,
+  "max_executions": 0,
+  "max_network_runs": 0,
+  "max_new_canonical_files": 4,
+  "max_repository_commits_by_worker": 4,
+  "repair_mode": "NONE",
+  "max_repair_cycles": 0,
+  "end_revalidation_required": true,
+  "manifest_last_completion_barrier": true,
+  "cross_domain_referral_allowed": true
+}
