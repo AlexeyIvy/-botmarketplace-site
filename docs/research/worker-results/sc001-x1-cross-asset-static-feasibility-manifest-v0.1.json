@@ -1,0 +1,89 @@
+{
+  "schema": "sc001.worker_result_manifest.v0.1",
+  "project": "SC001",
+  "experiment_id": "SC001-X1-001",
+  "stage": "X1_CROSS_ASSET_STRUCTURE / DESIGN_ONLY / CROSS_ASSET_STATIC_FEASIBILITY",
+  "date": "2026-10-03",
+  "status": "CROSS_ASSET_STATIC_DEFER_SOURCE",
+  "strategy_triggers": [
+    "TERMINAL_REJECT_DEFER"
+  ],
+  "canonical_result": {
+    "path": "docs/research/sc001-cross-asset-information-transfer-landscape-v0.1.md",
+    "sha256": "aff2960d6a95219076c63f01279337595f8576b1e740497aa6f012963e7d740f"
+  },
+  "protocol": {
+    "path": "docs/research/tasks/sc001-x1-001-cross-asset-static-feasibility.json",
+    "sha256": "9ea04378cf6954d386df43fac98cd96b84f7e239983958d2812c8dd400d28e4c"
+  },
+  "implementation": null,
+  "execution": {
+    "mode": "NONE",
+    "bundle_id": null,
+    "bundle_sha256": null,
+    "job_id": null
+  },
+  "mechanism": {
+    "fingerprint_ref": null,
+    "disposition": "NOT_APPLICABLE_PRE_OUTCOME",
+    "adaptive_discovery_generated": true
+  },
+  "evidence": {
+    "class": "DESIGN_ONLY_STATIC_FEASIBILITY_WITH_AUTHORIZED_PUBLISHED_LEGACY_SUMMARIES",
+    "promotional": false,
+    "outcome_accessed": false,
+    "window": null,
+    "contamination_registry_ref": "docs/research/sc001-contamination-registry-v0.41.json"
+  },
+  "key_metrics": {
+    "outcome_accessed": false,
+    "protected_evidence_accessed": false,
+    "network_accessed": false,
+    "market_rows_read": false,
+    "test_executor_job_launched": false,
+    "runner_bundle_created": false,
+    "runner_bundle_executed": false,
+    "vps_raw_data_read": false,
+    "collector_changed": false,
+    "static_mechanism_families": 3,
+    "selected_future_candidates": 0,
+    "source_card_sha256": "5750493231deccae66c880e68ae78d1607261d31a9323138a8657f59d6bc3600"
+  },
+  "decision": {
+    "class": "DEFER",
+    "summary": "SC001-X1-001 considered three static families and selected none. Leader-to-alt flow overlaps C4; paired common-factor residual convergence overlaps C6. Mandatory basket-allocation transmission is conditionally distinct but lacks a canonically qualified product/obligation, historical publication vintage and tradable transmission map; DEFER_SOURCE, not economic survival. Its scheduled-event variant is CROSS_DOMAIN_REFERRAL only. No market rows, new response outcomes or research executions were accessed/run. Published legacy summaries were read for permitted lineage. experiment_id carries the existing task ID, not a new experiment. Main and exact PR task were unchanged at final revalidation; no shared-state or lifecycle mutation is authorized.",
+    "failed_gate": "C: SOURCE_AND_OBLIGATED_FLOW_IDENTITY_NOT_ESTABLISHED; A/B: MECHANISM_OVERLAP",
+    "allowed_claims": [
+      "A SAME_MECHANISM_VARIANT relative to C4; B SAME_MECHANISM_VARIANT relative to C6. Same-evidence tuning would be DISGUISED_RESCUE_REJECT.",
+      "C INDEPENDENT_MECHANISM only conditionally at schematic fingerprint level; no instantiated source-feasible candidate, no selected horizon or historical allocation.",
+      "Companion verified artifact: docs/research/sc001-cross-asset-source-and-clock-feasibility-v0.1.md; content SHA256 5750493231deccae66c880e68ae78d1607261d31a9323138a8657f59d6bc3600.",
+      "END_REVALIDATION_PASS at 2026-10-03T16:09:04Z: main 0889832f94868537e6aa9487b0b8e9b50af7ab6e equals DISPATCH_BASE_HEAD; all read main binding refs remain on the same immutable snapshot; exact task blob 01b492150e23a2a3e667824469d5a1834751babc unchanged.",
+      "PR #427 ownership/claim unchanged; pre-manifest branch head 96daf6bda95f0295b4630f1782ee97b4580a6b43; no review comments or terminal receipts at revalidation; lease valid until 2026-10-03T19:00:25Z.",
+      "Both non-manifest outputs verified by exact readback and SHA256; task-only output commits 099e0da635d2270d1fcf29062d564c3ba3ec3c55 and 96daf6bda95f0295b4630f1782ee97b4580a6b43. This manifest is the third and final repository artifact/worker commit.",
+      "Zero parameterizations, horizon tests, pair/symbol searches, research executions/network runs and repair cycles. No new experiment ID. Conditional fingerprint file intentionally absent because no family survived.",
+      "NO_REUSABLE_BLOCK_IDENTIFIED for new registration; existing RB003/RB004/RB006 and scoped clock/reference RB011/RB012 retained without mutation or promotion.",
+      "Safety receipt network_accessed=false excludes authorized GitHub control-plane access; outcome_accessed=false excludes new/raw price-response access and does not deny the permitted reading of published legacy summaries.",
+      "PROPOSED_SHARED_STATE_CHANGE: NONE. MERGE_AUTHORIZED: false. STRATEGY_REVIEW_REQUIRED: true."
+    ],
+    "forbidden_reuse": [
+      "Reopen C4/C6 terminal evidence or tune thresholds, horizons, subsets, sign, costs or fill counts to rescue them.",
+      "Duplicate or execute Candidate 2 or use its response data or its 2-second horizon as a new X1 choice.",
+      "Read protected P1/Candidate 1/B13-C outcomes or use clock/calibration days as clean new evidence.",
+      "Infer live receipt/decision latency, executable liquidity or fills from event-time synchronization.",
+      "Treat common-factor residuals/correlation, a generic index or optional hedging as proof of an obligated-flow payer.",
+      "Declare any historical date untouched without exact prior-use/contamination clearance.",
+      "Launch source acquisition, Test Executor, Runner, VPS browsing or collectors under this design task.",
+      "Promote this static report as Discovery, Confirmation, alpha, profitability or trading authorization.",
+      "Change shared roadmap, governance, Strategy State, contamination or reusable registry.",
+      "Merge, close, retarget, auto-merge or delete PR #427/its branch; start another task."
+    ],
+    "next_allowed_action": "Strategy Manager review of this manifest and PR terminal receipt. Accept bounded defer or separately authorize a documentation-only source/obligation qualification for a concrete family-C product, with CROSS_DOMAIN_REFERRAL ownership review for scheduled-event work. No automatic continuation, market-data access, new candidate, or outcome run."
+  },
+  "reusable_blocks": [
+    "RB003",
+    "RB004",
+    "RB006",
+    "RB011",
+    "RB012"
+  ]
+}
