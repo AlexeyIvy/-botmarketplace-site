@@ -1,0 +1,199 @@
+{
+  "schema": "sc001.h1_source_prior_use_audit_task.v0.1",
+  "task_id": "SC001-H1-002",
+  "worker_id": "H1_HISTORICAL_INDICATORS",
+  "authorization_class": "DESIGN_ONLY_SOURCE_PRIOR_USE_AUDIT",
+  "priority": 1,
+  "purpose": "Perform one bounded outcome-blind Binance USD-M perpetual 1m source/prior-use audit for the reviewed H1 benchmark prefreeze. Resolve as much as can be mechanically proven from canonical GitHub lineage and metadata-only approved local inventory; never open market rows or outcomes.",
+  "dispatch_base_head": "300793b0f8065252fd0020ec96783a929b2bb72c",
+  "architecture_version": "0.3",
+  "adaptive_discovery_generated": true,
+  "research_boundary": {
+    "source_class": "Binance USD-M perpetual 1m completed klines",
+    "minimum_complete_utc_days": 120,
+    "minimum_assets": 6,
+    "maximum_assets": 12,
+    "asset_cap_rule": "Normalize eligible symbols, sort lexicographically, and if more than 12 remain take the first 12. No outcome/performance statistic may enter eligibility or ordering.",
+    "asset_holdout_rule": "After exact eligibility freeze, lexicographic positions 5,10,... are holdout; all other eligible symbols are development assets.",
+    "evidence_fractions": {
+      "selection": 0.4,
+      "discovery": 0.2,
+      "asset_holdout": 0.2,
+      "chronological_confirmation": 0.2
+    },
+    "block_rounding_rule": "Whole complete UTC days from T0; any remainder is assigned to the final Chronological Confirmation block.",
+    "alternate_venue_allowed": false,
+    "outcome_access_allowed": false
+  },
+  "canonical_refs": [
+    "docs/research/sc001-h1-historical-indicators-project-instructions-v0.1.md",
+    "docs/research/sc001-h1-work-event-trigger-instructions-v0.1.md",
+    "docs/research/sc001-execution-worker-routing-and-automation-architecture-v0.3.md",
+    "docs/research/sc001-shared-data-and-resource-coordination-v0.1.md",
+    "docs/research/sc001-historical-discovery-data-contamination-census-v0.1.md",
+    "docs/research/sc001-historical-indicator-benchmark-batch-design-v0.1.md",
+    "docs/research/sc001-historical-indicator-benchmark-variant-ledger-v0.1.json",
+    "docs/research/sc001-contamination-registry-v0.41.json",
+    "docs/research/sc001-data-acquisition-protocol-v0.1.md",
+    "docs/research/sc001-data-q001-qualification-results-v0.1.md",
+    "docs/research/sc001-data-q002-results-v0.1.md",
+    "docs/research/sc001-worker-result-manifest-schema-v0.1.json"
+  ],
+  "required_questions": [
+    "What exact Binance USD-M 1m archive/source identity is mechanically supported without opening market rows?",
+    "Can at least 120 complete UTC days of common multi-symbol coverage be proven without outcomes?",
+    "What exact outcome-blind 6-12 instrument universe follows the frozen eligibility/cap rule?",
+    "What prior SC001 use applies to the exact candidate resource/window/instruments and what conservative contamination/evidence-role classification follows?",
+    "What exact DATASET_KEY and RESOURCE_ID can be frozen under the shared-data policy?",
+    "Does an already verified local raw resource or exact DERIVED_ID exist and can that identity be proven without reading market rows?",
+    "What exact Selection / Discovery / Asset Holdout / Chronological Confirmation block allocation and access boundary follows if eligibility is proven?"
+  ],
+  "allowed_tools": {
+    "github": {
+      "read": true,
+      "write_task_branch_only": true,
+      "allowed_writes": [
+        "exact_result_path",
+        "worker_result_manifest_path",
+        "task PR claim/terminal receipt"
+      ]
+    },
+    "botmarketplace_github_control": {
+      "read_only": true,
+      "write_allowed": false
+    },
+    "botmarketplace_vps_reader": {
+      "list_roots_allowed": true,
+      "list_files_allowed": "ONLY if list_roots exposes an approved SC001/H1 historical-data or metadata-inventory root relevant to this exact task; never inspect unrelated roots",
+      "read_text_allowed": false,
+      "market_row_read_allowed": false,
+      "outcome_read_allowed": false
+    },
+    "botmarketplace_test_executor": {
+      "info_read_allowed": false,
+      "job_launch_allowed": false
+    },
+    "botmarketplace_runner_probe": {
+      "info_read_allowed": false,
+      "bundle_creation_allowed": false,
+      "bundle_execution_allowed": false,
+      "job_artifact_read_allowed": false
+    }
+  },
+  "legacy_inventory_rule": "Use the one-time legacy inventory bootstrap semantics from shared-data policy only as metadata: logical path, basename, file size, extension/type, and already-canonical hashes. Do not parse market rows. If no approved H1/SC001 data root is exposed through the allowed read-only surface, return H1_SOURCE_PRIOR_USE_AUDIT_DEFER_METADATA_ACCESS rather than opening another root or escalating tools.",
+  "dataset_identity_rule": {
+    "dataset_key_required_fields": [
+      "source_provider",
+      "source_host_or_endpoint_class",
+      "market_type",
+      "instrument_or_frozen_universe_identifier",
+      "data_kind",
+      "granularity_or_archive_class",
+      "utc_start",
+      "utc_end_exclusive",
+      "exact_source_identity_rule",
+      "source_semantic_version_when_relevant"
+    ],
+    "resource_id_rule": "SHA256(canonical JSON serialization of DATASET_KEY)",
+    "resource_id_must_not_include_strategy_name": true,
+    "verified_record_creation_authorized": false,
+    "reservation_creation_authorized": false,
+    "acquisition_authorized": false
+  },
+  "prior_use_rule": {
+    "unresolved_legacy_source_default": "CALIBRATION_ONLY_NONPROMOTIONAL",
+    "untouched_requires_preopen_proof": [
+      "exact DATASET_KEY/RESOURCE_ID fixed",
+      "date interval and instrument set mechanically known",
+      "prior SC001 use audited",
+      "no Selection/calibration inspection touched the block",
+      "task-specific evidence authorization exists before opening the block"
+    ],
+    "terminal_outcome_windows_reusable_as_promotional_evidence": false,
+    "physical_presence_implies_evidence_authorization": false
+  },
+  "stop_rules": [
+    "If fewer than 6 eligible instruments or fewer than 120 common complete UTC days can be proven without outcomes, return H1_SOURCE_PRIOR_USE_AUDIT_DEFER_COVERAGE.",
+    "If local identity/reuse cannot be verified through the explicitly allowed metadata-only surface, return H1_SOURCE_PRIOR_USE_AUDIT_DEFER_METADATA_ACCESS; do not use Runner/Test Executor/network as a workaround.",
+    "If relevant concurrent main changes alter H1 source/evidence/governance semantics, return STALE_CONTEXT_REVALIDATION_REQUIRED.",
+    "If any step would require market-row, return, alpha, PnL, protected P1 evidence, or other outcome access, stop before access.",
+    "Do not start or propose an alternate venue/symbol/hour/horizon search."
+  ],
+  "forbidden_actions": [
+    "market-row parsing",
+    "return/alpha/PnL calculation",
+    "historical feature-effect calculation",
+    "protected/raw outcome access",
+    "P1 prospective/raw evidence access",
+    "network metadata/HEAD/body requests",
+    "archive download or acquisition",
+    "Test Executor job launch",
+    "Runner bundle creation/sealing/execution",
+    "Runner job log/artifact read",
+    "VPS read_text",
+    "VPS list_files on an unrelated root",
+    "collector access or mutation",
+    "parameter/horizon/symbol-performance/hour/session/venue winner search",
+    "roadmap/governance/Strategy State/contamination/reusable-registry mutation",
+    "data-registry verified/reservation/access record creation",
+    "merge/close/retarget/auto-merge/branch deletion"
+  ],
+  "exact_result_path": "docs/research/sc001-h1-binance-1m-source-prior-use-audit-v0.1.md",
+  "worker_result_manifest_path": "docs/research/worker-results/sc001-h1-binance-1m-source-prior-use-audit-manifest-v0.1.json",
+  "result_requirements": {
+    "required_sections": [
+      "SOURCE IDENTITY",
+      "COMMON COVERAGE",
+      "OUTCOME-BLIND UNIVERSE",
+      "PRIOR USE / CONTAMINATION",
+      "DATASET_KEY / RESOURCE_ID",
+      "LOCAL REUSE / DERIVED_ID",
+      "EVIDENCE BLOCK ALLOCATION",
+      "ACCESS BOUNDARY",
+      "TERMINAL DISPOSITION"
+    ],
+    "must_distinguish": [
+      "mechanically proven facts",
+      "canonical historical claims",
+      "unresolved items"
+    ],
+    "required_safety_receipts": [
+      "outcome_accessed=false",
+      "protected_evidence_accessed=false",
+      "market_rows_read=false",
+      "network_accessed=false",
+      "test_executor_job_launched=false",
+      "runner_bundle_created=false",
+      "runner_bundle_executed=false",
+      "vps_read_text_used=false",
+      "collector_changed=false"
+    ]
+  },
+  "terminal_status_values": [
+    "H1_SOURCE_PRIOR_USE_AUDIT_PASS",
+    "H1_SOURCE_PRIOR_USE_AUDIT_DEFER_METADATA_ACCESS",
+    "H1_SOURCE_PRIOR_USE_AUDIT_DEFER_COVERAGE",
+    "H1_SOURCE_PRIOR_USE_AUDIT_BLOCKED_CONTAMINATION",
+    "STALE_CONTEXT_REVALIDATION_REQUIRED"
+  ],
+  "claim_rule": "On valid Work trigger, keep the PR title unchanged. Update only DISPATCH_STATE in the PR body from READY to IN_PROGRESS and append one CLAIM_BLOCK with a 3-hour lease. This avoids title-event recursion.",
+  "terminal_rule": "Persist exact_result_path first, verify it, refresh/revalidate main, then create/update worker_result_manifest_path LAST as the final repository artifact. Add one terminal PR receipt after the manifest and stop. Never start a second task.",
+  "strategy_review_required": true,
+  "merge_authorized": false,
+  "shared_state_write_authorized": false,
+  "max_executions": 0,
+  "max_network_runs": 0,
+  "max_new_canonical_files": 2,
+  "max_changed_task_local_files": 2,
+  "max_repository_commits_by_worker": 3,
+  "repair_mode": "NONE",
+  "max_repair_cycles": 0,
+  "variant_budget": {
+    "new_feature_variants": 0,
+    "parameterizations": 0,
+    "alternate_horizons": 0,
+    "symbol_subset_alternatives": 0,
+    "hour_session_filters": 0,
+    "alternate_venues": 0
+  }
+}
