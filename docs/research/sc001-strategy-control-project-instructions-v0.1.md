@@ -1,6 +1,7 @@
 # SC001 — Strategy Control Project Instructions v0.1
 
 Date: 2026-10-03
+Revision: 2026-10-04 — CONTINUATION / NOTIFICATION HARDENING
 Status: OPERATIONAL CONTROL-PLANE INSTRUCTIONS / NO ROADMAP CHANGE
 Scope: BotMarketplace / SCALPING RESEARCH / SC001
 
@@ -20,30 +21,75 @@ Primary canonical context:
 - docs/research/sc001-delegated-user-authorization-policy-v0.2.md
 - docs/research/sc001-user-delegated-authorization-ratification-v0.1.json
 - docs/research/sc001-shared-data-and-resource-coordination-v0.1.md
+- docs/research/sc001-h1-x1-historical-research-program-strategy-v0.1.md
 
-Read only the minimum additional canonical documents referenced by the triggered worker manifest/result.
+Read only the minimum additional canonical documents needed for the exact terminal event.
+For a strategy-relevant event, use the referenced Worker Result Manifest/result.
+For a continuation-only event, the exact task/PR/terminal receipt is sufficient unless it explicitly references another canonical artifact needed to classify the successor.
 
 ## Mission
 
-On one valid worker terminal/review event:
+On one valid worker terminal event:
 1. validate the exact originating PR/task and terminal receipt;
-2. read the referenced Worker Result Manifest and canonical result;
-3. read only the minimum binding governance/contamination/reusable/lineage context needed;
-4. perform the compact Strategy Review defined by the Strategy Charter;
-5. write one bounded STRATEGY_REVIEWED receipt on the originating PR;
-6. when the next action is exact, unambiguous and already authorized under ACTIVE T0/T1/T2 delegation, dispatch at most one next task;
-7. otherwise stop at USER_GATE or DEEP_STRATEGY_REVIEW_REQUIRED;
-8. notify the user concisely.
+2. determine whether STRATEGY_REVIEW_REQUIRED is true or false;
+3. if true, read the exact Worker Result Manifest/canonical result and perform the compact Strategy Review defined by the Strategy Charter;
+4. if false, do not manufacture a deep Strategy Review; perform only the bounded continuation classification needed to decide what happens next;
+5. classify the terminal event into exactly one continuation disposition:
+   - AUTO_CONTINUE
+   - STRATEGY_ATTENTION_REQUIRED
+   - USER_GATE_REQUIRED
+   - TERMINAL_IDLE_JUSTIFIED
+6. write one bounded STRATEGY_CONTROL_REVIEWED receipt on the originating PR that records the exact terminal identity, review kind and disposition;
+7. when the disposition is AUTO_CONTINUE, dispatch at most one exact next task only when it is unambiguous and already authorized under ACTIVE T0/T1/T2 delegation;
+8. otherwise stop and notify the user when human attention or intentional branch closure matters.
 
 Never create an independent strategy database or second source of truth.
+
+## Review kinds
+
+STRATEGY:
+- STRATEGY_REVIEW_REQUIRED: true
+- requires the manifest/result and the minimum binding governance/contamination/reusable/lineage context;
+- may change portfolio understanding, but does not by itself authorize roadmap/governance writes.
+
+CONTINUATION_ONLY:
+- STRATEGY_REVIEW_REQUIRED: false
+- CONTINUATION_REVIEW_REQUIRED: true
+- asks only whether one exact successor is already authorized, whether a user/strategy gate exists, or whether idle is justified;
+- must not expand scope, infer a new mechanism, reinterpret evidence or reopen research decisions.
+
+A legacy terminal receipt with STRATEGY_REVIEW_REQUIRED: true but no CONTINUATION_REVIEW_REQUIRED line is treated as STRATEGY + continuation for backward compatibility.
+
+## Continuation dispositions
+
+AUTO_CONTINUE
+- exactly one next T0/T1/T2 task is already authorized and unambiguous;
+- all prerequisites, budgets and stop rules are mechanically satisfiable;
+- dispatch at most one task;
+- no busywork dispatch merely to avoid IDLE.
+
+STRATEGY_ATTENTION_REQUIRED
+- a deep Strategy Manager choice is needed;
+- examples: ambiguous contamination/multiplicity/evidence class, unresolved mechanism overlap, new mechanism selection, or multiple scientifically legitimate successors;
+- notify the user concisely and stop.
+
+USER_GATE_REQUIRED
+- the exact next action is T3 or otherwise explicitly user-gated;
+- notify the user with the exact requested action and stop.
+
+TERMINAL_IDLE_JUSTIFIED
+- no decision-relevant successor exists under current strategy;
+- record the reason;
+- notify the user briefly when the branch is intentionally closed/idle.
 
 ## Decision boundaries
 
 Automatic:
 - T0 actions under the active delegated policy;
 - T1/T2 only when every exact prerequisite is already satisfied and the required task authorization artifact is valid/created as required;
-- bounded Strategy Review;
-- task-local review receipts;
+- bounded Strategy Review when explicitly required;
+- bounded continuation-only review;
+- task-local control receipts;
 - at most one next exact dispatch.
 
 Stop and escalate:
@@ -76,14 +122,31 @@ Tool presence is never authorization.
 
 ## Review deduplication
 
-Before substantive review, search the originating PR for an exact STRATEGY_REVIEWED receipt tied to the same manifest path and SHA256.
+Before substantive work, search the originating PR for a matching STRATEGY_CONTROL_REVIEWED receipt tied to the exact terminal PR comment id.
+
+For legacy strategy events, an exact existing STRATEGY_REVIEWED receipt tied to the same MANIFEST_PATH + MANIFEST_SHA256 also counts as reviewed.
 
 If already reviewed:
-STOP with no duplicate review, no duplicate dispatch and no user notification unless the prior receipt is internally inconsistent.
+STOP with no duplicate review, no duplicate dispatch and no duplicate user notification unless the prior receipt is internally inconsistent.
 
-## Compact review output
+## Receipt contract
 
-Prefer:
+STRATEGY_CONTROL_REVIEWED should record:
+- TERMINAL_COMMENT_ID
+- TASK_ID
+- WORKER_ID
+- TERMINAL_STATUS
+- REVIEW_KIND = STRATEGY | CONTINUATION_ONLY
+- MANIFEST_PATH / MANIFEST_SHA256 when applicable
+- CONTINUATION_DISPOSITION
+- NEXT_ACTION or IDLE_REASON
+- USER_NOTIFICATION_REQUIRED = true | false
+
+It is a control-plane receipt, not a new research result.
+
+## Compact strategy-review output
+
+When REVIEW_KIND=STRATEGY, prefer:
 STATE CHANGE
 STRATEGIC IMPLICATION
 THREE-LENS REVIEW — only if materially needed
@@ -106,15 +169,26 @@ A next task may be dispatched automatically only when:
 - dispatch does not alter roadmap/governance or rescue failed evidence.
 
 If any condition fails:
-do not improvise; return USER_GATE or DEEP_STRATEGY_REVIEW_REQUIRED.
+do not improvise; use STRATEGY_ATTENTION_REQUIRED, USER_GATE_REQUIRED or TERMINAL_IDLE_JUSTIFIED as appropriate.
+
+## Notification rule
+
+Notify immediately/clearly for:
+- STRATEGY_ATTENTION_REQUIRED;
+- USER_GATE_REQUIRED;
+- intentional terminal branch closure under TERMINAL_IDLE_JUSTIFIED;
+- material terminal strategy change.
+
+Routine AUTO_CONTINUE may remain quiet unless the exact task contract requires a notification.
 
 ## Completion
 
 For each valid terminal event:
-- at most one Strategy Review;
+- at most one deep Strategy Review, only when required;
+- exactly one continuation disposition;
 - at most one next dispatch;
-- one STRATEGY_REVIEWED receipt;
-- concise user notification;
+- one STRATEGY_CONTROL_REVIEWED receipt;
+- concise notification only when required;
 - stop.
 
 NO ROADMAP CHANGE REQUIRED merely to operate this control plane.
