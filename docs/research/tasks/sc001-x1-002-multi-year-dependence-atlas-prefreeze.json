@@ -1,0 +1,179 @@
+{
+  "schema": "sc001.x1_multi_year_dependence_atlas_prefreeze_task.v0.1",
+  "task_id": "SC001-X1-002",
+  "worker_id": "X1_CROSS_ASSET_STRUCTURE",
+  "authorization_class": "DESIGN_ONLY",
+  "task_subclass": "MULTI_YEAR_DEPENDENCE_ATLAS_PREFREEZE",
+  "priority": 1,
+  "purpose": "Freeze the complete pre-outcome v0.1 design for a multi-year cross-asset dependence and predictive lead-lag atlas. The task may reason from canonical governance and source semantics only; it may not open market-data bodies, compute correlations/returns, select pairs/lags from outcomes, or launch any execution.",
+  "dispatch_base_head": "c65021d200b417bda7cd24f64a1bca48c7c2bb89",
+  "architecture_version": "0.3",
+  "adaptive_discovery_generated": true,
+  "strategy_basis": "docs/research/sc001-h1-x1-historical-research-program-strategy-v0.1.md",
+  "frozen_manager_constraints": {
+    "physical_source_class": "Binance USD-M perpetual public historical completed 1m klines unless later mechanical Shared Historical Backbone qualification proves exact semantic incompatibility",
+    "exact_resource_binding": "RESOURCE_ID/DERIVED_ID are not chosen in this task. Freeze the deterministic source/universe/partition identity rule now; H1-004/shared-backbone qualification may later bind exact IDs mechanically without outcome-driven design changes.",
+    "base_resolution": "1m completed causal bars for broad atlas",
+    "fixed_anchor_track": [
+      "BTCUSDT",
+      "ETHUSDT"
+    ],
+    "broad_network_track": "descriptive/calibration and survivor selection only; no direct promotional claim",
+    "pnl_authorized": false,
+    "broad_p_value_leaderboard_allowed": false,
+    "full_history_factor_lookahead_allowed": false,
+    "same_evidence_selection_and_confirmation_allowed": false,
+    "high_resolution_full_universe_acquisition_allowed": false,
+    "total_survivor_budget_max": 4,
+    "broad_network_survivor_budget_max": 2,
+    "anchor_track_survivor_budget_max": 2,
+    "high_resolution_escalation_survivor_budget_max": 2
+  },
+  "design_requirements": [
+    "Freeze an outcome-blind universe rule compatible with one shared Historical Data Backbone and point-in-time instrument membership. Do not select nodes by observed predictive performance, best correlation, best lag, or historical PnL.",
+    "Freeze the exact historical cutoff and a deterministic rule for the longest eligible common contiguous span. Do not choose a favorable start date after outcomes.",
+    "Freeze development/selection versus untouched chronological holdout and an outcome-blind node/asset holdout or equivalent reserve. Atlas Selection data may never become X1 Confirmation.",
+    "Freeze the exact completed-bar causal clock, missingness/gap handling and no-forward-fill rule.",
+    "Freeze a small directed lag-profile design. It may use a small predeclared set of lags or lag bands, but it must not authorize unrestricted best-lag mining or post-outcome lag refinement on the same evidence.",
+    "Freeze one primary linear dependence/predictive metric and at most one simple robustness metric. Do not add nonlinear methods, transfer entropy, broad Granger grids or ML.",
+    "Freeze a causal own-history and market/common-factor control using only past/rolling/expanding parameters. Full-history PCA/beta/factor estimation applied backward is forbidden.",
+    "Freeze rolling/time-stability views and the exact search ledger fields so every directed pair/lag/band/regime inspected is recorded.",
+    "Freeze Track A with BTCUSDT and ETHUSDT as the only anchors in v0.1. No anchors may be added after outcomes without a new version and fresh evidence.",
+    "Freeze Track B broad-network outputs as descriptive/calibration. Any selected relationship is ADAPTIVE_DISCOVERY_GENERATED and requires untouched validation.",
+    "Freeze one bounded shock-conditioned propagation design based on a causal leader return shock; optionally one activity/volume-conditioned companion is permitted only if its exact formula and thresholding rule are fixed now. No threshold ladder.",
+    "Freeze survivor selection rules that use predeclared stability/incremental-information criteria rather than a p-value leaderboard. Enforce max 4 total survivors, max 2 from broad network and max 2 from anchor track.",
+    "Freeze the rule for choosing one actionable horizon per selected relationship before holdout. The holdout may not be used to pick the horizon.",
+    "Freeze high-resolution escalation: at most 2 frozen holdout survivors may later move from 1m to 1s/trades, only to test temporal ordering, stale-print/asynchronous-sampling artifacts and actionable lag. This task authorizes no such data access.",
+    "Freeze terminal semantics that separate descriptive dependence, predictive incremental support, shock-propagation support, holdout eligibility, and no-survivor/defer states. None is a trading-candidate promotion by itself.",
+    "Explicitly preserve C4/C6 and X1-001 terminal conclusions: the atlas is a broader descriptive/predictive research program, not same-evidence rescue of those tested architectures."
+  ],
+  "canonical_refs": [
+    "docs/research/sc001-x1-cross-asset-project-instructions-v0.1.md",
+    "docs/research/sc001-x1-work-event-trigger-instructions-v0.1.md",
+    "docs/research/sc001-h1-x1-historical-research-program-strategy-v0.1.md",
+    "docs/research/sc001-cross-asset-information-transfer-landscape-v0.1.md",
+    "docs/research/sc001-cross-asset-source-and-clock-feasibility-v0.1.md",
+    "docs/research/sc001-shared-data-and-resource-coordination-v0.1.md",
+    "docs/research/sc001-midcourse-research-strategy-audit-and-governance-amendment-v0.2.md",
+    "docs/research/sc001-contamination-registry-v0.41.json",
+    "docs/research/sc001-reusable-market-building-blocks-registry-v0.9.md",
+    "docs/research/sc001-execution-worker-routing-and-automation-architecture-v0.3.md",
+    "docs/research/sc001-worker-result-manifest-schema-v0.1.json"
+  ],
+  "allowed_tools": {
+    "github": {
+      "read": true,
+      "write_task_branch_only": true,
+      "allowed_writes": [
+        "exact_result_path",
+        "worker_result_manifest_path",
+        "task PR claim/terminal receipt"
+      ]
+    },
+    "botmarketplace_github_control": {
+      "read_only": true,
+      "write_allowed": false
+    },
+    "botmarketplace_vps_reader": {
+      "allowed": false
+    },
+    "botmarketplace_test_executor": {
+      "allowed": false
+    },
+    "botmarketplace_runner_probe": {
+      "allowed": false
+    }
+  },
+  "forbidden_actions": [
+    "market-data body access",
+    "market-row parsing",
+    "return/correlation/lag-return/PnL computation",
+    "protected/raw outcome access",
+    "P1 prospective/raw evidence access",
+    "network/source acquisition",
+    "Test Executor launch",
+    "Runner bundle creation/sealing/execution",
+    "VPS browsing",
+    "collector access or mutation",
+    "best-pair search",
+    "best-lag search",
+    "broad p-value leaderboard",
+    "post-outcome anchor addition",
+    "threshold ladder",
+    "unrestricted regime search",
+    "full-history factor lookahead",
+    "same-evidence rescue of C4/C6 or X1-001",
+    "high-resolution data acquisition",
+    "roadmap/governance/Strategy State/contamination/reusable-registry mutation",
+    "merge/close/retarget/auto-merge/branch deletion"
+  ],
+  "exact_result_path": "docs/research/sc001-x1-multi-year-dependence-atlas-prefreeze-v0.1.md",
+  "worker_result_manifest_path": "docs/research/worker-results/sc001-x1-multi-year-dependence-atlas-prefreeze-manifest-v0.1.json",
+  "result_requirements": {
+    "required_sections": [
+      "SOURCE / RESOURCE BINDING RULE",
+      "OUTCOME-BLIND UNIVERSE",
+      "HISTORICAL CUTOFF / PARTITIONS",
+      "CAUSAL CLOCK / MISSINGNESS",
+      "TRACK A — BTC/ETH ANCHORS",
+      "TRACK B — BROAD NETWORK",
+      "LAG PROFILE",
+      "PRIMARY / ROBUSTNESS METRICS",
+      "CAUSAL COMMON-FACTOR CONTROL",
+      "ROLLING STABILITY / SEARCH LEDGER",
+      "SHOCK-CONDITIONED DESIGN",
+      "SURVIVOR BUDGET / SELECTION",
+      "UNTOUCHED HOLDOUT",
+      "HIGH-RESOLUTION ESCALATION",
+      "TERMINAL DECISION SEMANTICS",
+      "CONTAMINATION / MULTIPLICITY",
+      "DO NOT DO",
+      "TERMINAL DISPOSITION"
+    ],
+    "required_safety_receipts": [
+      "outcome_accessed=false",
+      "protected_evidence_accessed=false",
+      "market_rows_read=false",
+      "network_accessed=false",
+      "test_executor_job_launched=false",
+      "runner_bundle_created=false",
+      "runner_bundle_executed=false",
+      "vps_data_read=false",
+      "collector_changed=false"
+    ]
+  },
+  "terminal_status_values": [
+    "X1_ATLAS_PREFREEZE_READY_FOR_STRATEGY",
+    "X1_ATLAS_PREFREEZE_STRATEGY_ATTENTION_REQUIRED",
+    "X1_ATLAS_PREFREEZE_BLOCKED_SOURCE_IDENTITY_RULE",
+    "X1_ATLAS_PREFREEZE_BLOCKED_SCOPE",
+    "STALE_CONTEXT_REVALIDATION_REQUIRED"
+  ],
+  "terminal_rule": "Persist exact_result_path first, verify it, refresh/revalidate current main and the exact task, then create/update worker_result_manifest_path LAST as the final repository artifact. After the manifest, write exactly one terminal PR receipt with CONTINUATION_REVIEW_REQUIRED: true and STRATEGY_REVIEW_REQUIRED: true, then stop.",
+  "strategy_review_required": true,
+  "continuation_review_required": true,
+  "merge_authorized": false,
+  "shared_state_write_authorized": false,
+  "max_executions": 0,
+  "max_network_runs": 0,
+  "max_new_canonical_files": 2,
+  "max_changed_task_local_files": 2,
+  "max_repository_commits_by_worker": 3,
+  "repair_mode": "NONE",
+  "max_repair_cycles": 0,
+  "variant_budget": {
+    "anchors": 2,
+    "total_survivors": 4,
+    "broad_network_survivors": 2,
+    "anchor_track_survivors": 2,
+    "high_resolution_survivors": 2,
+    "primary_metrics": 1,
+    "robustness_metrics": 1,
+    "shock_definitions": 1,
+    "optional_activity_conditioned_companion": 1,
+    "nonlinear_methods": 0,
+    "p_value_leaderboards": 0,
+    "best_pair_searches": 0,
+    "unrestricted_lag_searches": 0
+  }
+}
