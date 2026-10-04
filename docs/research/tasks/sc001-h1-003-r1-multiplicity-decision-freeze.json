@@ -1,0 +1,186 @@
+{
+  "schema": "sc001.h1_r1_multiplicity_decision_freeze_task.v0.1",
+  "task_id": "SC001-H1-003",
+  "worker_id": "H1_HISTORICAL_INDICATORS",
+  "authorization_class": "DESIGN_ONLY",
+  "task_subclass": "R1_MULTIPLICITY_DECISION_FREEZE",
+  "priority": 1,
+  "purpose": "Freeze the exact pre-outcome family-wise inference and terminal decision rule for the already-frozen H1 Benchmark v0.1 directional R1 family. No market-data body, return, alpha, PnL, source acquisition, parameter search or implementation execution is permitted.",
+  "dispatch_base_head": "c65021d200b417bda7cd24f64a1bca48c7c2bb89",
+  "architecture_version": "0.3",
+  "adaptive_discovery_generated": true,
+  "strategy_basis": "docs/research/sc001-h1-x1-historical-research-program-strategy-v0.1.md",
+  "immutable_r1_family": [
+    {
+      "feature_id": "H1-BM-P1-LOC20-v0.1",
+      "horizon_minutes": 3,
+      "orientation": "REVERSION",
+      "oriented_feature_rule": "NEGATE_RAW_FEATURE_FOR_POSITIVE_ASSOCIATION_TEST"
+    },
+    {
+      "feature_id": "H1-BM-P2-MASPREAD-8-32-v0.1",
+      "horizon_minutes": 8,
+      "orientation": "CONTINUATION",
+      "oriented_feature_rule": "RAW_FEATURE"
+    },
+    {
+      "feature_id": "H1-BM-P2-SIGNPERSIST16-v0.1",
+      "horizon_minutes": 4,
+      "orientation": "CONTINUATION",
+      "oriented_feature_rule": "RAW_FEATURE"
+    },
+    {
+      "feature_id": "H1-BM-P7-MEDDEV20-v0.1",
+      "horizon_minutes": 5,
+      "orientation": "REVERSION",
+      "oriented_feature_rule": "NEGATE_RAW_FEATURE_FOR_POSITIVE_ASSOCIATION_TEST"
+    }
+  ],
+  "family_wise_freeze": {
+    "hypothesis_count": 4,
+    "family_membership_mutable": false,
+    "familywise_error_rate_alpha": 0.05,
+    "multiple_testing_procedure": "HOLM_BONFERRONI_STEP_DOWN",
+    "hypothesis_sidedness": "ONE_SIDED_PREORIENTED_POSITIVE_ASSOCIATION",
+    "post_outcome_sign_flip_allowed": false,
+    "post_outcome_horizon_change_allowed": false,
+    "post_outcome_family_redefinition_allowed": false,
+    "substitution_rule": "If the worker finds a concrete validity defect that makes Holm over the proposed marginal tests invalid or uninterpretable, do not substitute a more adaptive procedure. Return H1_R1_MULTIPLICITY_FREEZE_STRATEGY_ATTENTION_REQUIRED."
+  },
+  "design_requirements": [
+    "Verify the four-member R1 family, formulas, horizons and role eligibility exactly against the benchmark design and variant ledger; do not add or remove a member.",
+    "Freeze one exact threshold-free primary effect statistic suitable for continuous oriented features and fixed-horizon forward response. It must not require outcome-chosen cutoffs or winner ranking.",
+    "Freeze the exact primary inference/block unit and a dependence-valid marginal p-value construction. Event/minute rows may not be treated as IID. Cross-asset/common-day dependence must be addressed explicitly.",
+    "Use Holm-Bonferroni family-wise control at alpha=0.05 across exactly the four preoriented hypotheses. Do not replace Holm with max-stat/stepdown/bootstrap multiplicity unless this task returns Strategy Attention instead of silently changing the manager instruction.",
+    "Freeze exact null/alternative semantics for each family member after applying the stated orientation. No two-sided post-hoc reinterpretation and no sign rescue.",
+    "Freeze exact missing-block / insufficient-breadth / degenerate-statistic handling before outcomes.",
+    "Freeze family-level terminal semantics that distinguish: no discovery support, one-or-more multiplicity-controlled discovery-support members, inference/data invalid or insufficient, and stale-context review. A positive family result is Discovery support only, never Confirmation or promotion.",
+    "Require full disclosure of all four member results and adjusted decisions; no best-feature leaderboard or winner-only reporting.",
+    "State explicitly that R2/R3/R4/R6-only variants are outside this directional family and receive no standalone directional claim.",
+    "State explicitly that any later positive member remains ADAPTIVE_DISCOVERY_GENERATED and requires independent asset/time Confirmation before promotional interpretation."
+  ],
+  "preferred_statistical_posture": {
+    "simplicity_first": true,
+    "threshold_free": true,
+    "block_level_inference": true,
+    "acceptable_examples_for_consideration_only": [
+      "calendar-block aggregated rank association with a predeclared dependence-valid resampling/test",
+      "calendar-block aggregated oriented signed response with a predeclared dependence-valid resampling/test"
+    ],
+    "forbidden_interpretation": "Examples are not permission to inspect outcomes or try multiple statistics and keep the best. Select and freeze exactly one statistic/marginal test from theory and governance only."
+  },
+  "canonical_refs": [
+    "docs/research/sc001-h1-historical-indicators-project-instructions-v0.1.md",
+    "docs/research/sc001-h1-work-event-trigger-instructions-v0.1.md",
+    "docs/research/sc001-h1-x1-historical-research-program-strategy-v0.1.md",
+    "docs/research/sc001-historical-indicator-benchmark-batch-design-v0.1.md",
+    "docs/research/sc001-historical-indicator-benchmark-variant-ledger-v0.1.json",
+    "docs/research/sc001-feature-indicator-research-governance-v0.1.md",
+    "docs/research/sc001-incremental-feature-testing-protocol-v0.1.md",
+    "docs/research/sc001-midcourse-research-strategy-audit-and-governance-amendment-v0.2.md",
+    "docs/research/sc001-contamination-registry-v0.41.json",
+    "docs/research/sc001-execution-worker-routing-and-automation-architecture-v0.3.md",
+    "docs/research/sc001-worker-result-manifest-schema-v0.1.json"
+  ],
+  "allowed_tools": {
+    "github": {
+      "read": true,
+      "write_task_branch_only": true,
+      "allowed_writes": [
+        "exact_result_path",
+        "worker_result_manifest_path",
+        "task PR claim/terminal receipt"
+      ]
+    },
+    "botmarketplace_github_control": {
+      "read_only": true,
+      "write_allowed": false
+    },
+    "botmarketplace_vps_reader": {
+      "allowed": false
+    },
+    "botmarketplace_test_executor": {
+      "allowed": false
+    },
+    "botmarketplace_runner_probe": {
+      "allowed": false
+    }
+  },
+  "forbidden_actions": [
+    "market-data body access",
+    "market-row parsing",
+    "return/alpha/PnL computation",
+    "protected/raw outcome access",
+    "P1 prospective/raw evidence access",
+    "network/source acquisition",
+    "Test Executor launch",
+    "Runner bundle creation/sealing/execution",
+    "VPS browsing",
+    "collector access or mutation",
+    "new feature variant creation",
+    "parameter search",
+    "alternate horizon search",
+    "symbol subset search",
+    "hour/session search",
+    "venue search",
+    "threshold search",
+    "post-outcome sign/orientation change",
+    "roadmap/governance/Strategy State/contamination/reusable-registry mutation",
+    "merge/close/retarget/auto-merge/branch deletion"
+  ],
+  "exact_result_path": "docs/research/sc001-h1-r1-multiplicity-and-decision-freeze-v0.1.md",
+  "worker_result_manifest_path": "docs/research/worker-results/sc001-h1-r1-multiplicity-decision-freeze-manifest-v0.1.json",
+  "result_requirements": {
+    "required_sections": [
+      "FROZEN R1 FAMILY",
+      "ORIENTATION / HYPOTHESES",
+      "PRIMARY EFFECT STATISTIC",
+      "DEPENDENCE / INFERENCE UNIT",
+      "MARGINAL TEST CONSTRUCTION",
+      "HOLM FWER PROCEDURE",
+      "MISSINGNESS / INVALID BLOCKS",
+      "FAMILY TERMINAL DECISION SEMANTICS",
+      "CONTAMINATION / EVIDENCE CLASS",
+      "DO NOT DO",
+      "TERMINAL DISPOSITION"
+    ],
+    "required_safety_receipts": [
+      "outcome_accessed=false",
+      "protected_evidence_accessed=false",
+      "market_rows_read=false",
+      "network_accessed=false",
+      "test_executor_job_launched=false",
+      "runner_bundle_created=false",
+      "runner_bundle_executed=false",
+      "vps_data_read=false",
+      "collector_changed=false"
+    ]
+  },
+  "terminal_status_values": [
+    "H1_R1_MULTIPLICITY_FREEZE_READY_FOR_STRATEGY",
+    "H1_R1_MULTIPLICITY_FREEZE_STRATEGY_ATTENTION_REQUIRED",
+    "H1_R1_MULTIPLICITY_FREEZE_BLOCKED_SCOPE",
+    "STALE_CONTEXT_REVALIDATION_REQUIRED"
+  ],
+  "terminal_rule": "Persist exact_result_path first, verify it, refresh/revalidate current main and the exact task, then create/update worker_result_manifest_path LAST as the final repository artifact. After the manifest, write exactly one terminal PR receipt with CONTINUATION_REVIEW_REQUIRED: true and STRATEGY_REVIEW_REQUIRED: true, then stop.",
+  "strategy_review_required": true,
+  "continuation_review_required": true,
+  "merge_authorized": false,
+  "shared_state_write_authorized": false,
+  "max_executions": 0,
+  "max_network_runs": 0,
+  "max_new_canonical_files": 2,
+  "max_changed_task_local_files": 2,
+  "max_repository_commits_by_worker": 3,
+  "repair_mode": "NONE",
+  "max_repair_cycles": 0,
+  "variant_budget": {
+    "new_feature_variants": 0,
+    "parameterizations": 0,
+    "alternate_horizons": 0,
+    "symbol_subset_alternatives": 0,
+    "hour_session_filters": 0,
+    "alternate_venues": 0,
+    "alternate_primary_statistics_after_freeze": 0
+  }
+}
