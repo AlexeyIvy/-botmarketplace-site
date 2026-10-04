@@ -1,6 +1,7 @@
 # SC001 — P1 Work Event Trigger Instructions v0.1
 
 Date: 2026-10-04
+Revision: 2026-10-04 — TERMINAL CONTINUATION CONTRACT HARDENING
 Status: OPERATIONAL TRIGGER CONTRACT / NO RESEARCH AUTHORIZATION BY ITSELF
 Worker: P1_PROSPECTIVE_EVENT
 Repository: AlexeyIvy/-botmarketplace-site
@@ -40,14 +41,26 @@ If exact event/PR identity is unavailable, stop. Do not search for a replacement
 10. If strategy-relevant, create/update Worker Result Manifest LAST as the final repository artifact.
 11. Write one terminal PR receipt and stop.
 
-For a strategy-relevant task, terminal receipt must:
-- start exactly with `TERMINAL RECEIPT —`;
-- contain exactly `STRATEGY_REVIEW_REQUIRED: true`;
-- include TASK_ID, WORKER_ID, TERMINAL_STATUS, MANIFEST_PATH and MANIFEST_SHA256.
+## Terminal receipt contract
 
-For a non-strategy-relevant task, use:
-- `STRATEGY_REVIEW_REQUIRED: false`
-so Strategy Control ignores it.
+Every terminal P1 event must:
+- start exactly with TERMINAL RECEIPT —;
+- include TASK_ID, WORKER_ID and TERMINAL_STATUS;
+- contain exactly CONTINUATION_REVIEW_REQUIRED: true;
+- contain exactly one STRATEGY_REVIEW_REQUIRED line whose value is true or false.
+
+For a strategy-relevant task:
+- STRATEGY_REVIEW_REQUIRED: true
+- include MANIFEST_PATH and MANIFEST_SHA256;
+- Worker Result Manifest remains the final repository artifact before the terminal receipt.
+
+For a non-strategy-relevant task:
+- STRATEGY_REVIEW_REQUIRED: false
+- CONTINUATION_REVIEW_REQUIRED remains true;
+- a Worker Result Manifest is not required unless the exact task contract separately requires one.
+
+A non-strategy terminal is therefore still visible to Strategy Control for bounded continuation classification.
+Do not suppress it merely because deep Strategy Review is unnecessary.
 
 ## Hard safety
 
