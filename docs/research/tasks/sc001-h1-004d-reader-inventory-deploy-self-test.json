@@ -1,0 +1,30 @@
+{
+  "schema": "sc001.h1_reader_inventory_deploy_self_test_task.v0.1",
+  "task_id": "SC001-H1-004D",
+  "owner": "SC001_STRATEGY_MANAGER",
+  "authorization_class": "T0_OFFLINE_SYNTHETIC_TEST_ONLY",
+  "purpose": "Run exactly one offline synthetic self-test of the canonical H1 historical-inventory Reader deployment helper after merge.",
+  "canonical_parent_merge": "41c600c77d458a15aa51be86d62d3ab74fd4faf2",
+  "implementation_path": "scripts/research/deploy-sc001-historical-inventory-reader-root-v0.1.py",
+  "implementation_sha256": "844be3d86bdb69991e93de176422ef73a23e0578a263caf2f0f1c2b738619f4f",
+  "exact_execution": {
+    "plane": "BotMarketplace Test Executor",
+    "network_profile": "offline",
+    "entrypoint": "scripts/research/deploy-sc001-historical-inventory-reader-root-v0.1.py",
+    "args": ["--self-test"],
+    "max_runs": 1,
+    "timeout_seconds": 60
+  },
+  "forbidden_actions": [
+    "--apply",
+    "real /home/botmarket/sc001_data access",
+    "Reader config access or mutation",
+    "VPS browsing",
+    "systemd/collector mutation",
+    "network access",
+    "market/outcome access",
+    "Runner use"
+  ],
+  "success_token": "SELF_TEST_PASS",
+  "allowed_claim": "A PASS establishes synthetic installer behavior only. It authorizes no real host mutation or Reader configuration change."
+}
