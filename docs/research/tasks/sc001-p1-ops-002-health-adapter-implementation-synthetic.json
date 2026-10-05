@@ -16,6 +16,7 @@
     "Validate bounded JSON size, regular-file identity, no symlink substitution, exact expected stage/schema/version semantics and strict scalar types. Missing/permission/malformed/type mismatch fail closed to bounded error enums.",
     "Do not default absent counters to zero. Preserve UNKNOWN/unavailable states.",
     "Heartbeat freshness uses last_heartbeat_ms only; never substitute last_message_ms. Future heartbeat is anomalous, not fresh.",
+    "Use the prospectively frozen HEARTBEAT_STALE_AFTER_MS=90000 exactly; do not tune it after synthetic or live observations.",
     "Systemd process-state query, if implemented, must use a fixed argument vector and fixed unit; no shell and no service-control verbs.",
     "No writes/chmod/chown, no collector signals, no restart/daemon-reload, no sockets/network.",
     "Provide synthetic validation for allowlist leakage, stale/future heartbeat semantics, malformed/oversized/wrong-version/type errors, symlink/FIFO/nonregular rejection, fixed-unit/path behavior, and isolation from raw/event/log/network/service-control access."
@@ -75,5 +76,7 @@
   "max_network_runs": 0,
   "repair_mode": "AUTO_PRE_OUTCOME",
   "max_repair_cycles": 1,
-  "terminal_rule": "Persist implementation and test before execution. Run only the exact offline synthetic test. Persist the exact result document last among repository artifacts, then write one terminal receipt with CONTINUATION_REVIEW_REQUIRED: true and STRATEGY_REVIEW_REQUIRED: false. Stop."
+  "terminal_rule": "Persist implementation and test before execution. Run only the exact offline synthetic test. Persist the exact result document last among repository artifacts, then write one terminal receipt with CONTINUATION_REVIEW_REQUIRED: true and STRATEGY_REVIEW_REQUIRED: false. Stop.",
+  "heartbeat_stale_after_ms": 90000,
+  "heartbeat_stale_threshold_rationale": "Prospectively frozen before any live/protected access: 60s collector stale-connection bound + 30s heartbeat margin. This is an operational visibility threshold only, not evidence eligibility."
 }
