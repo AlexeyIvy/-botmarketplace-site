@@ -2,12 +2,12 @@
   "schema": "sc001.p1_health_adapter_implementation_synthetic_task.v0.1",
   "task_id": "SC001-P1-OPS-002",
   "worker_id": "P1_PROSPECTIVE_EVENT",
-  "authorization_class": "T0_REPOSITORY_IMPLEMENTATION_AND_OFFLINE_SYNTHETIC_VALIDATION",
+  "authorization_class": "T0_REPOSITORY_IMPLEMENTATION_AND_SYNTHETIC_TEST_PREP",
   "task_subclass": "COLLECTOR_HEALTH_ADAPTER_IMPLEMENTATION_SYNTHETIC",
   "priority": 0,
   "dispatch_base_head": "d4221a2d7b1ac13c2afc7f10cef1d5c645a6d05b",
   "architecture_version": "0.3",
-  "purpose": "Implement the fixed-purpose B13-C operational-health adapter defined by SC001-P1-OPS-001 and validate it only against synthetic fixtures. Do not deploy it and do not read any live collector state.",
+  "purpose": "Implement the fixed-purpose B13-C operational-health adapter and prepare its synthetic test fixture. Do not execute the Test Executor until the implementation/test are reviewed and merged to canonical main.",
   "parent_result": "docs/research/sc001-p1-collector-health-visibility-recovery-design-v0.1.md",
   "implementation_requirements": [
     "Expose no arbitrary path/unit/command selector to the caller.",
@@ -27,10 +27,11 @@
     "docs/research/sc001-p1-collector-health-adapter-static-synthetic-result-v0.1.md"
   ],
   "exact_test_execution": {
+    "status": "DEFERRED_UNTIL_CANONICAL_MAIN",
     "plane": "BotMarketplace Test Executor",
     "network_profile": "offline",
     "entrypoint": "tests/research/sc001_b13c_health_adapter_synthetic_test_v0_1.py",
-    "max_runs": 2,
+    "max_runs_after_merge": 1,
     "timeout_seconds": 120
   },
   "allowed_tools": {
@@ -55,16 +56,14 @@
   ],
   "result_requirements": [
     "Exact implementation/test hashes",
-    "Offline Test Executor job id(s) and exit/log result",
-    "Allowlist and negative-isolation checks",
-    "Safety receipts confirming no live/protected/collector access",
-    "Explicit statement that PASS authorizes no deployment or live read",
-    "Exact residual host-side/T3 requirements if any"
+    "Static review that the test fixture covers allowlist leakage, heartbeat semantics, malformed/oversized/wrong-identity/type failures, nonregular/symlink rejection, fixed-unit/path behavior, and isolation boundaries",
+    "Safety receipts confirming no live/protected/collector/Test Executor access",
+    "Explicit statement that implementation-prep PASS authorizes no deployment or live read",
+    "Exact next action: Strategy Manager review/merge, then one separately authorized offline Test Executor run from canonical main"
   ],
   "terminal_status_values": [
-    "P1_HEALTH_ADAPTER_SYNTHETIC_PASS",
-    "P1_HEALTH_ADAPTER_SYNTHETIC_FAIL",
-    "P1_HEALTH_ADAPTER_BLOCKED_SCOPE",
+    "P1_HEALTH_ADAPTER_IMPLEMENTATION_READY_FOR_REVIEW",
+    "P1_HEALTH_ADAPTER_IMPLEMENTATION_BLOCKED_SCOPE",
     "STALE_CONTEXT_REVALIDATION_REQUIRED"
   ],
   "strategy_review_required": false,
@@ -72,11 +71,11 @@
   "merge_authorized": false,
   "max_new_canonical_files": 3,
   "max_repository_commits_by_worker": 4,
-  "max_test_executor_runs": 2,
+  "max_test_executor_runs": 0,
   "max_network_runs": 0,
   "repair_mode": "AUTO_PRE_OUTCOME",
   "max_repair_cycles": 1,
-  "terminal_rule": "Persist implementation and test before execution. Run only the exact offline synthetic test. Persist the exact result document last among repository artifacts, then write one terminal receipt with CONTINUATION_REVIEW_REQUIRED: true and STRATEGY_REVIEW_REQUIRED: false. Stop.",
+  "terminal_rule": "Persist implementation and synthetic test fixture. Do not launch Test Executor in this task. Persist the exact result document last among repository artifacts, then write one terminal receipt with CONTINUATION_REVIEW_REQUIRED: true and STRATEGY_REVIEW_REQUIRED: false. Stop.",
   "heartbeat_stale_after_ms": 90000,
   "heartbeat_stale_threshold_rationale": "Prospectively frozen before any live/protected access: 60s collector stale-connection bound + 30s heartbeat margin. This is an operational visibility threshold only, not evidence eligibility."
 }
