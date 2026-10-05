@@ -1,0 +1,72 @@
+{
+  "schema": "sc001.h1_reader_inventory_deploy_prep_task.v0.1",
+  "task_id": "SC001-H1-004C",
+  "worker_id": "H1_HISTORICAL_INDICATORS",
+  "authorization_class": "DESIGN_ONLY_REPOSITORY_IMPLEMENTATION",
+  "task_subclass": "HISTORICAL_INVENTORY_READER_DEPLOY_PREP",
+  "priority": 1,
+  "dispatch_base_head": "d4221a2d7b1ac13c2afc7f10cef1d5c645a6d05b",
+  "purpose": "Prepare one auditable root-run installer that, only when explicitly executed later, publishes the already-tested metadata-only SC001 inventory and adds only that published directory as a Reader root. Do not execute or deploy it in this task.",
+  "exact_implementation_path": "scripts/research/deploy-sc001-historical-inventory-reader-root-v0.1.py",
+  "frozen_identities": {
+    "source_root": "/home/botmarket/sc001_data",
+    "exporter_path": "scripts/research/export-sc001-data-metadata-inventory-v0.1.py",
+    "exporter_sha256": "a6806038c986c9f17ba40cfd41cbdafe2ebb04355ae3537aac4437ae1a018f21",
+    "published_dir": "/var/lib/botmarket-research/published/sc001_historical_inventory",
+    "inventory_path": "/var/lib/botmarket-research/published/sc001_historical_inventory/inventory-v0.1.json",
+    "reader_config": "/etc/botmarket-research/reader-roots.json",
+    "reader_root_name": "sc001_historical_inventory",
+    "reader_service_user": "botmarket-mcp",
+    "reader_group": "botmarket-reader"
+  },
+  "implementation_requirements": [
+    "Require an explicit --apply flag for real host mutation; default invocation must not mutate.",
+    "Provide a --self-test using only temporary synthetic directories/config and never reference the real source root.",
+    "On --apply require effective uid 0 and exact exporter SHA256 match.",
+    "Never expose /home/botmarket/sc001_data itself as a Reader root.",
+    "Run the frozen exporter only with the exact fixed source root and fixed inventory output; no arbitrary source/output CLI values.",
+    "Create/preserve the published directory with Reader-readable least privilege and make only inventory-v0.1.json readable by the Reader group.",
+    "Load reader-roots.json, require schema_version=1 and a roots object, preserve every existing root unchanged, and add sc001_historical_inventory={path: published_dir, mode: read_only}. If that name already exists with a different spec, fail closed.",
+    "Write reader-roots.json atomically while preserving its existing uid/gid/mode. No backup containing secrets/config values may be copied to GitHub.",
+    "Do not restart or mutate systemd. Reader server reloads roots config on each call, so no service restart is required.",
+    "Do not chmod/chown or otherwise modify anything inside /home/botmarket/sc001_data.",
+    "Print only bounded success/failure tokens and metadata counts; no inventory contents."
+  ],
+  "allowed_writes": [
+    "exact_implementation_path",
+    "task PR claim/terminal receipt"
+  ],
+  "allowed_tools": {
+    "github_task_branch": true,
+    "github_control_read_only": true,
+    "test_executor": false,
+    "vps_reader": false,
+    "runner": false
+  },
+  "forbidden_actions": [
+    "running --apply",
+    "real SC001 data access",
+    "Reader config access or mutation",
+    "VPS browsing",
+    "systemd mutation/restart",
+    "collector access/mutation",
+    "network/source acquisition",
+    "market/outcome access",
+    "Test Executor job",
+    "Runner use",
+    "roadmap/governance mutation",
+    "merge/close/retarget/auto-merge/branch deletion"
+  ],
+  "terminal_status_values": [
+    "H1_READER_INVENTORY_DEPLOY_PREP_READY_FOR_REVIEW",
+    "H1_READER_INVENTORY_DEPLOY_PREP_BLOCKED_SCOPE",
+    "STALE_CONTEXT_REVALIDATION_REQUIRED"
+  ],
+  "continuation_review_required": true,
+  "strategy_review_required": false,
+  "merge_authorized": false,
+  "max_new_canonical_files": 1,
+  "max_repository_commits_by_worker": 2,
+  "max_executions": 0,
+  "next_after_pass": "Strategy Manager static-reviews and canonicalizes the installer, then the exact host-side --apply action remains a USER_GATE_REQUIRED/manual-host action because no connected tool has host config mutation authority."
+}
