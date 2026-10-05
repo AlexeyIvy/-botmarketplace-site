@@ -1,0 +1,141 @@
+{
+  "schema": "sc001.p1_collector_health_visibility_design_task.v0.1",
+  "task_id": "SC001-P1-OPS-001",
+  "origin_issue": 420,
+  "worker_id": "P1_PROSPECTIVE_EVENT",
+  "authorization_class": "DESIGN_ONLY",
+  "authorization_tier": "T0",
+  "task_subclass": "COLLECTOR_HEALTH_VISIBILITY_DESIGN",
+  "priority": 0,
+  "dispatch_base_head": "67559b5f837443eb11eb7420a10507471797eacb",
+  "architecture_version": "0.3",
+  "purpose": "Design the smallest safe read-only interface for B13-C collector operational health visibility through the active frozen window without opening protected/raw outcomes and without mutating or restarting the collector.",
+  "canonical_refs": [
+    "docs/research/sc001-p1-prospective-event-project-instructions-v0.1.md",
+    "docs/research/sc001-p1-work-event-trigger-instructions-v0.1.md",
+    "docs/research/sc001-execution-worker-routing-and-automation-architecture-v0.3.md",
+    "docs/research/sc001-delegated-user-authorization-policy-v0.2.md",
+    "docs/research/sc001-user-delegated-authorization-ratification-v0.1.json",
+    "docs/research/sc001-shared-data-and-resource-coordination-v0.1.md",
+    "docs/research/sc001-implementation-debugging-and-repair-control-v0.1.md"
+  ],
+  "known_incident": {
+    "job_id": "job_20261001T182200Z_53ef4eb0",
+    "failure": "PermissionError on /home/botmarket/sc001_data/SC001_B13C_PROSPECTIVE_LIQUIDATIONS/collector_state.json before collector state was read"
+  },
+  "required_work": [
+    "Inspect only canonical collector protocol/code and existing monitoring scripts needed to explain the known read-only visibility failure.",
+    "Determine whether an already-existing safe read-only operational interface can expose process/running state, connection state, heartbeat freshness, qualified-symbol count, reconnect diagnostics and process-gap diagnostics without exposing protected event/outcome content.",
+    "If no safe interface already exists, specify the smallest implementation/permission/interface change needed, but do not execute it.",
+    "Define a synthetic/offline validation path for the proposed interface.",
+    "State the exact next authorization tier if implementation or permission mutation is required."
+  ],
+  "allowed_tools": {
+    "github": {
+      "read": true,
+      "write_task_branch_only": true,
+      "allowed_writes": [
+        "exact_result_path",
+        "task PR claim block",
+        "task PR terminal state",
+        "one terminal receipt comment"
+      ]
+    },
+    "botmarketplace_github_control": {
+      "read_only": true,
+      "write_allowed": false
+    },
+    "botmarketplace_test_executor": {
+      "info_read_allowed": false,
+      "job_launch_allowed": false
+    },
+    "botmarketplace_runner_probe": {
+      "info_read_allowed": false,
+      "bundle_creation_allowed": false,
+      "bundle_execution_allowed": false,
+      "job_artifact_read_allowed": false
+    },
+    "botmarketplace_vps_reader": {
+      "list_roots_allowed": false,
+      "list_files_allowed": false,
+      "read_text_allowed": false
+    }
+  },
+  "allowed_health_fields": [
+    "process/running state",
+    "connection state",
+    "heartbeat freshness",
+    "qualified-symbol count",
+    "reconnect diagnostics",
+    "process-gap diagnostics"
+  ],
+  "forbidden_actions": [
+    "collector restart",
+    "collector mutation",
+    "collector source change",
+    "permission/file-mode change",
+    "reading collector_state.json itself",
+    "protected raw data access",
+    "per-symbol event frequencies",
+    "liquidation sizes",
+    "event clusters",
+    "prices",
+    "returns",
+    "PnL",
+    "network research job",
+    "Test Executor job launch",
+    "Runner bundle creation/sealing/execution",
+    "VPS browsing",
+    "fresh-window change",
+    "frozen experiment rule change",
+    "roadmap/governance/Strategy State/contamination/reusable-registry mutation",
+    "merge/close/retarget/auto-merge/branch deletion"
+  ],
+  "exact_result_path": "docs/research/sc001-p1-collector-health-visibility-recovery-design-v0.1.md",
+  "result_requirements": {
+    "required_sections": [
+      "OBSERVED FAILURE",
+      "SAFE VISIBILITY REQUIREMENT",
+      "EXISTING INTERFACE CHECK",
+      "MINIMAL CHANGE IF NEEDED",
+      "OFFLINE VALIDATION",
+      "AUTHORIZATION TIER",
+      "TERMINAL DISPOSITION"
+    ],
+    "required_safety_receipts": [
+      "outcome_accessed=false",
+      "protected_evidence_accessed=false",
+      "collector_state_read=false",
+      "collector_changed=false",
+      "network_accessed=false",
+      "test_executor_job_launched=false",
+      "runner_bundle_created=false",
+      "runner_bundle_executed=false",
+      "vps_raw_data_read=false"
+    ]
+  },
+  "terminal_status_values": [
+    "COLLECTOR_HEALTH_VISIBILITY_RECOVERY_READY",
+    "COLLECTOR_HEALTH_VISIBILITY_DEFER_INTERFACE",
+    "COLLECTOR_HEALTH_VISIBILITY_REJECT_UNSAFE",
+    "STALE_CONTEXT_REVALIDATION_REQUIRED"
+  ],
+  "claim_rule": "On a valid Work trigger, keep the PR title unchanged. Update only DISPATCH_STATE from READY to IN_PROGRESS and append one CLAIM_BLOCK with a 3-hour lease.",
+  "terminal_rule": "Persist exact_result_path, verify it, refresh/revalidate main and relevant binding references, update PR body DISPATCH_STATE to TERMINAL, then add exactly one top-level terminal receipt and stop. No Worker Result Manifest is required because STRATEGY_REVIEW_REQUIRED=false.",
+  "strategy_review_required": false,
+  "merge_authorized": false,
+  "shared_state_write_authorized": false,
+  "max_executions": 0,
+  "max_network_runs": 0,
+  "max_new_canonical_files": 1,
+  "max_changed_task_local_files": 1,
+  "max_repository_commits_by_worker": 1,
+  "repair_mode": "NONE",
+  "max_repair_cycles": 0,
+  "variant_budget": {
+    "research_variants": 0,
+    "parameterizations": 0,
+    "alternate_horizons": 0,
+    "symbol_searches": 0
+  }
+}
