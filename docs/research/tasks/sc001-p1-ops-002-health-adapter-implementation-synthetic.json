@@ -1,0 +1,81 @@
+{
+  "schema": "sc001.p1_health_adapter_implementation_synthetic_task.v0.1",
+  "task_id": "SC001-P1-OPS-002",
+  "worker_id": "P1_PROSPECTIVE_EVENT",
+  "authorization_class": "T0_REPOSITORY_IMPLEMENTATION_AND_SYNTHETIC_TEST_PREP",
+  "task_subclass": "COLLECTOR_HEALTH_ADAPTER_IMPLEMENTATION_SYNTHETIC",
+  "priority": 0,
+  "dispatch_base_head": "d4221a2d7b1ac13c2afc7f10cef1d5c645a6d05b",
+  "architecture_version": "0.3",
+  "purpose": "Implement the fixed-purpose B13-C operational-health adapter and prepare its synthetic test fixture. Do not execute the Test Executor until the implementation/test are reviewed and merged to canonical main.",
+  "parent_result": "docs/research/sc001-p1-collector-health-visibility-recovery-design-v0.1.md",
+  "implementation_requirements": [
+    "Expose no arbitrary path/unit/command selector to the caller.",
+    "Production identities are fixed in code: B13-C collector identity, fixed collector_state.json path, fixed sc001-b13c-liquidation.service unit.",
+    "Project only the allowlisted operational fields from the parent design; never return raw state JSON, symbol list, raw/event/invalid counts, message timestamps, prices, event sizes, clusters, frequencies, returns, PnL, raw exception text or log content.",
+    "Validate bounded JSON size, regular-file identity, no symlink substitution, exact expected stage/schema/version semantics and strict scalar types. Missing/permission/malformed/type mismatch fail closed to bounded error enums.",
+    "Do not default absent counters to zero. Preserve UNKNOWN/unavailable states.",
+    "Heartbeat freshness uses last_heartbeat_ms only; never substitute last_message_ms. Future heartbeat is anomalous, not fresh.",
+    "Use the prospectively frozen HEARTBEAT_STALE_AFTER_MS=90000 exactly; do not tune it after synthetic or live observations.",
+    "Systemd process-state query, if implemented, must use a fixed argument vector and fixed unit; no shell and no service-control verbs.",
+    "No writes/chmod/chown, no collector signals, no restart/daemon-reload, no sockets/network.",
+    "Provide synthetic validation for allowlist leakage, stale/future heartbeat semantics, malformed/oversized/wrong-version/type errors, symlink/FIFO/nonregular rejection, fixed-unit/path behavior, and isolation from raw/event/log/network/service-control access."
+  ],
+  "allowed_output_files": [
+    "ops/mcp/sc001_b13c_health_adapter_v0_1.py",
+    "tests/research/sc001_b13c_health_adapter_synthetic_test_v0_1.py",
+    "docs/research/sc001-p1-collector-health-adapter-static-synthetic-result-v0.1.md"
+  ],
+  "exact_test_execution": {
+    "status": "DEFERRED_UNTIL_CANONICAL_MAIN",
+    "plane": "BotMarketplace Test Executor",
+    "network_profile": "offline",
+    "entrypoint": "tests/research/sc001_b13c_health_adapter_synthetic_test_v0_1.py",
+    "max_runs_after_merge": 1,
+    "timeout_seconds": 120
+  },
+  "allowed_tools": {
+    "github_read_write_task_branch": true,
+    "github_control_read_only": true,
+    "test_executor_offline_only": true,
+    "vps_reader": false,
+    "runner": false
+  },
+  "forbidden_actions": [
+    "reading live collector_state.json",
+    "VPS browsing",
+    "protected/raw outcome access",
+    "network access",
+    "collector mutation or restart",
+    "systemd/service mutation",
+    "permission/group/ACL change",
+    "deployment/install action",
+    "Runner bundle creation/sealing/execution",
+    "roadmap/governance/Strategy State/contamination/reusable-registry mutation",
+    "merge/close/retarget/auto-merge/branch deletion"
+  ],
+  "result_requirements": [
+    "Exact implementation/test hashes",
+    "Static review that the test fixture covers allowlist leakage, heartbeat semantics, malformed/oversized/wrong-identity/type failures, nonregular/symlink rejection, fixed-unit/path behavior, and isolation boundaries",
+    "Safety receipts confirming no live/protected/collector/Test Executor access",
+    "Explicit statement that implementation-prep PASS authorizes no deployment or live read",
+    "Exact next action: Strategy Manager review/merge, then one separately authorized offline Test Executor run from canonical main"
+  ],
+  "terminal_status_values": [
+    "P1_HEALTH_ADAPTER_IMPLEMENTATION_READY_FOR_REVIEW",
+    "P1_HEALTH_ADAPTER_IMPLEMENTATION_BLOCKED_SCOPE",
+    "STALE_CONTEXT_REVALIDATION_REQUIRED"
+  ],
+  "strategy_review_required": false,
+  "continuation_review_required": true,
+  "merge_authorized": false,
+  "max_new_canonical_files": 3,
+  "max_repository_commits_by_worker": 4,
+  "max_test_executor_runs": 0,
+  "max_network_runs": 0,
+  "repair_mode": "AUTO_PRE_OUTCOME",
+  "max_repair_cycles": 1,
+  "terminal_rule": "Persist implementation and synthetic test fixture. Do not launch Test Executor in this task. Persist the exact result document last among repository artifacts, then write one terminal receipt with CONTINUATION_REVIEW_REQUIRED: true and STRATEGY_REVIEW_REQUIRED: false. Stop.",
+  "heartbeat_stale_after_ms": 90000,
+  "heartbeat_stale_threshold_rationale": "Prospectively frozen before any live/protected access: 60s collector stale-connection bound + 30s heartbeat margin. This is an operational visibility threshold only, not evidence eligibility."
+}
