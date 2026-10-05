@@ -1,0 +1,147 @@
+{
+  "schema": "sc001.h1_historical_metadata_inventory_exporter_task.v0.1",
+  "task_id": "SC001-H1-004A",
+  "worker_id": "H1_HISTORICAL_INDICATORS",
+  "authorization_class": "DESIGN_ONLY",
+  "task_subclass": "SHARED_BACKBONE_METADATA_INVENTORY_EXPORTER_PREP",
+  "priority": 1,
+  "purpose": "Implement one minimal deterministic metadata-only exporter that can later enumerate SC001_DATA_ROOT without opening or parsing any file body, and write a safe inventory artifact into the Reader-published area. This task creates code only; it does not access VPS data, deploy configuration, run the exporter, or qualify the Historical Data Backbone.",
+  "dispatch_base_head": "a6ebf81c7fe27ba486431170a84bc687eee972bd",
+  "architecture_version": "0.3",
+  "strategic_basis": [
+    "docs/research/sc001-h1-x1-historical-research-program-strategy-v0.1.md",
+    "docs/research/sc001-shared-data-and-resource-coordination-v0.1.md"
+  ],
+  "blocker_being_resolved": {
+    "prior_task": "SC001-H1-002",
+    "prior_terminal": "H1_SOURCE_PRIOR_USE_AUDIT_DEFER_METADATA_ACCESS",
+    "current_reader_roots": [
+      "b15_identity_inventory"
+    ],
+    "canonical_sc001_data_root": "/home/botmarket/sc001_data",
+    "published_reader_area": "/var/lib/botmarket-research/published",
+    "required_future_reader_root_name": "sc001_historical_inventory",
+    "rule": "Do not expose /home/botmarket/sc001_data itself as a Reader root. Publish only the generated metadata inventory directory."
+  },
+  "exact_implementation_path": "scripts/research/export-sc001-data-metadata-inventory-v0.1.py",
+  "implementation_contract": {
+    "cli_required": [
+      "--root <existing directory>",
+      "--output <json path>"
+    ],
+    "no_default_root": true,
+    "expected_future_root": "/home/botmarket/sc001_data",
+    "expected_future_output": "/var/lib/botmarket-research/published/sc001_historical_inventory/inventory-v0.1.json",
+    "schema": "sc001.legacy_metadata_inventory.v0.1",
+    "allowed_entry_fields": [
+      "logical_path",
+      "basename",
+      "kind",
+      "size_bytes",
+      "suffix"
+    ],
+    "allowed_summary_fields": [
+      "schema",
+      "root_label",
+      "entry_count",
+      "file_count",
+      "directory_count",
+      "symlink_count",
+      "other_count",
+      "total_file_bytes",
+      "entries"
+    ],
+    "deterministic_order": "UTF-8 bytewise lexicographic relative path order",
+    "file_body_reads_allowed": false,
+    "sha256_calculation_allowed": false,
+    "text_parsing_allowed": false,
+    "symlink_follow_allowed": false,
+    "outcome_or_market_semantic_inference_allowed": false,
+    "mtime_permission_owner_export_allowed": false,
+    "hidden_file_names_allowed": true,
+    "fail_closed_on_unreadable_directory": true,
+    "fail_closed_on_path_escape": true,
+    "output_atomic_replace_required": true,
+    "output_parent_creation_allowed": true,
+    "self_test_required": true,
+    "self_test_rule": "A built-in --self-test may create only a temporary synthetic directory tree, must prove deterministic ordering, exact allowed fields, symlink non-following, byte-size accounting, and that file contents are not needed. It must never reference /home/botmarket/sc001_data."
+  },
+  "canonical_refs": [
+    "docs/research/sc001-h1-historical-indicators-project-instructions-v0.1.md",
+    "docs/research/sc001-h1-work-event-trigger-instructions-v0.1.md",
+    "docs/research/sc001-h1-x1-historical-research-program-strategy-v0.1.md",
+    "docs/research/sc001-shared-data-and-resource-coordination-v0.1.md",
+    "docs/research/sc001-h1-binance-1m-source-prior-use-audit-v0.1.md",
+    "docs/research/worker-results/sc001-h1-binance-1m-source-prior-use-audit-manifest-v0.1.json",
+    "docs/research/sc001-controlled-research-mcp-architecture-v1.0.md",
+    "ops/mcp/reader_server_v0_1.py",
+    "docs/research/sc001-execution-worker-routing-and-automation-architecture-v0.3.md"
+  ],
+  "allowed_tools": {
+    "github": {
+      "read": true,
+      "write_task_branch_only": true,
+      "allowed_writes": [
+        "exact_implementation_path",
+        "task PR claim/terminal receipt"
+      ]
+    },
+    "botmarketplace_github_control": {
+      "read_only": true,
+      "write_allowed": false
+    },
+    "botmarketplace_test_executor": {
+      "allowed": false
+    },
+    "botmarketplace_vps_reader": {
+      "list_roots_allowed": true,
+      "list_files_allowed": false,
+      "read_text_allowed": false
+    },
+    "botmarketplace_runner_probe": {
+      "allowed": false
+    }
+  },
+  "forbidden_actions": [
+    "VPS list_files/read_text",
+    "any access to /home/botmarket/sc001_data",
+    "any file-body read or parse",
+    "hashing legacy data files",
+    "market rows, returns, alpha, PnL or outcome access",
+    "protected P1 evidence access",
+    "network/source acquisition",
+    "Test Executor job launch",
+    "Runner bundle creation/sealing/execution",
+    "collector access or mutation",
+    "editing Reader server code",
+    "editing /etc/botmarket-research/reader-roots.json",
+    "systemd/service mutation",
+    "publishing or deploying the inventory",
+    "roadmap/governance/Strategy State/contamination/reusable-registry mutation",
+    "merge/close/retarget/auto-merge/branch deletion"
+  ],
+  "terminal_status_values": [
+    "H1_METADATA_INVENTORY_EXPORTER_READY_FOR_REVIEW",
+    "H1_METADATA_INVENTORY_EXPORTER_BLOCKED_SCOPE",
+    "STALE_CONTEXT_REVALIDATION_REQUIRED"
+  ],
+  "terminal_rule": "Persist only exact_implementation_path, verify exact readback/hash, refresh/revalidate main and exact task, then write exactly one terminal PR receipt with CONTINUATION_REVIEW_REQUIRED: true and STRATEGY_REVIEW_REQUIRED: false. No Worker Result Manifest is required for this non-strategy engineering task.",
+  "strategy_review_required": false,
+  "continuation_review_required": true,
+  "merge_authorized": false,
+  "shared_state_write_authorized": false,
+  "max_executions": 0,
+  "max_network_runs": 0,
+  "max_new_canonical_files": 1,
+  "max_changed_task_local_files": 1,
+  "max_repository_commits_by_worker": 2,
+  "repair_mode": "NONE",
+  "max_repair_cycles": 0,
+  "variant_budget": {
+    "exporter_implementations": 1,
+    "alternate_root_scopes": 0,
+    "body_read_modes": 0,
+    "hash_modes": 0
+  },
+  "next_after_pass": "Strategy Manager reviews/merges the single helper, then performs one offline self-test from canonical main. Only after self-test PASS may an exact host-side publish/config action be presented as USER_GATE_REQUIRED; H1-004 backbone qualification remains blocked until the safe inventory becomes readable through Reader."
+}
