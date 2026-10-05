@@ -1,0 +1,32 @@
+{
+  "schema": "sc001.p1_health_adapter_offline_test_task.v0.1",
+  "task_id": "SC001-P1-OPS-003",
+  "owner": "SC001_STRATEGY_MANAGER",
+  "authorization_class": "T0_OFFLINE_SYNTHETIC_TEST_ONLY",
+  "purpose": "Run exactly one offline synthetic validation of the canonical P1 B13-C health adapter after merge.",
+  "canonical_parent_merge": "204ba46921ed08d03247e31f99b895f79633b5bb",
+  "implementation_path": "ops/mcp/sc001_b13c_health_adapter_v0_1.py",
+  "implementation_sha256": "844949ec670c6cd1856d2a1ea016f3554b6c6e85b95b254b6e370907eb47d2c7",
+  "test_path": "tests/research/sc001_b13c_health_adapter_synthetic_test_v0_1.py",
+  "test_sha256": "9d33b9938c6a1cf67675d069527ce84d2fddcd8976c7a93b05a2ad9717f95da3",
+  "heartbeat_stale_after_ms": 90000,
+  "exact_execution": {
+    "plane": "BotMarketplace Test Executor",
+    "network_profile": "offline",
+    "entrypoint": "tests/research/sc001_b13c_health_adapter_synthetic_test_v0_1.py",
+    "args": [],
+    "max_runs": 1,
+    "timeout_seconds": 120
+  },
+  "forbidden_actions": [
+    "live collector_state.json read",
+    "VPS browsing",
+    "network access",
+    "collector/systemd/permission mutation",
+    "deployment",
+    "protected/raw evidence access",
+    "Runner use"
+  ],
+  "success_token": "P1_HEALTH_ADAPTER_SYNTHETIC_PASS",
+  "allowed_claim": "A PASS establishes synthetic adapter behavior only and authorizes no deployment, live read, collector/systemd change, or evidence eligibility."
+}
