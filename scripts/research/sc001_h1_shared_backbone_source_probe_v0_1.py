@@ -67,11 +67,11 @@ class Budget:
 
     def consume_response(self, payload: bytes) -> None:
         size = len(payload)
-        self.network_bytes += size
         if size > self.max_xml_bytes:
             raise BudgetError("max_xml_response_bytes_each exceeded")
-        if self.network_bytes > self.max_total_bytes:
+        if self.network_bytes + size > self.max_total_bytes:
             raise BudgetError("max_total_network_bytes exceeded")
+        self.network_bytes += size
 
 
 @dataclass(frozen=True)
@@ -164,7 +164,17 @@ class RealFetcher:
                 with urllib.request.urlopen(
                     request, timeout=REQUEST_TIMEOUT_SECONDS
                 ) as response:
-                    payload = response.read(read_limit + 1)
+                    length_text = response.headers.get("Content-Length")
+                    if length_text is not None:
+                        try:
+                            content_length = int(length_text)
+                        except ValueError as exc:
+                            raise ProbeError("invalid Content-Length") from exc
+                        if content_length < 0:
+                            raise ProbeError("negative Content-Length")
+                        if content_length > read_limit:
+                            raise BudgetError("response exceeds remaining byte budget")
+                    payload = response.read(read_limit)
                 self.budget.consume_response(payload)
                 return payload
             except BudgetError:
@@ -606,12 +616,23 @@ def run_self_test() -> dict[str, object]:
     except BudgetError:
         pass
 
-    byte_budget = Budget(max_xml_bytes=8, max_total_bytes=8)
+    response_byte_budget = Budget(max_xml_bytes=8, max_total_bytes=100)
     try:
-        StaticFetcher((b"123456789",), byte_budget)("oversize")
-        raise AssertionError("byte cap did not fail closed")
+        StaticFetcher((b"123456789",), response_byte_budget)("oversize")
+        raise AssertionError("per-response byte cap did not fail closed")
     except BudgetError:
         pass
+    assert response_byte_budget.network_bytes == 0
+
+    total_byte_budget = Budget(max_xml_bytes=10, max_total_bytes=12)
+    total_fetcher = StaticFetcher((b"12345678", b"12345"), total_byte_budget)
+    total_fetcher("within-total")
+    try:
+        total_fetcher("exceeds-total")
+        raise AssertionError("total byte cap did not fail closed")
+    except BudgetError:
+        pass
+    assert total_byte_budget.network_bytes == 8
     checks.append("request_and_byte_caps")
 
     return {
