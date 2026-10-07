@@ -1,0 +1,27 @@
+{
+  "schema": "sc001.strategy_control_continuation_smoke.v0.1",
+  "task_id": "SC001-CTRL-SMOKE-001",
+  "worker_id": "H1_HISTORICAL_INDICATORS",
+  "authorization_class": "T0_CONTROL_PLANE_SMOKE",
+  "purpose": "Verify that the live SC001 Strategy Control event trigger accepts a continuation-only terminal receipt with STRATEGY_REVIEW_REQUIRED:false and writes exactly one STRATEGY_CONTROL_REVIEWED disposition.",
+  "research_relevance": "NONE",
+  "outcome_access_authorized": false,
+  "network_authorized": false,
+  "execution_authorized": false,
+  "next_action": "No research successor. Expected continuation disposition is TERMINAL_IDLE_JUSTIFIED after successful trigger handling.",
+  "allowed_writes": [
+    "this smoke task file",
+    "one terminal receipt comment",
+    "one Strategy Control receipt comment"
+  ],
+  "forbidden_actions": [
+    "research execution",
+    "Test Executor",
+    "Runner/Runner Probe",
+    "VPS data access",
+    "collector access or mutation",
+    "outcome access",
+    "roadmap/governance change",
+    "dispatch"
+  ]
+}
