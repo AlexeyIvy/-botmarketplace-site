@@ -665,14 +665,23 @@ cat > "$PRUNER" <<'PY'
 #!/usr/bin/env python3
 from __future__ import annotations
 import json, os, re, shutil, subprocess, sys
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 JOBS=Path("/var/lib/botmarket-test-executor/jobs").resolve()
+POLICY=Path("/etc/botmarket-test-executor/policy.json")
 JOB_RE=re.compile(r"^job_[0-9]{8}T[0-9]{6}Z_[0-9a-f]{8}$")
 
 def die(msg:str)->None:
     print(f"TEST_PRUNE_REVIEW:{msg}",file=sys.stderr)
     raise SystemExit(2)
+
+def job_created(job_id:str)->datetime:
+    try:
+        return datetime.strptime(job_id[4:20],"%Y%m%dT%H%M%SZ").replace(tzinfo=timezone.utc)
+    except Exception:
+        die("JOB_ID_TIMESTAMP")
+        raise AssertionError
 
 if os.geteuid()!=0:
     die("ROOT_REQUIRED")
@@ -683,12 +692,15 @@ if len(sys.argv)!=2 or not JOB_RE.fullmatch(sys.argv[1]):
     die("BAD_JOB_ID")
 
 job_id=sys.argv[1]
-job=(JOBS/job_id).resolve()
+raw_job=JOBS/job_id
+if raw_job.is_symlink():
+    die("JOB_SYMLINK")
+job=raw_job.resolve()
 try:
     job.relative_to(JOBS)
 except ValueError:
     die("PATH_ESCAPE")
-if not job.is_dir() or job.is_symlink():
+if not job.is_dir():
     die("JOB_NOT_FOUND")
 
 manifest=job/"job.json"
@@ -700,17 +712,42 @@ if not result.is_file() or result.is_symlink():
 
 try:
     obj=json.loads(manifest.read_text(encoding="utf-8"))
+    policy=json.loads(POLICY.read_text(encoding="utf-8"))
 except Exception:
-    die("MANIFEST_INVALID")
+    die("JSON_INVALID")
 if obj.get("job_id")!=job_id:
     die("MANIFEST_JOB_ID_MISMATCH")
+if policy.get("schema")!="botmarket.test_executor_policy.v1":
+    die("POLICY_SCHEMA")
+
+retention_days=int(policy["completed_job_retention_days"])
+max_retained=int(policy["max_retained_jobs"])
+if retention_days<1 or max_retained<1:
+    die("POLICY_RETENTION")
+
+completed:list[tuple[datetime,str]]=[]
+for d in JOBS.iterdir():
+    if d.is_symlink() or not d.is_dir() or not JOB_RE.fullmatch(d.name):
+        continue
+    if not (d/"job.json").is_file() or not (d/"output/job_result.json").is_file():
+        continue
+    completed.append((job_created(d.name),d.name))
+completed.sort(key=lambda item:(item[0],item[1]),reverse=True)
+
+rank=next((idx for idx,(_,jid) in enumerate(completed) if jid==job_id),None)
+if rank is None:
+    die("COMPLETED_JOB_NOT_INDEXED")
+cutoff=datetime.now(timezone.utc)-timedelta(days=retention_days)
+if not (job_created(job_id)<cutoff or rank>=max_retained):
+    die("NOT_RETENTION_ELIGIBLE")
 
 unit=f"botmarket-test-job-{job_id}.service"
 state=subprocess.run(
-    ["systemctl","is-active","--quiet",unit],
-    stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,
+    ["systemctl","is-active",unit],
+    text=True,stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,
 )
-if state.returncode==0:
+active_state=state.stdout.strip()
+if active_state in {"active","activating","reloading","deactivating"}:
     die("JOB_ACTIVE")
 
 shutil.rmtree(job)
@@ -946,15 +983,15 @@ def prune_completed_jobs()->dict[str,int]:
     jobs=[]
     for m in recent_manifests():
         try:
-            created=datetime.fromisoformat(m["created_utc"])
             job_id=m["job_id"]
+            created=datetime.strptime(job_id[4:20],"%Y%m%dT%H%M%SZ").replace(tzinfo=timezone.utc)
             job=resolve_job(job_id)
         except Exception:
             continue
         result=(job/"output/job_result.json").is_file()
         if result:
             jobs.append((created,job_id,job))
-    jobs.sort(key=lambda x:x[0],reverse=True)
+    jobs.sort(key=lambda x:(x[0],x[1]),reverse=True)
     removed=0
     for idx,(created,job_id,job) in enumerate(jobs):
         if created<cutoff or idx>=int(p["max_retained_jobs"]):
