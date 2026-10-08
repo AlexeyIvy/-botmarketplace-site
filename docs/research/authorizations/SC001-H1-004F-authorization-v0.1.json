@@ -1,0 +1,65 @@
+{
+  "schema": "sc001.task_authorization.v0.1",
+  "task_id": "SC001-H1-004F",
+  "worker_id": "H1_HISTORICAL_INDICATORS",
+  "authorization_tier": "T1",
+  "status": "AUTHORIZED_ONE_SHOT",
+  "policy_path": "docs/research/sc001-delegated-user-authorization-policy-v0.2.md",
+  "policy_sha256": "0ee60f6376876dc13cc42ad8ac8a6fef5d54fc50e8f8322a01e6d64a9cbe0178",
+  "ratification_path": "docs/research/sc001-user-delegated-authorization-ratification-v0.1.json",
+  "ratification_sha256": "9f5434f92471d7c7d36389fe4b376a7870fb52a90b0d94bda5aa2777d4b71aa8",
+  "strategy_review": "PASS",
+  "task_path": "docs/research/tasks/sc001-h1-004f-shared-backbone-source-metadata-qualification.json",
+  "implementation": {
+    "path": "scripts/research/sc001_h1_shared_backbone_source_probe_v0_1.py",
+    "sha256": "4748b005dfe67125d85ddc5b0ae91d36f22257bb1ab51ef960a6f07e6d84a370",
+    "offline_preflight_job_id": "job_20261008T200633Z_e6a81b99",
+    "offline_preflight_result": "PASS"
+  },
+  "evidence_role": "RESOURCE_SOURCE_QUALIFICATION_METADATA_ONLY_NONPROMOTIONAL",
+  "resource_id": "0d2b27da78974646fff5b781c49a274644a2253456b35e2ce48ac120330d62db",
+  "allowed_data_classes": [
+    "public archive listing XML metadata",
+    "archive object keys",
+    "derived source URLs"
+  ],
+  "prohibited_data_classes": [
+    "archive bodies",
+    "checksum bodies",
+    "market rows",
+    "returns",
+    "PnL",
+    "protected outcomes"
+  ],
+  "allowed_hosts": [
+    "s3-ap-northeast-1.amazonaws.com"
+  ],
+  "execution_profile": "BotMarketplace Test Executor/public_research",
+  "budgets": {
+    "max_network_runs": 1,
+    "max_outcome_runs": 0,
+    "max_requests": 85,
+    "max_total_network_bytes": 50000000,
+    "max_xml_response_bytes_each": 2000000,
+    "max_retries_per_request": 2,
+    "timeout_seconds": 900
+  },
+  "repair_mode": "NONE",
+  "no_same_evidence_rescue": true,
+  "collector_mutation": false,
+  "credentials_or_trading": false,
+  "runner_probe_execution": false,
+  "one_shot": true,
+  "claimed_at_utc": "2026-10-08T20:07:00Z",
+  "expires_at_utc": "2026-10-09T02:07:00Z",
+  "stop_rules": [
+    "any implementation hash mismatch",
+    "repo head mismatch",
+    "resource reservation mismatch",
+    "source/schema drift",
+    "request/byte budget breach",
+    "network failure after frozen retry budget",
+    "unexpected market-body or outcome access",
+    "any need for alternate source or second network run"
+  ]
+}
