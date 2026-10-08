@@ -1,0 +1,64 @@
+{
+  "schema": "sc001.h1_shared_backbone_source_metadata_qualification_task.v0.1",
+  "task_id": "SC001-H1-004F",
+  "worker_id": "H1_HISTORICAL_INDICATORS",
+  "authorization_class": "T1",
+  "task_subclass": "SHARED_BACKBONE_SOURCE_METADATA_QUALIFICATION",
+  "dispatch_base_head": "b4d205dd3942b4c16853ed1428713173e2643d4e",
+  "implementation_path": "scripts/research/sc001_h1_shared_backbone_source_probe_v0_1.py",
+  "implementation_sha256": "4748b005dfe67125d85ddc5b0ae91d36f22257bb1ab51ef960a6f07e6d84a370",
+  "offline_preflight_job_id": "job_20261008T200633Z_e6a81b99",
+  "offline_preflight_result": "PASS",
+  "evidence_role": "RESOURCE_SOURCE_QUALIFICATION_METADATA_ONLY_NONPROMOTIONAL",
+  "resource_id": "0d2b27da78974646fff5b781c49a274644a2253456b35e2ce48ac120330d62db",
+  "exact_execution": {
+    "plane": "BotMarketplace Test Executor",
+    "network_profile": "public_research",
+    "repo_head_sha": "b4d205dd3942b4c16853ed1428713173e2643d4e",
+    "entrypoint": "scripts/research/sc001_h1_shared_backbone_source_probe_v0_1.py",
+    "args": [],
+    "timeout_seconds": 900,
+    "max_network_runs": 1,
+    "max_outcome_runs": 0
+  },
+  "network_budget": {
+    "allowed_hosts": [
+      "s3-ap-northeast-1.amazonaws.com"
+    ],
+    "allowed_endpoint_class": "S3 ListObjectsV2 under data.binance.vision bucket only",
+    "max_s3_list_requests": 85,
+    "max_xml_response_bytes_each": 2000000,
+    "max_total_network_bytes": 50000000,
+    "max_retries_per_request": 2,
+    "concurrency": 1
+  },
+  "frozen_scope": {
+    "root_prefix": "data/futures/um/monthly/klines/",
+    "interval": "1m",
+    "cutoff_exclusive_utc": "2026-10-01T00:00:00Z",
+    "last_eligible_archive_month": "2026-09",
+    "h1_symbol_rule": "^[A-Z0-9]+USDT$ sorted UTF-8 bytewise",
+    "h1_scan_cap": 80,
+    "h1_first_qualifying_cap": 12,
+    "h1_min_qualifying_symbols": 6,
+    "h1_min_contiguous_calendar_days": 300,
+    "x1_anchors": [
+      "BTCUSDT",
+      "ETHUSDT"
+    ],
+    "x1_anchor_min_contiguous_months": 36
+  },
+  "forbidden_actions": [
+    "ZIP/archive/checksum body download",
+    "market row parsing",
+    "price/volume/return/alpha/PnL computation",
+    "protected/raw outcome access",
+    "collector access or mutation",
+    "Runner/Runner Probe use",
+    "alternate source fallback",
+    "scope/budget expansion after source response",
+    "roadmap/governance/frozen research-rule mutation"
+  ],
+  "terminal_rule": "One-shot. Persist exact Test Executor job identity and compact metadata result. Any network/source/schema/budget error is terminal DEFER/REVIEW; no second network run under this authorization.",
+  "result_path": "docs/research/sc001-h1-shared-backbone-source-metadata-qualification-v0.1.json"
+}
