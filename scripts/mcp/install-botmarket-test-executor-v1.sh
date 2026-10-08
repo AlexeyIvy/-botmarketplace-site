@@ -1255,17 +1255,24 @@ def filesystem_boundary_selftest()->dict[str,Any]:
         shutil.rmtree(probe,ignore_errors=True)
 
 def privilege_bridge_selftest()->dict[str,Any]:
-    p=subprocess.run(
-        ["sudo","-n",LAUNCHER,"--self-test"],
-        text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=15,
+    specs=(
+        ("launcher",LAUNCHER,"BOTMARKET_TEST_LAUNCHER_SELFTEST_PASS"),
+        ("canceler",CANCELER,"BOTMARKET_TEST_CANCEL_SELFTEST_PASS"),
+        ("pruner",PRUNER,"BOTMARKET_TEST_PRUNE_SELFTEST_PASS"),
     )
-    ok=(p.returncode==0 and p.stdout.strip()=="BOTMARKET_TEST_LAUNCHER_SELFTEST_PASS")
-    return {
-        "ok":ok,
-        "returncode":p.returncode,
-        "stdout":p.stdout.strip()[:500],
-        "stderr":p.stderr.strip()[:500],
-    }
+    checks={}
+    for name,path,token in specs:
+        p=subprocess.run(
+            ["sudo","-n",path,"--self-test"],
+            text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=15,
+        )
+        checks[name]={
+            "ok":p.returncode==0 and p.stdout.strip()==token,
+            "returncode":p.returncode,
+            "stdout":p.stdout.strip()[:500],
+            "stderr":p.stderr.strip()[:500],
+        }
+    return {"ok":all(x["ok"] for x in checks.values()),"helpers":checks}
 
 @mcp.tool()
 def get_test_executor_info()->dict[str,Any]:
