@@ -1,0 +1,80 @@
+{
+  "schema": "botmarket.test_executor_installation_freeze.v1.0.4",
+  "date": "2026-10-08",
+  "status": "READY_FOR_REDEPLOY_AFTER_RETENTION_PERMISSION_FIX",
+  "supersedes": "docs/infrastructure/botmarket-test-executor-installation-freeze-v1.0.3.json",
+  "base_git_head": "130f23dc453f8fd0810c13fabac0d8264bd3a2b5",
+  "root_cause": {
+    "class": "CONTROL_USER_RETENTION_RMTREE_CANNOT_DELETE_WORKER_OWNED_NESTED_OUTPUT",
+    "observed_call_chain": "run_repo_test -> prune_completed_jobs -> shutil.rmtree(job)",
+    "observed_exception": "PermissionError errno=13 on completed historical job output",
+    "failure_stage": "before new job.json creation",
+    "restart_did_not_resolve": true,
+    "privilege_bridge_passed": true,
+    "filesystem_boundary_selftest_passed": true,
+    "repo_snapshot_gates_excluded": true
+  },
+  "artifacts": {
+    "main_installer": {
+      "path": "scripts/mcp/install-botmarket-test-executor-v1.sh",
+      "git_blob_sha": "b4501fed4447497910026cb1afa1a4d001fb79ab",
+      "sha256": "0dc0926e2c3030b199243c5fc8f1dfa097305ab685f96dd1a0127bbf55f6bda0"
+    },
+    "tunnel_installer": {
+      "path": "scripts/mcp/install-botmarket-test-executor-tunnel-v1.sh",
+      "git_blob_sha": "83b7a550f5de819e287a65338fecdcfd5b2c5d7a",
+      "sha256": "e18062946fbefde2b3c6dd6e6314578c661067e983aa3f15c5c6ac5a28d1a1c9",
+      "changed": false
+    },
+    "runbook": {
+      "path": "docs/infrastructure/botmarket-test-executor-v1.0.md",
+      "git_blob_sha": "a7e0a588587a6201e5e89c11b6c62c88dc052ab1",
+      "sha256": "9ab41b17fe2092417eb5fdd640901b2b93993a789703f47df52c0ff5ac1c446e"
+    }
+  },
+  "runtime_fix": {
+    "root_helper": "/usr/local/sbin/botmarket-test-prune",
+    "sudo_scope": "botmarket-testctl may invoke only the exact root-helper path in addition to existing launch/cancel helpers",
+    "fixed_jobs_root": "/var/lib/botmarket-test-executor/jobs",
+    "job_id_regex": "^job_[0-9]{8}T[0-9]{6}Z_[0-9a-f]{8}$",
+    "require_manifest": true,
+    "require_completed_result": true,
+    "require_manifest_job_id_match": true,
+    "reject_job_symlink": true,
+    "reject_path_escape": true,
+    "reject_active_states": [
+      "active",
+      "activating",
+      "reloading",
+      "deactivating"
+    ],
+    "independently_enforce_retention_from_root_owned_policy": true,
+    "retention_age_derived_from_job_id_timestamp": true,
+    "max_retained_rank_rechecked_by_helper": true,
+    "direct_control_user_shutil_rmtree_for_completed_jobs": false,
+    "installer_worker_owned_nested_output_smoke": true
+  },
+  "unchanged_security_boundaries": {
+    "worker_NoNewPrivileges": true,
+    "worker_RestrictSUIDSGID": true,
+    "worker_CapabilityBoundingSet_empty": true,
+    "worker_AmbientCapabilities_empty": true,
+    "worker_ProtectSystem_strict": true,
+    "offline_and_public_research_profiles_unchanged": true,
+    "trading_credentials_available_to_jobs": false,
+    "arbitrary_shell_tool": false,
+    "arbitrary_host_file_reader": false,
+    "repo_write": false,
+    "research_runner_unchanged": true,
+    "collectors_unchanged": true
+  },
+  "post_redeploy_gate": [
+    "installer RETENTION_PRUNE_OWNERSHIP_SELFTEST=PASS",
+    "MCP service active",
+    "get_test_executor_info privilege_bridge PASS",
+    "get_test_executor_info filesystem_boundary PASS",
+    "one known-good offline run_repo_test PASS",
+    "H1 source-probe --self-test offline PASS"
+  ],
+  "research_authorization_effect": "NONE. This is infrastructure repair only and authorizes no market/outcome/network research by itself."
+}

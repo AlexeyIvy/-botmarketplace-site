@@ -27,6 +27,7 @@ SUDOERS="/etc/sudoers.d/botmarket-test-executor"
 
 LAUNCHER="/usr/local/sbin/botmarket-test-launch"
 CANCELER="/usr/local/sbin/botmarket-test-cancel"
+PRUNER="/usr/local/sbin/botmarket-test-prune"
 
 PY="${BM_TEST_PYTHON:-/opt/botmarket-research/venv/bin/python}"
 HOST="127.0.0.1"
@@ -77,7 +78,7 @@ install -d -m0700 -o "$CTL_USER" -g "$CTL_GROUP" "$SSHDIR"
 install -d -m2770 -o "$CTL_USER" -g "$JOB_GROUP" "$JOBS"
 install -d -m0700 -o root -g root "$BACKUP"
 
-for f in "$APP/server.py" "$APP/job_runner.py" "$LAUNCHER" "$CANCELER" "$ENVF" "$POLICY" "$UNIT" "$SUDOERS"; do
+for f in "$APP/server.py" "$APP/job_runner.py" "$LAUNCHER" "$CANCELER" "$PRUNER" "$ENVF" "$POLICY" "$UNIT" "$SUDOERS"; do
   [[ -f "$f" ]] && cp -a "$f" "$BACKUP/$(basename "$f").bak"
 done
 
@@ -659,16 +660,138 @@ chmod 0755 "$CANCELER"
 chown root:root "$CANCELER"
 "$PY" -m py_compile "$CANCELER"
 
+log STEP "Install root-only retention prune helper"
+cat > "$PRUNER" <<'PY'
+#!/usr/bin/env python3
+from __future__ import annotations
+import json, os, re, shutil, subprocess, sys
+from datetime import datetime, timedelta, timezone
+from pathlib import Path
+
+JOBS=Path("/var/lib/botmarket-test-executor/jobs").resolve()
+POLICY=Path("/etc/botmarket-test-executor/policy.json")
+JOB_RE=re.compile(r"^job_[0-9]{8}T[0-9]{6}Z_[0-9a-f]{8}$")
+
+def die(msg:str)->None:
+    print(f"TEST_PRUNE_REVIEW:{msg}",file=sys.stderr)
+    raise SystemExit(2)
+
+def job_created(job_id:str)->datetime:
+    try:
+        return datetime.strptime(job_id[4:20],"%Y%m%dT%H%M%SZ").replace(tzinfo=timezone.utc)
+    except Exception:
+        die("JOB_ID_TIMESTAMP")
+        raise AssertionError
+
+if os.geteuid()!=0:
+    die("ROOT_REQUIRED")
+if len(sys.argv)==2 and sys.argv[1]=="--self-test":
+    print("BOTMARKET_TEST_PRUNE_SELFTEST_PASS")
+    raise SystemExit(0)
+if len(sys.argv)!=2 or not JOB_RE.fullmatch(sys.argv[1]):
+    die("BAD_JOB_ID")
+
+job_id=sys.argv[1]
+raw_job=JOBS/job_id
+if raw_job.is_symlink():
+    die("JOB_SYMLINK")
+job=raw_job.resolve()
+try:
+    job.relative_to(JOBS)
+except ValueError:
+    die("PATH_ESCAPE")
+if not job.is_dir():
+    die("JOB_NOT_FOUND")
+
+manifest=job/"job.json"
+result=job/"output/job_result.json"
+if not manifest.is_file() or manifest.is_symlink():
+    die("MANIFEST_REQUIRED")
+if not result.is_file() or result.is_symlink():
+    die("COMPLETED_RESULT_REQUIRED")
+
+try:
+    obj=json.loads(manifest.read_text(encoding="utf-8"))
+    policy=json.loads(POLICY.read_text(encoding="utf-8"))
+except Exception:
+    die("JSON_INVALID")
+if obj.get("job_id")!=job_id:
+    die("MANIFEST_JOB_ID_MISMATCH")
+if policy.get("schema")!="botmarket.test_executor_policy.v1":
+    die("POLICY_SCHEMA")
+
+retention_days=int(policy["completed_job_retention_days"])
+max_retained=int(policy["max_retained_jobs"])
+if retention_days<1 or max_retained<1:
+    die("POLICY_RETENTION")
+
+completed:list[tuple[datetime,str]]=[]
+for d in JOBS.iterdir():
+    if d.is_symlink() or not d.is_dir() or not JOB_RE.fullmatch(d.name):
+        continue
+    if not (d/"job.json").is_file() or not (d/"output/job_result.json").is_file():
+        continue
+    completed.append((job_created(d.name),d.name))
+completed.sort(key=lambda item:(item[0],item[1]),reverse=True)
+
+rank=next((idx for idx,(_,jid) in enumerate(completed) if jid==job_id),None)
+if rank is None:
+    die("COMPLETED_JOB_NOT_INDEXED")
+cutoff=datetime.now(timezone.utc)-timedelta(days=retention_days)
+if not (job_created(job_id)<cutoff or rank>=max_retained):
+    die("NOT_RETENTION_ELIGIBLE")
+
+unit=f"botmarket-test-job-{job_id}.service"
+state=subprocess.run(
+    ["systemctl","is-active",unit],
+    text=True,stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,
+)
+active_state=state.stdout.strip()
+if active_state in {"active","activating","reloading","deactivating"}:
+    die("JOB_ACTIVE")
+
+shutil.rmtree(job)
+if job.exists():
+    die("DELETE_INCOMPLETE")
+print(json.dumps({"job_id":job_id,"pruned":True},sort_keys=True))
+PY
+chmod 0755 "$PRUNER"
+chown root:root "$PRUNER"
+"$PY" -m py_compile "$PRUNER"
+
 log STEP "Install restricted sudo policy"
 cat > "$SUDOERS" <<EOF
 $CTL_USER ALL=(root) NOPASSWD: $LAUNCHER
 $CTL_USER ALL=(root) NOPASSWD: $CANCELER
+$CTL_USER ALL=(root) NOPASSWD: $PRUNER
 EOF
 chmod 0440 "$SUDOERS"
 visudo -cf "$SUDOERS" >/dev/null
 
 as_testctl_root "$LAUNCHER" --self-test | grep -qx 'BOTMARKET_TEST_LAUNCHER_SELFTEST_PASS' || die "Launcher sudo escalation self-test failed"
 as_testctl_root "$CANCELER" --self-test | grep -qx 'BOTMARKET_TEST_CANCEL_SELFTEST_PASS' || die "Cancel sudo escalation self-test failed"
+as_testctl_root "$PRUNER" --self-test | grep -qx 'BOTMARKET_TEST_PRUNE_SELFTEST_PASS' || die "Prune sudo escalation self-test failed"
+
+PRUNE_SMOKE_ID="job_20000101T000000Z_feedface"
+PRUNE_SMOKE_DIR="$JOBS/$PRUNE_SMOKE_ID"
+rm -rf "$PRUNE_SMOKE_DIR"
+install -d -m0750 -o "$CTL_USER" -g "$JOB_GROUP" "$PRUNE_SMOKE_DIR"
+install -d -m0770 -o "$CTL_USER" -g "$JOB_GROUP" "$PRUNE_SMOKE_DIR/output"
+cat > "$PRUNE_SMOKE_DIR/job.json" <<EOF
+{"schema":"botmarket.test_job.v1","job_id":"$PRUNE_SMOKE_ID","created_utc":"2000-01-01T00:00:00+00:00"}
+EOF
+cat > "$PRUNE_SMOKE_DIR/output/job_result.json" <<EOF
+{"schema":"botmarket.test_job_result.v1","job_id":"$PRUNE_SMOKE_ID","exit_code":0}
+EOF
+install -d -m0700 -o "$JOB_USER" -g "$JOB_GROUP" "$PRUNE_SMOKE_DIR/output/nested"
+echo "protected worker output" > "$PRUNE_SMOKE_DIR/output/nested/worker-owned.txt"
+chown "$JOB_USER:$JOB_GROUP" "$PRUNE_SMOKE_DIR/output/nested/worker-owned.txt"
+chmod 0600 "$PRUNE_SMOKE_DIR/output/nested/worker-owned.txt"
+chown "$CTL_USER:$JOB_GROUP" "$PRUNE_SMOKE_DIR/job.json" "$PRUNE_SMOKE_DIR/output/job_result.json"
+chmod 0440 "$PRUNE_SMOKE_DIR/job.json" "$PRUNE_SMOKE_DIR/output/job_result.json"
+as_testctl_root "$PRUNER" "$PRUNE_SMOKE_ID" >/dev/null
+[[ ! -e "$PRUNE_SMOKE_DIR" ]] || die "Retention prune helper failed synthetic ownership smoke"
+echo "RETENTION_PRUNE_OWNERSHIP_SELFTEST=PASS"
 
 set +e
 ARBITRARY_ROOT_PROBE="$(runuser -u "$CTL_USER" -- sudo -n -- /usr/bin/id -u 2>&1)"
@@ -721,6 +844,7 @@ MAX_TEXT=int(os.getenv("BM_TEST_MAX_TEXT_BYTES","262144"))
 
 LAUNCHER="/usr/local/sbin/botmarket-test-launch"
 CANCELER="/usr/local/sbin/botmarket-test-cancel"
+PRUNER="/usr/local/sbin/botmarket-test-prune"
 JOB_RE=re.compile(r"^job_[0-9]{8}T[0-9]{6}Z_[0-9a-f]{8}$")
 
 mcp=MCPServer(NAME)
@@ -859,23 +983,31 @@ def prune_completed_jobs()->dict[str,int]:
     jobs=[]
     for m in recent_manifests():
         try:
-            created=datetime.fromisoformat(m["created_utc"])
             job_id=m["job_id"]
+            created=datetime.strptime(job_id[4:20],"%Y%m%dT%H%M%SZ").replace(tzinfo=timezone.utc)
             job=resolve_job(job_id)
         except Exception:
             continue
         result=(job/"output/job_result.json").is_file()
         if result:
-            jobs.append((created,job))
-    jobs.sort(key=lambda x:x[0],reverse=True)
+            jobs.append((created,job_id,job))
+    jobs.sort(key=lambda x:(x[0],x[1]),reverse=True)
     removed=0
-    for idx,(created,job) in enumerate(jobs):
+    for idx,(created,job_id,job) in enumerate(jobs):
         if created<cutoff or idx>=int(p["max_retained_jobs"]):
-            try:
-                shutil.rmtree(job)
-                removed+=1
-            except FileNotFoundError:
-                pass
+            if not job.exists():
+                continue
+            prune=subprocess.run(
+                ["sudo","-n",PRUNER,job_id],
+                text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=30,
+            )
+            if prune.returncode:
+                raise ValueError(
+                    f"RETENTION_PRUNE_FAILED job_id={job_id} stderr={prune.stderr.strip()[:800]}"
+                )
+            if job.exists():
+                raise ValueError(f"RETENTION_PRUNE_INCOMPLETE job_id={job_id}")
+            removed+=1
     return {"removed":removed}
 
 def prune_orphan_jobs()->dict[str,int]:

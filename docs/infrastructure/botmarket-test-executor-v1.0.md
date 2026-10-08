@@ -1,7 +1,7 @@
 # BotMarketplace Test Executor MCP v1.0
 
 Date: 2026-09-29  
-Status: **APP CONNECTED / FIRST MCP RUN DIAGNOSTIC FIXED / INSTALLATION FREEZE v1.0.3 READY**
+Status: **APP CONNECTED / RETENTION CLEANUP FIX PREPARED / INSTALLATION FREEZE v1.0.4 READY**
 
 ## Purpose
 
@@ -349,7 +349,7 @@ Consolidation result:
 
 Current installation freeze:
 
-`docs/infrastructure/botmarket-test-executor-installation-freeze-v1.0.3.json`
+`docs/infrastructure/botmarket-test-executor-installation-freeze-v1.0.4.json`
 
 Main installer:
 
@@ -482,6 +482,37 @@ v1.0.3 fixes the implementation without weakening the policy:
 Canonical diagnostic:
 
 `docs/infrastructure/botmarket-test-executor-first-mcp-run-diagnostic-v0.1.json`
+
+
+## Retention cleanup permission finding (2026-10-08)
+
+A later `run_repo_test` regression appeared only after completed jobs crossed the 7-day retention boundary.
+
+Live journal traceback localized the failure before new job creation:
+
+- `run_repo_test -> prune_completed_jobs -> shutil.rmtree(job)`;
+- `PermissionError` occurred on worker-owned nested output files from completed historical jobs;
+- MCP service health, restricted sudo bridge, filesystem-boundary self-test, repo freshness, run-rate counters and snapshot safety gates all remained PASS.
+
+Root cause:
+
+- the control service runs as `botmarket-testctl`;
+- isolated jobs create some nested output paths as `botmarket-testjob`;
+- retention cleanup attempted recursive deletion directly as the control user;
+- nested worker-owned directories can intentionally lack group-write permission, so direct `shutil.rmtree` is not a valid retention mechanism.
+
+v1.0.4 fixes this without weakening the worker sandbox:
+
+- add root-owned `/usr/local/sbin/botmarket-test-prune`;
+- sudo remains restricted to the exact helper path;
+- helper accepts only canonical job IDs under the fixed Test Executor jobs root;
+- symlink/path escape, missing manifest/result, manifest/job-id mismatch and active jobs fail closed;
+- helper independently checks retention eligibility from the job-id timestamp and root-owned policy before deletion;
+- `prune_completed_jobs` delegates only eligible completed-job removal to the helper;
+- installer includes a synthetic ownership smoke with a worker-owned `0700` nested output directory and `0600` file.
+
+No research semantics, network profile, credentials boundary, collector state, Worker `NoNewPrivileges`, capability set or protected-data boundary changes.
+
 
 ## Residual limitations
 
