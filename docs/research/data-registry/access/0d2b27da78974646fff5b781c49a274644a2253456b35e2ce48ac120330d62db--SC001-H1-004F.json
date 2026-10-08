@@ -1,0 +1,25 @@
+{
+  "schema": "sc001.evidence_access_receipt.v0.1",
+  "resource_id": "0d2b27da78974646fff5b781c49a274644a2253456b35e2ce48ac120330d62db",
+  "task_id": "SC001-H1-004F",
+  "worker_id": "H1_HISTORICAL_INDICATORS",
+  "evidence_role": "RESOURCE_SOURCE_QUALIFICATION_METADATA_ONLY_NONPROMOTIONAL",
+  "allowed_fields": [
+    "archive object key",
+    "symbol",
+    "month",
+    "mechanically derived public source URL"
+  ],
+  "interval": "source listing metadata up to cutoff 2026-10-01T00:00:00Z",
+  "assets": "lexicographic H1 candidate scan cap 80 plus BTCUSDT/ETHUSDT anchor checks",
+  "access_time_utc": [
+    "2026-10-08T20:09:14Z",
+    "2026-10-08T20:09:31Z"
+  ],
+  "contamination_class": "NONPROMOTIONAL_METADATA_ONLY",
+  "market_body_access": false,
+  "outcome_access": false,
+  "job_id": "job_20261008T200911Z_09b2df70",
+  "result_path": "docs/research/sc001-h1-shared-backbone-source-metadata-qualification-v0.1.json",
+  "status": "COMPLETED"
+}
