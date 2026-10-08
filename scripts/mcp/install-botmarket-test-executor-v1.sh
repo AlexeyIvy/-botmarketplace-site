@@ -772,7 +772,7 @@ as_testctl_root "$LAUNCHER" --self-test | grep -qx 'BOTMARKET_TEST_LAUNCHER_SELF
 as_testctl_root "$CANCELER" --self-test | grep -qx 'BOTMARKET_TEST_CANCEL_SELFTEST_PASS' || die "Cancel sudo escalation self-test failed"
 as_testctl_root "$PRUNER" --self-test | grep -qx 'BOTMARKET_TEST_PRUNE_SELFTEST_PASS' || die "Prune sudo escalation self-test failed"
 
-PRUNE_SMOKE_ID="job_$(date -u +%Y%m%dT%H%M%SZ)_feedface"
+PRUNE_SMOKE_ID="job_20000101T000000Z_feedface"
 PRUNE_SMOKE_DIR="$JOBS/$PRUNE_SMOKE_ID"
 rm -rf "$PRUNE_SMOKE_DIR"
 install -d -m0750 -o "$CTL_USER" -g "$JOB_GROUP" "$PRUNE_SMOKE_DIR"
