@@ -10,7 +10,7 @@ INSTALLER="$SCRIPT_DIR/install-botmarket-test-executor-v1.sh"
 FREEZE="$REPO_ROOT/docs/infrastructure/botmarket-test-executor-installation-freeze-v1.0.5.json"
 SERVICE="botmarket-test-executor.service"
 
-for c in git bash sha256sum python3 sudo systemctl runuser grep; do
+for c in git bash sha256sum python3 sudo systemctl runuser grep awk; do
   command -v "$c" >/dev/null || die "MISSING_COMMAND:$c"
 done
 
