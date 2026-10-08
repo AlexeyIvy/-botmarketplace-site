@@ -61,6 +61,12 @@ retry_cmd() {
   done
 }
 
+explicit_readonly_denial() {
+  local msg="$1"
+  grep -Fqi 'The key you are authenticating with has been marked as read only.' <<<"$msg" \
+    || grep -Eqi 'write access.*not granted|permission to .* denied|deploy key.*read.?only|permission denied.*write' <<<"$msg"
+}
+
 SERVICE_WAS_ACTIVE=0
 systemctl is-active --quiet botmarket-test-executor.service 2>/dev/null && SERVICE_WAS_ACTIVE=1 || true
 
@@ -71,6 +77,15 @@ for c in git ssh ssh-keygen ssh-keyscan systemctl journalctl runuser curl ss sud
   command -v "$c" >/dev/null || die "$c missing"
 done
 [[ -x "$PY" ]] || die "Python missing: $PY"
+
+READONLY_SAMPLE="ERROR: The key you are authenticating with has been marked as read only."
+TRANSPORT_SAMPLE="ssh: connect to host github.com port 22: Connection timed out"
+explicit_readonly_denial "$READONLY_SAMPLE" \
+  || die "GITHUB_WRITE_DENIAL_CLASSIFIER_REJECTED_LIVE_GITHUB_SAMPLE"
+if explicit_readonly_denial "$TRANSPORT_SAMPLE"; then
+  die "GITHUB_WRITE_DENIAL_CLASSIFIER_ACCEPTED_TRANSPORT_FAILURE"
+fi
+echo "GITHUB_WRITE_DENIAL_CLASSIFIER_SELFTEST=PASS"
 
 if ss -ltnH | awk '{print $4}' | grep -Eq "(^|:)${PORT}$"   && ! systemctl is-active --quiet botmarket-test-executor.service 2>/dev/null; then
   die "Port $PORT is occupied"
@@ -195,7 +210,7 @@ for attempt in 1 2 3; do
   if [[ $WRITE_RC -eq 0 ]]; then
     die "Deploy key appears write-enabled. Disable 'Allow write access' before continuing."
   fi
-  if grep -Eqi 'write access.*not granted|permission to .* denied|deploy key.*read.?only|permission denied.*write' <<<"$WRITE_PROBE"; then
+  if explicit_readonly_denial "$WRITE_PROBE"; then
     break
   fi
   if (( attempt < 3 )); then
@@ -203,7 +218,7 @@ for attempt in 1 2 3; do
     sleep "$((attempt*2))"
   fi
 done
-if ! grep -Eqi 'write access.*not granted|permission to .* denied|deploy key.*read.?only|permission denied.*write' <<<"$WRITE_PROBE"; then
+if ! explicit_readonly_denial "$WRITE_PROBE"; then
   die "GITHUB_WRITE_DENIAL_INDETERMINATE: ${WRITE_PROBE:0:1200}"
 fi
 echo "GITHUB_WRITE=DENIED_AS_REQUIRED"

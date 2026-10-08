@@ -1,7 +1,7 @@
 # BotMarketplace Test Executor MCP v1.0
 
 Date: 2026-09-29  
-Status: **APP CONNECTED / RETENTION + REDEPLOY HARDENING PREPARED / INSTALLATION FREEZE v1.0.5 READY**
+Status: **APP CONNECTED / RETENTION + REDEPLOY HARDENING / READ-ONLY PROOF FIX PREPARED / INSTALLATION FREEZE v1.0.6 READY**
 
 ## Purpose
 
@@ -352,7 +352,7 @@ Consolidation result:
 
 Current installation freeze:
 
-`docs/infrastructure/botmarket-test-executor-installation-freeze-v1.0.5.json`
+`docs/infrastructure/botmarket-test-executor-installation-freeze-v1.0.6.json`
 
 Main installer:
 
@@ -539,6 +539,23 @@ v1.0.5 therefore:
 - adds `scripts/mcp/redeploy-botmarket-test-executor-v1.0.5.sh`, which resolves paths from its own location, checks a clean exact `origin/main` worktree, verifies the frozen installer SHA256, runs `bash -n` before sudo, verifies a real process restart, and rechecks all three helpers afterward.
 
 The verified redeploy wrapper is the preferred update path for an existing installation. It is deliberately CWD-independent once invoked by absolute path.
+
+### v1.0.6 GitHub read-only proof fix
+
+A real redeploy on 2026-10-08 reached the write-denial gate and GitHub returned the explicit message:
+
+`ERROR: The key you are authenticating with has been marked as read only.`
+
+v1.0.5 failed closed because that exact wording was not in the accepted read-only proof classifier. No policy/helper/server/systemd installation occurred after the failed classifier gate.
+
+v1.0.6 adds:
+
+- exact recognition of GitHub's live `marked as read only` response;
+- a preflight classifier self-test that must accept that exact live sample;
+- a negative classifier self-test that must reject a representative SSH transport timeout;
+- no relaxation of the rule that ambiguous transport failures are not accepted as read-only proof;
+- versioned verified redeploy wrapper `scripts/mcp/redeploy-botmarket-test-executor-v1.0.6.sh`.
+
 
 
 ## Residual limitations

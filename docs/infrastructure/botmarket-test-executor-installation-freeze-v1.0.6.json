@@ -1,0 +1,74 @@
+{
+  "schema": "botmarket.test_executor_installation_freeze.v1.0.6",
+  "date": "2026-10-08",
+  "status": "READY_FOR_SINGLE_VERIFIED_REDEPLOY_AFTER_LIVE_READONLY_PROOF_FIX",
+  "supersedes": "docs/infrastructure/botmarket-test-executor-installation-freeze-v1.0.5.json",
+  "base_git_head": "46216d76bd88cee3361f068d6aa77eefbe59dbc1",
+  "observed_live_failure": {
+    "stage": "Verify deploy key is truly read-only",
+    "exact_positive_evidence": "ERROR: The key you are authenticating with has been marked as read only.",
+    "v1_0_5_behavior": "FAIL_CLOSED_AS_GITHUB_WRITE_DENIAL_INDETERMINATE",
+    "runtime_install_reached": false,
+    "systemd_restart_reached": false,
+    "interpretation": "The deploy key was correctly read-only; only the classifier vocabulary was incomplete."
+  },
+  "fix": {
+    "exact_live_readonly_phrase_recognized": true,
+    "existing_explicit_permission_denial_patterns_retained": true,
+    "transport_failures_remain_indeterminate": true,
+    "classifier_positive_selftest": "must accept exact GitHub 'marked as read only' sample",
+    "classifier_negative_selftest": "must reject SSH connection-timeout sample",
+    "previous_v1_0_5_retention_redeploy_security_boundaries_unchanged": true
+  },
+  "artifacts": {
+    "main_installer": {
+      "path": "scripts/mcp/install-botmarket-test-executor-v1.sh",
+      "git_blob_sha": "afcb0efe1dead2fecc3d15019835251f76a94ecc",
+      "sha256": "0e9afe9b9a3e12beb7aa451a7608eda3ffa30a46ba9b07faf0a869bfda518968",
+      "size_bytes": 62757
+    },
+    "verified_redeploy_wrapper": {
+      "path": "scripts/mcp/redeploy-botmarket-test-executor-v1.0.6.sh",
+      "git_blob_sha": "4d502b48199e7bfadb80266b719e56da7dea73ee",
+      "sha256": "036756ac2ca5d176a73951f64785a1a975f1b2e0f37e374e60e42637e1b1cfbb",
+      "size_bytes": 3216
+    },
+    "runbook": {
+      "path": "docs/infrastructure/botmarket-test-executor-v1.0.md",
+      "git_blob_sha": "03f4540176509b5db43d59c72af8e1677d5f043a"
+    },
+    "tunnel_installer": {
+      "path": "scripts/mcp/install-botmarket-test-executor-tunnel-v1.sh",
+      "git_blob_sha": "83b7a550f5de819e287a65338fecdcfd5b2c5d7a",
+      "sha256": "e18062946fbefde2b3c6dd6e6314578c661067e983aa3f15c5c6ac5a28d1a1c9",
+      "changed": false
+    }
+  },
+  "pre_root_mutation_gate": [
+    "verified wrapper exact origin/main + clean worktree",
+    "frozen installer SHA256 match",
+    "bash -n installer PASS",
+    "GITHUB_WRITE_DENIAL_CLASSIFIER_SELFTEST=PASS"
+  ],
+  "expected_install_sequence": [
+    "GITHUB_READ=PASS",
+    "GITHUB_WRITE_DENIAL_CLASSIFIER_SELFTEST=PASS",
+    "GITHUB_WRITE=DENIED_AS_REQUIRED",
+    "generated helper/server py_compile PASS",
+    "launch/cancel/prune sudo bridge self-tests PASS",
+    "RETENTION_PRUNE_OWNERSHIP_SELFTEST=PASS",
+    "arbitrary root sudo denied",
+    "explicit MCP service restart PASS",
+    "isolated offline install job self-test PASS",
+    "public-research network sandbox self-test PASS",
+    "local MCP probe PASS",
+    "BOTMARKET_TEST_EXECUTOR_REDEPLOY_PASS"
+  ],
+  "research_authorization_effect": "NONE. Infrastructure repair only; no market/outcome/collector/Runner/trading authority.",
+  "next_after_redeploy_pass": [
+    "Strategy Manager get_test_executor_info requires all three bridges + filesystem boundary PASS.",
+    "One known-good offline run_repo_test.",
+    "H1 source-probe --self-test offline.",
+    "Then exact T1 public_research metadata-only H1 source qualification if both tests PASS."
+  ]
+}
