@@ -1,0 +1,33 @@
+{
+  "schema": "sc001.verified_resource.v0.1",
+  "resource_id": "0d2b27da78974646fff5b781c49a274644a2253456b35e2ce48ac120330d62db",
+  "resource_kind": "REMOTE_ARCHIVE_LISTING_METADATA_RESULT",
+  "dataset_key": {
+    "source_provider": "Binance",
+    "source_host": "s3-ap-northeast-1.amazonaws.com/data.binance.vision",
+    "endpoint_class": "S3_ListObjectsV2_public_archive_metadata",
+    "market_type": "USD-M perpetual futures",
+    "instrument_or_universe_identifier": "H1_LEXICOGRAPHIC_USDT_CAP80_FIRST12_GE300D_PLUS_X1_ANCHORS_BTCUSDT_ETHUSDT",
+    "data_kind": "archive_listing_metadata",
+    "granularity_archive_class": "monthly_1m_klines_zip_keys",
+    "UTC_start": "EARLIEST_PUBLISHED_MONTH_OBSERVED_PER_PROBED_SYMBOL",
+    "UTC_end_exclusive": "2026-10-01T00:00:00Z",
+    "source_identity_rule": "ListObjectsV2 under data/futures/um/monthly/klines/; H1 symbols ^[A-Z0-9]+USDT$ sorted UTF-8 bytewise, scan <=80, first <=12 with >=300 contiguous calendar days; BTCUSDT/ETHUSDT checked separately for >=36 contiguous complete archive months; metadata keys only, no archive/checksum bodies",
+    "source_semantic_version": "sc001.h1_shared_backbone_source_probe.v0.1"
+  },
+  "verified_by_job_id": "job_20261008T200911Z_09b2df70",
+  "verification_log_sha256": "4a873a19d0b2b9f369bd3fb27d0a715c1c9bfe20b27f0d7c2b1c751a971399f3",
+  "canonical_result_path": "docs/research/sc001-h1-shared-backbone-source-metadata-qualification-v0.1.json",
+  "physical_market_body_persisted": false,
+  "reusable_claims": [
+    "Binance USD-M monthly 1m archive metadata source is reachable under the frozen source identity.",
+    "Frozen H1 lexicographic rule yields 12 source-qualified candidate instruments with a 395-day common archive-key span candidate.",
+    "BTCUSDT and ETHUSDT each expose 81 contiguous eligible monthly 1m archive keys from 2020-01 through 2026-09."
+  ],
+  "nonclaims": [
+    "No market-body completeness is proven.",
+    "No price/return/alpha/PnL evidence is proven.",
+    "No full X1 broad-network universe is qualified."
+  ],
+  "status": "VERIFIED_METADATA_ONLY"
+}
