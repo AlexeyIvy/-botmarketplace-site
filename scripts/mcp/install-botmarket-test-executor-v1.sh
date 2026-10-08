@@ -43,6 +43,27 @@ as_testctl_root() {
   runuser -u "$CTL_USER" -- sudo -n -- "$@"
 }
 
+retry_cmd() {
+  local max_attempts="$1"; shift
+  local attempt=1 rc=0
+  while true; do
+    if "$@"; then
+      return 0
+    else
+      rc=$?
+    fi
+    if (( attempt >= max_attempts )); then
+      return "$rc"
+    fi
+    echo "[RETRY] command failed rc=$rc attempt=$attempt/$max_attempts; retrying in $((attempt*2))s" >&2
+    sleep "$((attempt*2))"
+    attempt=$((attempt+1))
+  done
+}
+
+SERVICE_WAS_ACTIVE=0
+systemctl is-active --quiet botmarket-test-executor.service 2>/dev/null && SERVICE_WAS_ACTIVE=1 || true
+
 [[ "${EUID:-$(id -u)}" -eq 0 ]] || die "Run as root"
 
 log STEP "Preflight"
@@ -100,22 +121,34 @@ chmod 0644 "$KEY.pub"
 
 SSH="ssh -i $KEY -o IdentitiesOnly=yes -o UserKnownHostsFile=$KH -o StrictHostKeyChecking=yes -o BatchMode=yes"
 
-set +e
-READ="$(runuser -u "$CTL_USER" -- env GIT_SSH_COMMAND="$SSH" git ls-remote "$REPO_URL" "refs/heads/$BRANCH" 2>&1)"
-RC=$?
-set -e
+READ=""
+RC=1
+for attempt in 1 2 3 4; do
+  set +e
+  READ="$(runuser -u "$CTL_USER" -- env GIT_SSH_COMMAND="$SSH" git ls-remote "$REPO_URL" "refs/heads/$BRANCH" 2>&1)"
+  RC=$?
+  set -e
+  [[ $RC -eq 0 ]] && break
+  if (( attempt < 4 )); then
+    echo "[RETRY] GitHub read probe failed rc=$RC attempt=$attempt/4; retrying in $((attempt*2))s" >&2
+    sleep "$((attempt*2))"
+  fi
+done
 if [[ $RC -ne 0 ]]; then
-  echo
-  echo "TEST_EXECUTOR_DEPLOY_KEY_NOT_AUTHORIZED_YET"
-  echo "Repository: $REPO_NAME"
-  echo "GitHub -> Settings -> Deploy keys -> Add deploy key"
-  echo "Title: BotMarketplace Test Executor READ ONLY"
-  echo "IMPORTANT: DO NOT enable 'Allow write access'"
-  echo
-  cat "$KEY.pub"
-  echo
-  echo "After authorizing this READ-ONLY key, rerun this same installer."
-  exit 0
+  if grep -Eqi 'Permission denied \(publickey\)|Repository not found|repository access denied' <<<"$READ"; then
+    echo
+    echo "TEST_EXECUTOR_DEPLOY_KEY_NOT_AUTHORIZED_YET"
+    echo "Repository: $REPO_NAME"
+    echo "GitHub -> Settings -> Deploy keys -> Add deploy key"
+    echo "Title: BotMarketplace Test Executor READ ONLY"
+    echo "IMPORTANT: DO NOT enable 'Allow write access'"
+    echo
+    cat "$KEY.pub"
+    echo
+    echo "After authorizing this READ-ONLY key, rerun this same installer."
+    exit 3
+  fi
+  die "GITHUB_READ_TRANSPORT_FAILURE after 4 attempts: ${READ:0:1200}"
 fi
 
 REMOTE_SHA="$(awk 'NF>=2{print $1;exit}' <<<"$READ")"
@@ -127,12 +160,24 @@ if [[ -d "$REPODIR/.git" ]]; then
   ORIGIN="$(runuser -u "$CTL_USER" -- git -C "$REPODIR" remote get-url origin)"
   [[ "$ORIGIN" == "$REPO_URL" ]] || die "Unexpected origin: $ORIGIN"
   [[ -z "$(runuser -u "$CTL_USER" -- git -C "$REPODIR" status --porcelain=v1)" ]] || die "Test Executor clone is dirty"
-  runuser -u "$CTL_USER" -- env GIT_SSH_COMMAND="$SSH" git -C "$REPODIR" fetch --prune origin "$BRANCH"
+  retry_cmd 4 runuser -u "$CTL_USER" -- env GIT_SSH_COMMAND="$SSH" git -C "$REPODIR" fetch --prune origin "$BRANCH" \
+    || die "Git fetch failed after retries"
   runuser -u "$CTL_USER" -- git -C "$REPODIR" checkout "$BRANCH"
   runuser -u "$CTL_USER" -- git -C "$REPODIR" merge --ff-only "origin/$BRANCH"
 else
-  rm -rf "$REPODIR"
-  runuser -u "$CTL_USER" -- env GIT_SSH_COMMAND="$SSH"     git clone --branch "$BRANCH" --single-branch "$REPO_URL" "$REPODIR"
+  CLONE_OK=0
+  for attempt in 1 2 3 4; do
+    rm -rf "$REPODIR"
+    if runuser -u "$CTL_USER" -- env GIT_SSH_COMMAND="$SSH" git clone --branch "$BRANCH" --single-branch "$REPO_URL" "$REPODIR"; then
+      CLONE_OK=1
+      break
+    fi
+    if (( attempt < 4 )); then
+      echo "[RETRY] Git clone failed attempt=$attempt/4; retrying in $((attempt*2))s" >&2
+      sleep "$((attempt*2))"
+    fi
+  done
+  [[ "$CLONE_OK" -eq 1 ]] || die "Git clone failed after retries"
 fi
 chmod 0700 "$REPODIR"
 LOCAL_HEAD="$(runuser -u "$CTL_USER" -- git -C "$REPODIR" rev-parse HEAD)"
@@ -140,12 +185,26 @@ LOCAL_HEAD="$(runuser -u "$CTL_USER" -- git -C "$REPODIR" rev-parse HEAD)"
 echo "TEST_EXECUTOR_REPO_HEAD=$LOCAL_HEAD"
 
 log STEP "Verify deploy key is truly read-only"
-set +e
-WRITE_PROBE="$(runuser -u "$CTL_USER" -- env GIT_SSH_COMMAND="$SSH"   git -C "$REPODIR" push --dry-run origin "HEAD:refs/heads/__botmarket_test_executor_write_probe__" 2>&1)"
-WRITE_RC=$?
-set -e
-if [[ $WRITE_RC -eq 0 ]]; then
-  die "Deploy key appears write-enabled. Disable 'Allow write access' before continuing."
+WRITE_PROBE=""
+WRITE_RC=1
+for attempt in 1 2 3; do
+  set +e
+  WRITE_PROBE="$(runuser -u "$CTL_USER" -- env GIT_SSH_COMMAND="$SSH" git -C "$REPODIR" push --dry-run origin "HEAD:refs/heads/__botmarket_test_executor_write_probe__" 2>&1)"
+  WRITE_RC=$?
+  set -e
+  if [[ $WRITE_RC -eq 0 ]]; then
+    die "Deploy key appears write-enabled. Disable 'Allow write access' before continuing."
+  fi
+  if grep -Eqi 'write access.*not granted|permission to .* denied|deploy key.*read.?only|permission denied.*write' <<<"$WRITE_PROBE"; then
+    break
+  fi
+  if (( attempt < 3 )); then
+    echo "[RETRY] GitHub write-denial probe was transport-indeterminate attempt=$attempt/3; retrying in $((attempt*2))s" >&2
+    sleep "$((attempt*2))"
+  fi
+done
+if ! grep -Eqi 'write access.*not granted|permission to .* denied|deploy key.*read.?only|permission denied.*write' <<<"$WRITE_PROBE"; then
+  die "GITHUB_WRITE_DENIAL_INDETERMINATE: ${WRITE_PROBE:0:1200}"
 fi
 echo "GITHUB_WRITE=DENIED_AS_REQUIRED"
 
@@ -1196,17 +1255,24 @@ def filesystem_boundary_selftest()->dict[str,Any]:
         shutil.rmtree(probe,ignore_errors=True)
 
 def privilege_bridge_selftest()->dict[str,Any]:
-    p=subprocess.run(
-        ["sudo","-n",LAUNCHER,"--self-test"],
-        text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=15,
+    specs=(
+        ("launcher",LAUNCHER,"BOTMARKET_TEST_LAUNCHER_SELFTEST_PASS"),
+        ("canceler",CANCELER,"BOTMARKET_TEST_CANCEL_SELFTEST_PASS"),
+        ("pruner",PRUNER,"BOTMARKET_TEST_PRUNE_SELFTEST_PASS"),
     )
-    ok=(p.returncode==0 and p.stdout.strip()=="BOTMARKET_TEST_LAUNCHER_SELFTEST_PASS")
-    return {
-        "ok":ok,
-        "returncode":p.returncode,
-        "stdout":p.stdout.strip()[:500],
-        "stderr":p.stderr.strip()[:500],
-    }
+    checks={}
+    for name,path,token in specs:
+        p=subprocess.run(
+            ["sudo","-n",path,"--self-test"],
+            text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=15,
+        )
+        checks[name]={
+            "ok":p.returncode==0 and p.stdout.strip()==token,
+            "returncode":p.returncode,
+            "stdout":p.stdout.strip()[:500],
+            "stderr":p.stderr.strip()[:500],
+        }
+    return {"ok":all(x["ok"] for x in checks.values()),"helpers":checks}
 
 @mcp.tool()
 def get_test_executor_info()->dict[str,Any]:
@@ -1508,8 +1574,9 @@ RestartSec=3
 TimeoutStopSec=20
 UMask=0027
 # Deliberately NOT using NoNewPrivileges/empty CapabilityBoundingSet here:
-# this control service must traverse the exact sudoers bridge to the two
-# root-owned helpers. The helpers themselves create tightly sandboxed jobs.
+# this control service must traverse the exact sudoers bridge to the three
+# root-owned helpers (launch/cancel/retention-prune). The helpers themselves
+# remain narrowly scoped; jobs stay tightly sandboxed.
 PrivateTmp=true
 PrivateDevices=true
 ProtectSystem=strict
@@ -1530,13 +1597,29 @@ EOF
 chmod 0644 "$UNIT"
 
 systemctl daemon-reload
-systemctl enable --now botmarket-test-executor.service
+systemctl enable botmarket-test-executor.service >/dev/null
+
+if ! systemctl restart botmarket-test-executor.service; then
+  echo "[WARN] New Test Executor failed to restart; attempting bounded runtime rollback" >&2
+  if [[ "$SERVICE_WAS_ACTIVE" -eq 1 && -f "$BACKUP/server.py.bak" && -f "$BACKUP/botmarket-test-executor.service.bak" ]]; then
+    cp -a "$BACKUP/server.py.bak" "$APP/server.py"
+    cp -a "$BACKUP/botmarket-test-executor.service.bak" "$UNIT"
+    [[ -f "$BACKUP/env.bak" ]] && cp -a "$BACKUP/env.bak" "$ENVF"
+    [[ -f "$BACKUP/policy.json.bak" ]] && cp -a "$BACKUP/policy.json.bak" "$POLICY"
+    [[ -f "$BACKUP/botmarket-test-executor.bak" ]] && cp -a "$BACKUP/botmarket-test-executor.bak" "$SUDOERS"
+    systemctl daemon-reload
+    systemctl restart botmarket-test-executor.service || true
+  fi
+  systemctl --no-pager --full status botmarket-test-executor.service || true
+  journalctl -u botmarket-test-executor.service -n100 --no-pager || true
+  die "Test Executor restart failed; bounded rollback attempted"
+fi
 sleep 2
 
 systemctl is-active --quiet botmarket-test-executor.service || {
   systemctl --no-pager --full status botmarket-test-executor.service || true
   journalctl -u botmarket-test-executor.service -n100 --no-pager || true
-  die "Test Executor service failed"
+  die "Test Executor service is not active after explicit restart"
 }
 
 ss -ltnH | awk '{print $4}' | grep -Eq "127\.0\.0\.1:${PORT}$|\[::1\]:${PORT}$"   || die "Port $PORT not listening"
@@ -1618,12 +1701,22 @@ install -d -m0770 -o "$CTL_USER" -g "$JOB_GROUP" "$PUBLIC_DIR/output"
 cat > "$PUBLIC_DIR/package/public_test.sh" <<'SH'
 #!/usr/bin/env bash
 set -Eeuo pipefail
-set +e
-code="$(curl -4 --http1.1 -sS --max-time 15 -o /dev/null -w '%{http_code}' https://announcements.bybit.com/en-US/ 2>/dev/null)"
-curl_rc=$?
-set -e
+code=""
+curl_rc=1
+for attempt in 1 2 3; do
+  set +e
+  code="$(curl -4 --http1.1 -sS --max-time 15 -o /dev/null -w '%{http_code}' https://announcements.bybit.com/en-US/ 2>/dev/null)"
+  curl_rc=$?
+  set -e
+  if [[ $curl_rc -eq 0 && "$code" =~ ^[1-5][0-9][0-9]$ ]]; then
+    break
+  fi
+  if (( attempt < 3 )); then
+    sleep "$((attempt*2))"
+  fi
+done
 if [[ $curl_rc -ne 0 || ! "$code" =~ ^[1-5][0-9][0-9]$ ]]; then
-  echo "PUBLIC_HTTPS_TRANSPORT_FAILED rc=$curl_rc code=$code"
+  echo "PUBLIC_HTTPS_TRANSPORT_FAILED_AFTER_RETRIES rc=$curl_rc code=$code"
   exit 9
 fi
 echo "PUBLIC_HTTP_CODE=$code"

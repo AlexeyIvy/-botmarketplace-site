@@ -1,7 +1,7 @@
 # BotMarketplace Test Executor MCP v1.0
 
 Date: 2026-09-29  
-Status: **APP CONNECTED / RETENTION CLEANUP FIX PREPARED / INSTALLATION FREEZE v1.0.4 READY**
+Status: **APP CONNECTED / RETENTION + REDEPLOY HARDENING PREPARED / INSTALLATION FREEZE v1.0.5 READY**
 
 ## Purpose
 
@@ -188,12 +188,13 @@ The future Trading Executor, if ever created, remains a separate component and s
 
 ## Restricted root bridge
 
-The Test Executor control MCP must launch and cancel jobs through exactly two root-owned helpers:
+The Test Executor control MCP may use exactly three root-owned helpers:
 
 - `/usr/local/sbin/botmarket-test-launch`
 - `/usr/local/sbin/botmarket-test-cancel`
+- `/usr/local/sbin/botmarket-test-prune`
 
-The `botmarket-testctl` sudoers policy grants passwordless root execution **only** for these two exact command paths.
+The `botmarket-testctl` sudoers policy grants passwordless root execution **only** for these three exact command paths. The prune helper has no arbitrary path argument: it accepts only a canonical Test Executor job ID under the fixed jobs root, independently verifies completion/retention eligibility and refuses active, fresh, symlinked, escaped or incomplete jobs.
 
 Important systemd distinction:
 
@@ -202,12 +203,14 @@ Important systemd distinction:
 
 Therefore do **not** add `NoNewPrivileges=true` or an empty `CapabilityBoundingSet=` to `botmarket-test-executor.service` unless the root broker architecture is redesigned. Doing so prevents the service from using the restricted sudo bridge.
 
-The MCP server performs `launcher --self-test` through sudo during its own startup. If the bridge is unavailable from the real systemd sandbox, the service fails closed and does not become operational.
+The MCP server performs self-tests for all three root helpers through sudo during its own startup. If any launch/cancel/prune bridge is unavailable from the real systemd sandbox, the service fails closed and does not become operational. `get_test_executor_info` reports the three helper checks together.
 
 The installer also verifies:
 
 - launcher escalation works;
 - cancel-helper escalation works;
+- retention-prune escalation works;
+- a synthetic old completed job containing a worker-owned `0700` directory and `0600` file can be pruned;
 - an unrelated root command (`/usr/bin/id -u`) is denied.
 
 ## First-bootstrap validation finding
@@ -349,7 +352,7 @@ Consolidation result:
 
 Current installation freeze:
 
-`docs/infrastructure/botmarket-test-executor-installation-freeze-v1.0.4.json`
+`docs/infrastructure/botmarket-test-executor-installation-freeze-v1.0.5.json`
 
 Main installer:
 
@@ -501,7 +504,7 @@ Root cause:
 - retention cleanup attempted recursive deletion directly as the control user;
 - nested worker-owned directories can intentionally lack group-write permission, so direct `shutil.rmtree` is not a valid retention mechanism.
 
-v1.0.4 fixes this without weakening the worker sandbox:
+v1.0.4 fixes the retention permission defect without weakening the worker sandbox:
 
 - add root-owned `/usr/local/sbin/botmarket-test-prune`;
 - sudo remains restricted to the exact helper path;
@@ -512,6 +515,30 @@ v1.0.4 fixes this without weakening the worker sandbox:
 - installer includes a synthetic ownership smoke with a worker-owned `0700` nested output directory and `0600` file.
 
 No research semantics, network profile, credentials boundary, collector state, Worker `NoNewPrivileges`, capability set or protected-data boundary changes.
+
+### v1.0.5 redeploy hardening
+
+A three-pass programmer review after the v1.0.4 repair found additional operational failure modes that could otherwise force repeated manual Termux cycles:
+
+- a transient `git ls-remote` failure was previously mislabeled as an unauthorized deploy key;
+- the dry-run push check previously treated any network failure as proof of read-only GitHub access;
+- `systemctl enable --now` did not prove that an already-active MCP process restarted onto the newly installed server code;
+- startup health checked only the launch bridge, not the new prune bridge required by `run_repo_test`;
+- the installer public-network smoke had no bounded retry;
+- relative-path operator commands were vulnerable to the current working directory.
+
+v1.0.5 therefore:
+
+- retries GitHub read/fetch/clone checks with bounded backoff;
+- reports deploy-key authorization only for explicit authentication/repository-denial signatures;
+- accepts read-only status only from an explicit GitHub write-permission rejection; transport failures are indeterminate and fail closed;
+- explicitly restarts the MCP service after installation;
+- performs a bounded rollback of the prior server/unit/env/policy/sudoers if the new service cannot restart;
+- requires all launch/cancel/prune sudo bridges to self-test at service startup;
+- retries the public HTTPS transport smoke;
+- adds `scripts/mcp/redeploy-botmarket-test-executor-v1.0.5.sh`, which resolves paths from its own location, checks a clean exact `origin/main` worktree, verifies the frozen installer SHA256, runs `bash -n` before sudo, verifies a real process restart, and rechecks all three helpers afterward.
+
+The verified redeploy wrapper is the preferred update path for an existing installation. It is deliberately CWD-independent once invoked by absolute path.
 
 
 ## Residual limitations

@@ -1,0 +1,91 @@
+{
+  "schema": "botmarket.test_executor_installation_freeze.v1.0.5",
+  "date": "2026-10-08",
+  "status": "READY_FOR_SINGLE_VERIFIED_REDEPLOY_AFTER_THREE_PASS_PROGRAMMER_REVIEW",
+  "supersedes": "docs/infrastructure/botmarket-test-executor-installation-freeze-v1.0.4.json",
+  "base_git_head": "9e0bf4910ad97a27ed4c8edc528e9581d01ebb8f",
+  "purpose": "Harden the v1.0.4 retention repair deployment path so the next host action is one CWD-independent, fail-closed, recoverable redeploy rather than repeated manual diagnostic cycles.",
+  "three_pass_review": {
+    "pass_1_correctness_idempotence": [
+      "Explicit service restart replaces enable --now ambiguity for an already-active service.",
+      "Installer remains idempotent for existing users/groups/repo/key/runtime paths.",
+      "GitHub read/fetch/clone use bounded retry/backoff.",
+      "Public HTTPS install smoke uses bounded retry.",
+      "Verified wrapper checks clean worktree, exact origin/main, frozen installer hash and bash syntax before sudo."
+    ],
+    "pass_2_security_boundary": [
+      "GitHub write denial is accepted only from explicit permission-denied semantics; transport failure is indeterminate and fails closed.",
+      "Deploy-key authorization guidance is emitted only for explicit auth/repository denial after bounded read retries.",
+      "Launch/cancel/prune remain the only sudo helper paths.",
+      "Prune helper independently rechecks fixed root, canonical job ID, manifest/result, job ID match, retention eligibility and inactive state.",
+      "Worker NoNewPrivileges/capability/network/credential boundaries are unchanged."
+    ],
+    "pass_3_recovery_observability": [
+      "Service startup health requires all launch/cancel/prune bridges.",
+      "Failed new-service restart triggers bounded restoration of prior server/unit/env/policy/sudoers before stopping.",
+      "Wrapper verifies the running service actually restarted by comparing ExecMainStartTimestampMonotonic.",
+      "Wrapper verifies installed server contains the retention-prune binding and rechecks all three root helpers.",
+      "Relative current working directory is removed as an operator dependency."
+    ]
+  },
+  "artifacts": {
+    "main_installer": {
+      "path": "scripts/mcp/install-botmarket-test-executor-v1.sh",
+      "git_blob_sha": "e580e4a717aa8ed9c93a8e24dc9b9f61dedf421e",
+      "sha256": "bb058bf337e5edddaeea261a03eec195ebe53573cf7ee5d8370a0b6dfa326e8f",
+      "size_bytes": 62201
+    },
+    "verified_redeploy_wrapper": {
+      "path": "scripts/mcp/redeploy-botmarket-test-executor-v1.0.5.sh",
+      "git_blob_sha": "294f5c8c2fb743a5d2c21ef42db7c5d98cc89feb",
+      "sha256": "b94cb73b04f4dd7391aa39737a0dee13fe6dd71aa1e9b6d9ca5e03e8b89352e5",
+      "size_bytes": 3216
+    },
+    "runbook": {
+      "path": "docs/infrastructure/botmarket-test-executor-v1.0.md",
+      "git_blob_sha": "366ab65350421ee951bbf437a63bca20714cc449",
+      "sha256": "b55c1270b57b4bb7c5bb6e27fea39e5f7916b6d14656fed734370b3a8f8be1e9",
+      "size_bytes": 19853
+    },
+    "tunnel_installer": {
+      "path": "scripts/mcp/install-botmarket-test-executor-tunnel-v1.sh",
+      "git_blob_sha": "83b7a550f5de819e287a65338fecdcfd5b2c5d7a",
+      "sha256": "e18062946fbefde2b3c6dd6e6314578c661067e983aa3f15c5c6ac5a28d1a1c9",
+      "changed": false
+    }
+  },
+  "pre_root_mutation_gates": [
+    "wrapper path resolves from BASH_SOURCE rather than current working directory",
+    "worktree clean",
+    "local HEAD equals origin/main",
+    "installer SHA256 equals this freeze",
+    "bash -n installer PASS"
+  ],
+  "installer_pre_restart_gates": [
+    "GitHub read PASS after bounded retries",
+    "GitHub write DENIED_AS_REQUIRED by explicit permission rejection",
+    "generated launcher/cancel/prune/server Python py_compile PASS",
+    "restricted sudoers visudo PASS",
+    "launch/cancel/prune helper self-tests PASS",
+    "RETENTION_PRUNE_OWNERSHIP_SELFTEST=PASS",
+    "arbitrary root sudo denied"
+  ],
+  "post_restart_gates": [
+    "service active after explicit restart",
+    "filesystem boundary startup self-test PASS",
+    "all three privilege bridges PASS",
+    "isolated offline install job self-test PASS",
+    "public-research network sandbox self-test PASS after bounded transport retry",
+    "local MCP probe PASS",
+    "wrapper proves service start timestamp changed when service was previously active",
+    "wrapper rechecks installed retention binding and all three helper self-tests"
+  ],
+  "rollback_boundary": "If the newly installed MCP service cannot restart and a prior active runtime backup exists, restore prior server.py, service unit, env, policy and sudoers, daemon-reload, attempt restart of the prior runtime, emit diagnostics and stop. No automatic research execution follows a failed redeploy.",
+  "research_authorization_effect": "NONE. Infrastructure repair only. It does not authorize historical market-body access, outcomes, collectors, Runner execution, trading or changes to frozen research rules.",
+  "next_after_host_redeploy_pass": [
+    "Strategy Manager calls get_test_executor_info and requires privilege_bridge.ok=true and filesystem_boundary.ok=true.",
+    "Run exactly one known-good offline run_repo_test.",
+    "Run H1 source-probe --self-test offline.",
+    "Only after both PASS may exact T1 public_research metadata-only H1 source qualification proceed."
+  ]
+}
