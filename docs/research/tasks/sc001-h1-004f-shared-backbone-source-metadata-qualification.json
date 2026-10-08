@@ -14,12 +14,12 @@
   "exact_execution": {
     "plane": "BotMarketplace Test Executor",
     "network_profile": "public_research",
-    "repo_head_sha": "b4d205dd3942b4c16853ed1428713173e2643d4e",
     "entrypoint": "scripts/research/sc001_h1_shared_backbone_source_probe_v0_1.py",
     "args": [],
     "timeout_seconds": 900,
     "max_network_runs": 1,
-    "max_outcome_runs": 0
+    "max_outcome_runs": 0,
+    "repo_head_rule": "Use current canonical main at execution time, provided implementation_path SHA256 exactly equals 4748b005dfe67125d85ddc5b0ae91d36f22257bb1ab51ef960a6f07e6d84a370 and canonical task/authorization/reservation are present unchanged in that main."
   },
   "network_budget": {
     "allowed_hosts": [
