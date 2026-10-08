@@ -49,8 +49,9 @@ retry_cmd() {
   while true; do
     if "$@"; then
       return 0
+    else
+      rc=$?
     fi
-    rc=$?
     if (( attempt >= max_attempts )); then
       return "$rc"
     fi
@@ -1703,7 +1704,9 @@ for attempt in 1 2 3; do
   if [[ $curl_rc -eq 0 && "$code" =~ ^[1-5][0-9][0-9]$ ]]; then
     break
   fi
-  (( attempt < 3 )) && sleep "$((attempt*2))"
+  if (( attempt < 3 )); then
+    sleep "$((attempt*2))"
+  fi
 done
 if [[ $curl_rc -ne 0 || ! "$code" =~ ^[1-5][0-9][0-9]$ ]]; then
   echo "PUBLIC_HTTPS_TRANSPORT_FAILED_AFTER_RETRIES rc=$curl_rc code=$code"
