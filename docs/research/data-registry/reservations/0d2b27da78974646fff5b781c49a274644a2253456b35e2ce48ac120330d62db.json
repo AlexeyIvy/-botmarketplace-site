@@ -1,0 +1,35 @@
+{
+  "schema": "sc001.resource_reservation.v0.1",
+  "resource_id": "0d2b27da78974646fff5b781c49a274644a2253456b35e2ce48ac120330d62db",
+  "dataset_key": {
+    "source_provider": "Binance",
+    "source_host": "s3-ap-northeast-1.amazonaws.com/data.binance.vision",
+    "endpoint_class": "S3_ListObjectsV2_public_archive_metadata",
+    "market_type": "USD-M perpetual futures",
+    "instrument_or_universe_identifier": "H1_LEXICOGRAPHIC_USDT_CAP80_FIRST12_GE300D_PLUS_X1_ANCHORS_BTCUSDT_ETHUSDT",
+    "data_kind": "archive_listing_metadata",
+    "granularity_archive_class": "monthly_1m_klines_zip_keys",
+    "UTC_start": "EARLIEST_PUBLISHED_MONTH_OBSERVED_PER_PROBED_SYMBOL",
+    "UTC_end_exclusive": "2026-10-01T00:00:00Z",
+    "source_identity_rule": "ListObjectsV2 under data/futures/um/monthly/klines/; H1 symbols ^[A-Z0-9]+USDT$ sorted UTF-8 bytewise, scan <=80, first <=12 with >=300 contiguous calendar days; BTCUSDT/ETHUSDT checked separately for >=36 contiguous complete archive months; metadata keys only, no archive/checksum bodies",
+    "source_semantic_version": "sc001.h1_shared_backbone_source_probe.v0.1"
+  },
+  "task_id": "SC001-H1-004F",
+  "worker_id": "H1_HISTORICAL_INDICATORS",
+  "claimed_at_utc": "2026-10-08T20:07:00Z",
+  "lease_until_utc": "2026-10-09T02:07:00Z",
+  "authorization_class": "T1",
+  "user_approval_ref": "docs/research/sc001-user-delegated-authorization-ratification-v0.1.json",
+  "expected_bytes": 50000000,
+  "estimated_peak_disk_bytes": 134217728,
+  "network_hosts": [
+    "s3-ap-northeast-1.amazonaws.com"
+  ],
+  "max_requests_per_host": 85,
+  "max_network_bytes": 50000000,
+  "retry_budget": "2 retries per request, within total request cap",
+  "local_target_logical_path": "Test Executor transient output/run.log; compact canonical result persisted to docs/research/sc001-h1-shared-backbone-source-metadata-qualification-v0.1.json",
+  "resource_class": "LIGHT",
+  "evidence_role": "RESOURCE_SOURCE_QUALIFICATION_METADATA_ONLY_NONPROMOTIONAL",
+  "status": "RESERVED"
+}
