@@ -1,0 +1,133 @@
+{
+  "schema": "sc001.h1_shared_backbone_source_metadata_qualification_result.v0.1",
+  "task_id": "SC001-H1-004F",
+  "worker_id": "H1_HISTORICAL_INDICATORS",
+  "authorization_tier": "T1",
+  "status": "PASS_SOURCE_METADATA_COMPATIBLE",
+  "terminal_source_status": "H1_X1_SOURCE_METADATA_COMPATIBLE",
+  "execution": {
+    "job_id": "job_20261008T200911Z_09b2df70",
+    "repo_head": "1085ccbd15225bb337d71e2bf191ba662930ce60",
+    "implementation_path": "scripts/research/sc001_h1_shared_backbone_source_probe_v0_1.py",
+    "implementation_sha256": "4748b005dfe67125d85ddc5b0ae91d36f22257bb1ab51ef960a6f07e6d84a370",
+    "network_profile": "public_research",
+    "exit_code": 0,
+    "timed_out": false,
+    "log_sha256": "4a873a19d0b2b9f369bd3fb27d0a715c1c9bfe20b27f0d7c2b1c751a971399f3",
+    "network_runs": 1,
+    "outcome_runs": 0
+  },
+  "source_identity": {
+    "endpoint": "https://s3-ap-northeast-1.amazonaws.com/data.binance.vision",
+    "interval": "1m",
+    "market": "USD-M futures",
+    "metadata_only": true,
+    "object_class": "monthly klines ZIP archive metadata",
+    "provider": "Binance",
+    "public_url_prefix": "https://data.binance.vision/",
+    "root_prefix": "data/futures/um/monthly/klines/"
+  },
+  "source_budget_observed": {
+    "request_count": 17,
+    "network_bytes": 455379,
+    "request_cap": 85,
+    "byte_cap": 50000000
+  },
+  "h1": {
+    "discovered_symbol_count": 895,
+    "scanned_candidate_count": 13,
+    "frozen_eligible_universe": [
+      "0GUSDT",
+      "1000000BOBUSDT",
+      "1000000MOGUSDT",
+      "1000BONKUSDT",
+      "1000CATUSDT",
+      "1000CHEEMSUSDT",
+      "1000FLOKIUSDT",
+      "1000LUNCUSDT",
+      "1000PEPEUSDT",
+      "1000RATSUSDT",
+      "1000SATSUSDT",
+      "1000SHIBUSDT"
+    ],
+    "development_instruments": [
+      "0GUSDT",
+      "1000000BOBUSDT",
+      "1000000MOGUSDT",
+      "1000BONKUSDT",
+      "1000CHEEMSUSDT",
+      "1000FLOKIUSDT",
+      "1000LUNCUSDT",
+      "1000PEPEUSDT",
+      "1000SATSUSDT",
+      "1000SHIBUSDT"
+    ],
+    "asset_holdout_instruments": [
+      "1000CATUSDT",
+      "1000RATSUSDT"
+    ],
+    "common_complete_archive_key_span_candidate": {
+      "start_utc": "2025-09-01T00:00:00Z",
+      "end_exclusive_utc": "2026-10-01T00:00:00Z",
+      "calendar_days": 395,
+      "limiting_instrument": "0GUSDT",
+      "caveat": "Archive-key presence proves source availability, not yet body-level minute completeness. Body integrity must pass before evidence access."
+    },
+    "frozen_block_allocation_if_body_integrity_passes": {
+      "selection": [
+        "2025-09-01T00:00:00Z",
+        "2026-02-06T00:00:00Z",
+        158
+      ],
+      "discovery": [
+        "2026-02-06T00:00:00Z",
+        "2026-04-26T00:00:00Z",
+        79
+      ],
+      "asset_holdout": [
+        "2026-04-26T00:00:00Z",
+        "2026-07-14T00:00:00Z",
+        79
+      ],
+      "chronological_confirmation": [
+        "2026-07-14T00:00:00Z",
+        "2026-10-01T00:00:00Z",
+        79
+      ]
+    }
+  },
+  "x1_source_class": {
+    "btcusdt": {
+      "first_month": "2020-01",
+      "last_month": "2026-09",
+      "contiguous_months": 81,
+      "contiguous_calendar_days": 2465,
+      "source_class_compatible": true
+    },
+    "ethusdt": {
+      "first_month": "2020-01",
+      "last_month": "2026-09",
+      "contiguous_months": 81,
+      "contiguous_calendar_days": 2465,
+      "source_class_compatible": true
+    },
+    "interpretation": "BTC/ETH source class passes the >=36-month anchor requirement. This does not yet freeze or qualify the full X1 broad-network PIT universe."
+  },
+  "prior_use_contamination": {
+    "existing_q001_btc_day": "2025-01-15 BTCUSDT engineering/schema/access/storage qualification only; outside frozen H1 universe and outside H1 common span.",
+    "existing_q002_btc_aggtrades": "different data kind; does not establish H1 kline breadth.",
+    "local_inventory": "No mechanically identified reusable Binance USD-M 1m-kline body was found in the metadata-only legacy inventory.",
+    "h1_classification": "ADAPTIVE_DISCOVERY_GENERATED remains unchanged.",
+    "promotional_status": "NONPROMOTIONAL_SOURCE_QUALIFICATION_ONLY"
+  },
+  "body_access": {
+    "archive_bodies_downloaded": false,
+    "checksum_bodies_downloaded": false,
+    "market_rows_read": false,
+    "prices_or_returns_computed": false,
+    "pnl_computed": false,
+    "protected_outcomes_accessed": false
+  },
+  "next_gate": "Freeze exact raw body DATASET_KEY/RESOURCE_ID(s), acquisition/body-integrity plan and evidence-access receipts before any historical kline body is opened.",
+  "roadmap_change_required": false
+}
