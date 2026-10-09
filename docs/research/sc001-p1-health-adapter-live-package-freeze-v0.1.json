@@ -1,0 +1,268 @@
+{
+  "schema": "sc001.p1_health_adapter_live_package_freeze.v0.1",
+  "task_id": "SC001-P1-OPS-004",
+  "worker_id": "P1_PROSPECTIVE_EVENT",
+  "status": "P1_HEALTH_ADAPTER_LIVE_PACKAGE_READY_FOR_USER_GATE",
+  "authorization_class": "T0_DESIGN_AND_REPOSITORY_IMPLEMENTATION",
+  "strategy_review_required": false,
+  "continuation_review_required": true,
+  "canonical_main_head": "1ca17c1bef83ea9af4edfcb7e280437a92ecd0f5",
+  "source_validation": {
+    "adapter": {
+      "path": "ops/mcp/sc001_b13c_health_adapter_v0_1.py",
+      "git_blob_sha": "4c26f19b362d4f8ee9af1b34cbbf4d924323f755",
+      "sha256": "844949ec670c6cd1856d2a1ea016f3554b6c6e85b95b254b6e370907eb47d2c7"
+    },
+    "synthetic_job": {
+      "job_id": "job_20261005T211535Z_a451e333",
+      "result": "P1_HEALTH_ADAPTER_SYNTHETIC_PASS",
+      "tests": 23,
+      "failures": 0,
+      "errors": 0
+    }
+  },
+  "deployment_artifacts": {
+    "installer": {
+      "repository_path": "scripts/research/deploy-sc001-b13c-health-adapter-v0.1.py",
+      "git_blob_sha": "9bc09fc1fa249fd744c174fe49733077ccabef58",
+      "sha256": "a9e330ffad08be27f48b8a749f5c7335be8244d752db03b9023168b7f6c559fa"
+    },
+    "installed_adapter": {
+      "source_repository_path": "ops/mcp/sc001_b13c_health_adapter_v0_1.py",
+      "installed_path": "/usr/local/libexec/botmarket-research/sc001-b13c-health-v0.1/sc001_b13c_health_adapter_v0_1.py",
+      "sha256": "844949ec670c6cd1856d2a1ea016f3554b6c6e85b95b254b6e370907eb47d2c7"
+    },
+    "entrypoint": {
+      "installed_path": "/usr/local/libexec/botmarket-research/sc001-b13c-health-v0.1/sc001_b13c_health_entrypoint_v0_1.py",
+      "sha256": "eadaf746e0ca31de040040a744b0d7ff2e72995f9fd6fe84a7fe33e63b3e4612",
+      "maximum_stdout_bytes": 4096,
+      "caller_arguments": "NONE"
+    },
+    "sudoers": {
+      "installed_path": "/etc/sudoers.d/sc001-b13c-health-v0.1",
+      "sha256": "794e6e9bd87f062cbde818e852affdb81ef6a83adb8349e5e788c52ac798f8ba",
+      "command_alias": "SC001_B13C_HEALTH_V01",
+      "rule": "botmarket-mcp ALL=(botmarket) NOPASSWD:NOSETENV: SC001_B13C_HEALTH_V01",
+      "exact_target_command": "/usr/bin/python3 -I /usr/local/libexec/botmarket-research/sc001-b13c-health-v0.1/sc001_b13c_health_entrypoint_v0_1.py"
+    }
+  },
+  "host_ownership_and_modes": [
+    {
+      "path": "/usr/local/libexec/botmarket-research",
+      "owner": "root",
+      "group": "root",
+      "mode": "0755",
+      "kind": "directory"
+    },
+    {
+      "path": "/usr/local/libexec/botmarket-research/sc001-b13c-health-v0.1",
+      "owner": "root",
+      "group": "root",
+      "mode": "0555",
+      "kind": "directory"
+    },
+    {
+      "path": "/usr/local/libexec/botmarket-research/sc001-b13c-health-v0.1/sc001_b13c_health_adapter_v0_1.py",
+      "owner": "root",
+      "group": "root",
+      "mode": "0444",
+      "kind": "regular_file",
+      "hardlink_count": 1
+    },
+    {
+      "path": "/usr/local/libexec/botmarket-research/sc001-b13c-health-v0.1/sc001_b13c_health_entrypoint_v0_1.py",
+      "owner": "root",
+      "group": "root",
+      "mode": "0444",
+      "kind": "regular_file",
+      "hardlink_count": 1
+    },
+    {
+      "path": "/etc/sudoers.d/sc001-b13c-health-v0.1",
+      "owner": "root",
+      "group": "root",
+      "mode": "0440",
+      "kind": "regular_file",
+      "hardlink_count": 1
+    }
+  ],
+  "least_privilege_interface": {
+    "caller_user": "botmarket-mcp",
+    "run_as_user": "botmarket",
+    "public_method_equivalent": "get_health()",
+    "public_arguments": "NONE",
+    "fixed_collector_id": "SC001_B13C_PROSPECTIVE_LIQUIDATIONS",
+    "fixed_state_path": "/home/botmarket/sc001_data/SC001_B13C_PROSPECTIVE_LIQUIDATIONS/collector_state.json",
+    "fixed_systemd_unit": "sc001-b13c-liquidation.service",
+    "fixed_systemd_operation": "show ActiveState and SubState only",
+    "shell": false,
+    "network": false,
+    "writes_collector_storage": false,
+    "service_control": false,
+    "arbitrary_path": false,
+    "arbitrary_unit": false,
+    "arbitrary_command": false,
+    "log_access": false,
+    "raw_state_output": false
+  },
+  "live_output_contract": {
+    "top_level_keys_exact": [
+      "schema",
+      "adapter_version",
+      "collector_id",
+      "observed_at_ms",
+      "state",
+      "process",
+      "evidence_eligibility"
+    ],
+    "state_keys_exact": [
+      "availability",
+      "error",
+      "collector_status",
+      "connection_state",
+      "heartbeat",
+      "qualified_symbol_count",
+      "reconnect_diagnostics",
+      "process_gap_diagnostics"
+    ],
+    "heartbeat_keys_exact": [
+      "state",
+      "age_ms"
+    ],
+    "reconnect_diagnostics_keys_exact": [
+      "reconnect_count",
+      "cumulative_gap_ms"
+    ],
+    "process_gap_diagnostics_keys_exact": [
+      "process_restart_count",
+      "cumulative_process_gap_ms"
+    ],
+    "process_keys_exact": [
+      "availability",
+      "error",
+      "active_state",
+      "sub_state",
+      "running"
+    ],
+    "evidence_eligibility_exact": "NOT_EVALUATED",
+    "forbidden_output_families": [
+      "raw_state_json",
+      "symbols",
+      "raw_event_invalid_counts",
+      "message_timestamps",
+      "prices",
+      "sizes",
+      "clusters",
+      "event_frequencies",
+      "returns",
+      "pnl",
+      "log_content",
+      "raw_exception_text"
+    ]
+  },
+  "future_t3_actions": {
+    "host_installation": {
+      "gate": "EXPLICIT_USER_APPROVAL_REQUIRED",
+      "reads_live_collector_state": false,
+      "exact_command": [
+        "/usr/bin/python3",
+        "scripts/research/deploy-sc001-b13c-health-adapter-v0.1.py",
+        "--apply"
+      ],
+      "allowed_mutations_exact": [
+        "create versioned root-owned package directory and two immutable package files",
+        "create one root-owned fixed-command sudoers file"
+      ],
+      "forbidden_even_if_installation_approved": [
+        "collector restart or mutation",
+        "collector state/event/log read",
+        "collector/source/permission change",
+        "generic sudo or generic filesystem access"
+      ]
+    },
+    "first_live_read": {
+      "gate": "SEPARATE_EXPLICIT_USER_APPROVAL_REQUIRED_AFTER_VERIFIED_INSTALL",
+      "maximum_invocations_under_gate": 1,
+      "polling": false,
+      "exact_command": [
+        "/usr/bin/sudo",
+        "-n",
+        "-u",
+        "botmarket",
+        "--",
+        "/usr/bin/python3",
+        "-I",
+        "/usr/local/libexec/botmarket-research/sc001-b13c-health-v0.1/sc001_b13c_health_entrypoint_v0_1.py"
+      ],
+      "interpretation": "POINT_IN_TIME_OPERATIONAL_VISIBILITY_ONLY",
+      "does_not_establish": [
+        "evidence eligibility",
+        "window completeness",
+        "source continuity",
+        "subscription acknowledgement",
+        "research outcome authorization"
+      ]
+    }
+  },
+  "rollback": {
+    "gate": "EXPLICIT_T3_HOST_MUTATION_APPROVAL_REQUIRED",
+    "exact_command": [
+      "/usr/bin/python3",
+      "scripts/research/deploy-sc001-b13c-health-adapter-v0.1.py",
+      "--rollback"
+    ],
+    "precondition": "All installed files, hashes, owners, modes, hardlink counts and package membership match this freeze exactly.",
+    "actions_in_order": [
+      "remove /etc/sudoers.d/sc001-b13c-health-v0.1",
+      "remove the frozen entrypoint",
+      "remove the frozen adapter copy",
+      "remove the empty versioned package directory"
+    ],
+    "preserved": [
+      "collector process and unit",
+      "collector permissions and storage",
+      "parent /usr/local/libexec/botmarket-research directory",
+      "all logs and evidence"
+    ],
+    "mismatch_behavior": "FAIL_CLOSED_WITHOUT_REMOVAL"
+  },
+  "offline_static_validation": {
+    "worker_execution_performed": false,
+    "result": "STATIC_PACKAGE_REVIEW_PASS",
+    "method": "AST_PARSE_AND_LITERAL_HASH_RECOMPUTE",
+    "checks": [
+      "installer Python AST parsed",
+      "embedded entrypoint Python AST parsed",
+      "adapter, installer, entrypoint and sudoers SHA256 values recomputed",
+      "zero-argument entrypoint guard present",
+      "exact recursive output allowlist enforced before stdout",
+      "evidence_eligibility fixed to NOT_EVALUATED",
+      "output bounded to 4096 bytes",
+      "fixed sudo target command contains no caller-controlled argument",
+      "apply has no live-read operation",
+      "rollback is hash-and-metadata guarded",
+      "no Runner or Test Executor job launched"
+    ],
+    "optional_future_repository_only_command": [
+      "/usr/bin/python3",
+      "scripts/research/deploy-sc001-b13c-health-adapter-v0.1.py",
+      "--static-validate"
+    ]
+  },
+  "safety_receipts": {
+    "live_collector_state_read": false,
+    "vps_browsed": false,
+    "protected_evidence_accessed": false,
+    "outcome_accessed": false,
+    "price_return_pnl_accessed": false,
+    "collector_changed": false,
+    "collector_restarted": false,
+    "systemd_changed": false,
+    "permissions_or_acl_changed": false,
+    "deployment_performed": false,
+    "network_research_accessed": false,
+    "runner_bundle_executed": false,
+    "test_executor_job_launched": false
+  },
+  "terminal_rule": "Only USER_GATE_REQUIRED may follow this READY status. Host installation and the first live read require separate exact T3 user approvals."
+}
