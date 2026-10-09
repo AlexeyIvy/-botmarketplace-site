@@ -246,12 +246,18 @@ Never silently edit the predecessor's frozen contract or reduce evidence scope.
 
 ### Unique successor and incomplete transaction recovery
 
-Use deterministic successor identity based on exact originating
-`TERMINAL_COMMENT_ID` + successor stage + frozen scope/implementation identity,
-and additionally search for **semantically equivalent** live/terminal jobs from
-any source (including interactive Strategy Manager). The offline helper
-`continuation_key` defines one canonical byte encoding for deterministic IDs.
-Do not use the random Work run ID as the task identity.
+Use the reproducible branch pattern
+`sc001/continuation/<TERMINAL_COMMENT_ID>/<TASK_ID>`, requiring the exact
+terminal identity and one prospectively defined successor TASK_ID. Freeze
+the source/evidence/implementation scope hash in that task. Collision of the
+same terminal+TASK_ID with a DIFFERENT scope is a STOP, never a silent
+alternative branch. The pure helper `continuation_key` can additionally
+verify canonical terminal+stage+scope identity offline; computing its hash
+inside ChatGPT Work is NOT required for the branch reservation.
+
+Before create-only reservation, also search for **semantically equivalent**
+live/terminal jobs from other terminal comments or interactive Strategy
+Manager dispatches. Do not use a random Work run ID as task identity.
 
 Reserve one deterministic branch/task path with GitHub create-only atomic
 semantics. Under identical replay: do not create a different branch or task.
