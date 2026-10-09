@@ -193,7 +193,7 @@ class AdmissionTests(unittest.TestCase):
 
     def test_malformed_authorization_object_fails_closed(self):
         self.task["authorization_class"] = "T1"
-        result = self.check(authorization=["not a dict"])
+        result = self.check(auth=["not a dict"])
         self.assertEqual(result["status"], "ADMISSION_BLOCKED")
         self.assertIn("MALFORMED_AUTHORIZATION", result["errors"])
 
