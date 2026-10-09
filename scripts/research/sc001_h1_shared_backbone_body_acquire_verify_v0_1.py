@@ -20,7 +20,9 @@ import csv
 import hashlib
 import io
 import json
+import math
 import os
+import re
 from pathlib import Path, PurePosixPath
 import shutil
 import sys
@@ -31,11 +33,6 @@ import urllib.request
 import zipfile
 
 
-DATASET_KEY = (
-    "sc001/shared/binance-usdm/monthly-klines/1m/"
-    "2025-09-01_2026-10-01/12x13/v0.1"
-)
-RESOURCE_ID = "sc001-h1-binance-usdm-1m-bodyset-20250901-20261001-12x13-v0.1"
 PUBLIC_PREFIX = "https://data.binance.vision/"
 EXPECTED_SYMBOLS = (
     "0GUSDT",
@@ -61,7 +58,51 @@ EXPECTED_HEADER = (
     "quote_volume", "count", "taker_buy_volume",
     "taker_buy_quote_volume", "ignore",
 )
+DATASET_KEY: dict[str, object] = {
+    "source_provider": "Binance",
+    "source_host": "data.binance.vision",
+    "endpoint_class": "public archive objects",
+    "market_type": "USD-M futures",
+    "instrument_or_frozen_universe_identifier": {
+        "kind": "ordered_symbol_list",
+        "symbols": list(EXPECTED_SYMBOLS),
+    },
+    "data_kind": "kline",
+    "granularity": "1m",
+    "archive_class": "monthly ZIP plus SHA256 checksum sidecar",
+    "UTC_start": "2025-09-01T00:00:00Z",
+    "UTC_end_exclusive": "2026-10-01T00:00:00Z",
+    "exact_source_identity_rule": (
+        "data/futures/um/monthly/klines/{symbol}/1m/"
+        "{symbol}-1m-{YYYY-MM}.zip and exact .CHECKSUM sidecar basename"
+    ),
+    "source_semantic_version": (
+        "Binance public data monthly USD-M kline archive schema v1"
+    ),
+}
+
+
+def canonical_dataset_key_bytes(dataset_key: Mapping[str, object]) -> bytes:
+    return json.dumps(
+        dataset_key,
+        sort_keys=True,
+        separators=(",", ":"),
+        ensure_ascii=False,
+    ).encode("utf-8")
+
+
+def resource_id_for(dataset_key: Mapping[str, object]) -> str:
+    return hashlib.sha256(canonical_dataset_key_bytes(dataset_key)).hexdigest()
+
+
+RESOURCE_ID = resource_id_for(DATASET_KEY)
 CHUNK_BYTES = 1024 * 1024
+
+
+def cache_relative_path(source_basename: str) -> Path:
+    if not source_basename or Path(source_basename).name != source_basename:
+        raise ContractError("source basename must not contain path components")
+    return Path("_raw_cache") / "binance" / RESOURCE_ID / source_basename
 
 
 class ContractError(RuntimeError):
@@ -114,10 +155,16 @@ class Budget:
 
 def load_and_validate_freeze(path: Path) -> dict:
     freeze = json.loads(path.read_text(encoding="utf-8"))
-    if freeze.get("dataset_key") != DATASET_KEY:
+    frozen_key = freeze.get("dataset_key")
+    if not isinstance(frozen_key, Mapping):
+        raise ContractError("DATASET_KEY must be a structured mapping")
+    if frozen_key != DATASET_KEY:
         raise ContractError("DATASET_KEY mismatch")
-    if freeze.get("resource_id") != RESOURCE_ID:
-        raise ContractError("RESOURCE_ID mismatch")
+    computed_resource_id = resource_id_for(frozen_key)
+    if computed_resource_id != RESOURCE_ID:
+        raise ContractError("implementation RESOURCE_ID recomputation mismatch")
+    if freeze.get("resource_id") != computed_resource_id:
+        raise ContractError("freeze RESOURCE_ID is not SHA256(canonical DATASET_KEY)")
     if tuple(freeze.get("frozen_universe", ())) != EXPECTED_SYMBOLS:
         raise ContractError("frozen universe mismatch")
     interval = freeze.get("frozen_interval", {})
@@ -145,10 +192,18 @@ def load_and_validate_freeze(path: Path) -> dict:
         relative = f"data/futures/um/monthly/klines/{symbol}/1m/{stem}.zip"
         if item.get("archive_id") != stem or item.get("csv_member") != f"{stem}.csv":
             raise ContractError(f"archive identity mismatch: {stem}")
-        if item.get("archive", {}).get("url") != PUBLIC_PREFIX + relative:
+        archive = item.get("archive", {})
+        sidecar = item.get("checksum_sidecar", {})
+        if archive.get("url") != PUBLIC_PREFIX + relative:
             raise ContractError(f"archive URL mismatch: {stem}")
-        if item.get("checksum_sidecar", {}).get("url") != PUBLIC_PREFIX + relative + ".CHECKSUM":
+        if sidecar.get("url") != PUBLIC_PREFIX + relative + ".CHECKSUM":
             raise ContractError(f"checksum URL mismatch: {stem}")
+        expected_archive_cache = cache_relative_path(f"{stem}.zip").as_posix()
+        expected_sidecar_cache = cache_relative_path(f"{stem}.zip.CHECKSUM").as_posix()
+        if archive.get("cache_relative_path") != expected_archive_cache:
+            raise ContractError(f"RESOURCE_ID-bound archive cache mismatch: {stem}")
+        if sidecar.get("cache_relative_path") != expected_sidecar_cache:
+            raise ContractError(f"RESOURCE_ID-bound sidecar cache mismatch: {stem}")
     return freeze
 
 
@@ -170,18 +225,36 @@ def parse_checksum_sidecar(text: str, expected_filename: str) -> str:
     return digest.lower()
 
 
+def _content_range_start(content_range: str | None) -> int | None:
+    if content_range is None:
+        return None
+    match = re.fullmatch(r"bytes (\\d+)-(\\d+)/(\\d+|\\*)", content_range.strip())
+    if match is None:
+        return None
+    start, end = (int(value) for value in match.group(1, 2))
+    if end < start:
+        return None
+    total = match.group(3)
+    if total != "*" and end >= int(total):
+        return None
+    return start
+
+
 def validate_resume_response(existing_bytes: int, status: int, content_range: str | None) -> str:
+    range_start = _content_range_start(content_range)
     if existing_bytes == 0:
-        if status not in (200, 206):
-            raise ContractError(f"unexpected initial HTTP status {status}")
-        return "wb"
-    expected_prefix = f"bytes {existing_bytes}-"
-    if status != 206 or not content_range or not content_range.startswith(expected_prefix):
+        if status == 200:
+            return "wb"
+        if status == 206 and range_start == 0:
+            return "wb"
+        raise ContractError(
+            "initial response must be HTTP 200 or HTTP 206 with Content-Range starting at byte 0"
+        )
+    if status != 206 or range_start != existing_bytes:
         raise ContractError(
             "resume response mismatch; refusing restart or append to the frozen .part"
         )
     return "ab"
-
 
 def _month_bounds_ms(month: str) -> tuple[int, int]:
     import datetime as dt
@@ -284,6 +357,99 @@ def _safe_single_member(zf: zipfile.ZipFile, expected_member: str, archive_id: s
     return info
 
 
+def validate_kline_row(
+    row: Sequence[str],
+    archive_id: str,
+    row_number: int,
+) -> int:
+    if len(row) != len(EXPECTED_HEADER):
+        raise IntegrityFailure(
+            archive_id,
+            "CSV_SCHEMA_COLUMN_COUNT",
+            detail=f"data row {row_number}: expected 12, got {len(row)}",
+        )
+
+    integer_values: dict[str, int] = {}
+    for index, name in ((0, "open_time"), (6, "close_time"), (8, "count")):
+        try:
+            integer_values[name] = int(row[index])
+        except (TypeError, ValueError) as exc:
+            raise IntegrityFailure(
+                archive_id,
+                "INTEGER_FIELD_INVALID",
+                detail=f"data row {row_number}: {name}",
+            ) from exc
+
+    open_time = integer_values["open_time"]
+    day = _day_utc(open_time)
+    numeric_values: list[float] = []
+    for index, name in enumerate(EXPECTED_HEADER):
+        try:
+            value = float(row[index])
+        except (TypeError, ValueError) as exc:
+            raise IntegrityFailure(
+                archive_id,
+                "NUMERIC_FIELD_INVALID",
+                day_utc=day,
+                detail=f"data row {row_number}: {name}",
+            ) from exc
+        if not math.isfinite(value):
+            raise IntegrityFailure(
+                archive_id,
+                "NONFINITE_NUMERIC_FIELD",
+                day_utc=day,
+                detail=f"data row {row_number}: {name}",
+            )
+        numeric_values.append(value)
+
+    open_value, high, low, close = numeric_values[1:5]
+    if any(value <= 0 for value in (open_value, high, low, close)):
+        raise IntegrityFailure(
+            archive_id,
+            "OHLC_NON_POSITIVE",
+            day_utc=day,
+            detail=f"data row {row_number}",
+        )
+    if high < max(open_value, close, low) or low > min(open_value, close, high):
+        raise IntegrityFailure(
+            archive_id,
+            "OHLC_RELATION_INVALID",
+            day_utc=day,
+            detail=f"data row {row_number}",
+        )
+    for index, name in (
+        (5, "volume"),
+        (7, "quote_volume"),
+        (9, "taker_buy_volume"),
+        (10, "taker_buy_quote_volume"),
+    ):
+        if numeric_values[index] < 0:
+            raise IntegrityFailure(
+                archive_id,
+                "NEGATIVE_VOLUME",
+                day_utc=day,
+                detail=f"data row {row_number}: {name}",
+            )
+    if integer_values["count"] < 0:
+        raise IntegrityFailure(
+            archive_id,
+            "NEGATIVE_TRADE_COUNT",
+            day_utc=day,
+            detail=f"data row {row_number}",
+        )
+    if integer_values["close_time"] != open_time + 59_999:
+        raise IntegrityFailure(
+            archive_id,
+            "CLOSE_TIME_MISMATCH",
+            day_utc=day,
+            detail=(
+                f"data row {row_number}: expected {open_time + 59_999}, "
+                f"got {integer_values['close_time']}"
+            ),
+        )
+    return open_time
+
+
 def validate_zip_body(zip_path: Path, entry: Mapping[str, object]) -> dict:
     archive_id = str(entry["archive_id"])
     expected_member = str(entry["csv_member"])
@@ -310,22 +476,8 @@ def validate_zip_body(zip_path: Path, entry: Mapping[str, object]) -> dict:
                 rows = _prepend(first, reader)
 
             def timestamps() -> Iterable[int]:
-                row_number = 0
-                for row in rows:
-                    row_number += 1
-                    if len(row) != len(EXPECTED_HEADER):
-                        raise IntegrityFailure(
-                            archive_id, "CSV_SCHEMA_COLUMN_COUNT",
-                            detail=f"data row {row_number}: expected 12, got {len(row)}",
-                        )
-                    try:
-                        timestamp = int(row[0])
-                    except ValueError as exc:
-                        raise IntegrityFailure(
-                            archive_id, "OPEN_TIME_NOT_INTEGER",
-                            detail=f"data row {row_number}",
-                        ) from exc
-                    yield timestamp
+                for row_number, row in enumerate(rows, start=1):
+                    yield validate_kline_row(row, archive_id, row_number)
 
             rows_validated = validate_timestamp_sequence(
                 timestamps(), start_ms, end_ms, archive_id
