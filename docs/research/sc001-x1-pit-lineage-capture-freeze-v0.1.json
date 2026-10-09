@@ -8,18 +8,20 @@
   "parent_result": "docs/research/sc001-x1-pit-universe-source-freeze-v0.1.md",
   "capture_tool": {
     "path": "scripts/research/sc001_x1_pit_lineage_capture_v0_1.py",
-    "sha256": "cfeb5beddab7f4462f4c8cf23306585f791d7d468df791cf127b08deb9b43835",
+    "sha256": "e60c3c14398141f7362563678fd5a6862c96d4fbc954fd833820014a52fd9080",
     "runtime": "python3-standard-library-only",
     "network_execution_in_this_task": false,
     "future_execution_requires_separate_t1_authorization": true
   },
   "offline_tests": {
     "path": "tests/research/sc001_x1_pit_lineage_capture_test_v0_1.py",
-    "sha256": "f58dcdc30fbd496aadcb76cdc1c45821c529c88e8e3a309e217ac3c4d60a712d",
+    "sha256": "b69163a5ef0b089b11892bfcba4be353dd2ab5557fcc8d64345fe65fcd6e01fd",
     "command": "python3 -m unittest -v tests/research/sc001_x1_pit_lineage_capture_test_v0_1.py",
-    "result": "PASS_9_OF_9",
+    "result": "NOT_RUN_AFTER_FAIL_CLOSED_REPAIR",
     "coverage": [
       "exact URL allowlisting and canonicalization",
+      "exact announcement-detail path identity with no extra path segments or query",
+      "required exchangeInfo record types validated before filtering",
       "redirect host/class rejection",
       "canonical pagination and termination",
       "detail-ID extraction and deterministic deduplication",
