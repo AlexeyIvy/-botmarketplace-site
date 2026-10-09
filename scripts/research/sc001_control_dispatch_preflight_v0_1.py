@@ -132,9 +132,17 @@ def preflight(task: dict[str, Any], executor: dict[str, Any], main_head: str,
     bindings = _sha_bindings(task)
     need(bool(bindings), "MISSING_FROZEN_FILE_BINDINGS")
     if tier == "T1":
-        need(any(section in task for section in ("implementation", "frozen_inputs"))
-             and any(section in task for section in ("offline_test", "frozen_inputs")),
-             "MISSING_T1_CODE_TEST_BINDINGS")
+        frozen = task.get("frozen_inputs", {})
+        frozen = frozen if isinstance(frozen, dict) else {}
+        impl = task.get("implementation", {})
+        impl = impl if isinstance(impl, dict) else {}
+        test = task.get("offline_test", {})
+        test = test if isinstance(test, dict) else {}
+        has_code = (bool(impl.get("path") and impl.get("sha256")) or
+                    bool(frozen.get("implementation_path") and frozen.get("implementation_sha256")))
+        has_test = (bool(test.get("path") and test.get("sha256")) or
+                    bool(frozen.get("test_path") and frozen.get("test_sha256")))
+        need(has_code and has_test, "MISSING_T1_CODE_TEST_BINDINGS")
     for rel, expected in bindings:
         if not _relative(rel) or not isinstance(expected, str) or not SHA256_RE.fullmatch(expected):
             need(False, "INVALID_FROZEN_FILE_BINDING")
