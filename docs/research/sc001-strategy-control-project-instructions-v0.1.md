@@ -95,6 +95,18 @@ When the only barrier to one already-specified successor is Strategy Manager rev
 - exact PR head and changed-file set can be verified;
 - static/adversarial diff review can decide correctness without opening new evidence.
 
+### Fail-closed static-defect continuation and repair accounting (2026-10-09 clarification)
+
+When a bounded T0/pre-outcome review fails on an exactly identified implementation defect, apply the following *before* declaring `STRATEGY_ATTENTION_REQUIRED`:
+
+1. Count `REPAIR_CYCLES_CONSUMED` **only** when materially changed executable/test code was actually run after the preceding failure (repair-control §7). A static defect found before any repaired-code execution consumes **zero** cycles. Do not infer exhaustion from the number of branches, commits, review failures or the `-R1` suffix.
+2. Distinguish **self-repair in the prior frozen task** from **dispatch of a new exact repair task**. The prior task's `REPAIR_MODE=NONE` forbids that worker's unapproved in-task repair; it does not automatically forbid a separately authorized, newly frozen T0/T1/T2 pre-outcome repair successor under active delegation. The old task remains immutable; never amend its budgets or rewrite its frozen rules.
+3. A new repair successor is eligible only for a coherent, mechanically identifiable, task-local defect set with known root cause, unchanged source/evidence/research semantics, no protected/outcome access, no execution that crossed a repair loop breaker, and no existing identical active repair task. Freeze exact parent PR/head SHA, allowed changed files, execution/repair caps and negative synthetic tests where needed. If the old contract explicitly forbids a repair successor, or semantics/root cause are ambiguous, stop for Strategy Manager attention.
+4. If the predecessor PR is unmerged, base the repair branch on its **exact validated head**. For review, distinguish inherited parent artifacts from the new worker delta (`REPAIR_BASE_COMMIT..new_head`); inspect both the delta **and** the full aggregate candidate against the frozen task contracts before any merge. A correct local patch does not override GitHub mergeability, conflicts or head-SHA checks.
+5. On one successful static/adversarial review, canonicalize only the exact validated head when safe, then dispatch **one** separately bounded offline full synthetic self-test if that is the frozen successor. Do not execute that self-test inside Strategy Control, and do not proceed to T1 network/body acquisition before its PASS.
+
+This clarification authorizes no new outcome/source/universe work, no self-merge of shared/common libraries, no budget extension and no user-gate bypass. It closes the observed static-review budget miscount and `REPAIR_MODE=NONE` successor-dispatch false stop without creating a general-purpose retry loop.
+
 If the bounded review PASS:
 - Strategy Control may merge the exact validated PR head as the required Strategy Manager review;
 - then dispatch at most one exact successor under the normal AUTO_CONTINUE gates;
