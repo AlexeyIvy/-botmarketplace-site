@@ -68,6 +68,10 @@ class AdmissionTests(unittest.TestCase):
         self.assertFalse(result["execution_authorized_by_this_check"])
         self.assertTrue(result["live_recheck_required_immediately_before_job"])
 
+    def test_direct_output_dir_for_readonly_executor_is_rejected(self):
+        self.task["exact_execution"]["args"] = ["--output-dir", "artifacts/unsafe"]
+        self.assert_blocked("DIRECT_OUTPUT_DIRECTORY_CLI_NOT_EXECUTOR_BOUND")
+
     def test_python_command_instead_of_file_is_blocked(self):
         self.task["exact_execution"].pop("entrypoint")
         self.task["exact_execution"]["command"] = ["python3", "-m", "unittest"]
