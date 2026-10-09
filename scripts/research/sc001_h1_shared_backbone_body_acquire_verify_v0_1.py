@@ -228,7 +228,7 @@ def parse_checksum_sidecar(text: str, expected_filename: str) -> str:
 def _content_range_start(content_range: str | None) -> int | None:
     if content_range is None:
         return None
-    match = re.fullmatch(r"bytes (\\d+)-(\\d+)/(\\d+|\\*)", content_range.strip())
+    match = re.fullmatch(r"bytes (\d+)-(\d+)/(\d+|\*)", content_range.strip())
     if match is None:
         return None
     start, end = (int(value) for value in match.group(1, 2))
