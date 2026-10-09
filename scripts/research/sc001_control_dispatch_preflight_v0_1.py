@@ -97,6 +97,10 @@ def preflight(task: dict[str, Any], executor: dict[str, Any], main_head: str,
     args = execution.get("args")
     need(isinstance(args, list) and all(isinstance(a, str) for a in args),
          "INVALID_EXECUTOR_ARGS")
+    if isinstance(args, list) and "--output-dir" in args:
+        need(False, "DIRECT_OUTPUT_DIRECTORY_CLI_NOT_EXECUTOR_BOUND")
+        # The repo package is read-only. A task-local adapter must resolve
+        # BM_TEST_OUTPUT_DIR inside the job, backed by a separate offline test.
     profile = execution.get("network_profile")
     profiles = executor.get("network_profiles")
     need(isinstance(profiles, list) and profile in profiles, "UNSUPPORTED_NETWORK_PROFILE")
