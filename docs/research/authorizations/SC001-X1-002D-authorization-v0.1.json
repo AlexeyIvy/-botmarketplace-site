@@ -1,0 +1,123 @@
+{
+  "schema": "sc001.task_authorization.v0.1",
+  "task_id": "SC001-X1-002D",
+  "worker_id": "X1_CROSS_ASSET_STRUCTURE",
+  "authorization_tier": "T1",
+  "status": "AUTHORIZED_ONE_SHOT",
+  "issued_at_utc": "2026-10-09T18:18:00Z",
+  "expires_at_utc": "2026-10-10T18:18:00Z",
+  "policy_path": "docs/research/sc001-delegated-user-authorization-policy-v0.2.md",
+  "policy_sha256": "0ee60f6376876dc13cc42ad8ac8a6fef5d54fc50e8f8322a01e6d64a9cbe0178",
+  "ratification_path": "docs/research/sc001-user-delegated-authorization-ratification-v0.1.json",
+  "ratification_sha256": "9f5434f92471d7c7d36389fe4b376a7870fb52a90b0d94bda5aa2777d4b71aa8",
+  "strategy_review": "PASS_TO_EXECUTE_EXACT_FROZEN_ONE_SHOT_T1",
+  "strategy_review_source": {
+    "terminal_pr": 456,
+    "terminal_comment_id": 6086688481,
+    "predecessor_status": "X1_PIT_CAPTURE_FULL_OFFLINE_SELFTEST_PASS",
+    "review_kind": "CONTINUATION_ONLY"
+  },
+  "task_path": "docs/research/tasks/sc001-x1-002d-one-shot-pit-metadata-capture.json",
+  "task_creation_commit_sha": "2aa0b8033dcf585fc7371ec443c3b5bac98fdd99",
+  "canonical_main_head": "f91804067c5268b639d29ae502328383a8f9dd59",
+  "canonical_freeze": {
+    "path": "docs/research/sc001-x1-pit-lineage-capture-freeze-v0.1.json",
+    "sha256": "720e5bde4ea988970ee3444bb45e084ba546c4f1c6d86abc334991ce04092083"
+  },
+  "implementation": {
+    "path": "scripts/research/sc001_x1_pit_lineage_capture_v0_1.py",
+    "sha256": "e60c3c14398141f7362563678fd5a6862c96d4fbc954fd833820014a52fd9080",
+    "offline_test_path": "tests/research/sc001_x1_pit_lineage_capture_test_v0_1.py",
+    "offline_test_sha256": "b69163a5ef0b089b11892bfcba4be353dd2ab5557fcc8d64345fe65fcd6e01fd",
+    "offline_preflight_job_id": "job_20261009T181611Z_a3546ad0",
+    "offline_preflight_result": "PASS_11_OF_11",
+    "offline_preflight_log_sha256": "19363c132fa6ddaf1218aab0857873abaeca079842e9d70ff99869a072567f60"
+  },
+  "evidence_role": "OFFICIAL_PUBLIC_METADATA_SOURCE_CAPTURE_ONLY_NONPROMOTIONAL",
+  "source_qualification_boundary": {
+    "capture_completion_is_not_source_qualification": true,
+    "completeness_attestation_emitted": false,
+    "candidate_ledger_attestation": "NOT_ATTESTED_SOURCE_CAPTURE_ONLY",
+    "strategy_manager_must_decide_completeness": true,
+    "alternate_source_fallback": false,
+    "relaxed_completeness_rule": false
+  },
+  "allowed_data_classes": [
+    "current Binance USD-M exchangeInfo control metadata",
+    "official Binance Support announcement index metadata for categories 48 and 161",
+    "official Binance Support announcement detail response bytes discovered only from those indexes",
+    "two exact official Binance developer definition-page response bytes"
+  ],
+  "prohibited_data_classes": [
+    "market price/trade/kline/funding/open-interest bodies",
+    "returns, correlations, lead-lag outputs or PnL",
+    "protected outcomes",
+    "VPS raw data",
+    "collector data",
+    "external search evidence",
+    "alternate or licensed source data"
+  ],
+  "allowed_hosts": [
+    "fapi.binance.com",
+    "www.binance.com",
+    "developers.binance.com"
+  ],
+  "execution_profile": "BotMarketplace Test Executor/public_research",
+  "exact_entrypoint": "scripts/research/sc001_x1_pit_lineage_capture_v0_1.py",
+  "exact_args": [
+    "--output-dir",
+    "artifacts/sc001-x1-002d-pit-metadata-capture"
+  ],
+  "budgets": {
+    "max_network_runs": 1,
+    "max_outcome_runs": 0,
+    "max_executor_jobs": 1,
+    "max_execution_attempts": 1,
+    "max_requests_total": 1155,
+    "max_total_network_bytes": 161480704,
+    "max_wall_time_seconds": 1800,
+    "max_repository_output_bytes": 24000,
+    "max_changed_repository_files": 2,
+    "max_worker_commits": 2,
+    "claim_lease_seconds": 10800
+  },
+  "request_class_caps": {
+    "exchange_info": {
+      "requests": 1,
+      "response_bytes": 8388608
+    },
+    "announcement_index": {
+      "requests": 128,
+      "response_bytes": 16777216
+    },
+    "announcement_detail": {
+      "requests": 1024,
+      "response_bytes": 134217728
+    },
+    "definition_page": {
+      "requests": 2,
+      "response_bytes": 2097152
+    }
+  },
+  "resource_reservation": "NOT_REQUIRED_FOR_ONE_154_MIB_MAX_JOB_LOCAL_CAPTURE_WITHIN_TEST_EXECUTOR_LIMITS",
+  "repair_mode": "NONE",
+  "max_repair_cycles": 0,
+  "no_same_evidence_rescue": true,
+  "collector_mutation": false,
+  "credentials_or_trading": false,
+  "runner_probe_execution": false,
+  "one_shot": true,
+  "repository_result_path": "docs/research/sc001-x1-pit-lineage-capture-result-v0.1.json",
+  "worker_result_manifest_path": "docs/research/worker-results/sc001-x1-pit-lineage-capture-manifest-v0.1.json",
+  "worker_result_manifest_max_bytes": 8000,
+  "manifest_last_required": true,
+  "pr_lifecycle_authority": "NONE",
+  "stop_rules": [
+    "Any authorization, task, main-head, implementation, test or canonical-freeze mismatch.",
+    "Missing claim, expired authorization or lease, or conflicting claim.",
+    "Any source/schema/URL/redirect/pagination drift.",
+    "Any request/byte/time/output/commit boundary breach.",
+    "Any unexpected market-body, outcome, protected-evidence, VPS, collector, credential, trading or Runner access.",
+    "Any need for repair, retry, fallback, budget expansion, second job or second network run."
+  ]
+}
