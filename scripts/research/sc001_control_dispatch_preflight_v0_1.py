@@ -8,6 +8,7 @@ be checked again immediately before any actual job submission.
 from __future__ import annotations
 
 import argparse
+from datetime import datetime, timezone
 import hashlib
 import json
 from pathlib import Path, PurePosixPath
@@ -28,7 +29,7 @@ GIT_SHA_RE = re.compile(r"^[0-9a-f]{40}$")
 def continuation_key(repository: str, terminal_comment_id: int, stage: str,
                      frozen_scope_sha256: str) -> str:
     """Stable key for the SAME terminal/stage/scope; not an execution lease."""
-    if not repository or isinstance(terminal_comment_id, bool) or terminal_comment_id <= 0:
+    if repository != "AlexeyIvy/-botmarketplace-site" or type(terminal_comment_id) is not int or terminal_comment_id <= 0:
         raise ValueError("INVALID_TERMINAL_IDENTITY")
     if not re.fullmatch(r"[A-Z0-9_-]{2,80}", stage):
         raise ValueError("INVALID_STAGE")
@@ -109,9 +110,9 @@ def preflight(task: dict[str, Any], executor: dict[str, Any], main_head: str,
     if _int(timeout) and _int(maximum):
         need(timeout <= maximum, "TIMEOUT_EXCEEDS_LIVE_CAP")
 
-    count = execution.get("max_executions", execution.get("max_execution_attempts", 1))
+    count = execution.get("max_executions", execution.get("max_execution_attempts"))
     need(_int(count) and count == 1, "EXECUTION_COUNT_NOT_ONE")
-    network_runs = execution.get("max_network_runs", task.get("max_network_runs", 0))
+    network_runs = execution.get("max_network_runs", task.get("max_network_runs"))
     need(_int(network_runs) and network_runs <= 1, "INVALID_NETWORK_RUN_BUDGET")
     if profile == "offline":
         need(network_runs == 0, "OFFLINE_JOB_HAS_NETWORK_BUDGET")
@@ -128,7 +129,13 @@ def preflight(task: dict[str, Any], executor: dict[str, Any], main_head: str,
     if _relative(entry):
         resolved = (root / entry).resolve()
         need(resolved.is_relative_to(root) and resolved.is_file(), "ENTRYPOINT_NOT_IN_REPOSITORY")
-    for rel, expected in _sha_bindings(task):
+    bindings = _sha_bindings(task)
+    need(bool(bindings), "MISSING_FROZEN_FILE_BINDINGS")
+    if tier == "T1":
+        need(any(section in task for section in ("implementation", "frozen_inputs"))
+             and any(section in task for section in ("offline_test", "frozen_inputs")),
+             "MISSING_T1_CODE_TEST_BINDINGS")
+    for rel, expected in bindings:
         if not _relative(rel) or not isinstance(expected, str) or not SHA256_RE.fullmatch(expected):
             need(False, "INVALID_FROZEN_FILE_BINDING")
             continue
@@ -145,6 +152,17 @@ def preflight(task: dict[str, Any], executor: dict[str, Any], main_head: str,
              and authorization.get("worker_id") == worker, "AUTHORIZATION_TASK_MISMATCH")
         need(authorization.get("status") == "AUTHORIZED_ONE_SHOT",
              "AUTHORIZATION_NOT_ACTIVE")
+        if tier == "T1":
+            need(authorization.get("authorization_tier") == "T1",
+                 "AUTHORIZATION_TIER_MISMATCH")
+            expiry = authorization.get("expires_at_utc")
+            try:
+                parsed = datetime.fromisoformat(expiry.replace("Z", "+00:00"))
+                current = datetime.now(timezone.utc)
+                valid_expiry = parsed.tzinfo is not None and parsed > current
+            except (AttributeError, TypeError, ValueError):
+                valid_expiry = False
+            need(valid_expiry, "AUTHORIZATION_EXPIRED_OR_INVALID")
         need(authorization.get("canonical_main_head") == main_head,
              "AUTHORIZATION_MAIN_HEAD_MISMATCH")
         need(authorization.get("exact_entrypoint") == entry
@@ -153,6 +171,8 @@ def preflight(task: dict[str, Any], executor: dict[str, Any], main_head: str,
         auth_budget = auth_budget if isinstance(auth_budget, dict) else {}
         need(auth_budget.get("max_wall_time_seconds") == timeout,
              "AUTHORIZATION_TIMEOUT_MISMATCH")
+        need(auth_budget.get("max_network_runs") == network_runs,
+             "AUTHORIZATION_NETWORK_RUN_MISMATCH")
         task_network = task.get("frozen_request_contract")
         if isinstance(task_network, dict):
             need(auth_budget.get("max_requests_total") == task_network.get("max_requests_total"),
