@@ -1,0 +1,129 @@
+{
+  "schema": "sc001.x1_pit_lineage_capture_prep_task.v0.1",
+  "task_id": "SC001-X1-002C",
+  "worker_id": "X1_CROSS_ASSET_STRUCTURE",
+  "authorization_class": "T0_REPOSITORY_IMPLEMENTATION_ONLY",
+  "task_subclass": "PIT_LINEAGE_ONE_SHOT_CAPTURE_IMPLEMENTATION_PREP",
+  "priority": 1,
+  "dispatch_base_head": "0705c8b60e959ac248c8adc46e0a0b902ee6ab94",
+  "architecture_version": "0.3",
+  "purpose": "Implement and freeze the exact one-shot official Binance metadata capture needed for the X1 PIT lineage attempt already frozen by X1-002B. No network execution, market body, price, return, correlation or PnL access in this task.",
+  "parent_result": "docs/research/sc001-x1-pit-universe-source-freeze-v0.1.md",
+  "resolver_path": "scripts/research/sc001_x1_pit_universe_metadata_resolver_v0_1.py",
+  "frozen_network_attempt": {
+    "execution_plane": "BotMarketplace Test Executor/public_research",
+    "max_network_runs": 1,
+    "max_requests_total": 1155,
+    "max_response_bytes_total": 161480704,
+    "wall_time_seconds": 1800,
+    "request_classes": [
+      {
+        "host": "fapi.binance.com",
+        "identity": "GET /fapi/v1/exchangeInfo current control snapshot",
+        "request_cap": 1,
+        "response_byte_cap": 8388608
+      },
+      {
+        "host": "www.binance.com",
+        "identity": "Support announcement index pages categories 48 and 161",
+        "request_cap": 128,
+        "response_byte_cap": 16777216
+      },
+      {
+        "host": "www.binance.com",
+        "identity": "support/announcement/detail/<id> pages discovered only from bounded indexes",
+        "request_cap": 1024,
+        "response_byte_cap": 134217728
+      },
+      {
+        "host": "developers.binance.com",
+        "identity": "official API definition pages for response-schema pinning",
+        "request_cap": 2,
+        "response_byte_cap": 2097152
+      }
+    ],
+    "redirects": "must remain within binance.com allowed hosts",
+    "retries": "none beyond total/request-class caps",
+    "websocket": false,
+    "browser_or_javascript_expansion": false,
+    "external_search_as_evidence": false
+  },
+  "requirements": [
+    "Implement one deterministic standard-library metadata capture tool matching the exact frozen request classes/caps. It must make no market-price/body requests and no websocket connections.",
+    "Every response must be captured with canonical requested URL, final URL, UTC request/response times, HTTP status, content type, ETag/Last-Modified when present, raw-response SHA256 and bounded raw-response bytes in task output.",
+    "Support announcement detail URLs may be discovered only from the bounded official category-index responses. Deduplicate exact IDs deterministically before fetching details.",
+    "Freeze canonical pagination/termination behavior for the two category indexes. Unknown pagination/schema, redirect outside allowed hosts or request/byte cap exhaustion must fail closed as SOURCE_INCOMPLETE, not expand search.",
+    "Produce a compact normalized candidate ledger for the existing offline resolver, but never manufacture completeness_attestation=OFFICIAL_IMMUTABLE_OR_AUDITABLE_COMPLETE. The capture tool may emit only evidence needed for a later Strategy Manager completeness decision.",
+    "Provide offline synthetic tests for URL allowlisting, redirect rejection, pagination termination, detail-ID extraction/deduplication, request/byte budgets, response hashing, capture manifest ordering and fail-closed unknown schema.",
+    "No T1 execution occurs here."
+  ],
+  "allowed_output_files": [
+    "scripts/research/sc001_x1_pit_lineage_capture_v0_1.py",
+    "tests/research/sc001_x1_pit_lineage_capture_test_v0_1.py",
+    "docs/research/sc001-x1-pit-lineage-capture-freeze-v0.1.json"
+  ],
+  "forbidden_actions": [
+    "network access",
+    "Test Executor launch",
+    "market body access",
+    "price/return/correlation/lag/PnL computation",
+    "websocket collection",
+    "browser/JS expansion",
+    "external search as evidence",
+    "alternate source fallback",
+    "VPS raw browsing",
+    "protected P1 evidence",
+    "Runner/Runner Probe",
+    "roadmap/governance/shared-state mutation",
+    "PR lifecycle mutation"
+  ],
+  "claim_protocol": {
+    "claim_write_authorized": true,
+    "claim_surface": "originating task PR",
+    "required_claim_fields": [
+      "TASK_ID",
+      "WORKER_ID",
+      "claimed_at_utc",
+      "lease_until_utc",
+      "start_main_head",
+      "architecture_version"
+    ],
+    "default_lease_hours": 3,
+    "allowed_state_change": "DISPATCH_STATE READY -> IN_PROGRESS",
+    "duplicate_claim_forbidden": true
+  },
+  "allowed_pr_writes": [
+    "one READY->IN_PROGRESS claim/state update",
+    "one bounded CLAIM_BLOCK",
+    "exactly one terminal receipt"
+  ],
+  "pr_lifecycle_authority": {
+    "merge": false,
+    "close": false,
+    "retarget": false,
+    "auto_merge": false,
+    "delete_branch": false
+  },
+  "max_executions": 0,
+  "max_network_runs": 0,
+  "max_outcome_runs": 0,
+  "max_new_canonical_files": 3,
+  "max_changed_task_local_files": 3,
+  "max_repository_commits_by_worker": 4,
+  "variant_budget": {
+    "alternate_sources": 0,
+    "alternate_universe_rules": 0,
+    "alternate_cutoffs": 0,
+    "market_body_methods": 0
+  },
+  "repair_mode": "NONE",
+  "max_repair_cycles": 0,
+  "strategy_review_required": false,
+  "continuation_review_required": true,
+  "terminal_status_values": [
+    "X1_PIT_LINEAGE_CAPTURE_PREP_READY",
+    "X1_PIT_LINEAGE_CAPTURE_PREP_BLOCKED",
+    "STALE_CONTEXT_REVALIDATION_REQUIRED"
+  ],
+  "terminal_rule": "Persist only the exact three allowed outputs, verify readback/hash and revalidate current main, then write one TERMINAL RECEIPT with CONTINUATION_REVIEW_REQUIRED: true and STRATEGY_REVIEW_REQUIRED: false. Stop. The intended successor after bounded manager review is one offline self-test, then exact one-shot T1 metadata capture if PASS."
+}
