@@ -1,0 +1,83 @@
+{
+  "schema": "sc001.task_authorization.v0.1",
+  "task_id": "SC001-X1-002D-R2",
+  "worker_id": "X1_CROSS_ASSET_STRUCTURE",
+  "authorization_tier": "T0",
+  "status": "AUTHORIZED_DESIGN_ONLY_PRE_OUTCOME_REPAIR",
+  "issued_at_utc": "2026-10-09T18:41:00Z",
+  "expires_at_utc": "2026-10-10T18:41:00Z",
+  "policy_path": "docs/research/sc001-delegated-user-authorization-policy-v0.2.md",
+  "policy_sha256": "0ee60f6376876dc13cc42ad8ac8a6fef5d54fc50e8f8322a01e6d64a9cbe0178",
+  "ratification_path": "docs/research/sc001-user-delegated-authorization-ratification-v0.1.json",
+  "ratification_sha256": "9f5434f92471d7c7d36389fe4b376a7870fb52a90b0d94bda5aa2777d4b71aa8",
+  "strategy_control_binding": {
+    "terminal_pr_number": 458,
+    "terminal_comment_id": 6087052061,
+    "terminal_head_sha": "2465b62aad4c90e3e7def8b9c66b7694070f2720",
+    "review_kind": "STRATEGY",
+    "disposition": "AUTO_CONTINUE",
+    "basis": "Exact task-local pre-network execution adapter defect with zero network requests and unchanged research/source semantics."
+  },
+  "canonical_task": {
+    "path": "docs/research/tasks/sc001-x1-002d-r2-test-executor-output-adapter-repair.json",
+    "sha256": "657a3febf648893a531f813d987cb16cf42b4d5027d531cac6227aef21dc3174"
+  },
+  "exact_repair_base_head": "2465b62aad4c90e3e7def8b9c66b7694070f2720",
+  "task_scope": {
+    "design_only": true,
+    "pre_outcome": true,
+    "exact_outputs": [
+      "scripts/research/sc001_x1_pit_lineage_test_executor_adapter_v0_1.py",
+      "tests/research/sc001_x1_pit_lineage_test_executor_adapter_test_v0_1.py"
+    ],
+    "max_changed_files": 2,
+    "max_commits": 1,
+    "test_executor_jobs": 0,
+    "network_runs": 0,
+    "requests_total": 0,
+    "response_bytes_total": 0,
+    "outcome_runs": 0,
+    "repair_cycles": 0
+  },
+  "claim_authority": {
+    "required": true,
+    "max_claims": 1,
+    "lease_seconds": 10800,
+    "exact_start_main_head": "f91804067c5268b639d29ae502328383a8f9dd59",
+    "exact_repair_base_head": "2465b62aad4c90e3e7def8b9c66b7694070f2720"
+  },
+  "allowed_pr_writes": {
+    "files": [
+      "scripts/research/sc001_x1_pit_lineage_test_executor_adapter_v0_1.py",
+      "tests/research/sc001_x1_pit_lineage_test_executor_adapter_test_v0_1.py"
+    ],
+    "comments": [
+      "one CLAIM_BLOCK",
+      "one TERMINAL RECEIPT"
+    ],
+    "any_other_write": false
+  },
+  "lifecycle_authority": {
+    "edit_title": false,
+    "edit_body": false,
+    "convert_draft_or_ready": false,
+    "merge": false,
+    "close": false,
+    "delete_branch": false
+  },
+  "result_contract": {
+    "worker_result_manifest_required": false,
+    "strategy_review_required": false,
+    "continuation_review_required": true,
+    "terminal_success_status": "X1_TEST_EXECUTOR_OUTPUT_ADAPTER_DESIGN_READY",
+    "terminal_blocked_status": "X1_TEST_EXECUTOR_OUTPUT_ADAPTER_DESIGN_BLOCKED"
+  },
+  "prohibitions": [
+    "No execution, Test Executor, Runner, VPS or network use.",
+    "No modification of the existing capture implementation or existing capture tests.",
+    "No source/evidence/research semantic change.",
+    "No market data, protected outcome, collector, credential or trading access.",
+    "No roadmap, governance, policy, charter or shared registry change.",
+    "No retry, fallback, second task or lifecycle action by the worker."
+  ]
+}
