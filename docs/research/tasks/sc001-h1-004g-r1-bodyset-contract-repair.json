@@ -1,0 +1,123 @@
+{
+  "schema": "sc001.h1_backbone_bodyset_contract_repair_task.v0.1",
+  "task_id": "SC001-H1-004G-R1",
+  "parent_task_id": "SC001-H1-004G",
+  "worker_id": "H1_HISTORICAL_INDICATORS",
+  "authorization_class": "T0_PRE_OUTCOME_REPAIR",
+  "task_subclass": "SHARED_BACKBONE_BODYSET_CONTRACT_REPAIR",
+  "priority": 1,
+  "dispatch_base_head": "1ca17c1bef83ea9af4edfcb7e280437a92ecd0f5",
+  "repair_base_commit": "3100e713b072c0e2cd2e816e44dd549063136470",
+  "architecture_version": "0.3",
+  "purpose": "Repair one coherent pre-outcome contract defect set in the H1 shared-backbone acquisition package. No source/universe/month/evidence/outcome rule may change.",
+  "immutable_research_scope": {
+    "source": "Binance USD-M monthly 1m klines on data.binance.vision",
+    "symbols": [
+      "0GUSDT",
+      "1000000BOBUSDT",
+      "1000000MOGUSDT",
+      "1000BONKUSDT",
+      "1000CATUSDT",
+      "1000CHEEMSUSDT",
+      "1000FLOKIUSDT",
+      "1000LUNCUSDT",
+      "1000PEPEUSDT",
+      "1000RATSUSDT",
+      "1000SATSUSDT",
+      "1000SHIBUSDT"
+    ],
+    "start_utc": "2025-09-01T00:00:00Z",
+    "end_exclusive_utc": "2026-10-01T00:00:00Z",
+    "monthly_zip_count": 156,
+    "checksum_sidecar_count": 156
+  },
+  "exact_repair_set": [
+    {
+      "defect_id": "RESOURCE_IDENTITY_NONCOMPLIANT",
+      "required_fix": "Replace human-readable dataset/resource identifiers with a structured canonical DATASET_KEY containing every required field from sc001-shared-data-and-resource-coordination-v0.1.md; canonical serialization is UTF-8 JSON with sorted keys and separators=(',',':'); RESOURCE_ID must equal lowercase SHA256 hex of those exact canonical bytes. The implementation and freeze must recompute and verify the same value rather than trust a literal."
+    },
+    {
+      "defect_id": "RAW_CACHE_NOT_BOUND_TO_RESOURCE_ID",
+      "required_fix": "Use shared cache identity rooted under SC001_DATA_ROOT/_raw_cache/binance/<RESOURCE_ID>/ for all frozen archive/checksum basenames, or an exactly equivalent deterministic layout that includes RESOURCE_ID and passes a self-test proving two tasks with the same DATASET_KEY map to the same physical path. No strategy-specific raw copy."
+    },
+    {
+      "defect_id": "BODY_SEMANTIC_INTEGRITY_INCOMPLETE",
+      "required_fix": "Extend row integrity without computing returns: parse all frozen columns; reject non-finite numeric values; require open/high/low/close > 0; require high >= max(open,close,low) and low <= min(open,close,high); require volume/quote/taker volumes >= 0; require trade count integer >= 0; require close_time == open_time + 59999 for 1m Binance klines; preserve exact 60s open-time sequence, 1,440 bars/day and fail-closed exact archive/day diagnostics."
+    },
+    {
+      "defect_id": "INITIAL_PARTIAL_HTTP_RESPONSE_AMBIGUITY",
+      "required_fix": "For a new zero-byte .part, require HTTP 200 OR validate any HTTP 206 Content-Range begins at byte 0. Never silently accept a partial response beginning after byte 0."
+    }
+  ],
+  "required_test_additions": [
+    "deterministic canonical DATASET_KEY serialization and RESOURCE_ID SHA256 fixture",
+    "shared cache path contains exact RESOURCE_ID and uses _raw_cache",
+    "positive OHLCV/close-time valid row PASS",
+    "zero/negative/nonfinite OHLC rejection",
+    "high/low inconsistency rejection",
+    "negative volume and invalid trade-count rejection",
+    "close_time mismatch rejection",
+    "initial 206 starting after byte 0 rejection"
+  ],
+  "allowed_changed_files": [
+    "docs/research/sc001-h1-shared-backbone-bodyset-freeze-v0.1.json",
+    "scripts/research/sc001_h1_shared_backbone_body_acquire_verify_v0_1.py",
+    "tests/research/sc001_h1_shared_backbone_body_acquire_verify_test_v0_1.py"
+  ],
+  "forbidden_actions": [
+    "network access",
+    "Test Executor launch",
+    "market/archive body access",
+    "source/symbol/month changes",
+    "budget expansion",
+    "returns/alpha/PnL",
+    "protected evidence",
+    "Runner/Runner Probe",
+    "VPS browsing",
+    "roadmap/governance/contamination/reusable-registry mutation",
+    "PR lifecycle mutation"
+  ],
+  "claim_protocol": {
+    "claim_write_authorized": true,
+    "claim_surface": "originating task PR",
+    "required_claim_fields": [
+      "TASK_ID",
+      "WORKER_ID",
+      "claimed_at_utc",
+      "lease_until_utc",
+      "start_main_head",
+      "architecture_version"
+    ],
+    "default_lease_hours": 3,
+    "allowed_state_change": "DISPATCH_STATE READY -> IN_PROGRESS",
+    "duplicate_claim_forbidden": true
+  },
+  "allowed_pr_writes": [
+    "one READY->IN_PROGRESS claim/state update",
+    "one bounded CLAIM_BLOCK",
+    "exactly one terminal receipt"
+  ],
+  "pr_lifecycle_authority": {
+    "merge": false,
+    "close": false,
+    "retarget": false,
+    "auto_merge": false,
+    "delete_branch": false
+  },
+  "strategy_review_required": false,
+  "continuation_review_required": true,
+  "max_executions": 0,
+  "max_network_runs": 0,
+  "max_outcome_runs": 0,
+  "max_repair_cycles": 1,
+  "repair_mode": "AUTO_PRE_OUTCOME",
+  "max_changed_task_local_files": 3,
+  "max_new_canonical_files": 0,
+  "max_repository_commits_by_worker": 3,
+  "terminal_status_values": [
+    "H1_BODYSET_CONTRACT_REPAIR_READY",
+    "H1_BODYSET_CONTRACT_REPAIR_BLOCKED",
+    "STALE_CONTEXT_REVALIDATION_REQUIRED"
+  ],
+  "terminal_rule": "Apply only the exact coherent repair set, verify readback/diff and current main, then one TERMINAL RECEIPT with CONTINUATION_REVIEW_REQUIRED: true and STRATEGY_REVIEW_REQUIRED: false. Do not run tests in this task."
+}
