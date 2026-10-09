@@ -1,0 +1,75 @@
+{
+  "schema": "sc001.h1_backbone_body_acquisition_prep_task.v0.1",
+  "task_id": "SC001-H1-004G",
+  "worker_id": "H1_HISTORICAL_INDICATORS",
+  "authorization_class": "T0_REPOSITORY_IMPLEMENTATION_ONLY",
+  "task_subclass": "SHARED_BACKBONE_BODY_ACQUISITION_AND_INTEGRITY_PREP",
+  "priority": 1,
+  "dispatch_base_head": "1ca17c1bef83ea9af4edfcb7e280437a92ecd0f5",
+  "architecture_version": "0.3",
+  "purpose": "Prepare the exact reusable Binance USD-M 1m raw-body acquisition and body-integrity implementation for the frozen H1 12-instrument, 2025-09-01..2026-10-01 shared backbone. Do not download archive bodies or open market outcomes.",
+  "frozen_source_result": "docs/research/sc001-h1-shared-backbone-source-metadata-qualification-v0.1.json",
+  "frozen_universe": [
+    "0GUSDT",
+    "1000000BOBUSDT",
+    "1000000MOGUSDT",
+    "1000BONKUSDT",
+    "1000CATUSDT",
+    "1000CHEEMSUSDT",
+    "1000FLOKIUSDT",
+    "1000LUNCUSDT",
+    "1000PEPEUSDT",
+    "1000RATSUSDT",
+    "1000SATSUSDT",
+    "1000SHIBUSDT"
+  ],
+  "frozen_interval": {
+    "start_utc": "2025-09-01T00:00:00Z",
+    "end_exclusive_utc": "2026-10-01T00:00:00Z",
+    "months": 13
+  },
+  "requirements": [
+    "Freeze one deterministic BODYSET DATASET_KEY/RESOURCE_ID for exactly 12 symbols x 13 monthly 1m ZIP identities plus checksum sidecars.",
+    "Produce an exact ordered archive manifest of 156 ZIPs and 156 checksum sidecars; no extra symbol or month.",
+    "Implement a future public_research acquisition/verification tool using only frozen official data.binance.vision identities, deterministic .part resume, bounded retries and no alternate-source fallback.",
+    "Verify checksum sidecars before accepting raw ZIPs; quarantine identity/checksum mismatch.",
+    "Use the shared raw-cache layout under SC001_DATA_ROOT and never create strategy-specific duplicate raw copies.",
+    "Implement body-integrity checks without returns/alpha/PnL: safe ZIP structure, expected CSV member/schema, completed 1m timestamps, monotonic opens, no duplicates/gaps, exact 60s spacing and 1,440 bars per complete UTC day.",
+    "Body-integrity failure reports exact day/archive identities and fails closed; it may not shrink the interval or drop a symbol.",
+    "Provide offline synthetic tests for manifest cardinality, source identities, checksum parsing, ZIP-slip rejection, duplicate/gap/day-count detection, resume semantics and budget fail-closed behavior.",
+    "Freeze future acquisition/disk/network budgets prospectively; execute none here."
+  ],
+  "allowed_output_files": [
+    "scripts/research/sc001_h1_shared_backbone_body_acquire_verify_v0_1.py",
+    "docs/research/sc001-h1-shared-backbone-bodyset-freeze-v0.1.json",
+    "tests/research/sc001_h1_shared_backbone_body_acquire_verify_test_v0_1.py"
+  ],
+  "forbidden_actions": [
+    "network access",
+    "Test Executor launch",
+    "archive/checksum body download",
+    "real market-row access",
+    "return/alpha/PnL computation",
+    "protected evidence",
+    "Runner/Runner Probe",
+    "VPS raw browsing",
+    "symbol/month/source substitution",
+    "roadmap/governance/shared-state mutation",
+    "PR lifecycle mutation"
+  ],
+  "terminal_status_values": [
+    "H1_BODY_ACQUISITION_PREP_READY",
+    "H1_BODY_ACQUISITION_PREP_BLOCKED",
+    "STALE_CONTEXT_REVALIDATION_REQUIRED"
+  ],
+  "strategy_review_required": false,
+  "continuation_review_required": true,
+  "max_executions": 0,
+  "max_network_runs": 0,
+  "max_outcome_runs": 0,
+  "max_new_canonical_files": 3,
+  "max_repository_commits_by_worker": 4,
+  "repair_mode": "NONE",
+  "max_repair_cycles": 0,
+  "terminal_rule": "Persist only allowed artifacts, verify/revalidate current main, then one TERMINAL RECEIPT with CONTINUATION_REVIEW_REQUIRED: true and STRATEGY_REVIEW_REQUIRED: false. Stop."
+}
