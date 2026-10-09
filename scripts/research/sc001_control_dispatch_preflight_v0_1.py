@@ -31,9 +31,9 @@ def continuation_key(repository: str, terminal_comment_id: int, stage: str,
     """Stable key for the SAME terminal/stage/scope; not an execution lease."""
     if repository != "AlexeyIvy/-botmarketplace-site" or type(terminal_comment_id) is not int or terminal_comment_id <= 0:
         raise ValueError("INVALID_TERMINAL_IDENTITY")
-    if not re.fullmatch(r"[A-Z0-9_-]{2,80}", stage):
+    if not isinstance(stage, str) or not re.fullmatch(r"[A-Z0-9_-]{2,80}", stage):
         raise ValueError("INVALID_STAGE")
-    if not SHA256_RE.fullmatch(frozen_scope_sha256):
+    if not isinstance(frozen_scope_sha256, str) or not SHA256_RE.fullmatch(frozen_scope_sha256):
         raise ValueError("INVALID_SCOPE_SHA256")
     material = json.dumps(
         [repository, terminal_comment_id, stage, frozen_scope_sha256],
@@ -85,7 +85,7 @@ def preflight(task: dict[str, Any], executor: dict[str, Any], main_head: str,
         execution = {}
         errors.append("MISSING_EXACT_EXECUTION")
     worker = task.get("worker_id")
-    need(worker in WORKERS, "UNKNOWN_WORKER")
+    need(isinstance(worker, str) and worker in WORKERS, "UNKNOWN_WORKER")
     task_id = task.get("task_id")
     need(isinstance(task_id, str) and task_id.startswith("SC001-"), "INVALID_TASK_ID")
     tier = task.get("authorization_class", "")
@@ -160,6 +160,9 @@ def preflight(task: dict[str, Any], executor: dict[str, Any], main_head: str,
     if tier == "T1":
         need(authorization is not None, "MISSING_T1_AUTHORIZATION")
     if authorization is not None:
+        if not isinstance(authorization, dict):
+            need(False, "MALFORMED_AUTHORIZATION")
+            authorization = {}
         need(authorization.get("task_id") == task_id
              and authorization.get("worker_id") == worker, "AUTHORIZATION_TASK_MISMATCH")
         need(authorization.get("status") == "AUTHORIZED_ONE_SHOT",
