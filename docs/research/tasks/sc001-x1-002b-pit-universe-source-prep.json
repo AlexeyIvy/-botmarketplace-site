@@ -64,5 +64,33 @@
   "max_repository_commits_by_worker": 4,
   "repair_mode": "NONE",
   "max_repair_cycles": 0,
-  "terminal_rule": "Persist result/implementation/tests as applicable, verify/revalidate main, create Worker Result Manifest LAST, then one TERMINAL RECEIPT with CONTINUATION_REVIEW_REQUIRED: true and STRATEGY_REVIEW_REQUIRED: true. Stop."
+  "terminal_rule": "Persist result/implementation/tests as applicable, verify/revalidate main, create Worker Result Manifest LAST, then one TERMINAL RECEIPT with CONTINUATION_REVIEW_REQUIRED: true and STRATEGY_REVIEW_REQUIRED: true. Stop.",
+  "claim_protocol": {
+    "claim_write_authorized": true,
+    "claim_surface": "originating task PR",
+    "required_claim_fields": [
+      "TASK_ID",
+      "WORKER_ID",
+      "claimed_at_utc",
+      "lease_until_utc",
+      "start_main_head",
+      "architecture_version"
+    ],
+    "default_lease_hours": 3,
+    "allowed_state_change": "DISPATCH_STATE READY -> IN_PROGRESS",
+    "duplicate_claim_forbidden": true
+  },
+  "allowed_pr_writes": [
+    "one READY->IN_PROGRESS claim/state update",
+    "one bounded CLAIM_BLOCK",
+    "worker progress comments only when required by canonical worker instructions",
+    "exactly one terminal receipt"
+  ],
+  "pr_lifecycle_authority": {
+    "merge": false,
+    "close": false,
+    "retarget": false,
+    "auto_merge": false,
+    "delete_branch": false
+  }
 }
