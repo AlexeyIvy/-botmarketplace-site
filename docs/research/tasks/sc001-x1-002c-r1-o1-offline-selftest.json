@@ -1,0 +1,134 @@
+{
+  "schema": "sc001.x1_pit_capture_full_offline_selftest_task.v0.1",
+  "task_id": "SC001-X1-002C-R1-O1",
+  "parent_task_id": "SC001-X1-002C-R1",
+  "original_task_id": "SC001-X1-002C",
+  "worker_id": "X1_CROSS_ASSET_STRUCTURE",
+  "authorization_class": "T0_OFFLINE_SYNTHETIC_TEST_ONLY",
+  "priority": 1,
+  "architecture_version": "0.3",
+  "dispatch_base_head": "f91804067c5268b639d29ae502328383a8f9dd59",
+  "canonical_parent_merge": "f91804067c5268b639d29ae502328383a8f9dd59",
+  "canonicalized_implementation_head": "625ae591bc5d50ac0c6eafa9e95c83d1ae9d132e",
+  "originating_pr": 449,
+  "originating_terminal_comment_id": 6086391608,
+  "originating_control_review_comment_id": 6086514237,
+  "purpose": "Run exactly ONE full offline synthetic unit-test suite of the canonical X1 PIT lineage capture implementation after its two fail-closed defects were fixed, statically reviewed and merged. This is engineering-only; no live metadata, prices, body, protected evidence or outcomes.",
+  "frozen_inputs": {
+    "implementation_path": "scripts/research/sc001_x1_pit_lineage_capture_v0_1.py",
+    "implementation_sha256": "e60c3c14398141f7362563678fd5a6862c96d4fbc954fd833820014a52fd9080",
+    "test_path": "tests/research/sc001_x1_pit_lineage_capture_test_v0_1.py",
+    "test_sha256": "b69163a5ef0b089b11892bfcba4be353dd2ab5557fcc8d64345fe65fcd6e01fd",
+    "freeze_path": "docs/research/sc001-x1-pit-lineage-capture-freeze-v0.1.json",
+    "expected_test_count": 11,
+    "required_coverage": [
+      "exact detail path accepts only canonical 32-hex ID, rejects extra segments",
+      "all exchangeInfo identity/time field types checked before filtering and sorting",
+      "existing 9 baseline tests remain enabled",
+      "source incomplete fail-closed",
+      "request/byte/pagination caps unchanged"
+    ]
+  },
+  "exact_execution": {
+    "plane": "BotMarketplace Test Executor",
+    "network_profile": "offline",
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "-v",
+      "tests/research/sc001_x1_pit_lineage_capture_test_v0_1.py"
+    ],
+    "max_test_executor_jobs": 1,
+    "max_executions": 1,
+    "timeout_seconds": 180,
+    "expected_exit_code": 0,
+    "expected_result": "All 11 unittest methods PASS"
+  },
+  "admission": {
+    "verify_repo_sha256_before_execution": true,
+    "verify_current_execution_plane_limits": true,
+    "avoid_concurrent_test_executor_jobs": true,
+    "if_slot_unavailable": "STOP with RESOURCE_DEFER_EXECUTOR_BUSY, do not consume a run or retry inside this task; request bounded continuation",
+    "do_not_pretend_static_pass_is_test_pass": true
+  },
+  "output_budget": {
+    "claim_blocks": 1,
+    "terminal_receipts": 1,
+    "repository_file_changes_by_worker": 0,
+    "repository_commits_by_worker": 0,
+    "canonical_result_files": 0,
+    "worker_result_manifests": 0
+  },
+  "allowed_pr_writes": [
+    "Exactly one top-level CLAIM_BLOCK comment before execution",
+    "Exactly one top-level TERMINAL RECEIPT comment after the one authorized execution or preflight block"
+  ],
+  "claim_protocol": {
+    "claim_surface": "this task PR",
+    "claim_write_authorized": true,
+    "default_lease_hours": 3,
+    "required_claim_fields": [
+      "TASK_ID",
+      "WORKER_ID",
+      "claimed_at_utc",
+      "lease_until_utc",
+      "start_main_head",
+      "architecture_version"
+    ],
+    "duplicate_claim_forbidden": true,
+    "execution_before_valid_claim_forbidden": true
+  },
+  "lifecycle_authority": {
+    "worker_may_mark_ready": false,
+    "worker_may_toggle_draft": false,
+    "worker_may_merge": false,
+    "worker_may_close": false,
+    "worker_may_retarget": false,
+    "worker_may_enable_auto_merge": false
+  },
+  "repair_mode": "NONE",
+  "max_repair_cycles": 0,
+  "max_network_runs": 0,
+  "max_outcome_runs": 0,
+  "forbidden_actions": [
+    "Research Runner or Runner Probe",
+    "VPS/raw-data access",
+    "network/HTTP requests of any kind",
+    "market body, price, returns, correlation, lag or PnL",
+    "protected outcome/evidence",
+    "Binance source metadata T1 execution",
+    "collector or deployment/credential/trading operations",
+    "test/implementation/freeze/roadmap/governance mutation",
+    "any repository file write or commits",
+    "second job or rerun",
+    "PR lifecycle mutation"
+  ],
+  "strategy_review_required": false,
+  "continuation_review_required": true,
+  "terminal_status_values": [
+    "X1_PIT_CAPTURE_FULL_OFFLINE_SELFTEST_PASS",
+    "X1_PIT_CAPTURE_FULL_OFFLINE_SELFTEST_FAIL",
+    "RESOURCE_DEFER_EXECUTOR_BUSY",
+    "STALE_CONTEXT_REVALIDATION_REQUIRED"
+  ],
+  "terminal_receipt_required_fields": [
+    "TASK_ID",
+    "WORKER_ID",
+    "TERMINAL_STATUS",
+    "PR_HEAD_SHA",
+    "START_MAIN_HEAD",
+    "TEST_EXECUTOR_JOB_ID",
+    "EXECUTION_COUNT",
+    "COMMAND",
+    "EXIT_CODE",
+    "TESTS_RUN",
+    "FAILURES",
+    "ERRORS",
+    "NETWORK_USED",
+    "REPOSITORY_CHANGES_BY_WORKER",
+    "STRATEGY_REVIEW_REQUIRED",
+    "CONTINUATION_REVIEW_REQUIRED"
+  ],
+  "terminal_rule": "After one valid claim and resource admission, run only exact 11-test offline command once through Test Executor, emit exactly one terminal receipt. No Worker Result Manifest. On PASS, stop for Strategy Control continuation before separate exact T1 official metadata authorization; on FAIL/blocked, no repair or rerun without a new explicit decision."
+}
