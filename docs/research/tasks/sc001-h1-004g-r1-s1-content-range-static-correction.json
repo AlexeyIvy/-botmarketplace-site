@@ -1,0 +1,86 @@
+{
+  "schema": "sc001.h1_bodyset_content_range_static_correction_task.v0.1",
+  "task_id": "SC001-H1-004G-R1-S1",
+  "parent_task_id": "SC001-H1-004G-R1",
+  "original_task_id": "SC001-H1-004G",
+  "worker_id": "H1_HISTORICAL_INDICATORS",
+  "authorization_class": "T0_PRE_OUTCOME_STATIC_CORRECTION",
+  "task_subclass": "EXACT_CONTENT_RANGE_REGEX_REPAIR",
+  "priority": 1,
+  "architecture_version": "0.3",
+  "dispatch_base_head": "0fa0f2f9b7b430fbc2fe8eb49030841c36703d5a",
+  "repair_base_commit": "8fb5ad57a6271895ef63b6daa5ba76ffbb694c69",
+  "originating_pr": 445,
+  "originating_terminal_comment_id": 6085978292,
+  "manager_authorization_comment_id": 6086035277,
+  "repair_control_ref": "docs/research/sc001-implementation-debugging-and-repair-control-v0.1.md",
+  "authorized_failure_class": "DETERMINISTIC_SERIALIZATION_OR_PARSING_IMPLEMENTATION_DEFECT",
+  "purpose": "Apply ONLY the exact deterministic Content-Range regular-expression escape correction found in bounded static review of H1 R1. Preserve all frozen H1 source, data, RESOURCE_ID, evidence and research semantics.",
+  "exact_fix": {
+    "path": "scripts/research/sc001_h1_shared_backbone_body_acquire_verify_v0_1.py",
+    "function": "_content_range_start",
+    "root_cause": "The raw regex r\"bytes (\\\\d+)-(\\\\d+)/(\\\\d+|\\\\*)\" matches literal backslash sequences instead of digit classes and a literal star.",
+    "requirement": "Replace doubled backslashes before regex digit classes and star with correct single-backslash raw-regex tokens, without changing surrounding parsing or HTTP resume behavior. Fullmatch bytes 0-19/20 must yield start=0; invalid Content-Range must fail closed. The existing positive 206 test remains unchanged.",
+    "changed_code_scope": "ONE_FUNCTION_ONE_REGEX_LINE_ONLY"
+  },
+  "required_static_checks": [
+    "Verify exact parent head and only one intended regex line changed after task-file commit.",
+    "Inspect _content_range_start, validate_resume_response and existing synthetic assertions without executing code.",
+    "Revalidate that accepted initial 206 must start at byte zero and resumed 206 must match existing byte count.",
+    "Confirm SHA256 RESOURCE_ID and frozen 12 x 13 identity unchanged."
+  ],
+  "allowed_worker_changed_files": [
+    "scripts/research/sc001_h1_shared_backbone_body_acquire_verify_v0_1.py"
+  ],
+  "parent_artifacts_inherited_not_modifiable": [
+    "docs/research/sc001-h1-shared-backbone-bodyset-freeze-v0.1.json",
+    "tests/research/sc001_h1_shared_backbone_body_acquire_verify_test_v0_1.py"
+  ],
+  "forbidden_actions": [
+    "executing any scripts or tests in this task",
+    "network/body acquisition",
+    "Test Executor/Research Runner/VPS",
+    "market body or outcomes",
+    "source/symbol/month/RESOURCE_ID/budget changes",
+    "changing tests or assertions",
+    "modifying freeze/roadmap/governance/contamination/reusable registries",
+    "PR merge/close/retarget/auto-merge by worker"
+  ],
+  "repair_mode": "NONE",
+  "max_repair_cycles": 0,
+  "repair_cycles_consumed_at_dispatch": 0,
+  "max_executions": 0,
+  "max_network_runs": 0,
+  "max_outcome_runs": 0,
+  "max_changed_task_local_files": 1,
+  "max_new_canonical_files_by_worker": 0,
+  "max_repository_commits_by_worker": 2,
+  "variant_budget": {
+    "source": 0,
+    "symbols": 0,
+    "months": 0,
+    "horizons": 0
+  },
+  "claim_protocol": {
+    "claim_surface": "new task PR",
+    "claim_write_authorized": true,
+    "default_lease_hours": 3,
+    "required_claim_fields": [
+      "TASK_ID",
+      "WORKER_ID",
+      "claimed_at_utc",
+      "lease_until_utc",
+      "start_main_head",
+      "architecture_version"
+    ],
+    "duplicate_claim_forbidden": true
+  },
+  "strategy_review_required": false,
+  "continuation_review_required": true,
+  "terminal_status_values": [
+    "H1_CONTENT_RANGE_STATIC_CORRECTION_READY",
+    "H1_CONTENT_RANGE_STATIC_CORRECTION_BLOCKED",
+    "STALE_CONTEXT_REVALIDATION_REQUIRED"
+  ],
+  "terminal_rule": "Use one CLAIM_BLOCK, change only exact regex line, read back code/diff, no execution, then one TERMINAL RECEIPT carrying PR_HEAD_SHA, worker changes vs repair_base_commit, STRATEGY_REVIEW_REQUIRED: false and CONTINUATION_REVIEW_REQUIRED: true. Do not merge. Next: bounded Strategy Control review -> merge exact head on PASS -> exactly one full OFFLINE synthetic self-test in a separately authorized successor -> only then T1 body acquisition consideration."
+}
