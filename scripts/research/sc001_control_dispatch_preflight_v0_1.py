@@ -22,6 +22,7 @@ WORKERS = {
 }
 ENTRY_ROOTS = ("scripts/research/", "tests/research/")
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
+GIT_SHA_RE = re.compile(r"^[0-9a-f]{40}$")
 
 
 def continuation_key(repository: str, terminal_comment_id: int, stage: str,
@@ -118,7 +119,7 @@ def preflight(task: dict[str, Any], executor: dict[str, Any], main_head: str,
         need(profile == "public_research" and network_runs == 1,
              "T1_NETWORK_PROFILE_OR_BUDGET_MISMATCH")
 
-    need(isinstance(main_head, str) and bool(SHA256_RE.fullmatch(main_head)),
+    need(isinstance(main_head, str) and bool(GIT_SHA_RE.fullmatch(main_head)),
          "INVALID_CANONICAL_MAIN_HEAD")
     need(executor.get("head") == main_head, "EXECUTOR_HEAD_NOT_CANONICAL_MAIN")
     need(execution.get("repo_head_sha") == main_head, "TASK_HEAD_NOT_CANONICAL_MAIN")
