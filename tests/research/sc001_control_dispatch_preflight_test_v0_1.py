@@ -28,6 +28,11 @@ class AdmissionTests(unittest.TestCase):
         path.parent.mkdir(parents=True)
         path.write_text("import unittest\nif __name__ == '__main__': unittest.main()\n")
         self.sha = hashlib.sha256(path.read_bytes()).hexdigest()
+        self.impl = "scripts/research/frozen_impl.py"
+        impl_path = self.root / self.impl
+        impl_path.parent.mkdir(parents=True)
+        impl_path.write_text("VALUE = 1\n")
+        self.impl_sha = hashlib.sha256(impl_path.read_bytes()).hexdigest()
         self.info = {
             "head": HEAD, "network_profiles": ["offline", "public_research"],
             "limits": {"max_timeout_seconds": 900, "max_concurrent_jobs": 1,
@@ -38,7 +43,9 @@ class AdmissionTests(unittest.TestCase):
             "task_id": "SC001-H1-OFFLINE-001",
             "worker_id": "H1_HISTORICAL_INDICATORS",
             "authorization_class": "T0_OFFLINE_SYNTHETIC_TEST_ONLY",
-            "frozen_inputs": {"test_path": self.script, "test_sha256": self.sha},
+            "frozen_inputs": {"test_path": self.script, "test_sha256": self.sha,
+                              "implementation_path": self.impl,
+                              "implementation_sha256": self.impl_sha},
             "exact_execution": {
                 "entrypoint": self.script, "args": [], "repo_head_sha": HEAD,
                 "timeout_seconds": 180, "max_executions": 1,
@@ -149,6 +156,13 @@ class AdmissionTests(unittest.TestCase):
         self.assert_blocked("MISSING_FROZEN_FILE_BINDINGS")
         self.task["exact_execution"].pop("max_network_runs")
         self.assert_blocked("INVALID_NETWORK_RUN_BUDGET")
+
+    def test_t1_empty_code_binding_cannot_use_freeze_as_substitute(self):
+        self.task["authorization_class"] = "T1"
+        self.task["frozen_inputs"].pop("implementation_path")
+        self.task["frozen_inputs"].pop("implementation_sha256")
+        self.task["canonical_freeze"] = {"path": self.script, "sha256": self.sha}
+        self.assert_blocked("MISSING_T1_CODE_TEST_BINDINGS")
 
     def test_t1_authorization_expiry_fail_closed(self):
         self.task["authorization_class"] = "T1"
