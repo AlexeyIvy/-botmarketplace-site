@@ -2,6 +2,7 @@
 
 Date: 2026-10-03
 Revision: 2026-10-04 — CONTINUATION / NOTIFICATION HARDENING
+Revision: 2026-10-09 — BOUNDED PRE-OUTCOME MANAGER REVIEW / CANONICALIZATION
 Status: OPERATIONAL CONTROL-PLANE INSTRUCTIONS / NO ROADMAP CHANGE
 Scope: BotMarketplace / SCALPING RESEARCH / SC001
 
@@ -81,6 +82,30 @@ TERMINAL_IDLE_JUSTIFIED
 - no decision-relevant successor exists under current strategy;
 - record the reason;
 - notify the user briefly when the branch is intentionally closed/idle.
+
+## Bounded pre-outcome canonicalization review
+
+For a CONTINUATION_ONLY terminal, do not escalate merely because the worker itself has `merge_authorized=false`. That flag denies worker self-merge; it does not remove Strategy Manager review authority.
+
+When the only barrier to one already-specified successor is Strategy Manager review/canonicalization of a pre-outcome PR, Strategy Control SHOULD perform that bounded review itself as the automated surface of SC001_STRATEGY_MANAGER, but only when all are true:
+- outcome_accessed=false and protected_evidence_accessed=false;
+- the completed task is T0/DESIGN_ONLY/PRE_OUTCOME engineering or equivalent non-outcome work;
+- changed files are limited to the exact task contract plus task-local/additive outputs allowed by that task;
+- no shared/common executable library, collector, roadmap, governance, policy, contamination registry, reusable registry or frozen research rule changed;
+- exact PR head and changed-file set can be verified;
+- static/adversarial diff review can decide correctness without opening new evidence.
+
+If the bounded review PASS:
+- Strategy Control may merge the exact validated PR head as the required Strategy Manager review;
+- then dispatch at most one exact successor under the normal AUTO_CONTINUE gates;
+- it still MUST NOT launch Test Executor/Runner itself.
+
+If the bounded review finds a concrete pre-outcome defect:
+- do not merge;
+- if exactly one coherent repair set is mechanically identifiable, does not change research semantics, and is inside active T0/T1/T2 delegation, Strategy Control may dispatch one bounded repair task instead of requiring user attention;
+- otherwise use STRATEGY_ATTENTION_REQUIRED.
+
+Never use this rule to auto-merge shared/common code, outcome-bearing results, protected evidence, T3 actions, research-rule changes, ambiguous source/evidence semantics, or post-outcome repairs.
 
 ## Decision boundaries
 
