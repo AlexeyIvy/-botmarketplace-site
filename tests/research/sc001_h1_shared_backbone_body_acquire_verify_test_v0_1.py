@@ -37,6 +37,40 @@ class FrozenManifestTests(unittest.TestCase):
         for item in manifest:
             self.assertTrue(item["archive"]["url"].startswith(h1.PUBLIC_PREFIX))
             self.assertEqual(item["archive"]["url"] + ".CHECKSUM", item["checksum_sidecar"]["url"])
+            archive_name = Path(item["archive"]["relative_identity"]).name
+            sidecar_name = Path(item["checksum_sidecar"]["relative_identity"]).name
+            self.assertEqual(
+                h1.cache_relative_path(archive_name).as_posix(),
+                item["archive"]["cache_relative_path"],
+            )
+            self.assertEqual(
+                h1.cache_relative_path(sidecar_name).as_posix(),
+                item["checksum_sidecar"]["cache_relative_path"],
+            )
+
+    def test_canonical_dataset_key_and_resource_id_fixture(self) -> None:
+        freeze = h1.load_and_validate_freeze(FREEZE_PATH)
+        canonical = json.dumps(
+            freeze["dataset_key"],
+            sort_keys=True,
+            separators=(",", ":"),
+            ensure_ascii=False,
+        ).encode("utf-8")
+        expected_resource_id = hashlib.sha256(canonical).hexdigest()
+        self.assertEqual(canonical, h1.canonical_dataset_key_bytes(h1.DATASET_KEY))
+        self.assertEqual(expected_resource_id, h1.RESOURCE_ID)
+        self.assertEqual(expected_resource_id, freeze["resource_id"])
+        self.assertEqual(64, len(expected_resource_id))
+
+    def test_shared_cache_path_is_resource_bound_and_task_independent(self) -> None:
+        first_task_path = h1.cache_relative_path("X.zip")
+        second_task_path = h1.cache_relative_path("X.zip")
+        self.assertEqual(first_task_path, second_task_path)
+        self.assertEqual(
+            Path("_raw_cache") / "binance" / h1.RESOURCE_ID / "X.zip",
+            first_task_path,
+        )
+        self.assertNotIn("SC001-H1", first_task_path.as_posix())
 
     def test_checksum_parser_accepts_only_frozen_filename(self) -> None:
         digest = "a" * 64
@@ -51,6 +85,58 @@ class FrozenManifestTests(unittest.TestCase):
 
 
 class IntegrityTests(unittest.TestCase):
+    @staticmethod
+    def valid_row() -> list[str]:
+        return [
+            "0", "1.0", "3.0", "0.5", "2.0", "10.0",
+            "59999", "20.0", "4", "5.0", "10.0", "0",
+        ]
+
+    def test_positive_ohlcv_close_time_row_passes(self) -> None:
+        self.assertEqual(0, h1.validate_kline_row(self.valid_row(), "ROW", 1))
+
+    def test_zero_negative_and_nonfinite_ohlc_rejected(self) -> None:
+        cases = ((1, "0"), (4, "-1"), (2, "nan"))
+        for index, value in cases:
+            with self.subTest(index=index, value=value):
+                row = self.valid_row()
+                row[index] = value
+                with self.assertRaises(h1.IntegrityFailure):
+                    h1.validate_kline_row(row, "ROW", 1)
+
+    def test_high_low_inconsistency_rejected(self) -> None:
+        row = self.valid_row()
+        row[2] = "0.75"
+        with self.assertRaises(h1.IntegrityFailure) as caught:
+            h1.validate_kline_row(row, "ROW", 1)
+        self.assertEqual("OHLC_RELATION_INVALID", caught.exception.report["code"])
+
+    def test_negative_volume_and_invalid_trade_count_rejected(self) -> None:
+        row = self.valid_row()
+        row[5] = "-0.1"
+        with self.assertRaises(h1.IntegrityFailure) as caught:
+            h1.validate_kline_row(row, "ROW", 1)
+        self.assertEqual("NEGATIVE_VOLUME", caught.exception.report["code"])
+
+        row = self.valid_row()
+        row[8] = "1.5"
+        with self.assertRaises(h1.IntegrityFailure) as caught:
+            h1.validate_kline_row(row, "ROW", 1)
+        self.assertEqual("INTEGER_FIELD_INVALID", caught.exception.report["code"])
+
+        row = self.valid_row()
+        row[8] = "-1"
+        with self.assertRaises(h1.IntegrityFailure) as caught:
+            h1.validate_kline_row(row, "ROW", 1)
+        self.assertEqual("NEGATIVE_TRADE_COUNT", caught.exception.report["code"])
+
+    def test_close_time_mismatch_rejected(self) -> None:
+        row = self.valid_row()
+        row[6] = "60000"
+        with self.assertRaises(h1.IntegrityFailure) as caught:
+            h1.validate_kline_row(row, "ROW", 1)
+        self.assertEqual("CLOSE_TIME_MISMATCH", caught.exception.report["code"])
+
     def test_duplicate_detected_with_exact_archive_and_day(self) -> None:
         with self.assertRaises(h1.IntegrityFailure) as caught:
             h1.validate_timestamp_sequence(
@@ -101,6 +187,16 @@ class IntegrityTests(unittest.TestCase):
 class ResumeAndBudgetTests(unittest.TestCase):
     def test_resume_requires_exact_partial_response(self) -> None:
         self.assertEqual("wb", h1.validate_resume_response(0, 200, None))
+        self.assertEqual(
+            "wb",
+            h1.validate_resume_response(0, 206, "bytes 0-19/20"),
+        )
+        with self.assertRaises(h1.ContractError):
+            h1.validate_resume_response(0, 206, "bytes 10-19/20")
+        with self.assertRaises(h1.ContractError):
+            h1.validate_resume_response(0, 206, None)
+        with self.assertRaises(h1.ContractError):
+            h1.validate_resume_response(0, 206, "bytes 0-garbage/20")
         self.assertEqual(
             "ab",
             h1.validate_resume_response(10, 206, "bytes 10-19/20"),
