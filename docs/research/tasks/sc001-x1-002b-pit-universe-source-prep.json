@@ -1,0 +1,107 @@
+{
+  "schema": "sc001.x1_pit_universe_source_prep_task.v0.1",
+  "task_id": "SC001-X1-002B",
+  "worker_id": "X1_CROSS_ASSET_STRUCTURE",
+  "authorization_class": "T0_DESIGN_AND_REPOSITORY_IMPLEMENTATION",
+  "task_subclass": "PIT_UNIVERSE_SOURCE_AND_COVERAGE_PREP",
+  "priority": 1,
+  "dispatch_base_head": "1ca17c1bef83ea9af4edfcb7e280437a92ecd0f5",
+  "architecture_version": "0.3",
+  "purpose": "Close the remaining pre-body X1 source gap by freezing an official outcome-blind point-in-time Binance USD-M contract listing/delisting identity procedure and metadata-only qualification implementation. No prices, returns, correlations or market bodies may be opened.",
+  "parent_design": "docs/research/sc001-x1-multi-year-dependence-atlas-prefreeze-v0.1.md",
+  "shared_source_result": "docs/research/sc001-h1-shared-backbone-source-metadata-qualification-v0.1.json",
+  "fixed_constraints": {
+    "anchors": [
+      "BTCUSDT",
+      "ETHUSDT"
+    ],
+    "cutoff_exclusive_utc": "2026-10-01T00:00:00Z",
+    "base_resolution": "1m",
+    "min_source_span_months": 36,
+    "pool_non_anchor_cap": 24,
+    "node_reserve_rule": "last ceil(N/4) in frozen hash order",
+    "discovery_monthly_active_cap": 10,
+    "no_current_survivor_only_universe": true
+  },
+  "requirements": [
+    "Identify one exact official/public metadata lineage that can mechanically establish original contract identity, listing epoch and delisting/termination state/time for USD-M perpetual contracts before cutoff. Public documentation lookup is allowed; market-price/body access is not.",
+    "Do not infer listing/delisting solely from realized prices, volume, correlation or current surviving symbols. Archive first/last month may be used only as source-coverage metadata, not instrument-identity truth.",
+    "Freeze contract_identity = venue + market type + original instrument identity + listing epoch + denomination/multiplier version, including renames/redenominations/relistings.",
+    "Preserve X1-002 exclusion rules for non-USDT settlement, dated contracts, leveraged/index-basket tokens, stablecoin-underlying contracts and ambiguous mappings.",
+    "Implement or specify one deterministic metadata-only resolver that can later build the retrospective pool, hash-order it with SC001-X1-ATLAS-v0.1, reserve NODE_RESERVE and produce month-level PIT membership without price access.",
+    "Freeze exact one-shot T1 source request/byte budget. Execute none here.",
+    "If no sufficiently official PIT metadata lineage can be established without semantic ambiguity, return X1_PIT_UNIVERSE_SOURCE_STRATEGY_ATTENTION_REQUIRED rather than substituting current exchangeInfo, price history or heuristic listing dates.",
+    "Do not execute X1-003 or any correlation/lead-lag calculation."
+  ],
+  "allowed_output_files": [
+    "docs/research/sc001-x1-pit-universe-source-freeze-v0.1.md",
+    "scripts/research/sc001_x1_pit_universe_metadata_resolver_v0_1.py",
+    "tests/research/sc001_x1_pit_universe_metadata_resolver_test_v0_1.py",
+    "docs/research/worker-results/sc001-x1-pit-universe-source-prep-manifest-v0.1.json"
+  ],
+  "forbidden_actions": [
+    "market-data body access",
+    "returns/correlation/lag/PnL computation",
+    "Test Executor launch",
+    "Research Runner",
+    "VPS raw browsing",
+    "protected P1 evidence",
+    "best-pair/lag search",
+    "roadmap/governance/shared-state mutation",
+    "PR lifecycle mutation"
+  ],
+  "terminal_status_values": [
+    "X1_PIT_UNIVERSE_PREP_READY",
+    "X1_PIT_UNIVERSE_SOURCE_STRATEGY_ATTENTION_REQUIRED",
+    "X1_PIT_UNIVERSE_PREP_BLOCKED",
+    "STALE_CONTEXT_REVALIDATION_REQUIRED"
+  ],
+  "strategy_review_required": true,
+  "continuation_review_required": true,
+  "max_executions": 0,
+  "max_network_runs": 0,
+  "max_outcome_runs": 0,
+  "max_new_canonical_files": 4,
+  "max_repository_commits_by_worker": 4,
+  "repair_mode": "NONE",
+  "max_repair_cycles": 0,
+  "terminal_rule": "Persist result/implementation/tests as applicable, verify/revalidate main, create Worker Result Manifest LAST, then one TERMINAL RECEIPT with CONTINUATION_REVIEW_REQUIRED: true and STRATEGY_REVIEW_REQUIRED: true. Stop.",
+  "claim_protocol": {
+    "claim_write_authorized": true,
+    "claim_surface": "originating task PR",
+    "required_claim_fields": [
+      "TASK_ID",
+      "WORKER_ID",
+      "claimed_at_utc",
+      "lease_until_utc",
+      "start_main_head",
+      "architecture_version"
+    ],
+    "default_lease_hours": 3,
+    "allowed_state_change": "DISPATCH_STATE READY -> IN_PROGRESS",
+    "duplicate_claim_forbidden": true
+  },
+  "allowed_pr_writes": [
+    "one READY->IN_PROGRESS claim/state update",
+    "one bounded CLAIM_BLOCK",
+    "worker progress comments only when required by canonical worker instructions",
+    "exactly one terminal receipt"
+  ],
+  "pr_lifecycle_authority": {
+    "merge": false,
+    "close": false,
+    "retarget": false,
+    "auto_merge": false,
+    "delete_branch": false
+  },
+  "worker_result_manifest_path": "docs/research/worker-results/sc001-x1-pit-universe-source-prep-manifest-v0.1.json",
+  "completion_contract_correction": {
+    "type": "NON_SEMANTIC_PRE_OUTCOME_CONTROL_FIX",
+    "reason": "STRATEGY_REVIEW_REQUIRED=true requires a Worker Result Manifest LAST, but the initial dispatch omitted its path from allowed outputs.",
+    "research_scope_changed": false,
+    "source_semantics_changed": false,
+    "universe_rule_changed": false,
+    "evidence_boundary_changed": false,
+    "authorization_class_changed": false
+  }
+}

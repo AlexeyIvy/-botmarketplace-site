@@ -1,0 +1,81 @@
+{
+  "schema": "sc001.worker_result_manifest.v0.1",
+  "project": "SC001",
+  "experiment_id": "SC001-X1-002B",
+  "stage": "PIT_UNIVERSE_SOURCE_AND_COVERAGE_PREP",
+  "date": "2026-10-09",
+  "status": "X1_PIT_UNIVERSE_SOURCE_STRATEGY_ATTENTION_REQUIRED",
+  "strategy_triggers": [
+    "TERMINAL_REJECT_DEFER"
+  ],
+  "canonical_result": {
+    "path": "docs/research/sc001-x1-pit-universe-source-freeze-v0.1.md",
+    "sha256": "10212ff8f9c560a58a1b65628d72d17164cfbe92d66e11a7bfa33c0dbda8104d"
+  },
+  "protocol": {
+    "path": "docs/research/tasks/sc001-x1-002b-pit-universe-source-prep.json",
+    "sha256": "668ec1054d04ce75868eb5c66270b3b428c26f33609c9f2da5c2da40daafb4e1"
+  },
+  "implementation": {
+    "path": "scripts/research/sc001_x1_pit_universe_metadata_resolver_v0_1.py",
+    "sha256": "3820f61fe34418ffd6e6c43086784840ff30d48cbe581ccd8e5243b7c6050dcc"
+  },
+  "execution": {
+    "mode": "NONE",
+    "bundle_id": null,
+    "bundle_sha256": null,
+    "job_id": null
+  },
+  "mechanism": {
+    "fingerprint_ref": null,
+    "disposition": "NOT_APPLICABLE_PRE_OUTCOME",
+    "adaptive_discovery_generated": true
+  },
+  "evidence": {
+    "class": "OFFICIAL_PUBLIC_DOCUMENTATION_METADATA_ONLY_NO_MARKET_BODY",
+    "promotional": false,
+    "outcome_accessed": false,
+    "window": null,
+    "contamination_registry_ref": "docs/research/sc001-contamination-registry-v0.41.json"
+  },
+  "key_metrics": {
+    "protected_evidence_accessed": false,
+    "market_rows_read": false,
+    "documentation_lookup_performed": true,
+    "research_source_acquisition_executed": false,
+    "test_executor_job_launched": false,
+    "runner_bundle_created": false,
+    "runner_bundle_executed": false,
+    "vps_data_read": false,
+    "collector_changed": false,
+    "x1_003_executed": false,
+    "test_contract_sha256": "0a2b0fc708d095aa00d7a8572a1b0c96818de200b89181d051cc1963f19622ee",
+    "context_revalidation": "PASS after non-semantic Strategy Manager correction: main/base 1ca17c1bef83ea9af4edfcb7e280437a92ecd0f5; corrected task blob cffcaa5517913198df559f4898e9e6817e82b36f; own live claim; PR open/non-draft; result/script/tests exact remote readback; allowed manifest path and four-file budget confirmed"
+  },
+  "decision": {
+    "class": "DEFER",
+    "summary": "No documented official/public historical lineage was established that exhaustively and immutably reconstructs all Binance USD-M perpetual listing epochs, actual terminal states/times and identity changes before the cutoff. Current exchangeInfo is current-state only; !contractInfo is live-only; announcements are individual mutable pages without a documented complete machine ledger. A fail-closed offline resolver, tests and exact one-shot T1 metadata budget were frozen. No market body, outcome or X1-003 work occurred.",
+    "failed_gate": "OFFICIAL_COMPLETE_PIT_CONTRACT_MASTER_LINEAGE_NOT_ESTABLISHED",
+    "allowed_claims": [
+      "Current exchangeInfo fields are useful only as a current control snapshot, not retrospective completeness proof.",
+      "The official contractInfo stream can support prospective capture but does not document historical replay.",
+      "A deterministic metadata-only resolver and fail-closed evidence contract are frozen for a future authorized lineage source.",
+      "The exact future metadata-only request cap is 1,155 and response-byte cap is 161,480,704; no such acquisition ran here.",
+      "The source gap requires Strategy Manager disposition before X1 market-body access."
+    ],
+    "forbidden_reuse": [
+      "Treating current exchangeInfo as a historical point-in-time universe",
+      "Inferring listing or delisting from first/last price, kline, trade or archive month",
+      "Assuming announcement search/category pagination is exhaustive or immutable without proof",
+      "Silently splicing renames, redenominations, multiplier changes or relistings",
+      "Using present survivors, realized coverage, liquidity, returns or correlation to repair the universe",
+      "Running X1-003, opening market bodies, or computing returns/correlation/lag/PnL",
+      "Treating source-strategy attention as a negative market result",
+      "Shared-state or PR lifecycle mutation without separate authority"
+    ],
+    "next_allowed_action": "Strategy Manager must choose whether to authorize the exact bounded T1 metadata-lineage attempt, approve/provide an immutable official or licensed historical contract master, or defer the atlas. CONTINUATION_REVIEW_REQUIRED: true; STRATEGY_REVIEW_REQUIRED: true; MERGE_AUTHORIZED: false."
+  },
+  "reusable_blocks": [
+    "NO_REUSABLE_BLOCK_IDENTIFIED"
+  ]
+}
