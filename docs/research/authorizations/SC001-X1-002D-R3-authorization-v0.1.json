@@ -1,0 +1,83 @@
+{
+  "schema": "sc001.task_authorization.v0.1",
+  "task_id": "SC001-X1-002D-R3",
+  "worker_id": "X1_CROSS_ASSET_STRUCTURE",
+  "authorization_tier": "T0",
+  "status": "AUTHORIZED_OFFLINE_SYNTHETIC_TEST_ONLY",
+  "issued_at_utc": "2026-10-09T18:52:47Z",
+  "expires_at_utc": "2026-10-10T18:52:47Z",
+  "policy_path": "docs/research/sc001-delegated-user-authorization-policy-v0.2.md",
+  "policy_sha256": "0ee60f6376876dc13cc42ad8ac8a6fef5d54fc50e8f8322a01e6d64a9cbe0178",
+  "ratification_path": "docs/research/sc001-user-delegated-authorization-ratification-v0.1.json",
+  "ratification_sha256": "9f5434f92471d7c7d36389fe4b376a7870fb52a90b0d94bda5aa2777d4b71aa8",
+  "strategy_control_binding": {
+    "terminal_pr_number": 460,
+    "terminal_comment_id": 6087209780,
+    "terminal_head_sha": "8b97c0f35192899fb1b6a23903b40f25a8da0466",
+    "canonical_merge_sha": "599c8a34d02f39e61584b4e05fe116e6883d2c21",
+    "review_kind": "CONTINUATION_ONLY",
+    "disposition": "AUTO_CONTINUE",
+    "basis": "The exact task-local adapter and seven-test suite passed bounded static/adversarial review with zero execution, network, protected-evidence or outcome access."
+  },
+  "canonical_task": {
+    "path": "docs/research/tasks/sc001-x1-002d-r3-output-adapter-offline-selftest.json",
+    "sha256": "337d793f6a53ec12423059ba8ac9c4210724b4d159f70251eb5b0932a316ba10"
+  },
+  "canonical_inputs": {
+    "main_head_sha": "599c8a34d02f39e61584b4e05fe116e6883d2c21",
+    "adapter_path": "scripts/research/sc001_x1_pit_lineage_test_executor_adapter_v0_1.py",
+    "adapter_sha256": "b2c778603a7035f1eedcd99e47bf0378bbb62f049a733b1a7b721a657259ccc3",
+    "test_path": "tests/research/sc001_x1_pit_lineage_test_executor_adapter_test_v0_1.py",
+    "test_sha256": "40fa63a1b80d4df5c98f198a551ce8a3e585c53aa97d0b3fd6414e07736a07cb"
+  },
+  "task_scope": {
+    "offline_synthetic_test_only": true,
+    "test_executor_jobs": 1,
+    "max_executions": 1,
+    "timeout_seconds": 120,
+    "network_runs": 0,
+    "requests_total": 0,
+    "response_bytes_total": 0,
+    "outcome_runs": 0,
+    "repository_file_changes_by_worker": 0,
+    "repository_commits_by_worker": 0,
+    "repair_cycles": 0
+  },
+  "claim_authority": {
+    "required": true,
+    "max_claims": 1,
+    "lease_seconds": 10800,
+    "exact_start_main_head": "599c8a34d02f39e61584b4e05fe116e6883d2c21"
+  },
+  "allowed_pr_writes": {
+    "files": [],
+    "comments": [
+      "one CLAIM_BLOCK",
+      "one TERMINAL RECEIPT"
+    ],
+    "any_other_write": false
+  },
+  "lifecycle_authority": {
+    "edit_title": false,
+    "edit_body": false,
+    "convert_draft_or_ready": false,
+    "merge": false,
+    "close": false,
+    "delete_branch": false
+  },
+  "result_contract": {
+    "worker_result_manifest_required": false,
+    "strategy_review_required": false,
+    "continuation_review_required": true,
+    "terminal_success_status": "X1_TEST_EXECUTOR_OUTPUT_ADAPTER_OFFLINE_SELFTEST_PASS",
+    "terminal_failure_status": "X1_TEST_EXECUTOR_OUTPUT_ADAPTER_OFFLINE_SELFTEST_FAIL"
+  },
+  "prohibitions": [
+    "No network or HTTP access.",
+    "No live Binance metadata capture, market data, protected evidence or outcome access.",
+    "No Runner, Runner Probe, VPS, collector, credential or trading action.",
+    "No code, test, task, authorization, roadmap, governance or registry mutation.",
+    "No repository file write or commit by the worker.",
+    "No second job, rerun, repair, alternate entrypoint or lifecycle action by the worker."
+  ]
+}
