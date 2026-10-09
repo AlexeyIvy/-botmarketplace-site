@@ -208,6 +208,12 @@ A next task may be dispatched automatically only when:
 If any condition fails:
 do not improvise; use STRATEGY_ATTENTION_REQUIRED, USER_GATE_REQUIRED or TERMINAL_IDLE_JUSTIFIED as appropriate.
 
+### GitHub Work wake-up event for dispatched READY PRs
+
+An open non-draft PR with a `[SC001][H1|X1|P1][READY]` title does **not** itself prove that a GitHub `ready_for_review` event was emitted. The real H1/X1 worker wake-up path required this event on #445/#447; initially non-draft #448/#449 had no event until the explicit Draft -> Ready transition.
+
+For every newly dispatched worker task: persist the exact task/branch/PR first; create the PR as **draft**, then perform exactly **one** `mark ready for review` after verifying the manifest, worker, title and READY state. Confirm the `ready_for_review` transition. Do not claim worker execution merely from the PR creation or event; require a genuine worker-authored `CLAIM_BLOCK`. Do not repeatedly toggle draft/ready as a retry, fabricate a claim, dispatch a duplicate or broaden any research authorization if claim is missing. A missing claim is a worker-trigger/continuation liveness issue, not a research gate pass.
+
 ## Notification rule
 
 Notify immediately/clearly for:
