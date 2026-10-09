@@ -187,6 +187,16 @@ class AdmissionTests(unittest.TestCase):
         authorization["expires_at_utc"] = "not-a-date"
         self.assertIn("AUTHORIZATION_EXPIRED_OR_INVALID", self.check(authorization)["errors"])
 
+    def test_malformed_worker_type_fails_closed(self):
+        self.task["worker_id"] = {"unexpected": "object"}
+        self.assert_blocked("UNKNOWN_WORKER")
+
+    def test_malformed_authorization_object_fails_closed(self):
+        self.task["authorization_class"] = "T1"
+        result = self.check(authorization=["not a dict"])
+        self.assertEqual(result["status"], "ADMISSION_BLOCKED")
+        self.assertIn("MALFORMED_AUTHORIZATION", result["errors"])
+
     def test_t1_network_scope_cannot_be_downgraded_silently(self):
         self.task["authorization_class"] = "T1"
         self.assert_blocked("T1_NETWORK_PROFILE_OR_BUDGET_MISMATCH")
@@ -208,6 +218,10 @@ class AdmissionTests(unittest.TestCase):
             mod.continuation_key("AlexeyIvy/-botmarketplace-site", 1.5, "OFFLINE_SELFTEST", scope)
         with self.assertRaises(ValueError):
             mod.continuation_key("AlexeyIvy/-botmarketplace-site", True, "OFFLINE_SELFTEST", scope)
+        with self.assertRaises(ValueError):
+            mod.continuation_key("AlexeyIvy/-botmarketplace-site", 12, 88, scope)
+        with self.assertRaises(ValueError):
+            mod.continuation_key("AlexeyIvy/-botmarketplace-site", 12, "OFFLINE_SELFTEST", None)
 
 
 if __name__ == "__main__":
