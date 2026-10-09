@@ -36,7 +36,8 @@
   "allowed_output_files": [
     "docs/research/sc001-x1-pit-universe-source-freeze-v0.1.md",
     "scripts/research/sc001_x1_pit_universe_metadata_resolver_v0_1.py",
-    "tests/research/sc001_x1_pit_universe_metadata_resolver_test_v0_1.py"
+    "tests/research/sc001_x1_pit_universe_metadata_resolver_test_v0_1.py",
+    "docs/research/worker-results/sc001-x1-pit-universe-source-prep-manifest-v0.1.json"
   ],
   "forbidden_actions": [
     "market-data body access",
@@ -60,7 +61,7 @@
   "max_executions": 0,
   "max_network_runs": 0,
   "max_outcome_runs": 0,
-  "max_new_canonical_files": 3,
+  "max_new_canonical_files": 4,
   "max_repository_commits_by_worker": 4,
   "repair_mode": "NONE",
   "max_repair_cycles": 0,
@@ -92,5 +93,15 @@
     "retarget": false,
     "auto_merge": false,
     "delete_branch": false
+  },
+  "worker_result_manifest_path": "docs/research/worker-results/sc001-x1-pit-universe-source-prep-manifest-v0.1.json",
+  "completion_contract_correction": {
+    "type": "NON_SEMANTIC_PRE_OUTCOME_CONTROL_FIX",
+    "reason": "STRATEGY_REVIEW_REQUIRED=true requires a Worker Result Manifest LAST, but the initial dispatch omitted its path from allowed outputs.",
+    "research_scope_changed": false,
+    "source_semantics_changed": false,
+    "universe_rule_changed": false,
+    "evidence_boundary_changed": false,
+    "authorization_class_changed": false
   }
 }
