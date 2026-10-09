@@ -226,6 +226,7 @@ not a shell-command description:
 - `entrypoint` is one existing repository-relative `.py` or `.sh` file; `python3`, `-m`, or a command array as entrypoint is invalid;
 - args form the exact allowed list; network profile and job/timeout/rate/concurrency limits match the *current* executor, and both task + T1 authorization bind the same requested timeout;
 - exact main/implementation/test/freeze hashes, research authorization, resource and protected-evidence gates match before any job-creating action;
+- if the job writes files, its output path is proved writable in the Test Executor job sandbox (normally through a tested `BM_TEST_OUTPUT_DIR` adapter); do not pass a repo-relative `--output-dir artifacts/...` into the read-only package;
 - executor busy/rate-limited is `RESOURCE_DEFER`, not authorization to retry an unknown job.
 
 The pure offline checker `scripts/research/sc001_control_dispatch_preflight_v0_1.py`
