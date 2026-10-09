@@ -1,0 +1,169 @@
+{
+  "schema": "sc001.x1_pit_lineage_capture_freeze.v0.1",
+  "task_id": "SC001-X1-002C",
+  "worker_id": "X1_CROSS_ASSET_STRUCTURE",
+  "authorization_class": "T0_REPOSITORY_IMPLEMENTATION_ONLY",
+  "status": "X1_PIT_LINEAGE_CAPTURE_PREP_READY",
+  "architecture_version": "0.3",
+  "parent_result": "docs/research/sc001-x1-pit-universe-source-freeze-v0.1.md",
+  "capture_tool": {
+    "path": "scripts/research/sc001_x1_pit_lineage_capture_v0_1.py",
+    "sha256": "e60c3c14398141f7362563678fd5a6862c96d4fbc954fd833820014a52fd9080",
+    "runtime": "python3-standard-library-only",
+    "network_execution_in_this_task": false,
+    "future_execution_requires_separate_t1_authorization": true
+  },
+  "offline_tests": {
+    "path": "tests/research/sc001_x1_pit_lineage_capture_test_v0_1.py",
+    "sha256": "b69163a5ef0b089b11892bfcba4be353dd2ab5557fcc8d64345fe65fcd6e01fd",
+    "command": "python3 -m unittest -v tests/research/sc001_x1_pit_lineage_capture_test_v0_1.py",
+    "result": "NOT_RUN_AFTER_FAIL_CLOSED_REPAIR",
+    "coverage": [
+      "exact URL allowlisting and canonicalization",
+      "exact announcement-detail path identity with no extra path segments or query",
+      "required exchangeInfo record types validated before filtering",
+      "redirect host/class rejection",
+      "canonical pagination and termination",
+      "detail-ID extraction and deterministic deduplication",
+      "per-class and global request/response-byte budgets",
+      "raw response SHA256 and manifest ordering",
+      "fail-closed unknown index schema",
+      "full synthetic capture without network",
+      "existing offline resolver rejection of unattested candidate ledger"
+    ]
+  },
+  "frozen_request_contract": {
+    "execution_plane": "BotMarketplace Test Executor/public_research",
+    "max_network_runs": 1,
+    "wall_time_seconds": 1800,
+    "max_requests_total": 1155,
+    "max_response_bytes_total": 161480704,
+    "request_order": [
+      "one current exchangeInfo control snapshot",
+      "category 48 index pages in ascending page order",
+      "category 161 index pages in ascending page order",
+      "deduplicated announcement detail IDs in ascending bytewise ID order",
+      "two frozen developer definition pages in declared tuple order"
+    ],
+    "request_classes": [
+      {
+        "name": "exchange_info",
+        "host": "fapi.binance.com",
+        "path": "/fapi/v1/exchangeInfo",
+        "request_cap": 1,
+        "response_byte_cap": 8388608
+      },
+      {
+        "name": "announcement_index",
+        "host": "www.binance.com",
+        "path": "/bapi/composite/v1/public/cms/article/list/query",
+        "query": "type=1, catalogId in {48,161}, pageNo ascending from 1, pageSize=20",
+        "request_cap": 128,
+        "response_byte_cap": 16777216
+      },
+      {
+        "name": "announcement_detail",
+        "host": "www.binance.com",
+        "path": "/en/support/announcement/detail/<32-lowercase-hex-id>",
+        "discovery": "only from successfully validated bounded category-index responses",
+        "request_cap": 1024,
+        "response_byte_cap": 134217728
+      },
+      {
+        "name": "definition_page",
+        "host": "developers.binance.com",
+        "identities": [
+          "/docs/derivatives/usds-margined-futures/market-data/rest-api/Exchange-Information",
+          "/docs/derivatives/usds-margined-futures/websocket-market-streams/Contract-Info-Stream"
+        ],
+        "request_cap": 2,
+        "response_byte_cap": 2097152
+      }
+    ],
+    "transport": {
+      "method": "GET",
+      "websocket": false,
+      "browser_or_javascript_expansion": false,
+      "external_search_as_evidence": false,
+      "accept_encoding": "identity",
+      "redirect_rule": "https only; final URL must remain in the same frozen request class",
+      "retry_rule": "none beyond the frozen request caps",
+      "byte_rule": "fail before or at an unproved cap boundary; never read cap+1"
+    }
+  },
+  "pagination_contract": {
+    "categories": [48, 161],
+    "page_size": 20,
+    "max_pages_per_category": 64,
+    "first_page_rule": "read declared total, require recognized success/data/catalog schema",
+    "continuation_rule": "fetch exactly max(1, ceil(total/20)) pages",
+    "stability_rule": "declared total must remain identical on every page",
+    "page_length_rule": "every page length must equal the exact remaining bounded slice",
+    "termination_rule": "concatenated unique detail IDs for each category must reproduce declared total exactly",
+    "unknown_schema_rule": "SOURCE_INCOMPLETE; do not expand or fall back"
+  },
+  "capture_outputs": {
+    "raw_responses": "raw/<sequence>-<request-class>-<sha256>.bin",
+    "capture_manifest": "capture-manifest.json",
+    "candidate_ledger": "candidate-ledger.json",
+    "manifest_fields_per_response": [
+      "sequence",
+      "request_class",
+      "requested_url",
+      "final_url",
+      "requested_at_utc",
+      "received_at_utc",
+      "http_status",
+      "content_type",
+      "etag",
+      "last_modified",
+      "response_bytes",
+      "raw_response_sha256",
+      "raw_path"
+    ],
+    "candidate_ledger_schema": "sc001.x1_pit_universe_metadata_ledger.v0.1",
+    "candidate_ledger_attestation": "NOT_ATTESTED_SOURCE_CAPTURE_ONLY",
+    "success_status": "CAPTURE_COMPLETE_SOURCE_QUALIFICATION_PENDING",
+    "failure_status": "SOURCE_INCOMPLETE"
+  },
+  "fail_closed_conditions": [
+    "URL, path, query, category, page size or detail ID outside the frozen identity",
+    "redirect or final URL changes request class",
+    "request or response-byte budget exhaustion",
+    "HTTP status other than 200",
+    "invalid or mismatched Content-Length",
+    "unknown exchangeInfo or announcement schema",
+    "pagination total changes, page length differs, IDs repeat within a category or termination cannot reproduce total",
+    "deduplicated detail count exceeds 1024",
+    "same detail ID carries conflicting title or publication time"
+  ],
+  "qualification_boundary": {
+    "capture_completion_is_not_source_qualification": true,
+    "completeness_attestation_emitted": false,
+    "resolver_behavior": "The existing resolver rejects NOT_ATTESTED_SOURCE_CAPTURE_ONLY with SOURCE_STRATEGY_ATTENTION_REQUIRED.",
+    "strategy_manager_must_decide_completeness": true,
+    "alternate_source_fallback": false,
+    "relaxed_completeness_rule": false
+  },
+  "safety_accounting": {
+    "network_accessed": false,
+    "test_executor_job_launched": false,
+    "runner_bundle_created": false,
+    "runner_bundle_executed": false,
+    "vps_raw_data_read": false,
+    "market_body_accessed": false,
+    "protected_evidence_accessed": false,
+    "outcome_accessed": false,
+    "returns_or_correlations_computed": false,
+    "pnl_computed": false,
+    "collector_changed": false,
+    "x1_003_executed": false,
+    "shared_state_changed": false
+  },
+  "continuation": {
+    "continuation_review_required": true,
+    "strategy_review_required": false,
+    "merge_authorized": false,
+    "intended_successor": "bounded manager review, then one offline self-test, then the exact one-shot T1 metadata capture only if separately authorized"
+  }
+}

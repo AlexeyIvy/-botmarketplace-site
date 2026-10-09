@@ -1,0 +1,98 @@
+{
+  "schema": "sc001.x1_pit_capture_fail_closed_repair_task.v0.1",
+  "task_id": "SC001-X1-002C-R1",
+  "parent_task_id": "SC001-X1-002C",
+  "worker_id": "X1_CROSS_ASSET_STRUCTURE",
+  "authorization_class": "T0_PRE_OUTCOME_REPAIR",
+  "task_subclass": "EXACT_PIT_CAPTURE_FAIL_CLOSED_CONTRACT_REPAIR",
+  "priority": 1,
+  "architecture_version": "0.3",
+  "dispatch_base_head": "0fa0f2f9b7b430fbc2fe8eb49030841c36703d5a",
+  "repair_base_commit": "939b0e77f4fcd2c1c364bd6e734f22dd70b1af0a",
+  "originating_pr": 447,
+  "originating_terminal_comment_id": 6086060419,
+  "originating_review_comment_id": 6086082202,
+  "repair_control_ref": "docs/research/sc001-implementation-debugging-and-repair-control-v0.1.md",
+  "purpose": "One coherent, outcome-blind, static T0 repair of the two contract defects found in X1-002C bounded review, with adversarial synthetic tests. Does not reopen X1 research or execute any live metadata request.",
+  "exact_repair_set": [
+    {
+      "defect_id": "DETAIL_PATH_PREFIX_ACCEPTS_EXTRA_SEGMENTS",
+      "path": "scripts/research/sc001_x1_pit_lineage_capture_v0_1.py",
+      "target": "classify_url",
+      "required_fix": "For www.binance.com detail requests, require exactly /en/support/announcement/detail/<32-lowercase-hex-id> with no extra path segments and no query. Verify host/scheme/fragment/credentials/port guards remain fail closed; extra prefix/suffix segments must raise SourceIncomplete; do not broaden redirects or request-class allowlist."
+    },
+    {
+      "defect_id": "EXCHANGE_INFO_FIELD_TYPE_VALIDATION_MISSING",
+      "path": "scripts/research/sc001_x1_pit_lineage_capture_v0_1.py",
+      "target": "extract_current_contracts",
+      "required_fix": "Validate all required record field types BEFORE filtering any record or sorting: identity/status/classification fields (symbol,pair,contractType,status,baseAsset,quoteAsset,marginAsset) must be nonempty strings; onboardDate and deliveryDate must be integer millisecond values excluding bool (and nonnegative). Invalid required types anywhere produce SourceIncomplete/SOURCE_INCOMPLETE, not silent skip, accidental TypeError/ValueError or permissive coercion. Preserve exact existing filter, derived ledger and frozen request/source semantics."
+    }
+  ],
+  "required_adversarial_tests": [
+    "Positive: exact detail path with 32 lowercase hex ID classified announcement_detail.",
+    "Negative: extra intermediate or trailing detail path segment, wrong-length/nonhex ID, query/suffix; all fail SourceIncomplete.",
+    "Positive: complete typed current exchangeInfo record produces unchanged normalized candidate; valid but non-perpetual record remains filtered.",
+    "Negative: required identity/status field null, numeric, bool, blank; reject before silent filter.",
+    "Negative: onboardDate/deliveryDate bool, float, str, null; reject deterministically as SourceIncomplete, including in otherwise filtered-out record.",
+    "No relaxation/deletion of existing 9 offline synthetic assertions."
+  ],
+  "allowed_worker_changed_files": [
+    "scripts/research/sc001_x1_pit_lineage_capture_v0_1.py",
+    "tests/research/sc001_x1_pit_lineage_capture_test_v0_1.py",
+    "docs/research/sc001-x1-pit-lineage-capture-freeze-v0.1.json"
+  ],
+  "freeze_update_only": "Update code/test SHA256 identity and mark new full offline self-test NOT_RUN if not executed; preserve frozen hosts/caps, source schema, pagination, qualification, evidence and network rules without modifications.",
+  "required_static_checks": [
+    "Classify root causes and perform one bounded adjacent-defect sweep of these two exact sites before patch.",
+    "Review worker diff vs repair_base_commit: only 2 code/test defects plus implementation/test identity refresh.",
+    "Readback verify SHA256, ensure frozen 1,155 requests / 161,480,704 bytes and no alternate source.",
+    "Synthetic regression cases must demonstrate fail-closed behavior; no code execution/network in this T0 prep task."
+  ],
+  "forbidden_actions": [
+    "network access or requests to Binance",
+    "Test Executor/Research Runner/VPS",
+    "market bodies, price/returns/correlation/lag/PnL",
+    "X1-003",
+    "expanding host/request caps or changing pagination/detail-ID/evidence criteria",
+    "relaxing PIT completeness or substituting survivorship/listing dates",
+    "roadmap/governance/contamination/reusable registry mutation",
+    "PR merge/close/retarget by worker"
+  ],
+  "repair_mode": "AUTO_PRE_OUTCOME",
+  "max_repair_cycles": 1,
+  "repair_cycles_consumed_at_dispatch": 0,
+  "max_executions": 0,
+  "max_network_runs": 0,
+  "max_outcome_runs": 0,
+  "max_changed_task_local_files": 3,
+  "max_new_canonical_files_by_worker": 0,
+  "max_repository_commits_by_worker": 3,
+  "variant_budget": {
+    "alternate_sources": 0,
+    "universe_changes": 0,
+    "cutoff_changes": 0,
+    "price_or_outcome_methods": 0
+  },
+  "claim_protocol": {
+    "claim_surface": "new task PR",
+    "claim_write_authorized": true,
+    "default_lease_hours": 3,
+    "required_claim_fields": [
+      "TASK_ID",
+      "WORKER_ID",
+      "claimed_at_utc",
+      "lease_until_utc",
+      "start_main_head",
+      "architecture_version"
+    ],
+    "duplicate_claim_forbidden": true
+  },
+  "strategy_review_required": false,
+  "continuation_review_required": true,
+  "terminal_status_values": [
+    "X1_PIT_CAPTURE_FAIL_CLOSED_REPAIR_READY",
+    "X1_PIT_CAPTURE_FAIL_CLOSED_REPAIR_BLOCKED",
+    "STALE_CONTEXT_REVALIDATION_REQUIRED"
+  ],
+  "terminal_rule": "Claim new repair PR, patch only exact two defects with synthetic adversarial test definitions and implementation SHA refresh, DO NOT execute code in T0 prep, verify exact diff and readback, write one TERMINAL RECEIPT with CONTINUATION_REVIEW_REQUIRED: true and STRATEGY_REVIEW_REQUIRED: false. Do not merge. After bounded control review PASS canonicalize exact head, then separately authorize one full OFFLINE synthetic self-test. Only after PASS may exact T1 official-source metadata run be considered."
+}
