@@ -92,6 +92,22 @@ class CaptureContractTests(unittest.TestCase):
         with self.assertRaises(capture.SourceIncomplete):
             capture.classify_url("https://www.binance.com/en/support/announcement/detail/not-an-id")
 
+    def test_detail_path_requires_exact_frozen_identity(self) -> None:
+        exact = capture.DETAIL_PREFIX + ARTICLE_A
+        self.assertEqual(capture.classify_url(exact), "announcement_detail")
+        rejected = (
+            capture.DETAIL_PREFIX + "extra/" + ARTICLE_A,
+            exact + "/extra",
+            capture.DETAIL_PREFIX + ("a" * 31),
+            capture.DETAIL_PREFIX + ("g" * 32),
+            exact + "?suffix=1",
+            exact + ".html",
+        )
+        for url in rejected:
+            with self.subTest(url=url):
+                with self.assertRaises(capture.SourceIncomplete):
+                    capture.classify_url(url)
+
     def test_redirect_rejects_host_change_and_downgrade(self) -> None:
         handler = capture.StrictRedirectHandler()
         request = urllib.request.Request(capture.EXCHANGE_INFO_URL)
@@ -130,6 +146,47 @@ class CaptureContractTests(unittest.TestCase):
         with self.assertRaises(capture.SourceIncomplete):
             capture.bounded_read(io.BytesIO(b"12345"), 4, "5")
         self.assertEqual(capture.bounded_read(io.BytesIO(b"1234"), 4, "4"), b"1234")
+
+    def test_exchange_info_required_types_validated_before_filtering(self) -> None:
+        valid = {
+            "symbol": "BTCUSDT",
+            "pair": "BTCUSDT",
+            "contractType": "PERPETUAL",
+            "deliveryDate": 4133404800000,
+            "onboardDate": 1569398400000,
+            "status": "TRADING",
+            "baseAsset": "BTC",
+            "quoteAsset": "USDT",
+            "marginAsset": "USDT",
+        }
+        filtered = dict(valid, symbol="ETHUSD_240628", pair="ETHUSD", contractType="CURRENT_QUARTER")
+        body = json.dumps({"symbols": [valid, filtered]}).encode("utf-8")
+        records = capture.extract_current_contracts(body)
+        self.assertEqual(len(records), 1)
+        self.assertEqual(records[0]["symbol"], "BTCUSDT")
+        self.assertEqual(records[0]["onboard_ms"], 1569398400000)
+
+        string_fields = (
+            "symbol", "pair", "contractType", "status",
+            "baseAsset", "quoteAsset", "marginAsset",
+        )
+        for field in string_fields:
+            for invalid in (None, 7, True, "   "):
+                with self.subTest(field=field, invalid=invalid):
+                    malformed = dict(filtered)
+                    malformed[field] = invalid
+                    payload = json.dumps({"symbols": [malformed]}).encode("utf-8")
+                    with self.assertRaises(capture.SourceIncomplete):
+                        capture.extract_current_contracts(payload)
+
+        for field in ("onboardDate", "deliveryDate"):
+            for invalid in (True, 1.5, "123", None):
+                with self.subTest(field=field, invalid=invalid):
+                    malformed = dict(filtered)
+                    malformed[field] = invalid
+                    payload = json.dumps({"symbols": [malformed]}).encode("utf-8")
+                    with self.assertRaises(capture.SourceIncomplete):
+                        capture.extract_current_contracts(payload)
 
     def test_response_hash_and_manifest_ordering(self) -> None:
         raw = b"synthetic-response"
