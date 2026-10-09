@@ -106,9 +106,10 @@ def classify_url(value: str) -> str:
             if not 1 <= page_no <= MAX_PAGES_PER_CATEGORY or page_size != PAGE_SIZE:
                 raise SourceIncomplete("INDEX_PAGE_OUTSIDE_FREEZE")
             return "announcement_index"
-        if parsed.path.startswith("/en/support/announcement/detail/") and not query:
-            detail_id = parsed.path.rsplit("/", 1)[-1]
-            if DETAIL_ID_RE.fullmatch(detail_id):
+        detail_prefix = "/en/support/announcement/detail/"
+        if parsed.path.startswith(detail_prefix) and not query:
+            detail_id = parsed.path.removeprefix(detail_prefix)
+            if DETAIL_ID_RE.fullmatch(detail_id) and parsed.path == detail_prefix + detail_id:
                 return "announcement_detail"
         raise SourceIncomplete("UNAUTHORIZED_SUPPORT_PATH")
     if parsed.hostname == "developers.binance.com" and not query and url in DOC_URLS:
@@ -342,9 +343,21 @@ def extract_current_contracts(body: bytes) -> list[dict[str, Any]]:
         "symbol", "pair", "contractType", "deliveryDate", "onboardDate", "status",
         "baseAsset", "quoteAsset", "marginAsset",
     )
+    string_fields = (
+        "symbol", "pair", "contractType", "status",
+        "baseAsset", "quoteAsset", "marginAsset",
+    )
+    timestamp_fields = ("deliveryDate", "onboardDate")
     for item in symbols:
         if any(key not in item for key in required):
             raise SourceIncomplete("EXCHANGE_INFO_SYMBOL_SCHEMA_MISSING")
+        if any(not isinstance(item[key], str) or not item[key].strip() for key in string_fields):
+            raise SourceIncomplete("EXCHANGE_INFO_INVALID_STRING_FIELD")
+        if any(
+            not isinstance(item[key], int) or isinstance(item[key], bool) or item[key] < 0
+            for key in timestamp_fields
+        ):
+            raise SourceIncomplete("EXCHANGE_INFO_INVALID_TIMESTAMP_FIELD")
         if item["contractType"] != "PERPETUAL" or item["quoteAsset"] != "USDT" or item["marginAsset"] != "USDT":
             continue
         records.append(
