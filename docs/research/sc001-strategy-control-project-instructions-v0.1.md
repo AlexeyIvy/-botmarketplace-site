@@ -214,6 +214,81 @@ An open non-draft PR with a `[SC001][H1|X1|P1][READY]` title does **not** itself
 
 For every newly dispatched worker task: persist the exact task/branch/PR first; create the PR as **draft**, then perform exactly **one** `mark ready for review` after verifying the manifest, worker, title and READY state. Confirm the `ready_for_review` transition. Do not claim worker execution merely from the PR creation or event; require a genuine worker-authored `CLAIM_BLOCK`. Do not repeatedly toggle draft/ready as a retry, fabricate a claim, dispatch a duplicate or broaden any research authorization if claim is missing. A missing claim is a worker-trigger/continuation liveness issue, not a research gate pass.
 
+## Bounded operational hardening — technical admission and idempotent continuation (2026-10-09)
+
+This is control-plane engineering, not research governance and not a new authorization tier.
+
+### Admission BEFORE READY
+
+Before preparing or activating any executable T0/T1/T2 successor, fetch the **live**
+BotMarketplace Test Executor info. Check the actual `run_repo_test` interface,
+not a shell-command description:
+- `entrypoint` is one existing repository-relative `.py` or `.sh` file; `python3`, `-m`, or a command array as entrypoint is invalid;
+- args form the exact allowed list; network profile and job/timeout/rate/concurrency limits match the *current* executor, and both task + T1 authorization bind the same requested timeout;
+- exact main/implementation/test/freeze hashes, research authorization, resource and protected-evidence gates match before any job-creating action;
+- executor busy/rate-limited is `RESOURCE_DEFER`, not authorization to retry an unknown job.
+
+The pure offline checker `scripts/research/sc001_control_dispatch_preflight_v0_1.py`
+provides a machine-readable implementation of the executor-side subset. Its
+synthetic tests are `tests/research/sc001_control_dispatch_preflight_test_v0_1.py`.
+It accepts a **fresh, trusted** executor info snapshot and exact main SHA.
+A checker PASS is technical evidence only, NEVER research authorization, job
+approval, or proof that the executor is still available. Recheck live on execute.
+Until a trusted machine-check invocation is wired into the Work dispatch path,
+perform every invariant against current tool results and fail closed on doubt.
+A self-test of the checker alone MUST NOT be represented as validation of a
+new task's exact live admission.
+
+If a fatal mismatch exists, do not produce `READY`. Record the exact blocker
+and, if permitted, one mechanically exact separately frozen pre-outcome repair.
+Never silently edit the predecessor's frozen contract or reduce evidence scope.
+
+### Unique successor and incomplete transaction recovery
+
+Use deterministic successor identity based on exact originating
+`TERMINAL_COMMENT_ID` + successor stage + frozen scope/implementation identity,
+and additionally search for **semantically equivalent** live/terminal jobs from
+any source (including interactive Strategy Manager). The offline helper
+`continuation_key` defines one canonical byte encoding for deterministic IDs.
+Do not use the random Work run ID as the task identity.
+
+Reserve one deterministic branch/task path with GitHub create-only atomic
+semantics. Under identical replay: do not create a different branch or task.
+Inspect and reconcile the SAME operation:
+1. branch exists, no task file/PR: inspect commit/ownership, continue only if
+   provably identical and safe; else `DISPATCH_STATE_UNCERTAIN_STOP`;
+2. manifest exists, no PR: create only the missing draft PR for that manifest;
+3. draft PR exists: validate full task, main and authorization before a single
+   ready-for-review transition;
+4. ready PR exists: do not re-toggle; inspect CLAIM/TERMINAL, and never
+   infer that Work actually ran from the GitHub ready-for-review event;
+5. terminal or executor job exists: never create an equivalent new runnable
+   task or job without explicit proven zero-execution/safety accounting.
+
+Do not write a FINAL `STRATEGY_CONTROL_REVIEWED` claiming
+`NEXT_TASK_DISPATCHED: true` before the exact successor PR and ready event
+exist. A Work-run dispatch-slot conflict is an *operational* pending condition,
+not automatically a new research-strategy decision. Do not consume a second
+terminal as reviewed merely because another terminal was served in the same
+Work invocation. Leave a concrete actionable anomaly for liveness/replay;
+do not silently launch a second successor or reinterpret it as research defer.
+
+### Execution uncertainty and active frozen HEADs
+
+A tool timeout after job submission is not evidence of zero executions.
+Query the exact job/receipt identity where available; if no deterministic
+executor-side idempotency key exists and job creation is uncertain, STOP:
+`EXECUTION_IDENTITY_UNCERTAIN`. No retry, no double T1, no resource takeover.
+Executor-side idempotency remains a future implementation requirement;
+this instruction is NOT evidence that it already exists.
+
+Before merging an unrelated control-plane PR to main, identify active tasks
+requiring exact `repo_head_sha == main`. If an active executable task would be
+invalidated, defer the merge or perform only an independently authorized,
+explicitly reviewed re-freeze. Do not silently invalidate a frozen worker task.
+For legacy open `[READY]` PRs, comments/claims/terminal/closure and exact task
+identity take precedence over stale title/body labels.
+
 ## Notification rule
 
 Notify immediately/clearly for:
