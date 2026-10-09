@@ -1,0 +1,69 @@
+{
+  "schema": "sc001.worker_result_manifest.v0.1",
+  "task_id": "SC001-X1-002D-R1",
+  "worker_id": "X1_CROSS_ASSET_STRUCTURE",
+  "terminal_status": "X1_PIT_METADATA_CAPTURE_SOURCE_INCOMPLETE",
+  "canonical_result": {
+    "path": "docs/research/sc001-x1-pit-lineage-capture-r1-result-v0.1.json",
+    "sha256": "651f84f4d4d715365f3028267e4566ffd59bd3d93314de9046c84f06872d5c4f"
+  },
+  "pr_binding": {
+    "pr_number": 458,
+    "task_pr_head_sha": "bc1fa7c85e1150107a67652bbf38074335631f56",
+    "head_before_manifest_commit": "82bd166850ef07b13ed1fb26bf383e419a65d227",
+    "branch": "sc001/x1/SC001-X1-002D-R1-executor-timeout-compatible-capture"
+  },
+  "repo_head_sha": "f91804067c5268b639d29ae502328383a8f9dd59",
+  "test_executor": {
+    "job_id": "job_20261009T183828Z_8ed9bccc",
+    "job_creation_attempts": 1,
+    "jobs_created": 1,
+    "exit_code": 2,
+    "log_sha256": "2719ecbe5b54e6db12f29484376c5deca842ba0c41a374c52e355fc0a5e4ac88",
+    "failure": "OUTPUT_DIRECTORY_READ_ONLY_PRE_NETWORK",
+    "task_timeout_seconds": 900,
+    "executor_max_timeout_seconds": 900,
+    "timed_out": false
+  },
+  "capture": {
+    "status": "SOURCE_INCOMPLETE",
+    "capture_manifest_sha256": null,
+    "candidate_ledger_sha256": null,
+    "raw_response_count": 0,
+    "candidate_record_count": 0,
+    "announcement_candidate_count": 0,
+    "completeness_attestation": "NOT_EMITTED_CAPTURE_NOT_STARTED",
+    "source_qualification": "NOT_EVALUATED",
+    "network_runs": 0,
+    "requests_total": 0,
+    "response_bytes_total": 0,
+    "requests_by_class": {
+      "exchange_info": 0,
+      "announcement_index": 0,
+      "announcement_detail": 0,
+      "definition_page": 0
+    },
+    "response_bytes_by_class": {
+      "exchange_info": 0,
+      "announcement_index": 0,
+      "announcement_detail": 0,
+      "definition_page": 0
+    }
+  },
+  "safety_accounting": {
+    "outcome_accessed": false,
+    "protected_evidence_accessed": false,
+    "market_body_accessed": false,
+    "returns_or_correlations_computed": false,
+    "pnl_computed": false,
+    "collector_changed": false,
+    "runner_bundle_created": false,
+    "runner_bundle_executed": false,
+    "vps_raw_data_read": false,
+    "credentials_or_trading": false
+  },
+  "strategy_review_required": true,
+  "continuation_review_required": true,
+  "manifest_last": true,
+  "recorded_at_utc": "2026-10-09T18:39:41.533Z"
+}
