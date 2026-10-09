@@ -1,0 +1,59 @@
+{
+  "schema": "sc001.p1_health_adapter_live_package_freeze_task.v0.1",
+  "task_id": "SC001-P1-OPS-004",
+  "worker_id": "P1_PROSPECTIVE_EVENT",
+  "authorization_class": "T0_DESIGN_AND_REPOSITORY_IMPLEMENTATION",
+  "task_subclass": "HEALTH_ADAPTER_LIVE_PACKAGE_FREEZE",
+  "priority": 1,
+  "dispatch_base_head": "1ca17c1bef83ea9af4edfcb7e280437a92ecd0f5",
+  "architecture_version": "0.3",
+  "purpose": "Prepare one exact minimal read-only live package for the already synthetic-PASS B13-C health adapter so the next action can be presented as a concrete T3 user gate. Do not deploy or read live collector state.",
+  "implementation_path": "ops/mcp/sc001_b13c_health_adapter_v0_1.py",
+  "implementation_sha256": "844949ec670c6cd1856d2a1ea016f3554b6c6e85b95b254b6e370907eb47d2c7",
+  "synthetic_validation": {
+    "job_id": "job_20261005T211535Z_a451e333",
+    "result": "P1_HEALTH_ADAPTER_SYNTHETIC_PASS",
+    "tests": 23,
+    "failures": 0,
+    "errors": 0
+  },
+  "requirements": [
+    "Freeze the least-privilege host interface needed for exactly one bounded get_health() call against the fixed state path and fixed systemd unit.",
+    "Expose no arbitrary path, service name, shell command, log content or raw state JSON.",
+    "Freeze exact deployment artifact hashes, ownership/mode expectations, rollback procedure and one bounded live-read invocation.",
+    "Live output must remain exactly the adapter allowlist and evidence_eligibility must remain NOT_EVALUATED.",
+    "Separate the future T3 actions explicitly: host installation of the read-only interface and the first live collector-state read.",
+    "Provide offline/static validation of the package without touching live state."
+  ],
+  "allowed_output_files": [
+    "scripts/research/deploy-sc001-b13c-health-adapter-v0.1.py",
+    "docs/research/sc001-p1-health-adapter-live-package-freeze-v0.1.json"
+  ],
+  "forbidden_actions": [
+    "live collector-state read",
+    "collector restart/mutation",
+    "host permission/service mutation",
+    "deployment/install",
+    "network access",
+    "protected/raw event access",
+    "price/return/PnL access",
+    "Runner/Test Executor launch",
+    "roadmap/governance/shared-state mutation",
+    "PR lifecycle mutation"
+  ],
+  "terminal_status_values": [
+    "P1_HEALTH_ADAPTER_LIVE_PACKAGE_READY_FOR_USER_GATE",
+    "P1_HEALTH_ADAPTER_LIVE_PACKAGE_BLOCKED",
+    "STALE_CONTEXT_REVALIDATION_REQUIRED"
+  ],
+  "strategy_review_required": false,
+  "continuation_review_required": true,
+  "max_executions": 0,
+  "max_network_runs": 0,
+  "max_outcome_runs": 0,
+  "max_new_canonical_files": 2,
+  "max_repository_commits_by_worker": 3,
+  "repair_mode": "NONE",
+  "max_repair_cycles": 0,
+  "terminal_rule": "Persist and verify the exact package/freeze, revalidate current main, then one TERMINAL RECEIPT with CONTINUATION_REVIEW_REQUIRED: true and STRATEGY_REVIEW_REQUIRED: false. The only valid continuation after READY is USER_GATE_REQUIRED. Stop."
+}
