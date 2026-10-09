@@ -126,11 +126,13 @@ class AdmissionTests(unittest.TestCase):
             "task_id": self.task["task_id"],
             "worker_id": self.task["worker_id"],
             "status": "AUTHORIZED_ONE_SHOT",
+            "authorization_tier": "T1",
+            "expires_at_utc": "2999-01-01T00:00:00Z",
             "canonical_main_head": HEAD,
             "exact_entrypoint": self.script,
             "exact_args": [],
-            "budgets": {"max_wall_time_seconds": 180, "max_requests_total": 9,
-                        "max_total_network_bytes": 1500},
+            "budgets": {"max_wall_time_seconds": 180, "max_network_runs": 1,
+                        "max_requests_total": 9, "max_total_network_bytes": 1500},
         }
         self.assertEqual(self.check(auth)["status"], "ADMISSION_PRECHECK_PASS")
         auth["budgets"]["max_wall_time_seconds"] = 1800
@@ -138,6 +140,34 @@ class AdmissionTests(unittest.TestCase):
         auth["budgets"]["max_wall_time_seconds"] = 180
         auth["budgets"]["max_requests_total"] = 10
         self.assertIn("AUTHORIZATION_REQUEST_CAP_MISMATCH", self.check(auth)["errors"])
+
+    def test_missing_explicit_execution_count_and_evidence_bindings(self):
+        self.task["exact_execution"].pop("max_executions")
+        self.assert_blocked("EXECUTION_COUNT_NOT_ONE")
+        self.task["exact_execution"]["max_executions"] = 1
+        self.task.pop("frozen_inputs")
+        self.assert_blocked("MISSING_FROZEN_FILE_BINDINGS")
+        self.task["exact_execution"].pop("max_network_runs")
+        self.assert_blocked("INVALID_NETWORK_RUN_BUDGET")
+
+    def test_t1_authorization_expiry_fail_closed(self):
+        self.task["authorization_class"] = "T1"
+        self.task["exact_execution"]["network_profile"] = "public_research"
+        self.task["exact_execution"]["max_network_runs"] = 1
+        self.task["frozen_request_contract"] = {
+            "max_requests_total": 9, "max_response_bytes_total": 1500}
+        authorization = {
+            "task_id": self.task["task_id"], "worker_id": self.task["worker_id"],
+            "status": "AUTHORIZED_ONE_SHOT", "authorization_tier": "T1",
+            "expires_at_utc": "2020-01-01T00:00:00Z",
+            "canonical_main_head": HEAD, "exact_entrypoint": self.script,
+            "exact_args": [],
+            "budgets": {"max_wall_time_seconds": 180, "max_network_runs": 1,
+                        "max_requests_total": 9, "max_total_network_bytes": 1500},
+        }
+        self.assertIn("AUTHORIZATION_EXPIRED_OR_INVALID", self.check(authorization)["errors"])
+        authorization["expires_at_utc"] = "not-a-date"
+        self.assertIn("AUTHORIZATION_EXPIRED_OR_INVALID", self.check(authorization)["errors"])
 
     def test_t1_network_scope_cannot_be_downgraded_silently(self):
         self.task["authorization_class"] = "T1"
@@ -156,6 +186,10 @@ class AdmissionTests(unittest.TestCase):
                                                      123, "T1_CAPTURE", scope))
         with self.assertRaises(ValueError):
             mod.continuation_key("x", 0, "OFFLINE_SELFTEST", scope)
+        with self.assertRaises(ValueError):
+            mod.continuation_key("AlexeyIvy/-botmarketplace-site", 1.5, "OFFLINE_SELFTEST", scope)
+        with self.assertRaises(ValueError):
+            mod.continuation_key("AlexeyIvy/-botmarketplace-site", True, "OFFLINE_SELFTEST", scope)
 
 
 if __name__ == "__main__":
