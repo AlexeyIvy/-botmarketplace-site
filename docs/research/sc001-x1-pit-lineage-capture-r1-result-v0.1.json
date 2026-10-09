@@ -1,0 +1,63 @@
+{
+  "schema": "sc001.x1_pit_lineage_capture_result.v0.1",
+  "task_id": "SC001-X1-002D-R1",
+  "worker_id": "X1_CROSS_ASSET_STRUCTURE",
+  "terminal_status": "X1_PIT_METADATA_CAPTURE_SOURCE_INCOMPLETE",
+  "repo_head_sha": "f91804067c5268b639d29ae502328383a8f9dd59",
+  "pr_head_sha_at_claim": "bc1fa7c85e1150107a67652bbf38074335631f56",
+  "test_executor_job_id": "job_20261009T183828Z_8ed9bccc",
+  "job_creation_attempts": 1,
+  "executor_jobs_created": 1,
+  "exit_code": 2,
+  "log_sha256": "2719ecbe5b54e6db12f29484376c5deca842ba0c41a374c52e355fc0a5e4ac88",
+  "capture_status": "SOURCE_INCOMPLETE",
+  "failure_reason": "OUTPUT_DIRECTORY_READ_ONLY_PRE_NETWORK: the exact task-local output path artifacts/sc001-x1-002d-r1-pit-metadata-capture could not be created because the Test Executor repository snapshot is read-only ([Errno 30] Read-only file system: 'artifacts'). The job exited before any network request. Retry, output-path substitution, repair, fallback, timeout extension, budget change, and a second job are prohibited.",
+  "network_runs": 0,
+  "requests_total": 0,
+  "response_bytes_total": 0,
+  "requests_by_class": {
+    "exchange_info": 0,
+    "announcement_index": 0,
+    "announcement_detail": 0,
+    "definition_page": 0
+  },
+  "response_bytes_by_class": {
+    "exchange_info": 0,
+    "announcement_index": 0,
+    "announcement_detail": 0,
+    "definition_page": 0
+  },
+  "capture_manifest_sha256": null,
+  "candidate_ledger_sha256": null,
+  "raw_response_count": 0,
+  "candidate_record_count": 0,
+  "announcement_candidate_count": 0,
+  "completeness_attestation": "NOT_EMITTED_CAPTURE_NOT_STARTED",
+  "source_qualification": "NOT_EVALUATED",
+  "executor_preflight": {
+    "head": "f91804067c5268b639d29ae502328383a8f9dd59",
+    "worktree_clean": true,
+    "network_profile_available": true,
+    "task_timeout_seconds": 900,
+    "executor_max_timeout_seconds": 900,
+    "running_jobs_before_launch": 0
+  },
+  "job_timing": {
+    "started_utc": "2026-10-09T18:38:31.596827+00:00",
+    "finished_utc": "2026-10-09T18:38:31.762554+00:00",
+    "timed_out": false
+  },
+  "safety_accounting": {
+    "outcome_accessed": false,
+    "protected_evidence_accessed": false,
+    "market_body_accessed": false,
+    "returns_or_correlations_computed": false,
+    "pnl_computed": false,
+    "collector_changed": false,
+    "runner_bundle_created": false,
+    "runner_bundle_executed": false,
+    "vps_raw_data_read": false,
+    "credentials_or_trading": false
+  },
+  "recorded_at_utc": "2026-10-09T18:39:14.166Z"
+}

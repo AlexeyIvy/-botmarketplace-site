@@ -1,0 +1,183 @@
+{
+  "schema": "sc001.x1_test_executor_output_adapter_design_task.v0.1",
+  "task_id": "SC001-X1-002D-R2",
+  "worker_id": "X1_CROSS_ASSET_STRUCTURE",
+  "authorization_class": "T0",
+  "task_subclass": "DESIGN_ONLY_PRE_OUTCOME_TASK_LOCAL_EXECUTOR_OUTPUT_ADAPTER_REPAIR",
+  "priority": 1,
+  "architecture_version": "0.3",
+  "repair_base": {
+    "pr_number": 458,
+    "terminal_comment_id": 6087052061,
+    "exact_pr_head_sha": "2465b62aad4c90e3e7def8b9c66b7694070f2720",
+    "predecessor_task_id": "SC001-X1-002D-R1",
+    "predecessor_terminal_status": "X1_PIT_METADATA_CAPTURE_SOURCE_INCOMPLETE",
+    "result_path": "docs/research/sc001-x1-pit-lineage-capture-r1-result-v0.1.json",
+    "result_sha256": "651f84f4d4d715365f3028267e4566ffd59bd3d93314de9046c84f06872d5c4f",
+    "manifest_path": "docs/research/worker-results/sc001-x1-pit-lineage-capture-r1-manifest-v0.1.json",
+    "manifest_sha256": "57c2cdc0850493a0830e82622fab91cc96e4246326b240ac2f2bb128417178a3",
+    "test_executor_job_id": "job_20261009T183828Z_8ed9bccc",
+    "failure": "OUTPUT_DIRECTORY_READ_ONLY_PRE_NETWORK",
+    "network_runs": 0,
+    "requests_total": 0,
+    "response_bytes_total": 0,
+    "outcome_accessed": false,
+    "protected_evidence_accessed": false
+  },
+  "repair_accounting": {
+    "defect_class": "NON_SEMANTIC_EXECUTION_ADAPTER_OUTPUT_PATH",
+    "root_cause": "The capture received a repository-relative artifacts/... output path inside the Test Executor read-only package instead of the executor-provided writable directory.",
+    "canonical_executor_contract": {
+      "documentation_path": "docs/infrastructure/botmarket-test-executor-v1.0.md",
+      "documentation_sha256": "03f4540176509b5db43d59c72af8e1677d5f043a",
+      "installer_path": "scripts/mcp/install-botmarket-test-executor-v1.sh",
+      "installer_blob_sha": "afcb0efe1dead2fecc3d15019835251f76a94ecc",
+      "writable_output_environment_variable": "BM_TEST_OUTPUT_DIR"
+    },
+    "predecessor_jobs_created": 1,
+    "predecessor_network_runs": 0,
+    "predecessor_repair_cycles_consumed": 0,
+    "this_task_network_runs": 0,
+    "this_task_execution_runs": 0,
+    "research_semantics_changed": false,
+    "old_tasks_immutable": true
+  },
+  "purpose": "Add one task-local adapter and its synthetic unit tests so a later separately authorized Test Executor job can route the frozen capture into BM_TEST_OUTPUT_DIR without changing the capture implementation, source identities, ordering, evidence semantics or budgets.",
+  "classification": {
+    "tier": "T0",
+    "design_only": true,
+    "pre_outcome": true,
+    "executable_code_created_but_not_executed": true,
+    "shared_common_executable_modified": false,
+    "existing_capture_implementation_modified": false
+  },
+  "claim_contract": {
+    "claim_required": true,
+    "max_claims": 1,
+    "lease_seconds": 10800,
+    "claim_comment_prefix": "CLAIM_BLOCK",
+    "required_fields": [
+      "TASK_ID",
+      "WORKER_ID",
+      "claimed_at_utc",
+      "lease_until_utc",
+      "start_main_head",
+      "architecture_version"
+    ],
+    "exact_start_main_head": "f91804067c5268b639d29ae502328383a8f9dd59",
+    "exact_repair_base_head": "2465b62aad4c90e3e7def8b9c66b7694070f2720",
+    "exclusive_claim": true,
+    "stale_claim_recovery_authorized": false
+  },
+  "exact_outputs": {
+    "adapter": {
+      "path": "scripts/research/sc001_x1_pit_lineage_test_executor_adapter_v0_1.py",
+      "max_bytes": 6000,
+      "requirements": [
+        "Standard-library only.",
+        "Import and delegate to scripts/research/sc001_x1_pit_lineage_capture_v0_1.py; do not duplicate or alter capture/source logic.",
+        "Accept no CLI arguments. Any argument fails closed with exit code 2 before delegation.",
+        "Read only the exact environment key BM_TEST_OUTPUT_DIR for the executor-owned output root.",
+        "Fail closed with exit code 2 if BM_TEST_OUTPUT_DIR is missing, empty, non-absolute, nonexistent, not a directory, or cannot be resolved.",
+        "Resolve the executor output root and append the fixed child name sc001-x1-pit-metadata-capture.",
+        "Prove the resolved fixed child remains beneath the resolved executor output root before delegation.",
+        "Delegate exactly once to capture.main with ['--output-dir', '<resolved-root>/sc001-x1-pit-metadata-capture'].",
+        "Preserve the delegated capture exit code exactly.",
+        "Do not read or change URLs, request classes, ordering, request/byte caps, timeout, source qualification, evidence semantics, collectors, credentials, trading, VPS or Runner state."
+      ]
+    },
+    "synthetic_tests": {
+      "path": "tests/research/sc001_x1_pit_lineage_test_executor_adapter_test_v0_1.py",
+      "max_bytes": 12000,
+      "exact_test_count": 7,
+      "requirements": [
+        "Standard-library unittest only.",
+        "Import the task-local adapter and mock capture.main so the suite performs zero network requests and creates no market evidence.",
+        "Test missing BM_TEST_OUTPUT_DIR fails closed without delegation.",
+        "Test empty BM_TEST_OUTPUT_DIR fails closed without delegation.",
+        "Test relative BM_TEST_OUTPUT_DIR fails closed without delegation.",
+        "Test nonexistent BM_TEST_OUTPUT_DIR fails closed without delegation.",
+        "Test unexpected CLI argument fails closed without delegation.",
+        "Test a valid absolute writable temporary root delegates exactly once with the exact fixed child path.",
+        "Test the adapter preserves both delegated success and SOURCE_INCOMPLETE exit codes without changing arguments."
+      ]
+    }
+  },
+  "allowed_repository_writes": {
+    "files": [
+      "scripts/research/sc001_x1_pit_lineage_test_executor_adapter_v0_1.py",
+      "tests/research/sc001_x1_pit_lineage_test_executor_adapter_test_v0_1.py"
+    ],
+    "max_changed_files": 2,
+    "max_commits": 1,
+    "comments": [
+      "exactly one CLAIM_BLOCK",
+      "exactly one TERMINAL RECEIPT"
+    ],
+    "any_other_write": false
+  },
+  "execution_contract": {
+    "test_executor_jobs": 0,
+    "network_runs": 0,
+    "requests_total": 0,
+    "response_bytes_total": 0,
+    "runner_runs": 0,
+    "vps_reads": 0,
+    "collector_changes": 0,
+    "outcome_runs": 0,
+    "code_execution": false,
+    "static_authoring_only": true
+  },
+  "repair_control": {
+    "repair_mode": "NONE",
+    "max_repair_cycles": 0,
+    "retry": false,
+    "second_task_in_same_worker_run": false,
+    "source_fallback": false,
+    "budget_expansion": false
+  },
+  "pr_lifecycle_authority": {
+    "edit_title": false,
+    "edit_body": false,
+    "convert_draft_or_ready": false,
+    "merge": false,
+    "close": false,
+    "delete_branch": false
+  },
+  "terminal_rules": {
+    "success_terminal_status": "X1_TEST_EXECUTOR_OUTPUT_ADAPTER_DESIGN_READY",
+    "blocked_terminal_status": "X1_TEST_EXECUTOR_OUTPUT_ADAPTER_DESIGN_BLOCKED",
+    "strategy_review_required": false,
+    "continuation_review_required": true,
+    "worker_result_manifest_required": false,
+    "required_terminal_fields": [
+      "TASK_ID",
+      "WORKER_ID",
+      "TERMINAL_STATUS",
+      "FINAL_PR_HEAD",
+      "ADAPTER_PATH",
+      "TEST_PATH",
+      "CHANGED_FILES",
+      "EXECUTION_COUNT",
+      "NETWORK_RUNS",
+      "STRATEGY_REVIEW_REQUIRED",
+      "CONTINUATION_REVIEW_REQUIRED"
+    ]
+  },
+  "successor_boundary": {
+    "on_design_ready": "Strategy Control must statically/adversarially review the exact PR head and two-file delta. If PASS, it may canonicalize that exact head and dispatch one separately bounded offline Test Executor self-test task. The worker must not merge or execute tests.",
+    "network_capture_before_offline_pass": false,
+    "automatic_network_successor_from_this_task": false
+  },
+  "hard_prohibitions": [
+    "No Test Executor job in this task.",
+    "No network access or source capture.",
+    "No Research Runner or Runner Probe.",
+    "No VPS raw-data read.",
+    "No market body, price, return, correlation, lag, PnL or protected outcome access.",
+    "No collector, credential or trading action.",
+    "No change to the existing capture implementation or its existing tests.",
+    "No roadmap, governance, policy, charter, contamination registry, reusable registry or frozen research-rule change.",
+    "No merge, close, draft/ready toggle or branch deletion by the worker."
+  ]
+}
