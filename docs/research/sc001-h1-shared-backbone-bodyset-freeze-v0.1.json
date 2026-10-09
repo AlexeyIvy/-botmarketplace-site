@@ -4,8 +4,37 @@
   "worker_id": "H1_HISTORICAL_INDICATORS",
   "authorization_class": "T0_REPOSITORY_IMPLEMENTATION_ONLY",
   "status": "FROZEN_NOT_ACQUIRED",
-  "dataset_key": "sc001/shared/binance-usdm/monthly-klines/1m/2025-09-01_2026-10-01/12x13/v0.1",
-  "resource_id": "sc001-h1-binance-usdm-1m-bodyset-20250901-20261001-12x13-v0.1",
+  "dataset_key": {
+    "source_provider": "Binance",
+    "source_host": "data.binance.vision",
+    "endpoint_class": "public archive objects",
+    "market_type": "USD-M futures",
+    "instrument_or_frozen_universe_identifier": {
+      "kind": "ordered_symbol_list",
+      "symbols": [
+        "0GUSDT",
+        "1000000BOBUSDT",
+        "1000000MOGUSDT",
+        "1000BONKUSDT",
+        "1000CATUSDT",
+        "1000CHEEMSUSDT",
+        "1000FLOKIUSDT",
+        "1000LUNCUSDT",
+        "1000PEPEUSDT",
+        "1000RATSUSDT",
+        "1000SATSUSDT",
+        "1000SHIBUSDT"
+      ]
+    },
+    "data_kind": "kline",
+    "granularity": "1m",
+    "archive_class": "monthly ZIP plus SHA256 checksum sidecar",
+    "UTC_start": "2025-09-01T00:00:00Z",
+    "UTC_end_exclusive": "2026-10-01T00:00:00Z",
+    "exact_source_identity_rule": "data/futures/um/monthly/klines/{symbol}/1m/{symbol}-1m-{YYYY-MM}.zip and exact .CHECKSUM sidecar basename",
+    "source_semantic_version": "Binance public data monthly USD-M kline archive schema v1"
+  },
+  "resource_id": "b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf",
   "source_qualification": "docs/research/sc001-h1-shared-backbone-source-metadata-qualification-v0.1.json",
   "source": {
     "provider": "Binance",
@@ -69,13 +98,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2025-09.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2025-09.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/0GUSDT/0GUSDT-1m-2025-09.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/0GUSDT-1m-2025-09.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2025-09.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2025-09.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/0GUSDT/0GUSDT-1m-2025-09.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/0GUSDT-1m-2025-09.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -88,13 +117,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2025-10.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2025-10.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/0GUSDT/0GUSDT-1m-2025-10.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/0GUSDT-1m-2025-10.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2025-10.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2025-10.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/0GUSDT/0GUSDT-1m-2025-10.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/0GUSDT-1m-2025-10.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -107,13 +136,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2025-11.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2025-11.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/0GUSDT/0GUSDT-1m-2025-11.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/0GUSDT-1m-2025-11.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2025-11.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2025-11.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/0GUSDT/0GUSDT-1m-2025-11.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/0GUSDT-1m-2025-11.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -126,13 +155,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2025-12.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2025-12.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/0GUSDT/0GUSDT-1m-2025-12.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/0GUSDT-1m-2025-12.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2025-12.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2025-12.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/0GUSDT/0GUSDT-1m-2025-12.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/0GUSDT-1m-2025-12.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -145,13 +174,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2026-01.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2026-01.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/0GUSDT/0GUSDT-1m-2026-01.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/0GUSDT-1m-2026-01.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2026-01.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2026-01.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/0GUSDT/0GUSDT-1m-2026-01.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/0GUSDT-1m-2026-01.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -164,13 +193,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2026-02.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2026-02.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/0GUSDT/0GUSDT-1m-2026-02.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/0GUSDT-1m-2026-02.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2026-02.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2026-02.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/0GUSDT/0GUSDT-1m-2026-02.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/0GUSDT-1m-2026-02.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -183,13 +212,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2026-03.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2026-03.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/0GUSDT/0GUSDT-1m-2026-03.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/0GUSDT-1m-2026-03.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2026-03.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2026-03.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/0GUSDT/0GUSDT-1m-2026-03.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/0GUSDT-1m-2026-03.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -202,13 +231,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2026-04.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2026-04.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/0GUSDT/0GUSDT-1m-2026-04.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/0GUSDT-1m-2026-04.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2026-04.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2026-04.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/0GUSDT/0GUSDT-1m-2026-04.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/0GUSDT-1m-2026-04.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -221,13 +250,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2026-05.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2026-05.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/0GUSDT/0GUSDT-1m-2026-05.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/0GUSDT-1m-2026-05.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2026-05.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2026-05.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/0GUSDT/0GUSDT-1m-2026-05.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/0GUSDT-1m-2026-05.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -240,13 +269,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2026-06.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2026-06.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/0GUSDT/0GUSDT-1m-2026-06.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/0GUSDT-1m-2026-06.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2026-06.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2026-06.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/0GUSDT/0GUSDT-1m-2026-06.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/0GUSDT-1m-2026-06.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -259,13 +288,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2026-07.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2026-07.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/0GUSDT/0GUSDT-1m-2026-07.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/0GUSDT-1m-2026-07.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2026-07.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2026-07.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/0GUSDT/0GUSDT-1m-2026-07.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/0GUSDT-1m-2026-07.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -278,13 +307,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2026-08.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2026-08.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/0GUSDT/0GUSDT-1m-2026-08.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/0GUSDT-1m-2026-08.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2026-08.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2026-08.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/0GUSDT/0GUSDT-1m-2026-08.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/0GUSDT-1m-2026-08.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -297,13 +326,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2026-09.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2026-09.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/0GUSDT/0GUSDT-1m-2026-09.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/0GUSDT-1m-2026-09.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2026-09.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/0GUSDT/1m/0GUSDT-1m-2026-09.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/0GUSDT/0GUSDT-1m-2026-09.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/0GUSDT-1m-2026-09.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -316,13 +345,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2025-09.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2025-09.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000BOBUSDT/1000000BOBUSDT-1m-2025-09.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000BOBUSDT-1m-2025-09.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2025-09.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2025-09.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000BOBUSDT/1000000BOBUSDT-1m-2025-09.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000BOBUSDT-1m-2025-09.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -335,13 +364,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2025-10.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2025-10.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000BOBUSDT/1000000BOBUSDT-1m-2025-10.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000BOBUSDT-1m-2025-10.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2025-10.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2025-10.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000BOBUSDT/1000000BOBUSDT-1m-2025-10.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000BOBUSDT-1m-2025-10.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -354,13 +383,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2025-11.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2025-11.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000BOBUSDT/1000000BOBUSDT-1m-2025-11.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000BOBUSDT-1m-2025-11.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2025-11.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2025-11.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000BOBUSDT/1000000BOBUSDT-1m-2025-11.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000BOBUSDT-1m-2025-11.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -373,13 +402,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2025-12.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2025-12.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000BOBUSDT/1000000BOBUSDT-1m-2025-12.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000BOBUSDT-1m-2025-12.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2025-12.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2025-12.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000BOBUSDT/1000000BOBUSDT-1m-2025-12.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000BOBUSDT-1m-2025-12.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -392,13 +421,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2026-01.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2026-01.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000BOBUSDT/1000000BOBUSDT-1m-2026-01.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000BOBUSDT-1m-2026-01.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2026-01.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2026-01.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000BOBUSDT/1000000BOBUSDT-1m-2026-01.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000BOBUSDT-1m-2026-01.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -411,13 +440,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2026-02.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2026-02.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000BOBUSDT/1000000BOBUSDT-1m-2026-02.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000BOBUSDT-1m-2026-02.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2026-02.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2026-02.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000BOBUSDT/1000000BOBUSDT-1m-2026-02.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000BOBUSDT-1m-2026-02.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -430,13 +459,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2026-03.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2026-03.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000BOBUSDT/1000000BOBUSDT-1m-2026-03.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000BOBUSDT-1m-2026-03.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2026-03.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2026-03.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000BOBUSDT/1000000BOBUSDT-1m-2026-03.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000BOBUSDT-1m-2026-03.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -449,13 +478,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2026-04.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2026-04.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000BOBUSDT/1000000BOBUSDT-1m-2026-04.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000BOBUSDT-1m-2026-04.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2026-04.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2026-04.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000BOBUSDT/1000000BOBUSDT-1m-2026-04.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000BOBUSDT-1m-2026-04.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -468,13 +497,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2026-05.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2026-05.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000BOBUSDT/1000000BOBUSDT-1m-2026-05.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000BOBUSDT-1m-2026-05.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2026-05.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2026-05.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000BOBUSDT/1000000BOBUSDT-1m-2026-05.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000BOBUSDT-1m-2026-05.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -487,13 +516,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2026-06.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2026-06.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000BOBUSDT/1000000BOBUSDT-1m-2026-06.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000BOBUSDT-1m-2026-06.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2026-06.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2026-06.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000BOBUSDT/1000000BOBUSDT-1m-2026-06.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000BOBUSDT-1m-2026-06.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -506,13 +535,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2026-07.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2026-07.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000BOBUSDT/1000000BOBUSDT-1m-2026-07.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000BOBUSDT-1m-2026-07.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2026-07.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2026-07.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000BOBUSDT/1000000BOBUSDT-1m-2026-07.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000BOBUSDT-1m-2026-07.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -525,13 +554,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2026-08.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2026-08.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000BOBUSDT/1000000BOBUSDT-1m-2026-08.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000BOBUSDT-1m-2026-08.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2026-08.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2026-08.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000BOBUSDT/1000000BOBUSDT-1m-2026-08.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000BOBUSDT-1m-2026-08.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -544,13 +573,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2026-09.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2026-09.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000BOBUSDT/1000000BOBUSDT-1m-2026-09.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000BOBUSDT-1m-2026-09.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2026-09.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000BOBUSDT/1m/1000000BOBUSDT-1m-2026-09.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000BOBUSDT/1000000BOBUSDT-1m-2026-09.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000BOBUSDT-1m-2026-09.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -563,13 +592,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2025-09.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2025-09.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000MOGUSDT/1000000MOGUSDT-1m-2025-09.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000MOGUSDT-1m-2025-09.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2025-09.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2025-09.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000MOGUSDT/1000000MOGUSDT-1m-2025-09.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000MOGUSDT-1m-2025-09.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -582,13 +611,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2025-10.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2025-10.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000MOGUSDT/1000000MOGUSDT-1m-2025-10.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000MOGUSDT-1m-2025-10.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2025-10.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2025-10.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000MOGUSDT/1000000MOGUSDT-1m-2025-10.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000MOGUSDT-1m-2025-10.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -601,13 +630,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2025-11.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2025-11.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000MOGUSDT/1000000MOGUSDT-1m-2025-11.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000MOGUSDT-1m-2025-11.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2025-11.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2025-11.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000MOGUSDT/1000000MOGUSDT-1m-2025-11.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000MOGUSDT-1m-2025-11.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -620,13 +649,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2025-12.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2025-12.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000MOGUSDT/1000000MOGUSDT-1m-2025-12.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000MOGUSDT-1m-2025-12.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2025-12.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2025-12.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000MOGUSDT/1000000MOGUSDT-1m-2025-12.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000MOGUSDT-1m-2025-12.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -639,13 +668,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2026-01.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2026-01.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000MOGUSDT/1000000MOGUSDT-1m-2026-01.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000MOGUSDT-1m-2026-01.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2026-01.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2026-01.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000MOGUSDT/1000000MOGUSDT-1m-2026-01.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000MOGUSDT-1m-2026-01.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -658,13 +687,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2026-02.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2026-02.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000MOGUSDT/1000000MOGUSDT-1m-2026-02.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000MOGUSDT-1m-2026-02.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2026-02.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2026-02.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000MOGUSDT/1000000MOGUSDT-1m-2026-02.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000MOGUSDT-1m-2026-02.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -677,13 +706,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2026-03.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2026-03.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000MOGUSDT/1000000MOGUSDT-1m-2026-03.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000MOGUSDT-1m-2026-03.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2026-03.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2026-03.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000MOGUSDT/1000000MOGUSDT-1m-2026-03.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000MOGUSDT-1m-2026-03.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -696,13 +725,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2026-04.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2026-04.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000MOGUSDT/1000000MOGUSDT-1m-2026-04.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000MOGUSDT-1m-2026-04.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2026-04.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2026-04.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000MOGUSDT/1000000MOGUSDT-1m-2026-04.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000MOGUSDT-1m-2026-04.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -715,13 +744,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2026-05.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2026-05.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000MOGUSDT/1000000MOGUSDT-1m-2026-05.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000MOGUSDT-1m-2026-05.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2026-05.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2026-05.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000MOGUSDT/1000000MOGUSDT-1m-2026-05.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000MOGUSDT-1m-2026-05.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -734,13 +763,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2026-06.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2026-06.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000MOGUSDT/1000000MOGUSDT-1m-2026-06.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000MOGUSDT-1m-2026-06.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2026-06.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2026-06.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000MOGUSDT/1000000MOGUSDT-1m-2026-06.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000MOGUSDT-1m-2026-06.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -753,13 +782,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2026-07.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2026-07.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000MOGUSDT/1000000MOGUSDT-1m-2026-07.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000MOGUSDT-1m-2026-07.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2026-07.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2026-07.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000MOGUSDT/1000000MOGUSDT-1m-2026-07.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000MOGUSDT-1m-2026-07.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -772,13 +801,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2026-08.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2026-08.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000MOGUSDT/1000000MOGUSDT-1m-2026-08.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000MOGUSDT-1m-2026-08.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2026-08.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2026-08.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000MOGUSDT/1000000MOGUSDT-1m-2026-08.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000MOGUSDT-1m-2026-08.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -791,13 +820,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2026-09.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2026-09.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000MOGUSDT/1000000MOGUSDT-1m-2026-09.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000MOGUSDT-1m-2026-09.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2026-09.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000000MOGUSDT/1m/1000000MOGUSDT-1m-2026-09.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000000MOGUSDT/1000000MOGUSDT-1m-2026-09.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000000MOGUSDT-1m-2026-09.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -810,13 +839,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2025-09.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2025-09.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000BONKUSDT/1000BONKUSDT-1m-2025-09.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000BONKUSDT-1m-2025-09.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2025-09.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2025-09.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000BONKUSDT/1000BONKUSDT-1m-2025-09.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000BONKUSDT-1m-2025-09.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -829,13 +858,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2025-10.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2025-10.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000BONKUSDT/1000BONKUSDT-1m-2025-10.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000BONKUSDT-1m-2025-10.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2025-10.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2025-10.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000BONKUSDT/1000BONKUSDT-1m-2025-10.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000BONKUSDT-1m-2025-10.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -848,13 +877,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2025-11.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2025-11.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000BONKUSDT/1000BONKUSDT-1m-2025-11.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000BONKUSDT-1m-2025-11.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2025-11.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2025-11.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000BONKUSDT/1000BONKUSDT-1m-2025-11.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000BONKUSDT-1m-2025-11.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -867,13 +896,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2025-12.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2025-12.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000BONKUSDT/1000BONKUSDT-1m-2025-12.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000BONKUSDT-1m-2025-12.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2025-12.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2025-12.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000BONKUSDT/1000BONKUSDT-1m-2025-12.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000BONKUSDT-1m-2025-12.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -886,13 +915,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2026-01.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2026-01.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000BONKUSDT/1000BONKUSDT-1m-2026-01.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000BONKUSDT-1m-2026-01.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2026-01.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2026-01.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000BONKUSDT/1000BONKUSDT-1m-2026-01.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000BONKUSDT-1m-2026-01.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -905,13 +934,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2026-02.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2026-02.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000BONKUSDT/1000BONKUSDT-1m-2026-02.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000BONKUSDT-1m-2026-02.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2026-02.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2026-02.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000BONKUSDT/1000BONKUSDT-1m-2026-02.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000BONKUSDT-1m-2026-02.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -924,13 +953,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2026-03.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2026-03.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000BONKUSDT/1000BONKUSDT-1m-2026-03.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000BONKUSDT-1m-2026-03.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2026-03.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2026-03.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000BONKUSDT/1000BONKUSDT-1m-2026-03.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000BONKUSDT-1m-2026-03.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -943,13 +972,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2026-04.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2026-04.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000BONKUSDT/1000BONKUSDT-1m-2026-04.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000BONKUSDT-1m-2026-04.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2026-04.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2026-04.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000BONKUSDT/1000BONKUSDT-1m-2026-04.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000BONKUSDT-1m-2026-04.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -962,13 +991,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2026-05.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2026-05.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000BONKUSDT/1000BONKUSDT-1m-2026-05.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000BONKUSDT-1m-2026-05.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2026-05.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2026-05.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000BONKUSDT/1000BONKUSDT-1m-2026-05.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000BONKUSDT-1m-2026-05.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -981,13 +1010,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2026-06.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2026-06.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000BONKUSDT/1000BONKUSDT-1m-2026-06.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000BONKUSDT-1m-2026-06.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2026-06.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2026-06.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000BONKUSDT/1000BONKUSDT-1m-2026-06.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000BONKUSDT-1m-2026-06.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1000,13 +1029,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2026-07.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2026-07.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000BONKUSDT/1000BONKUSDT-1m-2026-07.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000BONKUSDT-1m-2026-07.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2026-07.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2026-07.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000BONKUSDT/1000BONKUSDT-1m-2026-07.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000BONKUSDT-1m-2026-07.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1019,13 +1048,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2026-08.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2026-08.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000BONKUSDT/1000BONKUSDT-1m-2026-08.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000BONKUSDT-1m-2026-08.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2026-08.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2026-08.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000BONKUSDT/1000BONKUSDT-1m-2026-08.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000BONKUSDT-1m-2026-08.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1038,13 +1067,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2026-09.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2026-09.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000BONKUSDT/1000BONKUSDT-1m-2026-09.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000BONKUSDT-1m-2026-09.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2026-09.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000BONKUSDT/1m/1000BONKUSDT-1m-2026-09.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000BONKUSDT/1000BONKUSDT-1m-2026-09.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000BONKUSDT-1m-2026-09.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1057,13 +1086,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2025-09.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2025-09.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CATUSDT/1000CATUSDT-1m-2025-09.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CATUSDT-1m-2025-09.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2025-09.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2025-09.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CATUSDT/1000CATUSDT-1m-2025-09.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CATUSDT-1m-2025-09.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1076,13 +1105,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2025-10.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2025-10.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CATUSDT/1000CATUSDT-1m-2025-10.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CATUSDT-1m-2025-10.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2025-10.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2025-10.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CATUSDT/1000CATUSDT-1m-2025-10.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CATUSDT-1m-2025-10.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1095,13 +1124,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2025-11.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2025-11.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CATUSDT/1000CATUSDT-1m-2025-11.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CATUSDT-1m-2025-11.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2025-11.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2025-11.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CATUSDT/1000CATUSDT-1m-2025-11.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CATUSDT-1m-2025-11.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1114,13 +1143,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2025-12.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2025-12.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CATUSDT/1000CATUSDT-1m-2025-12.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CATUSDT-1m-2025-12.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2025-12.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2025-12.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CATUSDT/1000CATUSDT-1m-2025-12.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CATUSDT-1m-2025-12.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1133,13 +1162,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2026-01.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2026-01.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CATUSDT/1000CATUSDT-1m-2026-01.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CATUSDT-1m-2026-01.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2026-01.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2026-01.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CATUSDT/1000CATUSDT-1m-2026-01.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CATUSDT-1m-2026-01.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1152,13 +1181,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2026-02.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2026-02.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CATUSDT/1000CATUSDT-1m-2026-02.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CATUSDT-1m-2026-02.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2026-02.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2026-02.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CATUSDT/1000CATUSDT-1m-2026-02.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CATUSDT-1m-2026-02.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1171,13 +1200,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2026-03.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2026-03.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CATUSDT/1000CATUSDT-1m-2026-03.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CATUSDT-1m-2026-03.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2026-03.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2026-03.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CATUSDT/1000CATUSDT-1m-2026-03.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CATUSDT-1m-2026-03.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1190,13 +1219,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2026-04.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2026-04.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CATUSDT/1000CATUSDT-1m-2026-04.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CATUSDT-1m-2026-04.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2026-04.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2026-04.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CATUSDT/1000CATUSDT-1m-2026-04.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CATUSDT-1m-2026-04.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1209,13 +1238,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2026-05.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2026-05.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CATUSDT/1000CATUSDT-1m-2026-05.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CATUSDT-1m-2026-05.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2026-05.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2026-05.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CATUSDT/1000CATUSDT-1m-2026-05.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CATUSDT-1m-2026-05.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1228,13 +1257,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2026-06.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2026-06.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CATUSDT/1000CATUSDT-1m-2026-06.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CATUSDT-1m-2026-06.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2026-06.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2026-06.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CATUSDT/1000CATUSDT-1m-2026-06.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CATUSDT-1m-2026-06.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1247,13 +1276,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2026-07.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2026-07.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CATUSDT/1000CATUSDT-1m-2026-07.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CATUSDT-1m-2026-07.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2026-07.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2026-07.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CATUSDT/1000CATUSDT-1m-2026-07.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CATUSDT-1m-2026-07.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1266,13 +1295,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2026-08.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2026-08.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CATUSDT/1000CATUSDT-1m-2026-08.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CATUSDT-1m-2026-08.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2026-08.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2026-08.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CATUSDT/1000CATUSDT-1m-2026-08.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CATUSDT-1m-2026-08.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1285,13 +1314,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2026-09.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2026-09.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CATUSDT/1000CATUSDT-1m-2026-09.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CATUSDT-1m-2026-09.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2026-09.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CATUSDT/1m/1000CATUSDT-1m-2026-09.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CATUSDT/1000CATUSDT-1m-2026-09.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CATUSDT-1m-2026-09.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1304,13 +1333,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2025-09.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2025-09.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CHEEMSUSDT/1000CHEEMSUSDT-1m-2025-09.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CHEEMSUSDT-1m-2025-09.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2025-09.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2025-09.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CHEEMSUSDT/1000CHEEMSUSDT-1m-2025-09.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CHEEMSUSDT-1m-2025-09.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1323,13 +1352,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2025-10.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2025-10.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CHEEMSUSDT/1000CHEEMSUSDT-1m-2025-10.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CHEEMSUSDT-1m-2025-10.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2025-10.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2025-10.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CHEEMSUSDT/1000CHEEMSUSDT-1m-2025-10.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CHEEMSUSDT-1m-2025-10.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1342,13 +1371,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2025-11.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2025-11.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CHEEMSUSDT/1000CHEEMSUSDT-1m-2025-11.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CHEEMSUSDT-1m-2025-11.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2025-11.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2025-11.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CHEEMSUSDT/1000CHEEMSUSDT-1m-2025-11.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CHEEMSUSDT-1m-2025-11.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1361,13 +1390,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2025-12.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2025-12.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CHEEMSUSDT/1000CHEEMSUSDT-1m-2025-12.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CHEEMSUSDT-1m-2025-12.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2025-12.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2025-12.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CHEEMSUSDT/1000CHEEMSUSDT-1m-2025-12.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CHEEMSUSDT-1m-2025-12.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1380,13 +1409,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2026-01.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2026-01.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CHEEMSUSDT/1000CHEEMSUSDT-1m-2026-01.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CHEEMSUSDT-1m-2026-01.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2026-01.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2026-01.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CHEEMSUSDT/1000CHEEMSUSDT-1m-2026-01.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CHEEMSUSDT-1m-2026-01.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1399,13 +1428,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2026-02.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2026-02.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CHEEMSUSDT/1000CHEEMSUSDT-1m-2026-02.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CHEEMSUSDT-1m-2026-02.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2026-02.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2026-02.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CHEEMSUSDT/1000CHEEMSUSDT-1m-2026-02.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CHEEMSUSDT-1m-2026-02.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1418,13 +1447,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2026-03.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2026-03.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CHEEMSUSDT/1000CHEEMSUSDT-1m-2026-03.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CHEEMSUSDT-1m-2026-03.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2026-03.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2026-03.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CHEEMSUSDT/1000CHEEMSUSDT-1m-2026-03.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CHEEMSUSDT-1m-2026-03.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1437,13 +1466,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2026-04.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2026-04.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CHEEMSUSDT/1000CHEEMSUSDT-1m-2026-04.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CHEEMSUSDT-1m-2026-04.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2026-04.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2026-04.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CHEEMSUSDT/1000CHEEMSUSDT-1m-2026-04.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CHEEMSUSDT-1m-2026-04.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1456,13 +1485,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2026-05.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2026-05.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CHEEMSUSDT/1000CHEEMSUSDT-1m-2026-05.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CHEEMSUSDT-1m-2026-05.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2026-05.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2026-05.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CHEEMSUSDT/1000CHEEMSUSDT-1m-2026-05.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CHEEMSUSDT-1m-2026-05.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1475,13 +1504,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2026-06.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2026-06.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CHEEMSUSDT/1000CHEEMSUSDT-1m-2026-06.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CHEEMSUSDT-1m-2026-06.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2026-06.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2026-06.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CHEEMSUSDT/1000CHEEMSUSDT-1m-2026-06.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CHEEMSUSDT-1m-2026-06.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1494,13 +1523,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2026-07.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2026-07.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CHEEMSUSDT/1000CHEEMSUSDT-1m-2026-07.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CHEEMSUSDT-1m-2026-07.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2026-07.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2026-07.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CHEEMSUSDT/1000CHEEMSUSDT-1m-2026-07.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CHEEMSUSDT-1m-2026-07.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1513,13 +1542,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2026-08.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2026-08.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CHEEMSUSDT/1000CHEEMSUSDT-1m-2026-08.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CHEEMSUSDT-1m-2026-08.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2026-08.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2026-08.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CHEEMSUSDT/1000CHEEMSUSDT-1m-2026-08.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CHEEMSUSDT-1m-2026-08.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1532,13 +1561,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2026-09.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2026-09.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CHEEMSUSDT/1000CHEEMSUSDT-1m-2026-09.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CHEEMSUSDT-1m-2026-09.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2026-09.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000CHEEMSUSDT/1m/1000CHEEMSUSDT-1m-2026-09.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000CHEEMSUSDT/1000CHEEMSUSDT-1m-2026-09.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000CHEEMSUSDT-1m-2026-09.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1551,13 +1580,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2025-09.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2025-09.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000FLOKIUSDT/1000FLOKIUSDT-1m-2025-09.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000FLOKIUSDT-1m-2025-09.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2025-09.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2025-09.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000FLOKIUSDT/1000FLOKIUSDT-1m-2025-09.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000FLOKIUSDT-1m-2025-09.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1570,13 +1599,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2025-10.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2025-10.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000FLOKIUSDT/1000FLOKIUSDT-1m-2025-10.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000FLOKIUSDT-1m-2025-10.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2025-10.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2025-10.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000FLOKIUSDT/1000FLOKIUSDT-1m-2025-10.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000FLOKIUSDT-1m-2025-10.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1589,13 +1618,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2025-11.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2025-11.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000FLOKIUSDT/1000FLOKIUSDT-1m-2025-11.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000FLOKIUSDT-1m-2025-11.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2025-11.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2025-11.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000FLOKIUSDT/1000FLOKIUSDT-1m-2025-11.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000FLOKIUSDT-1m-2025-11.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1608,13 +1637,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2025-12.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2025-12.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000FLOKIUSDT/1000FLOKIUSDT-1m-2025-12.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000FLOKIUSDT-1m-2025-12.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2025-12.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2025-12.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000FLOKIUSDT/1000FLOKIUSDT-1m-2025-12.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000FLOKIUSDT-1m-2025-12.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1627,13 +1656,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2026-01.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2026-01.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000FLOKIUSDT/1000FLOKIUSDT-1m-2026-01.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000FLOKIUSDT-1m-2026-01.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2026-01.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2026-01.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000FLOKIUSDT/1000FLOKIUSDT-1m-2026-01.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000FLOKIUSDT-1m-2026-01.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1646,13 +1675,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2026-02.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2026-02.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000FLOKIUSDT/1000FLOKIUSDT-1m-2026-02.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000FLOKIUSDT-1m-2026-02.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2026-02.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2026-02.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000FLOKIUSDT/1000FLOKIUSDT-1m-2026-02.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000FLOKIUSDT-1m-2026-02.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1665,13 +1694,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2026-03.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2026-03.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000FLOKIUSDT/1000FLOKIUSDT-1m-2026-03.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000FLOKIUSDT-1m-2026-03.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2026-03.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2026-03.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000FLOKIUSDT/1000FLOKIUSDT-1m-2026-03.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000FLOKIUSDT-1m-2026-03.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1684,13 +1713,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2026-04.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2026-04.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000FLOKIUSDT/1000FLOKIUSDT-1m-2026-04.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000FLOKIUSDT-1m-2026-04.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2026-04.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2026-04.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000FLOKIUSDT/1000FLOKIUSDT-1m-2026-04.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000FLOKIUSDT-1m-2026-04.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1703,13 +1732,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2026-05.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2026-05.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000FLOKIUSDT/1000FLOKIUSDT-1m-2026-05.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000FLOKIUSDT-1m-2026-05.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2026-05.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2026-05.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000FLOKIUSDT/1000FLOKIUSDT-1m-2026-05.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000FLOKIUSDT-1m-2026-05.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1722,13 +1751,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2026-06.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2026-06.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000FLOKIUSDT/1000FLOKIUSDT-1m-2026-06.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000FLOKIUSDT-1m-2026-06.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2026-06.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2026-06.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000FLOKIUSDT/1000FLOKIUSDT-1m-2026-06.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000FLOKIUSDT-1m-2026-06.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1741,13 +1770,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2026-07.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2026-07.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000FLOKIUSDT/1000FLOKIUSDT-1m-2026-07.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000FLOKIUSDT-1m-2026-07.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2026-07.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2026-07.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000FLOKIUSDT/1000FLOKIUSDT-1m-2026-07.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000FLOKIUSDT-1m-2026-07.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1760,13 +1789,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2026-08.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2026-08.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000FLOKIUSDT/1000FLOKIUSDT-1m-2026-08.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000FLOKIUSDT-1m-2026-08.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2026-08.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2026-08.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000FLOKIUSDT/1000FLOKIUSDT-1m-2026-08.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000FLOKIUSDT-1m-2026-08.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1779,13 +1808,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2026-09.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2026-09.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000FLOKIUSDT/1000FLOKIUSDT-1m-2026-09.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000FLOKIUSDT-1m-2026-09.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2026-09.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000FLOKIUSDT/1m/1000FLOKIUSDT-1m-2026-09.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000FLOKIUSDT/1000FLOKIUSDT-1m-2026-09.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000FLOKIUSDT-1m-2026-09.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1798,13 +1827,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2025-09.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2025-09.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000LUNCUSDT/1000LUNCUSDT-1m-2025-09.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000LUNCUSDT-1m-2025-09.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2025-09.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2025-09.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000LUNCUSDT/1000LUNCUSDT-1m-2025-09.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000LUNCUSDT-1m-2025-09.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1817,13 +1846,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2025-10.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2025-10.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000LUNCUSDT/1000LUNCUSDT-1m-2025-10.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000LUNCUSDT-1m-2025-10.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2025-10.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2025-10.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000LUNCUSDT/1000LUNCUSDT-1m-2025-10.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000LUNCUSDT-1m-2025-10.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1836,13 +1865,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2025-11.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2025-11.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000LUNCUSDT/1000LUNCUSDT-1m-2025-11.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000LUNCUSDT-1m-2025-11.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2025-11.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2025-11.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000LUNCUSDT/1000LUNCUSDT-1m-2025-11.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000LUNCUSDT-1m-2025-11.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1855,13 +1884,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2025-12.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2025-12.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000LUNCUSDT/1000LUNCUSDT-1m-2025-12.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000LUNCUSDT-1m-2025-12.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2025-12.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2025-12.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000LUNCUSDT/1000LUNCUSDT-1m-2025-12.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000LUNCUSDT-1m-2025-12.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1874,13 +1903,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2026-01.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2026-01.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000LUNCUSDT/1000LUNCUSDT-1m-2026-01.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000LUNCUSDT-1m-2026-01.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2026-01.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2026-01.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000LUNCUSDT/1000LUNCUSDT-1m-2026-01.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000LUNCUSDT-1m-2026-01.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1893,13 +1922,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2026-02.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2026-02.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000LUNCUSDT/1000LUNCUSDT-1m-2026-02.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000LUNCUSDT-1m-2026-02.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2026-02.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2026-02.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000LUNCUSDT/1000LUNCUSDT-1m-2026-02.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000LUNCUSDT-1m-2026-02.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1912,13 +1941,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2026-03.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2026-03.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000LUNCUSDT/1000LUNCUSDT-1m-2026-03.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000LUNCUSDT-1m-2026-03.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2026-03.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2026-03.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000LUNCUSDT/1000LUNCUSDT-1m-2026-03.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000LUNCUSDT-1m-2026-03.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1931,13 +1960,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2026-04.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2026-04.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000LUNCUSDT/1000LUNCUSDT-1m-2026-04.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000LUNCUSDT-1m-2026-04.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2026-04.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2026-04.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000LUNCUSDT/1000LUNCUSDT-1m-2026-04.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000LUNCUSDT-1m-2026-04.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1950,13 +1979,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2026-05.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2026-05.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000LUNCUSDT/1000LUNCUSDT-1m-2026-05.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000LUNCUSDT-1m-2026-05.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2026-05.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2026-05.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000LUNCUSDT/1000LUNCUSDT-1m-2026-05.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000LUNCUSDT-1m-2026-05.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1969,13 +1998,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2026-06.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2026-06.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000LUNCUSDT/1000LUNCUSDT-1m-2026-06.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000LUNCUSDT-1m-2026-06.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2026-06.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2026-06.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000LUNCUSDT/1000LUNCUSDT-1m-2026-06.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000LUNCUSDT-1m-2026-06.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -1988,13 +2017,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2026-07.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2026-07.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000LUNCUSDT/1000LUNCUSDT-1m-2026-07.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000LUNCUSDT-1m-2026-07.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2026-07.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2026-07.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000LUNCUSDT/1000LUNCUSDT-1m-2026-07.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000LUNCUSDT-1m-2026-07.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2007,13 +2036,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2026-08.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2026-08.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000LUNCUSDT/1000LUNCUSDT-1m-2026-08.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000LUNCUSDT-1m-2026-08.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2026-08.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2026-08.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000LUNCUSDT/1000LUNCUSDT-1m-2026-08.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000LUNCUSDT-1m-2026-08.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2026,13 +2055,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2026-09.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2026-09.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000LUNCUSDT/1000LUNCUSDT-1m-2026-09.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000LUNCUSDT-1m-2026-09.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2026-09.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000LUNCUSDT/1m/1000LUNCUSDT-1m-2026-09.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000LUNCUSDT/1000LUNCUSDT-1m-2026-09.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000LUNCUSDT-1m-2026-09.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2045,13 +2074,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2025-09.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2025-09.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000PEPEUSDT/1000PEPEUSDT-1m-2025-09.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000PEPEUSDT-1m-2025-09.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2025-09.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2025-09.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000PEPEUSDT/1000PEPEUSDT-1m-2025-09.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000PEPEUSDT-1m-2025-09.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2064,13 +2093,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2025-10.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2025-10.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000PEPEUSDT/1000PEPEUSDT-1m-2025-10.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000PEPEUSDT-1m-2025-10.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2025-10.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2025-10.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000PEPEUSDT/1000PEPEUSDT-1m-2025-10.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000PEPEUSDT-1m-2025-10.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2083,13 +2112,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2025-11.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2025-11.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000PEPEUSDT/1000PEPEUSDT-1m-2025-11.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000PEPEUSDT-1m-2025-11.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2025-11.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2025-11.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000PEPEUSDT/1000PEPEUSDT-1m-2025-11.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000PEPEUSDT-1m-2025-11.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2102,13 +2131,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2025-12.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2025-12.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000PEPEUSDT/1000PEPEUSDT-1m-2025-12.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000PEPEUSDT-1m-2025-12.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2025-12.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2025-12.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000PEPEUSDT/1000PEPEUSDT-1m-2025-12.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000PEPEUSDT-1m-2025-12.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2121,13 +2150,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2026-01.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2026-01.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000PEPEUSDT/1000PEPEUSDT-1m-2026-01.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000PEPEUSDT-1m-2026-01.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2026-01.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2026-01.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000PEPEUSDT/1000PEPEUSDT-1m-2026-01.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000PEPEUSDT-1m-2026-01.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2140,13 +2169,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2026-02.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2026-02.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000PEPEUSDT/1000PEPEUSDT-1m-2026-02.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000PEPEUSDT-1m-2026-02.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2026-02.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2026-02.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000PEPEUSDT/1000PEPEUSDT-1m-2026-02.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000PEPEUSDT-1m-2026-02.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2159,13 +2188,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2026-03.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2026-03.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000PEPEUSDT/1000PEPEUSDT-1m-2026-03.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000PEPEUSDT-1m-2026-03.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2026-03.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2026-03.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000PEPEUSDT/1000PEPEUSDT-1m-2026-03.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000PEPEUSDT-1m-2026-03.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2178,13 +2207,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2026-04.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2026-04.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000PEPEUSDT/1000PEPEUSDT-1m-2026-04.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000PEPEUSDT-1m-2026-04.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2026-04.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2026-04.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000PEPEUSDT/1000PEPEUSDT-1m-2026-04.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000PEPEUSDT-1m-2026-04.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2197,13 +2226,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2026-05.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2026-05.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000PEPEUSDT/1000PEPEUSDT-1m-2026-05.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000PEPEUSDT-1m-2026-05.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2026-05.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2026-05.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000PEPEUSDT/1000PEPEUSDT-1m-2026-05.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000PEPEUSDT-1m-2026-05.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2216,13 +2245,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2026-06.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2026-06.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000PEPEUSDT/1000PEPEUSDT-1m-2026-06.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000PEPEUSDT-1m-2026-06.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2026-06.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2026-06.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000PEPEUSDT/1000PEPEUSDT-1m-2026-06.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000PEPEUSDT-1m-2026-06.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2235,13 +2264,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2026-07.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2026-07.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000PEPEUSDT/1000PEPEUSDT-1m-2026-07.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000PEPEUSDT-1m-2026-07.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2026-07.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2026-07.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000PEPEUSDT/1000PEPEUSDT-1m-2026-07.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000PEPEUSDT-1m-2026-07.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2254,13 +2283,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2026-08.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2026-08.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000PEPEUSDT/1000PEPEUSDT-1m-2026-08.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000PEPEUSDT-1m-2026-08.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2026-08.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2026-08.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000PEPEUSDT/1000PEPEUSDT-1m-2026-08.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000PEPEUSDT-1m-2026-08.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2273,13 +2302,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2026-09.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2026-09.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000PEPEUSDT/1000PEPEUSDT-1m-2026-09.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000PEPEUSDT-1m-2026-09.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2026-09.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000PEPEUSDT/1m/1000PEPEUSDT-1m-2026-09.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000PEPEUSDT/1000PEPEUSDT-1m-2026-09.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000PEPEUSDT-1m-2026-09.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2292,13 +2321,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2025-09.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2025-09.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000RATSUSDT/1000RATSUSDT-1m-2025-09.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000RATSUSDT-1m-2025-09.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2025-09.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2025-09.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000RATSUSDT/1000RATSUSDT-1m-2025-09.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000RATSUSDT-1m-2025-09.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2311,13 +2340,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2025-10.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2025-10.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000RATSUSDT/1000RATSUSDT-1m-2025-10.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000RATSUSDT-1m-2025-10.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2025-10.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2025-10.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000RATSUSDT/1000RATSUSDT-1m-2025-10.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000RATSUSDT-1m-2025-10.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2330,13 +2359,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2025-11.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2025-11.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000RATSUSDT/1000RATSUSDT-1m-2025-11.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000RATSUSDT-1m-2025-11.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2025-11.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2025-11.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000RATSUSDT/1000RATSUSDT-1m-2025-11.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000RATSUSDT-1m-2025-11.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2349,13 +2378,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2025-12.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2025-12.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000RATSUSDT/1000RATSUSDT-1m-2025-12.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000RATSUSDT-1m-2025-12.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2025-12.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2025-12.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000RATSUSDT/1000RATSUSDT-1m-2025-12.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000RATSUSDT-1m-2025-12.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2368,13 +2397,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2026-01.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2026-01.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000RATSUSDT/1000RATSUSDT-1m-2026-01.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000RATSUSDT-1m-2026-01.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2026-01.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2026-01.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000RATSUSDT/1000RATSUSDT-1m-2026-01.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000RATSUSDT-1m-2026-01.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2387,13 +2416,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2026-02.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2026-02.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000RATSUSDT/1000RATSUSDT-1m-2026-02.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000RATSUSDT-1m-2026-02.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2026-02.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2026-02.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000RATSUSDT/1000RATSUSDT-1m-2026-02.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000RATSUSDT-1m-2026-02.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2406,13 +2435,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2026-03.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2026-03.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000RATSUSDT/1000RATSUSDT-1m-2026-03.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000RATSUSDT-1m-2026-03.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2026-03.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2026-03.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000RATSUSDT/1000RATSUSDT-1m-2026-03.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000RATSUSDT-1m-2026-03.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2425,13 +2454,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2026-04.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2026-04.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000RATSUSDT/1000RATSUSDT-1m-2026-04.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000RATSUSDT-1m-2026-04.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2026-04.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2026-04.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000RATSUSDT/1000RATSUSDT-1m-2026-04.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000RATSUSDT-1m-2026-04.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2444,13 +2473,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2026-05.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2026-05.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000RATSUSDT/1000RATSUSDT-1m-2026-05.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000RATSUSDT-1m-2026-05.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2026-05.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2026-05.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000RATSUSDT/1000RATSUSDT-1m-2026-05.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000RATSUSDT-1m-2026-05.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2463,13 +2492,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2026-06.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2026-06.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000RATSUSDT/1000RATSUSDT-1m-2026-06.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000RATSUSDT-1m-2026-06.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2026-06.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2026-06.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000RATSUSDT/1000RATSUSDT-1m-2026-06.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000RATSUSDT-1m-2026-06.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2482,13 +2511,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2026-07.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2026-07.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000RATSUSDT/1000RATSUSDT-1m-2026-07.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000RATSUSDT-1m-2026-07.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2026-07.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2026-07.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000RATSUSDT/1000RATSUSDT-1m-2026-07.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000RATSUSDT-1m-2026-07.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2501,13 +2530,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2026-08.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2026-08.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000RATSUSDT/1000RATSUSDT-1m-2026-08.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000RATSUSDT-1m-2026-08.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2026-08.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2026-08.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000RATSUSDT/1000RATSUSDT-1m-2026-08.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000RATSUSDT-1m-2026-08.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2520,13 +2549,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2026-09.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2026-09.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000RATSUSDT/1000RATSUSDT-1m-2026-09.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000RATSUSDT-1m-2026-09.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2026-09.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000RATSUSDT/1m/1000RATSUSDT-1m-2026-09.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000RATSUSDT/1000RATSUSDT-1m-2026-09.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000RATSUSDT-1m-2026-09.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2539,13 +2568,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2025-09.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2025-09.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SATSUSDT/1000SATSUSDT-1m-2025-09.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SATSUSDT-1m-2025-09.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2025-09.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2025-09.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SATSUSDT/1000SATSUSDT-1m-2025-09.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SATSUSDT-1m-2025-09.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2558,13 +2587,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2025-10.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2025-10.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SATSUSDT/1000SATSUSDT-1m-2025-10.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SATSUSDT-1m-2025-10.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2025-10.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2025-10.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SATSUSDT/1000SATSUSDT-1m-2025-10.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SATSUSDT-1m-2025-10.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2577,13 +2606,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2025-11.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2025-11.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SATSUSDT/1000SATSUSDT-1m-2025-11.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SATSUSDT-1m-2025-11.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2025-11.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2025-11.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SATSUSDT/1000SATSUSDT-1m-2025-11.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SATSUSDT-1m-2025-11.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2596,13 +2625,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2025-12.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2025-12.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SATSUSDT/1000SATSUSDT-1m-2025-12.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SATSUSDT-1m-2025-12.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2025-12.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2025-12.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SATSUSDT/1000SATSUSDT-1m-2025-12.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SATSUSDT-1m-2025-12.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2615,13 +2644,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2026-01.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2026-01.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SATSUSDT/1000SATSUSDT-1m-2026-01.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SATSUSDT-1m-2026-01.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2026-01.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2026-01.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SATSUSDT/1000SATSUSDT-1m-2026-01.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SATSUSDT-1m-2026-01.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2634,13 +2663,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2026-02.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2026-02.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SATSUSDT/1000SATSUSDT-1m-2026-02.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SATSUSDT-1m-2026-02.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2026-02.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2026-02.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SATSUSDT/1000SATSUSDT-1m-2026-02.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SATSUSDT-1m-2026-02.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2653,13 +2682,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2026-03.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2026-03.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SATSUSDT/1000SATSUSDT-1m-2026-03.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SATSUSDT-1m-2026-03.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2026-03.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2026-03.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SATSUSDT/1000SATSUSDT-1m-2026-03.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SATSUSDT-1m-2026-03.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2672,13 +2701,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2026-04.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2026-04.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SATSUSDT/1000SATSUSDT-1m-2026-04.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SATSUSDT-1m-2026-04.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2026-04.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2026-04.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SATSUSDT/1000SATSUSDT-1m-2026-04.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SATSUSDT-1m-2026-04.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2691,13 +2720,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2026-05.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2026-05.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SATSUSDT/1000SATSUSDT-1m-2026-05.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SATSUSDT-1m-2026-05.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2026-05.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2026-05.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SATSUSDT/1000SATSUSDT-1m-2026-05.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SATSUSDT-1m-2026-05.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2710,13 +2739,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2026-06.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2026-06.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SATSUSDT/1000SATSUSDT-1m-2026-06.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SATSUSDT-1m-2026-06.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2026-06.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2026-06.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SATSUSDT/1000SATSUSDT-1m-2026-06.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SATSUSDT-1m-2026-06.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2729,13 +2758,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2026-07.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2026-07.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SATSUSDT/1000SATSUSDT-1m-2026-07.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SATSUSDT-1m-2026-07.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2026-07.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2026-07.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SATSUSDT/1000SATSUSDT-1m-2026-07.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SATSUSDT-1m-2026-07.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2748,13 +2777,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2026-08.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2026-08.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SATSUSDT/1000SATSUSDT-1m-2026-08.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SATSUSDT-1m-2026-08.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2026-08.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2026-08.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SATSUSDT/1000SATSUSDT-1m-2026-08.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SATSUSDT-1m-2026-08.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2767,13 +2796,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2026-09.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2026-09.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SATSUSDT/1000SATSUSDT-1m-2026-09.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SATSUSDT-1m-2026-09.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2026-09.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SATSUSDT/1m/1000SATSUSDT-1m-2026-09.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SATSUSDT/1000SATSUSDT-1m-2026-09.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SATSUSDT-1m-2026-09.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2786,13 +2815,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2025-09.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2025-09.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SHIBUSDT/1000SHIBUSDT-1m-2025-09.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SHIBUSDT-1m-2025-09.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2025-09.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2025-09.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SHIBUSDT/1000SHIBUSDT-1m-2025-09.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SHIBUSDT-1m-2025-09.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2805,13 +2834,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2025-10.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2025-10.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SHIBUSDT/1000SHIBUSDT-1m-2025-10.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SHIBUSDT-1m-2025-10.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2025-10.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2025-10.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SHIBUSDT/1000SHIBUSDT-1m-2025-10.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SHIBUSDT-1m-2025-10.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2824,13 +2853,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2025-11.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2025-11.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SHIBUSDT/1000SHIBUSDT-1m-2025-11.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SHIBUSDT-1m-2025-11.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2025-11.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2025-11.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SHIBUSDT/1000SHIBUSDT-1m-2025-11.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SHIBUSDT-1m-2025-11.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2843,13 +2872,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2025-12.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2025-12.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SHIBUSDT/1000SHIBUSDT-1m-2025-12.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SHIBUSDT-1m-2025-12.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2025-12.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2025-12.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SHIBUSDT/1000SHIBUSDT-1m-2025-12.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SHIBUSDT-1m-2025-12.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2862,13 +2891,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2026-01.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2026-01.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SHIBUSDT/1000SHIBUSDT-1m-2026-01.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SHIBUSDT-1m-2026-01.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2026-01.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2026-01.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SHIBUSDT/1000SHIBUSDT-1m-2026-01.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SHIBUSDT-1m-2026-01.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2881,13 +2910,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2026-02.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2026-02.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SHIBUSDT/1000SHIBUSDT-1m-2026-02.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SHIBUSDT-1m-2026-02.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2026-02.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2026-02.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SHIBUSDT/1000SHIBUSDT-1m-2026-02.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SHIBUSDT-1m-2026-02.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2900,13 +2929,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2026-03.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2026-03.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SHIBUSDT/1000SHIBUSDT-1m-2026-03.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SHIBUSDT-1m-2026-03.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2026-03.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2026-03.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SHIBUSDT/1000SHIBUSDT-1m-2026-03.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SHIBUSDT-1m-2026-03.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2919,13 +2948,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2026-04.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2026-04.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SHIBUSDT/1000SHIBUSDT-1m-2026-04.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SHIBUSDT-1m-2026-04.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2026-04.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2026-04.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SHIBUSDT/1000SHIBUSDT-1m-2026-04.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SHIBUSDT-1m-2026-04.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2938,13 +2967,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2026-05.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2026-05.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SHIBUSDT/1000SHIBUSDT-1m-2026-05.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SHIBUSDT-1m-2026-05.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2026-05.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2026-05.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SHIBUSDT/1000SHIBUSDT-1m-2026-05.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SHIBUSDT-1m-2026-05.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2957,13 +2986,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2026-06.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2026-06.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SHIBUSDT/1000SHIBUSDT-1m-2026-06.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SHIBUSDT-1m-2026-06.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2026-06.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2026-06.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SHIBUSDT/1000SHIBUSDT-1m-2026-06.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SHIBUSDT-1m-2026-06.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2976,13 +3005,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2026-07.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2026-07.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SHIBUSDT/1000SHIBUSDT-1m-2026-07.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SHIBUSDT-1m-2026-07.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2026-07.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2026-07.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SHIBUSDT/1000SHIBUSDT-1m-2026-07.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SHIBUSDT-1m-2026-07.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -2995,13 +3024,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2026-08.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2026-08.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SHIBUSDT/1000SHIBUSDT-1m-2026-08.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SHIBUSDT-1m-2026-08.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2026-08.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2026-08.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SHIBUSDT/1000SHIBUSDT-1m-2026-08.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SHIBUSDT-1m-2026-08.zip.CHECKSUM",
         "max_bytes": 4096
       }
     },
@@ -3014,13 +3043,13 @@
       "archive": {
         "relative_identity": "data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2026-09.zip",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2026-09.zip",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SHIBUSDT/1000SHIBUSDT-1m-2026-09.zip",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SHIBUSDT-1m-2026-09.zip",
         "max_bytes": 67108864
       },
       "checksum_sidecar": {
         "relative_identity": "data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2026-09.zip.CHECKSUM",
         "url": "https://data.binance.vision/data/futures/um/monthly/klines/1000SHIBUSDT/1m/1000SHIBUSDT-1m-2026-09.zip.CHECKSUM",
-        "cache_relative_path": "raw_cache/binance/usdm/monthly/klines/1m/1000SHIBUSDT/1000SHIBUSDT-1m-2026-09.zip.CHECKSUM",
+        "cache_relative_path": "_raw_cache/binance/b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf/1000SHIBUSDT-1m-2026-09.zip.CHECKSUM",
         "max_bytes": 4096
       }
     }
