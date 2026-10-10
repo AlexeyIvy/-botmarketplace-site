@@ -1,0 +1,49 @@
+{
+  "schema": "sc001.worker_result_manifest.v0.1",
+  "task_id": "SC001-H1-004I",
+  "worker_id": "H1_HISTORICAL_INDICATORS",
+  "authorization_class": "T0_DESIGN_ONLY_PRE_OUTCOME",
+  "architecture_version": "0.3",
+  "task_pr": 467,
+  "task_branch": "sc001/h1/SC001-H1-004I-durable-cache-host-gate-design",
+  "dispatch_main_head": "e1de40ede4f9126078cbd84cd87c85f234b2f458",
+  "revalidated_main_head": "e1de40ede4f9126078cbd84cd87c85f234b2f458",
+  "terminal_status": "H1_DURABLE_CACHE_T3_CAPABILITY_PACKAGE_READY",
+  "decision": "T3_HOST_CAPABILITY_REQUIRED",
+  "next_gate": "USER_GATE_REQUIRED_FOR_SEPARATELY_EXACT_T3_HOST_CAPABILITY_PACKAGE",
+  "t1_body_acquisition_authorized": false,
+  "strategy_review_required": true,
+  "continuation_review_required": true,
+  "result": {
+    "path": "docs/research/sc001-h1-durable-cache-host-gate-design-v0.1.md",
+    "sha256": "9c04ed5796665f311a10acc79ae5cd895eb00112e230f5924595d775f27fabdc",
+    "bytes": 8602,
+    "commit_sha": "77e3403d7687765484214d12ddade223e2be19aa"
+  },
+  "frozen_bindings": {
+    "acquisition_implementation_sha256": "1eb597e3186023540a5ab9929f433f7f5a81b9d587f10386cf2e3e55f625c760",
+    "test_executor_installer_sha256": "0e9afe9b9a3e12beb7aa451a7608eda3ffa30a46ba9b07faf0a869bfda518968",
+    "bodyset_freeze_sha256": "c0798987d86dfb32fdb38e4d7ca525d68850bf41391a0c15e7fa7ed91de2075a",
+    "resource_id": "b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf"
+  },
+  "repo_changed_files": [
+    "docs/research/sc001-h1-durable-cache-host-gate-design-v0.1.md",
+    "docs/research/worker-results/sc001-h1-durable-cache-host-gate-design-manifest-v0.1.json"
+  ],
+  "repo_commits_by_worker": 2,
+  "manifest_created_last": true,
+  "no_roadmap_change_required": true,
+  "evidence_access_count": 0,
+  "market_body_accessed": false,
+  "protected_outcome_accessed": false,
+  "network_runs": 0,
+  "executions": 0,
+  "host_or_collector_mutations": 0,
+  "acquisition_performed": false,
+  "source_universe_horizon_feature_changes": 0,
+  "notes": [
+    "Existing Test Executor remains the proposed plane; no new service.",
+    "T3 approval is required before host path, permissions, bind/write policy, environment, deployment, live preflight, or offline smoke changes.",
+    "Even after a future T3 PASS, T1 remains unapproved pending disk, collector-isolation, 900-second-envelope or separately frozen chunk-design, reservation, and data-size authorization gates."
+  ]
+}
