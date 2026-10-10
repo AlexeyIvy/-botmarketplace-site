@@ -1,0 +1,141 @@
+{
+  "schema": "sc001.h1_durable_cache_host_capability_gate_design_task.v0.1",
+  "task_id": "SC001-H1-004I",
+  "worker_id": "H1_HISTORICAL_INDICATORS",
+  "authorization_class": "T0_DESIGN_ONLY_PRE_OUTCOME",
+  "task_subclass": "PREBODY_DURABLE_SHARED_CACHE_EXECUTION_CAPABILITY_DESIGN",
+  "priority": 1,
+  "architecture_version": "0.3",
+  "dispatch_base_head": "e1de40ede4f9126078cbd84cd87c85f234b2f458",
+  "predecessor": {
+    "prior_task_id": "SC001-H1-004H",
+    "retired_pr": 464,
+    "retirement_manager_comment_id": 6099971648,
+    "retirement_disposition": "CLOSED_EXPIRED_UNMERGED_NO_TERMINAL_ZERO_WORKER_ARTIFACTS",
+    "why_not_duplicate": "The manager already completed the predecessor's bounded static diagnostic and recorded exact findings. This new task MUST NOT re-perform that audit; it designs only the minimum viable, user-approvable operational remedy."
+  },
+  "purpose": "Create one decision-ready, minimal least-privilege prospective host/runtime capability design to support the already frozen H1/X1 shared raw cache before any H1 10-GiB historical archive-body acquisition. Preserve existing research freeze; identify whether T3 is unavoidable and exactly what approval would cover.",
+  "verified_root_cause_inputs": {
+    "H1_acquisition_code_path": "scripts/research/sc001_h1_shared_backbone_body_acquire_verify_v0_1.py",
+    "H1_acquisition_code_sha256": "1eb597e3186023540a5ab9929f433f7f5a81b9d587f10386cf2e3e55f625c760",
+    "Test_Executor_installer_path": "scripts/mcp/install-botmarket-test-executor-v1.sh",
+    "Test_Executor_installer_sha256": "0e9afe9b9a3e12beb7aa451a7608eda3ffa30a46ba9b07faf0a869bfda518968",
+    "H1_bodyset_freeze_path": "docs/research/sc001-h1-shared-backbone-bodyset-freeze-v0.1.json",
+    "H1_bodyset_freeze_sha256": "c0798987d86dfb32fdb38e4d7ca525d68850bf41391a0c15e7fa7ed91de2075a",
+    "H1_RESOURCE_ID": "b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf",
+    "Test_Executor_launcher_env": "SC001_DATA_ROOT=BM_TEST_OUTPUT_DIR/data (job-local); BM_TEST_NETWORK_PROFILE set; SC001_NETWORK_PROFILE not set by launcher",
+    "Test_Executor_write_scope": "ReadWritePaths=job_output only; package read-only; completed job output retention 7 days",
+    "frozen_H1_scope": "12 symbols × 13 months; 156 ZIP + 156 checksum sidecars; 312 remote objects",
+    "frozen_H1_caps": "1248 requests, ≤10 GiB network, ≥25 GiB free before start, 900 s executor limit; no source/universe changes",
+    "H1_offline_test": "PASS_17_OF_17, job_20261010T040335Z_a886e25b",
+    "market_body_accessed": false,
+    "protected_outcomes_accessed": false
+  },
+  "min_required_references": [
+    "docs/research/sc001-h1-work-event-trigger-instructions-v0.1.md",
+    "docs/research/sc001-h1-historical-indicators-project-instructions-v0.1.md",
+    "docs/research/sc001-execution-worker-routing-and-automation-architecture-v0.3.md",
+    "docs/research/sc001-shared-data-and-resource-coordination-v0.1.md",
+    "docs/research/sc001-delegated-user-authorization-policy-v0.2.md",
+    "previous_manager_comment_6099971648_on_pr_464"
+  ],
+  "read_cost_control": "Do NOT read the full ~175KB H1 resource freeze or ~63KB installer unless a specific unresolved contract demands it; verify hashes and read only relevant existing lines: env, writable mount/retention, H1 apply gate, disk and resource reservation. Avoid reconstructing SC001 history.",
+  "deliverable": {
+    "result_path": "docs/research/sc001-h1-durable-cache-host-gate-design-v0.1.md",
+    "result_max_bytes": 10500,
+    "worker_result_manifest_path": "docs/research/worker-results/sc001-h1-durable-cache-host-gate-design-manifest-v0.1.json",
+    "manifest_max_bytes": 3700,
+    "manifest_last": true,
+    "sections": [
+      "Known and verified static blockers (3-6 precise facts, no speculative runtime claims).",
+      "One minimum viable least-privilege durable-cache capability option, using existing Test Executor when feasible; otherwise explicit T3 host/install capability gate with no assumed deployment.",
+      "Exact permitted logical persistence path, immutability/locking and per-worker evidence-access separation; prohibit new storage outside existing safety reserves without user approval.",
+      "Disk/peak/collector isolation, rate and <=900-s executor envelope; if a 312-object/10GiB acquisition cannot fit one job, STOP and propose a separately frozen source-preserving execution-chunk design review, not a parameter/budget rewrite.",
+      "Exact T3 human approval boundary for any host bind mount, permissions/systemd or persistent storage mutation; installation and live collector read are never implicitly authorized.",
+      "One minimal prospective offline smoke acceptance and rollback proposal; no live execution in this task.",
+      "Technical decision: T0_NEXT_PREPARE_EXACT_GATE or T3_HOST_CAPABILITY_REQUIRED or DEFER_NO_SAFE_PLANE, with no T1 authorization.",
+      "Explicit NO_ROADMAP_CHANGE_REQUIRED, evidence access 0, no altered frozen source/universe/horizons/outcomes."
+    ]
+  },
+  "claim_protocol": {
+    "required": true,
+    "claim_surface": "this PR",
+    "lease_hours": 3,
+    "max_claim_comments": 1,
+    "required_fields": [
+      "TASK_ID",
+      "WORKER_ID",
+      "claimed_at_utc",
+      "lease_until_utc",
+      "start_main_head",
+      "architecture_version"
+    ],
+    "duplicate_claim_forbidden": true,
+    "ready_to_in_progress_authorized": true
+  },
+  "allowed_pr_writes": [
+    "exactly one CLAIM_BLOCK",
+    "exactly one TERMINAL RECEIPT —"
+  ],
+  "allowed_repo_writes": {
+    "files": [
+      "docs/research/sc001-h1-durable-cache-host-gate-design-v0.1.md",
+      "docs/research/worker-results/sc001-h1-durable-cache-host-gate-design-manifest-v0.1.json"
+    ],
+    "max_changed_files": 2,
+    "max_repository_commits_by_worker": 2,
+    "max_new_canonical_files": 2
+  },
+  "max_executions": 0,
+  "max_network_runs": 0,
+  "max_outcome_runs": 0,
+  "repair_mode": "NONE",
+  "max_repair_cycles": 0,
+  "variant_budget": {
+    "source": 0,
+    "symbols": 0,
+    "months": 0,
+    "features": 0,
+    "horizons": 0,
+    "outcome_families": 0
+  },
+  "pr_lifecycle_authority": {
+    "merge": false,
+    "close": false,
+    "retarget": false,
+    "auto_merge": false,
+    "delete_branch": false,
+    "mark_ready": false,
+    "draft_toggle": false
+  },
+  "stop_rules": [
+    "Any host/mount/collector/runtime mutation, any network, Test Executor, Research Runner or VPS read => STOP; do not attempt execution.",
+    "Any inability to verify frozen H1 RESOURCE_ID or hash of relevant bounded source references => STALE_CONTEXT_REVALIDATION_REQUIRED.",
+    "Any proposal requiring lowering disk reserves, extending source/coverage, changing H1 data/outcome role or bypassing 900s/retention => STOP.",
+    "No presumed durable cache without testable host evidence; no collector restart/permission changes without explicit T3.",
+    "Another active equivalent H1 task or conflicting claim/lease => STOP without duplicate."
+  ],
+  "forbidden_actions": [
+    "Test Executor job",
+    "Research Runner/Runner Probe",
+    "VPS raw reading or remote host actions",
+    "network/archive acquisition",
+    "collector health/live state/protected evidence reading or mutation",
+    "market body, returns, indicators or PnL",
+    "any acquisition or shared-cache installation",
+    "source/universe/RESOURCE_ID/horizon/feature changes",
+    "changing frozen H1 implementation or tests",
+    "shared roadmap/governance/contamination/reusable registry writes",
+    "PR merge/close/retarget/draft-ready by worker"
+  ],
+  "strategy_review_required": true,
+  "continuation_review_required": true,
+  "terminal_status_values": [
+    "H1_DURABLE_CACHE_T3_CAPABILITY_PACKAGE_READY",
+    "H1_DURABLE_CACHE_T0_DESIGN_GATE_READY",
+    "H1_DURABLE_CACHE_DEFER_NO_SAFE_PLANE",
+    "STALE_CONTEXT_REVALIDATION_REQUIRED",
+    "H1_DURABLE_CACHE_BLOCKED"
+  ],
+  "terminal_rule": "On exactly one valid ready_for_review event, one valid claim, author ONLY the two bounded task-specific artifacts with Worker Result Manifest LAST, readback verify, revalidate relevant current bindings, then one terminal receipt. No execution, no T1 body acquisition and no self-dispatched successor. Strategy Manager reviews feasible host gate; if host mutation required, USER_GATE_REQUIRED for separately exact T3 authorization."
+}
