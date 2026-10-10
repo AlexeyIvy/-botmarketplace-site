@@ -1,0 +1,65 @@
+{
+  "schema": "sc001.resource_reservation.v0.1",
+  "resource_id": "32492463c3043b5bdeea15f2b1bf47f7f408b08099e35a68b5bfe994d3fa4827",
+  "dataset_key": {
+    "source_provider": "Binance",
+    "source_host": [
+      "developers.binance.com",
+      "fapi.binance.com",
+      "www.binance.com"
+    ],
+    "endpoint_class": "official_usdm_perpetual_contract_metadata_and_support_announcements",
+    "market_type": "USD-M perpetual futures",
+    "instrument_or_frozen_universe_identifier": "ALL_USDM_PERPETUAL_IDENTITIES_BEFORE_2026-10-01",
+    "data_kind": "PIT_listing_delisting_identity_official_metadata",
+    "granularity_archive_class": "one_shot_HTTP_JSON_HTML_responses",
+    "UTC_start": "2026-10-10T00:00:00Z",
+    "UTC_end_exclusive": "2026-10-11T00:00:00Z",
+    "historical_cutoff_exclusive_utc": "2026-10-01T00:00:00Z",
+    "exact_source_identity_rule": "GET fapi.binance.com/fapi/v1/exchangeInfo once; www.binance.com support index catalogId=48,161 pageSize=20 <=128; discovered /en/support/announcement/detail/<32-hex-id> <=1024; developers.binance.com frozen Exchange-Information and Contract-Info-Stream pages once each; total <=1155 GET <=161480704 response bytes; no alternate sources",
+    "source_semantic_version": "official_binance_usdm_pit_metadata_capture_v0.1"
+  },
+  "canonical_serialization": "UTF-8 JSON ensure_ascii=False, keys sorted, separators=(',',':')",
+  "reservation_category": "OFFICIAL_PUBLIC_METADATA_LINEAGE_SOURCE_ONLY",
+  "task_id": "SC001-X1-002D-R4",
+  "worker_id": "X1_CROSS_ASSET_STRUCTURE",
+  "claimed_at_utc": "2026-10-10T04:12:02.554Z",
+  "lease_until_utc": "2026-10-10T10:12:02.554Z",
+  "authorization_class": "T1",
+  "user_approval_ref": "docs/research/sc001-user-delegated-authorization-ratification-v0.1.json",
+  "source_freeze_path": "docs/research/sc001-x1-pit-lineage-capture-freeze-v0.1.json",
+  "source_cutoff_exclusive_utc": "2026-10-01T00:00:00Z",
+  "resource_class": "LIGHT",
+  "expected_bytes": 161480704,
+  "estimated_peak_disk_bytes": 805306368,
+  "network_hosts": [
+    "fapi.binance.com",
+    "www.binance.com",
+    "developers.binance.com"
+  ],
+  "requests_by_host_cap": {
+    "fapi.binance.com": 1,
+    "www.binance.com": 1152,
+    "developers.binance.com": 2
+  },
+  "max_requests_per_host": 1152,
+  "max_requests_total": 1155,
+  "max_network_bytes": 161480704,
+  "retry_budget": "0 retries; one job only; fail closed on 429/timeout/schema, no alternate source",
+  "request_pacing_rule": "Sequential only; no concurrent request bursts. No fallback or automatic extra request.",
+  "local_target_logical_path": "Test Executor job-local BM_TEST_OUTPUT_DIR/sc001-x1-pit-metadata-capture, read-only review of manifest/ledger; NOT VERIFIED OR PROMOTIONAL",
+  "capture_retention": "Test Executor job output retention <=7 days; raw source is not a verified reusable dataset until separately preserved and audited",
+  "evidence_role": "OFFICIAL_PUBLIC_METADATA_SOURCE_CAPTURE_ONLY_NONPROMOTIONAL",
+  "collector_protection": "No protected collector endpoints, no credentials, LIGHT resource class; defer if host conflict/health cannot be proved",
+  "status": "RESERVED",
+  "no_auto_recovery_if_expired": true,
+  "active_task_required": true,
+  "prior_attempts": {
+    "network_runs": 0,
+    "market_body_accessed": false,
+    "outcome_accessed": false,
+    "last_offline_test": "X1_TEST_EXECUTOR_OUTPUT_ADAPTER_OFFLINE_SELFTEST_PASS",
+    "offline_test_job": "job_20261009T185540Z_71dfbbad"
+  },
+  "review_gate": "Record reservation to canonical main and recheck exact resource ID, lease, executor caps and policy BEFORE issuing runnable T1 PR; this staged PR alone does not authorize a network job"
+}
