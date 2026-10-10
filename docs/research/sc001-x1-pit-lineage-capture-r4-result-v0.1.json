@@ -1,0 +1,100 @@
+{
+  "schema": "sc001.x1_pit_lineage_capture_result.v0.1",
+  "task_id": "SC001-X1-002D-R4",
+  "worker_id": "X1_CROSS_ASSET_STRUCTURE",
+  "terminal_status": "X1_PIT_METADATA_CAPTURE_SOURCE_INCOMPLETE",
+  "repo_head_sha": "e1de40ede4f9126078cbd84cd87c85f234b2f458",
+  "pr_head_sha_at_claim": "62027ca800812f3788d1183437b14caf62de0b52",
+  "resource_reservation": {
+    "resource_id": "32492463c3043b5bdeea15f2b1bf47f7f408b08099e35a68b5bfe994d3fa4827",
+    "status_at_admission": "RESERVED",
+    "dataset_key_sha256_verified": true,
+    "lease_until_utc": "2026-10-10T10:12:02.554Z"
+  },
+  "test_executor_job_id": "job_20261010T042035Z_9672810f",
+  "job_creation_attempts": 1,
+  "executor_jobs_created": 1,
+  "exit_code": 2,
+  "log_sha256": "e9e3e13b467739d8e69f7890d8f2a7eb37df5d9e0cafc7cfb03ad7e74a5aa5cb",
+  "capture_status": "SOURCE_INCOMPLETE",
+  "failure_reason": "The frozen capture returned SOURCE_INCOMPLETE after two official-source responses. The exact internal failure token could not be read because the nested job-local capture manifest and candidate ledger were present but unavailable through the Test Executor text-read boundary. Repair, rerun, alternate source, fallback, and a second job are prohibited.",
+  "network_runs": 1,
+  "requests_total": 2,
+  "response_bytes_total": 1152056,
+  "requests_by_class": {
+    "exchange_info": 1,
+    "announcement_index": 1,
+    "announcement_detail": 0,
+    "definition_page": 0
+  },
+  "response_bytes_by_class": {
+    "exchange_info": 1147714,
+    "announcement_index": 4342,
+    "announcement_detail": 0,
+    "definition_page": 0
+  },
+  "raw_responses": [
+    {
+      "sequence": 1,
+      "request_class": "exchange_info",
+      "response_bytes": 1147714,
+      "raw_response_sha256": "826b26af926b79501502eda7dc78b916a8ffe587009714f9ece688581b68fe8e"
+    },
+    {
+      "sequence": 2,
+      "request_class": "announcement_index",
+      "response_bytes": 4342,
+      "raw_response_sha256": "139ee77b8eef49859fd40ac8554a98163539177410758fae3960c9ea672b2ff3"
+    }
+  ],
+  "capture_manifest": {
+    "present": true,
+    "size_bytes": 1966,
+    "sha256": null,
+    "readback": "UNAVAILABLE_JOB_LOCAL_FILE_PERMISSION_BOUNDARY"
+  },
+  "candidate_ledger": {
+    "present": true,
+    "size_bytes": 279,
+    "sha256": null,
+    "readback": "UNAVAILABLE_JOB_LOCAL_FILE_PERMISSION_BOUNDARY"
+  },
+  "raw_response_count": 2,
+  "candidate_record_count": null,
+  "announcement_candidate_count": null,
+  "completeness_attestation": "NOT_ATTESTED_SOURCE_CAPTURE_ONLY",
+  "source_qualification": "NOT_EVALUATED_SOURCE_INCOMPLETE",
+  "executor_preflight": {
+    "head": "e1de40ede4f9126078cbd84cd87c85f234b2f458",
+    "worktree_clean": true,
+    "network_profile": "public_research",
+    "task_timeout_seconds": 900,
+    "executor_max_timeout_seconds": 900,
+    "running_jobs_before_launch": 0,
+    "filesystem_boundary_ok": true
+  },
+  "job_timing": {
+    "started_utc": "2026-10-10T04:20:38.920992+00:00",
+    "finished_utc": "2026-10-10T04:20:40.895380+00:00",
+    "timed_out": false
+  },
+  "retention": {
+    "raw_committed_to_github": false,
+    "job_local_retention_days_max": 7
+  },
+  "safety_accounting": {
+    "outcome_accessed": false,
+    "protected_evidence_accessed": false,
+    "market_body_accessed": false,
+    "returns_or_correlations_computed": false,
+    "pnl_computed": false,
+    "collector_changed": false,
+    "runner_bundle_created": false,
+    "runner_bundle_executed": false,
+    "vps_raw_data_read": false,
+    "credentials_or_trading": false,
+    "alternate_source_used": false,
+    "retry_or_second_job": false
+  },
+  "recorded_at_utc": "2026-10-10T04:22:36.127Z"
+}
