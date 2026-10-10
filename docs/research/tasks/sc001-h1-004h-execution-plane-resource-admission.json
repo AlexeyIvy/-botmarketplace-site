@@ -1,0 +1,129 @@
+{
+  "schema": "sc001.h1_acquisition_execution_plane_admission_task.v0.1",
+  "task_id": "SC001-H1-004H",
+  "worker_id": "H1_HISTORICAL_INDICATORS",
+  "priority": 1,
+  "architecture_version": "0.3",
+  "authorization_class": "T0_DESIGN_ONLY_RESOURCE_AND_EXECUTION_CONTRACT",
+  "task_subclass": "H1_BODYSET_DURABLE_CACHE_EXECUTOR_ADMISSION_REVIEW",
+  "dispatch_base_head": "cbb840859570823f0c24dadab6138dd502ebaf81",
+  "parent_terminal_pr": 463,
+  "parent_terminal_comment_id": 6093573832,
+  "parent_offline_job_id": "job_20261010T040335Z_a886e25b",
+  "parent_offline_result": "PASS_17_OF_17",
+  "reason": "One 12-symbol x 13-month historical backbone with up to 10 GiB network cache cannot be admitted based only on 17 offline tests: current Test Executor launcher binds SC001_DATA_ROOT to job-local output/data, BM_TEST_NETWORK_PROFILE not SC001_NETWORK_PROFILE, ReadWritePaths only to job output, completed job output retention 7 days. Verify static technical facts and future durable resource admission before any body access.",
+  "exact_read_sources": [
+    "docs/research/sc001-research-strategy-agent-charter-v0.1.md",
+    "docs/research/sc001-h1-x1-historical-research-program-strategy-v0.1.md",
+    "docs/research/sc001-shared-data-and-resource-coordination-v0.1.md",
+    "docs/research/sc001-implementation-debugging-and-repair-control-v0.1.md",
+    "docs/research/sc001-h1-shared-backbone-bodyset-freeze-v0.1.json",
+    "scripts/research/sc001_h1_shared_backbone_body_acquire_verify_v0_1.py",
+    "scripts/mcp/install-botmarket-test-executor-v1.sh",
+    "docs/infrastructure/botmarket-test-executor-v1.0.md",
+    "docs/research/sc001-h1-shared-backbone-source-metadata-qualification-v0.1.json",
+    "docs/research/data-registry/reservations/0d2b27da78974646fff5b781c49a274644a2253456b35e2ce48ac120330d62db.json"
+  ],
+  "exact_questions": [
+    "Static confirm Test Executor job environment: SC001_DATA_ROOT location and lifetime, network-profile variable name, read/write mount boundary, and output retention; distinguish deployed runtime evidence from installer claims.",
+    "Static confirm frozen H1 acquisition env requirements, --ack-resource-id semantics, actual cache path, and the 12*13 immutable data identity without touching market bodies.",
+    "Does job-local SC001_DATA_ROOT provide a VERIFIED shareable resource across jobs as required by resource coordination? Fail-closed if unproven.",
+    "Can network acquisition run with existing Test Executor 900-second maximum and one-job cap, given 312 objects and frozen 1248 requests? Do not assume yes from offline test.",
+    "Can prejob disk headroom be proved against max(10GiB,15%FS) + expected peak without lowering reserves? Is same-host collector isolation proven?",
+    "Compare the source metadata qualification vs body acquisition RESERVATION requirements. Do not claim metadata-only prior reservation covers the new body RESOURCE_ID.",
+    "Identify at most one minimal executable T0 successor proving missing env/storage/disk capability before any T1; no host mutation or new service. Escalate as USER_GATE_REQUIRED if actual host mount or protected collector permissions change requires T3."
+  ],
+  "scope_guardrails": {
+    "resource_id": "b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf",
+    "symbols": 12,
+    "months": 13,
+    "zip_archives": 156,
+    "checksum_sidecars": 156,
+    "data_source": "Binance USD-M monthly 1m kline public ZIP and checksums",
+    "market_body_access_allowed": false,
+    "resource_policy": "docs/research/sc001-shared-data-and-resource-coordination-v0.1.md",
+    "expected_network_byte_cap": 10737418240,
+    "frozen_body_min_free_before_start": 26843545600,
+    "evidence_role": "NONPROMOTIONAL_QUALIFICATION_ONLY"
+  },
+  "allowed_repo_writes": {
+    "new_output_files": [
+      "docs/research/sc001-h1-acquisition-execution-plane-admission-v0.1.json",
+      "docs/research/worker-results/sc001-h1-acquisition-execution-plane-admission-manifest-v0.1.json"
+    ],
+    "max_new_files": 2,
+    "max_commits": 2,
+    "result_max_bytes": 14000,
+    "manifest_max_bytes": 8500,
+    "manifest_last": true
+  },
+  "result_schema": {
+    "must_record": [
+      "TASK_ID",
+      "WORKER_ID",
+      "STATIC_DEPLOYMENT_CONTRACT",
+      "ENV_VARIABLE_MISMATCH",
+      "DATA_ROOT_DURABILITY",
+      "DISK_AND_COLLECTOR_RESOURCE_ADMISSION",
+      "EXACT_MAIN_AND_IMPLEMENTATION_SHA",
+      "NO_RESEARCH_EVIDENCE",
+      "NEXT_ALLOWED_ACTION_OR_HARD_STOP"
+    ],
+    "must_distinguish": [
+      "proven static facts",
+      "actual deployed-runtime evidence not verified",
+      "authorization required for host/runtime changes"
+    ]
+  },
+  "claim_protocol": {
+    "required": true,
+    "claim_surface": "this PR",
+    "max_claims": 1,
+    "default_lease_hours": 3,
+    "required_claim_fields": [
+      "TASK_ID",
+      "WORKER_ID",
+      "claimed_at_utc",
+      "lease_until_utc",
+      "start_main_head",
+      "architecture_version"
+    ],
+    "duplicate_claim_forbidden": true
+  },
+  "event_gate": {
+    "repository": "AlexeyIvy/-botmarketplace-site",
+    "action": "ready_for_review",
+    "title_prefix": "[SC001][H1][READY]",
+    "event_identity_mandatory": true
+  },
+  "max_executions": 0,
+  "max_network_runs": 0,
+  "max_outcome_runs": 0,
+  "max_repair_cycles": 0,
+  "repair_mode": "NONE",
+  "variant_budget": {
+    "alternate_sources": 0,
+    "universe_changes": 0,
+    "horizons": 0,
+    "features": 0
+  },
+  "forbidden_actions": [
+    "Test Executor or Research Runner job",
+    "VPS read or network access",
+    "market/source/archive body access or download",
+    "price/return/correlation/lag/PnL",
+    "collector, host, systemd, mount, permission, deployment or credential changes",
+    "source/universe/month/RESOURCE_ID/label/evidence rule changes",
+    "shared roadmap/governance/contamination/reusable state mutation",
+    "any actual H1 body acquisition",
+    "PR lifecycle actions"
+  ],
+  "strategy_review_required": true,
+  "continuation_review_required": true,
+  "terminal_status_values": [
+    "H1_ACQUISITION_EXECUTION_PLANE_DEFER_RESOURCE_CONTRACT",
+    "H1_ACQUISITION_EXECUTION_PLANE_ADMISSION_PROVEN",
+    "STALE_CONTEXT_REVALIDATION_REQUIRED"
+  ],
+  "terminal_rule": "One exact PR claim, static read-only engineering/resource audit; write exact diagnostic result and Worker Result Manifest LAST, verify readback and current relevant context; then one TERMINAL RECEIPT with STRATEGY_REVIEW_REQUIRED:true and CONTINUATION_REVIEW_REQUIRED:true. No second task and no network/execution."
+}
