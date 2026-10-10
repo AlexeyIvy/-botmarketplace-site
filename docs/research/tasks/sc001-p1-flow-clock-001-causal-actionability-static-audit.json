@@ -1,0 +1,152 @@
+{
+  "schema": "sc001.p1_forced_flow_causal_actionability_static_review.v0.1",
+  "task_id": "SC001-P1-FLOW-CLOCK-001",
+  "worker_id": "P1_PROSPECTIVE_EVENT",
+  "authorization_class": "T0_DESIGN_ONLY_PREOUTCOME_STATIC_AUDIT",
+  "priority": 0,
+  "architecture_version": "0.3",
+  "dispatch_base_head": "e1de40ede4f9126078cbd84cd87c85f234b2f458",
+  "task_subclass": "PRIMARY_FORCED_FLOW_STATIC_CLOCK_KNOWABILITY_FALSIFICATION",
+  "purpose": "Independent bounded pre-outcome audit of whether the frozen S0 liquidation-cluster end, first strict-coactive E+1..E+2 seconds, and actual message/price availability correspond to a causally knowable live trading signal. Do NOT evaluate alpha; protect original S0 and future evidence.",
+  "binding_read_set": {
+    "docs/research/sc001-next-primary-forced-flow-relative-dislocation-s0-protocol-v0.2.md": "331bc684246ed03470c2cb0008e167e7dd01c2efad41a37aa09d2b1122cf7f96",
+    "docs/research/sc001-next-primary-forced-flow-relative-dislocation-mechanism-fingerprint-v0.2.json": "8d225dbbfb76fe489b3da380d14101c62e1713a14ab3d665f31bd7392d695ea3",
+    "research/sc001/sc001_forced_flow_s0_analyzer_v0_1.py": "760096bd0572afa3b53d4b603ac6e33fbfa4b8fbc5934b3ba9061c9a69f171e3",
+    "research/sc001/sc001_b13c_s0_source_only_cluster_census_v0_1.py": "601252728e8fa7caf2d9c467d99e61296268a78879a42323725b67bac223db5b",
+    "docs/research/sc001-b13c-s0-simple-post-liquidation-reversal-sentinel-protocol-v0.1.md": "8f8035b0f1e9c7add09732d0e55e399b8a20a4357799193b06e80208b2c54829",
+    "docs/research/sc001-next-primary-forced-flow-relative-dislocation-s0-implementation-handshake-protocol-v0.1.md": "46a20d4045eddbb45040178c4a67b47f5d47967f185ae2647ab043e7a45a20a9",
+    "docs/research/sc001-next-primary-forced-flow-relative-dislocation-s0-input-provenance-materialization-protocol-v0.1.md": "214d16b568b35717481aff7d517b55c94c2b59248c3c51ea31664c77e4dd659e"
+  },
+  "governance_read_set": [
+    "docs/research/sc001-research-strategy-agent-charter-v0.1.md",
+    "docs/research/sc001-midcourse-research-strategy-audit-and-governance-amendment-v0.2.md",
+    "docs/research/sc001-strategy-manager-portfolio-review-v0.1.md",
+    "docs/research/sc001-p1-work-event-trigger-instructions-v0.1.md",
+    "docs/research/sc001-p1-prospective-event-project-instructions-v0.1.md",
+    "docs/research/sc001-execution-worker-routing-and-automation-architecture-v0.3.md",
+    "docs/research/sc001-user-delegated-authorization-ratification-v0.1.json"
+  ],
+  "exact_static_questions": [
+    "From actual source code, reconstruct exactly how >=3 same-side liquidation events form a cluster, how consecutive event gaps <=5000ms extend it, and which future information establishes that the last event was the *final* cluster event. Identify earliest theoretical cluster-closure knowability, distinct from historical cluster_end_ms.",
+    "Compare earliest valid closure knowability against the frozen S0 first strict-coactive observation bucket [E+1000ms,E+2000ms). Prove inequalities for all possible alignment phases, not a cherry-picked example; explicitly identify any needed assumptions and conservative delays.",
+    "Distinguish liquidation exchange event time, collector recv_ts_ms, absence-of-subsequent-event watermark/late arrival, coactive second start, timestamp of chronologically last trade from each venue, bucket end, actual feed arrival and earliest possible decision/order time. Mark facts not established by static sources as UNKNOWN, never invent latency.",
+    "Check if current S0 analyzer or preflight validates causal signal knowability / uses recv timestamps / can prove the completed price bucket was available before the supposed entry. Reference precise source functions/lines.",
+    "Distinguish retrospective nonpromotional statistic conditional on future cluster membership from an *actionable* live execution signal. Could post-event absence over 5s introduce lookahead selection into an E+1..2s description even without inspecting later price? Report implications without recalculating metrics.",
+    "Independently assess if the observed venue-relative basis is only a gross dislocation, not net Bybit-only capture; Bybit and OKX convergence can occur by different leg movements. Do not compute later convergence/PnL; explain evidentiary separation.",
+    "Determine the smallest viable future audit/remedy if timing is unsafe: do not modify any frozen E+1..2s rule, H=52 bps, 7-day window, 12-symbol denominator, source/pressure sign, code or authorization. Decide if historical frozen S0 can remain solely descriptive and what independent prospective freeze/new evidence would be required for any tradeable successor."
+  ],
+  "three_lens_review": {
+    "market_financial": true,
+    "programmer_trader": true,
+    "mathematician_statistician": true
+  },
+  "output": {
+    "report_path": "docs/research/sc001-primary-forced-flow-causal-actionability-audit-v0.1.md",
+    "worker_result_manifest_path": "docs/research/worker-results/sc001-primary-forced-flow-causal-actionability-audit-manifest-v0.1.json",
+    "manifest_last": true,
+    "max_report_bytes": 16000,
+    "max_manifest_bytes": 6000,
+    "max_new_files": 2,
+    "max_repo_commits": 2,
+    "report_sections": [
+      "EXACT BINDINGS",
+      "CLOCK PROOF WITH INEQUALITIES",
+      "EVENT-TIME VS RECEIVE-TIME AND SECOND-CLOSE",
+      "TRADABILITY / ECONOMIC OBJECT",
+      "RETROSPECTIVE VS ACTIONABLE EVIDENCE",
+      "THREE-LENS VERDICT",
+      "STRATEGIC_GATE_DISPOSITION",
+      "NEXT ALLOWED ACTION",
+      "DO NOT DO",
+      "NO ROADMAP CHANGE REQUIRED"
+    ],
+    "manifest_required_fields": [
+      "TASK_ID",
+      "WORKER_ID",
+      "TERMINAL_STATUS",
+      "PR_HEAD_SHA",
+      "RESULT_PATH",
+      "RESULT_SHA256",
+      "SOURCE_BINDING_SHAS",
+      "OUTCOME_ACCESSED_FALSE",
+      "NETWORK_USED_FALSE",
+      "FROZEN_RULES_UNCHANGED_TRUE",
+      "STRATEGY_REVIEW_REQUIRED_TRUE",
+      "CONTINUATION_REVIEW_REQUIRED_TRUE"
+    ]
+  },
+  "allowed_tool_actions": [
+    "read current canonical GitHub source/docs",
+    "create exactly one result report and one Worker Result Manifest on the task PR branch",
+    "one valid CLAIM_BLOCK comment",
+    "one TERMINAL RECEIPT comment"
+  ],
+  "forbidden_actions": [
+    "Test Executor or Research Runner/Runner Probe jobs; any shell/source-code execution",
+    "VPS data access; collector health/state/raw event/price/market body reads; network API calls",
+    "protected outcome or historical market observations; return/basis/lag/PnL simulation",
+    "any modification of frozen S0 protocol, implementation, symbols, window, horizon, H=52, filters, evidence roles, thresholds, source eligibility",
+    "rewrite/reinterpret protected evidence as Confirmation or alter prior terminal decisions",
+    "invent receive-latency numbers or assume public historical data were live-order accessible",
+    "roadmap/governance/Strategy State/contamination/reusable registry shared writes",
+    "new T1 source materialization or acquisition, collector mutation, host/T3, trading or credentials",
+    "any second worker task, extra report/manifest, PR lifecycle mutation or same-evidence rescue"
+  ],
+  "event_gate": {
+    "repository": "AlexeyIvy/-botmarketplace-site",
+    "action": "ready_for_review",
+    "title_prefix": "[SC001][P1][READY]",
+    "originating_pr_only": true,
+    "no_event_no_work": true
+  },
+  "claim_protocol": {
+    "required": true,
+    "claim_write_authorized": true,
+    "claim_surface": "originating PR",
+    "max_claims": 1,
+    "lease_hours": 3,
+    "ready_to_in_progress_comment_authorized": true,
+    "required_fields": [
+      "TASK_ID",
+      "WORKER_ID",
+      "claimed_at_utc",
+      "lease_until_utc",
+      "start_main_head",
+      "architecture_version"
+    ],
+    "duplicate_claim_forbidden": true
+  },
+  "allowed_pr_writes": [
+    "one CLAIM_BLOCK after exact event validation",
+    "two task-local repository files on task branch; Worker Result Manifest LAST",
+    "one TERMINAL RECEIPT — with manifest identity"
+  ],
+  "lifecycle_authority": {
+    "merge": false,
+    "close": false,
+    "retarget": false,
+    "auto_merge": false,
+    "mark_draft": false,
+    "mark_ready": false,
+    "delete_branch": false
+  },
+  "budget": {
+    "max_executions": 0,
+    "max_network_runs": 0,
+    "max_outcome_runs": 0,
+    "max_data_body_access": 0,
+    "max_repair_cycles": 0,
+    "max_variant_changes": 0,
+    "max_changed_existing_files": 0
+  },
+  "repair_mode": "NONE",
+  "terminal_status_values": [
+    "CAUSAL_ACTIONABILITY_STATIC_FAIL",
+    "CAUSAL_ACTIONABILITY_STATIC_PASS",
+    "CAUSAL_ACTIONABILITY_STATIC_UNRESOLVED",
+    "STALE_CONTEXT_REVALIDATION_REQUIRED"
+  ],
+  "strategy_review_required": true,
+  "continuation_review_required": true,
+  "terminal_rule": "On only valid ready_for_review event for this exact PR: validate, claim once, read only frozen source/docs, write report then Worker Result Manifest LAST, verify hashes/readback and relevant current main, publish one TERMINAL RECEIPT — with exact MANIFEST_PATH/MANIFEST_SHA256 and STRATEGY_REVIEW_REQUIRED: true plus CONTINUATION_REVIEW_REQUIRED: true. Stop. Never change frozen rules; any review gate requiring policy/freeze change goes to Strategy Manager/User for separate prospective decision. No automatic S0 or successor."
+}
