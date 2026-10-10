@@ -1,0 +1,50 @@
+{
+  "schema": "sc001.worker_result_manifest.v0.1",
+  "task_id": "SC001-X1-002D",
+  "worker_id": "X1_CROSS_ASSET_STRUCTURE",
+  "terminal_status": "X1_PIT_METADATA_CAPTURE_PREJOB_BLOCKED",
+  "canonical_result": {
+    "path": "docs/research/sc001-x1-pit-lineage-capture-result-v0.1.json",
+    "sha256": "ce5399da3d602bf0c9bffb6aa1ab14ad1ca214cfc4f9dfedbb525b68ba41b4bb"
+  },
+  "pr_binding": {
+    "pr_number": 457,
+    "task_pr_head_sha": "07afe90721f04aea33e580e44ebb11d46d88fdf9",
+    "head_before_manifest_commit": "63f638e2ed4758db7844f1f0251af8e93b4b3730",
+    "branch": "sc001/x1/SC001-X1-002D-one-shot-pit-metadata-capture"
+  },
+  "repo_head_sha": "f91804067c5268b639d29ae502328383a8f9dd59",
+  "test_executor": {
+    "job_id": null,
+    "job_creation_attempts": 1,
+    "jobs_created": 0,
+    "log_sha256": null,
+    "failure": "INVALID_ARGUMENT_PREJOB_TIMEOUT_CAP_MISMATCH",
+    "task_timeout_seconds": 1800,
+    "executor_max_timeout_seconds": 900
+  },
+  "capture": {
+    "status": "NOT_STARTED_PREJOB_BLOCKED",
+    "capture_manifest_sha256": null,
+    "candidate_ledger_sha256": null,
+    "network_runs": 0,
+    "requests_total": 0,
+    "response_bytes_total": 0
+  },
+  "safety_accounting": {
+    "outcome_accessed": false,
+    "protected_evidence_accessed": false,
+    "market_body_accessed": false,
+    "returns_or_correlations_computed": false,
+    "pnl_computed": false,
+    "collector_changed": false,
+    "runner_bundle_created": false,
+    "runner_bundle_executed": false,
+    "vps_raw_data_read": false,
+    "credentials_or_trading": false
+  },
+  "strategy_review_required": true,
+  "continuation_review_required": true,
+  "manifest_last": true,
+  "recorded_at_utc": "2026-10-09T18:29:42.741Z"
+}

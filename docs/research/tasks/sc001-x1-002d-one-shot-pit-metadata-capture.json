@@ -1,0 +1,267 @@
+{
+  "schema": "sc001.x1_pit_lineage_one_shot_capture_task.v0.1",
+  "task_id": "SC001-X1-002D",
+  "worker_id": "X1_CROSS_ASSET_STRUCTURE",
+  "authorization_class": "T1",
+  "task_subclass": "PIT_LINEAGE_OFFICIAL_METADATA_ONE_SHOT_CAPTURE",
+  "priority": 1,
+  "dispatch_base_head": "f91804067c5268b639d29ae502328383a8f9dd59",
+  "architecture_version": "0.3",
+  "parent_terminal": {
+    "pr_number": 456,
+    "terminal_comment_id": 6086688481,
+    "task_id": "SC001-X1-002C-R1-O2",
+    "terminal_status": "X1_PIT_CAPTURE_FULL_OFFLINE_SELFTEST_PASS",
+    "offline_test_job_id": "job_20261009T181611Z_a3546ad0",
+    "tests_run": 11,
+    "failures": 0,
+    "errors": 0,
+    "network_used": false,
+    "log_sha256": "19363c132fa6ddaf1218aab0857873abaeca079842e9d70ff99869a072567f60"
+  },
+  "canonical_freeze": {
+    "path": "docs/research/sc001-x1-pit-lineage-capture-freeze-v0.1.json",
+    "sha256": "720e5bde4ea988970ee3444bb45e084ba546c4f1c6d86abc334991ce04092083"
+  },
+  "implementation": {
+    "path": "scripts/research/sc001_x1_pit_lineage_capture_v0_1.py",
+    "sha256": "e60c3c14398141f7362563678fd5a6862c96d4fbc954fd833820014a52fd9080"
+  },
+  "offline_test": {
+    "path": "tests/research/sc001_x1_pit_lineage_capture_test_v0_1.py",
+    "sha256": "b69163a5ef0b089b11892bfcba4be353dd2ab5557fcc8d64345fe65fcd6e01fd",
+    "verified_result": "PASS_11_OF_11"
+  },
+  "purpose": "Execute exactly one bounded official Binance metadata-only capture under the already-frozen X1 PIT lineage contract. Capture completion is not source qualification. No market-price, trade, kline, funding, open-interest, return, correlation, lag, PnL, protected-outcome, collector, VPS or Runner access is authorized.",
+  "claim_contract": {
+    "claim_required": true,
+    "max_claims": 1,
+    "lease_seconds": 10800,
+    "claim_comment_prefix": "CLAIM_BLOCK",
+    "required_fields": [
+      "TASK_ID",
+      "WORKER_ID",
+      "claimed_at_utc",
+      "lease_until_utc",
+      "start_main_head",
+      "architecture_version"
+    ],
+    "exact_start_main_head": "f91804067c5268b639d29ae502328383a8f9dd59",
+    "exclusive_claim": true,
+    "worker_stale_claim_recovery_authorized": false
+  },
+  "exact_execution": {
+    "plane": "BotMarketplace Test Executor",
+    "network_profile": "public_research",
+    "entrypoint": "scripts/research/sc001_x1_pit_lineage_capture_v0_1.py",
+    "args": [
+      "--output-dir",
+      "artifacts/sc001-x1-002d-pit-metadata-capture"
+    ],
+    "output_directory_rule": "The path must be absent or empty at job start and remains job-local; do not commit raw responses or the candidate ledger.",
+    "timeout_seconds": 1800,
+    "max_network_runs": 1,
+    "max_outcome_runs": 0,
+    "max_executor_jobs": 1,
+    "max_execution_attempts": 1,
+    "repo_head_sha": "f91804067c5268b639d29ae502328383a8f9dd59",
+    "repo_head_rule": "Fail closed unless canonical main equals repo_head_sha and the implementation/offline-test SHA256 values match exactly before job creation."
+  },
+  "frozen_request_contract": {
+    "method": "GET",
+    "request_order": [
+      "one current exchangeInfo control snapshot",
+      "category 48 index pages in ascending page order",
+      "category 161 index pages in ascending page order",
+      "deduplicated announcement detail IDs in ascending bytewise ID order",
+      "two frozen developer definition pages in declared tuple order"
+    ],
+    "max_requests_total": 1155,
+    "max_response_bytes_total": 161480704,
+    "request_classes": [
+      {
+        "name": "exchange_info",
+        "host": "fapi.binance.com",
+        "path": "/fapi/v1/exchangeInfo",
+        "request_cap": 1,
+        "response_byte_cap": 8388608
+      },
+      {
+        "name": "announcement_index",
+        "host": "www.binance.com",
+        "path": "/bapi/composite/v1/public/cms/article/list/query",
+        "categories": [
+          48,
+          161
+        ],
+        "page_size": 20,
+        "max_pages_per_category": 64,
+        "request_cap": 128,
+        "response_byte_cap": 16777216
+      },
+      {
+        "name": "announcement_detail",
+        "host": "www.binance.com",
+        "path_template": "/en/support/announcement/detail/<32-lowercase-hex-id>",
+        "discovery": "only from successfully validated bounded category-index responses",
+        "request_cap": 1024,
+        "response_byte_cap": 134217728
+      },
+      {
+        "name": "definition_page",
+        "host": "developers.binance.com",
+        "paths": [
+          "/docs/derivatives/usds-margined-futures/market-data/rest-api/Exchange-Information",
+          "/docs/derivatives/usds-margined-futures/websocket-market-streams/Contract-Info-Stream"
+        ],
+        "request_cap": 2,
+        "response_byte_cap": 2097152
+      }
+    ],
+    "accept_encoding": "identity",
+    "websocket": false,
+    "browser_or_javascript_expansion": false,
+    "external_search_as_evidence": false,
+    "redirects": "HTTPS only; final URL must remain in the same frozen request class.",
+    "retries": "None beyond frozen caps; no second job.",
+    "byte_rule": "Fail before or at an unproved cap boundary; never read cap+1."
+  },
+  "job_outputs": {
+    "raw_responses": "artifacts/sc001-x1-002d-pit-metadata-capture/raw/<sequence>-<request-class>-<sha256>.bin",
+    "capture_manifest": "artifacts/sc001-x1-002d-pit-metadata-capture/capture-manifest.json",
+    "candidate_ledger": "artifacts/sc001-x1-002d-pit-metadata-capture/candidate-ledger.json",
+    "candidate_ledger_attestation": "NOT_ATTESTED_SOURCE_CAPTURE_ONLY",
+    "success_status": "CAPTURE_COMPLETE_SOURCE_QUALIFICATION_PENDING",
+    "failure_status": "SOURCE_INCOMPLETE",
+    "capture_completion_is_not_source_qualification": true,
+    "completeness_attestation_emitted": false
+  },
+  "repository_outputs": {
+    "canonical_result": {
+      "path": "docs/research/sc001-x1-pit-lineage-capture-result-v0.1.json",
+      "max_bytes": 16000,
+      "required_fields": [
+        "task_id",
+        "worker_id",
+        "terminal_status",
+        "repo_head_sha",
+        "test_executor_job_id",
+        "exit_code",
+        "log_sha256",
+        "capture_status",
+        "failure_reason",
+        "network_runs",
+        "requests_total",
+        "response_bytes_total",
+        "requests_by_class",
+        "response_bytes_by_class",
+        "capture_manifest_sha256",
+        "candidate_ledger_sha256",
+        "raw_response_count",
+        "candidate_record_count",
+        "announcement_candidate_count",
+        "completeness_attestation",
+        "source_qualification",
+        "safety_accounting"
+      ]
+    },
+    "worker_result_manifest": {
+      "path": "docs/research/worker-results/sc001-x1-pit-lineage-capture-manifest-v0.1.json",
+      "max_bytes": 8000,
+      "create_last": true,
+      "must_be_final_repository_artifact_before_terminal_receipt": true,
+      "required_bindings": [
+        "TASK_ID",
+        "WORKER_ID",
+        "terminal status",
+        "canonical result path and SHA256",
+        "exact PR head SHA",
+        "Test Executor job ID",
+        "log SHA256",
+        "capture-manifest SHA256",
+        "candidate-ledger SHA256",
+        "network/request/byte accounting",
+        "outcome/protected-evidence/market-body/collector safety flags"
+      ]
+    },
+    "raw_capture_files_committed_to_repository": false
+  },
+  "allowed_repository_writes": {
+    "files": [
+      "docs/research/sc001-x1-pit-lineage-capture-result-v0.1.json",
+      "docs/research/worker-results/sc001-x1-pit-lineage-capture-manifest-v0.1.json"
+    ],
+    "max_changed_files": 2,
+    "max_commits": 2,
+    "manifest_last_rule": "Write the canonical result first. Create the Worker Result Manifest as the final repository artifact. Make no repository write after it before the terminal receipt.",
+    "comments": [
+      "exactly one CLAIM_BLOCK",
+      "exactly one TERMINAL RECEIPT"
+    ],
+    "any_other_write": false
+  },
+  "pr_lifecycle_authority": {
+    "edit_title": false,
+    "edit_body": false,
+    "convert_draft_or_ready": false,
+    "merge": false,
+    "close": false,
+    "delete_branch": false
+  },
+  "repair_control": {
+    "repair_mode": "NONE",
+    "max_repair_cycles": 0,
+    "source_fallback": false,
+    "second_network_run": false,
+    "budget_expansion": false
+  },
+  "terminal_rules": {
+    "success_terminal_status": "X1_PIT_METADATA_CAPTURE_COMPLETE_SOURCE_QUALIFICATION_PENDING",
+    "incomplete_terminal_status": "X1_PIT_METADATA_CAPTURE_SOURCE_INCOMPLETE",
+    "prejob_terminal_status": "X1_PIT_METADATA_CAPTURE_PREJOB_BLOCKED",
+    "strategy_review_required": true,
+    "continuation_review_required": true,
+    "exact_manifest_path": "docs/research/worker-results/sc001-x1-pit-lineage-capture-manifest-v0.1.json",
+    "terminal_receipt_required_fields": [
+      "TASK_ID",
+      "WORKER_ID",
+      "TERMINAL_STATUS",
+      "PR_HEAD_SHA",
+      "TEST_EXECUTOR_JOB_ID",
+      "EXECUTION_COUNT",
+      "ENTRYPOINT",
+      "ARGS",
+      "EXIT_CODE",
+      "NETWORK_USED",
+      "REQUESTS_TOTAL",
+      "RESPONSE_BYTES_TOTAL",
+      "LOG_SHA256",
+      "MANIFEST_PATH",
+      "MANIFEST_SHA256",
+      "STRATEGY_REVIEW_REQUIRED",
+      "CONTINUATION_REVIEW_REQUIRED"
+    ]
+  },
+  "stop_rules": [
+    "Any task, authorization, canonical-main, implementation or offline-test binding mismatch.",
+    "Missing or invalid exclusive CLAIM_BLOCK.",
+    "Output directory is non-empty.",
+    "Any URL, host, path, query, category, page size, detail ID, redirect or method outside the frozen request classes.",
+    "Any request, response-byte, wall-time or execution cap boundary reached without proof of safe completion.",
+    "Any HTTP status other than 200, invalid Content-Length, unknown schema, unstable pagination, duplicate/conflicting detail identity or incomplete termination proof.",
+    "Any attempt to access market-data bodies, prices, returns, correlations, lag, PnL, protected outcomes, collectors, VPS data, credentials, trading, Runner or Runner Probe.",
+    "Any need for alternate sources, relaxed completeness, code repair, second job or second network run."
+  ],
+  "safety_accounting_expected": {
+    "outcome_accessed": false,
+    "protected_evidence_accessed": false,
+    "market_body_accessed": false,
+    "returns_or_correlations_computed": false,
+    "pnl_computed": false,
+    "collector_changed": false,
+    "runner_bundle_created": false,
+    "runner_bundle_executed": false,
+    "vps_raw_data_read": false,
+    "credentials_or_trading": false
+  }
+}
