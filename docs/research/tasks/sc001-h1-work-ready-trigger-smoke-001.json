@@ -1,0 +1,87 @@
+{
+  "schema": "sc001.h1_event_ready_trigger_smoke_task.v0.1",
+  "task_id": "SC001-H1-WORK-TRIGGER-SMOKE-001",
+  "worker_id": "H1_HISTORICAL_INDICATORS",
+  "authorization_class": "T0_DESIGN_ONLY_CONTROL_PLANE_SMOKE",
+  "task_subclass": "GITHUB_WORK_READY_FOR_REVIEW_EVENT_DELIVERY_PROBE",
+  "priority": 0,
+  "dispatch_base_head": "599c8a34d02f39e61584b4e05fe116e6883d2c21",
+  "architecture_version": "0.3",
+  "purpose": "Prove that a fresh GitHub pull_request action=ready_for_review for this exact H1 PR reaches the Work H1 researcher and permits a single GitHub-only CLAIM_BLOCK and TERMINAL RECEIPT. No market/data/strategy activity, no executor or network job.",
+  "strict_event_gate": {
+    "repository": "AlexeyIvy/-botmarketplace-site",
+    "action": "ready_for_review",
+    "title_prefix": "[SC001][H1][READY]",
+    "event_identity_required": true,
+    "no_event_no_action": true,
+    "do_not_infer_event_from_open_ready_pr": true,
+    "ignore": [
+      "opened",
+      "closed",
+      "synchronize",
+      "comments",
+      "reviews",
+      "other repositories",
+      "other PRs"
+    ]
+  },
+  "claim_protocol": {
+    "allowed": true,
+    "surface": "this exact originating PR",
+    "max_claim_blocks": 1,
+    "default_lease_hours": 3,
+    "required_fields": [
+      "TASK_ID",
+      "WORKER_ID",
+      "claimed_at_utc",
+      "lease_until_utc",
+      "start_main_head",
+      "architecture_version"
+    ],
+    "duplicate_claim_forbidden": true,
+    "claim_before_any_substantive_work": true
+  },
+  "task_steps": [
+    "Verify exact event action and originating PR identity, and immutable GitHub task contract; fail closed otherwise with no mutation.",
+    "Read canonical H1 Work trigger/project instructions and verify current main context. Do not search for other READY tasks.",
+    "When valid and unclaimed, publish exactly one CLAIM_BLOCK as an originating PR comment.",
+    "Perform no code execution or further repository writes. Revalidate current main and task identity.",
+    "Publish exactly one TERMINAL RECEIPT — with task id, worker id, H1_WORK_READY_TRIGGER_SMOKE_PASS, original PR_HEAD_SHA, actual claim comment ID, CONTINUATION_REVIEW_REQUIRED: true, STRATEGY_REVIEW_REQUIRED: false.",
+    "Stop. No follow-on work; Strategy Control must classify this synthetic task as TERMINAL_IDLE_JUSTIFIED, not dispatch another task."
+  ],
+  "allowed_pr_comment_writes": [
+    "one CLAIM_BLOCK after exact event validation",
+    "one TERMINAL RECEIPT — after claim/revalidation"
+  ],
+  "max_executions": 0,
+  "max_network_runs": 0,
+  "max_outcome_runs": 0,
+  "max_repair_cycles": 0,
+  "repair_mode": "NONE",
+  "max_repository_commits_by_worker": 0,
+  "max_changed_task_local_files": 0,
+  "max_new_canonical_files_by_worker": 0,
+  "allowed_pr_lifecycle_actions": [],
+  "forbidden_actions": [
+    "Test Executor and Research Runner jobs",
+    "VPS browsing",
+    "API/exchange/data network requests",
+    "market/archive body or protected evidence access",
+    "prices/returns/correlations/lag/PnL",
+    "collector operations, secrets or trading",
+    "creating/editing any file or commit by worker",
+    "claiming a different task, polling for replacement READY work",
+    "changing roadmap/governance/Strategy State/contamination/reusable registry",
+    "PR merge/close/retarget/auto-merge/draft-ready transitions by worker",
+    "any actual historical H1 self-test or T1 acquisition",
+    "rescue, retry or repeated trigger attempts by worker"
+  ],
+  "strategy_review_required": false,
+  "continuation_review_required": true,
+  "terminal_status_values": [
+    "H1_WORK_READY_TRIGGER_SMOKE_PASS",
+    "H1_WORK_READY_TRIGGER_SMOKE_BLOCKED",
+    "STALE_CONTEXT_REVALIDATION_REQUIRED"
+  ],
+  "terminal_rule": "On valid event claim then one terminal. If no exact valid GitHub event identity supplied, STOP silently with no claim/terminal/writes. If validation after a valid event fails and exact task permits BLOCKED receipt, use exactly one bounded receipt. No successor automatically from this smoke."
+}
