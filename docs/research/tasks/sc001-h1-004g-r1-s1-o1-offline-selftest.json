@@ -1,0 +1,116 @@
+{
+  "schema": "sc001.h1_bodyset_offline_selftest_task.v0.1",
+  "task_id": "SC001-H1-004G-R1-S1-O1",
+  "parent_task_id": "SC001-H1-004G-R1-S1",
+  "original_task_id": "SC001-H1-004G",
+  "worker_id": "H1_HISTORICAL_INDICATORS",
+  "authorization_class": "T0_OFFLINE_SYNTHETIC_TEST_ONLY",
+  "priority": 1,
+  "architecture_version": "0.3",
+  "dispatch_base_head": "93f57ccc17fa0d1dedbc0f2a1f0f805642c9e2f8",
+  "canonicalized_implementation_head": "65f9f32818914f0ed395af90033d6a5caf9714f7",
+  "canonical_parent_merge": "93f57ccc17fa0d1dedbc0f2a1f0f805642c9e2f8",
+  "originating_pr": 448,
+  "originating_terminal_comment_id": 6086377876,
+  "purpose": "Run exactly one full offline synthetic unit-test suite against the canonical H1 shared-backbone body acquire/verify implementation after bounded Strategy Manager static review and merge. This task proves synthetic behavior only and authorizes no network, body acquisition, outcome access, deployment, or T1 continuation.",
+  "frozen_inputs": {
+    "implementation_path": "scripts/research/sc001_h1_shared_backbone_body_acquire_verify_v0_1.py",
+    "implementation_sha256": "1eb597e3186023540a5ab9929f433f7f5a81b9d587f10386cf2e3e55f625c760",
+    "test_path": "tests/research/sc001_h1_shared_backbone_body_acquire_verify_test_v0_1.py",
+    "test_sha256": "564a5688b83611d3fce31c0cd29cf46f28fae423bf92ab9b8c1ff2aee735b9aa",
+    "expected_test_count": 17
+  },
+  "exact_execution": {
+    "plane": "BotMarketplace Test Executor",
+    "network_profile": "offline",
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "-v",
+      "tests/research/sc001_h1_shared_backbone_body_acquire_verify_test_v0_1.py"
+    ],
+    "max_test_executor_jobs": 1,
+    "max_executions": 1,
+    "timeout_seconds": 180,
+    "expected_exit_code": 0,
+    "expected_result": "All 17 existing unittest methods PASS"
+  },
+  "output_budget": {
+    "claim_blocks": 1,
+    "terminal_receipts": 1,
+    "repository_file_changes_by_worker": 0,
+    "repository_commits_by_worker": 0,
+    "canonical_result_files": 0,
+    "worker_result_manifests": 0
+  },
+  "allowed_pr_writes": [
+    "Exactly one top-level CLAIM_BLOCK comment before execution",
+    "Exactly one top-level TERMINAL RECEIPT comment after the single authorized execution"
+  ],
+  "claim_protocol": {
+    "claim_surface": "this task PR",
+    "claim_write_authorized": true,
+    "default_lease_hours": 3,
+    "required_claim_fields": [
+      "TASK_ID",
+      "WORKER_ID",
+      "claimed_at_utc",
+      "lease_until_utc",
+      "start_main_head",
+      "architecture_version"
+    ],
+    "duplicate_claim_forbidden": true,
+    "execution_before_valid_claim_forbidden": true
+  },
+  "lifecycle_authority": {
+    "worker_may_mark_ready": false,
+    "worker_may_toggle_draft": false,
+    "worker_may_merge": false,
+    "worker_may_close": false,
+    "worker_may_retarget": false,
+    "worker_may_enable_auto_merge": false
+  },
+  "repair_mode": "NONE",
+  "max_repair_cycles": 0,
+  "max_network_runs": 0,
+  "max_outcome_runs": 0,
+  "forbidden_actions": [
+    "Research Runner or Runner Probe use",
+    "VPS or raw-data browsing",
+    "network access or HTTP requests",
+    "market body acquisition",
+    "protected evidence or outcome access",
+    "collector, systemd, deployment, credential or trading operations",
+    "source, test, freeze, roadmap, governance, policy or charter mutation",
+    "changing any repository file",
+    "a second Test Executor job or rerun",
+    "PR merge, close, retarget, auto-merge, draft or ready transition by worker"
+  ],
+  "strategy_review_required": false,
+  "continuation_review_required": true,
+  "terminal_status_values": [
+    "H1_OFFLINE_SYNTHETIC_SELFTEST_PASS",
+    "H1_OFFLINE_SYNTHETIC_SELFTEST_FAIL",
+    "STALE_CONTEXT_REVALIDATION_REQUIRED"
+  ],
+  "terminal_receipt_required_fields": [
+    "TASK_ID",
+    "WORKER_ID",
+    "TERMINAL_STATUS",
+    "PR_HEAD_SHA",
+    "START_MAIN_HEAD",
+    "TEST_EXECUTOR_JOB_ID",
+    "EXECUTION_COUNT",
+    "COMMAND",
+    "EXIT_CODE",
+    "TESTS_RUN",
+    "FAILURES",
+    "ERRORS",
+    "NETWORK_USED",
+    "REPOSITORY_CHANGES_BY_WORKER",
+    "STRATEGY_REVIEW_REQUIRED",
+    "CONTINUATION_REVIEW_REQUIRED"
+  ],
+  "terminal_rule": "After one valid claim, run only the exact offline command once through BotMarketplace Test Executor. Record one terminal receipt with STRATEGY_REVIEW_REQUIRED: false and CONTINUATION_REVIEW_REQUIRED: true. Do not fabricate a Worker Result Manifest. On PASS, stop for Strategy Control continuation review before any T1 body acquisition; on FAIL or stale context, stop without repair or rerun."
+}
