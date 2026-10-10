@@ -1,0 +1,135 @@
+{
+  "schema": "sc001.task_authorization.v0.1",
+  "task_id": "SC001-X1-002D-R4",
+  "worker_id": "X1_CROSS_ASSET_STRUCTURE",
+  "authorization_tier": "T1",
+  "status": "AUTHORIZED_ONE_SHOT",
+  "issued_at_utc": "2026-10-10T04:17:15.304Z",
+  "expires_at_utc": "2026-10-10T10:12:02.554Z",
+  "policy_path": "docs/research/sc001-delegated-user-authorization-policy-v0.2.md",
+  "policy_sha256": "0ee60f6376876dc13cc42ad8ac8a6fef5d54fc50e8f8322a01e6d64a9cbe0178",
+  "ratification_path": "docs/research/sc001-user-delegated-authorization-ratification-v0.1.json",
+  "ratification_sha256": "9f5434f92471d7c7d36389fe4b376a7870fb52a90b0d94bda5aa2777d4b71aa8",
+  "strategy_review": "PASS_TO_EXECUTE_EXACT_FROZEN_ONE_SHOT_OFFICIAL_METADATA_ONLY",
+  "strategy_review_source": {
+    "originating_terminal_pr": 461,
+    "originating_terminal_id": 6087291457,
+    "evidence_role": "SOURCE_ONLY_NONPROMOTIONAL",
+    "prior_actual_network_runs": 0
+  },
+  "task_path": "docs/research/tasks/sc001-x1-002d-r4-official-metadata-source-one-shot.json",
+  "task_creation_commit_sha": "9494b1135337d9dccfb357a166b0289b46e20693",
+  "canonical_main_head": "e1de40ede4f9126078cbd84cd87c85f234b2f458",
+  "canonical_freeze": {
+    "path": "docs/research/sc001-x1-pit-lineage-capture-freeze-v0.1.json",
+    "sha256": "720e5bde4ea988970ee3444bb45e084ba546c4f1c6d86abc334991ce04092083",
+    "unchanged_request_classes": true
+  },
+  "implementation": {
+    "path": "scripts/research/sc001_x1_pit_lineage_capture_v0_1.py",
+    "sha256": "e60c3c14398141f7362563678fd5a6862c96d4fbc954fd833820014a52fd9080"
+  },
+  "test_paths": [
+    {
+      "path": "tests/research/sc001_x1_pit_lineage_capture_test_v0_1.py",
+      "sha256": "b69163a5ef0b089b11892bfcba4be353dd2ab5557fcc8d64345fe65fcd6e01fd",
+      "verified_result": "PASS_11_OF_11"
+    },
+    {
+      "path": "tests/research/sc001_x1_pit_lineage_test_executor_adapter_test_v0_1.py",
+      "sha256": "40fa63a1b80d4df5c98f198a551ce8a3e585c53aa97d0b3fd6414e07736a07cb",
+      "verified_result": "PASS_7_OF_7",
+      "verified_job_id": "job_20261009T185540Z_71dfbbad"
+    }
+  ],
+  "adapter": {
+    "path": "scripts/research/sc001_x1_pit_lineage_test_executor_adapter_v0_1.py",
+    "sha256": "b2c778603a7035f1eedcd99e47bf0378bbb62f049a733b1a7b721a657259ccc3",
+    "accepts_args": [],
+    "output_environment": "BM_TEST_OUTPUT_DIR",
+    "fixed_child": "sc001-x1-pit-metadata-capture",
+    "raw_local_only": true
+  },
+  "resource_reservation_path": "docs/research/data-registry/reservations/32492463c3043b5bdeea15f2b1bf47f7f408b08099e35a68b5bfe994d3fa4827.json",
+  "resource_id": "32492463c3043b5bdeea15f2b1bf47f7f408b08099e35a68b5bfe994d3fa4827",
+  "resource_lease_expires_utc": "2026-10-10T10:12:02.554Z",
+  "evidence_role": "OFFICIAL_PUBLIC_METADATA_SOURCE_CAPTURE_ONLY_NONPROMOTIONAL",
+  "source_qualification_boundary": {
+    "capture_completion_not_source_qualification": true,
+    "candidate_ledger_attestation": "NOT_ATTESTED_SOURCE_CAPTURE_ONLY",
+    "historical_PIT_master_not_proven": true,
+    "complete_immutable_lineage_requires_strategy_review": true,
+    "fallback": false,
+    "universe_heuristics": false
+  },
+  "allowed_data_classes": [
+    "official current Binance USD-M exchangeInfo identity/control metadata",
+    "official Binance Support listing/delisting announcement category index and details from frozen IDs",
+    "two exact official Binance developer definition pages"
+  ],
+  "prohibited_data_classes": [
+    "market kline/trade/price/funding/open-interest bodies",
+    "returns/correlation/lead-lag/PnL",
+    "protected P1 outcomes/collector data",
+    "external search as source evidence",
+    "paid/licensed/trading/credentials"
+  ],
+  "allowed_hosts": [
+    "fapi.binance.com",
+    "www.binance.com",
+    "developers.binance.com"
+  ],
+  "execution_profile": "BotMarketplace Test Executor/public_research",
+  "exact_entrypoint": "scripts/research/sc001_x1_pit_lineage_test_executor_adapter_v0_1.py",
+  "exact_args": [],
+  "budgets": {
+    "max_network_runs": 1,
+    "max_outcome_runs": 0,
+    "max_executor_jobs": 1,
+    "max_execution_attempts": 1,
+    "max_requests_total": 1155,
+    "max_total_network_bytes": 161480704,
+    "max_wall_time_seconds": 900,
+    "max_repository_output_bytes": 24000,
+    "max_changed_repository_files": 2,
+    "max_worker_commits": 2,
+    "claim_lease_seconds": 10800
+  },
+  "request_class_caps": {
+    "exchange_info": {
+      "requests": 1,
+      "response_bytes": 8388608
+    },
+    "announcement_index": {
+      "requests": 128,
+      "response_bytes": 16777216
+    },
+    "announcement_detail": {
+      "requests": 1024,
+      "response_bytes": 134217728
+    },
+    "definition_page": {
+      "requests": 2,
+      "response_bytes": 2097152
+    }
+  },
+  "repair_mode": "NONE",
+  "max_repair_cycles": 0,
+  "one_shot": true,
+  "no_same_evidence_rescue": true,
+  "collector_mutation": false,
+  "trading": false,
+  "Runner": false,
+  "canonical_result_path": "docs/research/sc001-x1-pit-lineage-capture-r4-result-v0.1.json",
+  "worker_result_manifest_path": "docs/research/worker-results/sc001-x1-pit-lineage-capture-r4-manifest-v0.1.json",
+  "manifest_last_required": true,
+  "stop_rules": [
+    "Any task/auth/main/implementation/adapter/test/freeze/reservation mismatch.",
+    "Expired reservation or claim or authorization.",
+    "Any Test Executor limit, timeout, rate or filesystem boundary cannot be verified.",
+    "Any unexpected response/source schema/redirect/index continuity failure.",
+    "Any output write outside BM_TEST_OUTPUT_DIR, exact request classes or budgets exceeded.",
+    "Any protected/raw market evidence, trading, credential, Collector or Runner access.",
+    "No second job, fallback, retry or research-rule change; return SOURCE_INCOMPLETE or PREJOB_BLOCKED."
+  ]
+}
