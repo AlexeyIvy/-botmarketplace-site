@@ -1,0 +1,24 @@
+name: SC001 control admission self-test
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    paths:
+      - scripts/research/sc001_control_dispatch_preflight_v0_1.py
+      - tests/research/sc001_control_dispatch_preflight_test_v0_1.py
+      - .github/workflows/sc001-control-admission-selftest.yml
+
+permissions:
+  contents: read
+
+jobs:
+  offline-control-admission:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run offline synthetic admission checks
+        run: python3 -m unittest -v tests/research/sc001_control_dispatch_preflight_test_v0_1.py

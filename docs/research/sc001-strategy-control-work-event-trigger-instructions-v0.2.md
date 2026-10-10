@@ -92,6 +92,29 @@ This fallback exists only to recover exact event identity when the GitHub Work t
 11. Otherwise stop; notify the user when required by the project instructions.
 12. Never start a second task in the same Work run.
 
+## Concurrent-terminal work-run cap and recovery safety
+
+The limit remains **one newly dispatched successor per Work invocation**.
+A second, distinct terminal event arriving in the same invocation must NOT
+be converted into a final `STRATEGY_CONTROL_REVIEWED` merely because the
+first terminal consumed that dispatch slot. It is not a strategy ambiguity
+and does not constitute a completed continuation. Preserve the exact terminal
+comment ID as unreviewed, surface a compact
+`CONTINUATION_PENDING_CONTROL_SLOT` anomaly, and stop without duplicate work.
+A later independently triggered review or authorized reconciler may complete
+the original exact event after full deduplication.
+
+If the Work runtime cannot ensure the second event is redelivered, rely on
+read-only orphan detection to notify the user; do not claim autonomous retry
+or repeatedly toggle PR draft/ready. A scheduled read-only watcher cannot
+mutate GitHub on behalf of these workers under the existing failed
+scheduled-write-path smoke.
+
+Before any new executable successor, apply the technical admission and
+incomplete transaction/duplicate safeguards in the current Strategy
+Control project instructions. Uncertain job creation or active exact-main
+binds must stop rather than generate a new runnable task.
+
 ## Loop prevention
 
 Never trigger on Strategy Control's own comments.
