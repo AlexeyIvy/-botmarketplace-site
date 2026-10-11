@@ -1,0 +1,107 @@
+{
+  "schema": "sc001.explicit_user_t3_one_shot_runner_authorization.v0.1",
+  "project": "SC001",
+  "task_id": "SC001-P1-B15-W1-001",
+  "worker_id": "P1_PROSPECTIVE_EVENT",
+  "date_utc": "2026-10-11",
+  "status": "AUTHORIZED_EXACT_T3_HANDOFF_ONE_SHOT",
+  "authorization_source": {
+    "type": "EXPLICIT_USER_IN_CURRENT_STRATEGY_CONVERSATION",
+    "recorded_by": "SC001_STRATEGY_MANAGER",
+    "approval_quote": "Разрешаю подготовить и передать исполнителю один точный T3 offline-запуск B15-P1 W1 census: bundle_20260926T175529Z_93fa9025, SHA256 1308ce4c140161618dc465672564bdc3f2409e62cf219dc6932bc7edf1891495, approval code BM-1308CE4C1401. Только frozen source-only census без цен, PnL, изменения коллектора и повторных запусков.",
+    "interpretation": "Authorization to delegate one exact sealed offline Runner execution to the P1 worker, not authorization for Strategy Manager to run it or to expand any protected evidence scope."
+  },
+  "exact_bundle": {
+    "bundle_id": "bundle_20260926T175529Z_93fa9025",
+    "bundle_sha256": "1308ce4c140161618dc465672564bdc3f2409e62cf219dc6932bc7edf1891495",
+    "approval_code": "BM-1308CE4C1401",
+    "state": "SEALED",
+    "research_ref": "SC001-B15-P1/STAGE-E/W1-7D-REAL-DATA-CENSUS-V0.1",
+    "runtime_profile": "offline-research-v1",
+    "entrypoint": "research/sc001/sc001_b15p1_stage_e_w1_real_data_census_bootstrap_v0_1.py",
+    "entrypoint_sha256": "8473e8da24dadf0f272cf41421b7106d0e6ad50eae7af05b99017bb30ddb0f88",
+    "sealed_files": 6,
+    "source_only_input_files": 17,
+    "only_source_root": "sc001_data"
+  },
+  "exact_run": {
+    "executor": "BotMarketplace_Runner_Probe",
+    "tool": "run_bundle",
+    "bundle_id": "bundle_20260926T175529Z_93fa9025",
+    "bundle_sha256": "1308ce4c140161618dc465672564bdc3f2409e62cf219dc6932bc7edf1891495",
+    "approval_code": "BM-1308CE4C1401",
+    "run_key": "sc001-b15p1-stagee-w1-20260927-20261003-one-shot-20261011",
+    "params": null,
+    "max_run_bundle_calls": 1,
+    "max_jobs": 1,
+    "retries": 0,
+    "max_repair_cycles": 0,
+    "allow_reexecution_if_status_unknown": false,
+    "claim_lease_hours": 3
+  },
+  "scope": {
+    "start_utc_inclusive": "2026-09-27T00:00:00Z",
+    "end_utc_exclusive": "2026-10-04T00:00:00Z",
+    "not_before_utc": "2026-10-04T00:00:00Z",
+    "sources": "17 immutable-by-protocol materialized collector state/manifest and closed daily manifest/poll ledgers, exactly as sealed inside bundle",
+    "data_classes": [
+      "NON_PRICE_POLL_STATUS",
+      "SOURCE_INTEGRITY",
+      "SOURCE_GAP_METADATA"
+    ],
+    "evidence_role": "SOURCE_ONLY_W1_PRE_PRICE_QUALITY_CENSUS_NONPROMOTIONAL",
+    "allow_derived": "integrity hash, poll-chain continuity, valid fractions and source-only artifact identity",
+    "no_price_no_pnl": true,
+    "no_trading": true,
+    "allows_second_stage_w1_analysis": false
+  },
+  "budgets": {
+    "max_network_calls": 0,
+    "max_api_requests": 0,
+    "max_market_price_reads": 0,
+    "max_price_or_pnl_runs": 0,
+    "max_collector_mutations": 0,
+    "max_collector_restarts": 0,
+    "max_experiment_variants": 0,
+    "max_runner_jobs": 1,
+    "max_runner_bundle_submissions": 1,
+    "max_data_source_families": 1,
+    "max_other_task_dispatch": 0
+  },
+  "explicit_prohibitions": [
+    "No Research Runner execution by Strategy Manager; P1_WORKER only after live authorization and current bundle checks",
+    "No duplicate submit, retry, different run_key, altered params, new bundle, bundle reseal, or alternate executor",
+    "No direct VPS/raw event/price/PnL browsing by Strategy Manager or worker; protected inputs only through exact immutable Runner input mounts",
+    "No price/spread/return/PnL/headroom/opportunity-rate inference, source or universe changes, threshold selection, collector mutation/restart, paid API, credentials or trading",
+    "No W1 analysis bundle build or dispatch from this authorization, even on PASS; wait for independent Strategy Review"
+  ],
+  "source_bindings": [
+    {
+      "path": "docs/research/sc001-b15-p1-source-only-opportunity-rate-analysis-protocol-v0.1.md",
+      "sha256": "a91e09d453515f85feb98d5a636eede0c66efa323d2ca7a9765855acf46edde2"
+    },
+    {
+      "path": "docs/research/sc001-b15-p1-stage-e-w1-real-data-census-contract-v0.1.json",
+      "sha256": "bb5a1e6983ec6e66b89e154a574d7690fd6ebe8184e04f4cc75de7495c2bca8f"
+    },
+    {
+      "path": "docs/research/sc001-b15-p1-stage-e-w1-source-only-checkpoint-contract-v0.1.json",
+      "sha256": "d9ac225f56af110c69cc310067d0df0f63683fc0a532665553df0eb17f1f2e25"
+    },
+    {
+      "path": "research/sc001/sc001_b15p1_stage_e_w1_input_census_v0_1.py",
+      "sha256": "5386182a73eb6e0561eb3670223168d3e1ebe7d11640ee9d67ce753569de4aaf"
+    },
+    {
+      "path": "research/sc001/sc001_b15p1_stage_e_w1_real_data_census_bootstrap_v0_1.py",
+      "sha256": "8473e8da24dadf0f272cf41421b7106d0e6ad50eae7af05b99017bb30ddb0f88"
+    },
+    {
+      "path": "docs/research/sc001-b15-p1-stage-e-w1-offline-selftest-result-v0.1.json",
+      "sha256": "f26be5ec3e52e1d4346f7aa6af7685c7baf4641072ed3c1b67b24f342634880d"
+    }
+  ],
+  "expires_at_utc": "2026-10-12T12:00:00Z",
+  "one_shot_execution_status": "APPROVED_NOT_SUBMITTED",
+  "terminal_rule": "On exactly one validated P1 task PR ready_for_review event, claim once; validate user approval record, exact seal, no prior execution and resource availability; invoke run_bundle at most once. On any uncertainty or failure stop without resubmission and request Strategy Manager review. This record does not by itself certify the run happened."
+}
