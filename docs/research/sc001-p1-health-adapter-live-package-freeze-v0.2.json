@@ -1,0 +1,146 @@
+{
+  "schema": "sc001.p1_health_adapter_live_package_freeze.v0.2",
+  "task_id": "SC001-P1-OPS-005",
+  "worker_id": "P1_PROSPECTIVE_EVENT",
+  "status": "P1_HEALTH_INSTALLER_HOST_TOOL_SYMLINK_REPAIR_STATIC_PACKAGE_READY",
+  "authorization_class": "T0_EXACT_PRE_OUTCOME_ENGINEERING_REPAIR",
+  "strategy_review_required": true,
+  "continuation_review_required": true,
+  "canonical_main_head": "e1de40ede4f9126078cbd84cd87c85f234b2f458",
+  "parent_freeze": {
+    "path": "docs/research/sc001-p1-health-adapter-live-package-freeze-v0.1.json",
+    "sha256": "0957bd451c54d4bb30212ee72df947f254b5a19749e026d4d1f5d4d7240d159f",
+    "immutable": true
+  },
+  "deployment_artifacts": {
+    "installer": {
+      "repository_path": "scripts/research/deploy-sc001-b13c-health-adapter-v0.2.py",
+      "sha256": "1c06a5bcf5dad06ce4a4df44629c1cc7c59b38377ceb02753796d640f051a8da"
+    },
+    "regression_test": {
+      "repository_path": "tests/research/sc001_p1_b13c_health_installer_host_tool_symlink_test_v0_2.py",
+      "sha256": "56565870f36e8cdbe3a4458241952589ded7204c5779f8f7590ee5015de34372",
+      "execution_performed": false
+    },
+    "installed_adapter": {
+      "source_repository_path": "ops/mcp/sc001_b13c_health_adapter_v0_1.py",
+      "installed_path": "/usr/local/libexec/botmarket-research/sc001-b13c-health-v0.1/sc001_b13c_health_adapter_v0_1.py",
+      "sha256": "844949ec670c6cd1856d2a1ea016f3554b6c6e85b95b254b6e370907eb47d2c7"
+    },
+    "entrypoint": {
+      "installed_path": "/usr/local/libexec/botmarket-research/sc001-b13c-health-v0.1/sc001_b13c_health_entrypoint_v0_1.py",
+      "sha256": "eadaf746e0ca31de040040a744b0d7ff2e72995f9fd6fe84a7fe33e63b3e4612",
+      "maximum_stdout_bytes": 4096,
+      "caller_arguments": "NONE"
+    },
+    "sudoers": {
+      "installed_path": "/etc/sudoers.d/sc001-b13c-health-v0.1",
+      "sha256": "794e6e9bd87f062cbde818e852affdb81ef6a83adb8349e5e788c52ac798f8ba",
+      "command_alias": "SC001_B13C_HEALTH_V01",
+      "rule": "botmarket-mcp ALL=(botmarket) NOPASSWD:NOSETENV: SC001_B13C_HEALTH_V01",
+      "exact_target_command": "/usr/bin/python3 -I /usr/local/libexec/botmarket-research/sc001-b13c-health-v0.1/sc001_b13c_health_entrypoint_v0_1.py"
+    }
+  },
+  "host_tool_policy": {
+    "python3": {
+      "exact_path": "/usr/bin/python3",
+      "trusted_directory": "/usr/bin",
+      "symlink_allowed": true,
+      "link_requirements": [
+        "root:root ownership",
+        "every symlink hop is a direct child of /usr/bin, excluding intermediate path components",
+        "not dangling",
+        "maximum eight links",
+        "no cycle"
+      ],
+      "resolved_target_requirements": [
+        "regular file",
+        "root:root ownership",
+        "not group/world writable",
+        "at least one executable bit"
+      ]
+    },
+    "visudo": {
+      "exact_path": "/usr/sbin/visudo",
+      "trusted_directory": "/usr/sbin",
+      "symlink_allowed": false,
+      "requirements": [
+        "regular file",
+        "root:root ownership",
+        "not group/world writable",
+        "at least one executable bit"
+      ]
+    },
+    "nominal_symlink_mode_rule": "Linux symlink mode bits are not used as target writability evidence."
+  },
+  "unchanged_installation_contract": {
+    "package_directory": "/usr/local/libexec/botmarket-research/sc001-b13c-health-v0.1",
+    "package_directory_mode": "0555",
+    "adapter_mode": "0444",
+    "entrypoint_mode": "0444",
+    "sudoers_mode": "0440",
+    "caller_user": "botmarket-mcp",
+    "run_as_user": "botmarket",
+    "shell": false,
+    "network": false,
+    "collector_read_during_install": false,
+    "collector_or_systemd_mutation": false
+  },
+  "future_t3_actions": {
+    "host_installation": {
+      "gate": "NEW_EXACT_USER_APPROVAL_REQUIRED_FOR_V0.2",
+      "prior_v0_1_approval_applies": false,
+      "exact_command": [
+        "/usr/bin/python3",
+        "scripts/research/deploy-sc001-b13c-health-adapter-v0.2.py",
+        "--apply"
+      ],
+      "reads_live_collector_state": false
+    },
+    "rollback": {
+      "gate": "EXPLICIT_T3_HOST_MUTATION_APPROVAL_REQUIRED",
+      "exact_command": [
+        "/usr/bin/python3",
+        "scripts/research/deploy-sc001-b13c-health-adapter-v0.2.py",
+        "--rollback"
+      ],
+      "precondition": "All installed files, hashes, owners, modes, hardlink counts and package membership match the unchanged v0.1 installation contract exactly."
+    },
+    "first_live_read": {
+      "gate": "SEPARATE_EXPLICIT_USER_APPROVAL_REQUIRED_AFTER_VERIFIED_INSTALL",
+      "maximum_invocations_under_gate": 1,
+      "polling": false
+    }
+  },
+  "offline_static_validation": {
+    "worker_execution_performed": false,
+    "result": "STATIC_REVIEW_ONLY_NOT_EXECUTED",
+    "reason": "Task explicitly sets offline_unit_execution_authorized=false.",
+    "prepared_regressions": [
+      "standard root-owned Ubuntu python3 -> python3.12 symlink passes",
+      "root-owned regular executable behavior remains valid",
+      "unsafe link or target ownership fails closed",
+      "writable or non-executable target fails closed",
+      "dangling, non-regular, escaping and cyclic targets fail closed",
+      "visudo symlink remains forbidden",
+      "nested intermediate path components are rejected"
+    ]
+  },
+  "safety_receipts": {
+    "live_collector_state_read": false,
+    "vps_browsed": false,
+    "protected_evidence_accessed": false,
+    "outcome_accessed": false,
+    "price_return_pnl_accessed": false,
+    "collector_changed": false,
+    "collector_restarted": false,
+    "systemd_changed": false,
+    "permissions_or_acl_changed": false,
+    "deployment_performed": false,
+    "network_research_accessed": false,
+    "runner_bundle_executed": false,
+    "test_executor_job_launched": false,
+    "installer_executed": false
+  },
+  "terminal_rule": "Strategy Manager review is required. A new exact T3 approval is required before any v0.2 host apply; installation approval never authorizes the separate first live read."
+}

@@ -1,0 +1,91 @@
+{
+  "schema": "sc001.worker_result_manifest.v0.1",
+  "task_id": "SC001-P1-OPS-005",
+  "worker_id": "P1_PROSPECTIVE_EVENT",
+  "terminal_status": "P1_HEALTH_INSTALLER_HOST_TOOL_SYMLINK_REPAIR_STATIC_PACKAGE_READY",
+  "authorization_class": "T0_EXACT_PRE_OUTCOME_ENGINEERING_REPAIR",
+  "strategy_review_required": true,
+  "continuation_review_required": true,
+  "event": {
+    "type": "pull_request",
+    "action": "ready_for_review",
+    "repository": "AlexeyIvy/-botmarketplace-site",
+    "pr_number": 472,
+    "delivery_id": "1f519c90-c54a-11f1-8c25-5c3825c2e98c"
+  },
+  "claim": {
+    "comment_id": 6106964523,
+    "claimed_at_utc": "2026-10-11T08:06:07Z",
+    "lease_until_utc": "2026-10-11T11:06:07Z"
+  },
+  "binding_context": {
+    "dispatch_base_head": "e1de40ede4f9126078cbd84cd87c85f234b2f458",
+    "revalidated_main_head": "e1de40ede4f9126078cbd84cd87c85f234b2f458",
+    "architecture_version": "0.3",
+    "task_manifest_blob_sha": "6595e02289423157bd208f852a01988cdba02c3f"
+  },
+  "diagnosis": {
+    "failure_signature": "ACTION_FAIL:HOST_TOOL_TYPE",
+    "failure_class": "TASK_LOCAL_ENVIRONMENT_CONFIGURATION_DEFECT",
+    "root_cause_confidence": "HIGH",
+    "first_failing_invariant": "v0.1 applies group/world-write bits to nominal Linux symlink mode 0777",
+    "frozen_research_semantics_changed": false
+  },
+  "coherent_repair": {
+    "summary": "Allow only the exact python3 host-tool symlink with root-owned in-directory direct-child hops and a root-owned regular non-writable executable target; keep visudo regular-file only.",
+    "adjacent_sweep": "PASS_AFTER_HARDENING_REVIEW",
+    "repair_cycles_consumed": 0
+  },
+  "outputs": [
+    {
+      "path": "scripts/research/deploy-sc001-b13c-health-adapter-v0.2.py",
+      "sha256": "1c06a5bcf5dad06ce4a4df44629c1cc7c59b38377ceb02753796d640f051a8da",
+      "size_bytes": 21551
+    },
+    {
+      "path": "tests/research/sc001_p1_b13c_health_installer_host_tool_symlink_test_v0_2.py",
+      "sha256": "56565870f36e8cdbe3a4458241952589ded7204c5779f8f7590ee5015de34372",
+      "size_bytes": 5725
+    },
+    {
+      "path": "docs/research/sc001-p1-health-adapter-live-package-freeze-v0.2.json",
+      "sha256": "041bf77b15cff977979715feae1d57df1bb1bdc775ad59db06bde1148703a87f",
+      "size_bytes": 5963
+    },
+    {
+      "path": "docs/research/sc001-p1-ops-005-host-tool-type-diagnostic-and-repair-v0.1.md",
+      "sha256": "f5ca45d27f4571e536ec1ad598695b89a103489f9064d5da4616df032974a6ba",
+      "size_bytes": 4295
+    }
+  ],
+  "unchanged_identities": {
+    "installer_v0_1_sha256": "a9e330ffad08be27f48b8a749f5c7335be8244d752db03b9023168b7f6c559fa",
+    "freeze_v0_1_sha256": "0957bd451c54d4bb30212ee72df947f254b5a19749e026d4d1f5d4d7240d159f",
+    "adapter_sha256": "844949ec670c6cd1856d2a1ea016f3554b6c6e85b95b254b6e370907eb47d2c7",
+    "entrypoint_sha256": "eadaf746e0ca31de040040a744b0d7ff2e72995f9fd6fe84a7fe33e63b3e4612",
+    "sudoers_sha256": "794e6e9bd87f062cbde818e852affdb81ef6a83adb8349e5e788c52ac798f8ba"
+  },
+  "validation": {
+    "static_source_review": "PASS",
+    "adversarial_diff_review": "PASS",
+    "targeted_regression": "PREPARED_NOT_EXECUTED",
+    "adjacent_test_set": "PREPARED_NOT_EXECUTED",
+    "full_preflight": "NOT_EXECUTED_BY_TASK_AUTHORIZATION",
+    "output_firewall": "PASS_STATIC",
+    "readback_identity": "TO_VERIFY_AFTER_COMMIT"
+  },
+  "safety": {
+    "protected_evidence_accessed": false,
+    "outcome_accessed": false,
+    "network_accessed": false,
+    "collector_or_systemd_mutated": false,
+    "live_collector_read": false,
+    "host_apply_or_rollback": false,
+    "installer_executed": false,
+    "test_executor_jobs": 0,
+    "runner_bundles": 0,
+    "vps_jobs": 0
+  },
+  "remaining_risk": "Prepared tests and full preflight were not executed because offline_unit_execution_authorized=false.",
+  "next_action": "Strategy Manager review and separately authorized validation; then a new exact T3 user approval is required before any v0.2 host apply. The first live read remains a separate T3 gate."
+}
