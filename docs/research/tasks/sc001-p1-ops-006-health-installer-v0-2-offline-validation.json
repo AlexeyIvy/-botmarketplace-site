@@ -1,0 +1,112 @@
+{
+  "schema_version": "sc001_worker_task_v0.1",
+  "task_id": "SC001-P1-OPS-006",
+  "worker_id": "P1_PROSPECTIVE_EVENT",
+  "title": "Offline validate SC001 P1 health installer v0.2",
+  "task_class": "T2_VALIDATION_ONLY",
+  "phase": "PRE_OUTCOME",
+  "status": "READY",
+  "authority": {
+    "source_policy": "docs/research/sc001-delegated-user-authorization-policy-v0.2.md",
+    "ratification_status": "ACTIVE",
+    "delegated_tier": "T2",
+    "strategy_control_trigger_pr": 472,
+    "strategy_control_terminal_comment_id": 6107009563,
+    "strategy_control_review_kind": "STRATEGY",
+    "user_gate_boundary": "Any live-host apply, privileged mutation, live evidence read, or T3 action remains separately user-authorized."
+  },
+  "exact_source": {
+    "repository": "AlexeyIvy/-botmarketplace-site",
+    "repair_pr": 472,
+    "repair_head_sha": "27307f64777836ebdf6b58f68776151e8a59e38d",
+    "repair_terminal_comment_id": 6107009563,
+    "installer_path": "scripts/research/deploy-sc001-b13c-health-adapter-v0.2.py",
+    "installer_sha256": "1c06a5bcf5dad06ce4a4df44629c1cc7c59b38377ceb02753796d640f051a8da",
+    "freeze_path": "docs/research/sc001-p1-health-adapter-live-package-freeze-v0.2.json",
+    "freeze_sha256": "041bf77b15cff977979715feae1d57df1bb1bdc775ad59db06bde1148703a87f",
+    "regression_path": "tests/research/sc001_p1_b13c_health_installer_host_tool_symlink_test_v0_2.py",
+    "regression_sha256": "56565870f36e8cdbe3a4458241952589ded7204c5779f8f7590ee5015de34372"
+  },
+  "claim_contract": {
+    "claim_authority": "P1_PROSPECTIVE_EVENT may create exactly one CLAIM receipt on the successor PR after READY.",
+    "lease_duration_minutes": 180,
+    "max_claims": 1,
+    "claim_block_on_active_foreign_lease": true,
+    "no_work_before_claim": true
+  },
+  "allowed_pr_writes": {
+    "repository": "AlexeyIvy/-botmarketplace-site",
+    "branch": "sc001/continuation/6107009563/SC001-P1-OPS-006",
+    "successor_pr_only": true,
+    "allowed_paths": [
+      "docs/research/sc001-p1-ops-006-health-installer-v0-2-offline-validation-report-v0.1.md",
+      "docs/research/worker-results/sc001-p1-ops-006-health-installer-v0-2-offline-validation-manifest-v0.1.json"
+    ],
+    "forbidden": [
+      "Modify the installer, freeze, regression test, shared/common executable code, governance, policy, roadmap, or charter.",
+      "Write outside the exact successor branch or PR.",
+      "Merge, close, reopen, convert draft state, retarget, relabel, or otherwise manage PR lifecycle."
+    ]
+  },
+  "lifecycle_authority": {
+    "may_commit_exact_outputs": true,
+    "may_push_successor_branch": true,
+    "may_comment_claim_progress_terminal": true,
+    "may_merge": false,
+    "may_close": false,
+    "may_create_additional_prs": false,
+    "may_dispatch_successors": false
+  },
+  "execution_contract": {
+    "executor": "TEST_EXECUTOR",
+    "max_jobs": 1,
+    "network_profile": "offline",
+    "timeout_seconds": 120,
+    "entrypoint": "tests/research/sc001_p1_b13c_health_installer_host_tool_symlink_test_v0_2.py",
+    "argv": [],
+    "expected_repo_commit": "SUCCESSOR_PR_HEAD_AT_JOB_SUBMISSION",
+    "allowed_inputs": [
+      "The exact successor repository snapshot derived from repair head 27307f64777836ebdf6b58f68776151e8a59e38d.",
+      "The exact installer, freeze, and regression paths and hashes frozen above."
+    ],
+    "prohibited": [
+      "Research Runner or Runner Probe execution.",
+      "VPS access or raw-data browsing.",
+      "Public or private network access.",
+      "Live-host apply, sudo, collector operation or mutation, systemd mutation, cron mutation, filesystem mutation outside the isolated executor.",
+      "Protected evidence or outcome access.",
+      "Trading credentials or trading.",
+      "A second execution, retry, repair cycle, or same-evidence rescue."
+    ]
+  },
+  "acceptance": {
+    "required": [
+      "GitHub readback reconfirms the exact source paths and SHA256 values.",
+      "Exactly one offline Test Executor job runs the frozen regression entrypoint at the exact submitted successor commit.",
+      "Job exits 0 with all discovered regression cases passing and zero failures or errors.",
+      "No prohibited access or mutation occurs.",
+      "The report records job id, submitted commit, executor policy snapshot, command contract, exit status, test counts, and immutable log/output references."
+    ],
+    "fail_closed": [
+      "Any hash mismatch, nonzero exit, failed/error test, executor admission failure, timeout, infrastructure ambiguity, or prohibited access is terminal for this task.",
+      "Do not modify the package, rerun, broaden scope, or reinterpret failure."
+    ]
+  },
+  "output_contract": {
+    "report_path": "docs/research/sc001-p1-ops-006-health-installer-v0-2-offline-validation-report-v0.1.md",
+    "report_budget_bytes": 24000,
+    "manifest_path": "docs/research/worker-results/sc001-p1-ops-006-health-installer-v0-2-offline-validation-manifest-v0.1.json",
+    "manifest_budget_bytes": 12000,
+    "manifest_must_be_created_last": true,
+    "total_output_budget_bytes": 36000,
+    "repair_cycles": 0
+  },
+  "terminal_contract": {
+    "strategy_review_required": true,
+    "continuation_review_required": true,
+    "terminal_status_on_pass": "P1_HEALTH_INSTALLER_V0_2_OFFLINE_VALIDATED",
+    "terminal_status_on_fail": "P1_HEALTH_INSTALLER_V0_2_OFFLINE_VALIDATION_FAILED",
+    "next_action_on_pass": "Strategy Control review; live-host apply remains a separate exact T3 user gate.",
+    "next_action_on_fail": "Strategy attention required; no automatic repair, rerun, or same-evidence rescue."
+  }
+}
