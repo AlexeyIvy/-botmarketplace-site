@@ -1,0 +1,57 @@
+{
+  "schema": "sc001.p1_b15_w1_one_shot_runner_execution_result.v0.1",
+  "task_id": "SC001-P1-B15-W1-001",
+  "worker_id": "P1_PROSPECTIVE_EVENT",
+  "status": "B15P1_STAGE_E_W1_CENSUS_SOURCE_REVIEW",
+  "bundle_id": "bundle_20260926T175529Z_93fa9025",
+  "bundle_sha256": "1308ce4c140161618dc465672564bdc3f2409e62cf219dc6932bc7edf1891495",
+  "approval_record_path": "docs/research/authorizations/SC001-P1-B15-W1-001-user-t3-authorization-v0.1.json",
+  "run_key": "sc001-b15p1-stagee-w1-20260927-20261003-one-shot-20261011",
+  "job_id": "job_20261011T114243Z_57ec4c24",
+  "execution_started_utc": "2026-10-11T11:42:43.068740+00:00",
+  "execution_ended_utc": "2026-10-11T11:42:44.116210+00:00",
+  "runner_status": "FAILED",
+  "runner_exit_code": 2,
+  "package_integrity_ok": true,
+  "observed_pass_or_review_token": "B15P1_STAGE_E_W1_REAL_DATA_CENSUS_BOOTSTRAP_REVIEW",
+  "quality_gate_summary": {
+    "evaluated": false,
+    "admission_inputs_materialized": 17,
+    "census_program_sha256_verified": true,
+    "failed_gate": "COLLECTOR_SNAPSHOT_STATUS_MUST_EQUAL_B15P1_NONPRICE_COLLECTION_RUNNING",
+    "observed_failure": "RuntimeError: collector snapshot not running",
+    "poll_coverage_fraction": null,
+    "both_venue_valid_fraction": null,
+    "hash_chain_continuity": null
+  },
+  "allowed_input_count": 17,
+  "network_calls": 0,
+  "collector_mutations": 0,
+  "collector_restarts": 0,
+  "price_accessed": false,
+  "pnl_calculated": false,
+  "opportunity_rate_inference_performed": false,
+  "credentials_available": false,
+  "runner_artifacts": [
+    {
+      "path": "stage_e_w1_real_data_census_bootstrap_manifest.json",
+      "sha256": "876efc7a369c773c013097886f6d3e56ae26baaf314d1bd17bbbc42e91ec8e24",
+      "size_bytes": 4682
+    }
+  ],
+  "job_log_sha_or_identity": {
+    "stdout_bytes": 88,
+    "stderr_bytes": 1041,
+    "stdout_terminal_token": "B15P1_STAGE_E_W1_REAL_DATA_CENSUS_BOOTSTRAP_REVIEW",
+    "stderr_terminal_error": "RuntimeError: collector snapshot not running"
+  },
+  "evidence_role": "SOURCE_ONLY_W1_PRE_PRICE_QUALITY_CENSUS_NONPROMOTIONAL",
+  "source_window_utc": {
+    "start_inclusive": "2026-09-27T00:00:00Z",
+    "end_exclusive": "2026-10-04T00:00:00Z"
+  },
+  "submission_count": 1,
+  "retry_count": 0,
+  "automatic_repair_performed": false,
+  "next_allowed_action": "STOP_AND_REVIEW_W1_REAL_DATA_CENSUS; Strategy Manager must review the collector-snapshot state before any separately authorized future action. No retry or second bundle is authorized by this task."
+}
