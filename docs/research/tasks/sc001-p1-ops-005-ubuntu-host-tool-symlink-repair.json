@@ -1,0 +1,126 @@
+{
+  "schema": "sc001.p1.host_tool_type_symlink_repair.v0.1",
+  "task_id": "SC001-P1-OPS-005",
+  "worker_id": "P1_PROSPECTIVE_EVENT",
+  "authorization_class": "T0_EXACT_PRE_OUTCOME_ENGINEERING_REPAIR",
+  "priority": 0,
+  "architecture_version": "0.3",
+  "dispatch_base_head": "e1de40ede4f9126078cbd84cd87c85f234b2f458",
+  "parent": {
+    "pr": 444,
+    "task_id": "SC001-P1-OPS-004",
+    "exact_install_approval_comment_id": 6106699652,
+    "observed_failure_comment_id": 6106925399,
+    "frozen_installer_v0_1": "scripts/research/deploy-sc001-b13c-health-adapter-v0.1.py",
+    "installer_sha256": "a9e330ffad08be27f48b8a749f5c7335be8244d752db03b9023168b7f6c559fa",
+    "frozen_health_package_v0_1": "docs/research/sc001-p1-health-adapter-live-package-freeze-v0.1.json",
+    "package_sha256": "0957bd451c54d4bb30212ee72df947f254b5a19749e026d4d1f5d4d7240d159f",
+    "unchanged_adapter_source": "ops/mcp/sc001_b13c_health_adapter_v0_1.py",
+    "adapter_sha256": "844949ec670c6cd1856d2a1ea016f3554b6c6e85b95b254b6e370907eb47d2c7",
+    "unchanged_entrypoint_sha256": "eadaf746e0ca31de040040a744b0d7ff2e72995f9fd6fe84a7fe33e63b3e4612",
+    "unchanged_sudoers_sha256": "794e6e9bd87f062cbde818e852affdb81ef6a83adb8349e5e788c52ac798f8ba"
+  },
+  "incident": {
+    "host_failed_install": "ACTION_FAIL:HOST_TOOL_TYPE",
+    "host_diag": "/usr/bin/python3 is root-owned symlink to /usr/bin/python3.12 with symlink mode 0777; /usr/sbin/visudo is root-owned ordinary executable mode 0755",
+    "static_root_cause": "require_fixed_tools applies link_metadata.st_mode & 0o022 to Linux symlink mode 0777 and fails despite root-owned regular trusted resolved target",
+    "status": "NO_INSTALL_PASS; the failure is before ensure_parent/install_package/install_sudoers"
+  },
+  "purpose": "One narrowly-scoped additive T0 engineering repair to the frozen P1 health-adapter host installer: accept a trusted root-owned /usr/bin/python3 symlink only when its canonical resolved executable and safe path pass strict root-ownership/type/mode checks, never interpret nominal symlink 0777 as writable target. Keep all collector and sudoers restrictions identical. No host apply or live read.",
+  "exact_read_sources": [
+    "docs/research/sc001-p1-work-event-trigger-instructions-v0.1.md",
+    "docs/research/sc001-p1-prospective-event-project-instructions-v0.1.md",
+    "docs/research/sc001-user-delegated-authorization-ratification-v0.1.json",
+    "docs/research/sc001-delegated-user-authorization-policy-v0.2.md",
+    "scripts/research/deploy-sc001-b13c-health-adapter-v0.1.py@main verified sha256",
+    "docs/research/sc001-p1-health-adapter-live-package-freeze-v0.1.json@main verified sha256",
+    "ops/mcp/sc001_b13c_health_adapter_v0_1.py@main",
+    "PR444 review/approval/incident comments 6085968524, 6106699652, 6106925399",
+    "tests/research existing P1 frozen adapter synthetic test if needed to revalidate unchanged constraints"
+  ],
+  "implementation_constraints": [
+    "Create v0.2 additive copy of installer in exact new path; do NOT modify original frozen v0.1 installer or freeze. Do not make unstated changes to installed adapter, immutable entrypoint, sudoers command/content, users, paths, metadata allowlist, permissions or collector scope.",
+    "Treat Python3 as the ONLY explicitly allowed trusted executable symlink. Symlink must be owned root:root, not dangling, reject any symlink chain or intermediate component escaping root-trusted directories /usr/bin; resolved regular file must be root-owned, non-group/world-writable, and executable. Keep /usr/sbin/visudo strict regular or exact independent trusted behavior; no generic symlink bypass.",
+    "Never weaken root/owner/type/mode controls by simply deleting the condition or using a broad ignore_symlinks flag. Model rejection of unsafe link ownership, malicious target ownership/mode, missing target, directory/non-regular target, symlink path escape; normal root-owned Ubuntu python3 -> python3.12 must PASS.",
+    "Add smallest focused offline unit/static regression test using mock/fake stat metadata and safe temporary fixtures; zero sudo, root, collector reads; verify existing non-symlink trusted regular executable behavior and bad cases.",
+    "Produce new frozen package v0.2 binding new installer bytes/hash and unchanged exact adapter/entrypoint/sudoers hashes, preserving install --apply and --rollback semantics, root-only, no collector read. Do not claim v0.2 is user authorized. Source SHA pin new as final manifest.",
+    "Report exact resulting SHA256 and optional safety blockers. If the repair cannot be safe within a single coherent change, return FAIL-CLOSED, do not propose manual host workaround.",
+    "Manifest LAST after all outputs; only two Github repo commits or at most five task files total; do not alter shared governance/roadmap."
+  ],
+  "outputs": {
+    "installer_path": "scripts/research/deploy-sc001-b13c-health-adapter-v0.2.py",
+    "max_installer_bytes": 24000,
+    "freeze_path": "docs/research/sc001-p1-health-adapter-live-package-freeze-v0.2.json",
+    "max_freeze_bytes": 11000,
+    "test_path": "tests/research/sc001_p1_b13c_health_installer_host_tool_symlink_test_v0_2.py",
+    "max_test_bytes": 14000,
+    "report_path": "docs/research/sc001-p1-ops-005-host-tool-type-diagnostic-and-repair-v0.1.md",
+    "max_report_bytes": 9000,
+    "manifest_path": "docs/research/worker-results/sc001-p1-ops-005-health-installer-symlink-repair-manifest-v0.1.json",
+    "max_manifest_bytes": 5500,
+    "max_new_files": 5,
+    "max_commits": 5,
+    "manifest_last": true
+  },
+  "execution": {
+    "offline_unit_execution_authorized": false,
+    "test_executor_jobs": 0,
+    "network_runs": 0,
+    "vps_jobs": 0,
+    "runner_bundles": 0,
+    "host_mutations": 0,
+    "live_collector_reads": 0,
+    "market_body_reads": 0,
+    "outcome_runs": 0,
+    "repair_cycles": 1
+  },
+  "claim_protocol": {
+    "required": true,
+    "claim_write_authorized": true,
+    "max_claims": 1,
+    "lease_hours": 3,
+    "fields": [
+      "TASK_ID",
+      "WORKER_ID",
+      "claimed_at_utc",
+      "lease_until_utc",
+      "start_main_head",
+      "architecture_version"
+    ],
+    "duplicate_claim_forbidden": true
+  },
+  "allowed_pr_writes": [
+    "one claim comment with CLAIM_BLOCK",
+    "exact task-local output files on the task branch; Worker Result Manifest LAST",
+    "one TERMINAL RECEIPT — with review flags and manifest SHA256"
+  ],
+  "pr_lifecycle": {
+    "merge": false,
+    "close": false,
+    "retarget": false,
+    "ready_toggle": false,
+    "delete_branch": false
+  },
+  "event_gate": {
+    "repo": "AlexeyIvy/-botmarketplace-site",
+    "action": "ready_for_review",
+    "title_prefix": "[SC001][P1][READY]",
+    "exact_triggered_pr_only": true
+  },
+  "terminal_statuses": [
+    "P1_HEALTH_INSTALLER_HOST_TOOL_SYMLINK_REPAIR_STATIC_PACKAGE_READY",
+    "P1_HEALTH_INSTALLER_SYMLINK_REPAIR_UNSAFE_DEFER",
+    "STALE_CONTEXT_REVALIDATION_REQUIRED"
+  ],
+  "strategy_review_required": true,
+  "continuation_review_required": true,
+  "forbidden": [
+    "T3 host apply/rollback, sudo, chmod/chown on VPS, package deployment or installer execution",
+    "Research Runner or Test Executor jobs, VPS raw file access, market/body/outcome/collector state reads, any network retrieval",
+    "Change frozen original v0.1 SHA/files/installation, rewrite original failure receipt",
+    "Manual host workaround, reinterpret current user approval for v0.2, invoke P1 T3_GATE_2 live read",
+    "Change data, collector, executable privilege scope, sidestep preflight or alter shared research governance",
+    "Start a second work task or any market research/alpha stage"
+  ],
+  "stop_rule": "After PR ready_for_review, claim exact task once, one coherent v0.2 additive patch + tests + freeze + report + Worker Result Manifest LAST, terminal receipt with STRATEGY_REVIEW_REQUIRED:true CONTINUATION_REVIEW_REQUIRED:true. Strategy Manager must review and a renewed exact user approval is required for v0.2 host apply."
+}
