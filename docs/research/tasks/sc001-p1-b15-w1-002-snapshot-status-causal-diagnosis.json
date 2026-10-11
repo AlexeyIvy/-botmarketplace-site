@@ -1,0 +1,124 @@
+{
+  "schema": "sc001.p1.b15.w1.static_snapshot_status_causal_diagnosis.v0.1",
+  "task_id": "SC001-P1-B15-W1-002",
+  "worker_id": "P1_PROSPECTIVE_EVENT",
+  "authorization_class": "T0_DESIGN_ONLY_STATIC_DIAGNOSIS",
+  "architecture_version": "0.3",
+  "priority": 1,
+  "dispatch_state": "READY",
+  "dispatch_base_head": "e1de40ede4f9126078cbd84cd87c85f234b2f458",
+  "origin": {
+    "pr": 474,
+    "task_id": "SC001-P1-B15-W1-001",
+    "parent_pr_head": "dcfc33aee63dff10a0a3265d6663e71fc155e43c",
+    "terminal_comment_id": 6108678303,
+    "control_review_id": 6108698163,
+    "exact_runner_job": "job_20261011T114243Z_57ec4c24",
+    "consumed_bundle_id": "bundle_20260926T175529Z_93fa9025",
+    "consumed_bundle_sha": "1308ce4c140161618dc465672564bdc3f2409e62cf219dc6932bc7edf1891495",
+    "result_path": "docs/research/sc001-p1-b15-w1-001-source-only-census-execution-result-v0.1.json",
+    "result_sha256": "6b2e535b22500be5e425e0df804e3f002e99f772495774298ef47f437a52f58c"
+  },
+  "purpose": "One short bounded STATIC diagnosis, from canonical source/code and W1 result only, of why a source-only retrospective seven-day census requires live collector_state.status == B15P1_NONPRICE_COLLECTION_RUNNING at analysis time. Diagnose semantic feasibility and minimum future evidence without touching market/collector/VPS/run. No W1 outcome, no automatic repair.",
+  "read_only_bindings": {
+    "exact_main_source_sha256": {
+      "research/sc001/sc001_b15p1_stage_e_w1_input_census_v0_1.py": "5386182a73eb6e0561eb3670223168d3e1ebe7d11640ee9d67ce753569de4aaf",
+      "research/sc001/sc001_b15p1_nonprice_transferability_collector_v0_1_4.py": "280253b060f65517548054b3d8c33c315013d724ef2b836e9b8fef14628be213",
+      "research/sc001/sc001_b15p1_stage_e_w1_real_data_census_bootstrap_v0_1.py": "8473e8da24dadf0f272cf41421b7106d0e6ad50eae7af05b99017bb30ddb0f88",
+      "docs/research/sc001-b15-p1-source-only-opportunity-rate-analysis-protocol-v0.1.md": "a91e09d453515f85feb98d5a636eede0c66efa323d2ca7a9765855acf46edde2",
+      "docs/research/sc001-b15-p1-stage-e-w1-real-data-census-contract-v0.1.json": "bb5a1e6983ec6e66b89e154a574d7690fd6ebe8184e04f4cc75de7495c2bca8f",
+      "docs/research/sc001-b15-p1-stage-e-w1-source-only-checkpoint-contract-v0.1.json": "d9ac225f56af110c69cc310067d0df0f63683fc0a532665553df0eb17f1f2e25"
+    },
+    "exact_prior_result": "docs/research/sc001-p1-b15-w1-001-source-only-census-execution-result-v0.1.json@PR474:dcfc33aee63dff10a0a3265d6663e71fc155e43c",
+    "exact_prior_manifest": "docs/research/worker-results/sc001-p1-b15-w1-001-source-only-census-manifest-v0.1.json@PR474:dcfc33aee63dff10a0a3265d6663e71fc155e43c",
+    "binding_governance": [
+      "docs/research/sc001-research-strategy-agent-charter-v0.1.md",
+      "docs/research/sc001-delegated-user-authorization-policy-v0.2.md",
+      "docs/research/sc001-user-delegated-authorization-ratification-v0.1.json",
+      "docs/research/sc001-execution-worker-routing-and-automation-architecture-v0.3.md",
+      "docs/research/sc001-midcourse-research-strategy-audit-and-governance-amendment-v0.2.md",
+      "docs/research/sc001-shared-data-and-resource-coordination-v0.1.md"
+    ]
+  },
+  "diagnosis_questions": [
+    "Trace exact W1 input_census.check_state_manifest() sequence and show whether it checks current snapshot status before any W1 daily integrity/coverage and how source-only static code establishes that, with exact source functions and lines.",
+    "Trace v0.1.4 collector lifecycle: INITIALIZED, RUNNING, STOPPED, SOURCE_REVIEW; under which explicit code paths can status transition away from RUNNING (normal stop, resource guard, etc.)? Distinguish known static reachable states from ACTUAL UNKNOWN status/cause of the failed job: canonical result reports only a mismatch. Do not infer actual snapshot value.",
+    "Is a live RUNNING status at 2026-10-11 a necessary scientific precondition to historical integrity/completeness of immutable 2026-09-27..2026-10-03 closed daily manifests? Contrast historical as-of W1 validity versus current running state, and when a stop could signify a dangerous within-window integrity breach. Do not weaken integrity or price firewall.",
+    "Review whether already frozen W1 dates, 99% coverage/both-venue-valid, daily manifest / poll chain continuity, no gap forward fill and original 17 materialized inputs remain unchanged. No new threshold/date/variant or changing original failed record.",
+    "Determine cheapest minimal future *metadata-only* discriminating evidence to distinguish post-window STOPPED from SOURCE_REVIEW / early stop, based exclusively on documented allowable sources; explain any new T3/protected-data/Runner permission. Do not request or access live collector or existing raw VPS input in this task.",
+    "Conclude one of STATUS_GATE_STATIC_CONTRACT_MISMATCH_PLAUSIBLE, STATUS_MISMATCH_REQUIRES_BOUNDED_METADATA_PROOF, FROZEN_W1_SOURCE_QUALITY_STOP or STATIC_DIAGNOSIS_INCONCLUSIVE. Distinguish static feasibility from actual W1 quality PASS; no automatic new W1 run.",
+    "Three lenses: Trader—economic value of B15-P1 rare outage events versus extra engineering/approval; Engineer—historical snapshot vs current lifecycle status and fail-closed identity; Statistician—frozen evidence and no source-only after-failure relaxation masking missing windows."
+  ],
+  "output": {
+    "report_path": "docs/research/sc001-p1-b15-w1-002-snapshot-status-diagnosis-v0.1.md",
+    "report_max_bytes": 11500,
+    "worker_result_manifest_path": "docs/research/worker-results/sc001-p1-b15-w1-002-snapshot-status-diagnosis-manifest-v0.1.json",
+    "manifest_max_bytes": 5500,
+    "max_new_files": 2,
+    "max_commits": 2,
+    "manifest_last": true
+  },
+  "execution_limits": {
+    "max_test_executor_jobs": 0,
+    "max_runner_jobs": 0,
+    "max_network_runs": 0,
+    "max_vps_reads": 0,
+    "max_market_data_bytes": 0,
+    "max_protected_data_access": 0,
+    "max_host_mutations": 0,
+    "max_collector_reads": 0,
+    "max_price_or_pnl": 0,
+    "max_repair_cycles": 0,
+    "max_new_scripts": 0,
+    "max_horizon_or_threshold_variants": 0
+  },
+  "event_gate": {
+    "repository": "AlexeyIvy/-botmarketplace-site",
+    "trigger_action": "ready_for_review",
+    "title_prefix": "[SC001][P1][READY]",
+    "exact_pr_only": true
+  },
+  "claim_protocol": {
+    "required": true,
+    "max_claims": 1,
+    "claim_lease_hours": 3,
+    "required_fields": [
+      "TASK_ID",
+      "WORKER_ID",
+      "claimed_at_utc",
+      "lease_until_utc",
+      "start_main_head",
+      "architecture_version"
+    ],
+    "duplicate_claim_forbidden": true
+  },
+  "allowed_repo_actions": [
+    "one CLAIM_BLOCK comment only after exact event validation",
+    "two task-local files on its own PR branch, Worker Result Manifest LAST",
+    "one TERMINAL RECEIPT — with exact result and manifest hashes"
+  ],
+  "lifecycle": {
+    "merge_authorized": false,
+    "close_authorized": false,
+    "retarget_authorized": false,
+    "auto_merge_authorized": false,
+    "ready_toggle_authorized": false
+  },
+  "terminal_statuses": [
+    "B15P1_W1_STATUS_GATE_STATIC_CAUSE_IDENTIFIED_REVIEW",
+    "B15P1_W1_STATUS_GATE_STATIC_UNRESOLVED_REVIEW",
+    "B15P1_W1_SOURCE_QUALITY_STOP_STATIC_EVIDENCE_ONLY",
+    "STALE_CONTEXT_REVALIDATION_REQUIRED"
+  ],
+  "strategy_review_required": true,
+  "continuation_review_required": true,
+  "forbidden": [
+    "Any repeated or different Research Runner bundle, Test Executor/network/VPS/collector call; no read_job_artifact or protected raw input from here",
+    "Do not read collector_state.json, historical poll/event/fee files or market prices / outcome data, even through other tools",
+    "Do not change frozen original W1 protocol or implementation, require RUNNING predicate, source-gap definition, coverage 99% or historical window",
+    "Do not patch code or execute any synthetic tests; pure static review of source and canonical result only",
+    "Do not infer or declare W1 source PASS or independent cluster rates, issue price-stage authorization, restart collector, change host permissions or create other tasks",
+    "No roadmap/governance/Strategy State/contamination/reusable shared writes"
+  ],
+  "stop_rule": "One T0 code-only diagnosis and at most one future recommendation; never auto-retry prior consumed bundle or allow W1 data access. Result and manifest LAST then TERMINAL RECEIPT —, stop, await independent Strategy Manager review."
+}
