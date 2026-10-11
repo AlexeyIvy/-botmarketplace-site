@@ -1,0 +1,171 @@
+{
+  "schema": "sc001.p1_b15_w1_one_shot_runner_execution_task.v0.1",
+  "task_id": "SC001-P1-B15-W1-001",
+  "worker_id": "P1_PROSPECTIVE_EVENT",
+  "authorization_class": "T3_EXPLICIT_USER_APPROVED_EXACT_RUNNER_ONE_SHOT",
+  "priority": 1,
+  "architecture_version": "0.3",
+  "dispatch_base_head": "e1de40ede4f9126078cbd84cd87c85f234b2f458",
+  "dispatch_state": "READY",
+  "exact_authorization_path": "docs/research/authorizations/SC001-P1-B15-W1-001-user-t3-authorization-v0.1.json",
+  "user_gate_status": "EXACT_T3_GATE_ALREADY_APPROVED_AS_RECORDED",
+  "source_of_truth": "GitHub plus live read-only Runner sealed bundle metadata; worker must revalidate before any job",
+  "business_question": "Can the frozen W1 (2026-09-27 to 2026-10-03) non-price collection meet 99% source integrity/coverage and hash-chain continuity required before an independent event-rate census? Absolutely no trading outcome or price inference.",
+  "binding_refs": [
+    "docs/research/sc001-research-strategy-agent-charter-v0.1.md",
+    "docs/research/sc001-research-strategy-state-v0.1.json",
+    "docs/research/sc001-b15-p1-source-only-opportunity-rate-analysis-protocol-v0.1.md",
+    "docs/research/sc001-b15-p1-stage-e-w1-real-data-census-contract-v0.1.json",
+    "docs/research/sc001-b15-p1-stage-e-w1-source-only-checkpoint-contract-v0.1.json",
+    "docs/research/sc001-current-roadmap-and-stop-rules-v5.114.md",
+    "docs/research/sc001-delegated-user-authorization-policy-v0.2.md",
+    "docs/research/sc001-user-delegated-authorization-ratification-v0.1.json",
+    "docs/research/sc001-shared-data-and-resource-coordination-v0.1.md",
+    "docs/research/sc001-p1-work-event-trigger-instructions-v0.1.md",
+    "docs/research/sc001-p1-prospective-event-project-instructions-v0.1.md"
+  ],
+  "sealed_bundle": {
+    "bundle_id": "bundle_20260926T175529Z_93fa9025",
+    "bundle_sha256": "1308ce4c140161618dc465672564bdc3f2409e62cf219dc6932bc7edf1891495",
+    "approval_code": "BM-1308CE4C1401",
+    "entrypoint": "research/sc001/sc001_b15p1_stage_e_w1_real_data_census_bootstrap_v0_1.py",
+    "runner_profile": "offline-research-v1",
+    "input_root": "sc001_data",
+    "files_count": 6,
+    "declared_inputs_count": 17,
+    "expected_healthy_pass_token": "B15P1_STAGE_E_W1_REAL_DATA_CENSUS_BOOTSTRAP_PASS"
+  },
+  "user_approval": {
+    "authorization_ref": "docs/research/authorizations/SC001-P1-B15-W1-001-user-t3-authorization-v0.1.json",
+    "max_executions": 1,
+    "expires_at_utc": "2026-10-12T12:00:00Z",
+    "explicit_user_gate_satisfied": true
+  },
+  "handoff_execution_contract": {
+    "preconditions": [
+      "PR title begins exactly [SC001][P1][READY] and exact ready_for_review event verified",
+      "No other active P1 claim; exactly one fresh CLAIM_BLOCK with three-hour lease",
+      "Exact authorization JSON present, scope unchanged, expiration not passed",
+      "Exact Runner get_bundle returns SEALED with correct id/sha/approval_code, exactly six files, 17 sc001_data input identities, correct program SHA",
+      "No evidence exact bundle previously started (Runner job list and task PR); if visibility insufficient to exclude duplicate, STOP_UNCERTAIN instead of execute",
+      "Runner mode offline-research-v1 and allowlisted input root sc001_data; no competing high load/collector-protection risk",
+      "Current main and all frozen canonical source hashes revalidated; no tampering",
+      "Exact source start/end and not-before time passed"
+    ],
+    "only_job_creating_action": {
+      "tool": "BotMarketplace_Runner_Probe.run_bundle",
+      "args": {
+        "bundle_id": "bundle_20260926T175529Z_93fa9025",
+        "bundle_sha256": "1308ce4c140161618dc465672564bdc3f2409e62cf219dc6932bc7edf1891495",
+        "approval_code": "BM-1308CE4C1401",
+        "run_key": "sc001-b15p1-stagee-w1-20260927-20261003-one-shot-20261011",
+        "params": null
+      }
+    },
+    "job_submission_count_cap": 1,
+    "on_submission_ambiguity": "SUBMISSION_UNKNOWN_STOP; never issue second run_bundle even with same run_key; use get_job/list jobs only as read-only identity check",
+    "permitted_readback": [
+      "Runner get_job/wait_job/get_job_log bounded to known job_id",
+      "Runner list_job_artifacts for known job_id; read only exact stage_e_w1_input_census_manifest.json and stage_e_w1_real_data_census_bootstrap_manifest.json when output list confirms expected names, up to 24KiB each",
+      "Do not materialize original poll ledgers, event rows, price/PnL or collector states outside Runner"
+    ],
+    "stop_after": "one completed result or bounded unresolved execution receipt; no next Runner bundle or W1 source-only analyzer"
+  },
+  "resource_budgets": {
+    "max_runner_bundle_executes": 1,
+    "max_other_jobs": 0,
+    "max_network_runs": 0,
+    "max_outcome_runs": 0,
+    "max_retries": 0,
+    "max_repair_cycles": 0,
+    "max_market_price_bytes": 0,
+    "max_collector_actions": 0,
+    "max_new_rules": 0,
+    "resource_class": "BOUNDED_READ_ONLY_W1_SOURCE_CENSUS",
+    "collector_protection": "Do not disturb current collector or cause protected CPU/I/O contention; if resource safety unverified STOP_REVIEW"
+  },
+  "output_contract": {
+    "result_path": "docs/research/sc001-p1-b15-w1-001-source-only-census-execution-result-v0.1.json",
+    "result_format": "json",
+    "max_result_bytes": 14500,
+    "worker_result_manifest_path": "docs/research/worker-results/sc001-p1-b15-w1-001-source-only-census-manifest-v0.1.json",
+    "max_manifest_bytes": 8000,
+    "max_new_worker_files": 2,
+    "max_worker_commits": 2,
+    "manifest_last": true,
+    "report_fields": [
+      "task_id",
+      "status",
+      "bundle_id",
+      "bundle_sha256",
+      "approval_record_path",
+      "run_key",
+      "job_id",
+      "execution_started_utc",
+      "execution_ended_utc",
+      "observed_pass_or_review_token",
+      "quality_gate_summary",
+      "allowed_input_count",
+      "network_calls",
+      "collector_mutations",
+      "price_accessed",
+      "pnl_calculated",
+      "job_log_sha_or_identity",
+      "evidence_role",
+      "next_allowed_action"
+    ]
+  },
+  "claim_protocol": {
+    "required": true,
+    "claim_write_authorized": true,
+    "claim_limit": 1,
+    "lease_hours": 3,
+    "fields": [
+      "TASK_ID",
+      "WORKER_ID",
+      "claimed_at_utc",
+      "lease_until_utc",
+      "start_main_head",
+      "architecture_version"
+    ],
+    "multiple_owners_forbidden": true
+  },
+  "event_gate": {
+    "repository": "AlexeyIvy/-botmarketplace-site",
+    "action": "ready_for_review",
+    "pr_title_prefix": "[SC001][P1][READY]",
+    "no_event_no_work": true,
+    "triggered_pr_only": true
+  },
+  "allowed_pr_writes": [
+    "one CLAIM_BLOCK top-level comment after exact event validation",
+    "result and Worker Result Manifest LAST on this task branch only",
+    "one TERMINAL RECEIPT — with exact final manifest SHA256 and job_id or unambiguous no-submit reason"
+  ],
+  "pr_lifecycle_authority": {
+    "merge": false,
+    "close": false,
+    "retarget": false,
+    "auto_merge": false,
+    "mark_ready": false,
+    "mark_draft": false,
+    "delete_branch": false
+  },
+  "terminal_statuses": [
+    "B15P1_STAGE_E_W1_CENSUS_PASS",
+    "B15P1_STAGE_E_W1_CENSUS_SOURCE_REVIEW",
+    "B15P1_W1_T3_EXECUTION_ADMISSION_BLOCKED",
+    "B15P1_W1_T3_SUBMISSION_UNCERTAIN_NO_RETRY",
+    "STALE_CONTEXT_REVALIDATION_REQUIRED"
+  ],
+  "strategy_review_required": true,
+  "continuation_review_required": true,
+  "do_not_do": [
+    "Strategy Manager never invokes run_bundle; only executing P1 worker may do exact one after authorization checks",
+    "No package reseal/param edit, re-execution, automatic retries, alternative path, networked VPS or Test Executor",
+    "No collector state/cycle mutation, access to market prices/returns/PnL/protected outcomes outside source-only W1",
+    "No continuation to source-only event counting, prices or secondary stage within this task",
+    "No shared roadmap/governance/Strategy State/contamination/reusable writes"
+  ],
+  "terminal_rule": "After one exact authorized execution or fail-closed admission/uncertainty, write result, then Worker Result Manifest LAST; revalidate current main and artifact hashes; publish one TERMINAL RECEIPT — with TASK_ID/WORKER_ID/TERMINAL_STATUS/MANIFEST_PATH/MANIFEST_SHA256 and STRATEGY_REVIEW_REQUIRED: true and CONTINUATION_REVIEW_REQUIRED: true. Stop. No new job or task."
+}
