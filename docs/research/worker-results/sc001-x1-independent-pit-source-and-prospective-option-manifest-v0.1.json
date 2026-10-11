@@ -1,0 +1,62 @@
+{
+  "schema": "sc001.worker_result_manifest.v0.1",
+  "TASK_ID": "SC001-X1-002E",
+  "WORKER_ID": "X1_CROSS_ASSET_STRUCTURE",
+  "TERMINAL_STATUS": "X1_PIT_HISTORICAL_SOURCE_STOP_PROSPECTIVE_OPTION_ONLY",
+  "AUTHORIZATION_CLASS": "T0_SOURCE_DOCUMENTATION_AND_STRATEGY_ONLY",
+  "ARCHITECTURE_VERSION": "0.3",
+  "PR_NUMBER": 471,
+  "PR_BRANCH": "sc001/x1/SC001-X1-002E-independent-pit-source-gate",
+  "START_MAIN_HEAD": "e1de40ede4f9126078cbd84cd87c85f234b2f458",
+  "TASK_PR_HEAD_AT_CLAIM": "3b8d21976811f2e35ba0d7e4b5b1e5838ebbd035",
+  "HEAD_BEFORE_MANIFEST_COMMIT": "36b8ff0d8bf0249b56d318676201cdaec48194af",
+  "CLAIM_COMMENT_ID": 6106726079,
+  "RESULT_PATH": "docs/research/sc001-x1-independent-pit-source-and-prospective-option-review-v0.1.md",
+  "RESULT_SHA256": "6328c066fe76935c70a9f9a618415f344110b74acebd7c3bc19f93b165217876",
+  "RESULT_BYTES": 7778,
+  "FROZEN_CUTOFF_EXCLUSIVE": "2026-10-01",
+  "SOURCE_OPTIONS_REVIEWED": [
+    {
+      "name": "Tardis.dev Instruments Metadata API",
+      "disposition": "DOCUMENTED_PARTIAL_LINEAGE_NOT_QUALIFIED",
+      "decisive_limit": "Only contractMultiplier change history is guaranteed complete; availableSince may differ from listing and availableTo may lag actual delisting.",
+      "licensing": "USER_COST_T3_GATE"
+    },
+    {
+      "name": "Kaiko Reference Data",
+      "disposition": "AUDITABLE_VERSIONING_WITHOUT_DOCUMENTED_PIT_COMPLETENESS_NOT_QUALIFIED",
+      "decisive_limit": "Public documentation does not attest complete pre-cutoff Binance USD-M onboarding, delisting, redenomination, relisting and reused-symbol lineage.",
+      "licensing": "USER_COST_T3_GATE"
+    }
+  ],
+  "SOURCE_DOCUMENTATION_FAMILIES_REVIEWED": 2,
+  "QUALIFIED_HISTORICAL_PIT_SOURCE": false,
+  "HISTORICAL_ATLAS_DISPOSITION": "STOP",
+  "FULL_NEGATIVE_OUTCOME_CLAIM": false,
+  "PROSPECTIVE_OPTION": {
+    "id": "PROSPECTIVE_FIXED_ANCHOR_TARGET_REGISTRY_V0",
+    "status": "NOT_AUTHORIZED",
+    "count": 1,
+    "requires": "SEPARATE_STRATEGY_MECHANISM_REVIEW_AND_TASK; COLLECTOR_ACTION_REMAINS_T3"
+  },
+  "SAFETY_ACCOUNTING": {
+    "public_documentation_lookup": true,
+    "market_api_requests": 0,
+    "source_or_data_downloads": 0,
+    "test_executor_jobs": 0,
+    "runner_bundles": 0,
+    "vps_reads": 0,
+    "market_body_or_rows_opened": 0,
+    "protected_evidence_accessed": false,
+    "outcomes_accessed": false,
+    "returns_lag_correlation_or_pnl_computed": false,
+    "x1_003_executed": false,
+    "shared_state_changed": false,
+    "pr_lifecycle_changed": false
+  },
+  "STRATEGY_REVIEW_REQUIRED": true,
+  "CONTINUATION_REVIEW_REQUIRED": true,
+  "MANIFEST_LAST": true,
+  "NEXT_ALLOWED_ACTION": "STRATEGY_MANAGER_REVIEW_ONLY",
+  "recorded_at_utc": "2026-10-11T07:37:02.800Z"
+}

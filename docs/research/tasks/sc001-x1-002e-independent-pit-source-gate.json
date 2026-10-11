@@ -1,0 +1,124 @@
+{
+  "schema": "sc001.x1.independent_pit_source_strategic_feasibility_review.v0.1",
+  "task_id": "SC001-X1-002E",
+  "worker_id": "X1_CROSS_ASSET_STRUCTURE",
+  "authorization_class": "T0_SOURCE_DOCUMENTATION_AND_STRATEGY_ONLY",
+  "task_subclass": "INDEPENDENT_PIT_SOURCE_GO_NO_GO",
+  "priority": 3,
+  "architecture_version": "0.3",
+  "dispatch_base_head": "e1de40ede4f9126078cbd84cd87c85f234b2f458",
+  "predecessor": {
+    "pr_number": 466,
+    "task_id": "SC001-X1-002D-R4",
+    "terminal_comment_id": 6093729490,
+    "control_review_id": 6093741015,
+    "terminal_status": "X1_PIT_METADATA_CAPTURE_SOURCE_INCOMPLETE",
+    "exact_result_ref": "41ce69814f9eb2454df5c4d82781006ca2613c9d",
+    "result_path": "docs/research/sc001-x1-pit-lineage-capture-r4-result-v0.1.json",
+    "result_sha256": "0ff9c0cf25952f626d49034d8e101266343f788ccbedcfcbc03cd64533b33273",
+    "network_jobs_consumed": 1,
+    "prior_source_request_count": 2
+  },
+  "purpose": "At most one bounded independent/documentation-only PIT source feasibility decision, not a same-source capture rescue. Do we have externally auditable, comprehensive *as-of* Binance USD-M perpetual identity history BEFORE frozen 2026-10-01 cutoff, independent of present survivors and archive key inference? If no, recommend STOP for current multiyear X1 atlas and at most one fresh prospective-only concept requiring separate new Strategy approval.",
+  "read_exact": [
+    "docs/research/sc001-research-strategy-agent-charter-v0.1.md",
+    "docs/research/sc001-midcourse-research-strategy-audit-and-governance-amendment-v0.2.md",
+    "docs/research/sc001-h1-x1-historical-research-program-strategy-v0.1.md",
+    "docs/research/sc001-x1-pit-universe-source-freeze-v0.1.md",
+    "docs/research/sc001-x1-pit-lineage-capture-freeze-v0.1.json",
+    "docs/research/sc001-x1-pit-lineage-capture-r4-result-v0.1.json@PR466 exact 41ce69814f9eb2454df5c4d82781006ca2613c9d",
+    "docs/research/worker-results/sc001-x1-pit-lineage-capture-r4-manifest-v0.1.json@PR466 exact head",
+    "docs/research/sc001-shared-data-and-resource-coordination-v0.1.md",
+    "docs/research/sc001-delegated-user-authorization-policy-v0.2.md"
+  ],
+  "scope": [
+    "Review only existing canonical evidence plus official PUBLIC documentation for at most TWO materially independent source-lineage options. Historical Binance Support category capture and current exchangeInfo already attempted; DO NOT re-issue any HTTP market/announcement/API GET or recreate one-shot job.",
+    "Accept a source as plausible only when auditable historical symbol onboarding, delisting effective status, redenomination/multiplier changes, relisting and historical completeness attestations can all be established prior to cutoff. Clearly separate immutability, auditability, actual historic completeness and legal/licensing cost.",
+    "Treat vendor-paid/licensed or credentialed raw feeds only as theoretical alternatives and exact USER_COST_T3_GATE, not automatic approval or acquisition.",
+    "Evaluate whether X1's broad 1m atlas has a feasible path without using outcome-based survivor selection. The current frozen universe/listing/historical cutoff CANNOT be relaxed on existing evidence.",
+    "If no independent PIT source meets requirements in documentation, choose a STOP/DEFER instead of generating busywork; suggest at most one NEW prospectively fixed anchor/target design to investigate later only after a separate mechanism/economic review, NOT a rerun of X1-003.",
+    "Three lenses: trader edge-to-fill and opportunity-scale doubt (correlation != alpha); engineering immutable timing/identity/metadata contracts; statistics survivorship and multiplicity/independence."
+  ],
+  "decision_criteria": {
+    "earliest_stop": "No independent documented historical point-in-time completeness at frozen cutoff => DO NOT request network/coding/data acquisition.",
+    "options_max": 2,
+    "future_prospective_architecture_max": 1,
+    "no_automatic_permission_for_any_source_or_redesign": true,
+    "full_negative_outcome_claim_forbidden": true
+  },
+  "output": {
+    "report_path": "docs/research/sc001-x1-independent-pit-source-and-prospective-option-review-v0.1.md",
+    "max_report_bytes": 12500,
+    "manifest_path": "docs/research/worker-results/sc001-x1-independent-pit-source-and-prospective-option-manifest-v0.1.json",
+    "max_manifest_bytes": 5500,
+    "manifest_last": true,
+    "max_new_files": 2,
+    "max_worker_commits": 2
+  },
+  "claim_protocol": {
+    "required": true,
+    "claim_write_authorized": true,
+    "lease_hours": 3,
+    "claim_limit": 1,
+    "required_fields": [
+      "TASK_ID",
+      "WORKER_ID",
+      "claimed_at_utc",
+      "lease_until_utc",
+      "start_main_head",
+      "architecture_version"
+    ],
+    "duplicate_claim_forbidden": true
+  },
+  "event_gate": {
+    "repository": "AlexeyIvy/-botmarketplace-site",
+    "action": "ready_for_review",
+    "title_prefix": "[SC001][X1][READY]",
+    "exact_pr_only": true
+  },
+  "allowed_pr_writes": [
+    "one CLAIM_BLOCK",
+    "one exact task report and one manifest LAST on task branch",
+    "one TERMINAL RECEIPT —"
+  ],
+  "lifecycle_authority": {
+    "merge": false,
+    "close": false,
+    "retarget": false,
+    "auto_merge": false,
+    "ready_toggle": false,
+    "delete_branch": false
+  },
+  "budgets": {
+    "max_test_executor_jobs": 0,
+    "max_runner_bundles": 0,
+    "max_network_market_api_requests": 0,
+    "max_data_body_access": 0,
+    "max_outcome_runs": 0,
+    "max_repair_cycles": 0,
+    "max_horizon_or_universe_changes": 0,
+    "max_source_documentation_families": 2,
+    "max_prospective_redesign_drafts": 1
+  },
+  "repair_mode": "NONE",
+  "forbidden_actions": [
+    "Repeat or modify previous X1 official Binance announcement HTTP capture, exchangeInfo, stream or Test Executor job",
+    "Paid/licensed source sign-up, downloads or credentials",
+    "Read market candle/trade/price/return/lag/correlation/PnL or protected evidence",
+    "Survivor-only or static-current-exchangeInfo universe substitution",
+    "Change frozen historical cutoff, symbol set, source eligibility, namespace, selection/confirmation budgets, robustness metrics",
+    "Call source absence an alpha rejection; fabricate historical completeness",
+    "Implement new strategy, X1-003 discovery, alternate lag/horizon grid or new market data collector",
+    "Update shared roadmap, governance, contamination, reusable blocks, Strategy State",
+    "Dispatch another task, change PR lifecycle or rerun source"
+  ],
+  "terminal_statuses": [
+    "X1_INDEPENDENT_PIT_SOURCE_DOCUMENTED_CANDIDATE_PENDING_STRATEGY",
+    "X1_PIT_HISTORICAL_SOURCE_STOP_PROSPECTIVE_OPTION_ONLY",
+    "X1_PIT_SOURCE_NO_VIABLE_PATH_STOP",
+    "STALE_CONTEXT_REVALIDATION_REQUIRED"
+  ],
+  "strategy_review_required": true,
+  "continuation_review_required": true,
+  "stop_rule": "One exact static documentation feasibility pass; report+manifest last, one terminal, Strategy Manager reviews. No new source testing or restart X1 historical atlas without independent source-proof and separate approval."
+}
