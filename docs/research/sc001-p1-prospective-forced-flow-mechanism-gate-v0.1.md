@@ -58,11 +58,6 @@ Necessary source SHA256 values:
   `ca5c9dfd29b8f77f93d3c30696a647a09b81b6f2`:
   `7f2bf03ae8ccba63dae3a88ef643377aacbe988cc716df636d54df51a9be664f`
 
-Strategy Control receipt `6102625423` requires a causal trigger after
-availability, explicit lateness/watermark rules, a post-availability decision
-bucket, separable Bybit return/cost estimand, and fresh evidence. It authorizes
-no successor.
-
 ## STATIC CAUSAL ORDER
 
 For any online design, distinguish the following times:
@@ -100,35 +95,18 @@ the event belongs to a future-defined cluster and does not require later
 absence to label the trigger. This repairs causality only at the design level;
 it does not prove a remaining opportunity.
 
-Missing observable fields or facts in current sources are:
-
-- an eligible external forced-flow source and exact public message semantics;
-- source exchange-event and local receive timestamps in the same record;
-- duplicate and late-arrival bounds;
-- source bucket trade event, receive, close, and availability times;
-- synchronized Bybit event/receive/availability times;
-- clock-quality and cross-host clock-offset bounds;
-- decision completion, order-submit, acknowledgement, and fill times;
-- proof that Bybit remains unadjusted after all prior steps;
-- an opportunity-frequency estimate from clean, independent evidence.
-
-These are `UNKNOWN`; no latency number is invented.
+Missing facts are: eligible external forced-flow source semantics; event and
+receive timestamps; duplicate/lateness bounds; source bucket close/availability;
+synchronized Bybit availability; clock-offset bounds; decision/order/fill
+times; proof that Bybit remains unadjusted; and clean opportunity frequency.
+All are `UNKNOWN`; no latency number is invented.
 
 ## SAME-MECHANISM AND RESCUE SCREEN
 
-The following are rejected without outcome work:
-
-- wait until the old Bybit cluster is known closed, then measure or enter later;
-- move E+1..E+2 to E+6, E+10, or another delay;
-- retain the same cross-venue basis state and change only the hold horizon;
-- alter cluster gap, minimum event count, size threshold, symbol subset, sign,
-  H=52, or the seven-day interval;
-- add an intensity/volatility/filter threshold learned from B13-C or S0;
-- turn the same basis into a four-fill hedge solely to make convergence
-  monetizable.
-
-All preserve the parent forced-venue re-anchor thesis or tune it after failure.
-They are not new mechanisms.
+Rejected without outcomes: delaying the old entry; changing its horizon,
+cluster gap/count/size, symbols, sign, H=52, dates, or filters; or adding a
+four-fill hedge to the same basis. These preserve or tune the failed parent
+forced-venue re-anchor thesis and are not new mechanisms.
 
 ## ONE DISTINCT MECHANISM FINGERPRINT DRAFT
 
@@ -191,27 +169,12 @@ adaptive parameter search and is forbidden.
 The Edge-to-Fill control counts one-sided entry plus exit as two fills and a
 paired trade as four. This draft uses two fills.
 
-The prior S0 value `H=52 bps` is recorded only as a nonpromotional warning
-about two-fill taker economics. It is not imported as this draft's hurdle and
-is not lowered. A future, separately authorized pre-outcome cost card would
-have to freeze current Bybit fee, spread/depth, model reserve, and any funding
-term before opening alpha evidence.
-
-Current classification:
-`UNKNOWN_NEEDS_NON_ALPHA_DATA`.
-
-The portfolio review states that ordinary SC001 information is commonly
-low-single-digit bps and that the propagation family is attractive only if an
-event-conditioned source impulse produces a much larger actionable response.
-No such scale is established here. The architecture is economically relevant
-for small capital only if:
-
-- actionability survives real receive, compute, submit, and fill latency;
-- gross Bybit response exceeds the new conservative two-fill burden;
-- opportunities occur often enough that short occupancy matters;
-- losses from synchronous/common shocks and stale triggers remain bounded.
-
-None is proven by static sources.
+Prior `H=52 bps` is only a nonpromotional warning, neither imported nor
+lowered. A future pre-outcome cost card would have to freeze current Bybit
+fees, spread/depth, reserve, and funding before alpha access. Classification is
+`UNKNOWN_NEEDS_NON_ALPHA_DATA`: static sources prove neither actionable
+latency, response above two-fill burden, useful frequency, nor bounded
+common-shock/stale-trigger losses.
 
 ## COMPETING NULL AND EVIDENCE PLAN
 
@@ -227,21 +190,12 @@ the single frozen two-second termination anchor, net treatment deferred until
 cost semantics are frozen. Cross-venue basis change is diagnostic only and
 cannot substitute for Bybit-leg return.
 
-A possible future sequence, only if Strategy Manager separately dispatches it:
-
-1. non-alpha source-semantic and timestamp-feasibility review;
-2. bounded public-feed receive/clock/order-path latency qualification with no
-   outcome search;
-3. prefreeze one source, one trigger definition, Bybit as lagging/traded venue,
-   one two-second timescale, two-fill cost card, and exact stop rules;
-4. allocate a new post-freeze evidence window independent of the B13-C and S0
-   intervals;
-5. run at most one smallest sentinel, with no threshold, leader, symbol, or
-   horizon grid;
-6. treat any positive result as adaptive Discovery requiring fresh
-   chronological/prospective Confirmation.
-
-The present task authorizes none of these actions.
+Only a separate Strategy Manager dispatch could allow: non-alpha source and
+timestamp feasibility; bounded receive/clock/order-path qualification; one
+pre-frozen source, trigger, Bybit lagging leg, two-second timescale, cost card,
+and stop rules; then one fresh independent sentinel without grids. Any positive
+adaptive Discovery would still require fresh Confirmation. This task authorizes
+none of those actions.
 
 ## THREE-LENS VERDICT
 
@@ -276,19 +230,12 @@ outcome run, or host task follows from this report.
 
 ## DO NOT DO
 
-- Do not run or reinterpret the frozen S0.
-- Do not move the old entry, observation, threshold, horizon, symbol set, H=52,
-  dates, sign, denominator, or evidence role.
-- Do not use B13-C or S0 evidence to choose a new source, trigger threshold,
-  leader, horizon, or winner symbols.
-- Do not claim that historical event-time order proves live orderability.
-- Do not treat basis convergence as executable Bybit profitability.
-- Do not invent latency, source completeness, opportunity frequency, or fill
-  quality.
-- Do not create a four-fill hedge version as a rescue.
-- Do not build code, acquire data, access VPS/collectors, or dispatch a follow-up
-  task from this worker.
-- Do not merge, close, retarget, or otherwise mutate PR lifecycle.
+Do not run/reinterpret S0; alter its entry, threshold, horizon, symbols, H=52,
+dates, sign, denominator, or evidence role; use prior evidence to select a
+source/threshold/leader; infer live orderability from historical ordering;
+equate basis convergence with Bybit profit; invent latency/frequency/fills;
+create a four-fill rescue; build code/acquire data/access hosts; dispatch a
+follow-up; or mutate PR lifecycle.
 
 ## NO SHARED-STATE CHANGE
 
