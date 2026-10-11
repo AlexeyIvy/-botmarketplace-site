@@ -1,0 +1,116 @@
+{
+  "schema": "sc001.p1.prospective_causal_mechanism_preoutcome_gate.v0.1",
+  "task_id": "SC001-P1-FLOW-CAUSAL-002",
+  "worker_id": "P1_PROSPECTIVE_EVENT",
+  "authorization_class": "T0_DESIGN_ONLY",
+  "priority": 1,
+  "architecture_version": "0.3",
+  "dispatch_base_head": "e1de40ede4f9126078cbd84cd87c85f234b2f458",
+  "stage": "NEW_MECHANISM_GATE_NO_OUTCOME",
+  "origin": {
+    "audited_task": "SC001-P1-FLOW-CLOCK-001",
+    "origin_pr": 468,
+    "exact_result_ref": "ca5c9dfd29b8f77f93d3c30696a647a09b81b6f2",
+    "audit_result_path": "docs/research/sc001-primary-forced-flow-causal-actionability-audit-v0.1.md",
+    "audit_result_sha256": "7f2bf03ae8ccba63dae3a88ef643377aacbe988cc716df636d54df51a9be664f",
+    "control_terminal_id": 6102611272,
+    "control_review_id": 6102625423,
+    "verdict": "CAUSAL_ACTIONABILITY_STATIC_FAIL"
+  },
+  "purpose": "One bounded design-only eligibility decision, not a rescue of frozen S0. Determine whether at most one truly new prospectively observable forced-flow economic architecture is justified for a small independent trader *after* closure/receive/bucket/action latency and direct executable Bybit economic payer. Reject if only entry delay/horizon/threshold changes. No new experiment ID or outcome is authorized.",
+  "necessary_sources": [
+    "docs/research/sc001-research-strategy-agent-charter-v0.1.md",
+    "docs/research/sc001-midcourse-research-strategy-audit-and-governance-amendment-v0.2.md",
+    "docs/research/sc001-edge-to-fill-structural-preflight-v0.1.md",
+    "docs/research/sc001-strategy-manager-portfolio-review-v0.1.md",
+    "docs/research/sc001-next-primary-forced-flow-relative-dislocation-mechanism-fingerprint-v0.2.json",
+    "docs/research/sc001-next-primary-forced-flow-relative-dislocation-s0-protocol-v0.2.md",
+    "docs/research/sc001-b13c-s0-simple-post-liquidation-reversal-sentinel-protocol-v0.1.md",
+    "docs/research/sc001-b13c-s0-simple-reversal-binding-outcome-review-v0.1.md",
+    "docs/research/sc001-primary-forced-flow-causal-actionability-audit-v0.1.md@PR468 exact head"
+  ],
+  "questions": [
+    "Compute static causal order: individual event exchange time, collector receive time, inactivity/late-event watermark, available cross-venue last trades, second-bucket close, decision/order submit time. List missing observable fields and prove no future membership claim.",
+    "Find an economically distinct payer/monetization architecture independent of the rejected frozen E+1..2 S0; if shifting observation time is the main change, classify SAME_MECHANISM_VARIANT or DISGUISED_RESCUE_REJECT and STOP. Do not force a new candidate.",
+    "If a materially different architecture is plausible, propose exactly one mechanism fingerprint DRAFT with payer, capital/risk object, event/receive watermark, online signal state machine, one primary timescale based on economics, 2/4 fill architecture, 52-bps prior as nonpromotional reference only (not recycled frozen hurdle), and fresh independent evidence plan. No new threshold/latency parameter calibration.",
+    "Assess competing null: common-market repricing and one-leg Bybit profitability need not follow from basis compression; require one separate executable Bybit estimand and new confirmation.",
+    "Challenge small-capital latency, order-book stress, source completeness, time-to-opportunity, and capital-time economics before proposing any engineering work.",
+    "Conclude one of STRUCTURAL_REJECT_NO_NEW_MECHANISM, DISTINCT_ARCHITECTURE_STATIC_SURVIVE_DRAFT_ONLY, SOURCE_OR_LATENCY_DEFER. If no independent payer, recommend returning to portfolio reserve B15-P1 without forcing another forced-flow outcome."
+  ],
+  "outputs": {
+    "report_path": "docs/research/sc001-p1-prospective-forced-flow-mechanism-gate-v0.1.md",
+    "max_report_bytes": 12500,
+    "manifest_path": "docs/research/worker-results/sc001-p1-prospective-forced-flow-mechanism-gate-manifest-v0.1.json",
+    "max_manifest_bytes": 5500,
+    "max_new_files": 2,
+    "max_worker_commits": 2,
+    "manifest_last": true,
+    "main_write": false
+  },
+  "event_gate": {
+    "repository": "AlexeyIvy/-botmarketplace-site",
+    "action": "ready_for_review",
+    "title_prefix": "[SC001][P1][READY]",
+    "exact_pr_only": true
+  },
+  "claim_protocol": {
+    "required": true,
+    "claim_write_authorized": true,
+    "one_claim": true,
+    "lease_hours": 3,
+    "fields": [
+      "TASK_ID",
+      "WORKER_ID",
+      "claimed_at_utc",
+      "lease_until_utc",
+      "start_main_head",
+      "architecture_version"
+    ],
+    "duplicate_claim_forbidden": true
+  },
+  "allowed_pr_writes": [
+    "one CLAIM_BLOCK",
+    "exactly two result/manifest files on task branch, manifest LAST",
+    "one TERMINAL RECEIPT —"
+  ],
+  "lifecycle_authority": {
+    "merge": false,
+    "close": false,
+    "retarget": false,
+    "auto_merge": false,
+    "ready_toggle": false,
+    "delete_branch": false
+  },
+  "budgets": {
+    "max_executor_jobs": 0,
+    "max_network_runs": 0,
+    "max_outcome_runs": 0,
+    "max_market_body_access": 0,
+    "max_host_mutations": 0,
+    "max_variants": 0,
+    "max_new_mechanism_drafts": 1,
+    "max_alt_horizons": 0,
+    "max_repair_cycles": 0
+  },
+  "repair_mode": "NONE",
+  "forbidden_actions": [
+    "Research Runner bundles; Test Executor jobs; VPS access; network/source body; read protected outcomes",
+    "live collector state/events, collector modification or health-adapter host install",
+    "price returns correlation PnL, backtests, parameter/horizon scans",
+    "reuse/move/repair frozen 2026-09-30..2026-10-07 outcome interval",
+    "retroactive changes to S0 52 bps, 12 symbols, 7 dates, evidence roles, timestamp semantics or freeze",
+    "auto issue experiment ID or dispatch successor/host task",
+    "shared roadmap/governance/Strategy State/contamination/reusable registry mutation"
+  ],
+  "review_requirements": {
+    "STRATEGY_REVIEW_REQUIRED": true,
+    "CONTINUATION_REVIEW_REQUIRED": true
+  },
+  "terminal_statuses": [
+    "PROSPECTIVE_MECHANISM_STATIC_SURVIVE_DRAFT_ONLY",
+    "PROSPECTIVE_MECHANISM_REJECT_SAME_MECHANISM",
+    "PROSPECTIVE_MECHANISM_DEFER_SOURCE_OR_LATENCY",
+    "STALE_CONTEXT_REVALIDATION_REQUIRED"
+  ],
+  "stop_rule": "ONE T0 task, exact GitHub sources (including reviewed PR468 result pinned at exact head), report and Worker Result Manifest LAST, one terminal, stop. Only Strategy Manager may decide whether a future independent prospective freeze is justified. NO S0 execution."
+}
