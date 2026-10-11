@@ -111,6 +111,11 @@ class HostToolSymlinkPolicyTest(unittest.TestCase):
     def test_absolute_escape_is_rejected(self):
         self.fails("HOST_TOOL_TYPE", FakeFilesystem(self.nodes(), {"/usr/bin/python3": "/opt/python3"}))
 
+    def test_nested_intermediate_component_is_rejected(self):
+        nodes = self.nodes()
+        nodes["/usr/bin/alias/python3.12"] = meta(stat.S_IFREG, 0o755)
+        self.fails("HOST_TOOL_TYPE", FakeFilesystem(nodes, {"/usr/bin/python3": "alias/python3.12"}))
+
     def test_cycle_is_rejected(self):
         nodes = self.nodes(); nodes["/usr/bin/python3.12"] = meta(stat.S_IFLNK, 0o777)
         self.fails("HOST_TOOL_TYPE", FakeFilesystem(nodes, {"/usr/bin/python3": "python3.12", "/usr/bin/python3.12": "python3"}))

@@ -15,11 +15,11 @@
   "deployment_artifacts": {
     "installer": {
       "repository_path": "scripts/research/deploy-sc001-b13c-health-adapter-v0.2.py",
-      "sha256": "3e50ba2b4c537cbb039bf33850e80c5dd165e0e1d94b2a9d6603d690c4e98450"
+      "sha256": "1c06a5bcf5dad06ce4a4df44629c1cc7c59b38377ceb02753796d640f051a8da"
     },
     "regression_test": {
       "repository_path": "tests/research/sc001_p1_b13c_health_installer_host_tool_symlink_test_v0_2.py",
-      "sha256": "45b9b4098727a055fd5afb8862dc4caebfa05e5c5d6f7f2563fcc3938eda6223",
+      "sha256": "56565870f36e8cdbe3a4458241952589ded7204c5779f8f7590ee5015de34372",
       "execution_performed": false
     },
     "installed_adapter": {
@@ -48,7 +48,7 @@
       "symlink_allowed": true,
       "link_requirements": [
         "root:root ownership",
-        "every symlink hop remains lexically below /usr/bin",
+        "every symlink hop is a direct child of /usr/bin, excluding intermediate path components",
         "not dangling",
         "maximum eight links",
         "no cycle"
@@ -122,7 +122,8 @@
       "unsafe link or target ownership fails closed",
       "writable or non-executable target fails closed",
       "dangling, non-regular, escaping and cyclic targets fail closed",
-      "visudo symlink remains forbidden"
+      "visudo symlink remains forbidden",
+      "nested intermediate path components are rejected"
     ]
   },
   "safety_receipts": {

@@ -362,7 +362,10 @@ def _require_host_tool(
         or trusted.st_mode & 0o022
     ):
         fail("HOST_TOOL_TRUST")
-    if not _inside_trusted_directory(path, trusted_directory):
+    if (
+        not _inside_trusted_directory(path, trusted_directory)
+        or path.parent != trusted_directory
+    ):
         fail("HOST_TOOL_TYPE")
 
     current = path
@@ -391,7 +394,10 @@ def _require_host_tool(
             if not target.is_absolute():
                 target = current.parent / target
             current = _absolute_lexical(target)
-            if not _inside_trusted_directory(current, trusted_directory):
+            if (
+                not _inside_trusted_directory(current, trusted_directory)
+                or current.parent != trusted_directory
+            ):
                 fail("HOST_TOOL_TYPE")
             continue
         if not stat.S_ISREG(metadata.st_mode):
