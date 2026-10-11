@@ -1,0 +1,102 @@
+{
+  "schema": "sc001.worker_result_manifest.v0.1",
+  "task_id": "SC001-H1-004J",
+  "worker_id": "H1_HISTORICAL_INDICATORS",
+  "authorization_class": "T0_OFFLINE_ENGINEERING_PACKAGE_ONLY",
+  "architecture_version": "0.3",
+  "task_pr": 470,
+  "task_branch": "sc001/h1/SC001-H1-004J-executable-host-capability-package",
+  "dispatch_main_head": "e1de40ede4f9126078cbd84cd87c85f234b2f458",
+  "revalidated_main_head": "e1de40ede4f9126078cbd84cd87c85f234b2f458",
+  "parent": {
+    "task_id": "SC001-H1-004I",
+    "pr": 467,
+    "final_head": "7b4cbe7fa3e021aac5ae9ce60f2a1bb2e78bb81c",
+    "design_sha256": "9c04ed5796665f311a10acc79ae5cd895eb00112e230f5924595d775f27fabdc",
+    "strategy_review_comment_id": 6100068770
+  },
+  "terminal_status": "H1_CAPABILITY_STATIC_PACKAGE_PREPARED_REVIEW_REQUIRED",
+  "decision": "STATIC_FAIL_CLOSED_PACKAGE_READY_FOR_PROGRAMMER_AND_STRATEGY_REVIEW",
+  "strategy_review_required": true,
+  "continuation_review_required": true,
+  "t3_host_install_authorized": false,
+  "t1_body_acquisition_authorized": false,
+  "artifacts": [
+    {
+      "path": "scripts/research/deploy_sc001_h1_shared_cache_capability_v0_1.py",
+      "sha256": "4fd60e29f4baaeeb417518ff659585c60e08f6145ac63256fdb2f27122a6e687",
+      "bytes": 24847,
+      "commit_sha": "9bc72c01b91bb1063fd149666cf2c194006434e3"
+    },
+    {
+      "path": "tests/research/test_sc001_h1_shared_cache_capability_v0_1.py",
+      "sha256": "4d7d4a4172868f98ef5669fa6f12f3df43d6d199eeef3686be91b0b86532d6be",
+      "bytes": 8618,
+      "commit_sha": "aaa5e95ad86233331107cc7cc0a7b845fad3349c"
+    },
+    {
+      "path": "docs/research/sc001-h1-004j-host-capability-implementation-review-v0.1.md",
+      "sha256": "ebc7a2df43ad44755efa65ae1aa6c733054df76b163549267e7b711342a0a783",
+      "bytes": 9072,
+      "commit_sha": "2df6f15bf6e77a3e5fe8e7156ccd24b383276b64"
+    }
+  ],
+  "frozen_bindings": {
+    "resource_id": "b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf",
+    "test_executor_installer_sha256": "0e9afe9b9a3e12beb7aa451a7608eda3ffa30a46ba9b07faf0a869bfda518968",
+    "acquisition_entrypoint_sha256": "1eb597e3186023540a5ab9929f433f7f5a81b9d587f10386cf2e3e55f625c760",
+    "bodyset_freeze_sha256": "c0798987d86dfb32fdb38e4d7ca525d68850bf41391a0c15e7fa7ed91de2075a",
+    "authorization_policy_sha256": "0ee60f6376876dc13cc42ad8ac8a6fef5d54fc50e8f8322a01e6d64a9cbe0178"
+  },
+  "preserved_limits": {
+    "max_timeout_seconds": 900,
+    "max_single_dataset_bytes": 5368709120,
+    "max_peak_workspace_increment_bytes": 16106127360,
+    "minimum_free_before_start_gib": 25,
+    "frozen_total_network_budget_gib": 10,
+    "frozen_remote_objects": 312
+  },
+  "capability_contract": {
+    "root": "/var/lib/botmarket-test-executor/shared-data/sc001",
+    "ordinary_job_role": "NONE",
+    "roles": [
+      "ACQUIRE_WRITE",
+      "CONSUME_READ_ONLY",
+      "SMOKE_WRITE",
+      "SMOKE_READ_ONLY"
+    ],
+    "root_owned_grant_required": true,
+    "grants_created_by_package": false,
+    "exact_plan_hash_required_for_apply": true,
+    "rollback_preserves_shared_data": true
+  },
+  "blockers_before_acquisition": [
+    "Separate programmer and Strategy Manager review of exact static package.",
+    "Explicit user T3 approval before host apply, grant creation, restart, live preflight, or smoke.",
+    "Separate T1 authorization and deterministic reservation before any request.",
+    "Resolve frozen up-to-10-GiB resource versus active 5-GiB single-dataset cap with a separately frozen source-preserving chunk/resource contract.",
+    "Prove 900-second envelope or separately freeze chunk/resume execution.",
+    "Record disk and protected-collector isolation gates."
+  ],
+  "repo_changed_files_by_worker": [
+    "scripts/research/deploy_sc001_h1_shared_cache_capability_v0_1.py",
+    "tests/research/test_sc001_h1_shared_cache_capability_v0_1.py",
+    "docs/research/sc001-h1-004j-host-capability-implementation-review-v0.1.md",
+    "docs/research/worker-results/sc001-h1-004j-host-capability-implementation-manifest-v0.1.json"
+  ],
+  "worker_commits": 4,
+  "manifest_created_last": true,
+  "verification": "REMOTE_READBACK_AND_STATIC_CONTRACT_REVIEW_ONLY",
+  "installer_or_tests_executed": false,
+  "network_runs": 0,
+  "market_data_bytes": 0,
+  "outcome_runs": 0,
+  "test_executor_jobs": 0,
+  "runner_bundles": 0,
+  "vps_jobs": 0,
+  "host_mutations": 0,
+  "evidence_access_count": 0,
+  "market_body_accessed": false,
+  "protected_outcome_accessed": false,
+  "no_roadmap_change_required": true
+}
