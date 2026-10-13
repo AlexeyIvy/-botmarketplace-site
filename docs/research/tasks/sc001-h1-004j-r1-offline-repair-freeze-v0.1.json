@@ -1,0 +1,164 @@
+{
+  "schema": "sc001.h1_offline_safety_repair_freeze.v0.1",
+  "task_id": "SC001-H1-004J-R1",
+  "worker_id": "H1_HISTORICAL_INDICATORS",
+  "authorization_class": "USER_AUTHORIZED_T0_OFFLINE_REPAIR_ONLY",
+  "REPAIR_MODE": "ONE_USER_AUTHORIZED_OFFLINE_CYCLE",
+  "not_automatic_shared_common_repair": true,
+  "REPAIR_BASE_COMMIT": "422af98fdce33499e3f9c067fecd0c012a84ab76",
+  "main_head": "e1de40ede4f9126078cbd84cd87c85f234b2f458",
+  "parent_pr": 470,
+  "parent_design_pr": 467,
+  "parent_design_head": "7b4cbe7fa3e021aac5ae9ce60f2a1bb2e78bb81c",
+  "review_url": "https://github.com/AlexeyIvy/-botmarketplace-site/pull/470#issuecomment-6106787307",
+  "start_utc": "2026-10-13T10:44:00Z",
+  "deadline_utc": "2026-10-13T14:44:00Z",
+  "strategy_acceptance": {
+    "status": "CONTRACT_ACCEPTED",
+    "received_utc": "2026-10-13T10:47:46Z",
+    "before_code_edits_and_tests": true,
+    "scope": "Exact five-file allowlist and narrow offline safety acceptance; actual apply/rollback and generated launcher, mocked privileged effects; H1 remains BLOCKED."
+  },
+  "failure_class": "USER_AUTHORIZED_REPAIR_OF_KNOWN_SHARED_CONTROL_PLANE_STATIC_DEFECTS",
+  "diagnostic": {
+    "failure_signatures": [
+      "apply receipt only written after systemctl start; failed restart leaves rollback without receipt",
+      "grant_path.resolve erases leaf symlink and no root-owner/non-writable check",
+      "missing required caps default zero and upper-bound-only checks accept zero or invalid scalar coercions"
+    ],
+    "last_known_good_stage": "Static package prepared at exact parent; never executed or deployed",
+    "affected_paths": [
+      "apply/atomic_write/rollback",
+      "patch_launcher generated grant load",
+      "patch_launcher generated cap validation"
+    ],
+    "offline_reproducible": true,
+    "confidence": "HIGH",
+    "coherent_repair_set": [
+      "durable pre-mutation receipt and exact plan-bound rollback including partial apply",
+      "root-owned regular non-group/world-writable grant descriptor with no symlink following",
+      "all three caps required strictly positive exact JSON integers with fixed upper bounds"
+    ],
+    "adjacent_risks": [
+      "reload/start failure and partial target replacement",
+      "missing or tampered receipt, plan, backup and installed target",
+      "resolved symlink bypass and pathname check/read race",
+      "booleans, floats, numeric strings, null, zero, negative caps; timeout over grant"
+    ],
+    "research_semantics_unchanged": true
+  },
+  "source_bindings": {
+    "scripts/research/deploy_sc001_h1_shared_cache_capability_v0_1.py": "4fd60e29f4baaeeb417518ff659585c60e08f6145ac63256fdb2f27122a6e687",
+    "tests/research/test_sc001_h1_shared_cache_capability_v0_1.py": "4d7d4a4172868f98ef5669fa6f12f3df43d6d199eeef3686be91b0b86532d6be",
+    "scripts/mcp/install-botmarket-test-executor-v1.sh": "0e9afe9b9a3e12beb7aa451a7608eda3ffa30a46ba9b07faf0a869bfda518968"
+  },
+  "allowed_new_files": [
+    {
+      "path": "docs/research/tasks/sc001-h1-004j-r1-offline-repair-freeze-v0.1.json",
+      "max_bytes": 12000
+    },
+    {
+      "path": "scripts/research/deploy_sc001_h1_shared_cache_capability_v0_2.py",
+      "max_bytes": 40000
+    },
+    {
+      "path": "tests/research/test_sc001_h1_shared_cache_capability_v0_2.py",
+      "max_bytes": 40000
+    },
+    {
+      "path": "docs/research/sc001-h1-004j-r1-offline-repair-review-v0.1.md",
+      "max_bytes": 14000
+    },
+    {
+      "path": "docs/research/worker-results/sc001-h1-004j-r1-offline-repair-manifest-v0.1.json",
+      "max_bytes": 10000
+    }
+  ],
+  "budgets": {
+    "max_wall_hours": 4,
+    "max_repair_cycles": 1,
+    "max_worker_commits": 4,
+    "max_new_files": 5,
+    "manifest_last": true,
+    "max_vps_jobs": 0,
+    "max_test_executor_jobs": 0,
+    "max_runner_jobs": 0,
+    "max_network_runs": 0,
+    "max_market_data_bytes": 0,
+    "max_outcome_runs": 0,
+    "max_host_mutations": 0,
+    "max_trial_installs": 0,
+    "max_grants_activated": 0
+  },
+  "validation_contract": {
+    "before_execution": "Independent static review and consolidated coherent repair set before first repaired-code validation; any post-execution failure stops, no second changed-code cycle.",
+    "same_identity_checks": [
+      "static syntax/compile and source binding checks",
+      "targeted deterministic rollback/grant/cap regression",
+      "full offline synthetic unit suite",
+      "full clean-process repeat with identical code and tests",
+      "output firewall and identity recheck",
+      "independent adversarial read-only diff review"
+    ],
+    "actual_paths_required": [
+      "v0_2.apply and v0_2.rollback with redirected synthetic temp paths and mocked root/service/ownership effects",
+      "all patchers on exact frozen installer heredocs, compilation of actual generated launcher and execution with synthetic grants and mocked service effects"
+    ],
+    "required_negative_tests": [
+      "failed start/reload restores exact four originals; partial apply recovery",
+      "missing/tampered receipt/plan/backup/target fail closed before rollback side effects",
+      "hostile token, symlink/escape/nonregular grants, nonroot ownership and group/world write",
+      "timeout/dataset/peak missing/null/zero/negative/bool/string/float/above-boundary; min/max accepted; timeout above declared cap refused"
+    ],
+    "no_real_chmod_chown_services_network": true,
+    "cap_contract": {
+      "max_timeout_seconds": {
+        "type": "int_not_bool",
+        "minimum": 1,
+        "maximum": 900
+      },
+      "max_single_dataset_bytes": {
+        "type": "int_not_bool",
+        "minimum": 1,
+        "maximum": 5368709120
+      },
+      "max_peak_workspace_increment": {
+        "type": "int_not_bool",
+        "minimum": 1,
+        "maximum": 16106127360
+      }
+    }
+  },
+  "preserved_gates": {
+    "RESOURCE_ID": "b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf",
+    "acquisition_sha256": "1eb597e3186023540a5ab9929f433f7f5a81b9d587f10386cf2e3e55f625c760",
+    "max_timeout_seconds": 900,
+    "max_single_dataset_bytes": 5368709120,
+    "max_peak_workspace_increment": 16106127360,
+    "min_free_start_bytes": 26843545600,
+    "ordinary_jobs_role": "NONE",
+    "separate_acquire_read_smoke_roles": true
+  },
+  "publication": {
+    "branch": "sc001/h1/SC001-H1-004J-R1-repair",
+    "new_pr_draft": true,
+    "ready_trigger": false,
+    "merge": false,
+    "deploy": false,
+    "lifecycle_authority": false,
+    "ci_observation": "Read-only through terminal; unrelated inherited dependency/security failures remain outside repair scope."
+  },
+  "forbidden": [
+    "modify any existing repository file or frozen parent contract",
+    "live install or service restart",
+    "actual permission/security setting change",
+    "VPS/Runner/Test Executor reads or writes",
+    "grant creation/activation outside synthetic nonfunctional fixtures",
+    "market/source/dataset/protected outcome/trading access",
+    "wider framework or dependency repair",
+    "new scientific authorization, successor dispatch, merge or READY transition"
+  ],
+  "success_status": "OFFLINE_SAFETY_REPAIR_PASS",
+  "remaining_h1_status": "BLOCKED",
+  "failure_status": "OFFLINE_SAFETY_REPAIR_STOP_REVIEW_REQUIRED"
+}
