@@ -79,7 +79,8 @@
     "qualification": "Validate exact instId/instType/instFamily/ctType/settleCcy/ctVal/ctValCcy/ctMult against explicit identity expectations; require live state, finite-positive units, exact FUTURES expiry and valid list/expiry timestamp ordering. No discovery, fallback, symbol replacement or inferred live metadata. Synthetic swap expectations are fixture-only and do not establish actual source qualification.",
     "envelope": "Only current generation, fully acknowledged trades envelope with exact allowed arg/row instrument match can reach the legacy-equivalent finite-positive trade parser. Timestamp strings must be integer milliseconds, capture and receive bounds enforced.",
     "restart": "Persist generation/counters/gaps. Session ACK always resets on nonterminal restart. COMPLETE and already-ended REVIEW are terminal no-retry; never reopen September 25.",
-    "immutable_research": "B14A_P0_DEFER_DATA stays unchanged. Preserve September 25 IDs/window/T0 and 50 bps hurdle as historical constants, never rescue/reconstruct old data. No headroom or other research calculation."
+    "immutable_research": "B14A_P0_DEFER_DATA stays unchanged. Preserve September 25 IDs/window/T0 and 50 bps hurdle as historical constants, never rescue/reconstruct old data. No headroom or other research calculation.",
+    "endpoint_literal": "The new offline-only v0.4 adapter argument uses the prespecified official443 URL wss://ws.okx.com/ws/v5/public. This is an inert literal, not authorization for network access, source acquisition or live integration. The frozen v0.3 :8443 URL and all historical artifacts remain unchanged."
   },
   "required_synthetic_cases": [
     "all four fresh ACKs",
@@ -149,5 +150,15 @@
       "remaining_risks"
     ],
     "completion_barrier": "Publish report last after exact passing hashes, independent adversarial diff review and current-main revalidation. PASS is offline engineering evidence only; no live deployment, arming, source qualification or research promotion."
-  }
+  },
+  "contract_revision": "0.1.1",
+  "clarification_history": [
+    {
+      "revision": "0.1.1",
+      "date_utc": "2026-10-13T10:34:00Z",
+      "prior_contract_commit": "b38369a5a5968ef31e0da409919143a23a2a2770",
+      "prior_contract_sha256": "13dc20b92372a21724c8de3c85e2d7dd3f72cc116ad8e9c078ee98a6430f9d90",
+      "reason": "Clarify parent-prespecified inert official443 endpoint literal before first test execution; no expansion of research or execution scope."
+    }
+  ]
 }
