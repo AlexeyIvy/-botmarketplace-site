@@ -1,0 +1,164 @@
+{
+  "schema": "sc001.p1_b14a_offline_correctness_repair_task.v0.1",
+  "task_id": "SC001-P1-B14A-OFFLINE-CORRECTNESS-R1",
+  "parent_task_id": "SC001-B14A-P0",
+  "worker_id": "P1_PROSPECTIVE_EVENT",
+  "authorization_class": "EXPLICIT_USER_APPROVED_OFFLINE_REPAIR",
+  "authorization_source": "User explicitly approved one bounded offline B14-A repair cycle after the proposed four-hour scope; Strategy Manager accepted the minimal versioned task freeze on 2026-10-13.",
+  "priority": 1,
+  "dispatch_base_head": "e1de40ede4f9126078cbd84cd87c85f234b2f458",
+  "architecture_version": "0.3",
+  "purpose": "Repair B14-A collector correctness in a separate version and prove actual receive/reconnect/restart/qualification flow with deterministic in-memory synthetic fixtures. No live integration or prospective event admission.",
+  "repair_version": "0.4",
+  "repair_mode": "AUTO_PRE_OUTCOME",
+  "failure_class": "TASK_LOCAL_STATE_MACHINE_IMPLEMENTATION_DEFECT_AGAINST_ALREADY_FROZEN_RULE",
+  "started_at_utc": "2026-10-13T10:13:00Z",
+  "hard_deadline_utc": "2026-10-13T14:13:00Z",
+  "max_wall_hours": 4,
+  "max_repair_cycles": 1,
+  "max_changed_task_local_files": 4,
+  "max_new_canonical_files": 4,
+  "max_executions": 1,
+  "max_network_runs": 0,
+  "max_outcome_runs": 0,
+  "variant_budget": 0,
+  "execution_budget_definition": "One coherent repair identity, tested through static/import, targeted, adjacent and full deterministic preflight. Repeating identical tests for reproducibility is allowed; a changed executable identity after a failing test consumes the one repair cycle. A recurring failure or further correction beyond that single cycle stops. No Test Executor or Runner jobs.",
+  "strategy_review_required": false,
+  "continuation_review_required": true,
+  "parent_refs": [
+    {
+      "path": "research/sc001/sc001_b14a_p0_prospective_trade_collector_v0_3.py",
+      "sha256": "f6a8e03bc9f91f300cd36cd5d3773b4cc9ede726485feff4f2e5337a45a23ae3"
+    },
+    {
+      "path": "docs/research/sc001-b14a-p0-collector-implementation-freeze-v0.3.json",
+      "sha256": "a501b7c94f83079d649aa94d8e5e447a6a077cdf365aebd711daf23d2924fefc"
+    },
+    {
+      "path": "docs/research/sc001-b14a-p0-collector-operational-resilience-v0.2.md",
+      "sha256": "e48ef64818c8326c0d1cff1d3bafb5c70aaf10cf0acc9ca283565b2ca7a69ec4"
+    },
+    {
+      "path": "docs/research/sc001-b14a-p0-transport-root-cause-review-v0.1.md",
+      "sha256": "f31ffd07cb5d867c2363c25108bef14f5ae0e356caaef2229fca6fd804f76bc6"
+    },
+    {
+      "path": "docs/research/sc001-b14a-p0-prospective-2026-09-25-headroom-protocol-v0.1.md",
+      "sha256": "90c0a28b7fab8d2d88f1e54f207e50e03ba300dcbd9b55698aed15fd1b215799"
+    },
+    {
+      "path": "docs/research/sc001-b14a-exact-12-future-expiry-identity-freeze-v0.1.json",
+      "sha256": "84692327ded8896a8f41e44418cbc56cfbaab0ff2d8108515f1e7937044bec16"
+    },
+    {
+      "path": "docs/research/sc001-b14a-p0-v0.2-post-event-restart-guard-review-v0.1.md",
+      "sha256": "8407578b9c4227397b3fc9e8fd84e4feef1170246088460d986adb4df0fe0562"
+    },
+    {
+      "path": "docs/research/sc001-execution-worker-routing-and-automation-architecture-v0.3.md",
+      "sha256": "51f7b9f931147026701265c170e246608a42c892e962904f570bda1a68a74ba2"
+    },
+    {
+      "path": "docs/research/sc001-implementation-debugging-and-repair-control-v0.1.md",
+      "sha256": "7118b269490f90121fc1cdcfa09e3b57827a4082eca9ee7bbb0d9efa1da36fd9"
+    }
+  ],
+  "allowed_changed_files": [
+    "docs/research/tasks/sc001-p1-b14a-offline-correctness-repair-r1.json",
+    "research/sc001/sc001_b14a_p0_prospective_trade_collector_v0_4.py",
+    "tests/research/sc001_b14a_p0_collector_correctness_test_v0_4.py",
+    "docs/research/worker-results/sc001-p1-b14a-offline-correctness-repair-r1-result.json"
+  ],
+  "implementation_contract": {
+    "form": "Separate versioned collector module containing the actual qualification/receive/reconnect/restart flow, driven by explicit transport/clock/persistence interfaces. Synthetic adapters only in this task. No default live adapter or collection CLI; default invocation must fail closed.",
+    "legacy": "All v0.1/v0.2/v0.3 collector files, frozen protocols, old freezes, actual state and raw logs remain byte-identical and unread by tests.",
+    "request_id": "ASCII alphanumeric 1..32 characters; unique for every connection generation; counter persisted across process restart.",
+    "ack": "ACK belongs to current connection generation and request ID, exact trades channel and frozen instrument. Duplicates are idempotent; missing, partial, stale and mismatched ACK cannot ready the session.",
+    "deadline": "Monotonic fixed ACK deadline checked before blocking and after every receive, including pong, invalid JSON, unrelated controls and trades. Exact deadline expires. Duplicate/irrelevant traffic cannot extend it.",
+    "gap": "Open availability gap from first unready attempt/disconnect; preserve earliest start across failed attempts; close only after successful connect plus all fresh ACKs. Restart retains the open gap; no phantom ready or silent gap closure.",
+    "qualification": "Validate exact instId/instType/instFamily/ctType/settleCcy/ctVal/ctValCcy/ctMult against explicit identity expectations; require live state, finite-positive units, exact FUTURES expiry and valid list/expiry timestamp ordering. No discovery, fallback, symbol replacement or inferred live metadata. Synthetic swap expectations are fixture-only and do not establish actual source qualification.",
+    "envelope": "Only current generation, fully acknowledged trades envelope with exact allowed arg/row instrument match can reach the legacy-equivalent finite-positive trade parser. Timestamp strings must be integer milliseconds, capture and receive bounds enforced.",
+    "restart": "Persist generation/counters/gaps. Session ACK always resets on nonterminal restart. COMPLETE and already-ended REVIEW are terminal no-retry; never reopen September 25.",
+    "immutable_research": "B14A_P0_DEFER_DATA stays unchanged. Preserve September 25 IDs/window/T0 and 50 bps hurdle as historical constants, never rescue/reconstruct old data. No headroom or other research calculation.",
+    "endpoint_literal": "The new offline-only v0.4 adapter argument uses the prespecified official443 URL wss://ws.okx.com/ws/v5/public. This is an inert literal, not authorization for network access, source acquisition or live integration. The frozen v0.3 :8443 URL and all historical artifacts remain unchanged."
+  },
+  "required_synthetic_cases": [
+    "all four fresh ACKs",
+    "missing ACK",
+    "partial ACK",
+    "duplicate ACK",
+    "prior-generation stale ACK",
+    "wrong request ID/channel/instrument ACK",
+    "continuous non-ACK traffic to exact deadline",
+    "ACK received after blocking past deadline",
+    "failed connect and partial reconnect remain one open gap",
+    "gap closes at final fresh ACK, not connect attempt",
+    "socket close/error/staleness and deterministic backoff",
+    "restart after ready resets ACK and generation",
+    "restart while gap open preserves earliest gap",
+    "COMPLETE no-retry",
+    "ended non-COMPLETE terminal REVIEW",
+    "identity/type/family/settlement/unit mismatch",
+    "invalid/missing/NaN/Infinity/zero/negative units",
+    "invalid list/expiry timestamps",
+    "trade envelope instrument mismatch and receive/event bounds",
+    "no real network/filesystem evidence access",
+    "full-flow integration and deterministic repeated result"
+  ],
+  "forbidden_actions": [
+    "market or exchange network access",
+    "live subscription ACK",
+    "actual collector state/raw log reads",
+    "VPS access/deploy/services/jobs/security/keys",
+    "Test Executor or Runner/Runner Probe launch",
+    "new prospective event/symbol/source or timing selection",
+    "capture or archive body access",
+    "research-rule/threshold/outcome/price/PnL/return/fill/signal changes",
+    "frozen artifact edits or September 25 rescue",
+    "shared-state/roadmap/governance/contamination/reusable registry writes",
+    "merge/deploy/ready_for_review/READY-title automation dispatch"
+  ],
+  "publication": {
+    "branch": "sc001/p1/sc001-p1-b14a-offline-correctness-r1-repair",
+    "base": "main",
+    "draft_pr_only": true,
+    "ready_transition": false,
+    "merge_authorized": false,
+    "independent_review_required_before_final_code_publish": true
+  },
+  "result_contract": {
+    "path": "docs/research/worker-results/sc001-p1-b14a-offline-correctness-repair-r1-result.json",
+    "status_values": [
+      "B14A_OFFLINE_CORRECTNESS_PASS",
+      "B14A_OFFLINE_CORRECTNESS_BLOCKED",
+      "STALE_CONTEXT_REVALIDATION_REQUIRED"
+    ],
+    "required_fields": [
+      "task_ref_sha256",
+      "base_head",
+      "new_implementation_sha256",
+      "test_sha256",
+      "legacy_input_sha256",
+      "failure_diagnostic",
+      "adjacent_defect_sweep",
+      "validation_ladder",
+      "synthetic_case_results",
+      "repair_cycles_consumed",
+      "outcome_accessed",
+      "protected_evidence_accessed",
+      "network_calls",
+      "remaining_risks"
+    ],
+    "completion_barrier": "Publish report last after exact passing hashes, independent adversarial diff review and current-main revalidation. PASS is offline engineering evidence only; no live deployment, arming, source qualification or research promotion."
+  },
+  "contract_revision": "0.1.1",
+  "clarification_history": [
+    {
+      "revision": "0.1.1",
+      "date_utc": "2026-10-13T10:34:00Z",
+      "prior_contract_commit": "b38369a5a5968ef31e0da409919143a23a2a2770",
+      "prior_contract_sha256": "13dc20b92372a21724c8de3c85e2d7dd3f72cc116ad8e9c078ee98a6430f9d90",
+      "reason": "Clarify parent-prespecified inert official443 endpoint literal before first test execution; no expansion of research or execution scope."
+    }
+  ]
+}

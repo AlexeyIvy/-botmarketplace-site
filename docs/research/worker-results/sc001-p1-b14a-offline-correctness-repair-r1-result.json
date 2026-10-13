@@ -1,0 +1,302 @@
+{
+  "schema": "sc001.p1_b14a_offline_correctness_repair_result.v0.1",
+  "task_id": "SC001-P1-B14A-OFFLINE-CORRECTNESS-R1",
+  "worker_id": "P1_PROSPECTIVE_EVENT",
+  "status": "B14A_OFFLINE_CORRECTNESS_PASS",
+  "date": "2026-10-13",
+  "started_at_utc": "2026-10-13T10:13:00Z",
+  "validation_completed_at_utc": "2026-10-13T10:37:00Z",
+  "hard_deadline_utc": "2026-10-13T14:13:00Z",
+  "elapsed_wall_minutes_at_validation": 24,
+  "task_ref": "docs/research/tasks/sc001-p1-b14a-offline-correctness-repair-r1.json",
+  "task_ref_sha256": "38ac9bb962a0d87cc58e32955b0845d1629319bf7fcce4228d6bcd4de748f71a",
+  "base_head": "e1de40ede4f9126078cbd84cd87c85f234b2f458",
+  "revalidated_main_head": "e1de40ede4f9126078cbd84cd87c85f234b2f458",
+  "task_freeze_commits": [
+    "b38369a5a5968ef31e0da409919143a23a2a2770",
+    "2e1985ed0d0315ce97687adbf608d8b16ec968aa"
+  ],
+  "new_implementation_path": "research/sc001/sc001_b14a_p0_prospective_trade_collector_v0_4.py",
+  "new_implementation_sha256": "5f7a65b8f6a23f33919d1a88e0eed0bbba06ef0be38d0d687a260407372c85c5",
+  "test_path": "tests/research/sc001_b14a_p0_collector_correctness_test_v0_4.py",
+  "test_sha256": "1ff18d48ac90eedad226b50323b959c20b51ff42982821319f6157caee30f5bb",
+  "legacy_input_path": "research/sc001/sc001_b14a_p0_prospective_trade_collector_v0_3.py",
+  "legacy_input_sha256": "f6a8e03bc9f91f300cd36cd5d3773b4cc9ede726485feff4f2e5337a45a23ae3",
+  "failure_diagnostic": {
+    "original_signature": "OKX 60033 Parameter id error for b14ap0-sub; static adjacent invariant violations",
+    "traceback": "No new legacy execution. Original exchange error is frozen in transport-root-cause review; exact observed static sites: collect() subscribe ID, timeout-only ACK deadline, pre-connect gap closure, sticky state ACK, qualify_instruments() unvalidated units.",
+    "first_failing_invariant": "Subscription request ID must be ASCII alphanumeric 1..32 characters.",
+    "last_known_good_stage": "Read-only source identity and frozen transport failure evidence; no market outcome.",
+    "failure_class": "TASK_LOCAL_STATE_MACHINE_IMPLEMENTATION_DEFECT_AGAINST_ALREADY_FROZEN_RULE",
+    "root_cause": "Collector control flow mixed connection availability with attempted connection and persisted event state. ACK identity/deadline/qualification were not treated as fail-closed session invariants.",
+    "confidence": "HIGH",
+    "offline_reproduction": true,
+    "adjacent_sweep": [
+      "full v0.3 collect/parse_trade/qualify/load-state/main paths",
+      "all versioned collector identities and systemd references only statically, unchanged",
+      "persisted true ACK survives reconnect/restart",
+      "deadline bypass by continuous non-ACK traffic",
+      "gap ends before connect success and fresh ACK",
+      "each repeated failure can erase earliest outage",
+      "unmatched outer/row instrument accepted",
+      "JSON non-object and malformed controls",
+      "ended/COMPLETE no-retry before network/dependency work",
+      "persisted epoch reuse after process restart",
+      "ctMult/family/unit and timestamp validation absent",
+      "no default state path or live adapter in new offline artifact"
+    ],
+    "frozen_research_semantics_unchanged": true
+  },
+  "adjacent_defect_sweep": {
+    "reviewed_surface": "Versioned v0.3 collect/qualify/parse/state/restart/terminal paths, exact frozen protocols and v0.4 full control flow.",
+    "coherent_repairs": [
+      "ASCII alphanumeric per-generation IDs persisted before subscribe.",
+      "ACK identity tied to current generation request ID, trades channel, exact instrument and consistent connection ID; fresh set on every attempt/restart.",
+      "Fixed monotonic ACK deadline checked before and after receive, including continuous non-ACK traffic and blocking overruns.",
+      "Availability gap spans failed attempts and partial subscriptions; closes only at full current-session ACK.",
+      "Exact instrument identity and finite-positive units checked against explicit expectations; timestamp schema/order and live state fail closed.",
+      "Trade envelope/row instrument match, exact millisecond timestamps and independent receive/event capture bounds.",
+      "Receipt timestamp sampled immediately after recv, preserved across slow persistence.",
+      "Malformed row types rejected; fatal implementation/clock errors clear readiness and persist terminal REVIEW without retry.",
+      "Completed/ended events do not qualify instruments or reconnect; no legacy state migration."
+    ],
+    "independent_static_findings_resolved_before_first_execution": [
+      "Unhashable malformed side value could raise TypeError: string check plus []/{} full-flow negatives.",
+      "Legacy-byte hash read inside test violated unread-by-tests constraint: moved to external static preflight.",
+      "Persistence latency shifted receive timestamps: fixed receipt-time sampling with both capture-boundary regressions.",
+      "Malformed wall clock could escape retry cleanup: fatal ClockError conversion plus invalid/backwards clock regressions.",
+      "Official443 inert literal needed explicit contract clarification: revision 0.1.1 committed/read back before tests.",
+      "Frozen instrument constants needed independent literal assertions rather than self-derived fixtures."
+    ]
+  },
+  "files_changed": [
+    "docs/research/tasks/sc001-p1-b14a-offline-correctness-repair-r1.json",
+    "research/sc001/sc001_b14a_p0_prospective_trade_collector_v0_4.py",
+    "tests/research/sc001_b14a_p0_collector_correctness_test_v0_4.py",
+    "docs/research/worker-results/sc001-p1-b14a-offline-correctness-repair-r1-result.json"
+  ],
+  "existing_frozen_files_changed": [],
+  "repair_cycles_consumed": 1,
+  "additional_post_failure_repair_cycles": 0,
+  "failed_test_runs": 0,
+  "distinct_executable_identities_tested": 1,
+  "test_invocations": {
+    "targeted_regression": 1,
+    "full_preflight": 1,
+    "clean_process_repeat": 1,
+    "definition": "Validation ladder invocations of the same reviewed identity, within the task's explicit single-cycle budget definition."
+  },
+  "validation_ladder": {
+    "static_syntax": "PASS: AST parse and py_compile for both new Python files.",
+    "input_contract": "PASS: all 9 frozen parent file hashes matched during external static preflight.",
+    "targeted_regression": "PASS: 7 targeted full-flow regressions.",
+    "adjacent_and_full_preflight": "PASS: all 39 test methods, including all required synthetic cases and adversarial boundaries.",
+    "clean_process_repeat": "PASS: all 39 methods in isolated Python -I -B process; identical test statuses. Full-flow deterministic test compares complete serialized state/log/request/capture fixtures.",
+    "output_firewall": "PASS: validation logs contain no raw fixture price fields or protected outcome fields; summary contains no trade prices.",
+    "identity": "PASS: implementation, test and task SHA256 unchanged after all validation.",
+    "main_revalidation": "PASS: current main equals dispatch_base_head.",
+    "independent_review": "PASS: separate read-only reviewer inspected full control flow, tests and captured validation outputs; independently rehashed exact files. Reviewer did not independently execute tests."
+  },
+  "commands": [
+    "python -m py_compile research/sc001/sc001_b14a_p0_prospective_trade_collector_v0_4.py tests/research/sc001_b14a_p0_collector_correctness_test_v0_4.py",
+    "Targeted unittest.TestSuite: seven named CollectorIntegrationTests/RestartTests/QualificationTests cases, same test module and code identity.",
+    "python tests/research/sc001_b14a_p0_collector_correctness_test_v0_4.py",
+    "python -I -B tests/research/sc001_b14a_p0_collector_correctness_test_v0_4.py"
+  ],
+  "python_version": "3.12.14",
+  "full_preflight_terminal_token": "B14A_OFFLINE_CORRECTNESS_V04_SYNTHETIC_PASS",
+  "full_preflight_test_count": 39,
+  "full_preflight_seconds": 4.255,
+  "clean_repeat_seconds": 4.308,
+  "synthetic_case_results": [
+    {
+      "name": "test_all_four_fresh_acks_and_trade_flow",
+      "status": "PASS"
+    },
+    {
+      "name": "test_continuous_non_ack_traffic_cannot_bypass_deadline",
+      "status": "PASS"
+    },
+    {
+      "name": "test_deterministic_full_flow_result",
+      "status": "PASS"
+    },
+    {
+      "name": "test_end_crossed_during_connect_does_not_subscribe",
+      "status": "PASS"
+    },
+    {
+      "name": "test_end_crossed_during_receive_does_not_admit_final_ack",
+      "status": "PASS"
+    },
+    {
+      "name": "test_exact_deadline_and_late_recv_ack_rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "test_failed_connect_partial_reconnect_preserve_earliest_gap",
+      "status": "PASS"
+    },
+    {
+      "name": "test_first_connect_failures_remain_one_open_gap",
+      "status": "PASS"
+    },
+    {
+      "name": "test_invalid_monotonic_clock_aborts_without_retry",
+      "status": "PASS"
+    },
+    {
+      "name": "test_invalid_or_backward_wall_clock_aborts_without_retry",
+      "status": "PASS"
+    },
+    {
+      "name": "test_invalid_trade_rows_and_non_object_messages",
+      "status": "PASS"
+    },
+    {
+      "name": "test_just_before_deadline_is_accepted",
+      "status": "PASS"
+    },
+    {
+      "name": "test_missing_ack_expires_on_socket_timeouts",
+      "status": "PASS"
+    },
+    {
+      "name": "test_partial_and_duplicate_acks_do_not_extend_deadline",
+      "status": "PASS"
+    },
+    {
+      "name": "test_pre_ack_trade_and_mismatched_envelope_not_admitted",
+      "status": "PASS"
+    },
+    {
+      "name": "test_receipt_timestamp_survives_sink_latency_at_capture_boundaries",
+      "status": "PASS"
+    },
+    {
+      "name": "test_receive_and_event_time_bounds_both_required",
+      "status": "PASS"
+    },
+    {
+      "name": "test_reconnect_resets_ack_and_rejects_prior_generation",
+      "status": "PASS"
+    },
+    {
+      "name": "test_recv_timeout_is_shortened_near_ack_deadline",
+      "status": "PASS"
+    },
+    {
+      "name": "test_source_error_socket_close_and_staleness_fail_closed",
+      "status": "PASS"
+    },
+    {
+      "name": "test_unexpected_programming_error_is_not_retried",
+      "status": "PASS"
+    },
+    {
+      "name": "test_waiting_heartbeat_and_stopped_before_connection",
+      "status": "PASS"
+    },
+    {
+      "name": "test_wrong_request_channel_instrument_connection_and_error_code",
+      "status": "PASS"
+    },
+    {
+      "name": "test_historical_constants_remain_frozen",
+      "status": "PASS"
+    },
+    {
+      "name": "test_no_live_adapter_and_cli_fail_closed",
+      "status": "PASS"
+    },
+    {
+      "name": "test_summary_contains_no_outcome_or_fixture_prices",
+      "status": "PASS"
+    },
+    {
+      "name": "test_exact_identity_and_unit_mismatches_fail_before_transport",
+      "status": "PASS"
+    },
+    {
+      "name": "test_expiry_listing_and_swap_expiry_semantics",
+      "status": "PASS"
+    },
+    {
+      "name": "test_invalid_expected_mapping_cannot_select_another_product",
+      "status": "PASS"
+    },
+    {
+      "name": "test_missing_fields_invalid_units_and_timestamps",
+      "status": "PASS"
+    },
+    {
+      "name": "test_positive_all_instrument_identities",
+      "status": "PASS"
+    },
+    {
+      "name": "test_response_schema_duplicate_rows_and_error_codes",
+      "status": "PASS"
+    },
+    {
+      "name": "test_complete_is_no_write_no_qualification_no_connection",
+      "status": "PASS"
+    },
+    {
+      "name": "test_ended_non_complete_and_missing_state_are_terminal",
+      "status": "PASS"
+    },
+    {
+      "name": "test_generation_overflow_cannot_create_invalid_request_id",
+      "status": "PASS"
+    },
+    {
+      "name": "test_invalid_state_and_event_identity_fail_closed",
+      "status": "PASS"
+    },
+    {
+      "name": "test_restart_keeps_earliest_open_gap",
+      "status": "PASS"
+    },
+    {
+      "name": "test_restart_resets_ready_and_increments_generation_before_send",
+      "status": "PASS"
+    },
+    {
+      "name": "test_terminal_review_before_end_does_not_retry",
+      "status": "PASS"
+    }
+  ],
+  "validation_log_sha256": {
+    "targeted.log": "043fdbce9372ac5b1c7dad05d0f2731c8ea4e623e7d88000bd93a36d5fd08426",
+    "full.log": "bff5c08a98e192d4860740decf4b47d346baf86cb5deeed6e538c23cb6bbed40",
+    "clean-repeat.log": "211fd5fd2c654eb962493a00987710b057967865ac9f7df614f899b60e62f4a6"
+  },
+  "network_calls": 0,
+  "market_data_accessed": false,
+  "collector_state_accessed": false,
+  "outcome_accessed": false,
+  "protected_evidence_accessed": false,
+  "test_executor_jobs": 0,
+  "runner_jobs": 0,
+  "vps_mutations": 0,
+  "collection_activated": false,
+  "synthetic_fixture_notice": "Hand-authored px/sz values exist only in parser fixtures. No fills, prices from markets, performance measures, PnL, returns or alpha outcomes were generated or read.",
+  "research_disposition": "September 25 B14A_P0_DEFER_DATA remains unchanged. This result is engineering correctness evidence only.",
+  "parser_compatibility": "Normal source string rows retain finite-positive parsing semantics. v0.4 is intentionally stricter than v0.3 for px/sz string type and surrounding whitespace, string tradeId, timestamps and envelope identity. It is not a byte-for-byte parser-equivalence claim.",
+  "endpoint_notice": "New v0.4 carries inert official443 URL as clarified in task revision 0.1.1. No socket/network was opened; frozen v0.3 :8443 literal remains unchanged.",
+  "remaining_risks": [
+    "No live network adapter or filesystem persistence adapter is included or admitted.",
+    "Real subscription ACK, endpoint reachability, current instrument metadata/listing, fees and actual market behavior are untested.",
+    "Durable filesystem failure/recovery, systemd/service behavior and deployment integration are outside this in-memory offline validation.",
+    "Swap unit expectations in tests are synthetic, not evidence of real instrument qualification.",
+    "Repository-wide Node/API/web checks were not run locally; the local checkout contains task-specific files only.",
+    "Any future prospective event requires exact new instrument/event/implementation freeze, separate user admission and live transport preflight.",
+    "Draft review result does not authorize merge, deployment, collection, research promotion or September 25 reconstruction."
+  ],
+  "strategy_review_required": false,
+  "continuation_review_required": true,
+  "merge_authorized": false,
+  "next_allowed_action": "Review this draft and separately admit any successor. H1 remains a separate task; no B14-A live collection is authorized.",
+  "validated_implementation_commit": "11d385bedbba2261bf2e4ea55c3bb66eda638017",
+  "remote_implementation_readback": "PASS: exact reviewed source and test bytes re-read from implementation commit before result publication."
+}
