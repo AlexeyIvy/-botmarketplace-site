@@ -1,0 +1,180 @@
+{
+  "schema": "sc001.worker_result_manifest.v0.1",
+  "task_id": "SC001-H1-004J-R1",
+  "worker_id": "H1_HISTORICAL_INDICATORS",
+  "architecture_version": "0.3",
+  "authorization_class": "USER_AUTHORIZED_T0_OFFLINE_REPAIR_ONLY",
+  "REPAIR_MODE": "ONE_USER_AUTHORIZED_OFFLINE_CYCLE",
+  "task_pr": 478,
+  "task_branch": "sc001/h1/SC001-H1-004J-R1-repair",
+  "dispatch_main_head": "e1de40ede4f9126078cbd84cd87c85f234b2f458",
+  "revalidated_main_head": "e1de40ede4f9126078cbd84cd87c85f234b2f458",
+  "repair_base_commit": "422af98fdce33499e3f9c067fecd0c012a84ab76",
+  "parent_pr": 470,
+  "parent_design_pr": 467,
+  "terminal_status": "OFFLINE_SAFETY_REPAIR_PASS",
+  "h1_research_state": "BLOCKED",
+  "decision": "NARROW_OFFLINE_SAFETY_REPAIR_ACCEPTED_NO_HOST_OR_RESEARCH_GATE_OPENED",
+  "freeze": {
+    "path": "docs/research/tasks/sc001-h1-004j-r1-offline-repair-freeze-v0.1.json",
+    "sha256": "ddfdd1946de45f39bcc85b2a9528b482d566f35db71bb0c2a52baab97c5d9315",
+    "bytes": 7224,
+    "commit_sha": "27e90b67a9e51dfa318114c59513a42b67f5b667",
+    "persisted_and_remote_verified_before_code_edits": true
+  },
+  "artifacts": [
+    {
+      "path": "scripts/research/deploy_sc001_h1_shared_cache_capability_v0_2.py",
+      "sha256": "1149a73122cd9baa2149493cc80e01f145ecab0b5c1823aed52f063223270aab",
+      "bytes": 31661,
+      "commit_sha": "fbb1212e21a20ccacd73b5590c6aaf9ef27faa58"
+    },
+    {
+      "path": "tests/research/test_sc001_h1_shared_cache_capability_v0_2.py",
+      "sha256": "79047512ee6dda156f195a81e7b27a0078156f7d4c3f33628910f3388f09d5f4",
+      "bytes": 36822,
+      "commit_sha": "fbb1212e21a20ccacd73b5590c6aaf9ef27faa58"
+    },
+    {
+      "path": "docs/research/sc001-h1-004j-r1-offline-repair-review-v0.1.md",
+      "sha256": "12d0ad70c848f7dba2870706fff644b76dfdd46ee3a58788b73895313dc3abaf",
+      "bytes": 9754,
+      "commit_sha": "fbb1212e21a20ccacd73b5590c6aaf9ef27faa58"
+    }
+  ],
+  "source_artifacts_preserved": {
+    "scripts/research/deploy_sc001_h1_shared_cache_capability_v0_1.py": "4fd60e29f4baaeeb417518ff659585c60e08f6145ac63256fdb2f27122a6e687",
+    "tests/research/test_sc001_h1_shared_cache_capability_v0_1.py": "4d7d4a4172868f98ef5669fa6f12f3df43d6d199eeef3686be91b0b86532d6be",
+    "scripts/mcp/install-botmarket-test-executor-v1.sh": "0e9afe9b9a3e12beb7aa451a7608eda3ffa30a46ba9b07faf0a869bfda518968"
+  },
+  "repair": {
+    "cycles_consumed": 1,
+    "max_cycles": 1,
+    "root_causes": [
+      "receipt persisted only after successful restart",
+      "resolved grant symlink and missing root-owner/non-write checks",
+      "mandatory caps defaulted to zero and used coercive upper-bound validation"
+    ],
+    "confidence": "HIGH",
+    "adjacent_sweep_before_execution": true,
+    "changes": [
+      "durable PREPARED receipt before first service/target mutation; exact-plan-bound prevalidated rollback",
+      "authority-directory/file descriptor trust, root ownership, no group/world write, nofollow/nonblocking grant read",
+      "mandatory positive exact integer timeout/dataset/peak grant caps within unchanged ceilings",
+      "directly required negative fixtures and same-identity clean-process preflight"
+    ],
+    "assertions_weakened": false,
+    "changed_code_retry": false,
+    "source_evidence_research_semantics_unchanged": true
+  },
+  "validation": {
+    "python": "3.12.14",
+    "completed_utc": "2026-10-13T11:03:19Z",
+    "syntax": "PASS",
+    "frozen_identity": "PASS",
+    "targeted_tests": 9,
+    "targeted_result": "PASS",
+    "full_tests": 51,
+    "full_result": "PASS",
+    "clean_process_repeat_tests": 51,
+    "clean_process_repeat_result": "PASS",
+    "output_firewall": "PASS",
+    "temporary_fixture_cleanup": "PASS",
+    "implementation_hashes_unchanged_before_after": true,
+    "actual_paths": [
+      "v0_2.apply and v0_2.rollback on redirected temporary files, real byte I/O, mocked privileged effects",
+      "all patchers on exact frozen installer heredocs; generated runner/launcher/server compilation",
+      "actual generated launcher flow with only five path constants redirected"
+    ],
+    "privileged_calls_mocked": [
+      "geteuid",
+      "chmod",
+      "chown",
+      "fchmod",
+      "fchown",
+      "systemctl",
+      "systemd-run"
+    ],
+    "network_and_unexpected_processes_blocked": true,
+    "log_sha256": {
+      "static": "31b5747a453ae8549418e6d9a430f9168142120275bf75d88fd8b54af5e572ee",
+      "targeted": "3adfbe6145d74e768da1455c968b8c4177cae703a8c498e8b2b8cd08412e8294",
+      "full": "af5eacab0b1c7e5279d24522a99550da16eed3cec2b30fc6e8f62e7959de42ca",
+      "clean_repeat": "6f19b8163e2c9bdbcb081b3177da0943f39bcfab6684dae0addb4c36cf59fba2"
+    }
+  },
+  "reviews": {
+    "independent_prevalidation": "ACCEPTED_BEFORE_FIRST_CODE_EXECUTION",
+    "independent_final": "OFFLINE_SAFETY_REPAIR_PASS",
+    "actual_strategy_contract_acceptance_utc": "2026-10-13T10:47:00Z",
+    "actual_strategy_final_utc": "2026-10-13T16:19:00Z",
+    "actual_strategy_final": "OFFLINE_SAFETY_REPAIR_PASS",
+    "actual_strategy_h1_state": "BLOCKED",
+    "new_reproducible_blockers": [],
+    "strategy_review_limit": "Full source/test/freeze/report/log bundle reviewed; supplied executor/reviewer evidence accepted; strategist did not independently execute tests or GitHub."
+  },
+  "timing": {
+    "engineering_started_utc": "2026-10-13T10:44:00Z",
+    "engineering_deadline_utc": "2026-10-13T14:44:00Z",
+    "code_and_tests_frozen_utc": "2026-10-13T11:03:19Z",
+    "engineering_completed_before_deadline": true,
+    "post_deadline_code_edits_or_tests": false,
+    "administrative_completion_after_deadline": "Only explicit user-approved public publication, actual strategy review and read-only remote/CI verification resumed; no engineering budget extension."
+  },
+  "publication": {
+    "user_explicitly_approved_public_files": true,
+    "repository": "AlexeyIvy/-botmarketplace-site",
+    "draft_pr": 478,
+    "validated_artifacts_commit": "fbb1212e21a20ccacd73b5590c6aaf9ef27faa58",
+    "code_tests_report_remote_bytes_verified": true,
+    "pre_manifest_delta": "Exactly four additive paths against repair base; inherited five parent artifacts preserved.",
+    "manifest_created_last": true,
+    "repository_ci": "Final-head CI observation follows this final artifact commit; terminal result is reported on the PR without modifying repository artifacts.",
+    "ready_trigger": false,
+    "merge_authorized": false,
+    "deploy_authorized": false
+  },
+  "preserved_gates": {
+    "resource_id": "b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf",
+    "acquisition_entrypoint_sha256": "1eb597e3186023540a5ab9929f433f7f5a81b9d587f10386cf2e3e55f625c760",
+    "max_timeout_seconds": 900,
+    "max_single_dataset_bytes": 5368709120,
+    "max_peak_workspace_increment_bytes": 16106127360,
+    "minimum_free_before_start_gib": 25,
+    "ordinary_jobs_role": "NONE"
+  },
+  "remaining_limits": [
+    "No installed service, real ownership/permission enforcement, kernel/systemd isolation or power-loss recovery proof",
+    "Uncatchable process kill leaving a target temporary file still requires separate operator handling",
+    "Future rollback requires exact expected-plan SHA256 and does not silently accept v0.1 receipts",
+    "Separate exact T3 authorization and host/isolation proof required before any install, restart, grant or live smoke",
+    "Separate T1 resource/reservation authorization required before acquisition; frozen resource budget and 900-second feasibility remain unresolved",
+    "No economic or research-value validation; H1 remains BLOCKED",
+    "Inherited dependency/security CI failures are outside this repair scope"
+  ],
+  "repo_changed_files_by_worker": [
+    "docs/research/tasks/sc001-h1-004j-r1-offline-repair-freeze-v0.1.json",
+    "scripts/research/deploy_sc001_h1_shared_cache_capability_v0_2.py",
+    "tests/research/test_sc001_h1_shared_cache_capability_v0_2.py",
+    "docs/research/sc001-h1-004j-r1-offline-repair-review-v0.1.md",
+    "docs/research/worker-results/sc001-h1-004j-r1-offline-repair-manifest-v0.1.json"
+  ],
+  "worker_commits_including_manifest": 3,
+  "max_worker_commits": 4,
+  "manifest_created_last": true,
+  "network_runs": 0,
+  "market_data_bytes": 0,
+  "outcome_runs": 0,
+  "test_executor_jobs": 0,
+  "runner_bundles": 0,
+  "vps_jobs": 0,
+  "host_mutations": 0,
+  "real_security_permission_changes": 0,
+  "grants_activated": 0,
+  "evidence_access_count": 0,
+  "market_body_accessed": false,
+  "protected_outcome_accessed": false,
+  "t3_host_install_authorized": false,
+  "t1_body_acquisition_authorized": false,
+  "no_roadmap_change_required": true
+}

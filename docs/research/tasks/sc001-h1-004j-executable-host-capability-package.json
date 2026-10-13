@@ -1,0 +1,119 @@
+{
+  "schema": "sc001.h1_shared_data_executor_host_capability_package.v0.1",
+  "task_id": "SC001-H1-004J",
+  "worker_id": "H1_HISTORICAL_INDICATORS",
+  "architecture_version": "0.3",
+  "authorization_class": "T0_OFFLINE_ENGINEERING_PACKAGE_ONLY",
+  "priority": 2,
+  "dispatch_base_head": "e1de40ede4f9126078cbd84cd87c85f234b2f458",
+  "parent": {
+    "task_id": "SC001-H1-004I",
+    "pr_number": 467,
+    "pr_final_head": "7b4cbe7fa3e021aac5ae9ce60f2a1bb2e78bb81c",
+    "design_path": "docs/research/sc001-h1-durable-cache-host-gate-design-v0.1.md",
+    "design_sha256": "9c04ed5796665f311a10acc79ae5cd895eb00112e230f5924595d775f27fabdc",
+    "terminal_comment_id": 6100051442,
+    "review_comment_id": 6100068770
+  },
+  "authorization_origin": "User approved bounded H1 host-capability preparation, not any public archive acquisition, data-size cap increase, privileged apply, or changes to collectors. T3 host install must await exact reviewed executable package and ability to execute on host.",
+  "purpose": "Produce a minimal, reversible, least-privilege *static* deployable host-capability patch and targeted offline synthetic tests for persistent shared SC001 raw cache under existing Test Executor; or return a documented fail-closed STOP if current launcher/invariants cannot be supported without unsafe shared runtime expansion. Only one engineering package, no actual deployment.",
+  "read_only_bindings": [
+    "docs/research/sc001-h1-durable-cache-host-gate-design-v0.1.md@PR467:7b4cbe7fa3e021aac5ae9ce60f2a1bb2e78bb81c",
+    "scripts/mcp/install-botmarket-test-executor-v1.sh@main SHA256 0e9afe9b9a3e12beb7aa451a7608eda3ffa30a46ba9b07faf0a869bfda518968",
+    "docs/infrastructure/botmarket-test-executor-v1.0.md",
+    "docs/research/sc001-h1-shared-backbone-bodyset-freeze-v0.1.json SHA256 c0798987d86dfb32fdb38e4d7ca525d68850bf41391a0c15e7fa7ed91de2075a",
+    "scripts/research/sc001_h1_shared_backbone_body_acquire_verify_v0_1.py SHA256 1eb597e3186023540a5ab9929f433f7f5a81b9d587f10386cf2e3e55f625c760",
+    "docs/research/sc001-delegated-user-authorization-policy-v0.2.md SHA256 0ee60f6376876dc13cc42ad8ac8a6fef5d54fc50e8f8322a01e6d64a9cbe0178",
+    "docs/research/sc001-user-delegated-authorization-ratification-v0.1.json",
+    "docs/research/sc001-shared-data-and-resource-coordination-v0.1.md",
+    "docs/research/sc001-research-strategy-agent-charter-v0.1.md"
+  ],
+  "required_gates": [
+    "Static independent check: Test Executor launcher SC001_DATA_ROOT is per-job ephemeral, BM_TEST_NETWORK_PROFILE differs from H1 SC001_NETWORK_PROFILE; no claim of runtime installer deploy until host install.",
+    "Use one exact target host root /var/lib/botmarket-test-executor/shared-data/sc001 (as proposed), path allowlisted by fixed RESOURCE_ID b97ffeefed4dd1b4caa771df734b59b5a6dc2b6a9ada3b3c9b8ce0c6de6319bf. Ordinary jobs remain sandboxed and unable to write this root.",
+    "Separate ACQUIRE_WRITE and CONSUME_READ_ONLY roles, immutable staged atomic checksums and fail-closed path permissions. No arbitrary host path, no generic sudo/bash shell, no new service, no access to existing collector.",
+    "Make reversible, exact-hash-guarded host apply/rollback semantics and 2-phase synthetic smoke across different jobs WITHOUT executing them or using market bytes. Preserve executor sandbox, network profile policy, 900 s hard timeout and rate/memory limits.",
+    "Assess if minimal standalone additive installer can safely patch existing Test Executor launcher/server/policy. If cannot, return DEFER and list exact blockers rather than emit an unsafe or nonfunctional installer.",
+    "Explicitly note acquisition full budget up to 10 GiB and frozen 312 objects, default MAX_SINGLE_DATASET_BYTES=5 GiB, MAX_PEAK_WORKSPACE_INCREMENT=15 GiB, 900 seconds per job. This preparatory package cannot increase any limits or authorize acquisition; future source-preserving chunk/resume would need separately frozen T0/T1 resource contract.",
+    "For existing protected collector on shared host require separately evidenced isolation. Do not inspect live filesystem or process; only static configuration claims.",
+    "No inflation of expected utility: current H1 12-asset panel is lexicographically determined, mostly speculative/small-cap instruments, and X1 BTC/ETH anchor resource sharing unproven. One paragraph economics/deprioritization."
+  ],
+  "output": {
+    "review_path": "docs/research/sc001-h1-004j-host-capability-implementation-review-v0.1.md",
+    "max_review_bytes": 11500,
+    "package_installer_path": "scripts/research/deploy_sc001_h1_shared_cache_capability_v0_1.py",
+    "max_installer_bytes": 26000,
+    "synthetic_test_path": "tests/research/test_sc001_h1_shared_cache_capability_v0_1.py",
+    "max_test_bytes": 16000,
+    "worker_result_manifest_path": "docs/research/worker-results/sc001-h1-004j-host-capability-implementation-manifest-v0.1.json",
+    "max_manifest_bytes": 6000,
+    "max_new_files": 4,
+    "max_worker_commits": 4,
+    "manifest_last": true,
+    "executable_package_optional_if_unprovable": true,
+    "all_new_paths_only": true
+  },
+  "execution_budgets": {
+    "max_vps_jobs": 0,
+    "max_test_executor_jobs": 0,
+    "max_runner_bundles": 0,
+    "max_network_runs": 0,
+    "max_market_data_bytes": 0,
+    "max_outcome_runs": 0,
+    "max_host_mutations": 0,
+    "max_trial_installs": 0,
+    "max_repair_cycles": 0
+  },
+  "claim_protocol": {
+    "required": true,
+    "claim_write_authorized": true,
+    "claim_limit": 1,
+    "lease_hours": 3,
+    "required_fields": [
+      "TASK_ID",
+      "WORKER_ID",
+      "claimed_at_utc",
+      "lease_until_utc",
+      "start_main_head",
+      "architecture_version"
+    ],
+    "duplicate_claim_forbidden": true
+  },
+  "event_gate": {
+    "repository": "AlexeyIvy/-botmarketplace-site",
+    "action": "ready_for_review",
+    "title_prefix": "[SC001][H1][READY]",
+    "exact_pr_only": true
+  },
+  "allowed_pr_writes": [
+    "one CLAIM_BLOCK after exact event validation",
+    "review, optional additive installer+tests, Worker Result Manifest LAST on exact task branch only",
+    "one TERMINAL RECEIPT — with exact hashes"
+  ],
+  "lifecycle_authority": {
+    "merge": false,
+    "close": false,
+    "retarget": false,
+    "auto_merge": false,
+    "mark_ready": false,
+    "delete_branch": false
+  },
+  "forbidden_actions": [
+    "Run or execute installer/smoke/tests on VPS, Test Executor, Research Runner or networked job; privileged host mutations/deploy/restart/systemd changes",
+    "Modify existing Test Executor or acquisition source code, collectors, credential files, policy in main, roadmap or frozen scientific rules",
+    "Override 5GiB per-single-dataset cap, 15GiB workspace cap, 900s wall, disk reserves or isolated collector gates",
+    "Read raw data/outcomes, API calls, prices, PnL, symbols/horizon variants, source changes, archive-body downloads",
+    "Claim that writing a script equals successful installed host capability or a verified shared cache",
+    "Auto dispatch T1 or authorize historical 1m body acquisition, second task or next PR"
+  ],
+  "terminal_statuses": [
+    "H1_CAPABILITY_STATIC_PACKAGE_PREPARED_REVIEW_REQUIRED",
+    "H1_CAPABILITY_STATIC_DEFER_EXECUTION_CONTRACT",
+    "STALE_CONTEXT_REVALIDATION_REQUIRED"
+  ],
+  "review_flags": {
+    "STRATEGY_REVIEW_REQUIRED": true,
+    "CONTINUATION_REVIEW_REQUIRED": true
+  },
+  "terminal_rule": "Read only exact refs, write report+optional additive executable installer/test proposal; manifest as last file; terminal with strategy review. No execution, no host install; manager must review code and approve exact T3 action separately."
+}
