@@ -1,0 +1,11 @@
+{
+  "selection": "One complete Python fenced block, preserved verbatim with its terminal newline; the leading duplicate matches after removing separating terminal newlines.",
+  "duplicate_copies_match_ignoring_terminal_newlines": true,
+  "original_script_executed_as_whole": false,
+  "network_acquisition_block_executed": false,
+  "source_label": "User-supplied external DeepSeek final script",
+  "audit_label": "Independent local offline verification of the exact supplied function on frozen CSV inputs",
+  "original_script_sha256": "8b11ef920cae01bfce066bb0b861d8f9d37328d7409a28b41d285140d6419bf6",
+  "source_supplied_date_utc": "2026-10-17",
+  "attribution": "External DeepSeek result as supplied by the user; not independently acquired from DeepSeek."
+}

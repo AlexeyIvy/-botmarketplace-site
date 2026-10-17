@@ -1,0 +1,182 @@
+{
+  "verification_type": "Exact supplied function and exact supplied benchmark expression, run offline on frozen user-supplied CSV; not a fresh market data acquisition or new out-of-sample test.",
+  "source_provenance_file": "source_provenance.json",
+  "source_and_input_sha256": {
+    "original_submitted_deepseek.py": "8b11ef920cae01bfce066bb0b861d8f9d37328d7409a28b41d285140d6419bf6",
+    "btc_raw_data.csv": "513892e2c85ef927c92f81725fb385932e0fc450397de8fb3900876c7463ae46",
+    "trades_log.csv": "f8a139e454e6bc66e2543460a5ba0dc0d56ffc5761fec76a730e2ecac34dd627"
+  },
+  "function_source_sha256": "e0ee5c8def2e38f272c2fb8edbc0c0c97a1954652b50ce3411dc64df18a16c70",
+  "function_source_lines": {
+    "start": 30,
+    "end": 127
+  },
+  "benchmark_expression": "bh_equity = [10000 * (test_df['Close'].iloc[50+i] / test_df['Close'].iloc[50]) for i in range(len(eq_curve))]",
+  "executed_source_nodes": [
+    "run_audited_backtest function definition",
+    "bh_equity assignment"
+  ],
+  "original_fetch_imports_csv_writes_and_plotting_executed": false,
+  "runtime": {
+    "python": "3.12.14",
+    "pandas": "2.2.3"
+  },
+  "periods": {
+    "raw_rows": 1000,
+    "raw_start": "2024-01-22",
+    "raw_end": "2026-10-17",
+    "train_rows": 700,
+    "train_start": "2024-01-22",
+    "train_end": "2025-12-21",
+    "test_rows": 300,
+    "test_start": "2025-12-22",
+    "test_end": "2026-10-17",
+    "equity_observations": 250,
+    "equity_start": "2026-02-10",
+    "equity_end": "2026-10-17",
+    "first_execution": "2026-02-11"
+  },
+  "results": {
+    "initial_capital": 10000,
+    "final_capital": 12488.636804405782,
+    "return_percent": 24.886368044057818,
+    "sum_net_pnl": 2488.63680440578,
+    "capital_reconciliation_difference": -1.8189894035458565e-12,
+    "trade_count": 6,
+    "total_entry_and_exit_fees": 116.35407989438932,
+    "last_equity_includes_terminal_exit_fee": true,
+    "daily_close_max_drawdown_percent": -19.484839658740526,
+    "max_drawdown_peak_date": "2026-02-24",
+    "max_drawdown_trough_date": "2026-04-12",
+    "last_trade_share_of_net_pnl_percent": 99.68020366073489
+  },
+  "benchmark": {
+    "original_graph_start_date": "2026-02-10",
+    "original_graph_start_price": 68841.9,
+    "original_graph_last_close": 81580.5,
+    "original_graph_final_gross_equity": 11850.41377416951,
+    "original_graph_gross_return_percent": 18.504137741695104,
+    "commission_in_original_benchmark": false,
+    "separately_computed_same_engine_cost_return_percent": 18.285633603953432,
+    "same_engine_cost_convention": "0.1% entry and exit; quantity calculated before entry fee, matching original strategy."
+  },
+  "supplied_trade_log_comparison": [
+    {
+      "trade": 1,
+      "numeric_deltas": {
+        "Entry_Price": 0.0,
+        "Exit_Price": 0.0,
+        "Entry_Fee": 0.0,
+        "Exit_Fee": 0.0,
+        "Net_PnL": 0.0,
+        "Position_Size": 0.0
+      },
+      "type_and_dates_match": true
+    },
+    {
+      "trade": 2,
+      "numeric_deltas": {
+        "Entry_Price": 0.0,
+        "Exit_Price": 0.0,
+        "Entry_Fee": 0.0,
+        "Exit_Fee": 0.0,
+        "Net_PnL": 0.0,
+        "Position_Size": 0.0
+      },
+      "type_and_dates_match": true
+    },
+    {
+      "trade": 3,
+      "numeric_deltas": {
+        "Entry_Price": 0.0,
+        "Exit_Price": 0.0,
+        "Entry_Fee": 0.0,
+        "Exit_Fee": 0.0,
+        "Net_PnL": 0.0,
+        "Position_Size": 0.0
+      },
+      "type_and_dates_match": true
+    },
+    {
+      "trade": 4,
+      "numeric_deltas": {
+        "Entry_Price": 0.0,
+        "Exit_Price": 0.0,
+        "Entry_Fee": 0.0,
+        "Exit_Fee": 0.0,
+        "Net_PnL": 0.0,
+        "Position_Size": 0.0
+      },
+      "type_and_dates_match": true
+    },
+    {
+      "trade": 5,
+      "numeric_deltas": {
+        "Entry_Price": 0.0,
+        "Exit_Price": 0.0,
+        "Entry_Fee": 0.0,
+        "Exit_Fee": 0.0,
+        "Net_PnL": 0.0,
+        "Position_Size": 0.0
+      },
+      "type_and_dates_match": true
+    },
+    {
+      "trade": 6,
+      "numeric_deltas": {
+        "Entry_Price": 0.0,
+        "Exit_Price": 0.0,
+        "Entry_Fee": 0.0,
+        "Exit_Fee": 0.0,
+        "Net_PnL": 0.0,
+        "Position_Size": 0.0
+      },
+      "type_and_dates_match": true
+    }
+  ],
+  "max_numeric_trade_difference": 0.0,
+  "input_structural_checks": {
+    "unique_ascending_daily_dates": true,
+    "finite_positive_ohlcv": true,
+    "ohlc_bounds": true
+  },
+  "exclude_last_provisional_row_diagnostic": {
+    "original_split_rows_kept": 700,
+    "test_rows": 299,
+    "test_end": "2026-10-16",
+    "final_capital": 12492.466961355964,
+    "return_percent": 24.924669613559637,
+    "equity_observations": 249,
+    "trade_count": 6,
+    "interpretation": "Same frozen input minus only 2026-10-17; original 700-row split and function unchanged; sensitivity diagnostic, not a new holdout."
+  },
+  "code_review": {
+    "train_df_usage": "Created and printed only; no model fitting, optimization or parameter selection using train_df in this script.",
+    "train_df_name_sites": [
+      {
+        "line": 22,
+        "context": "Store"
+      },
+      {
+        "line": 25,
+        "context": "Load"
+      },
+      {
+        "line": 25,
+        "context": "Load"
+      },
+      {
+        "line": 25,
+        "context": "Load"
+      }
+    ],
+    "warmup_graph_title": "Original title says including warm-up, but both plotted series begin at test index 50; the preceding 50 rows are not plotted.",
+    "first_signal_vs_execution": "February 10 is first recorded equity and signal date; February 11 is first next-open execution.",
+    "signal_timing": "Trailing rolling averages through close i; executions at Open i+1. No signal look-ahead detected in this function.",
+    "terminal_candle": "Final input row is 2026-10-17, the current UTC day at verification. No completed-candle filter; terminal result remains provisional.",
+    "short_costs": "Shorts are simulated from spot OHLC; no borrow costs, funding, spread, slippage or execution capacity model.",
+    "size_cost_convention": "Position notional uses capital before subtracting entry commission; exact verification preserves this convention.",
+    "validation_limit": "Six trades and a matching accounting identity establish reproducibility on this file, not robustness, live profitability, or untouched out-of-sample selection."
+  },
+  "original_source_and_inputs_unchanged": true
+}
